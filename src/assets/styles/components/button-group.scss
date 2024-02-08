@@ -1,0 +1,11 @@
+.button-group {
+  --button-group-component-spacing: calc(#{$component-spacing} / 3);
+
+  display: flex;
+  flex-flow: row wrap;
+  margin: calc(var(--button-group-component-spacing) * -1);
+
+  > .button {
+    margin: var(--button-group-component-spacing);
+  }
+}

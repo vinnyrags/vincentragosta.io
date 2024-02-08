@@ -1,0 +1,114 @@
+.heading {
+  --heading-color: #{$heading-color};
+  --heading-font-family: #{$heading-font-family};
+  --heading-font-weight: #{$heading-font-weight};
+  --heading-font-size-min: #{$heading-font-size-min};
+  --heading-font-size-max: #{$heading-font-size-max};
+
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  line-height: $heading-line-height;
+  margin: 0;
+
+  > a {
+    --link-color: var(--heading-color);
+
+    &:not(:hover) {
+      --link-text-decoration: none;
+    }
+
+    &:hover {
+      --link-color: var(--heading-color);
+    }
+  }
+
+  &,
+  &--default {
+    font-size: var(--heading-font-size-min);
+    @media (min-width: map-get($breakpoints, 'md')) {
+      font-size: var(--heading-font-size-max);
+    }
+  }
+
+  &--medium {
+    --heading-font-size-min: #{$heading-font-size-medium-min};
+    @media (min-width: map-get($breakpoints, 'md')) {
+      --heading-font-size-max: #{$heading-font-size-medium-max};
+    }
+  }
+
+  &--large {
+    --heading-font-size-min: #{$heading-font-size-large-min};
+    @media (min-width: map-get($breakpoints, 'md')) {
+      --heading-font-size-max: #{$heading-font-size-large-max};
+    }
+  }
+
+  &--xlarge {
+    --heading-font-size-min: #{$heading-font-size-xlarge-min};
+    @media (min-width: map-get($breakpoints, 'md')) {
+      --heading-font-size-max: #{$heading-font-size-xlarge-max};
+    }
+  }
+
+  &--primary {
+    --heading-color: #{map-get($colors, 'primary')};
+  }
+
+  &--primary-dark {
+    --heading-color: #{map-get($colors, 'primary-dark')};
+  }
+
+  &--primary-light {
+    --heading-color: #{map-get($colors, 'primary-light')};
+  }
+
+  &--secondary {
+    --heading-color: #{map-get($colors, 'secondary')};
+  }
+
+  &--secondary-dark {
+    --heading-color: #{map-get($colors, 'secondary-dark')};
+  }
+
+  &--secondary-light {
+    --heading-color: #{map-get($colors, 'secondary-light')};
+  }
+
+  &--tertiary {
+    --heading-color: #{map-get($colors, 'tertiary')};
+  }
+
+  &--tertiary-dark {
+    --heading-color: #{map-get($colors, 'tertiary-dark')};
+  }
+
+  &--tertiary-light {
+    --heading-color: #{map-get($colors, 'tertiary-light')};
+  }
+
+  &--gray {
+    --heading-color: #{map-get($colors, 'gray')};
+  }
+
+  &--gray-dark {
+    --heading-color: #{map-get($colors, 'gray-dark')};
+  }
+
+  &--gray-light {
+    --heading-color: #{map-get($colors, 'gray-light')};
+  }
+
+  &--off-white {
+    --heading-color: #{map-get($colors, 'off-white')};
+  }
+
+  &--white {
+    --heading-color: #{map-get($colors, 'white')};
+  }
+
+  &--black {
+    --heading-color: #{map-get($colors, 'black')};
+  }
+}

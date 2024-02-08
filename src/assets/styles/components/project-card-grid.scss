@@ -1,0 +1,9 @@
+.project-card-grid {
+  gap: 0;
+
+  .grid-col {
+    &__container {
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+.text {
+  &-right {
+    text-align: right;
+  }
+
+  &-center {
+    text-align: center;
+  }
+
+  &-primary {
+    color: map-get($colors, 'primary');
+  }
+
+  &-primary-dark {
+    color: map-get($colors, 'primary-dark');
+  }
+
+  &-primary-light {
+    color: map-get($colors, 'primary-light');
+  }
+
+  &-secondary {
+    color: map-get($colors, 'secondary');
+  }
+
+  &-secondary-dark {
+    color: map-get($colors, 'secondary-dark');
+  }
+
+  &-secondary-light {
+    color: map-get($colors, 'secondary-light');
+  }
+
+  &-tertiary {
+    color: map-get($colors, 'tertiary');
+  }
+
+  &-tertiary-dark {
+    color: map-get($colors, 'tertiary-dark');
+  }
+
+  &-tertiary-light {
+    color: map-get($colors, 'tertiary-light');
+  }
+
+  &-gray {
+    color: map-get($colors, 'gray');
+  }
+
+  &-gray-dark {
+    color: map-get($colors, 'gray-dark');
+  }
+
+  &-gray-light {
+    color: map-get($colors, 'gray-light');
+  }
+
+  &-off-white {
+    color: map-get($colors, 'off-white');
+  }
+
+  &-white {
+    color: map-get($colors, 'white');
+  }
+
+  &-black {
+    color: map-get($colors, 'black');
+  }
+
+  &-small {
+    font-size: 14px;
+  }
+
+  //&-letter-spacing {
+  //  letter-spacing: 2px;
+  //}
+}

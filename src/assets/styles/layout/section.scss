@@ -1,0 +1,120 @@
+.section {
+  --section-padding-y: calc(#{$layout-spacing} * 4);
+  --section-bg-color: inherit;
+  --section-color: inherit;
+
+  position: relative;
+  color: var(--section-color);
+
+  &__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--section-bg-color);
+  }
+
+  &__image,
+  &__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__image {
+    filter: brightness(0.85);
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: 1fr min(#{$content-max-width}, 100%) 1fr;
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+  }
+
+  &__grid {
+    grid-column: 2;
+  }
+
+  //&:first-of-type {
+  //  margin-top: var(--header-height);
+  //}
+
+  &--fluid {
+    .section__grid {
+      width: 100%;
+      grid-column: 1 / 4;
+    }
+
+    .grid-col__container {
+      padding: 0;
+    }
+  }
+
+  &--has-bg {
+    --section-color: #{map-get($colors, 'white')};
+
+    &.section {
+      &--bg-primary {
+        --section-bg-color: #{map-get($colors, 'primary')};
+      }
+
+      &--bg-primary-dark {
+        --section-bg-color: #{map-get($colors, 'primary-dark')};
+      }
+
+      &--bg-primary-light {
+        --section-bg-color: #{map-get($colors, 'primary-light')};
+      }
+
+      &--bg-secondary {
+        --section-bg-color: #{map-get($colors, 'secondary')};
+      }
+
+      &--bg-secondary-dark {
+        --section-bg-color: #{map-get($colors, 'secondary-dark')};
+      }
+
+      &--bg-secondary-light {
+        --section-bg-color: #{map-get($colors, 'secondary-light')};
+      }
+
+      &--bg-tertiary {
+        --section-bg-color: #{map-get($colors, 'tertiary')};
+      }
+
+      &--bg-tertiary-dark {
+        --section-bg-color: #{map-get($colors, 'tertiary-dark')};
+      }
+
+      &--bg-tertiary-light {
+        --section-bg-color: #{map-get($colors, 'tertiary-light')};
+      }
+
+      &--bg-gray-dark {
+        --section-bg-color: #{map-get($colors, 'gray-dark')};
+      }
+
+      &--bg-gray {
+        --section-bg-color: #{map-get($colors, 'gray')};
+      }
+
+      &--bg-gray-light {
+        --section-bg-color: #{map-get($colors, 'gray-light')};
+      }
+
+      &--bg-off-white {
+        --section-bg-color: #{map-get($colors, 'off-white')};
+        --section-color: #{$body-color};
+      }
+
+      &--bg-white {
+        --section-bg-color: #{map-get($colors, 'white')};
+        --section-color: #{$body-color};
+      }
+
+      &--bg-black {
+        --section-bg-color: #{map-get($colors, 'black')};
+      }
+    }
+  }
+}
