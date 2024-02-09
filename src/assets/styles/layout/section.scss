@@ -56,6 +56,12 @@
     &.section {
       &--bg-primary {
         --section-bg-color: #{map-get($colors, 'primary')};
+
+        //.button--primary {
+        //  &:hover {
+        //
+        //  }
+        //}
       }
 
       &--bg-primary-dark {
@@ -114,6 +120,66 @@
 
       &--bg-black {
         --section-bg-color: #{map-get($colors, 'black')};
+      }
+
+      &--primary {
+        --section-color: #{map-get($colors, 'primary')};
+      }
+
+      &--primary-dark {
+        --section-color: #{map-get($colors, 'primary-dark')};
+      }
+
+      &--primary-light {
+        --section-color: #{map-get($colors, 'primary-light')};
+      }
+
+      &--secondary {
+        --section-color: #{map-get($colors, 'secondary')};
+      }
+
+      &--secondary-dark {
+        --section-color: #{map-get($colors, 'secondary-dark')};
+      }
+
+      &--secondary-light {
+        --section-color: #{map-get($colors, 'secondary-light')};
+      }
+
+      &--tertiary {
+        --section-color: #{map-get($colors, 'tertiary')};
+      }
+
+      &--tertiary-dark {
+        --section-color: #{map-get($colors, 'tertiary-dark')};
+      }
+
+      &--tertiary-light {
+        --section-color: #{map-get($colors, 'tertiary-light')};
+      }
+
+      &--gray-dark {
+        --section-color: #{map-get($colors, 'gray-dark')};
+      }
+
+      &--gray {
+        --section-color: #{map-get($colors, 'gray')};
+      }
+
+      &--gray-light {
+        --section-color: #{map-get($colors, 'gray-light')};
+      }
+
+      &--off-white {
+        --section-color: #{map-get($colors, 'off-white')};
+      }
+
+      &--white {
+        --section-color: #{map-get($colors, 'white')};
+      }
+
+      &--black {
+        --section-color: #{map-get($colors, 'black')};
       }
     }
   }

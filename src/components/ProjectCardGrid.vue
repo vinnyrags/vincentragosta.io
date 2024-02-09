@@ -8,7 +8,7 @@
 
 <script>
 import ProjectCard from '@/components/ProjectCard.vue';
-import Grid from "@/layout/directive/Grid.vue";
+import Grid from "@/layout/Grid.vue";
 // import Section from "@/layout/Section.vue";
 import Column from "@/layout/Column.vue";
 export default {
