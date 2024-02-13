@@ -38,18 +38,171 @@ export default {
     offsetMd: String,
     offsetLg: String,
     offsetXl: String,
+
+    bgPrimary: Boolean,
+    bgPrimaryDark: Boolean,
+    bgPrimaryLight: Boolean,
+    bgSecondary: Boolean,
+    bgSecondaryDark: Boolean,
+    bgSecondaryLight: Boolean,
+    bgTertiary: Boolean,
+    bgTertiaryDark: Boolean,
+    bgTertiaryLight: Boolean,
+    bgGrayDark: Boolean,
+    bgGray: Boolean,
+    bgGrayLight: Boolean,
+    bgOffWhite: Boolean,
+    bgWhite: Boolean,
+    bgBlack: Boolean,
+
+    primary: Boolean,
+    primaryDark: Boolean,
+    primaryLight: Boolean,
+    secondary: Boolean,
+    secondaryDark: Boolean,
+    secondaryLight: Boolean,
+    tertiary: Boolean,
+    tertiaryDark: Boolean,
+    tertiaryLight: Boolean,
+    grayDark: Boolean,
+    gray: Boolean,
+    grayLight: Boolean,
+    offWhite: Boolean,
+    white: Boolean,
+    black: Boolean,
   },
   components: {},
   methods: {
     modifiers() {
       let modifiers = [];
-      if (this.hasBackground) {
+      if (this.hasBackground()) {
         modifiers.push('has-bg');
       }
 
       if (this.lineOffsetBreakpoints && this.lineOffsetBreakpoints.length) {
         modifiers.push('has-offset');
       }
+
+      if (this.bgPrimary) {
+        modifiers.push('bg-primary');
+      }
+
+      if (this.bgPrimaryDark) {
+        modifiers.push('bg-primary-dark');
+      }
+
+      if (this.bgPrimaryLight) {
+        modifiers.push('bg-primary-light');
+      }
+
+      if (this.bgSecondary) {
+        modifiers.push('bg-secondary');
+      }
+
+      if (this.bgSecondaryDark) {
+        modifiers.push('bg-secondary-dark');
+      }
+
+      if (this.bgSecondaryLight) {
+        modifiers.push('bg-secondary-light');
+      }
+
+      if (this.bgTertiary) {
+        modifiers.push('bg-tertiary');
+      }
+
+      if (this.bgTertiaryDark) {
+        modifiers.push('bg-tertiary-dark');
+      }
+
+      if (this.bgTertiaryLight) {
+        modifiers.push('bg-tertiary-light');
+      }
+
+      if (this.bgGrayDark) {
+        modifiers.push('bg-gray-dark');
+      }
+
+      if (this.bgGray) {
+        modifiers.push('bg-gray');
+      }
+
+      if (this.bgGrayLight) {
+        modifiers.push('bg-gray-light');
+      }
+
+      if (this.bgOffWhite) {
+        modifiers.push('bg-off-white');
+      }
+
+      if (this.bgWhite) {
+        modifiers.push('bg-white');
+      }
+
+      if (this.bgBlack) {
+        modifiers.push('bg-black');
+      }
+
+      if (this.primary) {
+        modifiers.push('primary');
+      }
+
+      if (this.primaryDark) {
+        modifiers.push('primary-dark');
+      }
+
+      if (this.primaryLight) {
+        modifiers.push('primary-light');
+      }
+
+      if (this.secondary) {
+        modifiers.push('secondary');
+      }
+
+      if (this.secondaryDark) {
+        modifiers.push('secondary-dark');
+      }
+
+      if (this.secondaryLight) {
+        modifiers.push('secondary-light');
+      }
+
+      if (this.tertiary) {
+        modifiers.push('tertiary');
+      }
+
+      if (this.tertiaryDark) {
+        modifiers.push('tertiary-dark');
+      }
+
+      if (this.tertiaryLight) {
+        modifiers.push('tertiary-light');
+      }
+
+      if (this.grayDark) {
+        modifiers.push('gray-dark');
+      }
+
+      if (this.gray) {
+        modifiers.push('gray');
+      }
+
+      if (this.grayLight) {
+        modifiers.push('gray-light');
+      }
+
+      if (this.offWhite) {
+        modifiers.push('off-white');
+      }
+
+      if (this.white) {
+        modifiers.push('white');
+      }
+
+      if (this.black) {
+        modifiers.push('black');
+      }
+
       return modifiers.map((modifier) => {
         return 'grid-col--' + modifier;
       });
@@ -83,12 +236,12 @@ export default {
     },
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');
-    }
+    },
+    hasBackground() {
+      return this.video || this.image || this.bgColor || this.bgPrimary || this.bgPrimaryDark || this.bgPrimaryLight || this.bgSecondary || this.bgSecondaryDark || this.bgSecondaryLight || this.bgTertiary || this.bgTertiaryDark || this.bgTertiaryLight || this.bgGray || this.bgGrayDark || this.bgGrayLight || this.bgOffWhite || this.bgWhite || this.bgBlack;
+    },
   },
   computed: {
-    hasBackground() {
-      return this.image || this.video || this.bgColor;
-    },
     cssVars() {
       let cssVars = {};
       if (this.bgColor) {
@@ -105,7 +258,7 @@ export default {
       const lineBreakpoints = this.lineBreakpoints;
       if (lineBreakpoints) {
         let offsetVars = {};
-        for(let i = 0; i < lineBreakpoints.length; i++) {
+        for (let i = 0; i < lineBreakpoints.length; i++) {
           offsetVars['--grid-col-offset-' + lineBreakpoints[i].breakpoint + '-start'] = lineBreakpoints[i].line;
         }
         Object.assign(cssVars, offsetVars);
@@ -199,7 +352,8 @@ export default {
       }
 
       return lineOffsetBreakpoints;
-    }
-  }
+    },
+  },
+  mounted() {}
 }
 </script>

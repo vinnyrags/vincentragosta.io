@@ -6,13 +6,13 @@
   --grid-col-margin-bottom: #{$component-spacing};
 
   position: relative;
+  color: var(--grid-col-color);
 
   &__bg {
     position: absolute;
     inset: 0;
     z-index: -1;
     background: var(--grid-col-bg-color);
-    color: var(--grid-col-color);
   }
 
   &__video {
@@ -35,6 +35,132 @@
   }
 
   &--has-bg {
+    --grid-col-color: #{$body-color-inverted};
+
+    &.grid-col {
+      &--bg-primary {
+        --grid-col-bg-color: #{map-get($colors, 'primary')};
+      }
+
+      &--bg-primary-dark {
+        --grid-col-bg-color: #{map-get($colors, 'primary-dark')};
+      }
+
+      &--bg-primary-light {
+        --grid-col-bg-color: #{map-get($colors, 'primary-light')};
+      }
+
+      &--bg-secondary {
+        --grid-col-bg-color: #{map-get($colors, 'secondary')};
+      }
+
+      &--bg-secondary-dark {
+        --grid-col-bg-color: #{map-get($colors, 'secondary-dark')};
+      }
+
+      &--bg-secondary-light {
+        --grid-col-bg-color: #{map-get($colors, 'secondary-light')};
+      }
+
+      &--bg-tertiary {
+        --grid-col-bg-color: #{map-get($colors, 'tertiary')};
+      }
+
+      &--bg-tertiary-dark {
+        --grid-col-bg-color: #{map-get($colors, 'tertiary-dark')};
+      }
+
+      &--bg-tertiary-light {
+        --grid-col-bg-color: #{map-get($colors, 'tertiary-light')};
+      }
+
+      &--bg-gray {
+        --grid-col-bg-color: #{map-get($colors, 'gray')};
+      }
+
+      &--bg-gray-dark {
+        --grid-col-bg-color: #{map-get($colors, 'gray-dark')};
+      }
+
+      &--bg-gray-light {
+        --grid-col-bg-color: #{map-get($colors, 'gray-light')};
+      }
+
+      &--bg-off-white {
+        --grid-col-bg-color: #{map-get($colors, 'off-white')};
+        --grid-col-color: #{$body-color};
+      }
+
+      &--bg-white {
+        --grid-col-bg-color: #{map-get($colors, 'white')};
+        --grid-col-color: #{$body-color};
+      }
+
+      &--bg-black {
+        --grid-col-bg-color: #{map-get($colors, 'black')};
+      }
+
+      &--primary {
+        --grid-col-color: #{map-get($colors, 'primary')};
+      }
+
+      &--primary-dark {
+        --grid-col-color: #{map-get($colors, 'primary-dark')};
+      }
+
+      &--primary-light {
+        --grid-col-color: #{map-get($colors, 'primary-light')};
+      }
+
+      &--secondary {
+        --grid-col-color: #{map-get($colors, 'secondary')};
+      }
+
+      &--secondary-dark {
+        --grid-col-color: #{map-get($colors, 'secondary-dark')};
+      }
+
+      &--secondary-light {
+        --grid-col-color: #{map-get($colors, 'secondary-light')};
+      }
+
+      &--tertiary {
+        --grid-col-color: #{map-get($colors, 'tertiary')};
+      }
+
+      &--tertiary-dark {
+        --grid-col-color: #{map-get($colors, 'tertiary-dark')};
+      }
+
+      &--tertiary-light {
+        --grid-col-color: #{map-get($colors, 'tertiary-light')};
+      }
+
+      &--gray-dark {
+        --grid-col-color: #{map-get($colors, 'gray-dark')};
+      }
+
+      &--gray {
+        --grid-col-color: #{map-get($colors, 'gray')};
+      }
+
+      &--gray-light {
+        --grid-col-color: #{map-get($colors, 'gray-light')};
+      }
+
+      &--off-white {
+        --grid-col-color: #{map-get($colors, 'off-white')};
+      }
+
+      &--white {
+        --grid-col-color: #{map-get($colors, 'white')};
+      }
+
+      &--black {
+        --grid-col-color: #{map-get($colors, 'black')};
+      }
+    }
+
     .grid-col__container {
       padding-top: var(--grid-col-container-padding-y);
       padding-bottom: var(--grid-col-container-padding-y)

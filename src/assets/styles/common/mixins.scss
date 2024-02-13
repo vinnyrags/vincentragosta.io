@@ -1,0 +1,3 @@
+@mixin grid-col-bg-color($color) {
+  --grid-col-bg-color: #{map-get($colors, $color)};
+}

@@ -51,11 +51,17 @@
   }
 
   &--has-bg {
-    --section-color: #{map-get($colors, 'white')};
+    --section-color: #{$body-color-inverted};
 
     &.section {
       &--bg-primary {
         --section-bg-color: #{map-get($colors, 'primary')};
+
+        //.button {
+          //&--outline {
+          //  --button-border-color: inherit;
+          //}
+        //}
 
         //.button--primary {
         //  &:hover {

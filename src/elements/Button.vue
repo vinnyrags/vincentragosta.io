@@ -43,13 +43,30 @@ export default {
     },
     hasRightSlot() {
       return !!this.$slots.right;
-    }
+    },
   },
   methods: {
     modifiers() {
       let modifiers = [];
 
-      if (this.primary) {
+      if (
+          this.primary ||
+          !this.primary &&
+          !this.primaryDark &&
+          !this.primaryLight &&
+          !this.secondary &&
+          !this.secondaryDark &&
+          !this.secondaryLight &&
+          !this.tertiary &&
+          !this.tertiaryDark &&
+          !this.tertiaryLight &&
+          !this.gray &&
+          !this.grayDark &&
+          !this.grayLight &&
+          !this.offWhite &&
+          !this.white &&
+          !this.black
+      ) {
         modifiers.push('primary');
       }
 
@@ -124,6 +141,7 @@ export default {
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');
     }
-  }
+  },
+  mounted() {}
 }
 </script>

@@ -117,7 +117,7 @@
 
     &.active,
     &:hover .header__menu-item-link {
-      color: map-get($colors, 'white');
+      color: $body-color-inverted;
     }
   }
 

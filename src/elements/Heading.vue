@@ -4,8 +4,6 @@ import { h } from 'vue'
 const DynamicHeading = (props, context) => {
   context.attrs.class = 'heading';
 
-  console.log(props);
-
   if (props.size) {
     context.attrs.class += ' heading--' + props.size;
   }
