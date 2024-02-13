@@ -1,5 +1,5 @@
 .section {
-  --section-padding-y: calc(#{$layout-spacing} * 4);
+  --section-padding-y: #{$section-padding-y};
   --section-bg-color: inherit;
   --section-color: inherit;
 

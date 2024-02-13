@@ -1,7 +1,7 @@
 .grid-col {
   --grid-col-bg-color: '';
   --grid-col-color: '';
-  --grid-col-container-padding-y: #{$component-spacing};
+  --grid-col-container-padding-y: #{$layout-spacing * 2};
   --grid-col-container-padding-x: calc(#{$component-spacing} / 2);
   --grid-col-margin-bottom: #{$component-spacing};
 

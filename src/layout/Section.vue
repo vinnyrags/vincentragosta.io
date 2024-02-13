@@ -211,7 +211,7 @@ export default {
       if (!this.size) {
         return '';
       }
-      const multiplier = 'calc(var(--layout-spacing) * ' + this.size + ')';
+      const multiplier = 'calc(var(--section-padding-y) * ' + this.size + ')';
       return 'padding-top: ' + multiplier + '; padding-bottom: ' + multiplier + ';';
     },
     hasBackground() {

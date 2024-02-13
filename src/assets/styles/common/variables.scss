@@ -109,6 +109,9 @@ $button-text-decoration: none;
 $button-transition: background 0.25s ease-in-out, color 0.25s ease-in-out, border-color 0.25s ease-in-out;
 $button-align-items: center;
 
+// Section
+$section-padding-y: calc(#{$layout-spacing} * 2);
+
 // Grid
 
 $grid-columns: 12;
