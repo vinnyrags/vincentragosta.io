@@ -1,11 +1,13 @@
 <script>
-import { h } from 'vue'
+import { h } from 'vue';
 
 const DynamicHeading = (props, context) => {
   context.attrs.class = 'heading';
 
   if (props.size) {
     context.attrs.class += ' heading--' + props.size;
+  } else {
+    context.attrs.class += ' heading--default';
   }
 
   if (props.class) {

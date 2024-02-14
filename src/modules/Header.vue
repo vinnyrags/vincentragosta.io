@@ -52,7 +52,7 @@ export default {
     window.addEventListener('resize', this.closeMenu)
   },
   mounted() {
-    document.body.style.setProperty('--header-height', this.$el.clientHeight + 'px');
+    document.documentElement.style.setProperty('--header-height', this.$el.clientHeight + 'px');
   },
   computed: {
     addAdditionalMenuItemClass() {

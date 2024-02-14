@@ -48,6 +48,8 @@ $colors: (
         'black': $color-black,
 );
 
+$root-font-size: 100%;
+
 // Spacing
 
 $layout-spacing: 50px;
@@ -57,7 +59,7 @@ $component-spacing: calc($layout-spacing / 2);
 
 $body-line-height: 1.5;
 $body-font-weight: 300;
-$body-font-size: 16px;
+$body-font-size: 1em;
 //$body-font-family: sans-serif;
 $body-font-family: 'Figtree', sans-serif;
 //$body-color: map-get($colors, 'black');
@@ -78,14 +80,14 @@ $heading-font-family: 'Source Sans 3', sans-serif;
 $heading-breakpoint: 'sm';
 $heading-font-weight: 400;
 $heading-line-height: 1;
-$heading-font-size-min: 28px;
-$heading-font-size-max: 28px;
-$heading-font-size-medium-min: 36px;
-$heading-font-size-medium-max: 56px;
-$heading-font-size-large-min: 36px;
-$heading-font-size-large-max: 56px;
-$heading-font-size-xlarge-min: 96px;
-$heading-font-size-xlarge-max: 96px;
+$heading-font-size-min: em(28);
+$heading-font-size-max: em(28);
+$heading-font-size-medium-min: em(36);
+$heading-font-size-medium-max: em(56);
+$heading-font-size-large-min: em(36);
+$heading-font-size-large-max: em(56);
+$heading-font-size-xlarge-min: em(96);
+$heading-font-size-xlarge-max: em(96);
 
 // Buttons
 
