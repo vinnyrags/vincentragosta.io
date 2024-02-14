@@ -223,8 +223,13 @@
   &--outline,
   &--ghost {
     --button-color: inherit;
+
     &:not(:hover) {
       --button-bg: transparent;
+    }
+
+    &:hover {
+      --button-color: #{$body-color-inverted};
     }
 
     &.button--off-white,

@@ -215,7 +215,7 @@ export default {
       return 'padding-top: ' + multiplier + '; padding-bottom: ' + multiplier + ';';
     },
     hasBackground() {
-      return this.video || this.image || this.bgColor || this.bgPrimary || this.bgSecondary || this.bgGrayDark || this.bgGray || this.bgGrayLight || this.bgWhite || this.bgBlack;
+      return this.video || this.image || this.bgColor || this.bgPrimary || this.bgPrimaryDark || this.bgPrimaryLight || this.bgSecondary || this.bgSecondaryDark || this.bgSecondaryLight || this.bgTertiary || this.bgTertiaryDark || this.bgTertiaryLight || this.bgGray || this.bgGrayDark || this.bgGrayLight || this.bgOffWhite || this.bgWhite || this.bgBlack;
     }
   },
   computed: {

@@ -56,18 +56,6 @@
     &.section {
       &--bg-primary {
         --section-bg-color: #{map-get($colors, 'primary')};
-
-        //.button {
-          //&--outline {
-          //  --button-border-color: inherit;
-          //}
-        //}
-
-        //.button--primary {
-        //  &:hover {
-        //
-        //  }
-        //}
       }
 
       &--bg-primary-dark {
