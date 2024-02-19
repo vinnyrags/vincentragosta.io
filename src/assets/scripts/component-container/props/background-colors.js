@@ -1,0 +1,18 @@
+export default {
+    bgColor: String,
+    bgPrimary: Boolean,
+    bgPrimaryDark: Boolean,
+    bgPrimaryLight: Boolean,
+    bgSecondary: Boolean,
+    bgSecondaryDark: Boolean,
+    bgSecondaryLight: Boolean,
+    bgTertiary: Boolean,
+    bgTertiaryDark: Boolean,
+    bgTertiaryLight: Boolean,
+    bgGrayDark: Boolean,
+    bgGray: Boolean,
+    bgGrayLight: Boolean,
+    bgOffWhite: Boolean,
+    bgWhite: Boolean,
+    bgBlack: Boolean,
+}

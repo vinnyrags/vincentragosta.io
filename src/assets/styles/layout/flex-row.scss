@@ -1,0 +1,36 @@
+.flex-row {
+  --bg-tpad: #{$layout-spacing};
+  --bg-bpad: #{$layout-spacing};
+  --gap: #{$component-spacing};
+
+  @extend %component-container;
+  @include color;
+  @include alignment;
+
+  &__bg {
+    @extend %component-container__bg;
+  }
+
+  &__video {
+    @extend %component-container__video;
+  }
+
+  &__image {
+    @extend %component-container__image;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-flow: row wrap;
+    gap: var(--gap);
+  }
+
+  &--has-bg {
+    @extend %component-container--has-bg;
+
+    &.flex-row {
+      @include bg-color;
+      @include vpad;
+    }
+  }
+}

@@ -1,5 +1,11 @@
-$browser-context: 16;
-
-@function em($pixels, $context: $browser-context) {
+@function em($pixels, $context: 16) {
   @return #{calc($pixels / $context)}em;
+}
+
+@function flex-width($column) {
+  @return percentage(calc($column / 12));
+}
+
+@function is-light-color($color) {
+  @return index($light-colors, $color);
 }

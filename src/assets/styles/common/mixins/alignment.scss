@@ -1,0 +1,12 @@
+$alignment: start, center, end;
+
+@mixin alignment() {
+  @each $align in $alignment {
+    $value: if($align == center, $align, flex-#{$align});
+    &--#{$align} {
+      > [class*=__wrap] {
+        justify-content: $value;
+      }
+    }
+  }
+}

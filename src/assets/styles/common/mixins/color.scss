@@ -1,0 +1,7 @@
+@mixin color() {
+  @each $color, $value in $colors {
+    &--#{$color} {
+      --color: #{$value};
+    }
+  }
+}

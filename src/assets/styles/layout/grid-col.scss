@@ -173,31 +173,31 @@
   grid-column-start: span 12;
 
   &-xs {
-    @media (min-width: map-get($breakpoints, 'xs')) {
+    @include breakpoint-xs {
       @include grid-columns;
     }
   }
 
   &-sm {
-    @media (min-width: map-get($breakpoints, 'sm')) {
+    @include breakpoint-sm {
       @include grid-columns;
     }
   }
 
   &-md {
-    @media (min-width: map-get($breakpoints, 'md')) {
+    @include breakpoint-md {
       @include grid-columns;
     }
   }
 
   &-lg {
-    @media (min-width: map-get($breakpoints, 'lg')) {
+    @include breakpoint-lg {
       @include grid-columns;
     }
   }
 
   &-xl {
-    @media (min-width: map-get($breakpoints, 'xl')) {
+    @include breakpoint-xl {
       @include grid-columns;
     }
   }
@@ -216,7 +216,7 @@
       &-xs-10,
       &-xs-11,
       &-xs-12 {
-        @media (min-width: 576px) {
+        @include breakpoint-xs {
           grid-column-start: var(--grid-col-offset-xs-start);
           grid-column-end: var(--grid-col-offset-xs-end);
         }
@@ -234,7 +234,7 @@
       &-sm-10,
       &-sm-11,
       &-sm-12 {
-        @media (min-width: 768px) {
+        @include breakpoint-sm {
           grid-column-start: var(--grid-col-offset-sm-start);
           grid-column-end: var(--grid-col-offset-sm-end);
         }
@@ -252,7 +252,7 @@
       &-md-10,
       &-md-11,
       &-md-12 {
-        @media (min-width: 992px) {
+        @include breakpoint-md {
           grid-column-start: var(--grid-col-offset-md-start);
           grid-column-end: var(--grid-col-offset-md-end);
         }
@@ -270,7 +270,7 @@
       &-lg-10,
       &-lg-11,
       &-lg-12 {
-        @media (min-width: 1200px) {
+        @include breakpoint-lg {
           grid-column-start: var(--grid-col-offset-lg-start);
           grid-column-end: var(--grid-col-offset-lg-end);
         }
@@ -288,7 +288,7 @@
       &-xl-10,
       &-xl-11,
       &-xl-12 {
-        @media (min-width: 1400px) {
+        @include breakpoint-xl {
           grid-column-start: var(--grid-col-offset-xl-start);
           grid-column-end: var(--grid-col-offset-xl-end);
         }
@@ -307,7 +307,7 @@
         &-xs-10,
         &-xs-11,
         &-xs-12 {
-          @media (min-width: 576px) {
+          @include breakpoint-xs {
             grid-column-start: var(--grid-col-breakpoint-offset-xs-start);
           }
         }
@@ -324,7 +324,7 @@
         &-sm-10,
         &-sm-11,
         &-sm-12 {
-          @media (min-width: 768px) {
+          @include breakpoint-sm {
             grid-column-start: var(--grid-col-breakpoint-offset-sm-start);
           }
         }
@@ -341,7 +341,7 @@
         &-md-10,
         &-md-11,
         &-md-12 {
-          @media (min-width: 992px) {
+          @include breakpoint-md {
             grid-column-start: var(--grid-col-breakpoint-offset-md-start);
           }
         }
@@ -358,7 +358,7 @@
         &-lg-10,
         &-lg-11,
         &-lg-12 {
-          @media (min-width: 1200px) {
+          @include breakpoint-lg {
             grid-column-start: var(--grid-col-breakpoint-offset-lg-start);
           }
         }
@@ -375,7 +375,7 @@
         &-xl-10,
         &-xl-11,
         &-xl-12 {
-          @media (min-width: 1400px) {
+          @include breakpoint-xl {
             grid-column-start: var(--grid-col-breakpoint-offset-xl-start);
           }
         }

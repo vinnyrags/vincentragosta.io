@@ -1,0 +1,31 @@
+.highlight-card {
+  --card-bg-color: #{map-get($colors, 'white')};
+  --card-color: #{$body-color};
+
+  display: flex;
+  flex-flow: row wrap;
+  color: var(--card-color);
+  background: var(--card-bg-color);
+  padding-top: $layout-spacing;
+
+  .heading,
+  p {
+    margin-top: 0;
+    margin-bottom: $component-spacing;
+    padding-left: $component-spacing;
+    padding-right: $component-spacing;
+  }
+
+  .button {
+    --button-padding-y: #{calc($component-spacing / 1.5)};
+    --button-padding-x: #{$component-spacing};
+    margin-top: $component-spacing;
+    width: 100%;
+  }
+
+  &--primary-dark {
+    .button {
+
+    }
+  }
+}

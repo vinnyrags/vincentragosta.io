@@ -1,13 +1,13 @@
 <template>
-  <section class="section" :class="additionalClasses()" :style="cssVars">
-    <div v-if="hasBg(this.$props)" class="section__bg">
-      <video v-if="video" class="section__video" type="video/mp4" :src="video" autoplay muted loop></video>
-      <img v-if="image" class="section__image" :src="image"/>
+  <div class="flex-row" :class="additionalClasses()" :style="cssVars">
+    <div v-if="hasBg(this.$props)" class="flex-row__bg">
+      <video v-if="video" class="flex-row__video" type="video/mp4" :src="video" autoplay muted loop></video>
+      <img v-if="image" class="flex-row__image" :src="image"/>
     </div>
-    <div class="section__container">
+    <div class="flex-row__wrap">
       <slot></slot>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -15,14 +15,12 @@
 import componentContainerProps from "@/assets/scripts/component-container/props/props";
 import { hasBg } from "@/assets/scripts/component-container/methods/has-bg";
 import { cssVars } from "@/assets/scripts/component-container/computed/css-vars";
-import {componentContainerModifiers} from "@/assets/scripts/component-container/methods/modifiers";
+import { componentContainerModifiers } from "@/assets/scripts/component-container/methods/modifiers";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Section',
+  name: 'FlexRow',
   props: {
-    fluid: Boolean,
-    // edge: Boolean,
     ...componentContainerProps
   },
   components: {},
@@ -30,20 +28,16 @@ export default {
     hasBg,
     modifiers() {
       let themeModifiers = [];
-
-      // Add additional modifiers here
-
       return [...themeModifiers, ...(componentContainerModifiers(this.$props))].map((modifier) => {
-        return 'section--' + modifier;
+        return 'flex-row--' + modifier;
       });
     },
     extraClasses() {
-      let classes = [];
-      return classes;
+      return [];
     },
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');
-    }
+    },
   },
   computed: {
     cssVars

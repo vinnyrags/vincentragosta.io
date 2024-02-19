@@ -1,5 +1,3 @@
-// Defaults
-
 .button {
   --button-padding-x: #{$button-padding-x};
   --button-padding-y: #{$button-padding-y};
@@ -32,7 +30,7 @@
   position: relative;
 
   font-size: var(--button-font-size-min);
-  @media (min-width: map-get($breakpoints, 'md')) {
+  @include site-breakpoint {
     font-size: var(--button-font-size-max);
   }
 
@@ -75,6 +73,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'primary-dark'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'primary-dark'), 5)};
     }
   }
 
@@ -85,6 +84,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'primary-light'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'primary-light'), 5)};
     }
   }
 
@@ -95,6 +95,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'secondary'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'secondary'), 5)};
     }
   }
 
@@ -105,6 +106,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'secondary-dark'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'secondary-dark'), 5)};
     }
   }
 
@@ -115,6 +117,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'secondary-light'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'secondary-light'), 5)};
     }
   }
 
@@ -125,6 +128,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'tertiary'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'tertiary'), 5)};
     }
   }
 
@@ -135,6 +139,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'tertiary-dark'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'tertiary-dark'), 5)};
     }
   }
 
@@ -145,6 +150,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'tertiary-light'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'tertiary-light'), 5)};
     }
   }
 
@@ -155,6 +161,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'gray'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'gray'), 5)};
     }
   }
 
@@ -165,6 +172,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'gray-dark'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'gray-dark'), 5)};
     }
   }
 
@@ -175,6 +183,7 @@
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-bg: #{lighten(map-get($colors, 'gray-light'), 5)};
+      --button-border-color: #{lighten(map-get($colors, 'gray-light'), 5)};
     }
   }
 

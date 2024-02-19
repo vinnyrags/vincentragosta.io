@@ -1,0 +1,54 @@
+@mixin breakpoint($breakpoint, $max: false) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $width: 'min';
+    $value: map-get($breakpoints, $breakpoint);
+
+    @if ($max) {
+      $width: 'max';
+      $value: calc($value - 1px);
+    }
+
+    @media (#{$width}-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+  }
+}
+
+@mixin breakpoint-xs($max: false) {
+  @include breakpoint('xs', $max) {
+    @content;
+  }
+}
+
+@mixin breakpoint-sm($max: false) {
+  @include breakpoint('sm', $max) {
+    @content;
+  }
+}
+
+@mixin breakpoint-md($max: false) {
+  @include breakpoint('md', $max) {
+    @content;
+  }
+}
+
+@mixin breakpoint-lg($max: false) {
+  @include breakpoint('lg', $max) {
+    @content;
+  }
+}
+
+@mixin breakpoint-xl($max: false) {
+  @include breakpoint('xl', $max) {
+    @content;
+  }
+}
+
+@mixin site-breakpoint($max: false) {
+  @include breakpoint($site-breakpoint, $max) {
+    @content;
+  }
+}

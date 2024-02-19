@@ -1,0 +1,3 @@
+export function hasBg(props) {
+    return props.video || props.image || props.bgColor || props.bgPrimary || props.bgPrimaryDark || props.bgPrimaryLight || props.bgSecondary || props.bgSecondaryDark || props.bgSecondaryLight || props.bgTertiary || props.bgTertiaryDark || props.bgTertiaryLight || props.bgGray || props.bgGrayDark || props.bgGrayLight || props.bgOffWhite || props.bgWhite || props.bgBlack;
+}

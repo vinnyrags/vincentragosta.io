@@ -1,180 +1,47 @@
 .section {
-  --section-padding-y: #{$section-padding-y};
-  --section-bg-color: inherit;
-  --section-color: inherit;
+  --bg-tpad: #{calc($layout-spacing * 2)};
+  --bg-bpad: #{calc($layout-spacing * 2)};
 
-  position: relative;
-  color: var(--section-color);
+  @extend %component-container;
+  @include color;
+  @include alignment;
 
   &__bg {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--section-bg-color);
+    @extend %component-container__bg;
   }
 
-  &__image,
   &__video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    @extend %component-container__video;
   }
 
   &__image {
-    filter: brightness(0.85);
+    @extend %component-container__image;
   }
 
   &__container {
     display: grid;
     grid-template-columns: 1fr min(#{$content-max-width}, 100%) 1fr;
-    padding-top: var(--section-padding-y);
-    padding-bottom: var(--section-padding-y);
-  }
+    padding-top: var(--bg-tpad);
+    padding-bottom: var(--bg-bpad);
 
-  &__grid {
-    grid-column: 2;
-  }
-
-  //&:first-of-type {
-  //  margin-top: var(--header-height);
-  //}
-
-  &--fluid {
-    .section__grid {
-      width: 100%;
-      grid-column: 1 / 4;
-    }
-
-    .grid-col__container {
-      padding: 0;
+    > * {
+      grid-column: 2;
     }
   }
 
   &--has-bg {
-    --section-color: #{$body-color-inverted};
+    @extend %component-container--has-bg;
 
     &.section {
-      &--bg-primary {
-        --section-bg-color: #{map-get($colors, 'primary')};
-      }
+      @include bg-color;
+      @include vpad;
+    }
+  }
 
-      &--bg-primary-dark {
-        --section-bg-color: #{map-get($colors, 'primary-dark')};
-      }
-
-      &--bg-primary-light {
-        --section-bg-color: #{map-get($colors, 'primary-light')};
-      }
-
-      &--bg-secondary {
-        --section-bg-color: #{map-get($colors, 'secondary')};
-      }
-
-      &--bg-secondary-dark {
-        --section-bg-color: #{map-get($colors, 'secondary-dark')};
-      }
-
-      &--bg-secondary-light {
-        --section-bg-color: #{map-get($colors, 'secondary-light')};
-      }
-
-      &--bg-tertiary {
-        --section-bg-color: #{map-get($colors, 'tertiary')};
-      }
-
-      &--bg-tertiary-dark {
-        --section-bg-color: #{map-get($colors, 'tertiary-dark')};
-      }
-
-      &--bg-tertiary-light {
-        --section-bg-color: #{map-get($colors, 'tertiary-light')};
-      }
-
-      &--bg-gray-dark {
-        --section-bg-color: #{map-get($colors, 'gray-dark')};
-      }
-
-      &--bg-gray {
-        --section-bg-color: #{map-get($colors, 'gray')};
-      }
-
-      &--bg-gray-light {
-        --section-bg-color: #{map-get($colors, 'gray-light')};
-      }
-
-      &--bg-off-white {
-        --section-bg-color: #{map-get($colors, 'off-white')};
-        --section-color: #{$body-color};
-      }
-
-      &--bg-white {
-        --section-bg-color: #{map-get($colors, 'white')};
-        --section-color: #{$body-color};
-      }
-
-      &--bg-black {
-        --section-bg-color: #{map-get($colors, 'black')};
-      }
-
-      &--primary {
-        --section-color: #{map-get($colors, 'primary')};
-      }
-
-      &--primary-dark {
-        --section-color: #{map-get($colors, 'primary-dark')};
-      }
-
-      &--primary-light {
-        --section-color: #{map-get($colors, 'primary-light')};
-      }
-
-      &--secondary {
-        --section-color: #{map-get($colors, 'secondary')};
-      }
-
-      &--secondary-dark {
-        --section-color: #{map-get($colors, 'secondary-dark')};
-      }
-
-      &--secondary-light {
-        --section-color: #{map-get($colors, 'secondary-light')};
-      }
-
-      &--tertiary {
-        --section-color: #{map-get($colors, 'tertiary')};
-      }
-
-      &--tertiary-dark {
-        --section-color: #{map-get($colors, 'tertiary-dark')};
-      }
-
-      &--tertiary-light {
-        --section-color: #{map-get($colors, 'tertiary-light')};
-      }
-
-      &--gray-dark {
-        --section-color: #{map-get($colors, 'gray-dark')};
-      }
-
-      &--gray {
-        --section-color: #{map-get($colors, 'gray')};
-      }
-
-      &--gray-light {
-        --section-color: #{map-get($colors, 'gray-light')};
-      }
-
-      &--off-white {
-        --section-color: #{map-get($colors, 'off-white')};
-      }
-
-      &--white {
-        --section-color: #{map-get($colors, 'white')};
-      }
-
-      &--black {
-        --section-color: #{map-get($colors, 'black')};
-      }
+  &--fluid {
+    .section__container {
+      width: 100%;
+      grid-column: 1 / 4;
     }
   }
 }

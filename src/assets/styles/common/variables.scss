@@ -1,10 +1,10 @@
 // Defaults
 
-$breakpoint-xs: 576px;
-$breakpoint-sm: 768px;
-$breakpoint-md: 992px;
-$breakpoint-lg: 1200px;
-$breakpoint-xl: 1400px;
+$breakpoint-xs: em(576);
+$breakpoint-sm: em(768);
+$breakpoint-md: em(992);
+$breakpoint-lg: em(1200);
+$breakpoint-xl: em(1400);
 
 $breakpoints: (
         'xs': $breakpoint-xs,
@@ -13,6 +13,8 @@ $breakpoints: (
         'lg': $breakpoint-lg,
         'xl': $breakpoint-xl
 );
+
+$site-breakpoint: 'md';
 
 $color-primary: #456ebf;
 $color-primary-dark: darken($color-primary, 10);
@@ -47,6 +49,10 @@ $colors: (
         'white': $color-white,
         'black': $color-black,
 );
+
+$light-colors: ('off-white', 'white');
+
+// Root
 
 $root-font-size: 100%;
 
@@ -83,8 +89,8 @@ $heading-line-height: 1;
 $heading-font-size-min: em(28);
 $heading-font-size-max: em(28);
 $heading-font-size-medium-min: em(36);
-$heading-font-size-medium-max: em(56);
-$heading-font-size-large-min: em(36);
+$heading-font-size-medium-max: em(36);
+$heading-font-size-large-min: em(56);
 $heading-font-size-large-max: em(56);
 $heading-font-size-xlarge-min: em(96);
 $heading-font-size-xlarge-max: em(96);
@@ -112,7 +118,7 @@ $button-transition: background 0.25s ease-in-out, color 0.25s ease-in-out, borde
 $button-align-items: center;
 
 // Section
-$section-padding-y: calc(#{$layout-spacing} * 2);
+//$section-padding-y: calc(#{$layout-spacing} * 2);
 
 // Grid
 
@@ -125,9 +131,10 @@ $grid-row-width: 1fr;
 $content-max-width: map-get($breakpoints, 'lg');
 
 // Header
+$header-breakpoint: map-get($breakpoints, 'sm');
 $header-padding-y: $component-spacing;
 $header-padding-x: $component-spacing;
 $header-active-color: $body-color-inverted;
-$header-font-size: 13px;
+$header-font-size: em(13);
 $header-bg: map-get($colors, 'black');
 $header-color: map-get($colors, 'gray-light');

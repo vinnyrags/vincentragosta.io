@@ -1,0 +1,18 @@
+export default {
+    color: String,
+    primary: Boolean,
+    primaryDark: Boolean,
+    primaryLight: Boolean,
+    secondary: Boolean,
+    secondaryDark: Boolean,
+    secondaryLight: Boolean,
+    tertiary: Boolean,
+    tertiaryDark: Boolean,
+    tertiaryLight: Boolean,
+    grayDark: Boolean,
+    gray: Boolean,
+    grayLight: Boolean,
+    offWhite: Boolean,
+    white: Boolean,
+    black: Boolean,
+}

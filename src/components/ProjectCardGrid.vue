@@ -1,5 +1,5 @@
 <template>
-  <Grid class="project-card-grid" edge fluid v-if="cards">
+  <Grid class="project-card-grid" fluid v-if="cards">
     <Column sm="6" :lg="setColumnLargeBreakpoint(index+1)" v-for="(card, index) in cards" :key="card.title + encodeURI(card.url) + encodeURI(card.image)">
       <ProjectCard :permalink="card.url" :image="card.image" :title="card.title"></ProjectCard>
     </Column>
@@ -9,8 +9,7 @@
 <script>
 import ProjectCard from '@/components/ProjectCard.vue';
 import Grid from "@/layout/Grid.vue";
-// import Section from "@/layout/Section.vue";
-import Column from "@/layout/Column.vue";
+import Column from "@/layout/GridColumn.vue";
 export default {
   name: 'ProjectCardGrid',
   components: {

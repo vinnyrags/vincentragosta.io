@@ -26,28 +26,28 @@
   &,
   &--default {
     font-size: var(--heading-font-size-min);
-    @media (min-width: map-get($breakpoints, 'md')) {
+    @include site-breakpoint {
       font-size: var(--heading-font-size-max);
     }
   }
 
   &--medium {
     --heading-font-size-min: #{$heading-font-size-medium-min};
-    @media (min-width: map-get($breakpoints, 'md')) {
+    @include site-breakpoint {
       --heading-font-size-max: #{$heading-font-size-medium-max};
     }
   }
 
   &--large {
     --heading-font-size-min: #{$heading-font-size-large-min};
-    @media (min-width: map-get($breakpoints, 'md')) {
+    @include site-breakpoint {
       --heading-font-size-max: #{$heading-font-size-large-max};
     }
   }
 
   &--xlarge {
     --heading-font-size-min: #{$heading-font-size-xlarge-min};
-    @media (min-width: map-get($breakpoints, 'md')) {
+    @include site-breakpoint {
       --heading-font-size-max: #{$heading-font-size-xlarge-max};
     }
   }

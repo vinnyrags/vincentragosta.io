@@ -77,7 +77,7 @@ const DynamicHeading = (props, context) => {
   return h(`h${props.level ? props.level : '2'}`, context.attrs, context.slots)
 }
 
-DynamicHeading.props = ['level', 'size', 'class', 'primary', 'primaryDark', 'primaryLight', 'secondary', 'secondaryDark', 'secondaryLight', 'tertiary', 'tertiaryDark', 'tertiaryLight', 'offWhite', 'white', 'black']
+DynamicHeading.props = ['level', 'size', 'class', 'primary', 'primaryDark', 'primaryLight', 'secondary', 'secondaryDark', 'secondaryLight', 'tertiary', 'tertiaryDark', 'tertiaryLight', 'gray', 'grayDark', 'grayLight', 'offWhite', 'white', 'black']
 
 export default DynamicHeading;
 </script>
