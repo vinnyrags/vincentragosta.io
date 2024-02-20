@@ -1,0 +1,19 @@
+$alignment: ('align-start', 'align-center', 'align-end');
+
+// TODO turn this into flex-halignment + create flex-valignment + create flex-abs-center
+@mixin flex-alignment() {
+  @each $align in $alignment {
+    $value: 'center';
+    @if ($align == 'align-start') {
+      $value: 'flex-start';
+    } @else if ($align == 'align-end') {
+      $value: 'flex-end';
+    }
+
+    &--#{$align} {
+      > [class*=__wrap] {
+        justify-content: #{$value};
+      }
+    }
+  }
+}

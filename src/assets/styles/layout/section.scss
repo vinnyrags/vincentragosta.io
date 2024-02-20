@@ -1,10 +1,10 @@
 .section {
-  --bg-tpad: #{calc($layout-spacing * 2)};
-  --bg-bpad: #{calc($layout-spacing * 2)};
-
   @extend %component-container;
-  @include color;
-  @include alignment;
+
+  --tpad: #{calc($layout-spacing * 2)};
+  --bpad: #{calc($layout-spacing * 2)};
+  --lpad: 0;
+  --rpad: 0;
 
   &__bg {
     @extend %component-container__bg;
@@ -18,25 +18,41 @@
     @extend %component-container__image;
   }
 
+  // TODO consider padding horizontal padding to container?
   &__container {
     display: grid;
     grid-template-columns: 1fr min(#{$content-max-width}, 100%) 1fr;
-    padding-top: var(--bg-tpad);
-    padding-bottom: var(--bg-bpad);
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
 
     > * {
       grid-column: 2;
     }
   }
 
+  @include color;
+  @include pad;
+  @include vpad;
+  @include hpad;
+
   &--has-bg {
     @extend %component-container--has-bg;
 
     &.section {
       @include bg-color;
-      @include vpad;
     }
   }
+
+  //&--align-start .section__container {
+  //  text-align: left;
+  //}
+  //
+  //&--align-center .section__container {
+  //  text-align: center;
+  //}
+  //
+  //&--align-end .section__container {
+  //  text-align: right;
+  //}
 
   &--fluid {
     .section__container {

@@ -1,5 +1,5 @@
 export default {
-    start: Boolean,
-    center: Boolean,
-    end: Boolean,
+    alignStart: Boolean,
+    alignCenter: Boolean,
+    alignEnd: Boolean,
 }

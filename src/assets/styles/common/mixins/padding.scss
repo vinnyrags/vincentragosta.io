@@ -1,4 +1,4 @@
-$vpad-sizes: (
+$padding-sizes: (
         'none': 0,
         'half': calc($layout-spacing * .5),
         'default': $layout-spacing,
@@ -7,30 +7,34 @@ $vpad-sizes: (
         'quadruple': calc($layout-spacing * 4)
 );
 
-$vpad-modifiers: ('vpad', 'tpad', 'bpad');
+$padding-modifiers: ('pad');
 
-@mixin vpad() {
-  @each $modifier in $vpad-modifiers {
-    @each $size, $value in $vpad-sizes {
-      &--#{$modifier}-#{$size} {
+@mixin pad() {
+  //@each $modifier in $pad-modifiers {
+    @each $size, $value in $padding-sizes {
+      &--pad-#{$size} {
         --tpad: #{$value};
         --bpad: #{$value};
+        --lpad: #{$value};
+        --rpad: #{$value};
       }
     }
-  }
+  //}
 
-  @each $modifier in $vpad-modifiers {
+  //@each $modifier in $pad-modifiers {
     @each $breakpoint in map-keys($breakpoints) {
-      &--#{$modifier}-#{$breakpoint} {
+      &--pad-#{$breakpoint} {
         @include breakpoint($breakpoint) {
-          @each $size, $value in $vpad-sizes {
+          @each $size, $value in $padding-sizes {
             &-#{$size} {
               --tpad: #{$value};
               --bpad: #{$value};
+              --lpad: #{$value};
+              --rpad: #{$value};
             }
           }
         }
       }
     }
-  }
+  //}
 }

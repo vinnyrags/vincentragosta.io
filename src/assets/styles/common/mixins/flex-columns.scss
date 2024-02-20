@@ -1,8 +1,9 @@
 @mixin flex-columns() {
   @for $i from 1 through 12 {
     &-#{$i} {
-      max-width: flex-width($i);
-      flex-basis: flex-width($i);
+      $width: calc(flex-width($i) - calc(var(--gap) / 2));
+      max-width: $width;
+      flex-basis: $width;
     }
   }
 }

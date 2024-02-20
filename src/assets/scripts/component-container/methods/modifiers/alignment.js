@@ -1,16 +1,16 @@
 export function maybeAddAlignmentModifiers(props) {
     let modifiers = [];
 
-    if (props.start) {
-        modifiers.push('start');
+    if (props.alignStart) {
+        modifiers.push('align-start');
     }
 
-    if (props.center) {
-        modifiers.push('center');
+    if (props.alignCenter) {
+        modifiers.push('align-center');
     }
 
-    if (props.end) {
-        modifiers.push('end');
+    if (props.alignEnd) {
+        modifiers.push('align-end');
     }
 
     return modifiers;

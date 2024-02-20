@@ -289,7 +289,7 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('tpad-xl-quadruple');
     }
 
-    if (props.bPadNone) {
+    if (props.bpadNone) {
         modifiers.push('bpad-none');
     }
 
@@ -297,47 +297,47 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('bpad-half');
     }
 
-    if (props.bPadDefault) {
+    if (props.bpadDefault) {
         modifiers.push('bpad-default');
     }
 
-    if (props.bPadDouble) {
+    if (props.bpadDouble) {
         modifiers.push('bpad-double');
     }
 
-    if (props.bPadTriple) {
+    if (props.bpadTriple) {
         modifiers.push('bpad-triple');
     }
 
-    if (props.bPadQuadruple) {
+    if (props.bpadQuadruple) {
         modifiers.push('bpad-quadruple');
     }
 
-    if (props.bPadXsNone) {
+    if (props.bpadXsNone) {
         modifiers.push('bpad-xs-none');
     }
 
-    if (props.bPadXsHalf) {
+    if (props.bpadXsHalf) {
         modifiers.push('bpad-xs-half');
     }
 
-    if (props.bPadXsDefault) {
+    if (props.bpadXsDefault) {
         modifiers.push('bpad-xs-default');
     }
 
-    if (props.bPadXsDouble) {
+    if (props.bpadXsDouble) {
         modifiers.push('bpad-xs-double');
     }
 
-    if (props.bPadXsTriple) {
+    if (props.bpadXsTriple) {
         modifiers.push('bpad-xs-triple');
     }
 
-    if (props.bPadXsQuadruple) {
+    if (props.bpadXsQuadruple) {
         modifiers.push('bpad-xs-quadruple');
     }
 
-    if (props.bPadSmNone) {
+    if (props.bpadSmNone) {
         modifiers.push('bpad-sm-none');
     }
 
@@ -345,23 +345,23 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('bpad-sm-half');
     }
 
-    if (props.bPadSmDefault) {
+    if (props.bpadSmDefault) {
         modifiers.push('bpad-sm-default');
     }
 
-    if (props.bPadSmDouble) {
+    if (props.bpadSmDouble) {
         modifiers.push('bpad-sm-double');
     }
 
-    if (props.bPadSmTriple) {
+    if (props.bpadSmTriple) {
         modifiers.push('bpad-sm-triple');
     }
 
-    if (props.bPadSmQuadruple) {
+    if (props.bpadSmQuadruple) {
         modifiers.push('bpad-sm-quadruple');
     }
 
-    if (props.bPadMdNone) {
+    if (props.bpadMdNone) {
         modifiers.push('bpad-md-none');
     }
 
@@ -369,23 +369,23 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('bpad-md-half');
     }
 
-    if (props.bPadMdDefault) {
+    if (props.bpadMdDefault) {
         modifiers.push('bpad-md-default');
     }
 
-    if (props.bPadMdDouble) {
+    if (props.bpadMdDouble) {
         modifiers.push('bpad-md-double');
     }
 
-    if (props.bPadMdTriple) {
+    if (props.bpadMdTriple) {
         modifiers.push('bpad-md-triple');
     }
 
-    if (props.bPadMdQuadruple) {
+    if (props.bpadMdQuadruple) {
         modifiers.push('bpad-md-quadruple');
     }
 
-    if (props.bPadLgNone) {
+    if (props.bpadLgNone) {
         modifiers.push('bpad-lg-none');
     }
 
@@ -393,23 +393,23 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('bpad-lg-half');
     }
 
-    if (props.bPadLgDefault) {
+    if (props.bpadLgDefault) {
         modifiers.push('bpad-lg-default');
     }
 
-    if (props.bPadLgDouble) {
+    if (props.bpadLgDouble) {
         modifiers.push('bpad-lg-double');
     }
 
-    if (props.bPadLgTriple) {
+    if (props.bpadLgTriple) {
         modifiers.push('bpad-lg-triple');
     }
 
-    if (props.bPadLgQuadruple) {
+    if (props.bpadLgQuadruple) {
         modifiers.push('bpad-lg-quadruple');
     }
 
-    if (props.bPadXlNone) {
+    if (props.bpadXlNone) {
         modifiers.push('bpad-xl-none');
     }
 
@@ -417,19 +417,19 @@ export function maybeAddVerticalPaddingModifiers(props) {
         modifiers.push('bpad-xl-half');
     }
 
-    if (props.bPadXlDefault) {
+    if (props.bpadXlDefault) {
         modifiers.push('bpad-xl-default');
     }
 
-    if (props.bPadXlDouble) {
+    if (props.bpadXlDouble) {
         modifiers.push('bpad-xl-double');
     }
 
-    if (props.bPadXlTriple) {
+    if (props.bpadXlTriple) {
         modifiers.push('bpad-xl-triple');
     }
 
-    if (props.bPadXlQuadruple) {
+    if (props.bpadXlQuadruple) {
         modifiers.push('bpad-xl-quadruple');
     }
 

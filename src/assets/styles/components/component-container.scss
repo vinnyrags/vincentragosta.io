@@ -1,5 +1,7 @@
 .component-container,
 %component-container {
+  //--tpad: #{$layout-spacing};
+  //--bpad: #{$layout-spacing};
   --bg-color: inherit;
   --color: inherit;
 
@@ -28,8 +30,8 @@
     --color: #{$body-color-inverted};
 
     > [class*=__wrap] {
-      padding-top: var(--bg-tpad);
-      padding-bottom: var(--bg-bpad)
+      --tpad: #{$layout-spacing};
+      --bpad: #{$layout-spacing};
     }
   }
 }

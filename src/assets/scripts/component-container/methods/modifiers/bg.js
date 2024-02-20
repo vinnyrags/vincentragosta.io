@@ -1,4 +1,4 @@
-import {maybeAddBgColorModifiers} from '@/assets/scripts/component-container/methods/modifiers/background-colors';
+import {maybeAddBgColorModifiers} from '@/assets/scripts/component-container/methods/modifiers/bg-colors';
 import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
 
 export function maybeAddBgModifiers(props) {

@@ -13,8 +13,8 @@
 <script>
 
 import componentContainerProps from "@/assets/scripts/component-container/props/props";
-import { hasBg } from "@/assets/scripts/component-container/methods/has-bg";
-import { cssVars } from "@/assets/scripts/component-container/computed/css-vars";
+import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
+import {cssVars} from "@/assets/scripts/component-container/computed/css-vars";
 import {componentContainerModifiers} from "@/assets/scripts/component-container/methods/modifiers";
 
 export default {

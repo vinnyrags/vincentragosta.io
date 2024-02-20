@@ -1,11 +1,11 @@
 .flex-row {
-  --bg-tpad: #{$layout-spacing};
-  --bg-bpad: #{$layout-spacing};
-  --gap: #{$component-spacing};
-
   @extend %component-container;
-  @include color;
-  @include alignment;
+
+  --gap: #{$component-spacing};
+  --tpad: 0;
+  --bpad: 0;
+  --lpad: 0;
+  --rpad: 0;
 
   &__bg {
     @extend %component-container__bg;
@@ -20,17 +20,24 @@
   }
 
   &__wrap {
+    //height: 100%;
     display: flex;
     flex-flow: row wrap;
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
     gap: var(--gap);
   }
+
+  @include color;
+  @include flex-alignment;
+  @include pad;
+  @include vpad;
+  @include hpad;
 
   &--has-bg {
     @extend %component-container--has-bg;
 
     &.flex-row {
       @include bg-color;
-      @include vpad;
     }
   }
 }

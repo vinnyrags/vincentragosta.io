@@ -1,32 +1,30 @@
 .flex-column {
-  --flex-column-bg-color: inherit;
-  --flex-column-color: inherit;
-  --flex-column-wrap-padding-y: #{$layout-spacing * 2};
-  --flex-column-wrap-padding-x: calc(#{$component-spacing} / 2);
-  --flex-column-margin-bottom: #{$component-spacing};
+  @extend %component-container;
 
-  position: relative;
-  color: var(--flex-column-color);
+  --tpad: 0;
+  --bpad: 0;
+  --lpad: #{$component-spacing};
+  --rpad: #{$component-spacing};
+  --mbottom: #{$component-spacing};
 
   &__bg {
-    background: var(--flex-column-bg-color);
-    position: absolute;
-    inset: 0;
-    z-index: -1;
+    @extend %component-container__bg;
   }
 
   &__video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    @extend %component-container__video;
+  }
+
+  &__image {
+    @extend %component-container__image;
   }
 
   &__wrap {
-    padding-left: var(--flex-column-wrap-padding-x);
-    padding-right: var(--flex-column-wrap-padding-x);
+    height: 100%;
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
 
     > * {
-      margin-bottom: var(--flex-column-margin-bottom);
+      margin-bottom: var(--mbottom);
 
       &:last-child {
         margin-bottom: 0;
@@ -34,143 +32,24 @@
     }
   }
 
-  &--has-bg {
-    --flex-column-color: #{$body-color-inverted};
+  @include color;
+  @include text-alignment;
+  @include pad;
+  @include hpad;
+  @include vpad;
 
-    .flex-column__container {
-      padding-top: var(--flex-column-wrap-padding-y);
-      padding-bottom: var(--flex-column-wrap-padding-y)
-    }
+  &--has-bg {
+    @extend %component-container--has-bg;
 
     &.flex-column {
-      &--bg-primary {
-        --flex-column-bg-color: #{map-get($colors, 'primary')};
-      }
-
-      &--bg-primary-dark {
-        --flex-column-bg-color: #{map-get($colors, 'primary-dark')};
-      }
-
-      &--bg-primary-light {
-        --flex-column-bg-color: #{map-get($colors, 'primary-light')};
-      }
-
-      &--bg-secondary {
-        --flex-column-bg-color: #{map-get($colors, 'secondary')};
-      }
-
-      &--bg-secondary-dark {
-        --flex-column-bg-color: #{map-get($colors, 'secondary-dark')};
-      }
-
-      &--bg-secondary-light {
-        --flex-column-bg-color: #{map-get($colors, 'secondary-light')};
-      }
-
-      &--bg-tertiary {
-        --flex-column-bg-color: #{map-get($colors, 'tertiary')};
-      }
-
-      &--bg-tertiary-dark {
-        --flex-column-bg-color: #{map-get($colors, 'tertiary-dark')};
-      }
-
-      &--bg-tertiary-light {
-        --flex-column-bg-color: #{map-get($colors, 'tertiary-light')};
-      }
-
-      &--bg-gray {
-        --flex-column-bg-color: #{map-get($colors, 'gray')};
-      }
-
-      &--bg-gray-dark {
-        --flex-column-bg-color: #{map-get($colors, 'gray-dark')};
-      }
-
-      &--bg-gray-light {
-        --flex-column-bg-color: #{map-get($colors, 'gray-light')};
-      }
-
-      &--bg-off-white {
-        --flex-column-bg-color: #{map-get($colors, 'off-white')};
-        --flex-column-color: #{$body-color};
-      }
-
-      &--bg-white {
-        --flex-column-bg-color: #{map-get($colors, 'white')};
-        --flex-column-color: #{$body-color};
-      }
-
-      &--bg-black {
-        --flex-column-bg-color: #{map-get($colors, 'black')};
-      }
-
-      &--primary {
-        --flex-column-color: #{map-get($colors, 'primary')};
-      }
-
-      &--primary-dark {
-        --flex-column-color: #{map-get($colors, 'primary-dark')};
-      }
-
-      &--primary-light {
-        --flex-column-color: #{map-get($colors, 'primary-light')};
-      }
-
-      &--secondary {
-        --flex-column-color: #{map-get($colors, 'secondary')};
-      }
-
-      &--secondary-dark {
-        --flex-column-color: #{map-get($colors, 'secondary-dark')};
-      }
-
-      &--secondary-light {
-        --flex-column-color: #{map-get($colors, 'secondary-light')};
-      }
-
-      &--tertiary {
-        --flex-column-color: #{map-get($colors, 'tertiary')};
-      }
-
-      &--tertiary-dark {
-        --flex-column-color: #{map-get($colors, 'tertiary-dark')};
-      }
-
-      &--tertiary-light {
-        --flex-column-color: #{map-get($colors, 'tertiary-light')};
-      }
-
-      &--gray-dark {
-        --flex-column-color: #{map-get($colors, 'gray-dark')};
-      }
-
-      &--gray {
-        --flex-column-color: #{map-get($colors, 'gray')};
-      }
-
-      &--gray-light {
-        --flex-column-color: #{map-get($colors, 'gray-light')};
-      }
-
-      &--off-white {
-        --flex-column-color: #{map-get($colors, 'off-white')};
-      }
-
-      &--white {
-        --flex-column-color: #{map-get($colors, 'white')};
-      }
-
-      &--black {
-        --flex-column-color: #{map-get($colors, 'black')};
-      }
+      @include bg-color;
     }
   }
 }
 
+// TODO consider making a modifier
 .flex-column {
   @include flex-columns;
-  //flex-columnumn-start: span 12;
 
   &-xs {
     @include breakpoint-xs {

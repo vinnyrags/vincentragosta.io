@@ -1,0 +1,17 @@
+$alignment: ('align-start', 'align-center', 'align-end');
+
+@mixin text-alignment() {
+  @each $align in $alignment {
+    $value: 'center';
+    @if ($align == 'align-start') {
+      $value: 'left';
+    } @else if ($align == 'align-end') {
+      $value: 'right';
+    }
+    &--#{$align} {
+      > [class*=__wrap] {
+        text-align: #{$value};
+      }
+    }
+  }
+}

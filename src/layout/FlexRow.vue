@@ -13,15 +13,17 @@
 <script>
 
 import componentContainerProps from "@/assets/scripts/component-container/props/props";
-import { hasBg } from "@/assets/scripts/component-container/methods/has-bg";
-import { cssVars } from "@/assets/scripts/component-container/computed/css-vars";
-import { componentContainerModifiers } from "@/assets/scripts/component-container/methods/modifiers";
+import alignment from '@/assets/scripts/component-container/props/alignment';
+import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
+import {cssVars} from "@/assets/scripts/component-container/computed/css-vars";
+import {componentContainerModifiers} from "@/assets/scripts/component-container/methods/modifiers";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'FlexRow',
   props: {
-    ...componentContainerProps
+    ...componentContainerProps,
+    ...alignment
   },
   components: {},
   methods: {

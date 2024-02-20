@@ -1,8 +1,7 @@
-import alignment from '@/assets/scripts/component-container/props/alignment';
-import vpad from "@/assets/scripts/component-container/props/vpad";
-import bg from '@/assets/scripts/component-container/props/background';
+import bg from '@/assets/scripts/component-container/props/bg';
 import colors from '@/assets/scripts/component-container/props/colors';
+import padding from "@/assets/scripts/component-container/props/padding";
 
 export default {
-    ...bg, ...colors, ...alignment, ...vpad
+    ...bg, ...colors, ...padding
 }
