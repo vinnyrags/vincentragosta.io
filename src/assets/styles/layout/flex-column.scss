@@ -3,9 +3,12 @@
 
   --tpad: 0;
   --bpad: 0;
-  --lpad: #{$component-spacing};
-  --rpad: #{$component-spacing};
-  --mbottom: #{$component-spacing};
+  --lpad: #{$layout-spacing-half};
+  --rpad: #{$layout-spacing-half};
+  --gutter-width: calc(#{$layout-spacing-half} / 2);
+  --component-spacing: #{$layout-spacing-half};
+
+  margin: var(--gutter-width);
 
   &__bg {
     @extend %component-container__bg;
@@ -20,11 +23,10 @@
   }
 
   &__wrap {
-    height: 100%;
     padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
 
     > * {
-      margin-bottom: var(--mbottom);
+      margin-bottom: var(--component-spacing);
 
       &:last-child {
         margin-bottom: 0;
@@ -47,7 +49,6 @@
   }
 }
 
-// TODO consider making a modifier
 .flex-column {
   @include flex-columns;
 

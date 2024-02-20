@@ -1,7 +1,7 @@
 .flex-row {
   @extend %component-container;
 
-  --gap: #{$component-spacing};
+  --gutter-width: #{$layout-spacing-half};
   --tpad: 0;
   --bpad: 0;
   --lpad: 0;
@@ -20,11 +20,10 @@
   }
 
   &__wrap {
-    //height: 100%;
     display: flex;
     flex-flow: row wrap;
     padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
-    gap: var(--gap);
+    margin: calc(calc(var(--gutter-width) / 2) * -1);
   }
 
   @include color;
@@ -35,6 +34,8 @@
 
   &--has-bg {
     @extend %component-container--has-bg;
+    --rpad: #{$layout-spacing-half};
+    --lpad: #{$layout-spacing-half};
 
     &.flex-row {
       @include bg-color;

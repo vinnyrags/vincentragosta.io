@@ -59,7 +59,8 @@ $root-font-size: 100%;
 // Spacing
 
 $layout-spacing: 50px;
-$component-spacing: calc($layout-spacing / 2);
+$layout-spacing-half: calc($layout-spacing / 2);
+$component-spacing: $layout-spacing-half;
 
 // Body
 
