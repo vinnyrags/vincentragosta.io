@@ -10,7 +10,7 @@
   margin-bottom: var(--component-spacing);
 
   @include breakpoint-md() {
-    --component-spacing: #{calc($layout-spacing * 2)};
+    --component-spacing: #{$layout-spacing-double};
   }
 
   &__bg {
@@ -48,8 +48,8 @@
       --bpad: #{$layout-spacing};
 
       @include breakpoint-md() {
-        --tpad: #{calc($layout-spacing * 2)};
-        --bpad: #{calc($layout-spacing * 2)};
+        --tpad: #{$layout-spacing-double};
+        --bpad: #{$layout-spacing-double};
       }
     }
 

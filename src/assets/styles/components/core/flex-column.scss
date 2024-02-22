@@ -8,6 +8,7 @@
 
   @extend %shared-container;
 
+  display: flex;
   margin: var(--gutter-width);
 
   &__bg {
@@ -23,6 +24,7 @@
   }
 
   &__wrap {
+    width: 100%;
     padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
 
     > * {
@@ -35,6 +37,7 @@
   }
 
   @include color;
+  @include flex-valignment;
   @include text-alignment;
   @include pad;
   @include hpad;
@@ -50,6 +53,14 @@
 
     &.flex-column {
       @include bg-color;
+    }
+  }
+
+  &--abs-center {
+    align-items: center;
+
+    .flex-column__wrap {
+      text-align: center;
     }
   }
 }

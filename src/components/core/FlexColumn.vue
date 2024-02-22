@@ -13,8 +13,10 @@
 <script>
 
 // TODO test video/image bg for all containers
+
 import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
-import alignmentProps from '@/assets/scripts/shared-container/props/alignment';
+import halignmentProps from '@/assets/scripts/shared-container/props/halignment';
+import valignmentProps from '@/assets/scripts/shared-container/props/valignment';
 import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
 import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
 
@@ -40,7 +42,8 @@ export default {
     offsetXl: String,
 
     ...sharedContainer.props,
-    ...alignmentProps
+    ...halignmentProps,
+    ...valignmentProps,
   },
   components: {},
   methods: {
@@ -59,20 +62,12 @@ export default {
     extraClasses() {
       let classes = [];
 
-      // TODO right now we are using alignment being ported in from component container, is that the way to go?
-      // if (this.center) {
-      //   classes.push('text-center');
-      // }
-
-      // TODO consider making modifiers (maybe not though)
-      // console.log(this.width);
       if (this.width) {
         classes.push('flex-column-' + this.width);
       }
 
       const responsiveBreakpoints = this.responsiveBreakpoints;
       if (responsiveBreakpoints && responsiveBreakpoints.length) {
-        // TODO consider making modifier
         responsiveBreakpoints.forEach((breakpoint) => {
           classes.push('flex-column-' + breakpoint.breakpoint + '-' + breakpoint.width);
           // classes.push('flex-column-' + responsiveBreakpoints[index].breakpoint + '-' + responsiveBreakpoints[index].width);

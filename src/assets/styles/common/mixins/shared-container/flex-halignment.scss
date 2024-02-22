@@ -1,8 +1,6 @@
-//$alignment: ('align-start', 'align-center', 'align-end');
-
 // TODO add breakpoint support
-// TODO turn this into flex-halignment + create flex-valignment + create flex-abs-center
-@mixin flex-alignment() {
+// TODO create flex-abs-center
+@mixin flex-halignment() {
   @each $align in $alignment {
     $value: 'center';
     @if ($align == 'align-start') {

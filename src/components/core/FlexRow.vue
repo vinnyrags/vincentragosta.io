@@ -13,7 +13,7 @@
 <script>
 
 import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
-import alignmentProps from '@/assets/scripts/shared-container/props/alignment';
+import halignmentProps from '@/assets/scripts/shared-container/props/halignment';
 import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
 import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
 
@@ -22,7 +22,7 @@ export default {
   name: 'FlexRow',
   props: {
     ...sharedContainer.props,
-    ...alignmentProps
+    ...halignmentProps
   },
   components: {},
   methods: {

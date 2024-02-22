@@ -1,0 +1,16 @@
+// TODO add breakpoint support
+// TODO create flex-abs-center
+@mixin flex-valignment() {
+  @each $align in $valignment {
+    $value: 'center';
+    @if ($align == 'valign-start') {
+      $value: 'flex-start';
+    } @else if ($align == 'valign-end') {
+      $value: 'flex-end';
+    }
+
+    &--#{$align} {
+      align-items: #{$value};
+    }
+  }
+}

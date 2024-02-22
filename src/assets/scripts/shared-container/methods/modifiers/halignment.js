@@ -1,4 +1,4 @@
-export function maybeAddAlignmentModifiers(props) {
+export function maybeAddHorizontalAlignmentModifiers(props) {
     let modifiers = [];
 
     if (props.alignStart) {
