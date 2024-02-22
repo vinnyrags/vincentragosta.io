@@ -1,7 +1,7 @@
 <template>
   <header class="header" :class="open ? 'header--open' : ''">
     <Heading :level="1" class="header__logo">
-      <a href="/">Vincent Ragosta Inc.</a>
+      <a href="/public">Vincent Ragosta Inc.</a>
     </Heading>
     <div class="header__menu-container" v-if="menu">
       <div class="header__hamburger" @click="open = (open === false);">

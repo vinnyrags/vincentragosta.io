@@ -12,6 +12,7 @@
 
 <script>
 
+// TODO test video/image bg for all containers
 import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
 import alignmentProps from '@/assets/scripts/shared-container/props/alignment';
 import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";

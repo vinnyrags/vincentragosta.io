@@ -8,8 +8,8 @@
 
 <script>
 import ProjectCard from '@/components/ProjectCard.vue';
-import Grid from "@/layout/Grid.vue";
-import Column from "@/layout/GridColumn.vue";
+import Grid from "@/components/core/Grid.vue";
+import Column from "@/components/core/GridColumn.vue";
 export default {
   name: 'ProjectCardGrid',
   components: {

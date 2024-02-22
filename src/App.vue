@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import Header from '@/modules/Header.vue';
+import Header from '@/components/Header.vue';
 import FrontPage from '@/pages/FrontPage.vue';
 
 export default {
