@@ -14,4 +14,4 @@ $sizes: (
 $vpad-modifiers: ('vpad', 'tpad', 'bpad');
 $hpad-modifiers: ('hpad', 'lpad', 'rpad');
 
-$content-max-width: map-get($breakpoints, 'lg');
+$content-max-width: calc(map-get($breakpoints, 'lg') + $layout-spacing + $layout-spacing-half);

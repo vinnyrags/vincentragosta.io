@@ -1,5 +1,5 @@
-import {maybeAddBgColorModifiers} from '@/assets/scripts/component-container/methods/modifiers/bg-colors';
-import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
+import {maybeAddBgColorModifiers} from '@/assets/scripts/shared-container/methods/modifiers/bg-colors';
+import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
 
 export function maybeAddBgModifiers(props) {
     let modifiers = [];

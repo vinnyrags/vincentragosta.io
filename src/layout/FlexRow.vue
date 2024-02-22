@@ -12,25 +12,24 @@
 
 <script>
 
-import componentContainerProps from "@/assets/scripts/component-container/props/props";
-import alignment from '@/assets/scripts/component-container/props/alignment';
-import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
-import {cssVars} from "@/assets/scripts/component-container/computed/css-vars";
-import {componentContainerModifiers} from "@/assets/scripts/component-container/methods/modifiers";
+import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
+import alignmentProps from '@/assets/scripts/shared-container/props/alignment';
+import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
+import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'FlexRow',
   props: {
-    ...componentContainerProps,
-    ...alignment
+    ...sharedContainer.props,
+    ...alignmentProps
   },
   components: {},
   methods: {
     hasBg,
     modifiers() {
       let themeModifiers = [];
-      return [...themeModifiers, ...(componentContainerModifiers(this.$props))].map((modifier) => {
+      return [...themeModifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'flex-row--' + modifier;
       });
     },

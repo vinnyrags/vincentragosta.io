@@ -12,11 +12,10 @@
 
 <script>
 
-import componentContainerProps from "@/assets/scripts/component-container/props/props";
-import alignmentProps from '@/assets/scripts/component-container/props/alignment';
-import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
-import {cssVars} from "@/assets/scripts/component-container/computed/css-vars";
-import {componentContainerModifiers} from "@/assets/scripts/component-container/methods/modifiers";
+import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
+import alignmentProps from '@/assets/scripts/shared-container/props/alignment';
+import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
+import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -39,7 +38,7 @@ export default {
     offsetLg: String,
     offsetXl: String,
 
-    ...componentContainerProps,
+    ...sharedContainer.props,
     ...alignmentProps
   },
   components: {},
@@ -52,7 +51,7 @@ export default {
         modifiers.push('has-offset');
       }
 
-      return [...modifiers, ...(componentContainerModifiers(this.$props))].map((modifier) => {
+      return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'flex-column--' + modifier;
       });
     },

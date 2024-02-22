@@ -6,26 +6,31 @@
   --lpad: 0;
   --rpad: 0;
 
-  @extend %component-container;
+  @extend %shared-container;
 
+  margin-bottom: var(--component-spacing);
   padding-left: #{calc($layout-spacing-half / 2)};
   padding-right: #{calc($layout-spacing-half / 2)};
-  margin-bottom: var(--component-spacing);
+
+  @include breakpoint-md() {
+    padding-left: #{$layout-spacing-half};
+    padding-right: #{$layout-spacing-half};
+  }
 
   &:last-child {
     margin-bottom: 0;
   }
 
   &__bg {
-    @extend %component-container__bg;
+    @extend %shared-container__bg;
   }
 
   &__video {
-    @extend %component-container__video;
+    @extend %shared-container__video;
   }
 
   &__image {
-    @extend %component-container__image;
+    @extend %shared-container__image;
   }
 
   &__wrap {
@@ -42,7 +47,7 @@
   @include hpad;
 
   &--has-bg {
-    @extend %component-container--has-bg;
+    @extend %shared-container--has-bg;
 
     > [class*=__wrap] {
       --tpad: #{$layout-spacing};
