@@ -1,0 +1,17 @@
+$layout-spacing: 50px;
+$layout-spacing-half: calc($layout-spacing / 2);
+$component-spacing: $layout-spacing-half;
+
+$sizes: (
+        'none': 0,
+        'half': calc($layout-spacing * .5),
+        'default': $layout-spacing,
+        'double': calc($layout-spacing * 2),
+        'triple': calc($layout-spacing * 3),
+        'quadruple': calc($layout-spacing * 4)
+);
+
+$vpad-modifiers: ('vpad', 'tpad', 'bpad');
+$hpad-modifiers: ('hpad', 'lpad', 'rpad');
+
+$content-max-width: map-get($breakpoints, 'lg');

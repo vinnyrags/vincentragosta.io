@@ -4,14 +4,15 @@
       <video v-if="video" class="section__video" type="video/mp4" :src="video" autoplay muted loop></video>
       <img v-if="image" class="section__image" :src="image"/>
     </div>
-    <div class="section__container">
+    <div class="section__wrap">
       <slot></slot>
     </div>
   </section>
 </template>
 
 <script>
-
+// TODO add README somewhere clever
+// TODO rename componentContainer to sharedContainer
 import componentContainerProps from "@/assets/scripts/component-container/props/props";
 import {hasBg} from "@/assets/scripts/component-container/methods/has-bg";
 import {cssVars} from "@/assets/scripts/component-container/computed/css-vars";

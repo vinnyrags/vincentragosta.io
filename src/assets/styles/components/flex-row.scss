@@ -1,11 +1,20 @@
 .flex-row {
-  @extend %component-container;
-
+  --component-spacing: #{$layout-spacing};
   --gutter-width: #{$layout-spacing-half};
   --tpad: 0;
   --bpad: 0;
   --lpad: 0;
   --rpad: 0;
+
+  @extend %component-container;
+
+  padding-left: #{calc($layout-spacing-half / 2)};
+  padding-right: #{calc($layout-spacing-half / 2)};
+  margin-bottom: var(--component-spacing);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &__bg {
     @extend %component-container__bg;
@@ -23,7 +32,7 @@
     display: flex;
     flex-flow: row wrap;
     padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
-    margin: calc(calc(var(--gutter-width) / 2) * -1);
+    margin: calc(var(--gutter-width) / -2);
   }
 
   @include color;
@@ -34,8 +43,11 @@
 
   &--has-bg {
     @extend %component-container--has-bg;
-    --rpad: #{$layout-spacing-half};
-    --lpad: #{$layout-spacing-half};
+
+    > [class*=__wrap] {
+      --tpad: #{$layout-spacing};
+      --bpad: #{$layout-spacing};
+    }
 
     &.flex-row {
       @include bg-color;

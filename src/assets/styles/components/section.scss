@@ -1,10 +1,17 @@
 .section {
-  @extend %component-container;
-
-  --tpad: #{$layout-spacing};
-  --bpad: #{$layout-spacing};
+  --component-spacing: #{$layout-spacing};
+  --tpad: 0;
+  --bpad: 0;
   --lpad: 0;
   --rpad: 0;
+
+  @extend %component-container;
+
+  margin-bottom: var(--component-spacing);
+
+  @include breakpoint-md() {
+    --component-spacing: #{calc($layout-spacing * 2)};
+  }
 
   &__bg {
     @extend %component-container__bg;
@@ -18,8 +25,7 @@
     @extend %component-container__image;
   }
 
-  // TODO consider padding horizontal padding to container?
-  &__container {
+  &__wrap {
     display: grid;
     grid-template-columns: 1fr min(#{$content-max-width}, 100%) 1fr;
     padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
@@ -37,15 +43,33 @@
   &--has-bg {
     @extend %component-container--has-bg;
 
+    > [class*=__wrap] {
+      --tpad: #{$layout-spacing};
+      --bpad: #{$layout-spacing};
+
+      @include breakpoint-md() {
+        --tpad: #{calc($layout-spacing * 2)};
+        --bpad: #{calc($layout-spacing * 2)};
+      }
+    }
+
     &.section {
       @include bg-color;
     }
   }
 
   &--fluid {
-    .section__container {
+    .section__wrap {
       width: 100%;
       grid-column: 1 / 4;
     }
+  }
+
+  article > &:first-child:not(.section--has-bg) {
+    margin-top: var(--component-spacing);
+  }
+
+  &:last-child {
+    margin-bottom: 0;
   }
 }

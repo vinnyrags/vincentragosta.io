@@ -1,17 +1,6 @@
-$hpad-sizes: (
-        'none': 0,
-        'half': calc($layout-spacing * .5),
-        'default': $layout-spacing,
-        'double': calc($layout-spacing * 2),
-        'triple': calc($layout-spacing * 3),
-        'quadruple': calc($layout-spacing * 4)
-);
-
-$hpad-modifiers: ('hpad', 'lpad', 'rpad');
-
 @mixin hpad() {
   @each $modifier in $hpad-modifiers {
-    @each $size, $value in $hpad-sizes {
+    @each $size, $value in $sizes {
       &--#{$modifier}-#{$size} {
         --lpad: #{$value};
         --rpad: #{$value};
@@ -23,7 +12,7 @@ $hpad-modifiers: ('hpad', 'lpad', 'rpad');
     @each $breakpoint in map-keys($breakpoints) {
       &--#{$modifier}-#{$breakpoint} {
         @include breakpoint($breakpoint) {
-          @each $size, $value in $hpad-sizes {
+          @each $size, $value in $sizes {
             &-#{$size} {
               --lpad: #{$value};
               --rpad: #{$value};

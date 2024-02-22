@@ -1,12 +1,12 @@
 .flex-column {
-  @extend %component-container;
-
+  --component-spacing: #{$layout-spacing-half};
+  --gutter-width: calc(#{$layout-spacing-half} / 2);
   --tpad: 0;
   --bpad: 0;
-  --lpad: #{$layout-spacing-half};
-  --rpad: #{$layout-spacing-half};
-  --gutter-width: calc(#{$layout-spacing-half} / 2);
-  --component-spacing: #{$layout-spacing-half};
+  --lpad: calc(#{$layout-spacing-half} / 2);
+  --rpad: calc(#{$layout-spacing-half} / 2);
+
+  @extend %component-container;
 
   margin: var(--gutter-width);
 
@@ -42,6 +42,11 @@
 
   &--has-bg {
     @extend %component-container--has-bg;
+
+    > [class*=__wrap] {
+      --tpad: #{$layout-spacing};
+      --bpad: #{$layout-spacing};
+    }
 
     &.flex-column {
       @include bg-color;

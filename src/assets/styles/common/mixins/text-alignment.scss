@@ -1,5 +1,3 @@
-$alignment: ('align-start', 'align-center', 'align-end');
-
 @mixin text-alignment() {
   @each $align in $alignment {
     $value: 'center';

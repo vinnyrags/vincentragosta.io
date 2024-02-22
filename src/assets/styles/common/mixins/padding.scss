@@ -1,40 +1,25 @@
-$padding-sizes: (
-        'none': 0,
-        'half': calc($layout-spacing * .5),
-        'default': $layout-spacing,
-        'double': calc($layout-spacing * 2),
-        'triple': calc($layout-spacing * 3),
-        'quadruple': calc($layout-spacing * 4)
-);
-
-$padding-modifiers: ('pad');
-
 @mixin pad() {
-  //@each $modifier in $pad-modifiers {
-    @each $size, $value in $padding-sizes {
-      &--pad-#{$size} {
-        --tpad: #{$value};
-        --bpad: #{$value};
-        --lpad: #{$value};
-        --rpad: #{$value};
-      }
+  @each $size, $value in $sizes {
+    &--pad-#{$size} {
+      --tpad: #{$value};
+      --bpad: #{$value};
+      --lpad: #{$value};
+      --rpad: #{$value};
     }
-  //}
+  }
 
-  //@each $modifier in $pad-modifiers {
-    @each $breakpoint in map-keys($breakpoints) {
-      &--pad-#{$breakpoint} {
-        @include breakpoint($breakpoint) {
-          @each $size, $value in $padding-sizes {
-            &-#{$size} {
-              --tpad: #{$value};
-              --bpad: #{$value};
-              --lpad: #{$value};
-              --rpad: #{$value};
-            }
+  @each $breakpoint in map-keys($breakpoints) {
+    &--pad-#{$breakpoint} {
+      @include breakpoint($breakpoint) {
+        @each $size, $value in $sizes {
+          &-#{$size} {
+            --tpad: #{$value};
+            --bpad: #{$value};
+            --lpad: #{$value};
+            --rpad: #{$value};
           }
         }
       }
     }
-  //}
+  }
 }
