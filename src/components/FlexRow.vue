@@ -12,10 +12,10 @@
 
 <script>
 
-import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
-import halignmentProps from '@/assets/scripts/shared-container/props/halignment';
-import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
-import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
+import sharedContainer from "@/assets/scripts/components/shared-container";
+import halignmentProps from '@/assets/scripts/props/alignment/halignment';
+import {hasBg} from "@/assets/scripts/functions/bg/hasBg";
+import {cssVars} from "@/assets/scripts/functions/cssVars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names

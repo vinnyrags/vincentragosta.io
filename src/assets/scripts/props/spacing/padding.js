@@ -1,5 +1,5 @@
-import vpad from "@/assets/scripts/shared-container/props/vpad";
-import hpad from "@/assets/scripts/shared-container/props/hpad";
+import vpad from "@/assets/scripts/props/spacing/vpad";
+import hpad from "@/assets/scripts/props/spacing/hpad";
 
 export default {
     padNone: Boolean,

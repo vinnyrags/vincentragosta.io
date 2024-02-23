@@ -14,11 +14,10 @@
 
 // TODO test video/image bg for all containers
 
-import sharedContainer from "@/assets/scripts/shared-container/SharedContainer";
-import halignmentProps from '@/assets/scripts/shared-container/props/halignment';
-import valignmentProps from '@/assets/scripts/shared-container/props/valignment';
-import {hasBg} from "@/assets/scripts/shared-container/methods/has-bg";
-import {cssVars} from "@/assets/scripts/shared-container/computed/css-vars";
+import sharedContainer from "@/assets/scripts/components/shared-container";
+import alignmentProps from '@/assets/scripts/props/alignment';
+import {hasBg} from "@/assets/scripts/functions/bg/hasBg";
+import {cssVars} from "@/assets/scripts/functions/cssVars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -42,8 +41,7 @@ export default {
     offsetXl: String,
 
     ...sharedContainer.props,
-    ...halignmentProps,
-    ...valignmentProps,
+    ...alignmentProps,
   },
   components: {},
   methods: {
