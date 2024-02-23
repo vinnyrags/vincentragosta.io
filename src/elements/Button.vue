@@ -11,6 +11,7 @@
 </template>
 
 <script>
+// TODO abstract color props and modifiers
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Button',

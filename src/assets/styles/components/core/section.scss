@@ -13,8 +13,18 @@
     --component-spacing: #{$layout-spacing-double};
   }
 
+  @include bmargin;
+
   &__bg {
     @extend %shared-container__bg;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .3);
+    }
   }
 
   &__video {
@@ -36,25 +46,18 @@
   }
 
   @include color;
-  @include pad;
-  @include vpad;
-  @include hpad;
 
   &--has-bg {
     @extend %shared-container--has-bg;
 
-    > [class*=__wrap] {
-      --tpad: #{$layout-spacing};
-      --bpad: #{$layout-spacing};
-
-      @include breakpoint-md() {
-        --tpad: #{$layout-spacing-double};
-        --bpad: #{$layout-spacing-double};
-      }
-    }
+    --tpad: #{$layout-spacing-double};
+    --bpad: #{$layout-spacing-double};
 
     &.section {
       @include bg-color;
+      @include pad;
+      @include vpad;
+      @include hpad;
     }
   }
 

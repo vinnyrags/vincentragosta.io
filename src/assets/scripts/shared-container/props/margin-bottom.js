@@ -1,0 +1,43 @@
+export default {
+    bmarginNone: Boolean,
+    bmarginXsNone: Boolean,
+    bmarginSmNone: Boolean,
+    bmarginMdNone: Boolean,
+    bmarginLgNone: Boolean,
+    bmarginXlNone: Boolean,
+
+    bmarginHalf: Boolean,
+    bmarginXsHalf: Boolean,
+    bmarginSmHalf: Boolean,
+    bmarginMdHalf: Boolean,
+    bmarginLgHalf: Boolean,
+    bmarginXlHalf: Boolean,
+
+    bmarginDefault: Boolean,
+    bmarginXsDefault: Boolean,
+    bmarginSmDefault: Boolean,
+    bmarginMdDefault: Boolean,
+    bmarginLgDefault: Boolean,
+    bmarginXlDefault: Boolean,
+
+    bmarginDouble: Boolean,
+    bmarginXsDouble: Boolean,
+    bmarginSmDouble: Boolean,
+    bmarginMdDouble: Boolean,
+    bmarginLgDouble: Boolean,
+    bmarginXlDouble: Boolean,
+
+    bmarginTriple: Boolean,
+    bmarginXsTriple: Boolean,
+    bmarginSmTriple: Boolean,
+    bmarginMdTriple: Boolean,
+    bmarginLgTriple: Boolean,
+    bmarginXlTriple: Boolean,
+
+    bmarginQuadruple: Boolean,
+    bmarginXsQuadruple: Boolean,
+    bmarginSmQuadruple: Boolean,
+    bmarginMdQuadruple: Boolean,
+    bmarginLgQuadruple: Boolean,
+    bmarginXlQuadruple: Boolean,
+}
