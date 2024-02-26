@@ -11,7 +11,9 @@
 </template>
 
 <script>
-// TODO abstract color props and modifiers
+import colors from "@/assets/scripts/props/colors";
+import {maybeAddColorModifiers} from "@/assets/scripts/functions/maybeAddColorModifiers";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Button',
@@ -22,21 +24,7 @@ export default {
     },
     target: String,
     variant: String,
-    primary: Boolean,
-    primaryDark: Boolean,
-    primaryLight: Boolean,
-    secondary: Boolean,
-    secondaryDark: Boolean,
-    secondaryLight: Boolean,
-    tertiary: Boolean,
-    tertiaryDark: Boolean,
-    tertiaryLight: Boolean,
-    gray: Boolean,
-    grayDark: Boolean,
-    grayLight: Boolean,
-    white: Boolean,
-    offWhite: Boolean,
-    black: Boolean,
+    ...colors
   },
   computed: {
     hasLeftSlot() {
@@ -51,7 +39,6 @@ export default {
       let modifiers = [];
 
       if (
-          this.primary ||
           !this.primary &&
           !this.primaryDark &&
           !this.primaryLight &&
@@ -71,67 +58,11 @@ export default {
         modifiers.push('primary');
       }
 
-      if (this.primaryDark) {
-        modifiers.push('primary-dark');
-      }
-
-      if (this.primaryLight) {
-        modifiers.push('primary-light');
-      }
-
-      if (this.secondary) {
-        modifiers.push('secondary');
-      }
-
-      if (this.secondaryDark) {
-        modifiers.push('secondary-dark');
-      }
-
-      if (this.secondaryLight) {
-        modifiers.push('secondary-light');
-      }
-
-      if (this.tertiary) {
-        modifiers.push('tertiary');
-      }
-
-      if (this.tertiaryDark) {
-        modifiers.push('tertiary-dark');
-      }
-
-      if (this.tertiaryLight) {
-        modifiers.push('tertiary-light');
-      }
-
-      if (this.gray) {
-        modifiers.push('gray');
-      }
-
-      if (this.grayDark) {
-        modifiers.push('gray-dark');
-      }
-
-      if (this.grayLight) {
-        modifiers.push('gray-light');
-      }
-
-      if (this.offWhite) {
-        modifiers.push('off-white');
-      }
-
-      if (this.white) {
-        modifiers.push('white');
-      }
-
-      if (this.black) {
-        modifiers.push('black');
-      }
-
       if (this.variant && ['outline', 'ghost'].includes(this.variant)) {
         modifiers.push(this.variant);
       }
 
-      return modifiers.map((modifier) => {
+      return [...modifiers, ...(maybeAddColorModifiers(this.$props))].map((modifier) => {
         return 'button--' + modifier;
       });
     },
