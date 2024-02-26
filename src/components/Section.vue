@@ -21,18 +21,45 @@ export default {
   name: 'Section',
   props: {
     ...sharedContainer.props,
+    wide: Boolean,
+    narrow: Boolean,
     fluid: Boolean,
-    // edge: Boolean,
+    vborderPrimary: Boolean,
+    vborderSecondary: Boolean,
+    vborderTertiary: Boolean,
+    // TODO create grid modifiers-- gridNone, gridHalf, grid (default)
   },
   components: {},
   methods: {
     hasBg,
     modifiers() {
-      let themeModifiers = [];
+      let modifiers = [];
 
-      // Add additional modifiers here
+      if (this.wide) {
+        modifiers.push('wide');
+      }
 
-      return [...themeModifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
+      if (this.narrow) {
+        modifiers.push('narrow');
+      }
+
+      if (this.fluid) {
+        modifiers.push('fluid');
+      }
+
+      if (this.vborderPrimary) {
+        modifiers.push('vborder-primary');
+      }
+
+      if (this.vborderSecondary) {
+        modifiers.push('vborder-secondary');
+      }
+
+      if (this.vborderTertiary) {
+        modifiers.push('vborder-tertiary');
+      }
+
+      return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'section--' + modifier;
       });
     },

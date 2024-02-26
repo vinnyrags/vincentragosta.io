@@ -11,9 +11,6 @@
 </template>
 
 <script>
-
-// TODO test video/image bg for all containers
-
 import sharedContainer from "@/assets/scripts/components/shared-container";
 import alignmentProps from '@/assets/scripts/props/alignment';
 import {hasBg} from "@/assets/scripts/functions/bg/hasBg";
@@ -34,12 +31,6 @@ export default {
     lg: [Boolean, String],
     xl: [Boolean, String],
 
-    offsetXs: String,
-    offsetSm: String,
-    offsetMd: String,
-    offsetLg: String,
-    offsetXl: String,
-
     ...sharedContainer.props,
     ...alignmentProps,
   },
@@ -48,11 +39,6 @@ export default {
     hasBg,
     modifiers() {
       let modifiers = [];
-
-      if (this.lineOffsetBreakpoints && this.lineOffsetBreakpoints.length) {
-        modifiers.push('has-offset');
-      }
-
       return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'flex-column--' + modifier;
       });
@@ -64,73 +50,18 @@ export default {
         classes.push('flex-column-' + this.width);
       }
 
-      const responsiveBreakpoints = this.responsiveBreakpoints;
+      const responsiveBreakpoints = this.responsiveBreakpoints();
       if (responsiveBreakpoints && responsiveBreakpoints.length) {
         responsiveBreakpoints.forEach((breakpoint) => {
           classes.push('flex-column-' + breakpoint.breakpoint + '-' + breakpoint.width);
-          // classes.push('flex-column-' + responsiveBreakpoints[index].breakpoint + '-' + responsiveBreakpoints[index].width);
         });
       }
-
-      // TODO is this still relevant?
-      // const lineOffsetBreakpoints = this.lineOffsetBreakpoints;
-      // if (lineOffsetBreakpoints && lineOffsetBreakpoints.length) {
-      //   lineOffsetBreakpoints.forEach((lineOffsetBreakpoint, index) => {
-      //     classes.push('flex-column-offset-' + lineOffsetBreakpoints[index].breakpoint + '-' + lineOffsetBreakpoints[index].line);
-      //   });
-      // }
 
       return classes;
     },
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');
     },
-  },
-  computed: {
-    cssVars,
-    // TODO is this still relevant?
-    // cssVars() {
-    //   let cssVars = {};
-    //   if (this.bgColor) {
-    //     Object.assign(cssVars, {
-    //       '--flex-column-bg-color': this.bgColor,
-    //     });
-    //   }
-    //   if (this.color) {
-    //     Object.assign(cssVars, {
-    //       '--flex-column-color': this.color,
-    //     });
-    //   }
-    //
-    //   // const lineBreakpoints = this.lineBreakpoints;
-    //   // if (lineBreakpoints) {
-    //   //   let offsetVars = {};
-    //   //   for (let i = 0; i < lineBreakpoints.length; i++) {
-    //   //     offsetVars['--flex-column-offset-' + lineBreakpoints[i].breakpoint + '-start'] = lineBreakpoints[i].line;
-    //   //   }
-    //   //   Object.assign(cssVars, offsetVars);
-    //   // }
-    //
-    //
-    //   // const lineOffsetBreakpoints = this.lineOffsetBreakpoints;
-    //   // if (lineOffsetBreakpoints) {
-    //   //   let offsetVars = {};
-    //   //   for (let i = 0; i < lineOffsetBreakpoints.length; i++) {
-    //   //     offsetVars['--flex-column-offset-' + lineOffsetBreakpoints[i].breakpoint + '-start'] = lineOffsetBreakpoints[i].line;
-    //   //     if (lineBreakpoints) {
-    //   //       for (let c = 0; c < lineBreakpoints.length; c++) {
-    //   //         offsetVars['--flex-column-offset-' + lineBreakpoints[c].breakpoint + '-end'] = parseInt(lineOffsetBreakpoints[i].line) + parseInt(lineBreakpoints[c].line);
-    //   //       }
-    //   //     } else {
-    //   //       offsetVars['--flex-column-offset-' + lineOffsetBreakpoints[i].breakpoint + '-end'] = parseInt(lineOffsetBreakpoints[i].line) + parseInt(this.width);
-    //   //     }
-    //   //     offsetVars['--flex-column-breakpoint-offset-' + lineOffsetBreakpoints[i].breakpoint + '-start'] = lineOffsetBreakpoints[i].line;
-    //   //   }
-    //   //   Object.assign(cssVars, offsetVars);
-    //   // }
-    //
-    //   return cssVars;
-    // },
     responsiveBreakpoints() {
       let breakpoint = [];
       if (this.xs) {
@@ -165,41 +96,9 @@ export default {
       }
       return breakpoint;
     },
-    lineOffsetBreakpoints() {
-      let offsetBreakpoint = [];
-      if (this.offsetXs) {
-        offsetBreakpoint.push({
-          breakpoint: 'xs',
-          line: typeof this.offsetXs === 'string' ? this.offsetXs : this.width
-        });
-      }
-      if (this.offsetSm) {
-        offsetBreakpoint.push({
-          breakpoint: 'sm',
-          line: typeof this.offsetSm === 'string' ? this.offsetSm : this.width
-        });
-      }
-      if (this.offsetMd) {
-        offsetBreakpoint.push({
-          breakpoint: 'md',
-          line: typeof this.offsetMd === 'string' ? this.offsetMd : this.width
-        });
-      }
-      if (this.offsetLg) {
-        offsetBreakpoint.push({
-          breakpoint: 'lg',
-          line: typeof this.offsetLg === 'string' ? this.offsetLg : this.width
-        });
-      }
-      if (this.offsetXl) {
-        offsetBreakpoint.push({
-          breakpoint: 'xl',
-          line: typeof this.offsetXl === 'string' ? this.offsetXl : this.width
-        });
-      }
-
-      return offsetBreakpoint;
-    },
+  },
+  computed: {
+    cssVars
   },
   mounted() {
   }

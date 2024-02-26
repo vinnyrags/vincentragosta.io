@@ -1,4 +1,6 @@
 .flex-row {
+  @extend %shared-container;
+
   --component-spacing: #{$layout-spacing};
   --gutter-width: #{$layout-spacing-half};
   --tpad: 0;
@@ -6,16 +8,8 @@
   --lpad: 0;
   --rpad: 0;
 
-  @extend %shared-container;
 
   margin-bottom: var(--component-spacing);
-  padding-left: #{calc($layout-spacing-half / 2)};
-  padding-right: #{calc($layout-spacing-half / 2)};
-
-  @include breakpoint-md() {
-    padding-left: #{$layout-spacing-half};
-    padding-right: #{$layout-spacing-half};
-  }
 
   &:last-child {
     margin-bottom: 0;

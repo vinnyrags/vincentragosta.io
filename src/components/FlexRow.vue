@@ -28,8 +28,8 @@ export default {
   methods: {
     hasBg,
     modifiers() {
-      let themeModifiers = [];
-      return [...themeModifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
+      let modifiers = [];
+      return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'flex-row--' + modifier;
       });
     },
