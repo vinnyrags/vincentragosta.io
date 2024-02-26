@@ -1,5 +1,5 @@
 <template>
-  <div class="highlight-card">
+  <div class="highlight-card" :class="additionalClasses()">
     <Heading :level="3" size="medium">{{ title }}</Heading>
     <p v-if="excerpt">{{ excerpt }}</p>
     <Button :href="url" v-if="url" v-bind="buttonStyleAttribute">Read More</Button>
@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import colors from "@/assets/scripts/props/colors";
+import {maybeAddColorModifiers} from "@/assets/scripts/functions/maybeAddColorModifiers";
 import Heading from "@/elements/Heading.vue";
 import Button from "@/elements/Button.vue";
 
@@ -16,18 +18,7 @@ export default {
     title: String,
     excerpt: String,
     url: String,
-    primaryDark: Boolean,
-    primaryLight: Boolean,
-    secondary: Boolean,
-    secondaryDark: Boolean,
-    secondaryLight: Boolean,
-    tertiary: Boolean,
-    tertiaryDark: Boolean,
-    tertiaryLight: Boolean,
-    gray: Boolean,
-    grayDark: Boolean,
-    grayLight: Boolean,
-    black: Boolean,
+    ...colors
   },
   components: {
     Heading,
@@ -36,6 +27,10 @@ export default {
   computed: {
     buttonStyleAttribute() {
       let attribute = "";
+
+      if (this.primary) {
+        attribute = {primary: true};
+      }
 
       if (this.primaryDark) {
         attribute = {primaryDark: true};
@@ -92,63 +87,7 @@ export default {
     modifiers() {
       let modifiers = [];
 
-      if (this.primaryDark) {
-        modifiers.push('primary-dark');
-      }
-
-      if (this.primaryLight) {
-        modifiers.push('primary-light');
-      }
-
-      if (this.secondary) {
-        modifiers.push('secondary');
-      }
-
-      if (this.secondaryDark) {
-        modifiers.push('secondary-dark');
-      }
-
-      if (this.secondaryLight) {
-        modifiers.push('secondary-light');
-      }
-
-      if (this.tertiary) {
-        modifiers.push('tertiary');
-      }
-
-      if (this.tertiaryDark) {
-        modifiers.push('tertiary-dark');
-      }
-
-      if (this.tertiaryLight) {
-        modifiers.push('tertiary-light');
-      }
-
-      if (this.gray) {
-        modifiers.push('gray');
-      }
-
-      if (this.grayDark) {
-        modifiers.push('gray-dark');
-      }
-
-      if (this.grayLight) {
-        modifiers.push('gray-light');
-      }
-
-      if (this.offWhite) {
-        modifiers.push('off-white');
-      }
-
-      if (this.white) {
-        modifiers.push('white');
-      }
-
-      if (this.black) {
-        modifiers.push('black');
-      }
-
-      return modifiers.map((modifier) => {
+      return [...modifiers, ...(maybeAddColorModifiers(this.$props))].map((modifier) => {
         return 'highlight-card--' + modifier;
       });
     },
