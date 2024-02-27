@@ -2,12 +2,12 @@
   @extend %shared-container;
 
   --component-spacing: #{$layout-spacing-half};
-  --gutter-width: calc(#{$layout-spacing-quarter});
+  --gutter-width: #{$layout-spacing-quarter};
+  --width-offset: #{$layout-spacing-half};
   --tpad: 0;
   --bpad: 0;
   --lpad: calc(#{$layout-spacing-quarter});
   --rpad: calc(#{$layout-spacing-quarter});
-
 
   display: flex;
   margin: var(--gutter-width);

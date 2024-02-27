@@ -27,8 +27,9 @@ export default {
     vborderPrimary: Boolean,
     vborderSecondary: Boolean,
     vborderTertiary: Boolean,
-    // TODO create grid modifiers-- gridNone, gridHalf, grid (default)
-    // TODO create color-var function so that we can access opacity
+    grid: Boolean,
+    gridNone: Boolean,
+    gridHalf: Boolean,
   },
   components: {},
   methods: {
@@ -60,13 +61,24 @@ export default {
         modifiers.push('vborder-tertiary');
       }
 
+      if (this.grid) {
+        modifiers.push('grid');
+      }
+
+      if (this.gridNone) {
+        modifiers.push('grid-none');
+      }
+
+      if (this.gridHalf) {
+        modifiers.push('grid-half');
+      }
+
       return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
         return 'section--' + modifier;
       });
     },
     extraClasses() {
-      let classes = [];
-      return classes;
+      return [];
     },
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');

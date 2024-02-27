@@ -63,7 +63,6 @@
     margin-top: var(--component-spacing);
   }
 
-
   &--has-bg {
     @extend %shared-container--has-bg;
 
@@ -92,19 +91,51 @@
     padding-right: 0;
   }
 
+  &--vborder-primary,
+  &--vborder-secondary,
+  &--vborder-tertiar {
+    @include vborder;
+  }
 
   &--vborder-primary {
     --vborder-color: #{color('primary')};
-    @include vborder;
   }
 
   &--vborder-secondary {
     --vborder-color: #{color('secondary')};
-    @include vborder;
   }
 
   &--vborder-tertiary {
     --vborder-color: #{color('tertiary')};
-    @include vborder;
+  }
+
+  &--grid {
+    .flex-row {
+      --component-spacing: #{$layout-spacing-half};
+    }
+  }
+
+  &--grid-none {
+    .flex-row {
+      --component-spacing: 0;
+      --gutter-width: 0;
+    }
+
+    .flex-column {
+      --gutter-width: 0;
+      --width-offset: 0%;
+    }
+  }
+
+  &--grid-half {
+    .flex-row {
+      --component-spacing: #{$layout-spacing-quarter};
+      --gutter-width: #{$layout-spacing-quarter};
+    }
+
+    .flex-column {
+      --gutter-width: #{calc($layout-spacing-quarter / 2)};
+      --width-offset: #{$layout-spacing-quarter};
+    }
   }
 }
