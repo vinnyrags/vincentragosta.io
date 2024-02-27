@@ -3,5 +3,5 @@ $header-padding-y: $component-spacing;
 $header-padding-x: $component-spacing;
 $header-active-color: $body-color-inverted;
 $header-font-size: em(13);
-$header-bg: map-get($colors, 'black');
-$header-color: map-get($colors, 'gray-light');
+$header-bg: color('black');
+$header-color: color('gray-light');

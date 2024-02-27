@@ -53,62 +53,62 @@
   }
 
   &--primary {
-    --heading-color: #{map-get($colors, 'primary')};
+    --heading-color: #{color('primary')};
   }
 
   &--primary-dark {
-    --heading-color: #{map-get($colors, 'primary-dark')};
+    --heading-color: #{color('primary-dark')};
   }
 
   &--primary-light {
-    --heading-color: #{map-get($colors, 'primary-light')};
+    --heading-color: #{color('primary-light')};
   }
 
   &--secondary {
-    --heading-color: #{map-get($colors, 'secondary')};
+    --heading-color: #{color('secondary')};
   }
 
   &--secondary-dark {
-    --heading-color: #{map-get($colors, 'secondary-dark')};
+    --heading-color: #{color('secondary-dark')};
   }
 
   &--secondary-light {
-    --heading-color: #{map-get($colors, 'secondary-light')};
+    --heading-color: #{color('secondary-light')};
   }
 
   &--tertiary {
-    --heading-color: #{map-get($colors, 'tertiary')};
+    --heading-color: #{color('tertiary')};
   }
 
   &--tertiary-dark {
-    --heading-color: #{map-get($colors, 'tertiary-dark')};
+    --heading-color: #{color('tertiary-dark')};
   }
 
   &--tertiary-light {
-    --heading-color: #{map-get($colors, 'tertiary-light')};
+    --heading-color: #{color('tertiary-light')};
   }
 
   &--gray {
-    --heading-color: #{map-get($colors, 'gray')};
+    --heading-color: #{color('gray')};
   }
 
   &--gray-dark {
-    --heading-color: #{map-get($colors, 'gray-dark')};
+    --heading-color: #{color('gray-dark')};
   }
 
   &--gray-light {
-    --heading-color: #{map-get($colors, 'gray-light')};
+    --heading-color: #{color('gray-light')};
   }
 
   &--off-white {
-    --heading-color: #{map-get($colors, 'off-white')};
+    --heading-color: #{color('off-white')};
   }
 
   &--white {
-    --heading-color: #{map-get($colors, 'white')};
+    --heading-color: #{color('white')};
   }
 
   &--black {
-    --heading-color: #{map-get($colors, 'black')};
+    --heading-color: #{color('black')};
   }
 }

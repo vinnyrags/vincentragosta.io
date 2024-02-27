@@ -8,63 +8,63 @@
   }
 
   &-primary {
-    color: map-get($colors, 'primary');
+    color: color('primary');
   }
 
   &-primary-dark {
-    color: map-get($colors, 'primary-dark');
+    color: color('primary-dark');
   }
 
   &-primary-light {
-    color: map-get($colors, 'primary-light');
+    color: color('primary-light');
   }
 
   &-secondary {
-    color: map-get($colors, 'secondary');
+    color: color('secondary');
   }
 
   &-secondary-dark {
-    color: map-get($colors, 'secondary-dark');
+    color: color('secondary-dark');
   }
 
   &-secondary-light {
-    color: map-get($colors, 'secondary-light');
+    color: color('secondary-light');
   }
 
   &-tertiary {
-    color: map-get($colors, 'tertiary');
+    color: color('tertiary');
   }
 
   &-tertiary-dark {
-    color: map-get($colors, 'tertiary-dark');
+    color: color('tertiary-dark');
   }
 
   &-tertiary-light {
-    color: map-get($colors, 'tertiary-light');
+    color: color('tertiary-light');
   }
 
   &-gray {
-    color: map-get($colors, 'gray');
+    color: color('gray');
   }
 
   &-gray-dark {
-    color: map-get($colors, 'gray-dark');
+    color: color('gray-dark');
   }
 
   &-gray-light {
-    color: map-get($colors, 'gray-light');
+    color: color('gray-light');
   }
 
   &-off-white {
-    color: map-get($colors, 'off-white');
+    color: color('off-white');
   }
 
   &-white {
-    color: map-get($colors, 'white');
+    color: color('white');
   }
 
   &-black {
-    color: map-get($colors, 'black');
+    color: color('black');
   }
 
   &-small {

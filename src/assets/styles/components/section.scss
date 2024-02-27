@@ -30,8 +30,7 @@
       content: '';
       position: absolute;
       inset: 0;
-      // TODO create color-var function wit opacity
-      background: rgba(0, 0, 0, .3);
+      background: color('black', .3);
     }
   }
 
@@ -95,17 +94,17 @@
 
 
   &--vborder-primary {
-    --vborder-color: #{map-get($colors, 'primary')};
+    --vborder-color: #{color('primary')};
     @include vborder;
   }
 
   &--vborder-secondary {
-    --vborder-color: #{map-get($colors, 'secondary')};
+    --vborder-color: #{color('secondary')};
     @include vborder;
   }
 
   &--vborder-tertiary {
-    --vborder-color: #{map-get($colors, 'tertiary')};
+    --vborder-color: #{color('tertiary')};
     @include vborder;
   }
 }

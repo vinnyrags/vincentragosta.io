@@ -74,7 +74,7 @@
     text-transform: uppercase;
     font-weight: 700;
     display: flex;
-    color: map-get($colors, 'gray-dark');
+    color: color('gray-dark');
     background: var(--header-bg);
     margin: 0;
 

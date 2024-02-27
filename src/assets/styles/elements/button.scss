@@ -57,170 +57,170 @@
 
   &--primary {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'primary')};
-    --button-border-color: #{map-get($colors, 'primary')};
+    --button-bg: #{color('primary')};
+    --button-border-color: #{color('primary')};
 
     &:hover {
-      --button-bg: #{map-get($colors, 'primary-dark')};
-      --button-border-color: #{map-get($colors, 'primary-dark')};
+      --button-bg: #{color('primary-dark')};
+      --button-border-color: #{color('primary-dark')};
     }
   }
 
   &--primary-dark {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'primary-dark')};
-    --button-border-color: #{map-get($colors, 'primary-dark')};
+    --button-bg: #{color('primary-dark')};
+    --button-border-color: #{color('primary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'primary-dark'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'primary-dark'), 5)};
+      --button-bg: #{lighten(color('primary-dark'), 5)};
+      --button-border-color: #{lighten(color('primary-dark'), 5)};
     }
   }
 
   &--primary-light {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'primary-light')};
-    --button-border-color: #{map-get($colors, 'primary-light')};
+    --button-bg: #{color('primary-light')};
+    --button-border-color: #{color('primary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'primary-light'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'primary-light'), 5)};
+      --button-bg: #{lighten(color('primary-light'), 5)};
+      --button-border-color: #{lighten(color('primary-light'), 5)};
     }
   }
 
   &--secondary {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'secondary')};
-    --button-border-color: #{map-get($colors, 'secondary')};
+    --button-bg: #{color('secondary')};
+    --button-border-color: #{color('secondary')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'secondary'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'secondary'), 5)};
+      --button-bg: #{lighten(color('secondary'), 5)};
+      --button-border-color: #{lighten(color('secondary'), 5)};
     }
   }
 
   &--secondary-dark {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'secondary-dark')};
-    --button-border-color: #{map-get($colors, 'secondary-dark')};
+    --button-bg: #{color('secondary-dark')};
+    --button-border-color: #{color('secondary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'secondary-dark'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'secondary-dark'), 5)};
+      --button-bg: #{lighten(color('secondary-dark'), 5)};
+      --button-border-color: #{lighten(color('secondary-dark'), 5)};
     }
   }
 
   &--secondary-light {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'secondary-light')};
-    --button-border-color: #{map-get($colors, 'secondary-light')};
+    --button-bg: #{color('secondary-light')};
+    --button-border-color: #{color('secondary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'secondary-light'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'secondary-light'), 5)};
+      --button-bg: #{lighten(color('secondary-light'), 5)};
+      --button-border-color: #{lighten(color('secondary-light'), 5)};
     }
   }
 
   &--tertiary {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'tertiary')};
-    --button-border-color: #{map-get($colors, 'tertiary')};
+    --button-bg: #{color('tertiary')};
+    --button-border-color: #{color('tertiary')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'tertiary'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'tertiary'), 5)};
+      --button-bg: #{lighten(color('tertiary'), 5)};
+      --button-border-color: #{lighten(color('tertiary'), 5)};
     }
   }
 
   &--tertiary-dark {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'tertiary-dark')};
-    --button-border-color: #{map-get($colors, 'tertiary-dark')};
+    --button-bg: #{color('tertiary-dark')};
+    --button-border-color: #{color('tertiary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'tertiary-dark'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'tertiary-dark'), 5)};
+      --button-bg: #{lighten(color('tertiary-dark'), 5)};
+      --button-border-color: #{lighten(color('tertiary-dark'), 5)};
     }
   }
 
   &--tertiary-light {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'tertiary-light')};
-    --button-border-color: #{map-get($colors, 'tertiary-light')};
+    --button-bg: #{color('tertiary-light')};
+    --button-border-color: #{color('tertiary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'tertiary-light'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'tertiary-light'), 5)};
+      --button-bg: #{lighten(color('tertiary-light'), 5)};
+      --button-border-color: #{lighten(color('tertiary-light'), 5)};
     }
   }
 
   &--gray {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'gray')};
-    --button-border-color: #{map-get($colors, 'gray')};
+    --button-bg: #{color('gray')};
+    --button-border-color: #{color('gray')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'gray'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'gray'), 5)};
+      --button-bg: #{lighten(color('gray'), 5)};
+      --button-border-color: #{lighten(color('gray'), 5)};
     }
   }
 
   &--gray-dark {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'gray-dark')};
-    --button-border-color: #{map-get($colors, 'gray-dark')};
+    --button-bg: #{color('gray-dark')};
+    --button-border-color: #{color('gray-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'gray-dark'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'gray-dark'), 5)};
+      --button-bg: #{lighten(color('gray-dark'), 5)};
+      --button-border-color: #{lighten(color('gray-dark'), 5)};
     }
   }
 
   &--gray-light {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'gray-light')};
-    --button-border-color: #{map-get($colors, 'gray-light')};
+    --button-bg: #{color('gray-light')};
+    --button-border-color: #{color('gray-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(map-get($colors, 'gray-light'), 5)};
-      --button-border-color: #{lighten(map-get($colors, 'gray-light'), 5)};
+      --button-bg: #{lighten(color('gray-light'), 5)};
+      --button-border-color: #{lighten(color('gray-light'), 5)};
     }
   }
 
   &--off-white {
-    --button-bg: #{map-get($colors, 'off-white')};
-    --button-border-color: #{map-get($colors, 'off-white')};
+    --button-bg: #{color('off-white')};
+    --button-border-color: #{color('off-white')};
 
     &:not(.button--outline):not(.button--ghost) {
-      --button-color: #{map-get($colors, 'primary')};
+      --button-color: #{color('primary')};
 
       &:hover {
-        --button-color: #{map-get($colors, 'off-white')};
-        --button-bg: #{map-get($colors, 'primary-dark')};
-        --button-border-color: #{map-get($colors, 'primary-dark')};
+        --button-color: #{color('off-white')};
+        --button-bg: #{color('primary-dark')};
+        --button-border-color: #{color('primary-dark')};
       }
     }
   }
 
   &--white {
-    --button-bg: #{map-get($colors, 'white')};
-    --button-border-color: #{map-get($colors, 'white')};
+    --button-bg: #{color('white')};
+    --button-border-color: #{color('white')};
 
     &:not(.button--outline):not(.button--ghost) {
-      --button-color: #{map-get($colors, 'primary')};
+      --button-color: #{color('primary')};
 
       &:hover {
-        --button-color: #{map-get($colors, 'white')};
-        --button-bg: #{map-get($colors, 'primary-dark')};
-        --button-border-color: #{map-get($colors, 'primary-dark')};
+        --button-color: #{color('white')};
+        --button-bg: #{color('primary-dark')};
+        --button-border-color: #{color('primary-dark')};
       }
     }
   }
 
   &--black {
     --button-color: #{$body-color-inverted};
-    --button-bg: #{map-get($colors, 'black')};
-    --button-border-color: #{map-get($colors, 'black')};
+    --button-bg: #{color('black')};
+    --button-border-color: #{color('black')};
 
     &:not(.button--outline):not(.button--ghost):hover {
       --button-color: #{$body-color};
@@ -244,7 +244,7 @@
     &.button--off-white,
     &.button--white {
       &:hover {
-        --button-color: #{map-get($colors, 'primary')};
+        --button-color: #{color('primary')};
       }
     }
   }

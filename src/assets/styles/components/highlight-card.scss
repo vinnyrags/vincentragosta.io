@@ -1,5 +1,5 @@
 .highlight-card {
-  --card-bg-color: #{map-get($colors, 'white')};
+  --card-bg-color: #{color('white')};
   --card-color: #{$body-color};
 
   display: flex;
@@ -21,11 +21,5 @@
     --button-padding-x: #{$component-spacing};
     margin-top: $component-spacing;
     width: 100%;
-  }
-
-  &--primary-dark {
-    .button {
-
-    }
   }
 }

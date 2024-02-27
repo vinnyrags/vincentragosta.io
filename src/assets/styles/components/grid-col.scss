@@ -39,125 +39,125 @@
 
     &.grid-col {
       &--bg-primary {
-        --grid-col-bg-color: #{map-get($colors, 'primary')};
+        --grid-col-bg-color: #{color('primary')};
       }
 
       &--bg-primary-dark {
-        --grid-col-bg-color: #{map-get($colors, 'primary-dark')};
+        --grid-col-bg-color: #{color('primary-dark')};
       }
 
       &--bg-primary-light {
-        --grid-col-bg-color: #{map-get($colors, 'primary-light')};
+        --grid-col-bg-color: #{color('primary-light')};
       }
 
       &--bg-secondary {
-        --grid-col-bg-color: #{map-get($colors, 'secondary')};
+        --grid-col-bg-color: #{color('secondary')};
       }
 
       &--bg-secondary-dark {
-        --grid-col-bg-color: #{map-get($colors, 'secondary-dark')};
+        --grid-col-bg-color: #{color('secondary-dark')};
       }
 
       &--bg-secondary-light {
-        --grid-col-bg-color: #{map-get($colors, 'secondary-light')};
+        --grid-col-bg-color: #{color('secondary-light')};
       }
 
       &--bg-tertiary {
-        --grid-col-bg-color: #{map-get($colors, 'tertiary')};
+        --grid-col-bg-color: #{color('tertiary')};
       }
 
       &--bg-tertiary-dark {
-        --grid-col-bg-color: #{map-get($colors, 'tertiary-dark')};
+        --grid-col-bg-color: #{color('tertiary-dark')};
       }
 
       &--bg-tertiary-light {
-        --grid-col-bg-color: #{map-get($colors, 'tertiary-light')};
+        --grid-col-bg-color: #{color('tertiary-light')};
       }
 
       &--bg-gray {
-        --grid-col-bg-color: #{map-get($colors, 'gray')};
+        --grid-col-bg-color: #{color('gray')};
       }
 
       &--bg-gray-dark {
-        --grid-col-bg-color: #{map-get($colors, 'gray-dark')};
+        --grid-col-bg-color: #{color('gray-dark')};
       }
 
       &--bg-gray-light {
-        --grid-col-bg-color: #{map-get($colors, 'gray-light')};
+        --grid-col-bg-color: #{color('gray-light')};
       }
 
       &--bg-off-white {
-        --grid-col-bg-color: #{map-get($colors, 'off-white')};
+        --grid-col-bg-color: #{color('off-white')};
         --grid-col-color: #{$body-color};
       }
 
       &--bg-white {
-        --grid-col-bg-color: #{map-get($colors, 'white')};
+        --grid-col-bg-color: #{color('white')};
         --grid-col-color: #{$body-color};
       }
 
       &--bg-black {
-        --grid-col-bg-color: #{map-get($colors, 'black')};
+        --grid-col-bg-color: #{color('black')};
       }
 
       &--primary {
-        --grid-col-color: #{map-get($colors, 'primary')};
+        --grid-col-color: #{color('primary')};
       }
 
       &--primary-dark {
-        --grid-col-color: #{map-get($colors, 'primary-dark')};
+        --grid-col-color: #{color('primary-dark')};
       }
 
       &--primary-light {
-        --grid-col-color: #{map-get($colors, 'primary-light')};
+        --grid-col-color: #{color('primary-light')};
       }
 
       &--secondary {
-        --grid-col-color: #{map-get($colors, 'secondary')};
+        --grid-col-color: #{color('secondary')};
       }
 
       &--secondary-dark {
-        --grid-col-color: #{map-get($colors, 'secondary-dark')};
+        --grid-col-color: #{color('secondary-dark')};
       }
 
       &--secondary-light {
-        --grid-col-color: #{map-get($colors, 'secondary-light')};
+        --grid-col-color: #{color('secondary-light')};
       }
 
       &--tertiary {
-        --grid-col-color: #{map-get($colors, 'tertiary')};
+        --grid-col-color: #{color('tertiary')};
       }
 
       &--tertiary-dark {
-        --grid-col-color: #{map-get($colors, 'tertiary-dark')};
+        --grid-col-color: #{color('tertiary-dark')};
       }
 
       &--tertiary-light {
-        --grid-col-color: #{map-get($colors, 'tertiary-light')};
+        --grid-col-color: #{color('tertiary-light')};
       }
 
       &--gray-dark {
-        --grid-col-color: #{map-get($colors, 'gray-dark')};
+        --grid-col-color: #{color('gray-dark')};
       }
 
       &--gray {
-        --grid-col-color: #{map-get($colors, 'gray')};
+        --grid-col-color: #{color('gray')};
       }
 
       &--gray-light {
-        --grid-col-color: #{map-get($colors, 'gray-light')};
+        --grid-col-color: #{color('gray-light')};
       }
 
       &--off-white {
-        --grid-col-color: #{map-get($colors, 'off-white')};
+        --grid-col-color: #{color('off-white')};
       }
 
       &--white {
-        --grid-col-color: #{map-get($colors, 'white')};
+        --grid-col-color: #{color('white')};
       }
 
       &--black {
-        --grid-col-color: #{map-get($colors, 'black')};
+        --grid-col-color: #{color('black')};
       }
     }
 

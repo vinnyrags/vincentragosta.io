@@ -28,6 +28,7 @@ export default {
     vborderSecondary: Boolean,
     vborderTertiary: Boolean,
     // TODO create grid modifiers-- gridNone, gridHalf, grid (default)
+    // TODO create color-var function so that we can access opacity
   },
   components: {},
   methods: {
