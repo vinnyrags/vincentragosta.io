@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-column" :class="additionalClasses()" :style="cssVars">
-    <div class="flex-column__bg" v-if="hasBg(this.$props)">
-      <video v-if="video" class="flex-column__video" type="video/mp4" :src="video" autoplay muted loop></video>
-      <img v-if="image" class="flex-column__image" :src="image"/>
+  <div class="column" :class="additionalClasses()" :style="cssVars">
+    <div class="column__bg" v-if="hasBg(this.$props)">
+      <video v-if="video" class="column__video" type="video/mp4" :src="video" autoplay muted loop></video>
+      <img v-if="image" class="column__image" :src="image"/>
     </div>
-    <div class="flex-column__wrap">
+    <div class="column__wrap">
       <slot></slot>
     </div>
   </div>
@@ -18,7 +18,7 @@ import {cssVars} from "@/assets/scripts/functions/cssVars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'FlexColumn',
+  name: 'Column',
   props: {
     width: {
       type: String,
@@ -40,20 +40,20 @@ export default {
     modifiers() {
       let modifiers = [];
       return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
-        return 'flex-column--' + modifier;
+        return 'column--' + modifier;
       });
     },
     extraClasses() {
       let classes = [];
 
       if (this.width) {
-        classes.push('flex-column-' + this.width);
+        classes.push('column-' + this.width);
       }
 
       const responsiveBreakpoints = this.responsiveBreakpoints();
       if (responsiveBreakpoints && responsiveBreakpoints.length) {
         responsiveBreakpoints.forEach((breakpoint) => {
-          classes.push('flex-column-' + breakpoint.breakpoint + '-' + breakpoint.width);
+          classes.push('column-' + breakpoint.breakpoint + '-' + breakpoint.width);
         });
       }
 

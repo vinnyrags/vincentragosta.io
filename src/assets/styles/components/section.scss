@@ -15,10 +15,7 @@
   padding-right: var(--container-padding);
 
   @include breakpoint-md() {
-    --container-padding: var(--component-spacing);
-  }
-
-  @include breakpoint-md() {
+    --container-padding: #{$layout-spacing};
     --component-spacing: #{$layout-spacing-double};
   }
 
@@ -110,30 +107,30 @@
   }
 
   &--grid {
-    .flex-row {
+    .row {
       --component-spacing: #{$layout-spacing-half};
     }
   }
 
   &--grid-none {
-    .flex-row {
+    .row {
       --component-spacing: 0;
       --gutter-width: 0;
     }
 
-    .flex-column {
+    .column {
       --gutter-width: 0;
       --width-offset: 0%;
     }
   }
 
   &--grid-half {
-    .flex-row {
+    .row {
       --component-spacing: #{$layout-spacing-quarter};
       --gutter-width: #{$layout-spacing-quarter};
     }
 
-    .flex-column {
+    .column {
       --gutter-width: #{calc($layout-spacing-quarter / 2)};
       --width-offset: #{$layout-spacing-quarter};
     }

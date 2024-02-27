@@ -1,10 +1,10 @@
 <template>
-  <div class="flex-row" :class="additionalClasses()" :style="cssVars">
-    <div v-if="hasBg(this.$props)" class="flex-row__bg">
-      <video v-if="video" class="flex-row__video" type="video/mp4" :src="video" autoplay muted loop></video>
-      <img v-if="image" class="flex-row__image" :src="image"/>
+  <div class="row" :class="additionalClasses()" :style="cssVars">
+    <div v-if="hasBg(this.$props)" class="row__bg">
+      <video v-if="video" class="row__video" type="video/mp4" :src="video" autoplay muted loop></video>
+      <img v-if="image" class="row__image" :src="image"/>
     </div>
-    <div class="flex-row__wrap">
+    <div class="row__wrap">
       <slot></slot>
     </div>
   </div>
@@ -19,7 +19,7 @@ import {cssVars} from "@/assets/scripts/functions/cssVars";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'FlexRow',
+  name: 'Row',
   props: {
     ...sharedContainer.props,
     ...halignmentProps
@@ -30,7 +30,7 @@ export default {
     modifiers() {
       let modifiers = [];
       return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {
-        return 'flex-row--' + modifier;
+        return 'row--' + modifier;
       });
     },
     extraClasses() {

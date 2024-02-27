@@ -1,4 +1,4 @@
-.flex-column {
+.column {
   @extend %shared-container;
 
   --component-spacing: #{$layout-spacing-half};
@@ -47,12 +47,10 @@
   &--has-bg {
     @extend %shared-container--has-bg;
 
-    > [class*=__wrap] {
-      --tpad: #{$layout-spacing};
-      --bpad: #{$layout-spacing};
-    }
+    --tpad: #{$layout-spacing};
+    --bpad: #{$layout-spacing};
 
-    &.flex-column {
+    &.column {
       @include bg-color;
     }
   }
@@ -60,7 +58,7 @@
   &--abs-center {
     align-items: center;
 
-    .flex-column__wrap {
+    .column__wrap {
       text-align: center;
     }
 
@@ -68,7 +66,7 @@
       @include breakpoint-xs {
         align-items: center;
 
-        .flex-column__wrap {
+        .column__wrap {
           text-align: center;
         }
       }
@@ -78,7 +76,7 @@
       @include breakpoint-sm {
         align-items: center;
 
-        .flex-column__wrap {
+        .column__wrap {
           text-align: center;
         }
       }
@@ -88,7 +86,7 @@
       @include breakpoint-md {
         align-items: center;
 
-        .flex-column__wrap {
+        .column__wrap {
           text-align: center;
         }
       }
@@ -98,7 +96,7 @@
       @include breakpoint-lg {
         align-items: center;
 
-        .flex-column__wrap {
+        .column__wrap {
           text-align: center;
         }
       }
@@ -108,7 +106,7 @@
       @include breakpoint-xl {
         align-items: center;
 
-        .flex-column__wrap {
+        .column__wrap {
           text-align: center;
         }
       }
@@ -116,36 +114,36 @@
   }
 }
 
-.flex-column {
-  @include flex-columns;
+.column {
+  @include columns;
 
   &-xs {
     @include breakpoint-xs {
-      @include flex-columns;
+      @include columns;
     }
   }
 
   &-sm {
     @include breakpoint-sm {
-      @include flex-columns;
+      @include columns;
     }
   }
 
   &-md {
     @include breakpoint-md {
-      @include flex-columns;
+      @include columns;
     }
   }
 
   &-lg {
     @include breakpoint-lg {
-      @include flex-columns;
+      @include columns;
     }
   }
 
   &-xl {
     @include breakpoint-xl {
-      @include flex-columns;
+      @include columns;
     }
   }
 

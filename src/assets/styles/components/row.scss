@@ -1,4 +1,4 @@
-.flex-row {
+.row {
   @extend %shared-container;
 
   --component-spacing: #{$layout-spacing};
@@ -42,12 +42,10 @@
   &--has-bg {
     @extend %shared-container--has-bg;
 
-    > [class*=__wrap] {
-      --tpad: #{$layout-spacing};
-      --bpad: #{$layout-spacing};
-    }
+    --tpad: #{$layout-spacing};
+    --bpad: #{$layout-spacing};
 
-    &.flex-row {
+    &.row {
       @include bg-color;
     }
   }
