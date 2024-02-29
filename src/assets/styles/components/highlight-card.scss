@@ -4,22 +4,33 @@
 
   display: flex;
   flex-flow: row wrap;
+  align-items: flex-start;
   color: var(--card-color);
   background: var(--card-bg-color);
   padding-top: $layout-spacing;
+  height: calc(100% - #{$layout-spacing});
+
+  &__content {
+    padding-left: $component-spacing;
+    padding-right: $component-spacing;
+  }
 
   .heading,
   p {
     margin-top: 0;
     margin-bottom: $component-spacing;
-    padding-left: $component-spacing;
-    padding-right: $component-spacing;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .button {
     --button-padding-y: #{calc($component-spacing / 1.5)};
     --button-padding-x: #{$component-spacing};
-    margin-top: $component-spacing;
+
+    margin-top: $layout-spacing;
+    align-self: flex-end;
     width: 100%;
   }
 }

@@ -1,7 +1,9 @@
 <template>
   <div class="highlight-card" :class="additionalClasses()">
-    <Heading :level="3" size="medium">{{ title }}</Heading>
-    <p v-if="excerpt">{{ excerpt }}</p>
+    <div class="highlight-card__content" v-if="title || excerpt">
+      <Heading :level="3" size="medium">{{ title }}</Heading>
+      <p v-if="excerpt">{{ excerpt }}</p>
+    </div>
     <Button :href="url" v-if="url" v-bind="buttonStyleAttribute">Read More</Button>
   </div>
 </template>
