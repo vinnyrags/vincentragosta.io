@@ -37,12 +37,14 @@ export default function data() {
             {
                 title: 'Test Heading A',
                 excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.',
-                url: '#'
+                url: '#',
+                image: 'https://devanimecards.test/wp-content/uploads/2024/01/holiday-afterpay.jpeg'
             },
             {
                 title: 'Test Heading B',
                 excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                url: '#'
+                url: '#',
+                image: 'https://devanimecards.test/wp-content/uploads/2024/01/holiday-afterpay.jpeg'
             }
         ]
     }

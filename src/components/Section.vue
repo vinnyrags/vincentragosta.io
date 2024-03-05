@@ -2,7 +2,7 @@
   <section class="section" :class="additionalClasses()" :style="cssVars">
     <div v-if="hasBg(this.$props)" class="section__bg">
       <video v-if="video" class="section__video" type="video/mp4" :src="video" autoplay muted loop></video>
-      <img v-if="image" class="section__image" :src="image"/>
+      <Image class="section__image" v-if="image" :src="image" fit />
     </div>
     <div class="section__wrap">
       <slot></slot>
@@ -15,6 +15,7 @@
 import sharedContainer from "@/assets/scripts/components/shared-container";
 import {hasBg} from "@/assets/scripts/functions/bg/hasBg";
 import {cssVars} from "@/assets/scripts/functions/cssVars";
+import Image from "@/components/Image.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -30,8 +31,11 @@ export default {
     grid: Boolean,
     gridNone: Boolean,
     gridHalf: Boolean,
+    bgParallax: Boolean
   },
-  components: {},
+  components: {
+    Image
+  },
   methods: {
     hasBg,
     modifiers() {
@@ -71,6 +75,10 @@ export default {
 
       if (this.gridHalf) {
         modifiers.push('grid-half');
+      }
+
+      if (this.bgParallax) {
+        modifiers.push('bg-parallax');
       }
 
       return [...modifiers, ...(sharedContainer.methods.modifiers(this.$props))].map((modifier) => {

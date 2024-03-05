@@ -71,6 +71,14 @@
       @include pad;
       @include vpad;
       @include hpad;
+
+      &--bg-parallax {
+        clip-path: inset(0 0 0 0);
+
+        .section__bg {
+          position: fixed;
+        }
+      }
     }
   }
 

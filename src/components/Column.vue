@@ -2,7 +2,7 @@
   <div class="column" :class="additionalClasses()" :style="cssVars">
     <div class="column__bg" v-if="hasBg(this.$props)">
       <video v-if="video" class="column__video" type="video/mp4" :src="video" autoplay muted loop></video>
-      <img v-if="image" class="column__image" :src="image"/>
+      <Image class="section__image" v-if="image" :src="image" fit />
     </div>
     <div class="column__wrap">
       <slot></slot>
@@ -15,6 +15,7 @@ import sharedContainer from "@/assets/scripts/components/shared-container";
 import alignmentProps from '@/assets/scripts/props/alignment';
 import {hasBg} from "@/assets/scripts/functions/bg/hasBg";
 import {cssVars} from "@/assets/scripts/functions/cssVars";
+import Image from "@/components/Image.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -34,7 +35,9 @@ export default {
     ...sharedContainer.props,
     ...alignmentProps,
   },
-  components: {},
+  components: {
+    Image
+  },
   methods: {
     hasBg,
     modifiers() {

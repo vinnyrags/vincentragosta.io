@@ -1,0 +1,26 @@
+.image {
+  margin: 0;
+
+  &__picture {
+    display: block;
+  }
+
+  &__img {
+    width: 100%;
+  }
+
+  &--fit {
+    height: 100%;
+
+    .image {
+      &__picture,
+      &__img {
+        height: 100%;
+      }
+
+      &__img {
+        object-fit: cover;
+      }
+    }
+  }
+}

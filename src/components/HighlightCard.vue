@@ -1,10 +1,17 @@
 <template>
   <div class="highlight-card" :class="additionalClasses()">
-    <div class="highlight-card__content" v-if="title || excerpt">
-      <Heading :level="3" size="medium">{{ title }}</Heading>
-      <p v-if="excerpt">{{ excerpt }}</p>
+    <div class="highlight-card__image-container" v-if="image && horizontal">
+      <Image class="highlight-card__image" v-if="image" :src="image" fit />
     </div>
-    <Button :href="url" v-if="url" v-bind="buttonStyleAttribute">Read More</Button>
+    <div class="highlight-card__content">
+      <div class="highlight-card__image-container" v-if="image && !horizontal">
+        <Image class="highlight-card__image" v-if="image" :src="image" fit />
+      </div>
+      <Heading class="highlight-card__heading" :level="3" size="medium" v-if="title">{{ title }}</Heading>
+      <p class="highlight-card__excerpt" v-if="excerpt">{{ excerpt }}</p>
+      <Button class="highlight-card__button" :href="url" v-if="url && horizontal" v-bind="buttonStyleAttribute">Read More</Button>
+    </div>
+    <Button class="highlight-card__button" :href="url" v-if="url && !horizontal" v-bind="buttonStyleAttribute">Read More</Button>
   </div>
 </template>
 
@@ -13,18 +20,25 @@ import colors from "@/assets/scripts/props/colors";
 import {maybeAddColorModifiers} from "@/assets/scripts/functions/maybeAddColorModifiers";
 import Heading from "@/elements/Heading.vue";
 import Button from "@/elements/Button.vue";
+import Image from "@/components/Image.vue";
 
 export default {
   name: 'HightlightCard',
   props: {
+    image: String,
     title: String,
     excerpt: String,
     url: String,
-    ...colors
+    ...colors,
+    sleek: Boolean,
+    sleekImage: Boolean,
+    sleekButton: Boolean,
+    horizontal: Boolean,
   },
   components: {
     Heading,
-    Button
+    Button,
+    Image
   },
   computed: {
     buttonStyleAttribute() {
@@ -83,24 +97,44 @@ export default {
       }
 
       return attribute;
-    }
+    },
   },
   methods: {
     modifiers() {
       let modifiers = [];
+
+      if (this.sleek) {
+        modifiers.push('sleek');
+      }
+
+      if (this.sleekImage) {
+        modifiers.push('sleek-image');
+      }
+
+      if (this.sleekButton) {
+        modifiers.push('sleek-button');
+      }
+
+      if (this.horizontal) {
+        modifiers.push('horizontal');
+      }
 
       return [...modifiers, ...(maybeAddColorModifiers(this.$props))].map((modifier) => {
         return 'highlight-card--' + modifier;
       });
     },
     extraClasses() {
-      let classes = [];
-      return classes;
+      return [];
     },
     additionalClasses() {
       return [...this.modifiers(), ...this.extraClasses()].join(' ');
     }
   },
+  created() {
+    window.addEventListener("resize", () => {
+      console.log('tick');
+    });
+  }
 }
 </script>
 
