@@ -1,0 +1,6 @@
+:root {
+  --font-size: #{$root-font-size};
+  --header-height: 0;
+
+  @include breakpoint-vars();
+}

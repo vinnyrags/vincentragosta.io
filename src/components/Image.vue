@@ -30,39 +30,41 @@ export default {
   computed: {
     srcset() {
       let sourceSet = [];
+      const rootVars = getComputedStyle(document.body);
+
 
       if (this.xs) {
         sourceSet.push({
           src: this.xs,
-          media: '(min-width: 576px)' // TODO figure out a way to get breakpoints into JS
+          media: '(min-width:' + rootVars.getPropertyValue('--breakpoint-xs') + ')'
         });
       }
 
       if (this.sm) {
         sourceSet.push({
           src: this.sm,
-          media: '(min-width: 768px)'
+          media: '(min-width:' + rootVars.getPropertyValue('--breakpoint-sm') + ')'
         });
       }
 
       if (this.md) {
         sourceSet.push({
           src: this.md,
-          media: '(min-width: 992px)'
+          media: '(min-width:' + rootVars.getPropertyValue('--breakpoint-md') + ')'
         });
       }
 
       if (this.lg) {
         sourceSet.push({
           src: this.lg,
-          media: '(min-width: 1200px)'
+          media: '(min-width:' + rootVars.getPropertyValue('--breakpoint-lg') + ')'
         });
       }
 
       if (this.xl) {
         sourceSet.push({
           src: this.xl,
-          media: '(min-width: 1400px)'
+          media: '(min-width:' + rootVars.getPropertyValue('--breakpoint-xl') + ')'
         });
       }
 

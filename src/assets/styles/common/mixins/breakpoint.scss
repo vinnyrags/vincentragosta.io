@@ -1,3 +1,9 @@
+@mixin breakpoint-vars() {
+  @each $breakpoint, $value in $breakpoints {
+    --breakpoint-#{$breakpoint}: #{$value};
+  }
+}
+
 @mixin breakpoint($breakpoint, $max: false) {
   @if map-has-key($breakpoints, $breakpoint) {
     $width: 'min';

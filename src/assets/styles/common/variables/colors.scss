@@ -8,9 +8,9 @@ $color-tertiary: #d843d1;
 $color-tertiary-dark: darken($color-tertiary, 10);
 $color-tertiary-light: lighten($color-tertiary, 10);
 $color-gray: #303030;
-$color-gray-dark: #666666; // default darken($color-gray, 50%);
-$color-gray-light: #cccccc; // default lighten($color-gray, 50%);
-$color-off-white: #f5f5f5; // default darken($color-white, 50%);
+$color-gray-dark: #666666; // default darken($color-gray, 10);
+$color-gray-light: #cccccc; // default lighten($color-gray, 10);
+$color-off-white: #f5f5f5; // default darken($color-white, 10);
 $color-white: #ffffff;
 $color-black: #000000;
 
