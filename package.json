@@ -45,7 +45,3 @@
     "not ie 11"
   ]
 }
-
-// TODO
-// configure git remote set-url
-// test deployment
