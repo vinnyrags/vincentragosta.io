@@ -1,0 +1,57 @@
+.blockquote {
+  --blockquote-font-size-min: #{$heading-font-size-medium-min};
+  --blockquote-font-size-max: #{$heading-font-size-medium-max};
+  --blockquote-attribution-font-size-min: 100%;
+  --blockquote-attribution-font-size-max: 100%;
+  --blockquote-attribution-font-style: #{$blockquote-attribution-font-style};
+
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+
+  &__quote {
+    margin-top: 0;
+    margin-bottom: calc($component-spacing / 2);
+    line-height: $heading-line-height;
+    font-size: var(--blockquote-font-size-min);
+    @include site-breakpoint() {
+      font-size: var(--blockquote-font-size-max);
+    }
+  }
+
+  &__attribution {
+    font-style: var(--blockquote-attribution-font-style);
+    font-size: var(--blockquote-attribution-font-size-min);
+    @include site-breakpoint() {
+      font-size: var(--blockquote-attribution-font-size-max);
+    }
+  }
+
+  &--no-attribution {
+    .blockquote {
+      &__quote {
+        margin-bottom: 0;
+      }
+
+      &__attribution {
+        display: none;
+      }
+    }
+  }
+
+  &--large {
+    --blockquote-font-size-min: #{$heading-font-size-large-min};
+    @include site-breakpoint {
+      --blockquote-font-size-max: #{$heading-font-size-large-max};
+      --blockquote-attribution-font-size-max: #{$blockquote-attribution-large-font-size};
+    }
+  }
+
+  &--xlarge {
+    --blockquote-font-size-min: #{$heading-font-size-xlarge-min};
+    @include site-breakpoint {
+      --blockquote-font-size-max: #{$heading-font-size-xlarge-max};
+      --blockquote-attribution-font-size-max: #{$blockquote-attribution-xlarge-font-size};
+    }
+  }
+}

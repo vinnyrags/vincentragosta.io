@@ -1,0 +1,25 @@
+@mixin hpad() {
+  @each $modifier in $hpad-modifiers {
+    @each $size, $value in $sizes {
+      &--#{$modifier}-#{$size} {
+        --lpad: #{$value};
+        --rpad: #{$value};
+      }
+    }
+  }
+
+  @each $modifier in $hpad-modifiers {
+    @each $breakpoint in map-keys($breakpoints) {
+      &--#{$modifier}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          @each $size, $value in $sizes {
+            &-#{$size} {
+              --lpad: #{$value};
+              --rpad: #{$value};
+            }
+          }
+        }
+      }
+    }
+  }
+}

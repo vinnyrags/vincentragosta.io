@@ -3,28 +3,64 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </nav>
+  <div>
+    <h1>Welcome to My App</h1>
+    <p v-if="loading">Loading...</p>
+    <p v-else>Data Loaded Successfully</p>
+  </div>
   <router-view />
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { defineComponent, computed } from "vue";
+import { useStore } from "vuex";
 
-nav {
-  padding: 30px;
-}
+export default defineComponent({
+  name: "App",
+  setup() {
+    const store = useStore();
+    const loading = computed(() => !store.state.data);
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+    // Fetch data from external URL and set it into Vuex store
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          "https://admin.vincentragosta.dev/wp-json/v1/config"
+        );
+        const data = await response.json();
+        store.commit("setData", data);
+        // console.log("Store data:", store.state.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
 
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    fetchData();
+
+    return { loading };
+  },
+});
+</script>
+
+<!--<style>-->
+<!--#app {-->
+<!--  font-family: Avenir, Helvetica, Arial, sans-serif;-->
+<!--  -webkit-font-smoothing: antialiased;-->
+<!--  -moz-osx-font-smoothing: grayscale;-->
+<!--  text-align: center;-->
+<!--  color: #2c3e50;-->
+<!--}-->
+
+<!--nav {-->
+<!--  padding: 30px;-->
+<!--}-->
+
+<!--nav a {-->
+<!--  font-weight: bold;-->
+<!--  color: #2c3e50;-->
+<!--}-->
+
+<!--nav a.router-link-exact-active {-->
+<!--  color: #42b983;-->
+<!--}-->
+<!--</style>-->

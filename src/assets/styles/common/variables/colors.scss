@@ -1,0 +1,35 @@
+$color-primary: #456ebf;
+$color-primary-dark: darken($color-primary, 10);
+$color-primary-light: lighten($color-primary, 10);
+$color-secondary: #ed3636;
+$color-secondary-dark: darken($color-secondary, 10);
+$color-secondary-light: lighten($color-secondary, 10);
+$color-tertiary: #d843d1;
+$color-tertiary-dark: darken($color-tertiary, 10);
+$color-tertiary-light: lighten($color-tertiary, 10);
+$color-gray: #303030;
+$color-gray-dark: #666666; // default darken($color-gray, 10);
+$color-gray-light: #cccccc; // default lighten($color-gray, 10);
+$color-off-white: #f5f5f5; // default darken($color-white, 10);
+$color-white: #ffffff;
+$color-black: #000000;
+
+$colors: (
+        'primary': $color-primary,
+        'primary-dark': $color-primary-dark,
+        'primary-light': $color-primary-light,
+        'secondary': $color-secondary,
+        'secondary-dark': $color-secondary-dark,
+        'secondary-light': $color-secondary-light,
+        'tertiary': $color-tertiary,
+        'tertiary-dark': $color-tertiary-dark,
+        'tertiary-light': $color-tertiary-light,
+        'gray': $color-gray,
+        'gray-dark': $color-gray-dark,
+        'gray-light': $color-gray-light,
+        'off-white': $color-off-white,
+        'white': $color-white,
+        'black': $color-black,
+);
+
+$light-colors: ('off-white', 'white');

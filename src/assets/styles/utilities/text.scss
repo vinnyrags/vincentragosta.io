@@ -1,0 +1,77 @@
+.text {
+  &-right {
+    text-align: right;
+  }
+
+  &-center {
+    text-align: center;
+  }
+
+  &-primary {
+    color: color('primary');
+  }
+
+  &-primary-dark {
+    color: color('primary-dark');
+  }
+
+  &-primary-light {
+    color: color('primary-light');
+  }
+
+  &-secondary {
+    color: color('secondary');
+  }
+
+  &-secondary-dark {
+    color: color('secondary-dark');
+  }
+
+  &-secondary-light {
+    color: color('secondary-light');
+  }
+
+  &-tertiary {
+    color: color('tertiary');
+  }
+
+  &-tertiary-dark {
+    color: color('tertiary-dark');
+  }
+
+  &-tertiary-light {
+    color: color('tertiary-light');
+  }
+
+  &-gray {
+    color: color('gray');
+  }
+
+  &-gray-dark {
+    color: color('gray-dark');
+  }
+
+  &-gray-light {
+    color: color('gray-light');
+  }
+
+  &-off-white {
+    color: color('off-white');
+  }
+
+  &-white {
+    color: color('white');
+  }
+
+  &-black {
+    color: color('black');
+  }
+
+  &-small {
+    font-size: 14px;
+  }
+
+  //&-letter-spacing {
+  //  letter-spacing: 2px;
+  //}
+}

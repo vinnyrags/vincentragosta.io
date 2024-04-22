@@ -1,0 +1,9 @@
+@mixin columns() {
+  @for $i from 1 through 12 {
+    &-#{$i} {
+      $width: calc(flex-width($i) - var(--width-offset));
+      max-width: $width;
+      flex-basis: $width;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+export const backgroundColorFixture: string[] = [
+  "bgPrimary",
+  "bgPrimaryDark",
+  "bgPrimaryLight",
+  "bgSecondary",
+  "bgSecondaryDark",
+  "bgSecondaryLight",
+  "bgTertiary",
+  "bgTertiaryDark",
+  "bgTertiaryLight",
+  "bgGrayDark",
+  "bgGray",
+  "bgGrayLight",
+  "bgOffWhite",
+  "bgWhite",
+  "bgBlack",
+];

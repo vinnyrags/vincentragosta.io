@@ -1,0 +1,91 @@
+.highlight-card {
+  --component-spacing: #{$component-spacing};
+  --card-bg-color: #{color('white')};
+  --card-color: #{$body-color};
+
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  color: var(--card-color);
+  background: var(--card-bg-color);
+  padding: calc(var(--component-spacing) * 2) var(--component-spacing);
+  height: calc(100% - calc(var(--component-spacing) * 4));
+
+  &__content {
+    margin-bottom: calc(var(--component-spacing) * 2);
+  }
+
+  &__image-container {
+    margin-bottom: calc(var(--component-spacing) * 2);
+  }
+
+  &__heading,
+  &__excerpt {
+    width: 100%;
+    margin-top: 0;
+    margin-bottom: calc(var(--component-spacing) / 2);
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__button {
+    --button-padding-y: #{calc($component-spacing / 1.5)};
+    --button-padding-x: #{var(--component-spacing)};
+
+    align-self: flex-end;
+    width: 100%;
+  }
+
+  &--sleek {
+    @include sleek-image;
+    @include sleek-button;
+  }
+
+  &--sleek-image {
+    @include sleek-image;
+  }
+
+  &--sleek-button {
+    @include sleek-button;
+  }
+
+  &--horizontal {
+    padding: 0;
+    height: 100%;
+    @include breakpoint-md {
+      align-items: center;
+    }
+
+    .highlight-card {
+      &__image-container {
+        margin: 0 0 calc(var(--component-spacing) * 2);
+        @include breakpoint-md {
+          margin-bottom: 0;
+          height: 100%;
+          flex-basis: 30%;
+        }
+      }
+
+      &__content {
+        padding: 0 var(--component-spacing);
+        margin-bottom: 0;
+        @include breakpoint-md {
+          flex-basis: calc(70% - calc(var(--component-spacing) * 2));
+          align-items: center;
+        }
+      }
+
+      &__button {
+        // minus the margin of the element before
+        margin-top: calc(calc(var(--component-spacing) * 2) - calc(var(--component-spacing) / 2));
+        margin-bottom: 0;
+        @include breakpoint-md {
+          margin: var(--component-spacing) 0 0;
+          width: auto;
+        }
+      }
+    }
+  }
+}

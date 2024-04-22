@@ -1,0 +1,11 @@
+@mixin bg-color() {
+  @each $color, $value in $colors {
+     &--bg-#{$color} {
+      --bg-color: #{$value};
+
+      @if is-light-color($color) {
+        --color: #{$body-color};
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+$layout-spacing: 50px;
+$layout-spacing-quarter: calc($layout-spacing / 4);
+$layout-spacing-half: calc($layout-spacing / 2);
+$layout-spacing-double: calc($layout-spacing * 2);
+
+$component-spacing: $layout-spacing-half;
+
+$sizes: (
+        'none': 0,
+        'half': calc($layout-spacing * .5),
+        'default': $layout-spacing,
+        'double': calc($layout-spacing * 2),
+        'triple': calc($layout-spacing * 3),
+        'quadruple': calc($layout-spacing * 4)
+);
+
+// breakpoint + row offset + column offset
+$content-max-width: calc(map-get($breakpoints, 'lg') + $layout-spacing + $layout-spacing-half);
+$content-wide-width: calc(map-get($breakpoints, 'xl') + $layout-spacing + $layout-spacing-half);
+$content-narrow-width: calc(map-get($breakpoints, 'md') + $layout-spacing + $layout-spacing-half);

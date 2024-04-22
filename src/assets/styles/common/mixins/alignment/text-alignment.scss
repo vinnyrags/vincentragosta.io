@@ -1,0 +1,50 @@
+@mixin text-alignment() {
+  @each $align in $alignment {
+    $value: 'center';
+    @if ($align == 'align-start') {
+      $value: 'left';
+    } @else if ($align == 'align-end') {
+      $value: 'right';
+    }
+
+    &--#{$align} {
+      > [class*=__wrap] {
+        text-align: #{$value};
+      }
+    }
+  }
+
+  @each $align in $alignment {
+    @each $breakpoint in map-keys($breakpoints) {
+      $value: 'center';
+      @if ($align == 'align-start') {
+        $value: 'left';
+      } @else if ($align == 'align-end') {
+        $value: 'right';
+      }
+
+      &--#{$align}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          > [class*=__wrap] {
+            text-align: #{$value};
+          }
+        }
+      }
+    }
+  }
+
+  //@each $align in $alignment {
+  //  $value: 'center';
+  //  @if ($align == 'align-start') {
+  //    $value: 'left';
+  //  } @else if ($align == 'align-end') {
+  //    $value: 'right';
+  //  }
+  //
+  //  &--#{$align} {
+  //    > [class*=__wrap] {
+  //      text-align: #{$value};
+  //    }
+  //  }
+  //}
+}

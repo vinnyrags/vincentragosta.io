@@ -1,0 +1,19 @@
+@mixin bmargin() {
+  @each $size, $value in $sizes {
+    &--bmargin-#{$size} {
+      --component-spacing: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    &--bmargin-#{$breakpoint} {
+      @include breakpoint($breakpoint) {
+        @each $size, $value in $sizes {
+          &-#{$size} {
+            --component-spacing: #{$value};
+          }
+        }
+      }
+    }
+  }
+}

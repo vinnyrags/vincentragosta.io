@@ -1,0 +1,146 @@
+.section {
+  @extend %shared-container;
+
+  --section-max-width: #{$content-max-width};
+  --component-spacing: #{$layout-spacing};
+  --container-padding: #{$layout-spacing-quarter};
+  --tpad: 0;
+  --bpad: 0;
+  --lpad: 0;
+  --rpad: 0;
+
+  display: grid;
+  margin-bottom: var(--component-spacing);
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+
+  @include breakpoint-md() {
+    --container-padding: #{$layout-spacing};
+    --component-spacing: #{$layout-spacing-double};
+  }
+
+  &__bg {
+    @extend %shared-container__bg;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: color('black', .3);
+    }
+  }
+
+  &__video {
+    @extend %shared-container__video;
+  }
+
+  &__image {
+    @extend %shared-container__image;
+  }
+
+  &__wrap {
+    display: grid;
+    grid-template-columns: 1fr min(var(--section-max-width), 100%) 1fr;
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
+
+    > * {
+      grid-column: 2;
+    }
+  }
+
+  @include color;
+  @include bmargin;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  article > &:first-child:not(.section--has-bg) {
+    margin-top: var(--component-spacing);
+  }
+
+  &--has-bg {
+    @extend %shared-container--has-bg;
+
+    --tpad: #{$layout-spacing-double};
+    --bpad: #{$layout-spacing-double};
+
+    &.section {
+      @include bg-color;
+      @include pad;
+      @include vpad;
+      @include hpad;
+
+      &--bg-parallax {
+        clip-path: inset(0 0 0 0);
+
+        .section__bg {
+          position: fixed;
+        }
+      }
+    }
+  }
+
+  &--wide {
+    --section-max-width: #{$content-wide-width};
+  }
+
+  &--narrow {
+    --section-max-width: #{$content-narrow-width};
+  }
+
+  &--fluid {
+    --section-max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &--vborder-primary,
+  &--vborder-secondary,
+  &--vborder-tertiar {
+    @include vborder;
+  }
+
+  &--vborder-primary {
+    --vborder-color: #{color('primary')};
+  }
+
+  &--vborder-secondary {
+    --vborder-color: #{color('secondary')};
+  }
+
+  &--vborder-tertiary {
+    --vborder-color: #{color('tertiary')};
+  }
+
+  &--grid {
+    .row {
+      --component-spacing: #{$layout-spacing-half};
+    }
+  }
+
+  &--grid-none {
+    .row {
+      --component-spacing: 0;
+      --gutter-width: 0;
+    }
+
+    .column {
+      --gutter-width: 0;
+      --width-offset: 0%;
+    }
+  }
+
+  &--grid-half {
+    .row {
+      --component-spacing: #{$layout-spacing-quarter};
+      --gutter-width: #{$layout-spacing-quarter};
+    }
+
+    .column {
+      --gutter-width: #{calc($layout-spacing-quarter / 2)};
+      --width-offset: #{$layout-spacing-quarter};
+    }
+  }
+}

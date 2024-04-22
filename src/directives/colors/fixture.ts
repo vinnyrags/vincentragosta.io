@@ -1,0 +1,17 @@
+export const colorFixture: string[] = [
+  "primary",
+  "primaryDark",
+  "primaryLight",
+  "secondary",
+  "secondaryDark",
+  "secondaryLight",
+  "tertiary",
+  "tertiaryDark",
+  "tertiaryLight",
+  "grayDark",
+  "gray",
+  "grayLight",
+  "offWhite",
+  "white",
+  "black",
+];

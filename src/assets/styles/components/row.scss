@@ -1,0 +1,52 @@
+.row {
+  @extend %shared-container;
+
+  --component-spacing: #{$layout-spacing};
+  --gutter-width: #{$layout-spacing-half};
+  --tpad: 0;
+  --bpad: 0;
+  --lpad: 0;
+  --rpad: 0;
+
+  margin-bottom: var(--component-spacing);
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__bg {
+    @extend %shared-container__bg;
+  }
+
+  &__video {
+    @extend %shared-container__video;
+  }
+
+  &__image {
+    @extend %shared-container__image;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-flow: row wrap;
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
+    margin: calc(var(--gutter-width) / -2);
+  }
+
+  @include color;
+  @include flex-halignment;
+  @include pad;
+  @include vpad;
+  @include hpad;
+
+  &--has-bg {
+    @extend %shared-container--has-bg;
+
+    --tpad: #{$layout-spacing};
+    --bpad: #{$layout-spacing};
+
+    &.row {
+      @include bg-color;
+    }
+  }
+}

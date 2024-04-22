@@ -1,0 +1,115 @@
+%heading,
+.heading {
+  --heading-color: #{$heading-color};
+  --heading-font-family: #{$heading-font-family};
+  --heading-font-weight: #{$heading-font-weight};
+  --heading-font-size-min: #{$heading-font-size-min};
+  --heading-font-size-max: #{$heading-font-size-max};
+
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-weight: var(--heading-font-weight);
+  line-height: $heading-line-height;
+  margin: 0;
+
+  > a {
+    --link-color: var(--heading-color);
+
+    &:not(:hover) {
+      --link-text-decoration: none;
+    }
+
+    &:hover {
+      --link-color: var(--heading-color);
+    }
+  }
+
+  &,
+  &--default {
+    font-size: var(--heading-font-size-min);
+    @include site-breakpoint {
+      font-size: var(--heading-font-size-max);
+    }
+  }
+
+  &--medium {
+    --heading-font-size-min: #{$heading-font-size-medium-min};
+    @include site-breakpoint {
+      --heading-font-size-max: #{$heading-font-size-medium-max};
+    }
+  }
+
+  &--large {
+    --heading-font-size-min: #{$heading-font-size-large-min};
+    @include site-breakpoint {
+      --heading-font-size-max: #{$heading-font-size-large-max};
+    }
+  }
+
+  &--xlarge {
+    --heading-font-size-min: #{$heading-font-size-xlarge-min};
+    @include site-breakpoint {
+      --heading-font-size-max: #{$heading-font-size-xlarge-max};
+    }
+  }
+
+  &--primary {
+    --heading-color: #{color('primary')};
+  }
+
+  &--primary-dark {
+    --heading-color: #{color('primary-dark')};
+  }
+
+  &--primary-light {
+    --heading-color: #{color('primary-light')};
+  }
+
+  &--secondary {
+    --heading-color: #{color('secondary')};
+  }
+
+  &--secondary-dark {
+    --heading-color: #{color('secondary-dark')};
+  }
+
+  &--secondary-light {
+    --heading-color: #{color('secondary-light')};
+  }
+
+  &--tertiary {
+    --heading-color: #{color('tertiary')};
+  }
+
+  &--tertiary-dark {
+    --heading-color: #{color('tertiary-dark')};
+  }
+
+  &--tertiary-light {
+    --heading-color: #{color('tertiary-light')};
+  }
+
+  &--gray {
+    --heading-color: #{color('gray')};
+  }
+
+  &--gray-dark {
+    --heading-color: #{color('gray-dark')};
+  }
+
+  &--gray-light {
+    --heading-color: #{color('gray-light')};
+  }
+
+  &--off-white {
+    --heading-color: #{color('off-white')};
+  }
+
+  &--white {
+    --heading-color: #{color('white')};
+  }
+
+  &--black {
+    --heading-color: #{color('black')};
+  }
+}

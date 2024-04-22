@@ -1,0 +1,255 @@
+.button {
+  --button-padding-x: #{$button-padding-x};
+  --button-padding-y: #{$button-padding-y};
+  --button-font-size-min: #{$button-font-size-min};
+  --button-font-size-max: #{$button-font-size-max};
+  --button-font-weight: #{$button-font-weight};
+  --button-color: #{$button-color};
+  --button-text-decoration: #{$button-text-decoration};
+  --button-border-color: #{$button-border-color};
+  --button-bg: #{$button-bg};
+
+  color: var(--button-color);
+  background: var(--button-bg);
+  border-color: var(--button-border-color);
+  font-weight: var(--button-font-weight);
+  padding: var(--button-padding-y) var(--button-padding-x);
+  text-decoration: var(--button-text-decoration);
+  font-family: $button-font-family;
+  line-height: $button-line-height;
+  border-width: $button-border-width;
+  border-style: $button-border-style;
+  border-radius: $button-border-radius;
+  box-shadow: $button-box-shadow;
+  transition: $button-transition;
+  text-transform: $button-text-transform;
+  align-items: $button-align-items;
+
+  display: inline-flex;
+  overflow: hidden;
+  position: relative;
+
+  font-size: var(--button-font-size-min);
+  @include site-breakpoint {
+    font-size: var(--button-font-size-max);
+  }
+
+  &[disabled] {
+    cursor: wait;
+    opacity: $button-disabled-opacity;
+  }
+
+  &__slot {
+    display: flex;
+
+    &--left {
+      svg {
+        margin-right: calc(var(--button-padding-x) / 2);
+      }
+    }
+
+    &--right {
+      svg {
+        margin-left: calc(var(--button-padding-x) / 2);
+      }
+    }
+  }
+
+  &--primary {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('primary')};
+    --button-border-color: #{color('primary')};
+
+    &:hover {
+      --button-bg: #{color('primary-dark')};
+      --button-border-color: #{color('primary-dark')};
+    }
+  }
+
+  &--primary-dark {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('primary-dark')};
+    --button-border-color: #{color('primary-dark')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('primary-dark'), 5)};
+      --button-border-color: #{lighten(color('primary-dark'), 5)};
+    }
+  }
+
+  &--primary-light {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('primary-light')};
+    --button-border-color: #{color('primary-light')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('primary-light'), 5)};
+      --button-border-color: #{lighten(color('primary-light'), 5)};
+    }
+  }
+
+  &--secondary {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('secondary')};
+    --button-border-color: #{color('secondary')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('secondary'), 5)};
+      --button-border-color: #{lighten(color('secondary'), 5)};
+    }
+  }
+
+  &--secondary-dark {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('secondary-dark')};
+    --button-border-color: #{color('secondary-dark')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('secondary-dark'), 5)};
+      --button-border-color: #{lighten(color('secondary-dark'), 5)};
+    }
+  }
+
+  &--secondary-light {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('secondary-light')};
+    --button-border-color: #{color('secondary-light')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('secondary-light'), 5)};
+      --button-border-color: #{lighten(color('secondary-light'), 5)};
+    }
+  }
+
+  &--tertiary {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('tertiary')};
+    --button-border-color: #{color('tertiary')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('tertiary'), 5)};
+      --button-border-color: #{lighten(color('tertiary'), 5)};
+    }
+  }
+
+  &--tertiary-dark {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('tertiary-dark')};
+    --button-border-color: #{color('tertiary-dark')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('tertiary-dark'), 5)};
+      --button-border-color: #{lighten(color('tertiary-dark'), 5)};
+    }
+  }
+
+  &--tertiary-light {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('tertiary-light')};
+    --button-border-color: #{color('tertiary-light')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('tertiary-light'), 5)};
+      --button-border-color: #{lighten(color('tertiary-light'), 5)};
+    }
+  }
+
+  &--gray {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('gray')};
+    --button-border-color: #{color('gray')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('gray'), 5)};
+      --button-border-color: #{lighten(color('gray'), 5)};
+    }
+  }
+
+  &--gray-dark {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('gray-dark')};
+    --button-border-color: #{color('gray-dark')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('gray-dark'), 5)};
+      --button-border-color: #{lighten(color('gray-dark'), 5)};
+    }
+  }
+
+  &--gray-light {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('gray-light')};
+    --button-border-color: #{color('gray-light')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-bg: #{lighten(color('gray-light'), 5)};
+      --button-border-color: #{lighten(color('gray-light'), 5)};
+    }
+  }
+
+  &--off-white {
+    --button-bg: #{color('off-white')};
+    --button-border-color: #{color('off-white')};
+
+    &:not(.button--outline):not(.button--ghost) {
+      --button-color: #{color('primary')};
+
+      &:hover {
+        --button-color: #{color('off-white')};
+        --button-bg: #{color('primary-dark')};
+        --button-border-color: #{color('primary-dark')};
+      }
+    }
+  }
+
+  &--white {
+    --button-bg: #{color('white')};
+    --button-border-color: #{color('white')};
+
+    &:not(.button--outline):not(.button--ghost) {
+      --button-color: #{color('primary')};
+
+      &:hover {
+        --button-color: #{color('white')};
+        --button-bg: #{color('primary-dark')};
+        --button-border-color: #{color('primary-dark')};
+      }
+    }
+  }
+
+  &--black {
+    --button-color: #{$body-color-inverted};
+    --button-bg: #{color('black')};
+    --button-border-color: #{color('black')};
+
+    &:not(.button--outline):not(.button--ghost):hover {
+      --button-color: #{$body-color};
+      --button-bg: #{$body-color-inverted};
+      --button-border-color: #{$body-color-inverted};
+    }
+  }
+
+  &--outline,
+  &--ghost {
+    --button-color: inherit;
+
+    &:not(:hover) {
+      --button-bg: transparent;
+    }
+
+    &:hover {
+      --button-color: #{$body-color-inverted};
+    }
+
+    &.button--off-white,
+    &.button--white {
+      &:hover {
+        --button-color: #{color('primary')};
+      }
+    }
+  }
+
+  &--ghost {
+    --button-border-color: transparent;
+  }
+}
