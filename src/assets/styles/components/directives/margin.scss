@@ -1,0 +1,23 @@
+@mixin margin-modifiers() {
+  @include margin-bottom-modifiers();
+}
+
+@mixin margin-bottom-modifiers() {
+  @each $size, $value in $sizes {
+    &--bottom-margin-#{$size} {
+      --component-spacing: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    &--bottom-margin-#{$breakpoint} {
+      @include breakpoint($breakpoint) {
+        @each $size, $value in $sizes {
+          &-#{$size} {
+            --component-spacing: #{$value};
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,19 @@
+@mixin sleek-image() {
+  .highlight-card__image-container {
+    margin-top: calc($component-spacing * -2);
+    margin-left:  calc($component-spacing * -1);
+    margin-right:  calc($component-spacing * -1);
+  }
+}
+
+@mixin sleek-button() {
+  .highlight-card__button {
+    margin-left: calc($component-spacing * -1);
+    margin-right: calc($component-spacing * -1);
+    margin-bottom: calc($component-spacing * -2);
+  }
+}
+
 .highlight-card {
   --component-spacing: #{$component-spacing};
   --card-bg-color: #{color('white')};

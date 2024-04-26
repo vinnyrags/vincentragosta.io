@@ -1,0 +1,73 @@
+$alignment: ('align-start', 'align-center', 'align-end');
+$valignment: ('valign-start', 'valign-center', 'valign-end');
+
+$vpad-modifiers: ('vpad', 'tpad', 'bpad');
+$hpad-modifiers: ('hpad', 'lpad', 'rpad');
+
+@mixin flex-valignment() {
+  @each $align in $valignment {
+    $value: 'center';
+    @if ($align == 'align-start') {
+      $value: 'flex-start';
+    } @else if ($align == 'align-end') {
+      $value: 'flex-end';
+    }
+
+    &--#{$align} {
+      align-items: #{$value};
+    }
+  }
+
+  @each $align in $valignment {
+    @each $breakpoint in map-keys($breakpoints) {
+      $value: 'center';
+      @if ($align == 'align-start') {
+        $value: 'flex-start';
+      } @else if ($align == 'align-end') {
+        $value: 'flex-end';
+      }
+
+      &--#{$align}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          align-items: #{$value};
+        }
+      }
+    }
+  }
+}
+
+@mixin flex-halignment() {
+  @each $align in $alignment {
+    $value: 'center';
+    @if ($align == 'align-start') {
+      $value: 'flex-start';
+    } @else if ($align == 'align-end') {
+      $value: 'flex-end';
+    }
+
+    &--#{$align} {
+      > [class*=__wrap] {
+        justify-content: #{$value};
+      }
+    }
+  }
+
+  @each $align in $alignment {
+    @each $breakpoint in map-keys($breakpoints) {
+      $value: 'center';
+      @if ($align == 'align-start') {
+        $value: 'flex-start';
+      } @else if ($align == 'align-end') {
+        $value: 'flex-end';
+      }
+
+      &--#{$align}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          > [class*=__wrap] {
+            justify-content: #{$value};
+          }
+        }
+      }
+    }
+  }
+}

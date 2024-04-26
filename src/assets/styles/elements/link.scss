@@ -1,3 +1,7 @@
+$link-color: inherit;
+$link-decoration: underline;
+$link-decoration-hover: none;
+
 a {
   --link-color: #{$link-color};
   --link-text-decoration: #{$link-decoration};

@@ -1,0 +1,83 @@
+@mixin padding-modifiers() {
+  @include default-padding-modifiers;
+  @include vertical-padding;
+  @include horizontal-padding;
+}
+
+@mixin default-padding-modifiers() {
+  @each $size, $value in $sizes {
+    &--padding-#{$size} {
+      --tpad: #{$value};
+      --bpad: #{$value};
+      --lpad: #{$value};
+      --rpad: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    &--padding-#{$breakpoint} {
+      @include breakpoint($breakpoint) {
+        @each $size, $value in $sizes {
+          &-#{$size} {
+            --tpad: #{$value};
+            --bpad: #{$value};
+            --lpad: #{$value};
+            --rpad: #{$value};
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin vertical-padding() {
+  @each $modifier in $vpad-modifiers {
+    @each $size, $value in $sizes {
+      &--#{$modifier}-#{$size} {
+        --tpad: #{$value};
+        --bpad: #{$value};
+      }
+    }
+  }
+
+  @each $modifier in $vpad-modifiers {
+    @each $breakpoint in map-keys($breakpoints) {
+      &--#{$modifier}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          @each $size, $value in $sizes {
+            &-#{$size} {
+              --tpad: #{$value};
+              --bpad: #{$value};
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@mixin horizontal-padding() {
+  @each $modifier in $hpad-modifiers {
+    @each $size, $value in $sizes {
+      &--#{$modifier}-#{$size} {
+        --lpad: #{$value};
+        --rpad: #{$value};
+      }
+    }
+  }
+
+  @each $modifier in $hpad-modifiers {
+    @each $breakpoint in map-keys($breakpoints) {
+      &--#{$modifier}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          @each $size, $value in $sizes {
+            &-#{$size} {
+              --lpad: #{$value};
+              --rpad: #{$value};
+            }
+          }
+        }
+      }
+    }
+  }
+}

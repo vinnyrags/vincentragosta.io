@@ -1,6 +1,7 @@
 .section {
-  @extend %shared-container;
-
+  //@extend %shared-container;
+  --bg-color: inherit;
+  --color: inherit;
   --section-max-width: #{$content-max-width};
   --component-spacing: #{$layout-spacing};
   --container-padding: #{$layout-spacing-quarter};
@@ -13,6 +14,8 @@
   margin-bottom: var(--component-spacing);
   padding-left: var(--container-padding);
   padding-right: var(--container-padding);
+  position: relative;
+  color: var(--color);
 
   @include breakpoint-md() {
     --container-padding: #{$layout-spacing};
@@ -20,8 +23,11 @@
   }
 
   &__bg {
-    @extend %shared-container__bg;
-    position: relative;
+    //@extend %shared-container__bg;
+    background: var(--bg-color);
+    position: absolute;
+    inset: 0;
+    z-index: -1;
 
     &:after {
       content: '';
@@ -32,11 +38,15 @@
   }
 
   &__video {
-    @extend %shared-container__video;
+    //@extend %shared-container__video;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__image {
-    @extend %shared-container__image;
+    //@extend %shared-container__image;
+    filter: brightness(0.85);
   }
 
   &__wrap {
@@ -49,8 +59,10 @@
     }
   }
 
-  @include color;
-  @include bmargin;
+  @include color-modifiers;
+  @include margin-modifiers;
+  @include padding-modifiers;
+  @include border-modifiers;
 
   &:last-child {
     margin-bottom: 0;
@@ -61,16 +73,13 @@
   }
 
   &--has-bg {
-    @extend %shared-container--has-bg;
-
+    //@extend %shared-container--has-bg;
+    --color: #{$body-color-inverted};
     --tpad: #{$layout-spacing-double};
     --bpad: #{$layout-spacing-double};
 
     &.section {
-      @include bg-color;
-      @include pad;
-      @include vpad;
-      @include hpad;
+      @include background-color-modifiers;
 
       &--bg-parallax {
         clip-path: inset(0 0 0 0);
@@ -96,11 +105,11 @@
     padding-right: 0;
   }
 
-  &--vborder-primary,
-  &--vborder-secondary,
-  &--vborder-tertiar {
-    @include vborder;
-  }
+  //&--vborder-primary,
+  //&--vborder-secondary,
+  //&--vborder-tertiary {
+  //  @include vborder;
+  //}
 
   &--vborder-primary {
     --vborder-color: #{color('primary')};

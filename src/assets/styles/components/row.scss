@@ -1,5 +1,5 @@
 .row {
-  @extend %shared-container;
+  //@extend %shared-container;
 
   --component-spacing: #{$layout-spacing};
   --gutter-width: #{$layout-spacing-half};
@@ -15,15 +15,15 @@
   }
 
   &__bg {
-    @extend %shared-container__bg;
+    //@extend %shared-container__bg;
   }
 
   &__video {
-    @extend %shared-container__video;
+    //@extend %shared-container__video;
   }
 
   &__image {
-    @extend %shared-container__image;
+    //@extend %shared-container__image;
   }
 
   &__wrap {
@@ -33,20 +33,20 @@
     margin: calc(var(--gutter-width) / -2);
   }
 
-  @include color;
-  @include flex-halignment;
-  @include pad;
-  @include vpad;
-  @include hpad;
+  //@include color;
+  //@include flex-halignment;
+  //@include pad;
+  //@include vpad;
+  //@include hpad;
 
   &--has-bg {
-    @extend %shared-container--has-bg;
+    //@extend %shared-container--has-bg;
 
     --tpad: #{$layout-spacing};
     --bpad: #{$layout-spacing};
 
     &.row {
-      @include bg-color;
+      //@include bg-color;
     }
   }
 }
