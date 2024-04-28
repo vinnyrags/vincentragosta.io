@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $breakpoint-xs: em(576);
 $breakpoint-sm: em(768);
 $breakpoint-md: em(992);
@@ -23,7 +25,7 @@ $site-breakpoint: 'md';
 @mixin breakpoint($breakpoint, $max: false) {
   @if map-has-key($breakpoints, $breakpoint) {
     $width: 'min';
-    $value: map-get($breakpoints, $breakpoint);
+    $value: map.get($breakpoints, $breakpoint);
 
     @if ($max) {
       $width: 'max';
@@ -34,8 +36,7 @@ $site-breakpoint: 'md';
       @content;
     }
   } @else {
-    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
-        + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. " + "Available breakpoints are: #{map-keys($breakpoints)}.";
   }
 }
 

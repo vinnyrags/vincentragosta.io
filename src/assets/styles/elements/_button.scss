@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $button-padding-x: calc($component-spacing / 2);
 $button-padding-y: calc($component-spacing / 3);
 $button-font-family: $body-font-family;
@@ -92,8 +94,8 @@ $button-align-items: center;
     --button-border-color: #{color('primary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('primary-dark'), 5)};
-      --button-border-color: #{lighten(color('primary-dark'), 5)};
+      --button-bg: #{color.adjust(color('primary-dark'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('primary-dark'), $lightness: 5%)};
     }
   }
 
@@ -103,8 +105,8 @@ $button-align-items: center;
     --button-border-color: #{color('primary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('primary-light'), 5)};
-      --button-border-color: #{lighten(color('primary-light'), 5)};
+      --button-bg: #{color.adjust(color('primary-light'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('primary-light'), $lightness: 5%)};
     }
   }
 
@@ -114,8 +116,8 @@ $button-align-items: center;
     --button-border-color: #{color('secondary')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('secondary'), 5)};
-      --button-border-color: #{lighten(color('secondary'), 5)};
+      --button-bg: #{color.adjust(color('secondary'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('secondary'), $lightness: 5%)};
     }
   }
 
@@ -125,8 +127,8 @@ $button-align-items: center;
     --button-border-color: #{color('secondary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('secondary-dark'), 5)};
-      --button-border-color: #{lighten(color('secondary-dark'), 5)};
+      --button-bg: #{color.adjust(color('secondary-dark'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('secondary-dark'), $lightness: 5%)};
     }
   }
 
@@ -136,8 +138,8 @@ $button-align-items: center;
     --button-border-color: #{color('secondary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('secondary-light'), 5)};
-      --button-border-color: #{lighten(color('secondary-light'), 5)};
+      --button-bg: #{color.adjust(color('secondary-light'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('secondary-light'), $lightness: 5%)};
     }
   }
 
@@ -147,8 +149,8 @@ $button-align-items: center;
     --button-border-color: #{color('tertiary')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('tertiary'), 5)};
-      --button-border-color: #{lighten(color('tertiary'), 5)};
+      --button-bg: #{color.adjust(color('tertiary'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('tertiary'), $lightness: 5%)};
     }
   }
 
@@ -158,8 +160,8 @@ $button-align-items: center;
     --button-border-color: #{color('tertiary-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('tertiary-dark'), 5)};
-      --button-border-color: #{lighten(color('tertiary-dark'), 5)};
+      --button-bg: #{color.adjust(color('tertiary-dark'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('tertiary-dark'), $lightness: 5%)};
     }
   }
 
@@ -169,8 +171,8 @@ $button-align-items: center;
     --button-border-color: #{color('tertiary-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('tertiary-light'), 5)};
-      --button-border-color: #{lighten(color('tertiary-light'), 5)};
+      --button-bg: #{color.adjust(color('tertiary-light'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('tertiary-light'), $lightness: 5%)};
     }
   }
 
@@ -180,8 +182,8 @@ $button-align-items: center;
     --button-border-color: #{color('gray')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('gray'), 5)};
-      --button-border-color: #{lighten(color('gray'), 5)};
+      --button-bg: #{color.adjust(color('gray'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('gray'), $lightness: 5%)};
     }
   }
 
@@ -191,8 +193,8 @@ $button-align-items: center;
     --button-border-color: #{color('gray-dark')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('gray-dark'), 5)};
-      --button-border-color: #{lighten(color('gray-dark'), 5)};
+      --button-bg: #{color.adjust(color('gray-dark'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('gray-dark'), $lightness: 5%)};
     }
   }
 
@@ -202,8 +204,8 @@ $button-align-items: center;
     --button-border-color: #{color('gray-light')};
 
     &:not(.button--outline):not(.button--ghost):hover {
-      --button-bg: #{lighten(color('gray-light'), 5)};
-      --button-border-color: #{lighten(color('gray-light'), 5)};
+      --button-bg: #{color.adjust(color('gray-light'), $lightness: 5%)};
+      --button-border-color: #{color.adjust(color('gray-light'), $lightness: 5%)};
     }
   }
 

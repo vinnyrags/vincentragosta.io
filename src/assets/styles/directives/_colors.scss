@@ -1,12 +1,15 @@
+@use "sass:color";
+@use "sass:map";
+
 $color-primary: #456ebf;
-$color-primary-dark: darken($color-primary, 10);
-$color-primary-light: lighten($color-primary, 10);
+$color-primary-dark: color.adjust($color-primary, $lightness: -10%);
+$color-primary-light: color.adjust($color-primary, $lightness: 10%);
 $color-secondary: #ed3636;
-$color-secondary-dark: darken($color-secondary, 10);
-$color-secondary-light: lighten($color-secondary, 10);
+$color-secondary-dark: color.adjust($color-secondary, $lightness: -10%);
+$color-secondary-light: color.adjust($color-secondary, $lightness: 10%);
 $color-tertiary: #d843d1;
-$color-tertiary-dark: darken($color-tertiary, 10);
-$color-tertiary-light: lighten($color-tertiary, 10);
+$color-tertiary-dark: color.adjust($color-tertiary, $lightness: -10%);
+$color-tertiary-light: color.adjust($color-tertiary, $lightness: 10%);
 $color-gray: #303030;
 $color-gray-dark: #666666; // default darken($color-gray, 10);
 $color-gray-light: #cccccc; // default lighten($color-gray, 10);
@@ -39,5 +42,5 @@ $light-colors: ('off-white', 'white');
 }
 
 @function color($color, $opacity: 1) {
-  @return rgba(map-get($colors, $color), $opacity);
+  @return rgba(map.get($colors, $color), $opacity);
 }

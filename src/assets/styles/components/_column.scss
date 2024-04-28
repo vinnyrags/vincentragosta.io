@@ -1,0 +1,147 @@
+.column {
+  //@extend %shared-container;
+
+  --component-spacing: #{$layout-spacing-half};
+  --gutter-width: #{$layout-spacing-quarter};
+  --width-offset: #{$layout-spacing-half};
+  --tpad: 0;
+  --bpad: 0;
+  --lpad: calc(#{$layout-spacing-quarter});
+  --rpad: calc(#{$layout-spacing-quarter});
+
+  display: flex;
+  margin: var(--gutter-width);
+
+  &__bg {
+    //@extend %shared-container__bg;
+  }
+
+  &__video {
+    //@extend %shared-container__video;
+  }
+
+  &__image {
+    //@extend %shared-container__image;
+  }
+
+  &__wrap {
+    width: 100%;
+    padding: var(--tpad) var(--rpad) var(--bpad) var(--lpad);
+
+    > * {
+      margin-bottom: var(--component-spacing);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  //@include color;
+  //@include flex-valignment;
+  //@include text-alignment;
+  //@include pad;
+  //@include hpad;
+  //@include vpad;
+
+  &--has-bg {
+    //@extend %shared-container--has-bg;
+
+    --tpad: #{$layout-spacing};
+    --bpad: #{$layout-spacing};
+
+    &.column {
+      //@include bg-color;
+    }
+  }
+
+  &--abs-center {
+    align-items: center;
+
+    .column__wrap {
+      text-align: center;
+    }
+
+    &-xs {
+      @include breakpoint-xs {
+        align-items: center;
+
+        .column__wrap {
+          text-align: center;
+        }
+      }
+    }
+
+    &-sm {
+      @include breakpoint-sm {
+        align-items: center;
+
+        .column__wrap {
+          text-align: center;
+        }
+      }
+    }
+
+    &-md {
+      @include breakpoint-md {
+        align-items: center;
+
+        .column__wrap {
+          text-align: center;
+        }
+      }
+    }
+
+    &-lg {
+      @include breakpoint-lg {
+        align-items: center;
+
+        .column__wrap {
+          text-align: center;
+        }
+      }
+    }
+
+    &-xl {
+      @include breakpoint-xl {
+        align-items: center;
+
+        .column__wrap {
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  @include columns;
+
+  &-xs {
+    @include breakpoint-xs {
+      @include columns;
+    }
+  }
+
+  &-sm {
+    @include breakpoint-sm {
+      @include columns;
+    }
+  }
+
+  &-md {
+    @include breakpoint-md {
+      @include columns;
+    }
+  }
+
+  &-lg {
+    @include breakpoint-lg {
+      @include columns;
+    }
+  }
+
+  &-xl {
+    @include breakpoint-xl {
+      @include columns;
+    }
+  }
+}

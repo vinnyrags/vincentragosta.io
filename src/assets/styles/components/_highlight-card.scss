@@ -48,7 +48,7 @@
 
   &__button {
     --button-padding-y: #{calc($component-spacing / 1.5)};
-    --button-padding-x: #{var(--component-spacing)};
+    --button-padding-x: var(--component-spacing);
 
     align-self: flex-end;
     width: 100%;

@@ -1,6 +1,0 @@
-// breakpoint + row offset + column offset
-$content-max-width: calc(map-get($breakpoints, 'lg') + $layout-spacing + $layout-spacing-half);
-$content-wide-width: calc(map-get($breakpoints, 'xl') + $layout-spacing + $layout-spacing-half);
-$content-narrow-width: calc(map-get($breakpoints, 'md') + $layout-spacing + $layout-spacing-half);
-
-// TODO build mixin for &--container-wide modifiers
