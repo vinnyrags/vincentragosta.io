@@ -1,0 +1,31 @@
+@mixin grid-modifiers() {
+  &--grid {
+    .row {
+      --component-spacing: #{$layout-spacing-half};
+    }
+  }
+
+  &--grid-none {
+    .row {
+      --component-spacing: 0;
+      --gutter-width: 0;
+    }
+
+    .column {
+      --gutter-width: 0;
+      --width-offset: 0%;
+    }
+  }
+
+  &--grid-half {
+    .row {
+      --component-spacing: #{$layout-spacing-quarter};
+      --gutter-width: #{$layout-spacing-quarter};
+    }
+
+    .column {
+      --gutter-width: #{calc($layout-spacing-quarter / 2)};
+      --width-offset: #{$layout-spacing-quarter};
+    }
+  }
+}

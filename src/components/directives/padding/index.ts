@@ -6,7 +6,7 @@ import horizontalPaddingProperties from "@/components/directives/padding/horizon
 import verticalPaddingProperties from "@/components/directives/padding/vertical";
 
 const paddingDefaults: DefaultPropertyStructure =
-  createPropertiesFromViewportAndMultipliers("padding");
+  createPropertiesFromViewportAndMultipliers("pad");
 export default {
   ...paddingDefaults,
   ...horizontalPaddingProperties,

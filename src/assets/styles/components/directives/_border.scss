@@ -2,25 +2,35 @@
   @include vertical-border-modifiers;
 }
 
+@mixin vborder-common {
+  content: "";
+  position: absolute;
+  width: 75%;
+  z-index: 5;
+  border-top: 8px solid var(--vborder-color);
+}
+
 @mixin vertical-border-modifiers() {
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    width: 75%;
-    z-index: 5;
-    border-top: 8px solid var(--vborder-color);
-  }
+  @each $color in $color-types {
+    &--vborder-#{$color} {
+      --vborder-color: #{color($color)};
 
-  &:before {
-    top: -4px;
-    right: 0;
-    border-left: 10px solid transparent;
-  }
+      &:before,
+      &:after {
+        @include vborder-common;
+      }
 
-  &:after {
-    bottom: -4px;
-    left: 0;
-    border-right: 10px solid transparent;
+      &:before {
+        top: -4px;
+        right: 0;
+        border-left: 10px solid transparent;
+      }
+
+      &:after {
+        bottom: -4px;
+        left: 0;
+        border-right: 10px solid transparent;
+      }
+    }
   }
 }

@@ -4,13 +4,13 @@ import {
 } from "@/components/directives/properties";
 
 export const horizontalPaddingProperties: DefaultPropertyStructure =
-  createPropertiesFromViewportAndMultipliers("horizontalPadding");
+  createPropertiesFromViewportAndMultipliers("hpad");
 
 export const leftPaddingProperties: DefaultPropertyStructure =
-  createPropertiesFromViewportAndMultipliers("leftPadding");
+  createPropertiesFromViewportAndMultipliers("lpad");
 
 export const rightPaddingProperties: DefaultPropertyStructure =
-  createPropertiesFromViewportAndMultipliers("rightPadding");
+  createPropertiesFromViewportAndMultipliers("rpad");
 
 export default {
   ...horizontalPaddingProperties,

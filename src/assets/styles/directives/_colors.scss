@@ -17,6 +17,8 @@ $color-off-white: #f5f5f5; // default darken($color-white, 10);
 $color-white: #ffffff;
 $color-black: #000000;
 
+$color-types: ('primary', 'secondary', 'tertiary');
+
 $colors: (
         'primary': $color-primary,
         'primary-dark': $color-primary-dark,

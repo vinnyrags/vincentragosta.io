@@ -1,6 +1,6 @@
 @mixin color-modifiers() {
   @each $color, $value in $colors {
-    &--#{$color} {
+    &--color-#{$color} {
       --color: #{$value};
     }
   }

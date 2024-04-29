@@ -1,7 +1,6 @@
 .section {
-  //@extend %shared-container;
-  --bg-color: inherit;
   --color: inherit;
+  --bg-color: inherit;
   --section-max-width: #{$content-max-width};
   --component-spacing: #{$layout-spacing};
   --container-padding: #{$layout-spacing-quarter};
@@ -29,12 +28,13 @@
     inset: 0;
     z-index: -1;
 
-    &:after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: color('black', .3);
-    }
+    // TODO create scenario where this applies, maybe on video/image only?
+    //&:after {
+    //  content: '';
+    //  position: absolute;
+    //  inset: 0;
+    //  background: color('black', .3);
+    //}
   }
 
   &__video {
@@ -63,6 +63,7 @@
   @include margin-modifiers;
   @include padding-modifiers;
   @include border-modifiers;
+  @include grid-modifiers;
 
   &:last-child {
     margin-bottom: 0;
@@ -79,7 +80,7 @@
     --bpad: #{$layout-spacing-double};
 
     &.section {
-      @include background-color-modifiers;
+      @include bg-color-modifiers;
 
       &--bg-parallax {
         clip-path: inset(0 0 0 0);

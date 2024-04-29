@@ -1,5 +1,5 @@
 @import '@/assets/styles/components/directives/colors';
-@import '@/assets/styles/components/directives/background-colors';
+@import '@/assets/styles/components/directives/background/index';
 @import '@/assets/styles/components/directives/border';
 @import '@/assets/styles/components/directives/padding';
 @import '@/assets/styles/components/directives/margin';
@@ -8,3 +8,4 @@
 @import '@/assets/styles/components/directives/columns';
 @import '@/assets/styles/components/directives/button-group';
 @import '@/assets/styles/components/directives/container';
+@import '@/assets/styles/components/directives/grid';

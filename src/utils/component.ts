@@ -1,9 +1,23 @@
 import { computed, ComputedRef } from "vue";
 import { DefaultPropertyStructure } from "@/components/directives/properties";
 import { toKebabCase } from "@/utils";
+import { backgroundMediaFixture } from "@/components/directives/background/media/fixture";
+import { backgroundColorFixture } from "@/components/directives/background/colors/fixture";
 
 export function hasBackground(props: DefaultPropertyStructure): boolean {
-  return computed(() => !!props.video || !!props.image).value;
+  return computed(() => {
+    for (const media of backgroundMediaFixture) {
+      if (props[media] || props[media] === "") {
+        return true;
+      }
+    }
+    for (const color of backgroundColorFixture) {
+      if (props[color] || props[color] === "") {
+        return true;
+      }
+    }
+    return false;
+  }).value;
 }
 
 export function useModifiers(

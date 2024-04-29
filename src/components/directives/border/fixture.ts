@@ -1,5 +1,5 @@
 export const borderFixture: string[] = [
-  "verticalBorderPrimary",
-  "verticalBorderSecondary",
-  "verticalBorderTertiary",
+  "vborderPrimary",
+  "vborderSecondary",
+  "vborderTertiary",
 ];

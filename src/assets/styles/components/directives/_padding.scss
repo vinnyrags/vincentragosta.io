@@ -1,12 +1,16 @@
 @mixin padding-modifiers() {
   @include default-padding-modifiers;
-  @include vertical-padding;
-  @include horizontal-padding;
+  @include vpad-modifiers;
+  @include hpad-modifiers;
+  @include tpad-modifiers;
+  @include rpad-modifiers;
+  @include bpad-modifiers;
+  @include lpad-modifiers;
 }
 
 @mixin default-padding-modifiers() {
   @each $size, $value in $sizes {
-    &--padding-#{$size} {
+    &--pad-#{$size} {
       --tpad: #{$value};
       --bpad: #{$value};
       --lpad: #{$value};
@@ -15,67 +19,125 @@
   }
 
   @each $breakpoint in map-keys($breakpoints) {
-    &--padding-#{$breakpoint} {
-      @include breakpoint($breakpoint) {
-        @each $size, $value in $sizes {
-          &-#{$size} {
-            --tpad: #{$value};
-            --bpad: #{$value};
-            --lpad: #{$value};
-            --rpad: #{$value};
-          }
+    @each $size, $value in $sizes {
+      &--pad-#{$size}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          --tpad: #{$value};
+          --bpad: #{$value};
+          --lpad: #{$value};
+          --rpad: #{$value};
         }
       }
     }
   }
 }
 
-@mixin vertical-padding() {
-  @each $modifier in $vpad-modifiers {
-    @each $size, $value in $sizes {
-      &--#{$modifier}-#{$size} {
-        --tpad: #{$value};
-        --bpad: #{$value};
-      }
+@mixin vpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--vpad-#{$size} {
+      --tpad: #{$value};
+      --bpad: #{$value};
     }
   }
 
-  @each $modifier in $vpad-modifiers {
-    @each $breakpoint in map-keys($breakpoints) {
-      &--#{$modifier}-#{$breakpoint} {
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--vpad-#{$size}-#{$breakpoint} {
         @include breakpoint($breakpoint) {
-          @each $size, $value in $sizes {
-            &-#{$size} {
-              --tpad: #{$value};
-              --bpad: #{$value};
-            }
-          }
+          --tpad: #{$value};
+          --bpad: #{$value};
         }
       }
     }
   }
 }
 
-@mixin horizontal-padding() {
-  @each $modifier in $hpad-modifiers {
-    @each $size, $value in $sizes {
-      &--#{$modifier}-#{$size} {
-        --lpad: #{$value};
-        --rpad: #{$value};
-      }
+@mixin hpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--hpad-#{$size} {
+      --lpad: #{$value};
+      --rpad: #{$value};
     }
   }
 
-  @each $modifier in $hpad-modifiers {
-    @each $breakpoint in map-keys($breakpoints) {
-      &--#{$modifier}-#{$breakpoint} {
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--hpad-#{$size}-#{$breakpoint} {
         @include breakpoint($breakpoint) {
-          @each $size, $value in $sizes {
-            &-#{$size} {
-              --lpad: #{$value};
-              --rpad: #{$value};
-            }
-          }
+          --lpad: #{$value};
+          --rpad: #{$value};
+        }
+      }
+    }
+  }
+}
+
+@mixin tpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--tpad-#{$size} {
+      --tpad: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--tpad-#{$size}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          --tpad: #{$value};
+        }
+      }
+    }
+  }
+}
+
+@mixin rpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--rpad-#{$size} {
+      --rpad: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--rpad-#{$size}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          --rpad: #{$value};
+        }
+      }
+    }
+  }
+}
+
+@mixin bpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--bpad-#{$size} {
+      --bpad: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--bpad-#{$size}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          --bpad: #{$value};
+        }
+      }
+    }
+  }
+}
+
+@mixin lpad-modifiers() {
+  @each $size, $value in $sizes {
+    &--lpad-#{$size} {
+      --lpad: #{$value};
+    }
+  }
+
+  @each $breakpoint in map-keys($breakpoints) {
+    @each $size, $value in $sizes {
+      &--lpad-#{$size}-#{$breakpoint} {
+        @include breakpoint($breakpoint) {
+          --lpad: #{$value};
         }
       }
     }

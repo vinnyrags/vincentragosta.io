@@ -1,4 +1,4 @@
-export const colorFixture: string[] = [
+export const themeColorFixture: string[] = [
   "primary",
   "primaryDark",
   "primaryLight",
@@ -15,3 +15,12 @@ export const colorFixture: string[] = [
   "white",
   "black",
 ];
+
+const transformColors = (colors: string[]): string[] => {
+  return colors.map(
+    (color) => `color${color.charAt(0).toUpperCase()}${color.slice(1)}`
+  );
+};
+
+// Generate colorFixture array using the transformed colors
+export const colorFixture: string[] = transformColors(themeColorFixture);
