@@ -1,0 +1,24 @@
+{
+  "name": "vincentragosta",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://travis-ci.com/timber/starter-theme.svg?branch=master)](https://travis-ci.com/github/timber/starter-theme) [![Packagist Version](https://img.shields.io/packagist/v/upstatement/timber-starter-theme?include_prereleases)](https://packagist.org/packages/upstatement/timber-starter-theme)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "sass assets/:assets/dist/ --style=compressed --no-source-map",
+    "build:js": "esbuild assets/**/*.js --bundle --outdir=assets/dist --format=esm --minify",
+    "watch": "npm run build -- --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.1",
+    "postcss": "^8.5.3",
+    "sass": "^1.86.0"
+  }
+}

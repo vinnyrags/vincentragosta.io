@@ -1,0 +1,17 @@
+{
+  "name": "acf/hero",
+  "title": "Hero",
+  "description": "A simple custom block rendered with Timber and ACF.",
+  "category": "common",
+  "icon": "star-filled",
+  "keywords": ["custom", "my block", "acf", "timber"],
+  "acf": {
+    "mode": "edit",
+    "renderCallback": "theme_acf_block_render_callback"
+  },
+  "supports": {
+    "align": ["wide", "full"],
+    "anchor": true
+  },
+  "style": ["file:./my-block.css"]
+}

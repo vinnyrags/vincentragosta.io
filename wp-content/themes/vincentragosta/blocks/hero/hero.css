@@ -1,0 +1,30 @@
+/* Styles for My Custom Block */
+.wp-block-acf-my-block {
+    border: 2px solid rebeccapurple;
+    padding: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f9f9f9;
+}
+
+.wp-block-acf-my-block h2 {
+    color: rebeccapurple;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif; /* Example using theme fonts */
+}
+
+.wp-block-acf-my-block p {
+    font-size: 1rem;
+    font-family: 'Libre Baskerville', serif; /* Example using theme fonts */
+}
+
+/* Style for preview mode */
+.is-preview .wp-block-acf-my-block .preview-notice {
+    font-style: italic;
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 15px;
+    border-top: 1px dotted #ccc;
+    padding-top: 10px;
+}

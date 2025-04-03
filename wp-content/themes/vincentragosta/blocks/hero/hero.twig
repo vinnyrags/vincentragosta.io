@@ -1,0 +1,37 @@
+{# File: blocks/my-block/my-block.twig #}
+{#
+Available variables:
+- block: The block data (name, id, align, etc.).
+- fields: An array of ACF fields for this block.
+- is_preview: True if rendering in the editor preview, false on frontend.
+- post_id: The ID of the post this block belongs to.
+- context: The full Timber context.
+#}
+
+<div id="{{ block.anchor ?: '' }}" class="{{ block.className ?: '' }} wp-block-acf-my-block{% if is_preview %} is-preview{% endif %}" {% if block.align %} data-align="{{ block.align }}"{% endif %}>
+    HERO
+    {% if fields.title %}
+        <h2>{{ fields.title }}</h2>
+    {% elseif is_preview %}
+        <h2 style="opacity: 0.7;">[Enter Block Title]</h2>
+    {% endif %}
+
+    {% if fields.content %}
+        <p>{{ fields.content }}</p>
+    {% elseif is_preview %}
+        <p style="opacity: 0.7;">[Enter block content here...]</p>
+    {% endif %}
+
+    {# Example: Repeater field #}
+    {% if fields.my_repeater %}
+        <ul>
+            {% for item in fields.my_repeater %}
+                <li>{{ item.sub_field_name }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if is_preview %}
+        <p class="preview-notice">Rendering block '{{ block.title }}' (Preview Mode)</p>
+    {% endif %}
+</div>
