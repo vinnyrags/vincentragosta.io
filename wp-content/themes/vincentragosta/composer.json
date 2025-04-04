@@ -23,17 +23,11 @@
     "yoast/wp-test-utils": "^1.0"
   },
   "extra": {
-    "installer-paths": {
-      "vendor/automattic/wordbless/": [
-        "automattic/wordbless"
-      ]
-    },
-    "wordpress-install-dir": "wordpress"
   },
   "config": {
     "allow-plugins": {
-      "roots/wordpress-core-installer": true,
-      "composer/installers": true
+      "composer/installers": true,
+      "roots/wordpress-core-installer": true
     }
   },
   "scripts": {
