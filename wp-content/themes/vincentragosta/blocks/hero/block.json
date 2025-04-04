@@ -1,17 +1,28 @@
 {
   "name": "acf/hero",
   "title": "Hero",
-  "description": "A simple custom block rendered with Timber and ACF.",
-  "category": "common",
-  "icon": "star-filled",
-  "keywords": ["custom", "my block", "acf", "timber"],
+  "description": "Displays a prominent hero section with title, subtitle, buttons, and an SVG background.",
+  "category": "layout",
+  "icon": "cover-image",
+  "keywords": ["hero", "acf", "timber", "svg"],
   "acf": {
-    "mode": "edit",
-    "renderCallback": "theme_acf_block_render_callback"
+    "mode": "preview",
+    "renderCallback": "theme_acf_block_render_callback",
+    "example": {
+      "attributes": {
+        "mode": "preview",
+        "data": {
+          "hero_title": "This is the Hero Title",
+          "hero_subtitle": "And this is a compelling subtitle explaining more.",
+          "hero_links": [{ "title": "Learn More", "url": "#" }],
+          "hero_squiggle": "squiggle.svg"
+        }
+      }
+    }
   },
   "supports": {
     "align": ["wide", "full"],
     "anchor": true
   },
-  "style": ["file:./my-block.css"]
+  "style": ["file:./hero.css"]
 }

@@ -1,37 +1,68 @@
-{# File: blocks/my-block/my-block.twig #}
+{# File: blocks/hero/hero.twig #}
 {#
 Available variables:
-- block: The block data (name, id, align, etc.).
-- fields: An array of ACF fields for this block.
+- block: The block data (name, id, align, className etc.).
+- fields: An array of ACF fields (hero_title, hero_subtitle, hero_links, hero_squiggle).
 - is_preview: True if rendering in the editor preview, false on frontend.
 - post_id: The ID of the post this block belongs to.
 - context: The full Timber context.
 #}
 
-<div id="{{ block.anchor ?: '' }}" class="{{ block.className ?: '' }} wp-block-acf-my-block{% if is_preview %} is-preview{% endif %}" {% if block.align %} data-align="{{ block.align }}"{% endif %}>
-    HERO
-    {% if fields.title %}
-        <h2>{{ fields.title }}</h2>
-    {% elseif is_preview %}
-        <h2 style="opacity: 0.7;">[Enter Block Title]</h2>
-    {% endif %}
+{% set block_classes = [
+    'wp-block-acf-hero',
+    block.className ?: '',
+    block.align ? 'align' ~ block.align : '',
+    is_preview ? 'is-preview' : ''
+] | join(' ') | trim %}
 
-    {% if fields.content %}
-        <p>{{ fields.content }}</p>
-    {% elseif is_preview %}
-        <p style="opacity: 0.7;">[Enter block content here...]</p>
-    {% endif %}
+<div id="{{ block.anchor ?: block.id }}" class="{{ block_classes }}">
+    <div class="hero-block__content">
+        {# Title (Required) #}
+        {% if fields.hero_title %}
+            <h1 class="hero-block__title">{{ fields.hero_title }}</h1>
+        {% elseif is_preview %}
+            <h1 class="hero-block__title is-placeholder">[Hero Title]</h1>
+        {% endif %}
 
-    {# Example: Repeater field #}
-    {% if fields.my_repeater %}
-        <ul>
-            {% for item in fields.my_repeater %}
-                <li>{{ item.sub_field_name }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+        {# Subtitle (Optional) #}
+        {% if fields.hero_subtitle %}
+            <p class="hero-block__subtitle">{{ fields.hero_subtitle | nl2br }}</p> {# Use nl2br if using Textarea #}
+        {% elseif is_preview %}
+            <p class="hero-block__subtitle is-placeholder">[Optional Subtitle]</p>
+        {% endif %}
+
+        {# Links Repeater (Optional) #}
+        {# Assuming the repeater field name is 'hero_links' and the link sub-field is 'link' #}
+        {% if fields.hero_links %}
+            <div class="hero-block__links">
+                {% for item in fields.hero_links %}
+                    {% set link = item.hero_link %} {# Assuming the Link sub-field name is 'link' #}
+                    {% if link and link.url and link.title %}
+                        <a href="{{ link.url }}" class="wp-block-button__link hero-block__link" target="{{ link.target ?: '_self' }}" {% if link.target == '_blank' %}rel="noopener noreferrer"{% endif %}>
+                            {{ link.title }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% elseif is_preview %}
+            {# Placeholder for when in preview mode and no links added yet #}
+            <div class="hero-block__links is-placeholder">
+                <span class="wp-block-button__link hero-block__link">[Link Repeater]</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="hero-block__svg">
+        {# Updated field name to hero_squiggle #}
+        {% if fields.hero_squiggle %}
+            {# Use the helper function (defined in PHP) to get SVG content safely #}
+            {{ function('get_theme_svg', fields.hero_squiggle) }}
+        {% elseif is_preview %}
+            <div class="is-placeholder" style="width: 150px; height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; text-align: center; border: 1px dashed #ccc; margin-left: auto;">[SVG Placeholder]</div>
+        {% endif %}
+    </div>
 
     {% if is_preview %}
-        <p class="preview-notice">Rendering block '{{ block.title }}' (Preview Mode)</p>
+        <p class="preview-notice"><em>Rendering Hero Block Preview</em></p>
     {% endif %}
 </div>

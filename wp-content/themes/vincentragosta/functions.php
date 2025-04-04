@@ -66,3 +66,89 @@ function theme_acf_block_render_callback( $block, $content = '', $is_preview = f
     }
 }
 // --- END NEW ---
+
+/**
+ * Populates ACF select field choices with SVG filenames from the theme's assets/images directory.
+ *
+ * @param array $field The ACF field array.
+ * @return array The modified ACF field array.
+ */
+function populate_svg_choices( $field ) {
+    // Reset choices
+    $field['choices'] = array();
+
+    // Path to the SVG directory
+    $svg_dir = get_template_directory() . '/assets/images/';
+
+    // Check if the directory exists
+    if ( is_dir( $svg_dir ) ) {
+        // Scan the directory for .svg files
+        $svg_files = glob( $svg_dir . '*.svg' );
+
+        if ( $svg_files ) {
+            foreach ( $svg_files as $file_path ) {
+                $filename = basename( $file_path );
+                // Use filename as both value and label (or create a nicer label)
+                $label = ucwords( str_replace( ['-', '_', '.svg'], ' ', $filename ) );
+                $field['choices'][ $filename ] = $label;
+            }
+        }
+    }
+
+    // Add a default "None" option if needed
+    // $field['choices'] = array_merge( array( '' => '- None -' ), $field['choices'] );
+
+    return $field;
+}
+// Hook the function to the specific ACF field name used in Step 1
+add_filter('acf/load_field/name=hero_svg_asset', 'populate_svg_choices');
+
+
+/**
+ * Safely retrieves the content of an SVG file from the theme's assets/images directory.
+ *
+ * @param string $filename The filename of the SVG (e.g., 'squiggle.svg').
+ * @return string SVG content or an empty string if not found or invalid.
+ */
+function get_theme_svg( $filename ) {
+    // Sanitize the filename to prevent directory traversal
+    $filename = basename( $filename );
+
+    // Construct the full path
+    $svg_path = get_template_directory() . '/assets/images/' . $filename;
+
+    // Check if the file exists and has a .svg extension
+    if ( $filename && pathinfo( $svg_path, PATHINFO_EXTENSION ) === 'svg' && file_exists( $svg_path ) ) {
+        // Read the file content
+        $svg_content = file_get_contents( $svg_path );
+
+        // Basic sanitization (remove script tags) - More robust sanitization might be needed
+        // depending on the source of SVGs. Consider libraries like SVG Sanitizer if SVGs
+        // could come from untrusted sources.
+        $svg_content = preg_replace( '#<script(.*?)>(.*?)</script>#is', '', $svg_content );
+
+        // Remove comments
+        $svg_content = preg_replace('//', '', $svg_content);
+
+        // Remove XML prolog if present
+        $svg_content = preg_replace('/<\?xml(.|\s)*?\?>/', '', $svg_content);
+
+        // You might want further sanitization here depending on trust level of SVGs
+
+        return $svg_content ?: ''; // Return content or empty string
+    }
+
+    return ''; // Return empty string if file not found or invalid
+}
+
+// --- Make the SVG function available in Twig ---
+// Option A: Add directly if StarterSite::add_to_twig is used
+// Inside StarterSite class, add_to_twig method:
+// $twig->addFunction(new \Timber\Twig_Function('get_theme_svg', 'get_theme_svg'));
+
+// Option B: Add filter globally (if not using class method or for simplicity)
+// Place this outside the class, e.g., after the function definitions above:
+add_filter( 'timber/twig', function( $twig ) {
+    $twig->addFunction( new Twig\TwigFunction( 'get_theme_svg', 'get_theme_svg' ) );
+    return $twig;
+});
