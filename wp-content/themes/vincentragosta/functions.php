@@ -193,12 +193,10 @@ function vincentragosta_render_hero_block($attributes, $content, $block) {
     <div <?php echo $wrapper_attributes; ?>>
         <div class="hero-block__content">
             <?php if ( ! empty( $title ) ) : ?>
-                {/* Use wp_kses_post or similar if title allows HTML from RichText */}
                 <h1 class="hero-block__title"><?php echo wp_kses_post( $title ); ?></h1>
             <?php endif; ?>
 
             <?php if ( ! empty( $subtitle ) ) : ?>
-                {/* Use wp_kses_post or similar if subtitle allows HTML from RichText */}
                 <p class="hero-block__subtitle"><?php echo wp_kses_post( $subtitle ); ?></p>
             <?php endif; ?>
 

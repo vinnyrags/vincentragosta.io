@@ -8,14 +8,10 @@
   "keywords": ["hero", "native", "banner", "svg"],
   "attributes": {
     "title": {
-      "type": "string",
-      "source": "html",
-      "selector": "h1.hero-block__title"
+      "type": "string"
     },
     "subtitle": {
-      "type": "string",
-      "source": "html",
-      "selector": "p.hero-block__subtitle"
+      "type": "string"
     },
     "links": {
       "type": "array",
