@@ -13,7 +13,6 @@ class StarterSite extends Site
         add_action('after_setup_theme', array($this, 'theme_supports'));
         add_action('init', array($this, 'register_post_types'));
         add_action('init', array($this, 'register_taxonomies'));
-        add_action('init', array($this, 'register_acf_blocks')); // <-- NEW: Add action hook for ACF blocks
 
         add_action('wp_enqueue_scripts', function () {
             // Enqueue Playfair Display (for headings)
@@ -67,36 +66,6 @@ class StarterSite extends Site
     public function register_taxonomies()
     {
         // Add custom taxonomies here
-    }
-
-    /**
-     * NEW: Register ACF Gutenberg Blocks.
-     * Automatically registers all blocks found in the theme's /blocks/ directory.
-     */
-    public function register_acf_blocks() {
-        // Check if ACF's register_block_type function exists.
-        if ( ! function_exists( 'register_block_type' ) ) {
-            return;
-        }
-
-        // Define the path to the blocks directory.
-        $block_dir = get_template_directory() . '/blocks';
-
-        // Check if the blocks directory exists.
-        if ( ! is_dir( $block_dir ) ) {
-            return;
-        }
-
-        // Scan the blocks directory for subdirectories (each representing a block).
-        $block_folders = glob( $block_dir . '/*', GLOB_ONLYDIR );
-
-        if ( $block_folders ) {
-            foreach ( $block_folders as $block_folder ) {
-                // Register the block type using the directory path.
-                // WordPress will look for block.json inside this directory.
-                register_block_type( $block_folder );
-            }
-        }
     }
 
     /**

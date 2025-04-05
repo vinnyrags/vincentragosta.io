@@ -1,28 +1,42 @@
 {
-  "name": "acf/hero",
-  "title": "Hero",
-  "description": "Displays a prominent hero section with title, subtitle, buttons, and an SVG background.",
-  "category": "layout",
+  "apiVersion": 3,
+  "name": "vincentragosta/hero",
+  "title": "Hero (Native)",
+  "category": "design",
   "icon": "cover-image",
-  "keywords": ["hero", "acf", "timber", "svg"],
-  "acf": {
-    "mode": "preview",
-    "renderCallback": "theme_acf_block_render_callback",
-    "example": {
-      "attributes": {
-        "mode": "preview",
-        "data": {
-          "hero_title": "This is the Hero Title",
-          "hero_subtitle": "And this is a compelling subtitle explaining more.",
-          "hero_links": [{ "title": "Learn More", "url": "#" }],
-          "hero_squiggle": "squiggle.svg"
-        }
-      }
+  "description": "Native hero block with title, subtitle, links, and SVG.",
+  "keywords": ["hero", "native", "banner", "svg"],
+  "attributes": {
+    "title": {
+      "type": "string",
+      "source": "html",
+      "selector": "h1.hero-block__title"
+    },
+    "subtitle": {
+      "type": "string",
+      "source": "html",
+      "selector": "p.hero-block__subtitle"
+    },
+    "links": {
+      "type": "array",
+      "default": []
+    },
+    "svgAsset": {
+      "type": "string",
+      "default": ""
+    },
+    "align": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {
+    "html": false,
     "align": ["wide", "full"],
     "anchor": true
   },
-  "style": ["file:./hero.css"]
+  "textdomain": "vincentragosta",
+  "editorScript": "file:./build/index.js",
+  "editorStyle": "file:./build/index.css",
+  "style": "file:./build/style-index.css"
 }

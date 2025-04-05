@@ -1,0 +1,141 @@
+// File: src/blocks/hero/style.scss
+// Styles for both Frontend and Editor Preview for vincentragosta/hero block
+
+// Main block wrapper class (automatically added by WordPress)
+.wp-block-vincentragosta-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: var(--wp--preset--spacing--70, 4rem);    // Use theme.json spacing with fallback
+  padding-bottom: var(--wp--preset--spacing--70, 4rem);
+  gap: var(--wp--preset--spacing--50, 2rem);
+  overflow: hidden;
+  position: relative;
+  min-height: 300px; // Adjust as needed
+  border-bottom: 1px solid var(--wp--preset--color--accent-6, #e0e0e0); // Optional separator using theme color
+
+  // --- Alignment Handling ---
+  // Core handles wide alignment max-width.
+  // Full width needs specific margin/padding adjustments.
+  &.alignfull {
+    // Reset theme padding and go full width
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    max-width: 100vw;
+    padding-left: 0;
+    padding-right: 0;
+
+    // Add back padding for direct children if needed inside fullwidth
+    > .hero-block__content {
+      padding-left: var(--wp--preset--spacing--50, 2rem);
+    }
+    > .hero-block__svg {
+      padding-right: var(--wp--preset--spacing--50, 2rem);
+    }
+  }
+
+  // --- Layout Containers ---
+  .hero-block__content {
+    flex: 1; // Occupy available space
+    min-width: min(100%, 320px); // Prevent getting too small, allow full width on small screens
+    padding-right: var(--wp--preset--spacing--40, 1.5rem); // Space between content and SVG on larger screens
+    z-index: 2;
+  }
+
+  .hero-block__svg {
+    flex: 1; // Occupy available space
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: min(100%, 250px);
+    max-height: 400px; // Max height for the SVG container
+    position: relative;
+    z-index: 1;
+
+    svg {
+      display: block; // Prevents extra space below SVG
+      max-width: 100%;
+      max-height: 100%; // Constrain SVG size within its container
+      width: auto;   // Allow intrinsic width unless constrained
+      height: auto; // Maintain aspect ratio
+    }
+  }
+
+  // --- Text & Link Elements ---
+  .hero-block__title {
+    font-family: var(--wp--preset--font-family--playfair-display, serif);
+    font-size: var(--wp--preset--font-size--xx-large, clamp(2.15rem, 8vw, 3rem)); // Use clamp for fluidity
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: var(--wp--preset--spacing--30, 1rem);
+    color: var(--wp--preset--color--contrast, inherit); // Inherit default text color if variable missing
+  }
+
+  .hero-block__subtitle {
+    font-family: var(--wp--preset--font-family--libre-baskerville, serif);
+    font-size: var(--wp--preset--font-size--large, 1.25rem);
+    color: var(--wp--preset--color--accent-4, #555); // Use a theme accent color or fallback
+    margin-top: 0;
+    margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
+    max-width: 60ch; // Limit line length
+    line-height: 1.6;
+  }
+
+  .hero-block__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wp--preset--spacing--30, 1rem);
+    margin-top: var(--wp--preset--spacing--50, 2rem); // Space above the button group
+  }
+
+  // Links are styled like buttons via .wp-block-button__link class added in PHP/JS
+  .hero-block__link {
+    // Add specific overrides only if needed, otherwise rely on theme/core button styles
+    // Example: Make Hero buttons slightly larger?
+    // padding-top: calc(var(--wp--preset--spacing--30, 10px) + 2px);
+    // padding-bottom: calc(var(--wp--preset--spacing--30, 10px) + 2px);
+  }
+
+  // --- Responsive Stacking ---
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+
+    .hero-block__content {
+      padding-right: 0; // Remove side padding when stacked
+      order: 1; // Content first
+    }
+
+    .hero-block__svg {
+      order: 2; // SVG second
+      justify-content: center; // Center SVG when stacked
+      max-height: 250px;
+      width: 80%; // Example: constrain width when stacked
+      margin: 0 auto var(--wp--preset--spacing--50, 2rem); // Add bottom margin when stacked
+    }
+
+    // Handle full width padding correctly when stacked
+    &.alignfull {
+      > .hero-block__content, > .hero-block__svg {
+        padding-left: var(--wp--preset--spacing--50, 2rem);
+        padding-right: var(--wp--preset--spacing--50, 2rem);
+      }
+      > .hero-block__svg {
+        width: calc(100% - 2 * var(--wp--preset--spacing--50, 2rem)); // Adjust width considering padding
+      }
+    }
+
+    .hero-block__links {
+      justify-content: center; // Center buttons when stacked
+    }
+
+    .hero-block__subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+// Add styles for specific SVG classes if needed, e.g.:
+// .wp-block-vincentragosta-hero .squiggle-1 { ... }

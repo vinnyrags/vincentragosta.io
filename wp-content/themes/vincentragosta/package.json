@@ -7,15 +7,15 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "npm run build:css && npm run build:js",
-    "build:css": "sass assets/:assets/dist/ --style=compressed --no-source-map",
-    "build:js": "esbuild assets/**/*.js --bundle --outdir=assets/dist --format=esm --minify",
-    "watch": "npm run build -- --watch"
+    "build": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
+    "start": "wp-scripts start blocks/hero/index.js --output-path=blocks/hero/build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@wordpress/icons": "^10.21.0",
+    "@wordpress/scripts": "^30.14.1",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.1",
     "postcss": "^8.5.3",
