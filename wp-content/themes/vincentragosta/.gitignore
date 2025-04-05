@@ -1,2 +1,4 @@
-/vendor/
-/wordpress/
+vendor/
+wordpress/
+node_modules/
+blocks/**/build/
