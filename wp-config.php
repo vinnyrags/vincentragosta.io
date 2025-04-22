@@ -14,21 +14,17 @@ define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 
 /** Authentication Unique Keys and Salts. */
-define( 'AUTH_KEY', 'DpREHbFqhNGWuojypxzsMSVOJcDLjxqbXWxDLRNzEQcQVpfTEHFViyAltcnfRQkA' );
-define( 'SECURE_AUTH_KEY', 'bEzjDHnNBJupNbgIegkweeOVaHaiNuaXbDqAkGyrHiyXFiWOKxTrDxRFJCMIyzeJ' );
-define( 'LOGGED_IN_KEY', 'vsvJISuXGNWGzKpZYFzLkOcdXAdkvETQubBDyroZMSIhHubtgmrULhBcZjPOFWzt' );
-define( 'NONCE_KEY', 'jhLbqOfcfJzCAIjyTzxaUxCTweaMiseeoWdLyISUrmPNHMGdBXwAVNzkYOLIOGBm' );
-define( 'AUTH_SALT', 'RtPTTbTTHbzCWRijfWeDPmPdwiWOIHenXWAymnkADvMXnmhSOjIcNrgIjpFaHuUW' );
-define( 'SECURE_AUTH_SALT', 'WkVHocMGtLTypfWxwfbisNywPSheFYoErtKohcAkiNshHnbJkowHTPUJXLoaXMCi' );
-define( 'LOGGED_IN_SALT', 'CaHxQJvyEBUGGOGVnoTtiWwtruJkHdiWYApIwbqxMSmUTYYYnKsRQtDdVnFNXoEQ' );
-define( 'NONCE_SALT', 'tMjQKKihstPDPlfqwJCRDMCUIxjLqTmCVoTtZDZdCqOCnwojHuexasMkqgkWeaBR' );
+define( 'AUTH_KEY', 'tUsyNAYcnAXdfTPSAzMgEVjRzOoUJklvAJxqAUYWrUnfrYUjxYRlqJASRIurNTGI' );
+define( 'SECURE_AUTH_KEY', 'pKfzCBAKQFqLXrXNSGXlOHbQNxrAqgdONVwazylrzIiJDvrcvbpUVPTuMmiukciS' );
+define( 'LOGGED_IN_KEY', 'icjUeTyestPmZPkgkhTvVQxBsreEQbGwdtZzCmwSIehVcaBhGzvThCORTCXVMuOQ' );
+define( 'NONCE_KEY', 'lEBlIpwgmfgssWrHtiUPKTfAUqNuuoRVPdLVCTsvKbywCyzutwCdOOTPSsFgnqLS' );
+define( 'AUTH_SALT', 'WvXayMAzKBXpcrYCVkCjPCjXdCECcqfAYRrVHKIBIWVRXznZVcfAKxPtUGYVEXKI' );
+define( 'SECURE_AUTH_SALT', 'fvwJIaxqWHwilFymLzaKLjeUyOeVZtyfGRMHLKOKIyNAcJPeYQrFHkezRNnjLOkH' );
+define( 'LOGGED_IN_SALT', 'LgCdkqiEhLTBiruriRdSgnDlzDKZJQKEeuoAbLWRczEymCsWUQnIpStbOYahDjbF' );
+define( 'NONCE_SALT', 'eAfjwChTCqqDWmBrbnerfVsIjGQELtXKgYHUWDYBmXEyJgZqVAmxSpvEZNOxpjCH' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true ); // Errors logged to wp-content/debug.log
-define( 'WP_DEBUG_DISPLAY', false ); // Don't display errors on screen
-@ini_set( 'display_errors', 0 );
 
 
 /* That's all, stop editing! Happy publishing. */

@@ -14,7 +14,7 @@
           "slug": "base"
         },
         {
-          "color": "#111111",
+          "color": "#151515",
           "name": "Contrast",
           "slug": "contrast"
         },
@@ -51,7 +51,7 @@
       ]
     },
     "layout": {
-      "contentSize": "645px",
+      "contentSize": "1340px",
       "wideSize": "1340px"
     },
     "spacing": {
@@ -172,8 +172,8 @@
   },
   "styles": {
     "color": {
-      "background": "var:preset|color|base",
-      "text": "var:preset|color|contrast"
+      "background": "var:preset|color|contrast",
+      "text": "var:preset|color|base"
     },
     "spacing": {
       "blockGap": "1.2rem",
@@ -581,8 +581,8 @@
     "elements": {
       "button": {
         "color": {
-          "background": "var:preset|color|contrast",
-          "text": "var:preset|color|base"
+          "background": "var:preset|color|base",
+          "text": "var:preset|color|contrast"
         },
         ":focus": {
           "outline": {
@@ -656,6 +656,9 @@
           "fontWeight": "400",
           "lineHeight": "1.125",
           "letterSpacing": "-0.1px"
+        },
+        "color": {
+          "text": "var:preset|color|base"
         }
       },
       "link": {

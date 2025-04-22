@@ -1,0 +1,87 @@
+// file: wp-content/themes/vincentragosta/blocks/hero/editor.scss
+
+// Styles specific to the editor preview for the vincentragosta/hero block
+
+.wp-block-vincentragosta-hero {
+  // Ensure editor layout mimics frontend structure
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  // Use static fallbacks if CSS variables aren't reliable in editor preview
+  gap: 2rem;
+  min-height: 250px; // Allow a slightly smaller preview height
+
+  .hero-block__content {
+    flex: 1;
+    min-width: 200px; // Prevent collapsing too small in editor flex
+    padding-right: 1.5rem; // Space, adjust as needed
+    z-index: 2;
+  }
+
+  .hero-block__svg {
+    flex: 1;
+    display: flex; // CRUCIAL: Establish flex context for alignment
+    align-items: center; // Vertically center SVG in container
+    justify-content: center; // Horizontally center SVG in container
+    min-width: 150px; // Ensure container has *some* width
+    min-height: 100px; // Ensure container has *some* height
+    // max-height: 300px; // Optional: Limit height in editor
+    // border: 1px dashed red; // Temporary: Visualize SVG container bounds
+    //overflow: hidden; // Prevent SVG overflow
+    position: relative;
+    z-index: 1;
+
+    // Target the inner div holding the SVG markup
+    .hero-block-editor__svg-preview {
+      display: inline-flex; // Use flex to help center its child (the SVG)
+      align-items: center;
+      justify-content: center;
+      width: 100%;    // Take full width of parent (.hero-block__svg)
+      height: 100%;   // Take full height of parent (.hero-block__svg)
+      max-width: 100%;
+      max-height: 100%;
+      line-height: 0; // Prevent extra space
+
+      svg {
+        display: block; // ESSENTIAL: Make SVG behave like a block
+        width: 100%;    // Force SVG width to fill its container (.hero-block-editor__svg-preview)
+        height: auto;   // Maintain aspect ratio based on width
+        max-width: 100%; // Redundant but safe
+        max-height: 100%; // Allow scaling down to fit height constraints
+      }
+    }
+
+    .hero-block-editor__svg-placeholder {
+      padding: 20px;
+      text-align: center;
+      color: #777;
+      background-color: #f0f0f0;
+      border: 1px dashed #ccc;
+      width: 100%;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  // Responsive adjustments specifically for the editor preview pane
+  @media (max-width: 782px) { // Standard WP admin breakpoint
+    flex-direction: column;
+    text-align: center;
+
+    .hero-block__content {
+      order: 1;
+      width: 100%;
+      padding-right: 0;
+    }
+
+    .hero-block__svg {
+      order: 2;
+      width: 80%; // Adjust width for stacked view
+      margin: 1rem auto; // Center when stacked
+      min-height: 150px;
+      justify-content: center; // Reinforce centering
+    }
+  }
+}
