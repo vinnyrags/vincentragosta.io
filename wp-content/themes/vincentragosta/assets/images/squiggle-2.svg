@@ -1,22 +1,22 @@
 <svg class="squiggle squiggle-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 935.24 742.33">
     <defs>
         <mask id="sq3-jksnjaos" maskUnits="userSpaceOnUse">
-            <path class="mask mask-0" data-duration="0.75" pathLength="100" stroke-width="86" stroke="#fff" stroke-miterlimit="10" fill="none" d="M846.13,60.71c62.45,137.85,47,211,36,245-7.96,24.6-16.65,32.07-20,35-40.74,35.54-157.53,19.08-311-82C343.13,121.71,198.09,25.37,177.13,45.71c-20.87,20.25,63.24,121.2,76.36,139.36,43.08,59.61,83.81,86.39,158.08,151.14,36.78,32.07,75.45,92.65,138.92,153.49" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 1556.77px;"></path>
+            <path class="mask mask-0" data-duration="0.75" pathLength="100" stroke-width="86" stroke="#fff" stroke-miterlimit="10" fill="none" d="M846.13,60.71c62.45,137.85,47,211,36,245-7.96,24.6-16.65,32.07-20,35-40.74,35.54-157.53,19.08-311-82C343.13,121.71,198.09,25.37,177.13,45.71c-20.87,20.25,63.24,121.2,76.36,139.36,43.08,59.61,83.81,86.39,158.08,151.14,36.78,32.07,75.45,92.65,138.92,153.49"></path>
         </mask>
         <mask id="sq3-hdksanjd" maskUnits="userSpaceOnUse">
-            <path class="mask mask-1" data-duration="0.1" pathLength="100" stroke-width="83" stroke="#fff" stroke-miterlimit="10" fill="none" d="M539.7,502.4c-155-85-248.39-154.95-408.71-250.02" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 379.298px;"></path>
+            <path class="mask mask-1" data-duration="0.1" pathLength="100" stroke-width="83" stroke="#fff" stroke-miterlimit="10" fill="none" d="M539.7,502.4c-155-85-248.39-154.95-408.71-250.02"></path>
         </mask>
         <mask id="sq3-ahdnmiod" maskUnits="userSpaceOnUse">
-            <path class="mask mask-2" data-duration="0.1" pathLength="100" stroke-width="98" stroke="#fff" stroke-miterlimit="10" fill="none" d="M124.13,252.71c124,153.07,245.54,273.28,370.54,426.61" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 465.229px;"></path>
+            <path class="mask mask-2" data-duration="0.1" pathLength="100" stroke-width="98" stroke="#fff" stroke-miterlimit="10" fill="none" d="M124.13,252.71c124,153.07,245.54,273.28,370.54,426.61"></path>
         </mask>
         <mask id="sq3-ndlpspad" maskUnits="userSpaceOnUse">
-            <path class="mask mask-3" data-duration="0.1" pathLength="100" stroke-width="105" stroke="#fff" stroke-miterlimit="10" fill="none" d="M482.16,671.94c-72.58-34.38-185.96-90.54-283.99-153.53" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 223.148px;"></path>
+            <path class="mask mask-3" data-duration="0.1" pathLength="100" stroke-width="105" stroke="#fff" stroke-miterlimit="10" fill="none" d="M482.16,671.94c-72.58-34.38-185.96-90.54-283.99-153.53"></path>
         </mask>
         <mask id="sq3-piljiopa" maskUnits="userSpaceOnUse">
-            <path class="mask mask-4" data-duration="0.1" pathLength="100" stroke-width="98" stroke="#fff" stroke-miterlimit="10" fill="none" d="M198.69,515.55c34.78,75.76,76.07,132.35,119.4,204.69" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 137.246px;"></path>
+            <path class="mask mask-4" data-duration="0.1" pathLength="100" stroke-width="98" stroke="#fff" stroke-miterlimit="10" fill="none" d="M198.69,515.55c34.78,75.76,76.07,132.35,119.4,204.69"></path>
         </mask>
         <mask id="sq3-qblhjjha" maskUnits="userSpaceOnUse">
-            <path class="mask mask-5" data-duration="0.3" pathLength="100" stroke-width="61" stroke="#fff" stroke-miterlimit="10" fill="none" d="M330.13,708.71c-87.52-55.54-187.16-104.26-319.86-151.71" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 254.865px;"></path>
+            <path class="mask mask-5" data-duration="0.3" pathLength="100" stroke-width="61" stroke="#fff" stroke-miterlimit="10" fill="none" d="M330.13,708.71c-87.52-55.54-187.16-104.26-319.86-151.71"></path>
         </mask>
 
         <linearGradient id="sq3-nshsoawo" x1="1044.57" y1="829.24" x2="-1.62" y2="226.08" gradientTransform="translate(-8.36 766.48) scale(1 -1)" gradientUnits="userSpaceOnUse">

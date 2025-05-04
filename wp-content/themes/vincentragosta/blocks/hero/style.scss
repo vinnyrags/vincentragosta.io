@@ -139,3 +139,55 @@
 
 // Add styles for specific SVG classes if needed, e.g.:
 // .wp-block-vincentragosta-hero .squiggle-1 { ... }
+
+/* --- Squiggle-3 Mask Animation (Inline SVG Method) --- */
+
+/* Define the animation keyframes */
+@keyframes draw-mask-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Target the mask paths specifically within an inline squiggle-3 SVG
+   inside your hero block's SVG container */
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask {
+  /* Set initial state using pathLength="100" */
+  stroke-dasharray: 100;  /* 100% of path length */
+  stroke-dashoffset: 100; /* Start fully 'dashed off' (invisible) */
+
+  /* Default animation - delays will be overridden per segment */
+  /* animation: name duration timing-function delay iteration-count direction fill-mode */
+  animation: draw-mask-stroke 1s ease-out 0s 1 forwards;
+
+  /* Ensure mask styles are correct if not set inline */
+  stroke: #fff;
+  fill: none;
+}
+
+/* --- Animation Sequencing (ADJUST DELAYS & DURATIONS) --- */
+/* Apply specific delays to make segments draw one after another */
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-0 {
+  animation-delay: 0.2s; /* Start after a small page load delay */
+  animation-duration: 0.75s;
+}
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-1 {
+  animation-delay: 0.8s; /* Start slightly after mask-0 finishes */
+  animation-duration: 0.5s;
+}
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-2 {
+  animation-delay: 1.1s;
+  animation-duration: 0.5s;
+}
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-3 {
+  animation-delay: 1.4s;
+  animation-duration: 0.4s;
+}
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-4 {
+  animation-delay: 1.6s;
+  animation-duration: 0.4s;
+}
+.wp-block-vincentragosta-hero .hero-block__svg svg.squiggle-3 .mask.mask-5 {
+  animation-delay: 1.8s;
+  animation-duration: 0.6s;
+}
