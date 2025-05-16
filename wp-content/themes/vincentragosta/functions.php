@@ -12,7 +12,7 @@ require_once __DIR__ . '/src/StarterSite.php';
 Timber\Timber::init();
 
 // Sets the directories (inside your theme) to find .twig files.
-Timber::$dirname = [ 'templates', 'views', 'blocks' ];
+Timber::$dirname = ['templates', 'views', 'blocks'];
 
 new StarterSite();
 
@@ -23,10 +23,11 @@ new StarterSite();
  * @param string $filename The filename of the SVG (e.g., 'squiggle.svg').
  * @return string SVG content or an empty string if not found or invalid.
  */
-function get_theme_svg( $filename ) {
+function get_theme_svg($filename)
+{
     // Prevent directory traversal and ensure it's just the filename
-    $filename = basename( $filename );
-    if ( empty( $filename ) ) {
+    $filename = basename($filename);
+    if (empty($filename)) {
         return '';
     }
 
@@ -34,14 +35,14 @@ function get_theme_svg( $filename ) {
     $svg_path = get_template_directory() . '/assets/images/' . $filename;
 
     // Check if the file exists, is readable, and has a .svg extension
-    if ( pathinfo( $svg_path, PATHINFO_EXTENSION ) === 'svg' && file_exists( $svg_path ) && is_readable( $svg_path ) ) {
+    if (pathinfo($svg_path, PATHINFO_EXTENSION) === 'svg' && file_exists($svg_path) && is_readable($svg_path)) {
 
         // Read the file content
-        $svg_content = file_get_contents( $svg_path );
+        $svg_content = file_get_contents($svg_path);
 
         // *** ADD THIS CHECK ***
         // Check if reading failed OR content is not a string (e.g., file was empty or had non-string data)
-        if ( $svg_content === false || ! is_string( $svg_content ) ) {
+        if ($svg_content === false || !is_string($svg_content)) {
             // Log a more informative error
             error_log('get_theme_svg: Failed to read file content or content is not string for: ' . $svg_path);
             return ''; // Return empty string immediately on read failure
@@ -54,8 +55,8 @@ function get_theme_svg( $filename ) {
 
         // Basic sanitization - focus on removing potentially harmful elements
         // ... (rest of your sanitization code - looks OK)
-        $sanitized_content = preg_replace( '#<script(.*?)>(.*?)</script>#is', '', $sanitized_content );
-        $sanitized_content = preg_replace( '/\s(on\w+)=("|\').*?\2/is', '', $sanitized_content );
+        $sanitized_content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $sanitized_content);
+        $sanitized_content = preg_replace('/\s(on\w+)=("|\').*?\2/is', '', $sanitized_content);
         $sanitized_content = preg_replace('/^\s*<\?xml.*?\?>\s*/s', '', $sanitized_content);
         $sanitized_content = preg_replace('/^<!DOCTYPE.+?>/is', '', $sanitized_content);
         $sanitized_content = preg_replace('//s', '', $sanitized_content);
@@ -82,9 +83,9 @@ function get_theme_svg( $filename ) {
 }
 
 // --- Make the SVG function available in Twig ---
-add_filter( 'timber/twig', function( $twig ) {
+add_filter('timber/twig', function ($twig) {
     // Using the standalone get_theme_svg function directly
-    $twig->addFunction( new Twig\TwigFunction( 'get_theme_svg', 'get_theme_svg' ) );
+    $twig->addFunction(new Twig\TwigFunction('get_theme_svg', 'get_theme_svg'));
     return $twig;
 });
 
@@ -94,14 +95,15 @@ add_filter( 'timber/twig', function( $twig ) {
 /**
  * Render callback function for the native Hero block.
  *
- * @param array   $attributes Block attributes.
- * @param string  $content    Block default content (inner blocks markup).
- * @param WP_Block $block     Block instance.
+ * @param array $attributes Block attributes.
+ * @param string $content Block default content (inner blocks markup).
+ * @param WP_Block $block Block instance.
  * @return string HTML markup for the hero block.
  */
-function vincentragosta_render_hero_block($attributes, $content, $block) {
-    $title     = $attributes['title'] ?? '';
-    $subtitle  = $attributes['subtitle'] ?? '';
+function vincentragosta_render_hero_block($attributes, $content, $block)
+{
+    $title = $attributes['title'] ?? '';
+    $subtitle = $attributes['subtitle'] ?? '';
     $svg_asset = $attributes['svgAsset'] ?? '';
 
     // get_block_wrapper_attributes automatically includes alignment and InnerBlocks classes
@@ -111,19 +113,19 @@ function vincentragosta_render_hero_block($attributes, $content, $block) {
     ?>
     <div <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
         <div class="hero-block__content">
-            <?php if ( ! empty( $title ) ) : ?>
-                <h1 class="hero-block__title"><?php echo wp_kses_post( $title ); ?></h1>
+            <?php if (!empty($title)) : ?>
+                <h1 class="hero-block__title"><?php echo wp_kses_post($title); ?></h1>
             <?php endif; ?>
 
-            <?php if ( ! empty( $subtitle ) ) : ?>
-                <p class="hero-block__subtitle"><?php echo wp_kses_post( $subtitle ); ?></p>
+            <?php if (!empty($subtitle)) : ?>
+                <p class="hero-block__subtitle"><?php echo wp_kses_post($subtitle); ?></p>
             <?php endif; ?>
 
             <?php
             // RENDER INNER BLOCKS (THE BUTTONS)
             // The $content variable contains the rendered markup of all inner blocks.
             // If saving is working correctly, $content will contain the HTML for the core/buttons block.
-            if ( ! empty( $content ) ) :
+            if (!empty($content)) :
                 // Wrap inner blocks in the existing .hero-block__links div for layout
                 echo '<div class="hero-block__links">';
                 echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $content is rendered block markup
@@ -131,7 +133,7 @@ function vincentragosta_render_hero_block($attributes, $content, $block) {
             else :
                 // This fallback indicates a save failure if you expect buttons to be there.
                 // Only show this debugging comment in the editor.
-                if ( current_user_can( 'edit_posts' ) && is_admin() ) {
+                if (current_user_can('edit_posts') && is_admin()) {
                     echo ''; // Empty string as per user's provided code
                 }
             endif;
@@ -139,9 +141,9 @@ function vincentragosta_render_hero_block($attributes, $content, $block) {
         </div>
         <div class="hero-block__svg">
             <?php
-            if ( ! empty( $svg_asset ) ) {
+            if (!empty($svg_asset)) {
                 // Render the SVG content safely using the helper
-                echo get_theme_svg( $svg_asset ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG is sanitized in get_theme_svg
+                echo get_theme_svg($svg_asset); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG is sanitized in get_theme_svg
             }
             ?>
         </div>
@@ -153,36 +155,37 @@ function vincentragosta_render_hero_block($attributes, $content, $block) {
 /**
  * Register native Gutenberg blocks from specific directories.
  */
-function vincentragosta_register_native_blocks() {
+function vincentragosta_register_native_blocks()
+{
     // Array of block directories (relative to theme root /blocks/)
     $blocks = [
         'hero', // Register the hero block directory
         'inner-block-test', // Register the inner-block-test block directory
     ];
 
-    foreach ( $blocks as $block_name ) {
+    foreach ($blocks as $block_name) {
         $block_directory = get_template_directory() . '/blocks/' . $block_name;
 
         // Check if block.json exists in the directory
-        if ( file_exists( $block_directory . '/block.json' ) ) {
+        if (file_exists($block_directory . '/block.json')) {
             // register_block_type() will automatically read block.json
             // and register the block with its defined settings (attributes, supports, render, scripts, styles).
             // If block.json has a "render" key, that will be used as the callback.
             // We DO NOT pass the 'render_callback' argument here if "render" is in block.json.
-            register_block_type( $block_directory );
+            register_block_type($block_directory);
         } else {
             // Log an error if block.json is missing, helpful for debugging during development
-            error_log( "Block configuration file not found for block: " . $block_name . " at " . $block_directory . "/block.json" );
+            error_log("Block configuration file not found for block: " . $block_name . " at " . $block_directory . "/block.json");
         }
     }
 }
+
 // Hook block registration to the 'init' action
-add_action( 'init', 'vincentragosta_register_native_blocks' );
+add_action('init', 'vincentragosta_register_native_blocks');
 
 // Note: The vincentragosta_render_hero_block function in this file is now unused
 // because block.json's render key takes precedence. You can remove it if you like,
 // or keep it for reference if you prefer.
-
 
 /**
  * Enqueue assets for the block editor and localize data.
@@ -192,7 +195,7 @@ add_action( 'init', 'vincentragosta_register_native_blocks' );
  * by WordPress because they are defined in block.json with the 'file:' prefix.
  */
 function vincentragosta_native_block_editor_assets() {
-    error_log('--- vincentragosta_native_block_editor_assets started ---'); // Debug start
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Function started.');
 
     $block_name = 'hero';
     $block_directory = get_template_directory() . '/blocks/' . $block_name;
@@ -200,32 +203,27 @@ function vincentragosta_native_block_editor_assets() {
 
     // Check if the asset file exists (generated by wp-scripts build)
     if ( ! file_exists( $asset_file_path ) ) {
-        // Log an error if build files are missing - crucial for development
-        error_log("Hero block asset file not found: " . $asset_file_path);
-        // Cannot localize if asset file is missing as we need its handle
-        error_log('--- vincentragosta_native_block_editor_assets finished (asset file missing) ---'); // Debug end
-        return;
+        error_log('>>> HERO BLOCK LOCALIZATION DEBUG: ERROR - Asset file not found: ' . $asset_file_path);
+        error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Function finished.');
+        return; // Stop execution if asset file is missing
     }
 
-    // Include the asset file to get its dependencies and version
-    // Use include to run the file and get its returned array
+    // We include the asset file to get dependencies and version,
+    // but the handle isn't the main key of the returned array.
     $asset_file = include( $asset_file_path );
 
-    // Get the handle that WordPress automatically generates for the editor script
-    // when 'editorScript' is defined in block.json.
-    // This handle is typically the *key* in the index.asset.php array.
-    // Based on the provided index.asset.php, the key is 'vincentragosta-hero-block-editor'.
-    $script_handle = 'vincentragosta-hero-block-editor';
+    // *** HARDCODE THE CORRECT SCRIPT HANDLE ***
+    // This handle is derived from your block name (vincentragosta/hero)
+    // and the standard wp-scripts output format for editor scripts.
+    $script_handle = 'vincentragosta-hero-editor-script'; // <--- Corrected handle
+    // **************************************
 
-    error_log('Hero Block Localize Debug: Target script handle is: ' . $script_handle);
-
-    // *** DO NOT manually enqueue the script or style here ***
-
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Using the correct script handle: ' . $script_handle);
 
     // --- Prepare data for wp_localize_script (for SVG dropdown/preview) ---
     $svg_dir = get_template_directory() . '/assets/images/';
     $svg_options = [['label' => __('Select SVG', 'vincentragosta'), 'value' => '']];
-    $svg_content_map = []; // Store SVG filename => content mapping
+    $svg_content_map = [];
 
     if (is_dir($svg_dir)) {
         $svg_files = glob($svg_dir . '*.svg');
@@ -234,7 +232,7 @@ function vincentragosta_native_block_editor_assets() {
                 $filename = basename($file_path);
                 $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
                 $svg_options[] = ['label' => $label, 'value' => $filename];
-                // Using the original get_theme_svg function
+                // Using the fixed get_theme_svg function
                 $svg_content_map[$filename] = get_theme_svg($filename);
             }
         }
@@ -243,26 +241,33 @@ function vincentragosta_native_block_editor_assets() {
     $localized_data = [
         'svgOptions' => $svg_options,
         'svgContent' => $svg_content_map,
-        // Add any other data needed by the block's JS here
     ];
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Data prepared.');
 
-    error_log('Hero Block Localize Debug: Data prepared for localization.');
-    // error_log('Hero Block Localize Debug: Localizing data: ' . print_r($localized_data, true)); // Be cautious with large data
 
-    // Localize the *automatically enqueued* script with the data
-    // The handle MUST match the handle WordPress used to enqueue the script via block.json
-    // This function MUST be called AFTER the script it targets has been enqueued.
-    // This action hook 'enqueue_block_editor_assets' is the correct place for localize.
-    wp_localize_script(
-        $script_handle, // Use the handle automatically generated by block.json/wp-scripts
-        'vincentragostaHeroBlockData', // Unique JS object name
-        $localized_data
-    );
+    // Check if the target script handle is registered or enqueued before localizing
+    $is_registered = wp_script_is( $script_handle, 'registered' );
+    $is_enqueued = wp_script_is( $script_handle, 'enqueued' );
 
-    error_log('Hero Block Localize Debug: wp_localize_script called.');
-    error_log('--- vincentragosta_native_block_editor_assets finished ---'); // Debug end
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Script handle "' . $script_handle . '" is registered: ' . ($is_registered ? 'Yes' : 'No'));
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Script handle "' . $script_handle . '" is enqueued: ' . ($is_enqueued ? 'Yes' : 'No'));
+
+
+    if ( $is_registered || $is_enqueued ) {
+        wp_localize_script(
+            $script_handle, // Use the correct handle
+            'vincentragostaHeroBlockData',
+            $localized_data
+        );
+        error_log('>>> HERO BLOCK LOCALIZATION DEBUG: wp_localize_script called.');
+    } else {
+        // This branch should ideally NOT be hit if the script is registered via block.json
+        error_log('>>> HERO BLOCK LOCALIZATION DEBUG: WARNING - Script handle "' . $script_handle . '" is NOT registered or enqueued. Localization skipped.');
+    }
+
+    error_log('>>> HERO BLOCK LOCALIZATION DEBUG: Function finished.');
 }
-// Keep the add_action line hooking this function
+// add_action hook remains correct
 add_action( 'enqueue_block_editor_assets', 'vincentragosta_native_block_editor_assets' );
 
 // Note: Your theme includes 'acf-json/group_67ee122690dbb.json' which defines fields for an ACF block named 'acf/hero'.
