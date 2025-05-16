@@ -2,15 +2,7 @@
   "name": "vinnyrags/your-wordpress-project",
   "description": "My WordPress project with ACF Pro",
   "type": "project",
-  "require": {
-    "wpengine/advanced-custom-fields-pro": "*"
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://connect.advancedcustomfields.com"
-    }
-  ],
+  "require": {},
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {

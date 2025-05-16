@@ -25,7 +25,10 @@ define( 'NONCE_SALT', 'eAfjwChTCqqDWmBrbnerfVsIjGQELtXKgYHUWDYBmXEyJgZqVAmxSpvEZ
 
 /* Add any custom values between this line and the "stop editing" line. */
 
-
+define( 'WP_DEBUG', true ); // Enable debug mode
+define( 'WP_DEBUG_LOG', true ); // Enable debug logging to debug.log
+define( 'WP_DEBUG_DISPLAY', false ); // Disable displaying errors on the page (recommended for DDEV/development)
+@ini_set( 'display_errors', 0 ); // Ensure display_errors is off at the PHP level
 
 /* That's all, stop editing! Happy publishing. */
 

@@ -4,18 +4,14 @@
   "title": "Hero (Native)",
   "category": "design",
   "icon": "cover-image",
-  "description": "Native hero block with title, subtitle, links, and SVG.",
-  "keywords": ["hero", "native", "banner", "svg"],
+  "description": "Native hero block with title, subtitle, buttons, and SVG.",
+  "keywords": ["hero", "native", "banner", "svg", "buttons"],
   "attributes": {
     "title": {
       "type": "string"
     },
     "subtitle": {
       "type": "string"
-    },
-    "links": {
-      "type": "array",
-      "default": []
     },
     "svgAsset": {
       "type": "string",
@@ -29,10 +25,16 @@
   "supports": {
     "html": false,
     "align": ["wide", "full"],
-    "anchor": true
+    "anchor": true,
+    "innerBlocks": true
+  },
+  "usesContext": ["postId", "queryId"],
+  "providesContext": {
+    "parentBlock": "vincentragosta/hero"
   },
   "textdomain": "vincentragosta",
   "editorScript": "file:./build/index.js",
   "editorStyle": "file:./build/index.css",
-  "style": "file:./build/style-index.css"
+  "style": "file:./build/style-index.css",
+  "render": "file:./render.php"
 }

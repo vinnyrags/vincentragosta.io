@@ -7,8 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
-    "start": "wp-scripts start blocks/hero/index.js --output-path=blocks/hero/build"
+    "build-hero": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
+    "build-test": "wp-scripts build blocks/inner-block-test/index.js --output-path=blocks/inner-block-test/build",
+    "start": "wp-scripts start blocks/hero/index.js blocks/inner-block-test/index.js --output-path=blocks/hero/build --output-path=blocks/inner-block-test/build"
   },
   "keywords": [],
   "author": "",
