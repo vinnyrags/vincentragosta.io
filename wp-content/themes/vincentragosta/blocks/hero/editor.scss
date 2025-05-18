@@ -11,14 +11,14 @@
   gap: 2rem;
   min-height: 250px; // Allow a slightly smaller preview height
 
-  .hero-block__content {
+  .hero__content {
     flex: 1;
     min-width: 200px; // Prevent collapsing too small in editor flex
     padding-right: 1.5rem; // Space, adjust as needed
     z-index: 2;
   }
 
-  .hero-block__svg {
+  .hero__svg {
     flex: 1;
     display: flex; // CRUCIAL: Establish flex context for alignment
     align-items: center; // Vertically center SVG in container
@@ -32,26 +32,26 @@
     z-index: 1;
 
     // Target the inner div holding the SVG markup
-    .hero-block-editor__svg-preview {
+    .hero-editor__svg-preview {
       display: inline-flex; // Use flex to help center its child (the SVG)
       align-items: center;
       justify-content: center;
-      width: 100%;    // Take full width of parent (.hero-block__svg)
-      height: 100%;   // Take full height of parent (.hero-block__svg)
+      width: 100%;    // Take full width of parent (.hero__svg)
+      height: 100%;   // Take full height of parent (.hero__svg)
       max-width: 100%;
       max-height: 100%;
       line-height: 0; // Prevent extra space
 
       svg {
         display: block; // ESSENTIAL: Make SVG behave like a block
-        width: 100%;    // Force SVG width to fill its container (.hero-block-editor__svg-preview)
+        width: 100%;    // Force SVG width to fill its container (.hero-editor__svg-preview)
         height: auto;   // Maintain aspect ratio based on width
         max-width: 100%; // Redundant but safe
         max-height: 100%; // Allow scaling down to fit height constraints
       }
     }
 
-    .hero-block-editor__svg-placeholder {
+    .hero-editor__svg-placeholder {
       padding: 20px;
       text-align: center;
       color: #777;
@@ -70,13 +70,13 @@
     flex-direction: column;
     text-align: center;
 
-    .hero-block__content {
+    .hero__content {
       order: 1;
       width: 100%;
       padding-right: 0;
     }
 
-    .hero-block__svg {
+    .hero__svg {
       order: 2;
       width: 80%; // Adjust width for stacked view
       margin: 1rem auto; // Center when stacked

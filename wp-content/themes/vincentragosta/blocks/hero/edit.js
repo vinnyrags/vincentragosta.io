@@ -104,10 +104,10 @@ export default function Edit({ attributes, setAttributes, clientId }) {
             {/* Block Content Area */}
             {/* Apply blockProps here */}
             <div {...blockProps}>
-                <div className="hero-block__content">
+                <div className="hero__content">
                     <RichText
                         tagName="h1"
-                        className="hero-block__title"
+                        className="hero__title"
                         value={title}
                         onChange={onChangeTitle}
                         placeholder={__('Enter Hero Title...', 'vincentragosta')}
@@ -116,14 +116,14 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     />
                     <RichText
                         tagName="p"
-                        className="hero-block__subtitle"
+                        className="hero__subtitle"
                         value={subtitle}
                         onChange={onChangeSubtitle}
                         placeholder={__('Enter subtitle...','vincentragosta')}
                         allowedFormats={['core/bold', 'core/italic', 'core/link']}
                     />
                     {/* InnerBlocks Area for Buttons */}
-                    <div className="hero-block__links">
+                    <div className="hero__links">
                         <InnerBlocks
                             allowedBlocks={ALLOWED_BLOCKS}
                             // No template prop here
@@ -133,16 +133,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 </div>
 
                 {/* --- SVG Preview Area (non-sprite version) --- */} {/* <-- Uncomment this whole block */}
-                <div className="hero-block__svg">
+                <div className="hero__svg">
                     {/* Display the fetched SVG content or a placeholder */}
                     {currentSvgContent ? (
                         <div
-                            className="hero-block-editor__svg-preview is-loaded"
+                            className="hero-editor__svg-preview is-loaded"
                             // Use dangerouslySetInnerHTML to render the SVG markup
                             dangerouslySetInnerHTML={{ __html: currentSvgContent }}
                         />
                     ) : (
-                        <div className="hero-block-editor__svg-placeholder">
+                        <div className="hero-editor__svg-placeholder">
                             {svgAsset
                                 ? __('SVG preview unavailable or not found.', 'vincentragosta') // More specific message
                                 : __('[No SVG Selected]', 'vincentragosta')}

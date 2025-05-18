@@ -15,10 +15,10 @@ export default function save() {
         // This corresponds to the main wrapper div in render_callback
         <div {...blockProps}>
             {/* This corresponds to the '.hero-block__content' div in render_callback */}
-            <div className="hero-block__content">
-                {/* This corresponds to the '.hero-block__links' div in render_callback
+            <div className="hero__content">
+                {/* This corresponds to the '.hero__links' div in render_callback
                     where the buttons are placed. */}
-                <div className="hero-block__links">
+                <div className="hero__links">
                     {/* InnerBlocks.Content outputs the saved markup of the inner blocks (core/buttons).
                         This is essential for the editor to find and load the inner blocks on reload. */}
                     <InnerBlocks.Content />
@@ -26,8 +26,8 @@ export default function save() {
                 {/* We don't include the InnerBlocks.Content for the SVG side,
                     as the SVG is not an InnerBlock managed by this parent block. */}
             </div>
-            {/* This corresponds to the '.hero-block__svg' div in render_callback */}
-            <div className="hero-block__svg">
+            {/* This corresponds to the '.hero__svg' div in render_callback */}
+            <div className="hero__svg">
                 {/* SVG content is handled by the PHP render_callback based on the svgAsset attribute */}
             </div>
         </div>

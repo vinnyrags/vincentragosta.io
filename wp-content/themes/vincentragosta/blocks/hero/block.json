@@ -1,7 +1,7 @@
 {
   "apiVersion": 3,
   "name": "vincentragosta/hero",
-  "title": "Hero (Native)",
+  "title": "Hero",
   "category": "design",
   "icon": "cover-image",
   "description": "Native hero block with title, subtitle, buttons, and SVG.",
