@@ -111,7 +111,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         value={title}
                         onChange={onChangeTitle}
                         placeholder={__('Enter Hero Title...', 'vincentragosta')}
-                        allowedFormats={['core/bold', 'core/italic']}
+                        allowedFormats={['core/bold', 'core/italic', 'vincentragosta/inline-block']}
                         withoutInteractiveFormatting
                     />
                     <RichText
@@ -120,7 +120,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         value={subtitle}
                         onChange={onChangeSubtitle}
                         placeholder={__('Enter subtitle...','vincentragosta')}
-                        allowedFormats={['core/bold', 'core/italic', 'core/link']}
+                        allowedFormats={['core/bold', 'core/italic', 'core/link', 'vincentragosta/inline-block']}
                     />
                     {/* InnerBlocks Area for Buttons */}
                     <div className="hero__links">

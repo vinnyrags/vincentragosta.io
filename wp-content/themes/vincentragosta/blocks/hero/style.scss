@@ -1,62 +1,46 @@
-// File: src/blocks/hero/style.scss
-// Styles for both Frontend and Editor Preview for vincentragosta/hero block
-
-// Main block wrapper class (automatically added by WordPress)
 .wp-block-vincentragosta-hero {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  padding: 60px;
+  padding: 60px 20px;
   min-height: 500px;
-  //padding-top: var(--wp--preset--spacing--70, 4rem);    // Use theme.json spacing with fallback
-  //padding-bottom: var(--wp--preset--spacing--70, 4rem);
-  //gap: var(--wp--preset--spacing--50, 2rem);
   overflow: hidden;
   position: relative;
-  //min-height: 300px; // Adjust as needed
-  //border-bottom: 1px solid var(--wp--preset--color--accent-6, #e0e0e0); // Optional separator using theme color
 
-  // --- Alignment Handling ---
-  // Core handles wide alignment max-width.
-  // Full width needs specific margin/padding adjustments.
-  //&.alignfull {
-  //  // Reset theme padding and go full width
-  //  margin-left: calc(50% - 50vw);
-  //  margin-right: calc(50% - 50vw);
-  //  max-width: 100vw;
-  //  padding-left: 0;
-  //  padding-right: 0;
-  //
-  //  // Add back padding for direct children if needed inside fullwidth
-  //  > .hero__content {
-  //    padding-left: var(--wp--preset--spacing--50, 2rem);
-  //  }
-  //  > .hero__svg {
-  //    padding-right: var(--wp--preset--spacing--50, 2rem);
-  //  }
-  //}
+  @media (min-width: 768px) {
+    padding: 200px 60px 60px;
+  }
 
-  // --- Layout Containers ---
   .hero__content {
-    width: 35%;
-    //flex: 1; // Occupy available space
-    //min-width: min(100%, 768px); // Prevent getting too small, allow full width on small screens
-    //padding-right: var(--wp--preset--spacing--40, 1.5rem); // Space between content and SVG on larger screens
-    //z-index: 2;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+
+    @media (min-width: 768px) {
+      width: 70%;
+    }
+
+    .wp-block-button {
+      display: flex;
+    }
   }
 
   .hero__svg {
-    //position: absolute;
-    //inset: 0;
     position: relative;
-    flex: 1;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    //min-width: min(100%, 250px);
-    //max-height: 400px;
-    //position: relative;
-    //z-index: 1;
+    width: 100%;
+
+    @media (min-width: 768px) {
+      justify-content: flex-end;
+      width: 65%;
+      z-index: -1;
+      position: absolute;
+      inset: 0;
+      margin-left: auto;
+      flex: 1;
+    }
 
     &:before {
       content: '';
@@ -65,51 +49,40 @@
       left: 0;
       right: 0;
       bottom: 0;
-      pointer-events: none; /* Allows interaction with content below */
-      z-index: 1; /* Ensure it's above content if needed */
+      pointer-events: none;
+      z-index: 1;
 
-      /* Radial gradient from transparent center to rgba(21, 21, 21, 1) edges */
-      //background: radial-gradient(ellipse at center, rgba(21, 21, 21, 0) 80%, rgba(21, 21, 21, 1) 100%);
-
-      background:
-              linear-gradient(to bottom, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 20%), /* Top fade */
-              linear-gradient(to top, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 20%),    /* Bottom fade */
-              linear-gradient(to right, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 20%),  /* Left fade */
-              linear-gradient(to left, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 20%);   /* Right fade */
+      background: linear-gradient(to bottom, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
+      linear-gradient(to top, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
+      linear-gradient(to right, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 60%),
+      linear-gradient(to left, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%);
     }
 
     svg {
-      display: block; // Prevents extra space below SVG
+      display: block;
       max-width: 100%;
-      //width: 800px;
-      max-height: 100%; // Constrain SVG size within its container
-      width: auto;   // Allow intrinsic width unless constrained
-      height: auto; // Maintain aspect ratio
-      //position: absolute;
-      //top: -100px;
-      //right: -100px;
-      //width: 900px;
+      max-height: 100%;
+      width: auto;
+      height: auto;
     }
   }
 
-  // --- Text & Link Elements ---
+  // TODO: add new fonts Roobert and Reckless Nueue Light (Downloads folder)
   .hero__title {
-    font-family: var(--wp--preset--font-family--playfair-display, serif);
-    font-size: var(--wp--preset--font-size--xx-large, clamp(2.15rem, 8vw, 3rem)); // Use clamp for fluidity
-    font-weight: 700;
+    width: 100%;
+    font-size: var(--wp--preset--font-size--large);
     line-height: 1.2;
+    display: block;
     margin-top: 0;
     margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
-    //color: var(--wp--preset--color--contrast, inherit); // Inherit default text color if variable missing
   }
 
   .hero__subtitle {
-    font-family: var(--wp--preset--font-family--libre-baskerville, serif);
-    font-size: var(--wp--preset--font-size--large, 1.25rem);
-    //color: var(--wp--preset--color--accent-4, #555); // Use a theme accent color or fallback
+    width: 100%;
+    display: block;
+    font-size: var(--wp--preset--font-size--medium);
     margin-top: 0;
     margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
-    //max-width: 60ch; // Limit line length
     line-height: 1.2;
   }
 
@@ -117,109 +90,49 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--wp--preset--spacing--30, 1rem);
-    //margin-top: var(--wp--preset--spacing--50, 2rem); // Space above the button group
   }
-
-  // Links are styled like buttons via .wp-block-button__link class added in PHP/JS
-  .hero__link {
-    // Add specific overrides only if needed, otherwise rely on theme/core button styles
-    // Example: Make Hero buttons slightly larger?
-    // padding-top: calc(var(--wp--preset--spacing--30, 10px) + 2px);
-    // padding-bottom: calc(var(--wp--preset--spacing--30, 10px) + 2px);
-  }
-
-  // --- Responsive Stacking ---
-  //@media (max-width: 768px) {
-  //  flex-direction: column;
-  //  text-align: center;
-  //
-  //  .hero__content {
-  //    padding-right: 0; // Remove side padding when stacked
-  //    order: 1; // Content first
-  //  }
-  //
-  //  .hero__svg {
-  //    order: 2; // SVG second
-  //    justify-content: center; // Center SVG when stacked
-  //    max-height: 250px;
-  //    width: 80%; // Example: constrain width when stacked
-  //    margin: 0 auto var(--wp--preset--spacing--50, 2rem); // Add bottom margin when stacked
-  //  }
-  //
-  //  // Handle full width padding correctly when stacked
-  //  &.alignfull {
-  //    > .hero__content, > .hero__svg {
-  //      padding-left: var(--wp--preset--spacing--50, 2rem);
-  //      padding-right: var(--wp--preset--spacing--50, 2rem);
-  //    }
-  //    > .hero__svg {
-  //      width: calc(100% - 2 * var(--wp--preset--spacing--50, 2rem)); // Adjust width considering padding
-  //    }
-  //  }
-  //
-  //  .hero__links {
-  //    justify-content: center; // Center buttons when stacked
-  //  }
-  //
-  //  .hero__subtitle {
-  //    margin-left: auto;
-  //    margin-right: auto;
-  //  }
-  //}
 }
 
-// Add styles for specific SVG classes if needed, e.g.:
-// .wp-block-vincentragosta-hero .squiggle-1 { ... }
-
-/* --- Squiggle-3 Mask Animation (Inline SVG Method) --- */
-
-/* Define the animation keyframes */
 @keyframes draw-mask-stroke {
   to {
     stroke-dashoffset: 0;
   }
 }
 
-/* Target the mask paths specifically within an inline squiggle-3 SVG
-   inside your hero block's SVG container */
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask {
-  /* Set initial state using pathLength="100" */
-  stroke-dasharray: 100;  /* 100% of path length */
-  stroke-dashoffset: 100; /* Start fully 'dashed off' (invisible) */
-
-  /* Default animation - Adjust timing function for fluidity */
-  /* Using cubic-bezier for a smoother acceleration/deceleration */
-  animation: draw-mask-stroke 1.5s cubic-bezier(0.4, 0, 0.2, 1) 0s 1 forwards; /* Increased duration slightly */
-
-  /* Ensure mask styles are correct if not set inline */
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: draw-mask-stroke cubic-bezier(0.4, 0, 0.2, 1) 0s 1 forwards;
   stroke: #fff;
   fill: none;
 }
 
-/* --- Animation Sequencing (ADJUST DELAYS & DURATIONS) --- */
-/* Apply specific delays to make segments draw one after another */
-/* Adjusted delays and durations to shorten overall time */
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-0 {
-  animation-delay: 0.1s;
-  animation-duration: 0.8s; /* Reduced duration */
+  animation-delay: 0s;
+  animation-duration: 0.6s;
 }
+
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-1 {
-  animation-delay: 0.6s; /* Adjusted delay */
-  animation-duration: 0.7s; /* Reduced duration */
+  animation-delay: 0.3s;
+  animation-duration: 0.5s;
 }
+
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-2 {
-  animation-delay: 1s; /* Adjusted delay */
-  animation-duration: 0.7s; /* Reduced duration */
+  animation-delay: 0.6s;
+  animation-duration: 0.5s;
 }
+
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-3 {
-  animation-delay: 1.4s; /* Adjusted delay */
-  animation-duration: 0.5s; /* Reduced duration */
+  animation-delay: 0.9s;
+  animation-duration: 0.4s;
 }
+
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-4 {
-  animation-delay: 1.7s; /* Adjusted delay */
-  animation-duration: 0.5s; /* Reduced duration */
+  animation-delay: 1.1s;
+  animation-duration: 0.4s;
 }
+
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-5 {
-  animation-delay: 2s; /* Adjusted delay */
-  animation-duration: 0.6s; /* Reduced duration */
+  animation-delay: 1.3s;
+  animation-duration: 0.4s;
 }

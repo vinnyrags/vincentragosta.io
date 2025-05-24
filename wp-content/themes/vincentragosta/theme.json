@@ -115,20 +115,20 @@
         },
         {
           "fluid": {
-            "max": "1.125rem",
-            "min": "1rem"
+            "max": "2.75rem",
+            "min": "2rem"
           },
           "name": "Medium",
-          "size": "1rem",
+          "size": "2rem",
           "slug": "medium"
         },
         {
           "fluid": {
-            "max": "1.375rem",
-            "min": "1.125rem"
+            "max": "4.5rem",
+            "min": "3.125rem"
           },
           "name": "Large",
-          "size": "1.38rem",
+          "size": "3.125rem",
           "slug": "large"
         },
         {
@@ -165,6 +165,61 @@
           "name": "Fira Code",
           "slug": "fira-code",
           "fontFamily": "'Fira Code', monospace"
+        },
+        {
+          "fontFamily": "\"Reckless Neue\", Georgia, Times, serif",
+          "name": "Reckless Neue",
+          "slug": "reckless-neue",
+          "fontFace": [
+            {
+              "fontFamily": "Reckless Neue",
+              "fontWeight": "300",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": [
+                "file:./assets/fonts/reckless-neue/reckless-neue-light.woff2",
+                "file:./assets/fonts/reckless-neue/reckless-neue-light.woff"
+              ]
+            },
+            {
+              "fontFamily": "Reckless Neue",
+              "fontWeight": "300",
+              "fontStyle": "italic",
+              "fontStretch": "normal",
+              "src": [
+                "file:./assets/fonts/reckless-neue/reckless-neue-light-italic.woff2",
+                "file:./assets/fonts/reckless-neue/reckless-neue-light-italic.woff"
+              ]
+            }
+          ]
+        },
+        {
+          "fontFamily": "\"Roobert\", \"Helvetica Neue\", Arial, sans-serif",
+          "name": "Roobert",
+          "slug": "roobert",
+          "fontFace": [
+            {
+              "fontFamily": "Roobert",
+              "fontWeight": "300",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/roobert/roobert-light.otf"]
+            },
+            {
+              "fontFamily": "Roobert",
+              "fontWeight": "500",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/roobert/roobert-medium.otf"]
+            },
+            {
+              "fontFamily": "Roobert",
+              "fontWeight": "500",
+              "fontStyle": "italic",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/roobert/roobert-medium-italic.otf"]
+            }
+          ]
         }
       ]
     },
@@ -183,7 +238,7 @@
       }
     },
     "typography": {
-      "fontFamily": "var:preset|font-family|libre-baskerville",
+      "fontFamily": "var(--wp--preset--font-family--libre-baskerville)",
       "fontSize": "var:preset|font-size|large",
       "fontWeight": "300",
       "letterSpacing": "-0.1px",
@@ -195,7 +250,29 @@
           "radius": "100px"
         }
       },
+      "core/paragraph": {
+        "typography": {
+          "fontSize": "var(--wp--preset--font-size--medium)",
+          "fontFamily": "var(--wp--preset--font-family--roobert)",
+          "fontWeight": "300"
+        },
+        "variations": {
+          "small-text": {
+            "typography": {
+              "fontSize": "var(--wp--preset--font-size--small)"
+            }
+          },
+          "large-text": {
+            "typography": {
+              "fontSize": "var(--wp--preset--font-size--large)"
+            }
+          }
+        }
+      },
       "core/button": {
+        "typography": {
+          "fontSize": "var(--wp--preset--font-size--small)"
+        },
         "variations": {
           "outline": {
             "border": {
@@ -617,48 +694,55 @@
           "lineHeight": "1.4"
         }
       },
+      "heading": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
+          "fontWeight": "300",
+          "lineHeight": "1.125",
+          "letterSpacing": "-0.1px"
+        },
+        "color": {
+          "text": "var:preset|color|base"
+        }
+      },
       "h1": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|xx-large"
         }
       },
       "h2": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|x-large"
         }
       },
       "h3": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|large"
         }
       },
       "h4": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|medium"
         }
       },
       "h5": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|small",
           "letterSpacing": "0.5px"
         }
       },
       "h6": {
         "typography": {
+          "fontFamily": "var(--wp--preset--font-family--reckless-neue)",
           "fontSize": "var:preset|font-size|small",
-          "fontWeight": "700",
+          "fontWeight": "300",
           "letterSpacing": "1.4px",
           "textTransform": "uppercase"
-        }
-      },
-      "heading": {
-        "typography": {
-          "fontWeight": "400",
-          "lineHeight": "1.125",
-          "letterSpacing": "-0.1px"
-        },
-        "color": {
-          "text": "var:preset|color|base"
         }
       },
       "link": {
@@ -688,7 +772,6 @@
       "area": "header",
       "name": "header-large-title",
       "title": "Header with large title"
-
     },
     {
       "area": "footer",
@@ -714,7 +797,9 @@
   "customTemplates": [
     {
       "name": "page-no-title",
-      "postTypes": ["page"],
+      "postTypes": [
+        "page"
+      ],
       "title": "Page No Title"
     }
   ]
