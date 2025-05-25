@@ -70,7 +70,7 @@
   // TODO: add new fonts Roobert and Reckless Nueue Light (Downloads folder)
   .hero__title {
     width: 100%;
-    font-size: var(--wp--preset--font-size--large);
+    font-size: var(--wp--preset--font-size--heading-large);
     line-height: 1.2;
     display: block;
     margin-top: 0;
@@ -80,7 +80,7 @@
   .hero__subtitle {
     width: 100%;
     display: block;
-    font-size: var(--wp--preset--font-size--medium);
+    font-size: var(--wp--preset--font-size--body-default);
     margin-top: 0;
     margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
     line-height: 1.2;

@@ -159,8 +159,7 @@ function vincentragosta_register_native_blocks()
 {
     // Array of block directories (relative to theme root /blocks/)
     $blocks = [
-        'hero', // Register the hero block directory
-        'inner-block-test', // Register the inner-block-test block directory
+        'hero',
     ];
 
     foreach ($blocks as $block_name) {

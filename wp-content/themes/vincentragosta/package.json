@@ -7,11 +7,14 @@
     "test": "tests"
   },
   "scripts": {
-    "build-assets": "wp-scripts build assets/src/js/custom-formats.js --output-path=assets/build/js",
-    "build-paragraph": "wp-scripts build assets/src/js/custom-paragraph-styles.js --output-path=assets/build/js",
-    "build-hero": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
-    "build-test": "wp-scripts build blocks/inner-block-test/index.js --output-path=blocks/inner-block-test/build",
-    "start": "wp-scripts start blocks/hero/index.js blocks/inner-block-test/index.js --output-path=blocks/hero/build --output-path=blocks/inner-block-test/build"
+    "build-assets": "wp-scripts build assets/src/js/custom-formats.js assets/src/js/custom-paragraph-styles.js --output-path=assets/src/build/js",
+    "build-block:hero": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
+    "build-blocks": "npm run build-block:hero",
+    "build": "npm run build-assets && npm run build-blocks",
+    "start-assets": "wp-scripts start assets/src/js/custom-formats.js assets/src/js/custom-paragraph-styles.js --output-path=assets/src/build/js",
+    "start-block:hero": "wp-scripts start blocks/hero/index.js",
+    "start-blocks": "npm-run-all --parallel start-block:hero",
+    "start": "npm-run-all --parallel start-assets start-blocks"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +23,7 @@
     "@wordpress/icons": "^10.21.0",
     "@wordpress/scripts": "^30.14.1",
     "autoprefixer": "^10.4.21",
+    "npm-run-all": "^4.1.5",
     "esbuild": "^0.25.1",
     "postcss": "^8.5.3",
     "sass": "^1.86.0"

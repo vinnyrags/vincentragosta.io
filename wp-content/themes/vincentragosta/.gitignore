@@ -1,5 +1,6 @@
 vendor/
 wordpress/
 node_modules/
-assets/build/
+
+assets/**/build/
 blocks/**/build/

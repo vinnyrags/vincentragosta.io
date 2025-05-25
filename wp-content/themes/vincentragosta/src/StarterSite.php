@@ -11,26 +11,7 @@ class StarterSite extends Site
     public function __construct()
     {
         add_action('after_setup_theme', array($this, 'theme_supports'));
-        add_action('init', array($this, 'register_post_types'));
-        add_action('init', array($this, 'register_taxonomies'));
-
         add_action('wp_enqueue_scripts', function () {
-            // Enqueue Playfair Display (for headings)
-            wp_enqueue_style(
-                'playfair-display-font',
-                'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap',
-                array(),
-                null
-            );
-
-            // Enqueue Libre Baskerville (for body text)
-            wp_enqueue_style(
-                'libre-baskerville-font',
-                'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap',
-                array(),
-                null
-            );
-
             // Enqueue Fira Code (for code blocks)
             wp_enqueue_style(
                 'fira-code-font',
@@ -47,43 +28,7 @@ class StarterSite extends Site
 
         add_action('enqueue_block_editor_assets', array($this, 'enqueue_custom_editor_scripts'));
 
-        add_filter('timber/context', array($this, 'add_to_context'));
-        add_filter('timber/twig', array($this, 'add_to_twig'));
-        add_filter('timber/twig/environment/options', [$this, 'update_twig_environment_options']);
-
         parent::__construct();
-    }
-
-    /**
-     * This is where you can register custom post types.
-     */
-    public function register_post_types()
-    {
-        // Add custom post types here
-    }
-
-    /**
-     * This is where you can register custom taxonomies.
-     */
-    public function register_taxonomies()
-    {
-        // Add custom taxonomies here
-    }
-
-    /**
-     * This is where you add some context
-     *
-     * @param string $context context['this'] Being the Twig's {{ this }}.
-     */
-    public function add_to_context($context)
-    {
-        $context['foo'] = 'bar';
-        $context['stuff'] = 'I am a value set in your functions.php file';
-        $context['notes'] = 'These values are available everytime you call Timber::context();';
-        $context['menu'] = Timber::get_menu();
-        $context['site'] = $this;
-
-        return $context;
     }
 
     public function theme_supports()
@@ -145,75 +90,16 @@ class StarterSite extends Site
     }
 
     /**
-     * his would return 'foo bar!'.
-     *
-     * @param string $text being 'foo', then returned 'foo bar!'.
-     */
-    public function myfoo($text)
-    {
-        $text .= ' bar!';
-        return $text;
-    }
-
-    /**
-     * This is where you can add your own functions to twig.
-     *
-     * @param Twig\Environment $twig get extension.
-     */
-    public function add_to_twig($twig)
-    {
-        /**
-         * Required when you want to use Twig’s template_from_string.
-         * @link https://twig.symfony.com/doc/3.x/functions/template_from_string.html
-         */
-        // $twig->addExtension( new Twig\Extension\StringLoaderExtension() );
-
-        $twig->addFilter(new \Twig\TwigFilter('myfoo', [$this, 'myfoo']));
-
-        // Optional: Add block_attributes helper if Timber < 2.0 or for custom attributes
-        // $twig->addFunction( new \Timber\Twig_Function( 'block_attributes', function( $block ) {
-        //     $attributes = '';
-        //     if ( ! empty( $block['anchor'] ) ) {
-        //         $attributes .= ' id="' . esc_attr( $block['anchor'] ) . '"';
-        //     }
-        //     $attributes .= ' class="' . esc_attr( implode( ' ', $block['classes'] ) ) . '"';
-        //     if ( ! empty( $block['align'] ) ) {
-        //         $attributes .= ' data-align="' . esc_attr( $block['align'] ) . '"';
-        //     }
-        //     // Add any other attributes you want to pass
-        //     return $attributes;
-        // } ) );
-
-        return $twig;
-    }
-
-    /**
-     * Updates Twig environment options.
-     *
-     * @link https://twig.symfony.com/doc/2.x/api.html#environment-options
-     *
-     * \@param array $options An array of environment options.
-     *
-     * @return array
-     */
-    function update_twig_environment_options($options)
-    {
-        // $options['autoescape'] = true;
-
-        return $options;
-    }
-
-    /**
      * Enqueues custom formats for the RichText editor.
      */
     public function enqueue_custom_editor_scripts()
     {
-        $script_asset_path = get_template_directory() . '/assets/build/js/custom-formats.asset.php';
+        $script_asset_path = get_template_directory() . '/assets/src/build/js/custom-formats.asset.php';
         if (file_exists($script_asset_path)) {
             $script_asset = require($script_asset_path);
             wp_enqueue_script(
                 'vincentragosta-custom-formats', // Unique handle for your script
-                get_template_directory_uri() . '/assets/build/js/custom-formats.js',
+                get_template_directory_uri() . '/assets/src/build/js/custom-formats.js',
                 $script_asset['dependencies'],
                 $script_asset['version'],
                 true // Load in footer
@@ -231,12 +117,12 @@ class StarterSite extends Site
         }
 
         // Enqueue custom paragraph styles script
-        $script_asset_path_paragraph = get_template_directory() . '/assets/build/js/custom-paragraph-styles.asset.php';
+        $script_asset_path_paragraph = get_template_directory() . '/assets/src/build/js/custom-paragraph-styles.asset.php';
         if (file_exists($script_asset_path_paragraph)) {
             $script_asset_paragraph = require($script_asset_path_paragraph);
             wp_enqueue_script(
                 'vincentragosta-custom-paragraph-styles', // Unique handle
-                get_template_directory_uri() . '/assets/build/js/custom-paragraph-styles.js',
+                get_template_directory_uri() . '/assets/src/build/js/custom-paragraph-styles.js',
                 $script_asset_paragraph['dependencies'],
                 $script_asset_paragraph['version'],
                 true
