@@ -1,4 +1,10 @@
-@import 'utilities/display';
-@import 'common/global';
-@import 'elements/block-text';
-@import 'elements/headings';
+/*
+ * Theme Name: Vincent Ragosta Theme
+ * Description: Starter Theme to use with Timber
+ * Author: Upstatement and YOU!
+*/
+
+@use 'utilities/display';
+@use 'common/global';
+@use 'elements/block-text';
+@use 'elements/headings';
