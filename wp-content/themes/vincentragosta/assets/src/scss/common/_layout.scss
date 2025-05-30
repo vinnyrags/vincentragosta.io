@@ -1,0 +1,9 @@
+.article-body {
+  // applies to all core components. all custom components
+  // need to account for their own padding
+  > *:not([class^="wp-block-vincentragosta-"]) {
+    margin-bottom: var(--wp--preset--spacing--x-large);
+    padding-left: var(--wp--preset--spacing--large);
+    padding-right: var(--wp--preset--spacing--large);
+  }
+}

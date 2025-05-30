@@ -8,14 +8,27 @@
   display: inline-block;
 }
 
-body {
-  font-size: var(--wp--preset--font-size--body-default);
+.text--underline {
+  text-decoration: underline;
 }
 
+body {
+  font-size: var(--wp--preset--font-size--body-default);
+  font-family: var(--wp--preset--font-family--roobert);
+}
+
+.article-body > *:not([class^=wp-block-vincentragosta-]) {
+  margin-bottom: var(--wp--preset--spacing--x-large);
+  padding-left: var(--wp--preset--spacing--large);
+  padding-right: var(--wp--preset--spacing--large);
+}
+
+p {
+  margin-top: 0;
+}
 p.is-style-small-text {
   font-size: var(--wp--preset--font-size--body-small);
 }
-
 p.is-style-large-text {
   font-size: var(--wp--preset--font-size--body-large);
 }

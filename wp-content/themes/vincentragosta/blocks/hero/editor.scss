@@ -1,53 +1,63 @@
-// file: wp-content/themes/vincentragosta/blocks/hero/editor.scss
-
-// Styles specific to the editor preview for the vincentragosta/hero block
+// Styles specific to the editor preview for the vincentragosta/hero block.
+// These rules will layer on top of, or override, styles from style.scss.
 
 .wp-block-vincentragosta-hero {
-  // Ensure editor layout mimics frontend structure
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  // Use static fallbacks if CSS variables aren't reliable in editor preview
-  gap: 2rem;
-  min-height: 250px; // Allow a slightly smaller preview height
+  // Editor-specific adjustments for the main block wrapper:
+  align-items: center; // Frontend uses align-items: flex-end; 'center' might be better for editor preview.
+  gap: 1.5rem;          // Slightly adjusted gap for editor compactness.
+  min-height: 250px;   // Maintain a smaller min-height for the editor.
+  padding: 2rem 1.5rem; // More constrained padding for the editor view than the frontend.
+  position: relative;  // Keep relative for z-index context, but avoid frontend's overflow:hidden if it clips UI.
+
+  // .hero__title and .hero__subtitle will inherit most of their styles
+  // (font-family, font-size, line-height, margins) from style.scss.
+  // This is good for consistency. Ensure your CSS variables like
+  // var(--wp--preset--font-size--heading-large) and var(--wp--preset--font-size--body-default)
+  // are correctly defined in your theme.json.
 
   .hero__content {
-    flex: 1;
-    min-width: 200px; // Prevent collapsing too small in editor flex
-    padding-right: 1.5rem; // Space, adjust as needed
+    flex: 1; // Allow content to take available space.
+    min-width: 200px; // Prevent it from becoming too narrow.
+    // width: auto; // Let flexbox determine width, unlike frontend's specific percentages.
+    padding-right: 1rem; // Space between content and SVG in editor's flex layout.
     z-index: 2;
+    display: flex;     // Keep these if they help editor layout
+    flex-flow: row wrap;
   }
 
   .hero__svg {
     flex: 1;
-    display: flex; // CRUCIAL: Establish flex context for alignment
-    align-items: center; // Vertically center SVG in container
-    justify-content: center; // Horizontally center SVG in container
-    min-width: 150px; // Ensure container has *some* width
-    min-height: 100px; // Ensure container has *some* height
-    // max-height: 300px; // Optional: Limit height in editor
-    // border: 1px dashed red; // Temporary: Visualize SVG container bounds
-    //overflow: hidden; // Prevent SVG overflow
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 150px;
+    min-height: 100px;
+    position: relative; // Simpler positioning than frontend's absolute for desktop.
     z-index: 1;
+    // width: auto; // Let flexbox determine width.
 
-    // Target the inner div holding the SVG markup
+    // Optionally remove or simplify the :before gradient in the editor if it's distracting.
+    &:before {
+      content: none; // Example: removing the gradient overlay in the editor.
+      // Or you could apply a much simpler, less intrusive overlay.
+    }
+
     .hero-editor__svg-preview {
-      display: inline-flex; // Use flex to help center its child (the SVG)
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 100%;    // Take full width of parent (.hero__svg)
-      height: 100%;   // Take full height of parent (.hero__svg)
+      width: 100%;
+      height: 100%;
       max-width: 100%;
       max-height: 100%;
-      line-height: 0; // Prevent extra space
+      line-height: 0;
 
       svg {
-        display: block; // ESSENTIAL: Make SVG behave like a block
-        width: 100%;    // Force SVG width to fill its container (.hero-editor__svg-preview)
-        height: auto;   // Maintain aspect ratio based on width
-        max-width: 100%; // Redundant but safe
-        max-height: 100%; // Allow scaling down to fit height constraints
+        display: block;
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
       }
     }
 
@@ -65,23 +75,29 @@
     }
   }
 
-  // Responsive adjustments specifically for the editor preview pane
-  @media (max-width: 782px) { // Standard WP admin breakpoint
+  // .hero__links styles will be inherited from style.scss.
+
+  // Editor-specific responsive adjustments (for WP admin breakpoint)
+  @media (max-width: 782px) {
     flex-direction: column;
     text-align: center;
+    padding: 1.5rem 1rem; // Adjusted padding for smaller editor views.
 
     .hero__content {
       order: 1;
-      width: 100%;
+      width: 100%; // Full width on smaller editor views.
       padding-right: 0;
     }
 
     .hero__svg {
       order: 2;
-      width: 80%; // Adjust width for stacked view
-      margin: 1rem auto; // Center when stacked
+      width: 80%; // Constrain SVG width on smaller editor views.
+      margin: 1rem auto;
       min-height: 150px;
-      justify-content: center; // Reinforce centering
     }
   }
 }
+
+// The SVG animation styles for .squiggle-3 .mask defined in your style.scss
+// will also apply in the editor if the SVG used in the preview has these classes.
+// There's no need to repeat them here unless you want a different animation behavior in the editor.

@@ -7,12 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "build-assets": "wp-scripts build assets/src/js/custom-formats.js assets/src/js/custom-paragraph-styles.js --output-path=assets/src/build/js",
+    "build-assets": "wp-scripts build assets/src/js/custom-formats.js --output-path=assets/src/build/js",
     "compile-theme-css": "sass assets/src/scss/main.scss style.css --no-source-map --style=expanded",
     "build-block:hero": "wp-scripts build blocks/hero/index.js --output-path=blocks/hero/build",
     "build-blocks": "npm run build-block:hero",
     "build": "npm run build-assets && npm run build-blocks && npm run compile-theme-css",
-    "start-assets": "wp-scripts start assets/src/js/custom-formats.js assets/src/js/custom-paragraph-styles.js --output-path=assets/src/build/js",
+    "start-assets": "wp-scripts start assets/src/js/custom-formats.js --output-path=assets/src/build/js",
     "watch-theme-css": "sass assets/src/scss/style.scss style.css --no-source-map --style=expanded --watch",
     "start-block:hero": "wp-scripts start blocks/hero/index.js",
     "start-blocks": "npm-run-all --parallel start-block:hero",

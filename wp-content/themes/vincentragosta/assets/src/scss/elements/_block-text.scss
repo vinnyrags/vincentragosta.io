@@ -1,7 +1,11 @@
-p.is-style-small-text {
-  font-size: var(--wp--preset--font-size--body-small);
-}
+p {
+  margin-top: 0;
 
-p.is-style-large-text {
-  font-size: var(--wp--preset--font-size--body-large);
+  &.is-style-small-text {
+    font-size: var(--wp--preset--font-size--body-small);
+  }
+
+  &.is-style-large-text {
+    font-size: var(--wp--preset--font-size--body-large);
+  }
 }
