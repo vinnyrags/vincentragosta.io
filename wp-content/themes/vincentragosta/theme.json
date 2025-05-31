@@ -109,8 +109,14 @@
       "fontSizes": [
         {
           "fluid": false,
-          "name": "Body Small",
+          "name": "Body Tiny",
           "size": "0.875rem",
+          "slug": "body-tiny"
+        },
+        {
+          "fluid": false,
+          "name": "Body Small",
+          "size": "1rem",
           "slug": "body-small"
         },
         {
@@ -257,21 +263,15 @@
         }
       },
       "core/button": {
-        "variations": {
-          "outline": {
-            "border": {
-              "color": "currentColor",
-              "width": "1px"
-            },
-            "css": ".wp-block-button__link:not(.has-background):hover {background-color:color-mix(in srgb, var(--wp--preset--color--contrast) 5%, transparent);}",
-            "spacing": {
-              "padding": {
-                "bottom": "calc(1rem - 1px)",
-                "left": "calc(2.25rem - 1px)",
-                "right": "calc(2.25rem - 1px)",
-                "top": "calc(1rem - 1px)"
-              }
-            }
+        "typography": {
+          "fontSize": "var:preset|font-size|body-small"
+        },
+        "spacing": {
+          "padding": {
+            "right": "var:preset|spacing|x-small",
+            "bottom": "var:preset|spacing|tiny",
+            "left": "var:preset|spacing|x-small",
+            "top": "var:preset|spacing|tiny"
           }
         }
       },
