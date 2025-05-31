@@ -542,7 +542,7 @@
             "top": "var:preset|spacing|x-small"
           }
         },
-        "css": "& p:last-of-type {margin-bottom: var(--wp--preset--spacing--30);}"
+        "css": "& p:last-of-type {margin-bottom: var(--wp--preset--spacing--regular);}"
       },
       "core/query-pagination": {
         "typography": {
