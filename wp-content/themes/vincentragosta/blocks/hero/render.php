@@ -30,24 +30,23 @@ $wrapper_attributes = get_block_wrapper_attributes();
 // We find the class attribute and insert our custom class.
 $wrapper_attributes = str_replace(
     'class="',
-    'class="hero ', // Add the 'hero' class here
+    'class="hero ',
     $wrapper_attributes
 );
 
 ?>
-<div <?php echo $wrapper_attributes;?>>
+<div <?= $wrapper_attributes; ?>>
     <div class="hero__svg">
         <?php if (!empty($svg_asset)): ?>
             <?= get_theme_svg($svg_asset); ?>
         <?php endif; ?>
     </div>
     <div class="hero__content">
+        <!-- TODO: add "taxonomy" segment -->
         <?php if (!empty($title)) : ?>
-            <h1 class="hero__title"><?php echo wp_kses_post($title); ?></h1>
-        <?php endif; ?>
-
-        <?php if (!empty($subtitle)) : ?>
-            <p class="hero__subtitle"><?php echo wp_kses_post($subtitle); ?></p>
+            <div class="hero__mask">
+                <h1 class="hero__title"><?= $title; ?></h1>
+            </div>
         <?php endif; ?>
 
         <?php if (!empty($content)): ?>

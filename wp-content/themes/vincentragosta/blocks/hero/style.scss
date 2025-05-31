@@ -1,3 +1,9 @@
+@keyframes draw-mask-stroke {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 .wp-block-vincentragosta-hero {
   display: flex;
   flex-wrap: wrap;
@@ -11,85 +17,89 @@
     padding: 200px 60px 60px;
   }
 
-  .hero__content {
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-
-    @media (min-width: 768px) {
-      width: 70%;
-    }
-
-    .wp-block-button {
+  .hero {
+    &__content {
+      width: 100%;
       display: flex;
-    }
-  }
+      flex-flow: row wrap;
 
-  .hero__svg {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+      @media (min-width: 768px) {
+        width: 70%;
+      }
 
-    @media (min-width: 768px) {
-      justify-content: flex-end;
-      width: 65%;
-      z-index: -1;
-      position: absolute;
-      inset: 0;
-      margin-left: auto;
-      flex: 1;
+      .wp-block-button {
+        display: flex;
+      }
     }
 
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: 1;
-
-      background: linear-gradient(to bottom, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
-      linear-gradient(to top, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
-      linear-gradient(to right, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 60%),
-      linear-gradient(to left, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%);
-    }
-
-    svg {
+    &__mask {
       display: block;
-      max-width: 100%;
-      max-height: 100%;
-      width: auto;
-      height: auto;
+      overflow: hidden;
+      width: 100%;
     }
-  }
 
-  // TODO: add new fonts Roobert and Reckless Nueue Light (Downloads folder)
-  .hero__title {
-    width: 100%;
-    font-size: var(--wp--preset--font-size--heading-large);
-    line-height: 1.2;
-    display: block;
-    margin-top: 0;
-    margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
-  }
+    &__svg {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
 
-  .hero__subtitle {
-    width: 100%;
-    display: block;
-    font-size: var(--wp--preset--font-size--body-default);
-    margin-top: 0;
-    margin-bottom: var(--wp--preset--spacing--40, 1.5rem);
-    line-height: 1.2;
-  }
+      @media (min-width: 768px) {
+        justify-content: flex-end;
+        width: 65%;
+        z-index: -1;
+        position: absolute;
+        inset: 0;
+        margin-left: auto;
+        flex: 1;
+      }
 
-  .hero__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--wp--preset--spacing--30, 1rem);
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 1;
+
+        background: linear-gradient(to bottom, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
+        linear-gradient(to top, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
+        linear-gradient(to right, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 60%),
+        linear-gradient(to left, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%);
+      }
+
+      svg {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+      }
+    }
+
+    &__title {
+      width: 100%;
+      font-size: var(--wp--preset--font-size--heading-large);
+      line-height: 1.2;
+      display: block;
+      margin-bottom: var(--wp--preset--spacing--large);
+      /* Initial State (Before Animation) */
+      transform: translateY(110%); /* Moves the text down, completely out of the mask's view */
+      opacity: 0;
+
+      /* Animation Properties */
+      animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      animation-delay: 0.2s; /* Optional: a slight delay before the animation starts */
+    }
+
+    &__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--wp--preset--spacing--30, 1rem);
+    }
   }
 }
 
@@ -99,6 +109,7 @@
   }
 }
 
+// TODO: clean this up
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
@@ -135,4 +146,35 @@
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-5 {
   animation-delay: 1.3s;
   animation-duration: 0.4s;
+}
+
+/*
+  1. The Mask for each individual line.
+*/
+.line-mask {
+  display: block;      /* Each mask takes up its own line */
+  overflow: hidden;    /* The magic: hides the overflowing text */
+  position: relative;  /* Establishes a positioning context */
+}
+
+/*
+  2. The actual text content that will be animated.
+*/
+.line-content {
+  display: block; /* Ensures transform works correctly */
+
+  /* Initial State (Before Animation) */
+  transform: translateY(110%);
+  opacity: 0;
+
+  /* Animation Properties */
+  animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/*
+  3. The Staggering Delay!
+     This is what makes the lines animate one after another.
+*/
+.hero__title .line-mask:nth-child(2) .line-content {
+  animation-delay: 0.2s;
 }
