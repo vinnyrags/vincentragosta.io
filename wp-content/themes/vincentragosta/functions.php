@@ -89,69 +89,6 @@ add_filter('timber/twig', function ($twig) {
     return $twig;
 });
 
-
-// --- Native Block Rendering ---
-
-/**
- * Render callback function for the native Hero block.
- *
- * @param array $attributes Block attributes.
- * @param string $content Block default content (inner blocks markup).
- * @param WP_Block $block Block instance.
- * @return string HTML markup for the hero block.
- */
-function vincentragosta_render_hero_block($attributes, $content, $block)
-{
-    $title = $attributes['title'] ?? '';
-    $subtitle = $attributes['subtitle'] ?? '';
-    $svg_asset = $attributes['svgAsset'] ?? '';
-
-    // get_block_wrapper_attributes automatically includes alignment and InnerBlocks classes
-    $wrapper_attributes = get_block_wrapper_attributes();
-
-    ob_start(); // Start output buffering
-    ?>
-    <div <?php echo $wrapper_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-        <div class="hero-block__content">
-            <?php if (!empty($title)) : ?>
-                <h1 class="hero-block__title"><?php echo wp_kses_post($title); ?></h1>
-            <?php endif; ?>
-
-            <?php if (!empty($subtitle)) : ?>
-                <p class="hero-block__subtitle"><?php echo wp_kses_post($subtitle); ?></p>
-            <?php endif; ?>
-
-            <?php
-            // RENDER INNER BLOCKS (THE BUTTONS)
-            // The $content variable contains the rendered markup of all inner blocks.
-            // If saving is working correctly, $content will contain the HTML for the core/buttons block.
-            if (!empty($content)) :
-                // Wrap inner blocks in the existing .hero-block__links div for layout
-                echo '<div class="hero-block__links">';
-                echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $content is rendered block markup
-                echo '</div>';
-            else :
-                // This fallback indicates a save failure if you expect buttons to be there.
-                // Only show this debugging comment in the editor.
-                if (current_user_can('edit_posts') && is_admin()) {
-                    echo ''; // Empty string as per user's provided code
-                }
-            endif;
-            ?>
-        </div>
-        <div class="hero-block__svg">
-            <?php
-            if (!empty($svg_asset)) {
-                // Render the SVG content safely using the helper
-                echo get_theme_svg($svg_asset); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- SVG is sanitized in get_theme_svg
-            }
-            ?>
-        </div>
-    </div>
-    <?php
-    return ob_get_clean(); // Return buffered content
-}
-
 /**
  * Register native Gutenberg blocks from specific directories.
  */
