@@ -264,7 +264,8 @@
       },
       "core/button": {
         "typography": {
-          "fontSize": "var:preset|font-size|body-small"
+          "fontSize": "var:preset|font-size|body-small",
+          "textTransform": "uppercase"
         },
         "spacing": {
           "padding": {
