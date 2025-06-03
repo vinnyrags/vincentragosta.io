@@ -1,0 +1,48 @@
+// Frontend and common styles for button icon
+// These styles target the structure created by the PHP render_block filter.
+.wp-block-button__link {
+  // Core button might already be inline-flex or flex.
+  // If this enhancement adds an icon, ensure flex properties are set for alignment.
+  // Check if adding these universally causes issues with theme styles.
+  // It might be better to add a helper class like 'has-icon' on the button via PHP filter.
+
+  // display: inline-flex; // Re-evaluate if this is needed globally or only for buttons with icons
+  // align-items: center;
+  // gap: 0.5em; // Default gap
+
+  .wp-block-button__icon {
+    display: inline-flex; // Helps align SVG content
+    align-items: center;
+    justify-content: center;
+    line-height: 0; // Crucial for SVG vertical alignment within the flex item
+
+    // Spacing is handled by `gap` on the parent .wp-block-button__link usually.
+    // If `gap` is not consistently supported or desired, use margins here.
+    // e.g. for icon on left: margin-right: 0.35em;
+    // e.g. for icon on right: margin-left: 0.35em;
+
+    svg {
+      fill: currentColor;
+      width: 1.2em;  // Example: adjust to match font size or be fixed
+      height: 1.2em; // Example: adjust to match font size or be fixed
+      display: inline-block; // Ensure it behaves as an inline block
+      vertical-align: middle; // Good fallback for alignment
+    }
+  }
+}
+
+// If PHP adds a class like 'icon-pos-right' or 'icon-pos-left' to the main .wp-block-button div
+// or to the .wp-block-button__link itself.
+.wp-block-button.has-icon .wp-block-button__link {
+  display: inline-flex; // Ensure flex context for buttons with icons
+  align-items: center;
+  gap: 0.5em; // Default gap
+}
+
+.wp-block-button.icon-pos-right .wp-block-button__link {
+  flex-direction: row-reverse;
+}
+
+.wp-block-button.icon-pos-left .wp-block-button__link {
+  flex-direction: row; // Default, but explicit
+}

@@ -85,6 +85,7 @@ class StarterSite extends Site
 
         add_theme_support('menus');
         add_theme_support('editor-styles');
+        add_editor_style('style.css');
         add_theme_support('block-templates'); // Keep this if you use block templates/FSE features
         add_theme_support('align-wide'); // Support wide and full alignments
     }
@@ -94,12 +95,12 @@ class StarterSite extends Site
      */
     public function enqueue_custom_editor_scripts()
     {
-        $script_asset_path = get_template_directory() . '/assets/src/build/js/custom-formats.asset.php';
+        $script_asset_path = get_template_directory() . '/assets/src/build/js/main.asset.php';
         if (file_exists($script_asset_path)) {
             $script_asset = require($script_asset_path);
             wp_enqueue_script(
-                'vincentragosta-custom-formats', // Unique handle for your script
-                get_template_directory_uri() . '/assets/src/build/js/custom-formats.js',
+                'vincentragosta-js', // Unique handle for your script
+                get_template_directory_uri() . '/assets/src/build/js/main.js',
                 $script_asset['dependencies'],
                 $script_asset['version'],
                 true // Load in footer
@@ -107,29 +108,13 @@ class StarterSite extends Site
 
             // Enable translations for your script
             wp_set_script_translations(
-                'vincentragosta-custom-formats', // Script handle
+                'vincentragosta-js', // Script handle
                 'vincentragosta', // Text domain
                 get_template_directory() . '/languages' // Path to your .po/.mo files if you have them
             );
         } else {
             // Log an error if the asset file is missing, helpful for debugging
             error_log('Custom formats asset file not found: ' . $script_asset_path);
-        }
-
-        // Enqueue custom paragraph styles script
-        $script_asset_path_paragraph = get_template_directory() . '/assets/src/build/js/custom-paragraph-styles.asset.php';
-        if (file_exists($script_asset_path_paragraph)) {
-            $script_asset_paragraph = require($script_asset_path_paragraph);
-            wp_enqueue_script(
-                'vincentragosta-custom-paragraph-styles', // Unique handle
-                get_template_directory_uri() . '/assets/src/build/js/custom-paragraph-styles.js',
-                $script_asset_paragraph['dependencies'],
-                $script_asset_paragraph['version'],
-                true
-            );
-            wp_set_script_translations('vincentragosta-custom-paragraph-styles', 'vincentragosta', get_template_directory() . '/languages');
-        } else {
-            error_log('Custom paragraph styles asset file not found: ' . $script_asset_path_paragraph);
         }
     }
 }

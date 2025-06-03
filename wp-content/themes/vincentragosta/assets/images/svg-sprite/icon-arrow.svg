@@ -1,0 +1,4 @@
+<svg class="icon icon-arrow-up-right" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+    <rect width="24" height="24" fill="currentColor" rx="12"></rect>
+    <path class="arrow" stroke="white" stroke-linecap="square" stroke-miterlimit="10" stroke-width="1.5" d="M9.273 8.727h6.55v6.55m-.454-6.095-6.642 6.642"></path>
+</svg>

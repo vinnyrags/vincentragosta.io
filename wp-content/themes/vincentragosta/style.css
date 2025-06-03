@@ -60,3 +60,31 @@ h6 strong, h6 b {
   /* font-style will be inherited. If the <strong> is also italic,
      and you have Roobert Medium Italic defined, it will be used. */
 }
+
+.wp-block-button__link .wp-block-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+.wp-block-button__link .wp-block-button__icon svg {
+  fill: currentColor;
+  width: 1.2em;
+  height: 1.2em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.wp-block-button.has-icon .wp-block-button__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.wp-block-button.icon-pos-right .wp-block-button__link {
+  flex-direction: row-reverse;
+}
+
+.wp-block-button.icon-pos-left .wp-block-button__link {
+  flex-direction: row;
+}
