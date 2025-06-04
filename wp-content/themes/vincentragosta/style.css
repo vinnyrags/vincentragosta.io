@@ -82,9 +82,9 @@ h6 strong, h6 b {
 }
 
 .wp-block-button.icon-pos-right .wp-block-button__link {
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 .wp-block-button.icon-pos-left .wp-block-button__link {
-  flex-direction: row;
+  flex-direction: row-reverse;
 }
