@@ -4,52 +4,50 @@
  *
  * This file is referenced in block.json in the 'render' key.
  *
- * @param array $attributes Block attributes.
- * @param string $content The block content (serialized HTML of inner blocks).
- * @param WP_Block $block The block instance.
+ * @param array    $attributes Block attributes.
+ * @param string   $content    The block content (serialized HTML of inner blocks).
+ * @param WP_Block $block      The block instance.
  * @return string HTML markup for the hero block.
  */
 
-// --- IDE Hints (for static analysis only) ---
-// These @var tags tell PHPStorm (and other tools) that these variables
-// exist in this file's scope and what their types are, even though
-// they are not defined using the '=' operator within this file.
 /** @var array $attributes */
-/** @var string $content */ // This $content contains the rendered InnerBlocks HTML
+/** @var string $content */
 /** @var WP_Block $block */
 
-
-$title = $attributes['title'] ?? '';
-$subtitle = $attributes['subtitle'] ?? '';
+$title     = $attributes['title'] ?? '';
 $svg_asset = $attributes['svgAsset'] ?? '';
 
-// get_block_wrapper_attributes automatically includes alignment and InnerBlocks classes
-$wrapper_attributes = get_block_wrapper_attributes();
-// Manually add the 'hero' class to the wrapper attributes.
-// get_block_wrapper_attributes() returns a string like 'class="wp-block-vincentragosta-hero alignfull"'
-// We find the class attribute and insert our custom class.
-$wrapper_attributes = str_replace(
-    'class="',
-    'class="hero ',
-    $wrapper_attributes
-);
+// Prepare wrapper attributes, including alignment
+$wrapper_attributes_array = [];
+// The 'hero' class will be added to the main div.
+// Alignment classes like 'alignwide' or 'alignfull' are handled by get_block_wrapper_attributes().
+// We'll ensure 'hero' is also part of the class list.
+$wrapper_attributes = get_block_wrapper_attributes(['class' => 'hero']);
+
 
 ?>
 <div <?= $wrapper_attributes; ?>>
     <div class="hero__svg">
-        <?php if (!empty($svg_asset)): ?>
-            <?= get_theme_svg($svg_asset); ?>
+        <?php if (!empty($svg_asset)) : ?>
+            <?php
+            // Call the global function directly
+            if (function_exists('get_theme_svg')) {
+                // Assuming hero SVGs are not in 'svg-sprite', so $is_sprite is false.
+                echo get_theme_svg($svg_asset, false);
+            } else {
+                error_log('Error in hero/render.php: Global function get_theme_svg() not found.');
+            }
+            ?>
         <?php endif; ?>
     </div>
     <div class="hero__content">
-        <!-- TODO: add "taxonomy" segment -->
         <?php if (!empty($title)) : ?>
             <div class="hero__mask">
                 <h1 class="hero__title"><?= $title; ?></h1>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($content)): ?>
+        <?php if (!empty($content)) : // $content here is the InnerBlocks_HTML ?>
             <div class="hero__links">
                 <?= $content; ?>
             </div>

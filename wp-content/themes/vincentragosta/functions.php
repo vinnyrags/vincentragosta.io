@@ -7,12 +7,10 @@
 // Load Composer dependencies.
 require_once __DIR__ . '/vendor/autoload.php';
 
+// Ensure the StarterSite class is loaded.
 require_once __DIR__ . '/src/StarterSite.php';
 
 Timber\Timber::init();
-
-// Sets the directories (inside your theme) to find .twig files.
-Timber::$dirname = ['templates', 'views', 'blocks'];
 
 new StarterSite();
 
@@ -34,159 +32,35 @@ function get_theme_svg($filename, $is_sprite = false)
     $subdirectory = $is_sprite ? 'assets/images/svg-sprite/' : 'assets/images/';
     $svg_path = get_template_directory() . '/' . $subdirectory . $filename;
 
-    if (pathinfo($svg_path, PATHINFO_EXTENSION) === 'svg' && file_exists($svg_path) && is_readable($svg_path)) {
+    if (pathinfo($svg_path, PATHINFO_EXTENSION) !== 'svg') {
+        // error_log('get_theme_svg (functions.php): Invalid file extension for: ' . $svg_path);
+        return '';
+    }
+
+    if (file_exists($svg_path) && is_readable($svg_path)) {
         $svg_content = file_get_contents($svg_path);
         if ($svg_content === false || !is_string($svg_content)) {
-            error_log('get_theme_svg: Failed to read file content or content is not string for: ' . $svg_path);
+            error_log('get_theme_svg (functions.php): Failed to read file content or content is not string for: ' . $svg_path);
             return '';
         }
+        // Basic sanitization
         $sanitized_content = trim($svg_content);
         $sanitized_content = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $sanitized_content);
         $sanitized_content = preg_replace('/\s(on\w+)=("|\').*?\2/is', '', $sanitized_content);
         $sanitized_content = preg_replace('/^\s*<\?xml.*?\?>\s*/s', '', $sanitized_content);
-        $sanitized_content = preg_replace('/^<!DOCTYPE.+?>/is', '', $sanitized_content);
+        $sanitized_content = preg_replace('/^<!DOCTYPE[^>]*?>/is', '', $sanitized_content);
 
         if (stripos($sanitized_content, '<svg') === false) {
-            error_log("get_theme_svg: Sanitization removed the main <svg> tag for: " . $filename . " from path " . $svg_path);
+            error_log("get_theme_svg (functions.php): Sanitization removed the main <svg> tag for: " . $filename . " from path " . $svg_path);
             return '';
         }
         return $sanitized_content ?: '';
-    }
-    return '';
-}
-
-add_filter('timber/twig', function ($twig) {
-    $twig->addFunction(new Twig\TwigFunction('get_theme_svg', 'get_theme_svg'));
-    return $twig;
-});
-
-function vincentragosta_register_native_blocks()
-{
-    $blocks = ['hero'];
-    foreach ($blocks as $block_name) {
-        $block_directory = get_template_directory() . '/blocks/' . $block_name;
-        if (file_exists($block_directory . '/block.json')) {
-            register_block_type($block_directory);
-        } else {
-            error_log("Block configuration file not found for block: " . $block_name . " at " . $block_directory . "/block.json");
-        }
-    }
-}
-add_action('init', 'vincentragosta_register_native_blocks');
-
-function vincentragosta_localize_block_editor_data() {
-
-    // Hero Block Specific Localization
-    $hero_block_asset_path = get_template_directory() . '/blocks/hero/build/index.asset.php';
-    if ( file_exists( $hero_block_asset_path ) ) {
-        $hero_script_handle = 'vincentragosta-hero-editor-script';
-        if (wp_script_is($hero_script_handle, 'registered') || wp_script_is($hero_script_handle, 'enqueued')) {
-            $svg_dir_hero = get_template_directory() . '/assets/images/';
-            $svg_options_hero = [['label' => __('Select SVG for Hero', 'vincentragosta'), 'value' => '']];
-            $svg_content_map_hero = [];
-            if (is_dir($svg_dir_hero)) {
-                $svg_files_hero = glob($svg_dir_hero . '*.svg');
-                if ($svg_files_hero) {
-                    foreach ($svg_files_hero as $file_path) {
-                        $filename = basename($file_path);
-                        $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
-                        $svg_options_hero[] = ['label' => $label, 'value' => $filename];
-                        $svg_content_map_hero[$filename] = get_theme_svg($filename);
-                    }
-                }
-            }
-            $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
-            wp_localize_script($hero_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
-        } else {
-            error_log('Hero block script (' . $hero_script_handle . ') not registered/enqueued for localization.');
-        }
     } else {
-        error_log('Hero block asset file for localization not found: ' . $hero_block_asset_path);
-    }
-
-    // Button Icon Enhancement Data Localization
-    $main_editor_script_handle = 'vincentragosta-js'; // As enqueued by StarterSite.php
-    if (wp_script_is($main_editor_script_handle, 'registered') || wp_script_is($main_editor_script_handle, 'enqueued')) {
-        $sprite_svg_dir = get_template_directory() . '/assets/images/svg-sprite/';
-        // Ensure "No Icon" is the first option
-        $button_icon_options = [['label' => __('— No Icon —', 'vincentragosta'), 'value' => '']];
-        $button_icon_content_map = [];
-
-        if (is_dir($sprite_svg_dir)) {
-            $sprite_svg_files = glob($sprite_svg_dir . '*.svg');
-            if ($sprite_svg_files) {
-                foreach ($sprite_svg_files as $file_path) {
-                    $filename = basename($file_path);
-                    $label = ucwords(str_replace(['icon-','-', '_', '.svg'], ['',' ', ' ', ''], pathinfo($filename, PATHINFO_FILENAME)));
-                    $button_icon_options[] = ['label' => $label, 'value' => $filename];
-                    $button_icon_content_map[$filename] = get_theme_svg($filename, true); // Use true for sprite
-                }
-            } else {
-                error_log('No SVG files found in svg-sprite directory: ' . $sprite_svg_dir);
-            }
-        } else {
-            error_log('SVG sprite directory not found: ' . $sprite_svg_dir);
-        }
-        $button_icon_localized_data = [
-            'iconOptions'   => $button_icon_options,
-            'iconContentMap'=> $button_icon_content_map,
-        ];
-        wp_localize_script($main_editor_script_handle, 'vincentragostaButtonIconData', $button_icon_localized_data);
-    } else {
-        error_log('Main editor script ('.$main_editor_script_handle.') not registered/enqueued. Localization for button icons skipped.');
+        // error_log('get_theme_svg (functions.php): SVG file not found or not readable: ' . $svg_path);
+        return '';
     }
 }
-add_action( 'enqueue_block_editor_assets', 'vincentragosta_localize_block_editor_data', 99 );
 
-function vincentragosta_render_button_with_icon_frontend($block_content, $block) {
-    if (
-        isset($block['blockName']) && $block['blockName'] === 'core/button' &&
-        !empty($block['attrs']['selectedIcon']) // Only check selectedIcon; hasIcon is removed
-    ) {
-        $icon_filename = $block['attrs']['selectedIcon'];
-        $svg_content = get_theme_svg($icon_filename, true); // Use true for svg-sprite directory
-
-        if (empty($svg_content)) {
-            return $block_content;
-        }
-
-        $icon_position = isset($block['attrs']['iconPosition']) ? $block['attrs']['iconPosition'] : 'left';
-
-        $class_to_add = ' has-icon icon-pos-' . esc_attr($icon_position);
-        if (strpos($block_content, 'class="') !== false) {
-            $block_content = preg_replace(
-                '/(<div\s+[^>]*class=")([^"]*wp-block-button[^"]*)/i',
-                '$1$2' . $class_to_add . '"',
-                $block_content,
-                1
-            );
-        } else {
-            $block_content = preg_replace(
-                '/(<div\s+[^>]*wp-block-button)/i',
-                '$1 class="' . trim($class_to_add) . '"',
-                $block_content,
-                1
-            );
-        }
-
-        $pattern = '/(<(a|button)\s+[^>]*class="[^"]*wp-block-button__link[^"]*"[^>]*>)(.*?)(<\/\2>)/is';
-        $block_content = preg_replace_callback(
-            $pattern,
-            function ($matches) use ($svg_content, $icon_position) {
-                $opening_tag = $matches[1];
-                $link_text   = $matches[3];
-                $closing_tag = $matches[4];
-                $icon_html = '<span class="wp-block-button__icon" aria-hidden="true">' . $svg_content . '</span>';
-                if ($icon_position === 'right') {
-                    return $opening_tag . $link_text . $icon_html . $closing_tag;
-                } else {
-                    return $opening_tag . $icon_html . $link_text . $closing_tag;
-                }
-            },
-            $block_content,
-            1
-        );
-    }
-    return $block_content;
-}
-add_filter('render_block_core/button', 'vincentragosta_render_button_with_icon_frontend', 10, 2);
+// The Twig filter to make get_theme_svg available in Twig templates is now
+// managed within the StarterSite class via the add_global_svg_function_to_twig method.
+// This keeps hook management centralized in the class.
