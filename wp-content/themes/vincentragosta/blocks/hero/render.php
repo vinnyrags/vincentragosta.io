@@ -43,7 +43,7 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => 'hero']);
     <div class="hero__content">
         <?php if (!empty($title)) : ?>
             <div class="hero__mask">
-                <h1 class="hero__title"><?= $title; ?></h1>
+                <h1 class="hero__title text--medium"><?= $title; ?></h1>
             </div>
         <?php endif; ?>
 

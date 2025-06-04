@@ -11,10 +11,22 @@
 .text--underline {
   text-decoration: underline;
 }
+.text--thin {
+  font-weight: 200;
+}
+.text--light {
+  font-weight: 300;
+}
+.text--regular {
+  font-weight: 400;
+}
+.text--medium {
+  font-weight: 500;
+}
 
-body {
-  font-size: var(--wp--preset--font-size--body-default);
-  font-family: var(--wp--preset--font-family--roobert);
+body ::selection {
+  background-color: var(--wp--preset--color--accent-1);
+  color: var(--wp--preset--color--contrast);
 }
 
 @keyframes slide-up-reveal {

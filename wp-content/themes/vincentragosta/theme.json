@@ -187,6 +187,28 @@
           "fontFace": [
             {
               "fontFamily": "Reckless Neue",
+              "fontWeight": "200",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": [
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff2",
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff",
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin.eot"
+              ]
+            },
+            {
+              "fontFamily": "Reckless Neue",
+              "fontWeight": "200",
+              "fontStyle": "italic",
+              "fontStretch": "normal",
+              "src": [
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff2",
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff",
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.eot"
+              ]
+            },
+            {
+              "fontFamily": "Reckless Neue",
               "fontWeight": "300",
               "fontStyle": "normal",
               "fontStretch": "normal",
@@ -254,12 +276,28 @@
     "typography": {
       "fontFamily": "var:preset|font-family|roobert",
       "fontSize": "var:preset|font-size|body-default",
-      "fontWeight": "300"
+      "fontWeight": "300",
+      "letterSpacing": "-0.3px"
     },
     "blocks": {
       "core/avatar": {
         "border": {
           "radius": "100px"
+        }
+      },
+      "core/button": {
+        "typography": {
+          "fontSize": "var:preset|font-size|body-small",
+          "fontWeight": "400",
+          "textTransform": "uppercase"
+        },
+        "spacing": {
+          "padding": {
+            "right": "var:preset|spacing|x-small",
+            "bottom": "var:preset|spacing|tiny",
+            "left": "var:preset|spacing|x-small",
+            "top": "var:preset|spacing|tiny"
+          }
         }
       },
       "core/columns": {
@@ -648,7 +686,7 @@
         },
         "typography": {
           "fontSize": "var:preset|font-size|body-small",
-          "fontWeight": "400",
+          "fontWeight": "500",
           "textTransform": "uppercase"
         },
         "spacing": {
@@ -669,9 +707,8 @@
       "heading": {
         "typography": {
           "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontWeight": "300",
-          "lineHeight": "1.125",
-          "letterSpacing": "-0.1px"
+          "fontWeight": "200",
+          "lineHeight": "1.125"
         },
         "color": {
           "text": "var:preset|color|base"
