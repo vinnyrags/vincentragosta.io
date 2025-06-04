@@ -45,22 +45,36 @@ h5,
 h6 {
   margin-top: 0;
 }
-
-/*
- * Apply Roobert font to <strong> and <b> tags within any heading.
- */
+h1 .text--underline,
+h2 .text--underline,
+h3 .text--underline,
+h4 .text--underline,
+h5 .text--underline,
+h6 .text--underline {
+  text-underline-offset: 10px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--wp--preset--color--accent-1);
+}
 h1 strong, h1 b,
-h2 strong, h2 b,
-h3 strong, h3 b,
-h4 strong, h4 b,
-h5 strong, h5 b,
-h6 strong, h6 b {
+h2 strong,
+h2 b,
+h3 strong,
+h3 b,
+h4 strong,
+h4 b,
+h5 strong,
+h5 b,
+h6 strong,
+h6 b {
   font-family: var(--wp--preset--font-family--roobert); /* Uses the slug 'roobert' from your theme.json */
   font-weight: 500; /* Explicitly set to Roobert's 'medium' weight (500) */
   /* font-style will be inherited. If the <strong> is also italic,
      and you have Roobert Medium Italic defined, it will be used. */
 }
 
+/*
+ * Apply Roobert font to <strong> and <b> tags within any heading.
+ */
 .wp-block-button__link .wp-block-button__icon {
   display: inline-flex;
   align-items: center;
@@ -87,4 +101,14 @@ h6 strong, h6 b {
 
 .wp-block-button.icon-pos-left .wp-block-button__link {
   flex-direction: row-reverse;
+}
+
+.wp-block-button .wp-block-button__link {
+  transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+}
+.wp-block-button .wp-block-button__link .wp-block-button__icon svg {
+  transition: transform 0.25s ease-in-out;
+}
+.wp-block-button .wp-block-button__link:hover .wp-block-button__icon svg {
+  transform: rotate(45deg);
 }
