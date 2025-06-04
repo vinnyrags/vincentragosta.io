@@ -138,31 +138,6 @@ function vincentragosta_localize_block_editor_data() {
 }
 add_action( 'enqueue_block_editor_assets', 'vincentragosta_localize_block_editor_data', 99 );
 
-function vincentragosta_sanitize_any_svg_string($svg_string) {
-    if (empty(trim($svg_string))) {
-        return '';
-    }
-    $allowed_svg_tags = array(
-        'svg' => array('width' => true, 'height' => true, 'viewbox' => true, 'xmlns' => true, 'fill' => true, 'class' => true, 'style' => true, 'aria-hidden' => true, 'role' => true, 'focusable' => true, 'preserveaspectratio' => true),
-        'path' => array('d' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true, 'class' => true, 'style' => true, 'transform' => true, 'fill-rule' => true, 'clip-rule' => true),
-        'circle' => array('cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'rect' => array('x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'ellipse' => array('cx' => true, 'cy' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'line' => array('x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'polygon' => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'polyline' => array('points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true),
-        'g' => array('fill' => true, 'stroke' => true, 'stroke-width' => true, 'class' => true, 'style' => true, 'transform' => true, 'id' => true),
-        'defs' => array(), 'symbol' => array('id' => true, 'viewbox' => true, 'preserveaspectratio' => true, 'overflow' => true),
-        'use' => array('xlink:href' => true, 'href' => true, 'class' => true, 'transform' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true),
-        'style' => array('type' => true), 'title' => array(), 'desc' => array(),
-    );
-    $sanitized_svg = wp_kses($svg_string, $allowed_svg_tags);
-    if (empty(trim($sanitized_svg)) || stripos($sanitized_svg, '<svg') === false) {
-        return '';
-    }
-    return $sanitized_svg;
-}
-
 function vincentragosta_render_button_with_icon_frontend($block_content, $block) {
     if (
         isset($block['blockName']) && $block['blockName'] === 'core/button' &&
