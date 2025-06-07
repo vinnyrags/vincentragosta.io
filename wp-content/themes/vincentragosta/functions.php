@@ -60,7 +60,3 @@ function get_theme_svg($filename, $is_sprite = false)
         return '';
     }
 }
-
-// The Twig filter to make get_theme_svg available in Twig templates is now
-// managed within the StarterSite class via the add_global_svg_function_to_twig method.
-// This keeps hook management centralized in the class.

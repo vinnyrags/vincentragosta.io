@@ -142,36 +142,36 @@
             "max": "2.4rem",
             "min": "2rem"
           },
-          "name": "Medium",
+          "name": "Default",
           "size": "2rem",
-          "slug": "heading-medium"
+          "slug": "heading-default"
         },
         {
           "fluid": {
             "max": "4.5rem",
             "min": "3.125rem"
           },
-          "name": "Large",
+          "name": "Medium",
           "size": "3.125rem",
+          "slug": "heading-medium"
+        },
+        {
+          "fluid": {
+            "max": "5.5rem",
+            "min": "4rem"
+          },
+          "name": "Large",
+          "size": "4rem",
           "slug": "heading-large"
         },
         {
           "fluid": {
-            "max": "2rem",
-            "min": "1.75rem"
+            "max": "6.5rem",
+            "min": "5rem"
           },
           "name": "Extra Large",
-          "size": "1.75rem",
+          "size": "5rem",
           "slug": "heading-x-large"
-        },
-        {
-          "fluid": {
-            "max": "3rem",
-            "min": "2.15rem"
-          },
-          "name": "Extra Extra Large",
-          "size": "2.15rem",
-          "slug": "heading-xx-large"
         }
       ],
       "fontFamilies": [
@@ -239,27 +239,54 @@
               "fontWeight": "300",
               "fontStyle": "normal",
               "fontStretch": "normal",
-              "src": ["file:./assets/fonts/roobert/roobert-light.otf"]
+              "src": [
+                "file:./assets/fonts/roobert/roobert-light.otf"
+              ]
             },
             {
               "fontFamily": "Roobert",
               "fontWeight": "500",
               "fontStyle": "normal",
               "fontStretch": "normal",
-              "src": ["file:./assets/fonts/roobert/roobert-medium.otf"]
+              "src": [
+                "file:./assets/fonts/roobert/roobert-medium.otf"
+              ]
             },
             {
               "fontFamily": "Roobert",
               "fontWeight": "500",
               "fontStyle": "italic",
               "fontStretch": "normal",
-              "src": ["file:./assets/fonts/roobert/roobert-medium-italic.otf"]
+              "src": [
+                "file:./assets/fonts/roobert/roobert-medium-italic.otf"
+              ]
             }
           ]
         }
       ]
     },
-    "useRootPaddingAwareAlignments": true
+    "useRootPaddingAwareAlignments": true,
+    "blocks": {
+      "core/heading": {
+        "styles": [
+          {
+            "name": "Medium",
+            "label": "Medium",
+            "className": "is-style-heading--medium"
+          },
+          {
+            "name": "Large",
+            "label": "Large",
+            "className": "is-style-heading--large"
+          },
+          {
+            "name": "X-Large",
+            "label": "X-Large",
+            "className": "is-style-heading--xlarge"
+          }
+        ]
+      }
+    }
   },
   "styles": {
     "color": {
@@ -446,12 +473,12 @@
         }
       },
       "core/post-date": {
-        "color":{
+        "color": {
           "text": "var:preset|color|accent-4"
         },
         "elements": {
           "link": {
-            "color" : {
+            "color": {
               "text": "var:preset|color|accent-4"
             },
             ":hover": {
@@ -514,7 +541,7 @@
           }
         },
         "typography": {
-          "fontSize": "var:preset|font-size|heading-large",
+          "fontSize": "var:preset|font-size|heading-medium",
           "fontWeight": "300"
         },
         "elements": {
@@ -549,7 +576,7 @@
       },
       "core/pullquote": {
         "typography": {
-          "fontSize": "var:preset|font-size|heading-large",
+          "fontSize": "var:preset|font-size|heading-medium",
           "fontWeight": "300",
           "lineHeight": "1.2"
         },
@@ -591,7 +618,7 @@
                 "left": "1.125rem"
               }
             },
-            ":hover" : {
+            ":hover": {
               "border": {
                 "color": "transparent"
               }
@@ -708,50 +735,11 @@
         "typography": {
           "fontFamily": "var:preset|font-family|reckless-neue",
           "fontWeight": "200",
-          "lineHeight": "1.125"
+          "lineHeight": "1.125",
+          "fontSize": "var:preset|font-size|heading-default"
         },
         "color": {
           "text": "var:preset|color|base"
-        }
-      },
-      "h1": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|xx-large"
-        }
-      },
-      "h2": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|x-large"
-        }
-      },
-      "h3": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|large"
-        }
-      },
-      "h4": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|medium"
-        }
-      },
-      "h5": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|small",
-          "letterSpacing": "0.5px"
-        }
-      },
-      "h6": {
-        "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontSize": "var:preset|font-size|small",
-          "fontWeight": "300",
-          "letterSpacing": "1.4px",
-          "textTransform": "uppercase"
         }
       },
       "link": {
