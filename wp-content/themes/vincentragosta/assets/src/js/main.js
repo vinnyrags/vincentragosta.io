@@ -1,2 +1,2 @@
-import './custom-formats';
-import './button-icon-enhancement';
+import './formats';
+import './button';

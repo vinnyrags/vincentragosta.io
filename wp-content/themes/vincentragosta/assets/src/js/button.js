@@ -1,5 +1,3 @@
-// In assets/src/js/button-icon-enhancement.js (or relevant part of main.js)
-
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { createHigherOrderComponent } from '@wordpress/compose';
