@@ -20,6 +20,10 @@
     "align": {
       "type": "string",
       "default": ""
+    },
+    "videoUrl": {
+      "type": "string",
+      "default": ""
     }
   },
   "supports": {

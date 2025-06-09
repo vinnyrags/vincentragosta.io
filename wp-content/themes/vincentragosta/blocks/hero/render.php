@@ -4,9 +4,9 @@
  *
  * This file is referenced in block.json in the 'render' key.
  *
- * @param array    $attributes Block attributes.
- * @param string   $content    The block content (serialized HTML of inner blocks).
- * @param WP_Block $block      The block instance.
+ * @param array $attributes Block attributes.
+ * @param string $content The block content (serialized HTML of inner blocks).
+ * @param WP_Block $block The block instance.
  * @return string HTML markup for the hero block.
  */
 
@@ -14,25 +14,26 @@
 /** @var string $content */
 /** @var WP_Block $block */
 
-$title     = $attributes['title'] ?? '';
+$title = $attributes['title'] ?? '';
 $svg_asset = $attributes['svgAsset'] ?? '';
+$video_url = $attributes['videoUrl'] ?? '';
 
-// Prepare wrapper attributes, including alignment
-$wrapper_attributes_array = [];
-// The 'hero' class will be added to the main div.
-// Alignment classes like 'alignwide' or 'alignfull' are handled by get_block_wrapper_attributes().
-// We'll ensure 'hero' is also part of the class list.
-$wrapper_attributes = get_block_wrapper_attributes(['class' => 'hero']);
-
+// Add a class to the block if a video URL is provided.
+$block_classes = ['hero'];
+if (!empty($video_url)) {
+    $block_classes[] = 'hero--has-video';
+}
+$wrapper_attributes = get_block_wrapper_attributes(['class' => implode(' ', $block_classes)]);
 
 ?>
 <div <?= $wrapper_attributes; ?>>
+    <?php if (!empty($video_url)) : ?>
+        <video class="hero__video" src="<?= esc_url($video_url); ?>" autoplay muted loop playsinline></video>
+    <?php endif; ?>
     <div class="hero__svg">
         <?php if (!empty($svg_asset)) : ?>
             <?php
-            // Call the global function directly
             if (function_exists('get_theme_svg')) {
-                // Assuming hero SVGs are not in 'svg-sprite', so $is_sprite is false.
                 echo get_theme_svg($svg_asset, false);
             } else {
                 error_log('Error in hero/render.php: Global function get_theme_svg() not found.');
@@ -43,11 +44,11 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => 'hero']);
     <div class="hero__content">
         <?php if (!empty($title)) : ?>
             <div class="hero__mask">
-                <h1 class="hero__title"><?= $title; ?></h1>
+                <h1 class="hero__title"><?= wp_kses_post($title); ?></h1>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($content)) : // $content here is the InnerBlocks_HTML ?>
+        <?php if (!empty($content)) : ?>
             <div class="hero__links">
                 <?= $content; ?>
             </div>
