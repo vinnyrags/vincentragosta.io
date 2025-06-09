@@ -125,7 +125,7 @@
             "min": "1rem"
           },
           "name": "Body Default",
-          "size": "1rem",
+          "size": "1.5rem",
           "slug": "body-default"
         },
         {
@@ -134,24 +134,15 @@
             "min": "2rem"
           },
           "name": "Body Large",
-          "size": "2rem",
+          "size": "2.4rem",
           "slug": "body-large"
-        },
-        {
-          "fluid": {
-            "max": "2.4rem",
-            "min": "2rem"
-          },
-          "name": "Default",
-          "size": "2rem",
-          "slug": "heading-default"
         },
         {
           "fluid": {
             "max": "4.5rem",
             "min": "3.125rem"
           },
-          "name": "Medium",
+          "name": "Heading Medium",
           "size": "3.125rem",
           "slug": "heading-medium"
         },
@@ -160,7 +151,7 @@
             "max": "5.5rem",
             "min": "4rem"
           },
-          "name": "Large",
+          "name": "Heading Large",
           "size": "4rem",
           "slug": "heading-large"
         },
@@ -169,7 +160,7 @@
             "max": "6.5rem",
             "min": "5rem"
           },
-          "name": "Extra Large",
+          "name": "Heading Extra Large",
           "size": "5rem",
           "slug": "heading-x-large"
         }
@@ -736,7 +727,7 @@
           "fontFamily": "var:preset|font-family|reckless-neue",
           "fontWeight": "200",
           "lineHeight": "1.125",
-          "fontSize": "var:preset|font-size|heading-default"
+          "fontSize": "var:preset|font-size|body-large"
         },
         "color": {
           "text": "var:preset|color|base"
