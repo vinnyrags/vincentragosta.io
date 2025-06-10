@@ -21,9 +21,8 @@ import './editor.scss';
 const ALLOWED_BLOCKS = [ 'core/buttons' ];
 
 export default function Edit({ attributes, setAttributes, clientId }) {
-    const { title, subtitle, svgAsset, align, videoUrl } = attributes;
+    const { title, svgAsset, align, videoUrl } = attributes;
 
-    // Add the 'hero--has-video' class conditionally
     const blockProps = useBlockProps({
         className: videoUrl ? 'hero--has-video' : '',
     });
@@ -56,11 +55,9 @@ export default function Edit({ attributes, setAttributes, clientId }) {
         }
     }, []);
 
-
     const svgOptions = blockData.svgOptions;
     const svgContentMap = blockData.svgContent;
     const onChangeTitle = (newTitle) => setAttributes({ title: newTitle });
-    const onChangeSubtitle = (newSubtitle) => setAttributes({ subtitle: newSubtitle });
     const onChangeSvgAsset = (newSvg) => setAttributes({ svgAsset: newSvg });
     const onChangeAlign = ( newAlign ) => setAttributes( { align: newAlign === undefined ? null : newAlign } );
     const onChangeVideoUrl = (newVideoUrl) => setAttributes({ videoUrl: newVideoUrl });
@@ -76,31 +73,34 @@ export default function Edit({ attributes, setAttributes, clientId }) {
             </BlockControls>
 
             <InspectorControls>
-                <PanelBody title={__('SVG Asset', 'vincentragosta')} initialOpen={true}>
-                    <SelectControl
-                        label={__('Select SVG', 'vincentragosta')}
-                        value={svgAsset}
-                        options={svgOptions}
-                        onChange={onChangeSvgAsset}
-                    />
-                    {svgAsset && (
-                        <p>
-                            <strong>{__('Selected:', 'vincentragosta')}</strong> {svgAsset}
-                        </p>
-                    )}
-                </PanelBody>
                 <PanelBody title={__('Video Background', 'vincentragosta')} initialOpen={true}>
                     <TextControl
                         label={__('Video URL', 'vincentragosta')}
                         value={videoUrl}
                         onChange={onChangeVideoUrl}
-                        help={__('Enter URL for background video. The video will autoplay, be muted, and loop.', 'vincentragosta')}
+                        help={__('Enter a video URL to use it as a background. This will hide the SVG option.', 'vincentragosta')}
                     />
                 </PanelBody>
+
+                { ! videoUrl && (
+                    <PanelBody title={__('SVG Asset', 'vincentragosta')} initialOpen={true}>
+                        <SelectControl
+                            label={__('Select SVG', 'vincentragosta')}
+                            value={svgAsset}
+                            options={svgOptions}
+                            onChange={onChangeSvgAsset}
+                        />
+                        {svgAsset && (
+                            <p>
+                                <strong>{__('Selected:', 'vincentragosta')}</strong> {svgAsset}
+                            </p>
+                        )}
+                    </PanelBody>
+                )}
             </InspectorControls>
 
             <div {...blockProps}>
-                { videoUrl && (
+                { videoUrl ? (
                     <video
                         className="hero__video"
                         src={videoUrl}
@@ -109,6 +109,16 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         loop
                         playsInline
                     />
+                ) : (
+                    // This is the updated section:
+                    // The SVG content is now rendered directly inside the .hero__svg container,
+                    // removing the extra .hero-editor__svg-preview wrapper.
+                    currentSvgContent && (
+                        <div
+                            className="hero__svg"
+                            dangerouslySetInnerHTML={{ __html: currentSvgContent }}
+                        />
+                    )
                 )}
                 <div className="hero__content">
                     <RichText
@@ -125,20 +135,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                             allowedBlocks={ALLOWED_BLOCKS}
                         />
                     </div>
-                </div>
-                <div className="hero__svg">
-                    {currentSvgContent ? (
-                        <div
-                            className="hero-editor__svg-preview is-loaded"
-                            dangerouslySetInnerHTML={{ __html: currentSvgContent }}
-                        />
-                    ) : (
-                        <div className="hero-editor__svg-placeholder">
-                            {svgAsset
-                                ? __('SVG preview unavailable or not found.', 'vincentragosta')
-                                : __('[No SVG Selected]', 'vincentragosta')}
-                        </div>
-                    )}
                 </div>
             </div>
         </>
