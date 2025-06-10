@@ -175,7 +175,7 @@ class StarterSite extends Site
         if ( file_exists( $hero_block_asset_path ) ) {
             $hero_script_handle = 'vincentragosta-hero-editor-script';
             if (wp_script_is($hero_script_handle, 'registered') || wp_script_is($hero_script_handle, 'enqueued')) {
-                $svg_dir_hero = get_template_directory() . '/assets/images/';
+                $svg_dir_hero = get_template_directory() . '/assets/images/svg/';
                 $svg_options_hero = [['label' => __('Select SVG for Hero', 'vincentragosta'), 'value' => '']];
                 $svg_content_map_hero = [];
                 if (is_dir($svg_dir_hero) && function_exists('get_theme_svg')) {
@@ -185,7 +185,7 @@ class StarterSite extends Site
                             $filename = basename($file_path);
                             $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
                             $svg_options_hero[] = ['label' => $label, 'value' => $filename];
-                            $svg_content_map_hero[$filename] = get_theme_svg($filename, false);
+                            $svg_content_map_hero[$filename] = get_theme_svg($filename);
                         }
                     }
                 }

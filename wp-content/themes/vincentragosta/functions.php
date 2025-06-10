@@ -19,7 +19,7 @@ new StarterSite();
  * Includes basic sanitization.
  *
  * @param string $filename  The filename of the SVG (e.g., 'squiggle.svg' or 'icon-arrow.svg').
- * @param bool   $is_sprite Optional. If true, looks in 'assets/images/svg-sprite/'. Defaults to false (looks in 'assets/images/').
+ * @param bool   $is_sprite Optional. If true, looks in 'assets/images/svg-sprite/'. Defaults to false (looks in 'assets/images/svg').
  * @return string SVG content or an empty string if not found or invalid.
  */
 function get_theme_svg($filename, $is_sprite = false)
@@ -29,7 +29,7 @@ function get_theme_svg($filename, $is_sprite = false)
         return '';
     }
 
-    $subdirectory = $is_sprite ? 'assets/images/svg-sprite/' : 'assets/images/';
+    $subdirectory = $is_sprite ? 'assets/images/svg-sprite/' : 'assets/images/svg/';
     $svg_path = get_template_directory() . '/' . $subdirectory . $filename;
 
     if (pathinfo($svg_path, PATHINFO_EXTENSION) !== 'svg') {
