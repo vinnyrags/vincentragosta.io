@@ -1,3 +1,10 @@
+body {
+  ::selection {
+    background-color: var(--wp--preset--color--accent-1);
+    color: var(--wp--preset--color--contrast);
+  }
+}
+
 p {
   margin-top: 0;
 }
