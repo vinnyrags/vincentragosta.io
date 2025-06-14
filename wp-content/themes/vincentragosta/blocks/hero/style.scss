@@ -18,7 +18,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  padding: 60px 20px;
+  //padding: 60px 20px;
+  //padding: var(--wp--preset--spacing--large) var(--wp--preset--spacing--x-small);
   min-height: 500px;
   overflow: hidden;
   position: relative;
@@ -44,7 +45,8 @@
   }
 
   @media (min-width: 768px) {
-    padding: 200px 60px 60px;
+    //padding: var(--wp--preset--spacing--x-large) var(--wp--preset--spacing--large) var(--wp--preset--spacing--large);
+    padding-top: var(--wp--preset--spacing--x-large);
   }
 
   .hero {

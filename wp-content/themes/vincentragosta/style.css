@@ -24,11 +24,6 @@
   font-weight: 500;
 }
 
-body ::selection {
-  background-color: var(--wp--preset--color--accent-1);
-  color: var(--wp--preset--color--contrast);
-}
-
 @keyframes slide-up-reveal {
   0% {
     transform: translateY(110%);
@@ -39,10 +34,20 @@ body ::selection {
     opacity: 1;
   }
 }
-.article-body > *:not([class^=wp-block-vincentragosta-]) {
-  margin-bottom: var(--wp--preset--spacing--x-large);
-  padding-left: var(--wp--preset--spacing--large);
-  padding-right: var(--wp--preset--spacing--large);
+/*
+  Apply horizontal content padding ONLY to direct children of the main layout container.
+  This creates the "content gutter" but avoids double-padding inside columns, groups, etc.
+*/
+/* This now works because the Group block has the .is-layout-constrained class */
+.content-wrapper > article > * {
+  padding-left: var(--wp--style--root--padding-left);
+  padding-right: var(--wp--style--root--padding-right);
+  margin-bottom: var(--wp--custom--spacing--margin-bottom);
+}
+
+body ::selection {
+  background-color: var(--wp--preset--color--accent-1);
+  color: var(--wp--preset--color--contrast);
 }
 
 p {
