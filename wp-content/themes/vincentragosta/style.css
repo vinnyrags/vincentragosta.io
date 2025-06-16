@@ -3,6 +3,41 @@
  * Description: Starter Theme to use with Timber
  * Author: Upstatement and YOU!
 */
+/**
+ * Creates a fluid clamp() value that scales between a min and max size
+ * based on the global --fluid-factor.
+ *
+ * @param {Number} $min-value - The minimum value (e.g., 16px).
+ * @param {Number} $max-value - The maximum value (e.g., 60px).
+ * @return {String} A complete clamp() function string.
+ */
+@keyframes slide-up-reveal {
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+/*
+ * Theme Name: Vincent Ragosta Theme
+ * Description: Starter Theme to use with Timber
+ * Author: Upstatement and YOU!
+*/
+:root {
+  --fluid-factor: calc((100vw - 768px) / 672);
+  --fluid-padding-inline: clamp(16px, calc(16px + 44 * var(--fluid-factor)), 60px);
+  --fluid-margin-block: clamp(120px, calc(120px + 80 * var(--fluid-factor)), 200px);
+}
+
+.content-wrapper > article > * {
+  padding-left: var(--fluid-padding-inline);
+  padding-right: var(--fluid-padding-inline);
+  margin-bottom: var(--fluid-margin-block);
+}
+
 /* Custom format for inline-block */
 .d-inline-block {
   display: inline-block;
@@ -22,27 +57,6 @@
 }
 .text--medium {
   font-weight: 500;
-}
-
-@keyframes slide-up-reveal {
-  0% {
-    transform: translateY(110%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-/*
-  Apply horizontal content padding ONLY to direct children of the main layout container.
-  This creates the "content gutter" but avoids double-padding inside columns, groups, etc.
-*/
-/* This now works because the Group block has the .is-layout-constrained class */
-.content-wrapper > article > * {
-  padding-left: var(--wp--style--root--padding-left);
-  padding-right: var(--wp--style--root--padding-right);
-  margin-bottom: var(--wp--custom--spacing--margin-bottom);
 }
 
 body ::selection {

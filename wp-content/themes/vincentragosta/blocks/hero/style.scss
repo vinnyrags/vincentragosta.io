@@ -18,15 +18,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  //padding: 60px 20px;
-  //padding: var(--wp--preset--spacing--large) var(--wp--preset--spacing--x-small);
   min-height: 500px;
   overflow: hidden;
   position: relative;
 
   &.hero--has-video {
-    //min-height: 100vh;
-
     .hero__svg:before {
       content: none;
     }
@@ -45,8 +41,7 @@
   }
 
   @media (min-width: 768px) {
-    //padding: var(--wp--preset--spacing--x-large) var(--wp--preset--spacing--large) var(--wp--preset--spacing--large);
-    padding-top: var(--wp--preset--spacing--x-large);
+    padding-top: 20%;
   }
 
   .hero {
