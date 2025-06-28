@@ -1,0 +1,17 @@
+{% extends "tease.twig" %}
+
+{% block content %}
+    <div class="project-card">
+        {% if post.thumbnail %}
+            <a href="{{ post.link }}">
+                <img src="{{ post.thumbnail.src|resize(400, 300) }}" alt="{{ post.thumbnail.alt }}">
+            </a>
+        {% endif %}
+        <h3 class="project-card__title">
+            <a href="{{ post.link }}">{{ post.title }}</a>
+        </h3>
+        <div class="project-card__excerpt">
+            {{ post.excerpt({ words: 20, read_more: '' }) }}
+        </div>
+    </div>
+{% endblock %}

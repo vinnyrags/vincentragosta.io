@@ -1,0 +1,36 @@
+.wp-block-vincentragosta-projects {
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .project-card {
+    background-color: var(--wp--preset--color--accent-5);
+    color: var(--wp--preset--color--contrast);
+    padding: 1.5rem;
+    border-radius: 4px;
+
+    img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      margin-bottom: 1rem;
+    }
+
+    &__title {
+      font-size: var(--wp--preset--font-size--body-large);
+      margin: 0 0 0.5rem 0;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
