@@ -26,7 +26,10 @@ class StarterSite extends Site
         // Enqueue custom editor scripts (main.js for formats, button icon enhancement, etc.)
         add_action('enqueue_block_editor_assets', array($this, 'enqueue_custom_editor_scripts'));
 
-        // Register custom blocks (like Hero)
+        // Register custom post types from the /config directory
+        add_action('init', array($this, 'register_custom_post_types'));
+
+        // Register custom blocks (like Hero and Projects)
         add_action('init', array($this, 'register_native_blocks'));
 
         // Localize data for the block editor (SVGs for Hero block, button icons for main.js)
@@ -150,11 +153,36 @@ class StarterSite extends Site
     }
 
     /**
+     * Registers custom post types from JSON files in the /config directory.
+     */
+    public function register_custom_post_types()
+    {
+        $config_dir = get_template_directory() . '/config/';
+        if (!is_dir($config_dir)) {
+            return;
+        }
+
+        $json_files = glob($config_dir . '*.json');
+
+        foreach ($json_files as $file) {
+            $content = file_get_contents($file);
+            $data = json_decode($content, true);
+
+            if (json_last_error() === JSON_ERROR_NONE && isset($data['post_type']) && isset($data['args'])) {
+                register_post_type($data['post_type'], $data['args']);
+            } else {
+                error_log("Failed to register post type from file: " . basename($file) . ". Invalid JSON or structure.");
+            }
+        }
+    }
+
+    /**
      * Registers custom Gutenberg blocks defined in the /blocks directory.
      */
     public function register_native_blocks()
     {
-        $blocks = ['hero'];
+        // Add 'projects' to the array of blocks to register.
+        $blocks = ['hero', 'projects'];
         foreach ($blocks as $block_name) {
             $block_directory = get_template_directory() . '/blocks/' . $block_name;
             if (file_exists($block_directory . '/block.json')) {
