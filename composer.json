@@ -1,6 +1,6 @@
 {
-  "name": "vinnyrags/your-wordpress-project",
-  "description": "My WordPress project with ACF Pro",
+  "name": "vinnyrags/vincentragostaio",
+  "description": "Personal website",
   "type": "project",
   "require": {},
   "minimum-stability": "dev",
@@ -8,8 +8,7 @@
   "config": {
     "allow-plugins": {
       "composer/installers/": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "composer/installers": true
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   }
 }
