@@ -23,7 +23,7 @@ if ( getenv( 'IS_DDEV_PROJECT' ) == 'true' ) {
 	defined( 'WP_HOME' ) || define( 'WP_HOME', 'https://vincentragosta.io.ddev.site' );
 
 	/** WP_SITEURL location */
-	defined( 'WP_SITEURL' ) || define( 'WP_SITEURL', WP_HOME . '/' );
+	defined( 'WP_SITEURL' ) || define( 'WP_SITEURL', WP_HOME . '/wp' );
 
 	/** Enable debug */
 	defined( 'WP_DEBUG' ) || define( 'WP_DEBUG', true );
