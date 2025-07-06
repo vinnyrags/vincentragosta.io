@@ -11,6 +11,7 @@ wp
 wp-admin
 wp-includes
 wp-content/index.php
+wp-content/themes/twentytwentyfive
 wp-content/themes/index.php
 license.txt
 readme.html
