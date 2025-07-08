@@ -6,29 +6,71 @@
   }
 
   .project-card {
-    //background-color: var(--wp--preset--color--accent-5);
-    color: var(--wp--preset--color--contrast);
-    padding: 1.5rem;
-    border-radius: 4px;
+    background-color: transparent;
+    color: var(--wp--preset--color--base);
+    text-decoration: none;
+    display: block;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 
-    img {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 4 / 3;
-      object-fit: cover;
-      margin-bottom: 1rem;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &__image-link {
+      display: block;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
+      }
+    }
+
+    &:hover &__image-link img {
+      transform: scale(1.05);
+    }
+
+    &__category {
+      font-size: var(--wp--preset--font-size--body-tiny);
+      text-transform: uppercase;
+      color: var(--wp--preset--color--accent-4);
+      margin-bottom: 0.5rem;
+      display: block;
     }
 
     &__title {
       font-size: var(--wp--preset--font-size--body-large);
-      margin: 0 0 0.5rem 0;
+      margin: 0;
 
       a {
+        position: relative;
         text-decoration: none;
         color: inherit;
+        display: inline; // or inline-block if needed
 
-        &:hover {
-          text-decoration: underline;
+        // The pseudo-element that creates the underline
+        &::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          bottom: -4px; // Adjust for spacing between text and line
+          left: 0;
+          background-color: var(--wp--preset--color--accent-1); // Your green color
+          transform: scaleX(0); // Initially hidden
+          transform-origin: bottom left;
+          transition: transform 0.2s ease-out;
+        }
+
+        // On hover, scale the line to its full width
+        &:hover::after {
+          transform: scaleX(1);
+          transform-origin: bottom left;
         }
       }
     }

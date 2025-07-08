@@ -1,14 +1,19 @@
-{% extends "tease.twig" %}
+{% set project_category = post.terms('project_category')|first %}
 
-{% block content %}
-    <div class="project-card">
-        {% if post.thumbnail %}
-            <a href="{{ post.link }}">
-                <img src="{{ post.thumbnail.src|resize(400, 300) }}" alt="{{ post.thumbnail.alt }}">
-            </a>
+<div class="project-card">
+    {% if post.thumbnail %}
+        <a href="{{ post.link }}" class="project-card__image-link" aria-label="View project: {{ post.title }}">
+            <img src="{{ post.thumbnail.src|resize(400, 300) }}" alt="{{ post.thumbnail.alt }}">
+        </a>
+    {% endif %}
+    <div class="project-card__content">
+        {% if project_category %}
+            <span class="project-card__category">{{ project_category.name }}</span>
         {% endif %}
         <h3 class="project-card__title">
-            <a href="{{ post.link }}">{{ post.title }}</a>
+            <a href="{{ post.link }}">
+                {{ post.title }}
+            </a>
         </h3>
     </div>
-{% endblock %}
+</div>
