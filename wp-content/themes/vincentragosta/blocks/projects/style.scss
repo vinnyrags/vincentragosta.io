@@ -1,30 +1,66 @@
 .wp-block-vincentragosta-projects {
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
+    grid-template-columns: 1fr;
+
+    @media (min-width: 992px) {
+      grid-template-columns: repeat(10, 1fr);
+
+      > .project-card {
+        // Row 1
+        &:nth-child(1) {
+          grid-column: span 3;
+        }
+        &:nth-child(2) {
+          grid-column: span 7;
+        }
+
+        // Row 2
+        &:nth-child(3) {
+          grid-column: span 10;
+
+          // ADDED: Rule for the third card's image height
+          .project-card__image-link {
+            height: 440px;
+          }
+        }
+
+        // Row 3
+        &:nth-child(4) {
+          grid-column: span 7;
+        }
+        &:nth-child(5) {
+          grid-column: span 3;
+        }
+      }
+    }
   }
 
   .project-card {
     background-color: transparent;
     color: var(--wp--preset--color--base);
-    text-decoration: none;
-    display: block;
+    display: flex;
+    flex-direction: column;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 
     &:hover {
       transform: translateY(-5px);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 3px 6px rgba(0, 0, 0, 0.1);
+
+      .project-card__title a::after {
+        transform: scaleX(1);
+      }
     }
 
     &__image-link {
       display: block;
       overflow: hidden;
+      height: 220px;
 
       img {
         width: 100%;
-        height: auto;
-        aspect-ratio: 4 / 3;
+        height: 100%;
         object-fit: cover;
         display: block;
         transition: transform 0.4s ease;
@@ -33,6 +69,10 @@
 
     &:hover &__image-link img {
       transform: scale(1.05);
+    }
+
+    &__content {
+      flex-grow: 1;
     }
 
     &__category {
@@ -45,32 +85,27 @@
 
     &__title {
       font-size: var(--wp--preset--font-size--body-large);
+      font-family: var(--wp--preset--font-family--reckless-neue);
+      font-weight: 300;
+      line-height: 1.3;
       margin: 0;
 
       a {
         position: relative;
         text-decoration: none;
         color: inherit;
-        display: inline; // or inline-block if needed
 
-        // The pseudo-element that creates the underline
         &::after {
           content: '';
           position: absolute;
           width: 100%;
           height: 2px;
-          bottom: -4px; // Adjust for spacing between text and line
+          bottom: -4px;
           left: 0;
-          background-color: var(--wp--preset--color--accent-1); // Your green color
-          transform: scaleX(0); // Initially hidden
+          background-color: var(--wp--preset--color--accent-1);
+          transform: scaleX(0);
           transform-origin: bottom left;
-          transition: transform 0.2s ease-out;
-        }
-
-        // On hover, scale the line to its full width
-        &:hover::after {
-          transform: scaleX(1);
-          transform-origin: bottom left;
+          transition: transform 0.3s ease-out;
         }
       }
     }

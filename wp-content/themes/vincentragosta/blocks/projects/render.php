@@ -10,7 +10,7 @@ $selected_ids = $attributes['selectedProjects'] ?? [];
 
 $args = [
     'post_type'      => 'project',
-    'posts_per_page' => 3,
+    'posts_per_page' => 5,
     'post_status'    => 'publish',
 ];
 

@@ -2,17 +2,15 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, ToggleControl, CheckboxControl, Spinner } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
-import './editor.scss'; // Import editor-specific styles
+import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
     const { mode, selectedProjects } = attributes;
 
-    // This hook fetches the project data. The `_embed` parameter is crucial
-    // as it includes linked data like the featured image URL.
     const allProjects = useSelect((select) => {
         return select('core').getEntityRecords('postType', 'project', {
             per_page: -1,
-            _embed: true, // This includes featured image data
+            _embed: true,
             orderby: 'date',
             order: 'desc',
         });
@@ -21,7 +19,7 @@ export default function Edit({ attributes, setAttributes }) {
     const onProjectSelectionChange = (isChecked, projectId) => {
         let newSelection = [...selectedProjects];
         if (isChecked) {
-            if (newSelection.length < 3) {
+            if (newSelection.length < 5) { // Allow up to 5
                 newSelection.push(projectId);
             }
         } else {
@@ -32,22 +30,12 @@ export default function Edit({ attributes, setAttributes }) {
 
     const blockProps = useBlockProps();
 
-    // Determine which projects to display in the preview
     const getDisplayProjects = () => {
-        if (!allProjects) {
-            return [];
-        }
-
+        if (!allProjects) return [];
         if (mode === 'curated') {
-            // Filter allProjects to only include those in selectedProjects,
-            // and maintain the order of selection.
-            return selectedProjects
-                .map(id => allProjects.find(p => p.id === id))
-                .filter(p => p); // Filter out any undefined if a project was deleted
+            return selectedProjects.map(id => allProjects.find(p => p.id === id)).filter(p => p);
         }
-
-        // For 'latest' mode, just return the first 3
-        return allProjects.slice(0, 3);
+        return allProjects.slice(0, 5); // Show up to 5 latest
     };
 
     const displayProjects = getDisplayProjects();
@@ -64,18 +52,16 @@ export default function Edit({ attributes, setAttributes }) {
                     />
                     {mode === 'curated' && (
                         <div>
-                            <strong>{__('Select up to 3 projects:', 'vincentragosta')}</strong>
+                            <strong>{__('Select up to 5 projects:', 'vincentragosta')}</strong>
                             {!allProjects && <Spinner />}
-                            {allProjects && allProjects.length === 0 && (
-                                <p>{__('No projects found. Please create some first.', 'vincentragosta')}</p>
-                            )}
+                            {allProjects && allProjects.length === 0 && <p>{__('No projects found.', 'vincentragosta')}</p>}
                             {allProjects && allProjects.map((project) => (
                                 <CheckboxControl
                                     key={project.id}
                                     label={project.title.rendered || __('(No title)', 'vincentragosta')}
                                     checked={selectedProjects.includes(project.id)}
                                     onChange={(isChecked) => onProjectSelectionChange(isChecked, project.id)}
-                                    disabled={!selectedProjects.includes(project.id) && selectedProjects.length >= 3}
+                                    disabled={!selectedProjects.includes(project.id) && selectedProjects.length >= 5}
                                 />
                             ))}
                         </div>
@@ -90,24 +76,32 @@ export default function Edit({ attributes, setAttributes }) {
                     <div className="projects-grid">
                         {displayProjects.length > 0 ? (
                             displayProjects.map((project) => {
-                                // Safely get the featured image URL from the embedded data
                                 const featuredImageUrl = project._embedded?.['wp:featuredmedia']?.[0]?.source_url;
+                                const categories = project._embedded?.['wp:term']?.[0];
+                                const projectCategory = categories?.find(term => term.taxonomy === 'project_category');
 
                                 return (
                                     <div key={project.id} className="project-card">
-                                        {featuredImageUrl ? (
-                                            <img src={featuredImageUrl} alt={project.title.rendered} />
-                                        ) : (
-                                            <div className="project-card__no-image"></div>
-                                        )}
-                                        <h3 className="project-card__title">
-                                            {project.title.rendered || __('(No title)', 'vincentragosta')}
-                                        </h3>
+                                        <div className="project-card__image-link">
+                                            {featuredImageUrl ? (
+                                                <img src={featuredImageUrl} alt={project.title.rendered} />
+                                            ) : (
+                                                <div className="project-card__no-image"></div>
+                                            )}
+                                        </div>
+                                        <div className="project-card__content">
+                                            {projectCategory && (
+                                                <span className="project-card__category">{projectCategory.name}</span>
+                                            )}
+                                            <h3 className="project-card__title">
+                                                <a>{project.title.rendered || __('(No title)', 'vincentragosta')}</a>
+                                            </h3>
+                                        </div>
                                     </div>
                                 );
                             })
                         ) : (
-                            <p>{__('No projects to display. Please create projects or adjust query settings.', 'vincentragosta')}</p>
+                            <p>{__('No projects to display.', 'vincentragosta')}</p>
                         )}
                     </div>
                 )}

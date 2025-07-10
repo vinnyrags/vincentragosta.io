@@ -1,11 +1,12 @@
 {% set project_category = post.terms('project_category')|first %}
-
 <div class="project-card">
-    {% if post.thumbnail %}
-        <a href="{{ post.link }}" class="project-card__image-link" aria-label="View project: {{ post.title }}">
-            <img src="{{ post.thumbnail.src|resize(400, 300) }}" alt="{{ post.thumbnail.alt }}">
-        </a>
-    {% endif %}
+    <a href="{{ post.link }}" class="project-card__image-link" aria-label="View project: {{ post.title }}">
+        {% if post.thumbnail %}
+            <img src="{{ post.thumbnail.src }}" alt="{{ post.thumbnail.alt|e }}">
+        {% else %}
+            <div class="project-card__no-image" aria-hidden="true"></div>
+        {% endif %}
+    </a>
     <div class="project-card__content">
         {% if project_category %}
             <span class="project-card__category">{{ project_category.name }}</span>
