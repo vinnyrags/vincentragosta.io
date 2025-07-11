@@ -21,23 +21,6 @@
     opacity: 1;
   }
 }
-/*
- * Theme Name: Vincent Ragosta Theme
- * Description: Starter Theme to use with Timber
- * Author: Upstatement and YOU!
-*/
-:root {
-  --fluid-factor: calc((100vw - 768px) / 672);
-  --fluid-padding-inline: clamp(16px, calc(16px + 44 * var(--fluid-factor)), 60px);
-  --fluid-margin-block: clamp(120px, calc(120px + 80 * var(--fluid-factor)), 200px);
-}
-
-.content-wrapper > article > * {
-  padding-left: var(--fluid-padding-inline);
-  padding-right: var(--fluid-padding-inline);
-  margin-bottom: var(--fluid-margin-block);
-}
-
 /* Custom format for inline-block */
 .d-inline-block {
   display: inline-block;

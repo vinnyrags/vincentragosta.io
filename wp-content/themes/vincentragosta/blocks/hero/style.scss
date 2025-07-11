@@ -114,50 +114,43 @@
       font-weight: 500;
       line-height: 1.2;
       display: block;
-      margin-bottom: var(--wp--preset--spacing--large);
-      /* Initial State (Before Animation) */
-      transform: translateY(110%); /* Moves the text down, completely out of the mask's view */
+      margin-bottom: var(--wp--preset--spacing--50);
+      transform: translateY(110%);
       opacity: 0;
-
-      /* Animation Properties */
       animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: 0.2s; /* Optional: a slight delay before the animation starts */
+      animation-delay: 0.2s;
     }
 
     &__links {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--wp--preset--spacing--30, 1rem);
+      gap: var(--wp--preset--spacing--30);
       width: 100%;
 
       .wp-block-button {
-        opacity: 0; // Initial state: hidden for fade-in
-
+        opacity: 0;
         animation-name: heroButtonSimpleFadeIn;
-        animation-duration: 1.2s; // Duration of the fade
+        animation-duration: 1.2s;
         animation-fill-mode: forwards;
-        animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1); // Easing
+        animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
 
-        // UPDATED: Animation delays for buttons to start slightly later
         &:nth-child(1) {
-          animation-delay: 0.6s; // Was 0.2s
+          animation-delay: 0.6s;
         }
 
         &:nth-child(2) {
-          animation-delay: 0.8s; // Was 0.4s (maintains 0.2s stagger from previous button)
+          animation-delay: 0.8s;
         }
 
         &:nth-child(3) {
-          animation-delay: 1.0s; // Was 0.6s (maintains 0.2s stagger from previous button)
+          animation-delay: 1.0s;
         }
-
-        // Add more :nth-child rules if you expect more buttons and want them staggered
       }
     }
   }
 }
 
-// SVG Mask animation (from your original)
+// SVG Mask animation
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
@@ -196,9 +189,7 @@
   animation-duration: 0.4s;
 }
 
-/*
- Line mask animation for title (structure from your original)
-*/
+// Line mask animation for title
 .line-mask {
   display: block;
   overflow: hidden;
@@ -210,27 +201,8 @@
   transform: translateY(110%);
   opacity: 0;
   animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  // The actual delay for .line-content is applied via its parent .hero__title
-  // or more specific nth-child rules for .line-mask if hero__title itself isn't directly animated.
-  // Based on your original .hero__title having animation-delay: 0.2s,
-  // and .hero__title .line-mask:nth-child(2) .line-content having animation-delay: 0.2s,
-  // it implies the first line's content starts effectively at 0.2s.
 }
 
-/*
- 3. The Staggering Delay!
-  This is what makes the lines animate one after another.
-  If .hero__title itself has the animation and delay, and it contains .line-mask > .line-content,
-  these delays on .line-content would be *additional* to the parent's delay.
-  However, your original SCSS applies the main animation directly to .hero__title.
-  The .line-mask / .line-content animation rules are often used when the main .hero__title
-  is a container and each .line-content gets the staggered `slide-up-reveal`.
-  Assuming the direct .hero__title animation is what's active for the overall title block.
-*/
 .hero__title .line-mask:nth-child(2) .line-content {
-  // This rule implies the first .line-content within .hero__title doesn't have an explicit additional delay
-  // beyond what .hero__title itself might have.
-  // If .hero__title has animation-delay: 0.2s, and this rule adds another 0.2s for the second line,
-  // the second line's content effectively starts at 0.4s page load time.
   animation-delay: 0.2s;
 }

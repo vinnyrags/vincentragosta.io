@@ -2,7 +2,7 @@
 
 use Timber\Site;
 use Timber\Timber;
-use Twig\TwigFunction; // Ensure this use statement is present
+use Twig\TwigFunction;
 
 /**
  * Class StarterSite
@@ -29,15 +29,18 @@ class StarterSite extends Site
         // Register custom post types from the /config directory
         add_action('init', array($this, 'register_custom_post_types'));
 
+        // Register custom taxonomies from the /config directory
+        // TODO: combine this with register_custom_post_types
+//        add_action('init', array($this, 'register_custom_taxonomies'));
+
         // Register custom blocks (like Hero and Projects)
         add_action('init', array($this, 'register_native_blocks'));
 
-        // Localize data for the block editor (SVGs for Hero block, button icons for main.js)
-        // Priority 99 to ensure it runs after other scripts might be enqueued/registered.
+        // Localize data for the block editor
         add_action('enqueue_block_editor_assets', array($this, 'localize_block_editor_data'), 99);
 
-        // Add the global get_theme_svg function (from functions.php) to Twig
-        add_filter('timber/twig', array($this, 'add_global_svg_function_to_twig'));
+        // Add custom functions and filters to Twig
+        add_filter('timber/twig', array($this, 'additional_timber_functions'));
 
         // Filter core/button block rendering to add icons on the frontend
         add_filter('render_block_core/button', array($this, 'render_button_with_icon_frontend'), 10, 2);
@@ -55,26 +58,11 @@ class StarterSite extends Site
         add_theme_support('post-thumbnails');
         add_theme_support(
             'html5',
-            array(
-                'comment-form',
-                'comment-list',
-                'gallery',
-                'caption',
-                'style',
-                'script',
-            )
+            array('comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script')
         );
         add_theme_support(
             'post-formats',
-            array(
-                'aside',
-                'image',
-                'video',
-                'quote',
-                'link',
-                'gallery',
-                'audio',
-            )
+            array('aside', 'image', 'video', 'quote', 'link', 'gallery', 'audio')
         );
         add_theme_support('menus');
         add_theme_support('editor-styles');
@@ -126,7 +114,6 @@ class StarterSite extends Site
                 $script_asset['version'],
                 true
             );
-
             wp_set_script_translations(
                 'vincentragosta-js',
                 'vincentragosta',
@@ -138,17 +125,17 @@ class StarterSite extends Site
     }
 
     /**
-     * Adds the global get_theme_svg function to Twig.
+     * Adds custom functions and filters to Twig.
+     *
      * @param \Twig\Environment $twig The Twig environment.
      * @return \Twig\Environment
      */
-    public function add_global_svg_function_to_twig($twig)
+    public function additional_timber_functions($twig)
     {
         if (function_exists('get_theme_svg')) {
             $twig->addFunction(new TwigFunction('get_theme_svg', 'get_theme_svg'));
-        } else {
-            error_log('StarterSite Error: Global function get_theme_svg() not found and cannot be added to Twig.');
         }
+
         return $twig;
     }
 
@@ -161,34 +148,45 @@ class StarterSite extends Site
         if (!is_dir($config_dir)) {
             return;
         }
-
-        $json_files = glob($config_dir . '*.json');
-
+        $json_files = glob($config_dir . '/*.json');
         foreach ($json_files as $file) {
             $content = file_get_contents($file);
             $data = json_decode($content, true);
-
             if (json_last_error() === JSON_ERROR_NONE && isset($data['post_type']) && isset($data['args'])) {
                 register_post_type($data['post_type'], $data['args']);
-            } else {
-                error_log("Failed to register post type from file: " . basename($file) . ". Invalid JSON or structure.");
             }
         }
     }
+
+//    /**
+//     * Registers custom taxonomies from JSON files in the /config directory.
+//     */
+//    public function register_custom_taxonomies()
+//    {
+//        $config_dir = get_template_directory() . '/config/';
+//        if (!is_dir($config_dir)) {
+//            return;
+//        }
+//        $json_files = glob($config_dir . '/*_tax.json'); // Use a suffix for taxonomy files
+//        foreach ($json_files as $file) {
+//            $content = file_get_contents($file);
+//            $data = json_decode($content, true);
+//            if (json_last_error() === JSON_ERROR_NONE && isset($data['taxonomy']) && isset($data['post_types']) && isset($data['args'])) {
+//                register_taxonomy($data['taxonomy'], $data['post_types'], $data['args']);
+//            }
+//        }
+//    }
 
     /**
      * Registers custom Gutenberg blocks defined in the /blocks directory.
      */
     public function register_native_blocks()
     {
-        // Add 'projects' to the array of blocks to register.
         $blocks = ['hero', 'projects'];
         foreach ($blocks as $block_name) {
             $block_directory = get_template_directory() . '/blocks/' . $block_name;
             if (file_exists($block_directory . '/block.json')) {
                 register_block_type($block_directory);
-            } else {
-                error_log("Block configuration file (block.json) not found for block: " . $block_name . " at " . $block_directory);
             }
         }
     }
@@ -200,7 +198,7 @@ class StarterSite extends Site
     {
         // Hero Block Specific Localization
         $hero_block_asset_path = get_template_directory() . '/blocks/hero/build/index.asset.php';
-        if ( file_exists( $hero_block_asset_path ) ) {
+        if (file_exists($hero_block_asset_path)) {
             $hero_script_handle = 'vincentragosta-hero-editor-script';
             if (wp_script_is($hero_script_handle, 'registered') || wp_script_is($hero_script_handle, 'enqueued')) {
                 $svg_dir_hero = get_template_directory() . '/assets/images/svg/';
@@ -219,11 +217,7 @@ class StarterSite extends Site
                 }
                 $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
                 wp_localize_script($hero_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
-            } else {
-                error_log('Hero block script (' . $hero_script_handle . ') not registered/enqueued for localization.');
             }
-        } else {
-            error_log('Hero block asset file for localization not found: ' . $hero_block_asset_path);
         }
 
         // Button Icon Enhancement Data Localization
@@ -238,23 +232,17 @@ class StarterSite extends Site
                 if ($sprite_svg_files) {
                     foreach ($sprite_svg_files as $file_path) {
                         $filename = basename($file_path);
-                        $label = ucwords(str_replace(['icon-','-', '_', '.svg'], ['',' ', ' ', ''], pathinfo($filename, PATHINFO_FILENAME)));
+                        $label = ucwords(str_replace(['icon-', '-', '_', '.svg'], ['', ' ', ' ', ''], pathinfo($filename, PATHINFO_FILENAME)));
                         $button_icon_options[] = ['label' => $label, 'value' => $filename];
                         $button_icon_content_map[$filename] = get_theme_svg($filename, true);
                     }
-                } else {
-                    error_log('No SVG files found in svg-sprite directory: ' . $sprite_svg_dir);
                 }
-            } else {
-                error_log('SVG sprite directory not found: ' . $sprite_svg_dir . ' or get_theme_svg function unavailable.');
             }
             $button_icon_localized_data = [
-                'iconOptions'    => $button_icon_options,
+                'iconOptions' => $button_icon_options,
                 'iconContentMap' => $button_icon_content_map,
             ];
             wp_localize_script($main_editor_script_handle, 'vincentragostaButtonIconData', $button_icon_localized_data);
-        } else {
-            error_log('Main editor script ('.$main_editor_script_handle.') not registered/enqueued. Localization for button icons skipped.');
         }
     }
 
@@ -299,7 +287,7 @@ class StarterSite extends Site
                 $pattern,
                 function ($matches) use ($svg_content, $icon_position) {
                     $opening_tag = $matches[1];
-                    $link_text   = $matches[3];
+                    $link_text = $matches[3];
                     $closing_tag = $matches[4];
                     $icon_html = '<span class="wp-block-button__icon" aria-hidden="true">' . $svg_content . '</span>';
 
