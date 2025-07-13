@@ -287,7 +287,7 @@
   },
   "styles": {
     "spacing": {
-      "blockGap": "var:preset|spacing|40",
+      "blockGap": "var:preset|spacing|80",
       "padding": {
         "top": "var:preset|spacing|50",
         "right": "var:preset|spacing|40",
