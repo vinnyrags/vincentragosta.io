@@ -24,7 +24,7 @@ if ($mode === 'curated' && !empty($selected_ids)) {
 
 $context = Timber::context();
 $context['projects'] = Timber::get_posts($args);
-$context['attributes'] = $attributes;
+$context['attributes'] = $attributes ?? [];
 
 // Get block wrapper attributes and echo the block.
 $wrapper_attributes = get_block_wrapper_attributes();

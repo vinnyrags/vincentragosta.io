@@ -22,7 +22,11 @@
   },
   "supports": {
     "html": false,
-    "align": ["wide", "full"]
+    "align": ["wide", "full"],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
   },
   "textdomain": "vincentragosta",
   "editorScript": "file:./build/index.js",
