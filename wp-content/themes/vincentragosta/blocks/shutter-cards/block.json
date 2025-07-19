@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "vincentragosta/shutter-cards",
+  "title": "Shutter Cards",
+  "category": "design",
+  "icon": "slides",
+  "description": "An interactive row of cards that expand on click.",
+  "keywords": ["cards", "interactive", "accordion", "shutter"],
+  "attributes": {
+    "cards": {
+      "type": "array",
+      "default": [
+        {
+          "id": "card-1",
+          "title": "Card 1 Title",
+          "subtitle": "Card 1 Subtitle",
+          "description": "<p>This is the description for the first card. You can edit this text.</p>"
+        },
+        {
+          "id": "card-2",
+          "title": "Card 2 Title",
+          "subtitle": "Card 2 Subtitle",
+          "description": "<p>This is the description for the second card.</p>"
+        },
+        {
+          "id": "card-3",
+          "title": "Card 3 Title",
+          "subtitle": "Card 3 Subtitle",
+          "description": "<p>This is the description for the third card.</p>"
+        }
+      ]
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "textdomain": "vincentragosta",
+  "editorScript": "file:./build/index.js",
+  "editorStyle": "file:./build/editor.css",
+  "style": "file:./build/style-index.css",
+  "render": "file:./render.php",
+  "viewScript": "file:./build/view.js"
+}
