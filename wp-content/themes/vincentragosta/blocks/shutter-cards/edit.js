@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { useBlockProps, RichText, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Button, TextControl } from '@wordpress/components';
-import { produce } from 'immer';
 import './editor.scss';
 
 export default function Edit({ attributes, setAttributes }) {
@@ -9,10 +8,19 @@ export default function Edit({ attributes, setAttributes }) {
     const blockProps = useBlockProps();
 
     const handleCardChange = (index, field, value) => {
-        const nextState = produce(cards, (draft) => {
-            draft[index][field] = value;
+        // Create a new array using .map()
+        const newCards = cards.map((card, i) => {
+            // If it's the card we want to update, return a new object
+            if (i === index) {
+                return {
+                    ...card, // Copy existing properties
+                    [field]: value, // Overwrite the one that changed
+                };
+            }
+            // Otherwise, return the original card
+            return card;
         });
-        setAttributes({ cards: nextState });
+        setAttributes({ cards: newCards });
     };
 
     const addCard = () => {
@@ -23,14 +31,14 @@ export default function Edit({ attributes, setAttributes }) {
             subtitle: 'New Card Subtitle',
             description: '<p>New card description.</p>',
         };
+        // Create a new array with the new card added
         setAttributes({ cards: [...cards, newCard] });
     };
 
     const removeCard = (index) => {
-        const nextState = produce(cards, (draft) => {
-            draft.splice(index, 1);
-        });
-        setAttributes({ cards: nextState });
+        // Create a new array excluding the card at the specified index
+        const newCards = cards.filter((_, i) => i !== index);
+        setAttributes({ cards: newCards });
     };
 
     return (
