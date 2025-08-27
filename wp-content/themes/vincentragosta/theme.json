@@ -6,7 +6,8 @@
     "useRootPaddingAwareAlignments": true,
     "layout": {
       "contentSize": "1280px",
-      "wideSize": "1440px"
+      "wideSize": "1440px",
+      "allowEditing": false
     },
     "color": {
       "defaultDuotone": false,
@@ -61,56 +62,41 @@
       ]
     },
     "spacing": {
-      "spacingScale": {
-        "operator": "*",
-        "increment": 1.5,
-        "steps": 7,
-        "mediumStep": 1.5,
-        "unit": "rem"
-      },
-      "units": [
-        "%",
-        "px",
-        "em",
-        "rem",
-        "vh",
-        "vw"
-      ],
       "spacingSizes": [
         {
-          "name": "2X-Small",
-          "size": "clamp(1.125rem, 1.000rem + 0.625vw, 1.5rem)",
-          "slug": "20"
+          "name": "20",
+          "slug": "20",
+          "size": "0.5rem"
         },
         {
-          "name": "X-Small",
-          "size": "clamp(1.5rem, 0.964rem + 2.679vw, 3rem)",
-          "slug": "30"
+          "name": "30",
+          "slug": "30",
+          "size": "0.75rem"
         },
         {
-          "name": "Small",
-          "size": "clamp(1.875rem, 1.179rem + 3.482vw, 3.75rem)",
-          "slug": "40"
+          "name": "40",
+          "slug": "40",
+          "size": "1rem"
         },
         {
-          "name": "Medium",
-          "size": "clamp(2.5rem, 1.571rem + 4.643vw, 5rem)",
-          "slug": "50"
+          "name": "50",
+          "slug": "50",
+          "size": "1.5rem"
         },
         {
-          "name": "Large",
-          "size": "clamp(3.75rem, 2.357rem + 6.964vw, 7.5rem)",
-          "slug": "60"
+          "name": "60",
+          "slug": "60",
+          "size": "2.25rem"
         },
         {
-          "name": "X-Large",
-          "size": "clamp(5rem, 3.143rem + 9.286vw, 10rem)",
-          "slug": "70"
+          "name": "70",
+          "slug": "70",
+          "size": "3rem"
         },
         {
-          "name": "2X-Large",
-          "size": "clamp(6.25rem, 3.929rem + 11.607vw, 12.5rem)",
-          "slug": "80"
+          "name": "80",
+          "slug": "80",
+          "size": "10rem"
         }
       ]
     },
@@ -267,27 +253,6 @@
           ]
         }
       ]
-    },
-    "blocks": {
-      "core/heading": {
-        "styles": [
-          {
-            "name": "Medium",
-            "label": "Medium",
-            "className": "is-style-heading--medium"
-          },
-          {
-            "name": "Large",
-            "label": "Large",
-            "className": "is-style-heading--large"
-          },
-          {
-            "name": "X-Large",
-            "label": "X-Large",
-            "className": "is-style-heading--xlarge"
-          }
-        ]
-      }
     }
   },
   "styles": {
