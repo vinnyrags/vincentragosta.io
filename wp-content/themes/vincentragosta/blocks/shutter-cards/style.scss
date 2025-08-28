@@ -1,70 +1,29 @@
 .wp-block-vincentragosta-shutter-cards {
-  .shutter-cards-container {
-    display: flex;
-    flex-wrap: nowrap;
-    width: 100%;
-    gap: var(--wp--preset--spacing--30, 1rem);
-    overflow-x: auto; // Allows horizontal scrolling if needed on small screens
-  }
-
   .shutter-card {
-    flex-grow: 1;
-    flex-shrink: 0; // Prevent shrinking below flex-basis
-    flex-basis: 0; // Distribute space evenly
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: flex-grow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    background-color: var(--wp--preset--color--contrast, #f0f0f0);
+    background-color: var(--wp--preset--color--accent-5, #fbfaf3);
+    color: var(--wp--preset--color--contrast, #151515);
     border-radius: var(--wp--custom--border-radius--small, 4px);
-    color: var(--wp--preset--color--base);
-    padding: var(--wp--preset--spacing--40, 1.5rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-
-    &.is-open {
-      flex-grow: 2; // Increase width relative to others (adjust as needed)
-    }
+    padding: var(--wp--preset--spacing--50, 1.5rem);
 
     &__title {
-      margin: 0;
-      font-size: var(--wp--preset--font-size--medium);
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      white-space: nowrap;
-      position: absolute;
-      bottom: var(--wp--preset--spacing--40, 1.5rem);
-      right: var(--wp--preset--spacing--40, 1.5rem);
-      transition: opacity 0.3s ease;
-    }
-
-    &__content {
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      transition: opacity 0.4s ease 0.1s, visibility 0.4s ease 0.1s, transform 0.4s ease 0.1s;
-    }
-
-    &.is-open &__content {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    &.is-open &__title {
-      opacity: 0; // Hide vertical title when open
+      font-size: var(--wp--preset--font-size--heading-medium);
+      font-family: var(--wp--preset--font-family--reckless-neue);
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0 0 1rem;
     }
 
     &__subtitle {
-      display: block;
-      font-size: var(--wp--preset--font-size--small);
-      font-weight: bold;
-      margin-bottom: var(--wp--preset--spacing--20);
+      font-size: var(--wp--preset--font-size--body-tiny);
+      font-weight: 500;
+      text-transform: uppercase;
+      color: var(--wp--preset--color--accent-4, #686868);
+      margin: 0 0 1rem; // Added a bottom margin for spacing
     }
 
     &__description {
-      font-size: var(--wp--preset--font-size--body);
+      font-size: var(--wp--preset--font-size--body-default);
+
       p {
         margin-top: 0;
         &:last-child {
