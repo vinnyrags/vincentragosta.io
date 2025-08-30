@@ -1,0 +1,35 @@
+// This file now contains the styles for a single card.
+.shutter-card {
+  background-color: var(--wp--preset--color--accent-5, #fbfaf3);
+  color: var(--wp--preset--color--contrast, #151515);
+  border-radius: var(--wp--custom--border-radius--small, 4px);
+  padding: var(--wp--preset--spacing--50, 1.5rem);
+  flex: 1; // Allows cards to share space in the container
+
+  &__title {
+    font-size: var(--wp--preset--font-size--heading-medium);
+    font-family: var(--wp--preset--font-family--reckless-neue);
+    font-weight: 300;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+  }
+
+  &__subtitle {
+    font-size: var(--wp--preset--font-size--body-tiny);
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--wp--preset--color--accent-4, #686868);
+    margin: 0 0 1rem;
+  }
+
+  &__description {
+    font-size: var(--wp--preset--font-size--body-default);
+
+    p {
+      margin-top: 0;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

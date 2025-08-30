@@ -1,35 +1,13 @@
 .wp-block-vincentragosta-shutter-cards {
-  .shutter-card {
-    background-color: var(--wp--preset--color--accent-5, #fbfaf3);
-    color: var(--wp--preset--color--contrast, #151515);
-    border-radius: var(--wp--custom--border-radius--small, 4px);
-    padding: var(--wp--preset--spacing--50, 1.5rem);
+  .shutter-cards-container {
+    display: flex;
+    flex-wrap: nowrap; // Keeps cards in a single row
+    gap: var(--wp--preset--spacing--40, 1.5rem);
 
-    &__title {
-      font-size: var(--wp--preset--font-size--heading-medium);
-      font-family: var(--wp--preset--font-family--reckless-neue);
-      font-weight: 300;
-      line-height: 1.2;
-      margin: 0 0 1rem;
-    }
-
-    &__subtitle {
-      font-size: var(--wp--preset--font-size--body-tiny);
-      font-weight: 500;
-      text-transform: uppercase;
-      color: var(--wp--preset--color--accent-4, #686868);
-      margin: 0 0 1rem; // Added a bottom margin for spacing
-    }
-
-    &__description {
-      font-size: var(--wp--preset--font-size--body-default);
-
-      p {
-        margin-top: 0;
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
+    // On smaller screens, allow horizontal scrolling
+    @media (max-width: 767px) {
+      overflow-x: auto;
+      padding-bottom: 1rem; // Add space for scrollbar
     }
   }
 }

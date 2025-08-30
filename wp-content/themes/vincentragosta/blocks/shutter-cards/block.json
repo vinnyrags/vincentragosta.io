@@ -2,22 +2,11 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "vincentragosta/shutter-cards",
-  "title": "Shutter Card",
+  "title": "Shutter Cards",
   "category": "design",
-  "icon": "format-aside",
-  "description": "A single, stylized card with a title, subtitle, and description.",
-  "keywords": ["card", "content", "info", "shutter"],
-  "attributes": {
-    "title": {
-      "type": "string"
-    },
-    "subtitle": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    }
-  },
+  "icon": "slides",
+  "description": "An interactive row of cards that expand on click.",
+  "keywords": ["cards", "interactive", "accordion", "shutter"],
   "supports": {
     "html": false,
     "align": ["wide", "full"],
@@ -27,8 +16,7 @@
     }
   },
   "textdomain": "vincentragosta",
-  "editorScript": "file:./build/index.js",
-  "editorStyle": "file:./build/editor.css",
+  "editorStyle": "file:./build/index.css",
   "style": "file:./build/style-index.css",
   "render": "file:./render.php"
 }

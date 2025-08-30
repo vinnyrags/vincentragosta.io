@@ -56,23 +56,14 @@ class StarterSite extends Site
         add_theme_support('automatic-feed-links');
         add_theme_support('title-tag');
         add_theme_support('post-thumbnails');
-        add_theme_support(
-            'html5',
-            array('comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script')
-        );
-        add_theme_support(
-            'post-formats',
-            array('aside', 'image', 'video', 'quote', 'link', 'gallery', 'audio')
-        );
         add_theme_support('menus');
+        add_theme_support('html5', ['comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script']);
         add_theme_support('editor-styles');
-        add_editor_style('style.css');
-        add_theme_support('block-templates');
+        add_theme_support('wp-block-styles');
+        add_theme_support('layout');
+        add_theme_support('custom-spacing');
         add_theme_support('align-wide');
-        add_theme_support('responsive-embeds');
-        add_theme_support('custom-line-height');
-        add_theme_support('experimental-link-color');
-        add_theme_support('custom-units');
+        add_editor_style('style.css');
     }
 
     /**
@@ -85,6 +76,13 @@ class StarterSite extends Site
             'https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap',
             array(),
             null
+        );
+
+        wp_enqueue_style(
+            'vincentragosta-style',
+            get_stylesheet_uri(),
+            array(),
+            wp_get_theme()->get('Version')
         );
     }
 
@@ -104,6 +102,21 @@ class StarterSite extends Site
      */
     public function enqueue_custom_editor_scripts()
     {
+        // --- START: Add these lines ---
+        // Enqueue the master block script
+        $blocks_script_asset_path = get_template_directory() . '/blocks/build/index.asset.php';
+        if (file_exists($blocks_script_asset_path)) {
+            $blocks_script_asset = require($blocks_script_asset_path);
+            wp_enqueue_script(
+                'vincentragosta-blocks-js', // A new handle for our blocks script
+                get_template_directory_uri() . '/blocks/build/index.js',
+                $blocks_script_asset['dependencies'],
+                $blocks_script_asset['version'],
+                true
+            );
+        }
+        // --- END: Add these lines ---
+
         $script_asset_path = get_template_directory() . '/assets/src/build/js/main.asset.php';
         if (file_exists($script_asset_path)) {
             $script_asset = require($script_asset_path);
@@ -182,7 +195,7 @@ class StarterSite extends Site
      */
     public function register_native_blocks()
     {
-        $blocks = ['hero', 'projects'];
+        $blocks = ['hero', 'projects', 'shutter-cards', 'shutter-card'];
         foreach ($blocks as $block_name) {
             $block_directory = get_template_directory() . '/blocks/' . $block_name;
             if (file_exists($block_directory . '/block.json')) {
@@ -192,35 +205,40 @@ class StarterSite extends Site
     }
 
     /**
-     * Localizes data for the block editor.
-     */
+     * Localizes data for the block editor.
+     */
     public function localize_block_editor_data()
     {
-        // Hero Block Specific Localization
-        $hero_block_asset_path = get_template_directory() . '/blocks/hero/build/index.asset.php';
-        if (file_exists($hero_block_asset_path)) {
-            $hero_script_handle = 'vincentragosta-hero-editor-script';
-            if (wp_script_is($hero_script_handle, 'registered') || wp_script_is($hero_script_handle, 'enqueued')) {
-                $svg_dir_hero = get_template_directory() . '/assets/images/svg/';
-                $svg_options_hero = [['label' => __('Select SVG for Hero', 'vincentragosta'), 'value' => '']];
-                $svg_content_map_hero = [];
-                if (is_dir($svg_dir_hero) && function_exists('get_theme_svg')) {
-                    $svg_files_hero = glob($svg_dir_hero . '*.svg');
-                    if ($svg_files_hero) {
-                        foreach ($svg_files_hero as $file_path) {
-                            $filename = basename($file_path);
-                            $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
-                            $svg_options_hero[] = ['label' => $label, 'value' => $filename];
-                            $svg_content_map_hero[$filename] = get_theme_svg($filename);
-                        }
+        // The handle for the master script that contains all block code.
+        $master_block_script_handle = 'vincentragosta-blocks-js';
+
+        // Check if the master block script is actually loaded.
+        if (wp_script_is($master_block_script_handle, 'registered') || wp_script_is($master_block_script_handle, 'enqueued')) {
+
+            // --- Hero Block Specific Localization ---
+            $svg_dir_hero = get_template_directory() . '/assets/images/svg/';
+            $svg_options_hero = [['label' => __('Select SVG for Hero', 'vincentragosta'), 'value' => '']];
+            $svg_content_map_hero = [];
+
+            if (is_dir($svg_dir_hero) && function_exists('get_theme_svg')) {
+                $svg_files_hero = glob($svg_dir_hero . '*.svg');
+                if ($svg_files_hero) {
+                    foreach ($svg_files_hero as $file_path) {
+                        $filename = basename($file_path);
+                        $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
+                        $svg_options_hero[] = ['label' => $label, 'value' => $filename];
+                        $svg_content_map_hero[$filename] = get_theme_svg($filename);
                     }
                 }
-                $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
-                wp_localize_script($hero_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
             }
+
+            $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
+
+            // Localize the data to the correct master block script handle.
+            wp_localize_script($master_block_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
         }
 
-        // Button Icon Enhancement Data Localization
+        // --- Button Icon Enhancement Data Localization ---
         $main_editor_script_handle = 'vincentragosta-js';
         if (wp_script_is($main_editor_script_handle, 'registered') || wp_script_is($main_editor_script_handle, 'enqueued')) {
             $sprite_svg_dir = get_template_directory() . '/assets/images/svg-sprite/';
@@ -238,10 +256,12 @@ class StarterSite extends Site
                     }
                 }
             }
+
             $button_icon_localized_data = [
                 'iconOptions' => $button_icon_options,
                 'iconContentMap' => $button_icon_content_map,
             ];
+
             wp_localize_script($main_editor_script_handle, 'vincentragostaButtonIconData', $button_icon_localized_data);
         }
     }

@@ -1,26 +1,12 @@
 .wp-block-vincentragosta-shutter-cards {
-  .shutter-cards-editor {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  border: 1px dashed #ccc;
+  padding: 1rem;
+  padding-bottom: 0.5rem; // Adjust padding
 
-  .shutter-card-editor-item {
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 4px;
-
-    &__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    &__description {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      min-height: 80px;
-    }
+  // Style our new custom button
+  .shutter-cards-appender {
+    width: 100%;
+    justify-content: center;
+    margin-top: 1.5rem;
   }
 }

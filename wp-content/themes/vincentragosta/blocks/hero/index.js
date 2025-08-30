@@ -1,15 +1,9 @@
-// file: wp-content/themes/vincentragosta/blocks/hero/index.js
 import { registerBlockType } from '@wordpress/blocks';
 import Edit from './edit';
 import save from './save';
 import metadata from './block.json'; // Import metadata
-import './style.scss'; // Styles for frontend + editor
-import './editor.scss'; // Styles for editor only
-
-console.log('Hero Block Debug: Loading index.js');
-console.log('Hero Block Debug: Imported metadata -> ', metadata);
-console.log('Hero Block Debug: Imported metadata.supports -> ', metadata.supports);
-
+import './style.scss';
+import './editor.scss';
 
 const settings = {
     /**
@@ -33,10 +27,4 @@ const settings = {
     // }
 };
 
-console.log('Hero Block Debug: Settings for registerBlockType -> ', settings);
-console.log('Hero Block Debug: Settings.supports -> ', settings.supports);
-
-
 registerBlockType(metadata.name, settings);
-
-console.log('Hero Block Debug: registerBlockType called for name:', metadata.name, 'with settings:', settings);

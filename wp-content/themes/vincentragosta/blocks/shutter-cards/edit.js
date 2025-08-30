@@ -1,37 +1,28 @@
-import { __ } from '@wordpress/i18n';
-import { useBlockProps, RichText } from '@wordpress/block-editor';
+import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useSelect } from '@wordpress/data';
 import './editor.scss';
 
-export default function Edit({ attributes, setAttributes }) {
-    const { title, subtitle, description } = attributes;
+const ALLOWED_BLOCKS = ['vincentragosta/shutter-card'];
+const TEMPLATE = [['vincentragosta/shutter-card']];
+const MAX_CARDS = 4;
+
+export default function Edit({ clientId }) {
     const blockProps = useBlockProps();
+
+    const { cardCount } = useSelect((select) => ({
+        cardCount: select('core/block-editor').getBlockCount(clientId),
+    }));
 
     return (
         <div {...blockProps}>
-            <RichText
-                tagName="h3"
-                className="shutter-card__title"
-                value={title}
-                onChange={(newTitle) => setAttributes({ title: newTitle })}
-                placeholder={__('Enter title here...', 'vincentragosta')}
-                allowedFormats={['core/bold', 'core/italic']}
-            />
-            <RichText
-                tagName="p"
-                className="shutter-card__subtitle"
-                value={subtitle}
-                onChange={(newSubtitle) => setAttributes({ subtitle: newSubtitle })}
-                placeholder={__('Enter subtitle here...', 'vincentragosta')}
-                allowedFormats={['core/bold', 'core/italic']}
-            />
-            <RichText
-                tagName="div"
-                multiline="p"
-                className="shutter-card__description"
-                value={description}
-                onChange={(newDescription) => setAttributes({ description: newDescription })}
-                placeholder={__('Enter description here...', 'vincentragosta')}
-                allowedFormats={['core/bold', 'core/italic', 'core/link']}
+            <InnerBlocks
+                allowedBlocks={ALLOWED_BLOCKS}
+                template={TEMPLATE}
+                renderAppender={
+                    cardCount < MAX_CARDS
+                        ? () => <InnerBlocks.ButtonBlockAppender />
+                        : () => null
+                }
             />
         </div>
     );
