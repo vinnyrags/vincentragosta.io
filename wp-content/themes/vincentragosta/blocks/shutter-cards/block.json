@@ -16,7 +16,5 @@
     }
   },
   "textdomain": "vincentragosta",
-  "editorStyle": "file:./build/index.css",
-  "style": "file:./build/style-index.css",
   "render": "file:./render.php"
 }

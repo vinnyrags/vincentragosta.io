@@ -28,6 +28,5 @@
     "html": false,
     "reusable": false
   },
-  "textdomain": "vincentragosta",
-  "style": "file:./build/style-index.css"
+  "textdomain": "vincentragosta"
 }
