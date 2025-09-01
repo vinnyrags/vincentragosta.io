@@ -1,10 +1,30 @@
-// This file now contains the styles for a single card.
 .shutter-card {
   background-color: var(--wp--preset--color--accent-5, #fbfaf3);
   color: var(--wp--preset--color--contrast, #151515);
   border-radius: var(--wp--custom--border-radius--small, 4px);
   padding: var(--wp--preset--spacing--50, 1.5rem);
-  flex: 1; // Allows cards to share space in the container
+  overflow: hidden;
+  transition: flex-grow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  // Default state is now the "active/open" state. It grows to take up more space.
+  flex-grow: 5;
+  flex-basis: 0;
+
+  // Inactive (collapsed) state.
+  &.shutter-card--inactive {
+    flex-grow: 1;
+
+    .shutter-card__subtitle,
+    .shutter-card__description {
+      opacity: 0;
+      visibility: hidden;
+      margin-bottom: 0;
+      transition:
+              opacity 0.3s ease-out,
+              visibility 0s 0.4s;
+    }
+  }
 
   &__title {
     font-size: var(--wp--preset--font-size--heading-medium);
@@ -12,6 +32,18 @@
     font-weight: 300;
     line-height: 1.2;
     margin: 0 0 1rem;
+    white-space: nowrap; // Keeps the title on one line in the inactive state.
+  }
+
+  &__subtitle,
+  &__description {
+    opacity: 1;
+    max-height: 1000px; // A large enough value to not clip content.
+    visibility: visible;
+    transition:
+            opacity 0.4s ease-in 0.2s, // Delay fade-in for a smoother effect.
+            max-height 0.4s ease-in 0.2s,
+            visibility 0s 0.2s;
   }
 
   &__subtitle {

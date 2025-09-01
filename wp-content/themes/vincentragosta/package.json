@@ -9,11 +9,11 @@
   "scripts": {
     "build-assets": "wp-scripts build assets/src/js/main.js --output-path=assets/src/build/js",
     "compile-theme-css": "sass assets/src/scss/main.scss style.css --no-source-map --style=expanded",
-    "build-blocks": "wp-scripts build blocks/index.js --output-path=blocks/build",
+    "build-blocks": "wp-scripts build blocks/index.js blocks/index-view.js --output-path=blocks/build",
     "build": "npm run build-assets && npm run build-blocks && npm run compile-theme-css",
     "start-assets": "wp-scripts start assets/src/js/main.js --output-path=assets/src/build/js",
     "watch-theme-css": "sass assets/src/scss/main.scss style.css --no-source-map --style=expanded --watch",
-    "start-blocks": "wp-scripts start blocks/index.js --output-path=blocks/build",
+    "start-blocks": "wp-scripts start blocks/index.js blocks/index-view.js --output-path=blocks/build",
     "start": "npm-run-all --parallel start-assets start-blocks watch-theme-css"
   },
   "keywords": [],

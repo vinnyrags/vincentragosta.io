@@ -26,6 +26,8 @@ class StarterSite extends Site
         // Enqueue custom editor scripts (main.js for formats, button icon enhancement, etc.)
         add_action('enqueue_block_editor_assets', array($this, 'enqueue_custom_editor_scripts'));
 
+        add_action('enqueue_block_assets', array($this, 'enqueue_block_styles'));
+
         // Register custom post types from the /config directory
         add_action('init', array($this, 'register_custom_post_types'));
 
@@ -84,19 +86,6 @@ class StarterSite extends Site
             array(),
             wp_get_theme()->get('Version')
         );
-
-        // --- START: Add this part ---
-        // Enqueue the frontend styles for our blocks
-        $blocks_style_path = get_template_directory() . '/blocks/build/style-index.css';
-        if (file_exists($blocks_style_path)) {
-            wp_enqueue_style(
-                'vincentragosta-blocks-style',
-                get_template_directory_uri() . '/blocks/build/style-index.css',
-                [],
-                filemtime($blocks_style_path)
-            );
-        }
-        // --- END: Add this part ---
     }
 
     /**
@@ -115,19 +104,6 @@ class StarterSite extends Site
      */
     public function enqueue_custom_editor_scripts()
     {
-        // --- START: Add this part ---
-        // Enqueue the editor-only styles for our blocks
-        $blocks_editor_style_path = get_template_directory() . '/blocks/build/index.css';
-        if (file_exists($blocks_editor_style_path)) {
-            wp_enqueue_style(
-                'vincentragosta-blocks-editor-style',
-                get_template_directory_uri() . '/blocks/build/index.css',
-                [], // No dependencies needed for CSS usually
-                filemtime($blocks_editor_style_path)
-            );
-        }
-        // --- END: Add this part ---
-
         // --- START: Add these lines ---
         // Enqueue the master block script
         $blocks_script_asset_path = get_template_directory() . '/blocks/build/index.asset.php';
@@ -231,8 +207,8 @@ class StarterSite extends Site
     }
 
     /**
-     * Localizes data for the block editor.
-     */
+     * Localizes data for the block editor.
+     */
     public function localize_block_editor_data()
     {
         // The handle for the master script that contains all block code.
@@ -348,5 +324,31 @@ class StarterSite extends Site
             );
         }
         return $block_content;
+    }
+
+    public function enqueue_block_styles() {
+        // Enqueue the main block styles (for both editor and frontend)
+        $blocks_style_path = get_template_directory() . '/blocks/build/style-index.css';
+        if (file_exists($blocks_style_path)) {
+            wp_enqueue_style(
+                'vincentragosta-blocks-style',
+                get_template_directory_uri() . '/blocks/build/style-index.css',
+                [],
+                filemtime($blocks_style_path)
+            );
+        }
+
+        // Enqueue editor-only styles
+        if (is_admin()) {
+            $blocks_editor_style_path = get_template_directory() . '/blocks/build/index.css';
+            if (file_exists($blocks_editor_style_path)) {
+                wp_enqueue_style(
+                    'vincentragosta-blocks-editor-style',
+                    get_template_directory_uri() . '/blocks/build/index.css',
+                    ['wp-edit-blocks', 'vincentragosta-blocks-style'], // Depends on both core and our main styles
+                    filemtime($blocks_editor_style_path)
+                );
+            }
+        }
     }
 }
