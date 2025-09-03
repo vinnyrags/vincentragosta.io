@@ -1,61 +1,60 @@
 .shutter-card {
-  background-color: var(--wp--preset--color--accent-5, #fbfaf3);
-  color: var(--wp--preset--color--contrast, #151515);
-  border-radius: var(--wp--custom--border-radius--small, 4px);
-  padding: var(--wp--preset--spacing--50, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--wp--preset--color--base);
+  border: 1px solid var(--wp--preset--color--grey-2);
+  color: var(--wp--preset--color--contrast);
+  padding: var(--wp--preset--spacing--50);
   overflow: hidden;
-  transition: flex-grow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 
-  // Default state is now the "active/open" state. It grows to take up more space.
-  flex-grow: 5;
-  flex-basis: 0;
+  // Active state styles
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 40%;
 
   // Inactive (collapsed) state.
   &.shutter-card--inactive {
-    flex-grow: 1;
+    flex-grow: 0;
+    flex-shrink: 0;
+    // Use the width calculated by PHP, with a 20% fallback.
+    flex-basis: var(--card-inactive-width, 20%);
+    background-color: var(--wp--preset--color--grey-1);
+    color: var(--wp--preset--color--base);
 
     .shutter-card__subtitle,
     .shutter-card__description {
       opacity: 0;
       visibility: hidden;
-      margin-bottom: 0;
-      transition:
-              opacity 0.3s ease-out,
-              visibility 0s 0.4s;
+      transition: opacity 0.3s ease-out, visibility 0s 0.4s;
     }
   }
 
   &__title {
-    font-size: var(--wp--preset--font-size--heading-medium);
+    color: inherit;
+    font-size: 2rem;
     font-family: var(--wp--preset--font-family--reckless-neue);
     font-weight: 300;
     line-height: 1.2;
     margin: 0 0 1rem;
-    white-space: nowrap; // Keeps the title on one line in the inactive state.
-  }
-
-  &__subtitle,
-  &__description {
-    opacity: 1;
-    max-height: 1000px; // A large enough value to not clip content.
-    visibility: visible;
-    transition:
-            opacity 0.4s ease-in 0.2s, // Delay fade-in for a smoother effect.
-            max-height 0.4s ease-in 0.2s,
-            visibility 0s 0.2s;
+    // Title will now wrap if needed.
   }
 
   &__subtitle {
     font-size: var(--wp--preset--font-size--body-tiny);
     font-weight: 500;
     text-transform: uppercase;
-    color: var(--wp--preset--color--accent-4, #686868);
     margin: 0 0 1rem;
+    transition: opacity 0.4s ease-in 0.2s;
   }
 
   &__description {
+    flex-grow: 1;
     font-size: var(--wp--preset--font-size--body-default);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease-in 0.2s;
 
     p {
       margin-top: 0;

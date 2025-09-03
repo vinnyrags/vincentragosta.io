@@ -55,6 +55,16 @@
           "slug": "accent-6"
         },
         {
+          "color": "#1c1c1f",
+          "name": "Grey 1",
+          "slug": "grey-1"
+        },
+        {
+          "color": "#313135",
+          "name": "Grey 1",
+          "slug": "grey-2"
+        },
+        {
           "color": "#afafb6",
           "name": "Grey 3",
           "slug": "grey-3"
