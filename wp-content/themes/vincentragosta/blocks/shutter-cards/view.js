@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const cards = container.querySelectorAll('.shutter-card');
 
         if (cards.length >= 2) {
+            // Add inactive class to all but the first card on page load
+            cards.forEach((card, index) => {
+                if (index > 0) {
+                    card.classList.add('shutter-card--inactive');
+                }
+            });
+
             // The only job is to handle clicks. PHP and CSS handle the layout.
             cards.forEach(card => {
                 card.addEventListener('click', function () {

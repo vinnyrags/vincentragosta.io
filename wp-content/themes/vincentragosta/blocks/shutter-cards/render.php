@@ -19,16 +19,7 @@ if ($card_count > 1) {
         <?php if (!empty($inner_blocks)) : ?>
             <?php foreach ($inner_blocks as $index => $inner_block) : ?>
                 <?php
-                $inner_block_content = $inner_block->render();
-
-                // Add the 'inactive' class to all cards except the first one.
-                if ($card_count >= 2 && $index > 0) {
-                    $search = 'wp-block-vincentragosta-shutter-card';
-                    $replace = 'wp-block-vincentragosta-shutter-card shutter-card--inactive';
-                    echo str_replace($search, $replace, $inner_block_content);
-                } else {
-                    echo $inner_block_content;
-                }
+                echo $inner_block->render();
                 ?>
             <?php endforeach; ?>
         <?php endif; ?>
