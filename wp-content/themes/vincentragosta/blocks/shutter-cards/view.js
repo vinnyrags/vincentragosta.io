@@ -4,6 +4,25 @@ document.addEventListener('DOMContentLoaded', function () {
     shutterCardsContainers.forEach(container => {
         const cards = container.querySelectorAll('.shutter-card');
 
+        // Function to set min-height for all cards based on container height
+        function setMinHeight() {
+            let containerHeight = container.offsetHeight;
+            cards.forEach(card => {
+                card.style.minHeight = `${containerHeight}px`;
+            });
+        }
+
+        // Throttle function for resize event
+        let throttleTimeout = null;
+        function throttledSetMinHeight() {
+            if (throttleTimeout) {
+                clearTimeout(throttleTimeout);
+            }
+            throttleTimeout = setTimeout(() => {
+                setMinHeight();
+            }, 50);
+        }
+
         if (cards.length >= 2) {
             // Add inactive class to all but the first card on page load
             cards.forEach((card, index) => {
@@ -11,6 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     card.classList.add('shutter-card--inactive');
                 }
             });
+
+            // Set initial min-height on page load after inactive classes are applied
+            setMinHeight();
+
+            // Update min-height on throttled resize
+            window.addEventListener('resize', throttledSetMinHeight);
+
+            // Recalculate min-height after all resources (images, fonts) are loaded
+            window.addEventListener('load', setMinHeight);
 
             // The only job is to handle clicks. PHP and CSS handle the layout.
             cards.forEach(card => {
