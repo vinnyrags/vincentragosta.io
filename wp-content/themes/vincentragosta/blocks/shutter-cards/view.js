@@ -51,6 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.classList.remove('shutter-card--inactive');
                 });
             });
+
+            // Remove preload class after all calculations are done
+            setTimeout(() => {
+                container.closest('.wp-block-vincentragosta-shutter-cards').classList.remove('shutter-cards--preload');
+            }, 500)
         }
     });
 });
