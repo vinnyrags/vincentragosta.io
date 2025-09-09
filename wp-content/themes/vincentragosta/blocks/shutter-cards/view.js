@@ -50,12 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
             // The only job is to handle clicks. PHP and CSS handle the layout.
             cards.forEach(card => {
                 card.addEventListener('click', function () {
-                    if (!this.classList.contains('shutter-card--inactive')) {
-                        return;
+                    // Simply toggle the inactive class on the clicked card
+                    // and ensure other cards are inactive.
+                    if (this.classList.contains('shutter-card--inactive')) {
+                        cards.forEach(c => c.classList.add('shutter-card--inactive'));
+                        this.classList.remove('shutter-card--inactive');
+                    } else {
+                        this.classList.add('shutter-card--inactive');
                     }
-
-                    container.querySelector('.shutter-card:not(.shutter-card--inactive)')?.classList.add('shutter-card--inactive');
-                    this.classList.remove('shutter-card--inactive');
                 });
             });
 
