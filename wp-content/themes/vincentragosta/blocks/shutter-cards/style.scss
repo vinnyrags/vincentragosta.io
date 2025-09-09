@@ -16,8 +16,7 @@
 
     // On smaller screens, allow horizontal scrolling
     @media (max-width: 767px) {
-      overflow-x: auto;
-      padding-bottom: 1rem; // Add space for scrollbar
+      flex-direction: column;
     }
   }
 }

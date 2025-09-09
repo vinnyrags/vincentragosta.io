@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Function to set min-height for all cards based on container height
         function setMinHeight() {
+            if (window.innerWidth <= 768) {
+                // Reset min-height for mobile
+                cards.forEach(card => {
+                    card.style.minHeight = 'auto';
+                });
+                return;
+            }
             let containerHeight = container.offsetHeight;
             cards.forEach(card => {
                 card.style.minHeight = `${containerHeight}px`;
@@ -32,13 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             // Set initial min-height on page load after inactive classes are applied
-            setMinHeight();
+            throttledSetMinHeight();
 
             // Update min-height on throttled resize
             window.addEventListener('resize', throttledSetMinHeight);
 
             // Recalculate min-height after all resources (images, fonts) are loaded
-            window.addEventListener('load', setMinHeight);
+            window.addEventListener('load', throttledSetMinHeight);
 
             // The only job is to handle clicks. PHP and CSS handle the layout.
             cards.forEach(card => {
