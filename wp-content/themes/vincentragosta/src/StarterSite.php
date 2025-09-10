@@ -31,9 +31,7 @@ class StarterSite extends Site
         // Register custom post types from the /config directory
         add_action('init', array($this, 'register_custom_post_types'));
 
-        // Register custom taxonomies from the /config directory
-        // TODO: combine this with register_custom_post_types
-//        add_action('init', array($this, 'register_custom_taxonomies'));
+        add_filter('show_admin_bar', '__return_false');
 
         // Register custom blocks (like Hero and Projects)
         add_action('init', array($this, 'register_native_blocks'));
