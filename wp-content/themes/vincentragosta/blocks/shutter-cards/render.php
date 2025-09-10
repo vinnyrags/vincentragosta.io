@@ -18,9 +18,7 @@ if ($card_count > 1) {
     <div class="shutter-cards-container" <?php echo $container_styles; ?>>
         <?php if (!empty($inner_blocks)) : ?>
             <?php foreach ($inner_blocks as $index => $inner_block) : ?>
-                <?php
-                echo $inner_block->render();
-                ?>
+                <?php echo $inner_block->render(); ?>
             <?php endforeach; ?>
         <?php endif; ?>
     </div>

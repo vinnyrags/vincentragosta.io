@@ -1,4 +1,5 @@
 .shutter-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background-color: var(--wp--preset--color--base);
@@ -7,7 +8,6 @@
   padding: var(--wp--preset--spacing--50);
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
 
   // Active state styles
   flex-grow: 1;
@@ -16,6 +16,7 @@
 
   // Inactive (collapsed) state.
   &.shutter-card--inactive {
+    cursor: pointer;
     flex-grow: 0;
     flex-shrink: 0;
     // Use the width calculated by PHP, with a 20% fallback.
@@ -29,6 +30,13 @@
       visibility: hidden;
       transition: opacity 0.2s ease-out, visibility 0s 0.2s;
     }
+  }
+
+  &__id {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--wp--preset--color--grey-3);
+    margin-bottom: 0.5rem;
   }
 
   &__title {
@@ -51,6 +59,7 @@
 
   &__description {
     font-size: var(--wp--preset--font-size--body-small);
+    line-height: 1.5rem;
     opacity: 1;
     visibility: visible;
     //transition: opacity 0.4s ease-in;
@@ -58,9 +67,44 @@
 
     p {
       margin-top: 0;
+
       &:last-child {
         margin-bottom: 0;
       }
     }
   }
+
+  &__close-icon {
+    position: absolute;
+    bottom: var(--wp--preset--spacing--50);
+    left: var(--wp--preset--spacing--50);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--wp--preset--color--contrast);
+    color: var(--wp--preset--color--contrast);
+    //cursor: pointer;
+    //opacity: 0;
+    //visibility: hidden;
+    //transition: opacity 0.3s ease-in, visibility 0s 0.3s;
+
+    .icon {
+      width: 100%;
+      height: 100%;
+      fill: currentColor;
+    }
+
+    .shutter-card--inactive & {
+      color: var(--wp--preset--color--base);
+      border-color: var(--wp--preset--color--base)
+    }
+  }
+
+  //&:not(.shutter-card--inactive) {
+  //  .shutter-card__close-icon {
+  //    opacity: 1;
+  //    visibility: visible;
+  //    transition: opacity 0.3s ease-in 0.6s, visibility 0s 0s;
+  //  }
+  //}
 }

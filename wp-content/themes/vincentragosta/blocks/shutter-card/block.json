@@ -21,6 +21,10 @@
       "type": "string",
       "source": "html",
       "selector": ".shutter-card__description"
+    },
+    "cardIndex": {
+      "type": "string",
+      "default": "00"
     }
   },
   "parent": [ "vincentragosta/shutter-cards" ],
