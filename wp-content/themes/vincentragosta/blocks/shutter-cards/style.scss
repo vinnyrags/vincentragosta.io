@@ -14,8 +14,12 @@
     flex-wrap: nowrap; // Keeps cards in a single row
     gap: var(--wp--preset--spacing--40, 1.5rem);
 
+    @media (min-width: 992px) {
+      height: 450px;
+    }
+
     // On smaller screens, allow horizontal scrolling
-    @media (max-width: 767px) {
+    @media (max-width: 991px) {
       flex-direction: column;
     }
   }

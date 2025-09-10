@@ -7,32 +7,35 @@
   color: var(--wp--preset--color--contrast);
   padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50) calc(36px + 4rem);
   overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1), flex-basis 0.6s ease-in-out, flex-grow 0.6s ease-in-out;
+  height: 100%;
 
   // Active state styles
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 40%;
 
-  @media (min-width: 782px) {
+  @media (min-width: 992px) {
     padding-bottom: var(--wp--preset--spacing--50);
   }
 
-  // Inactive (collapsed) state.
   &.shutter-card--inactive {
-    cursor: pointer;
-    flex-grow: 0;
-    flex-shrink: 0;
-    // Use the width calculated by PHP, with a 20% fallback.
-    flex-basis: var(--card-inactive-width, 20%);
-    background-color: var(--wp--preset--color--grey-1);
-    color: var(--wp--preset--color--base);
+    @media (min-width: 992px) {
+      cursor: pointer;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: var(--card-inactive-width, 20%);
+      background-color: var(--wp--preset--color--grey-1);
+      color: var(--wp--preset--color--base);
+    }
 
     .shutter-card__subtitle,
     .shutter-card__description {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.2s ease-out, visibility 0s 0.2s;
+      @media (min-width: 992px) {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease-out, visibility 0s 0.2s;
+      }
     }
   }
 
@@ -50,7 +53,6 @@
     font-weight: 300;
     line-height: 1.2;
     margin: 0 0 1rem;
-    // Title will now wrap if needed.
   }
 
   &__subtitle {
@@ -66,7 +68,6 @@
     line-height: 1.5rem;
     opacity: 1;
     visibility: visible;
-    //transition: opacity 0.4s ease-in;
     transition: opacity 0.4s ease-in 0.6s;
 
     p {
@@ -88,7 +89,7 @@
     border: 2px solid var(--wp--preset--color--contrast);
     color: var(--wp--preset--color--base);
     background-color: var(--wp--preset--color--contrast);
-    transition: transform 0.3s ease-in-out, color 0.3s ease-in, background-color 0.3s ease-in;
+    transition: all 0.3s ease-in-out;
 
     .icon {
       width: 100%;
@@ -97,16 +98,20 @@
     }
 
     .shutter-card--inactive & {
-      color: var(--wp--preset--color--base);
-      border-color: var(--wp--preset--color--base);
-      transform: rotate(45deg);
+      @media (min-width: 992px) {
+        color: var(--wp--preset--color--base);
+        border-color: var(--wp--preset--color--base);
+        transform: rotate(45deg);
+      }
     }
 
     .shutter-card--inactive:hover & {
-      transform: rotate(0);
-      color: var(--wp--preset--color--contrast);
-      background-color: var(--wp--preset--color--accent-1);
-      border-color: var(--wp--preset--accent-1);
+      @media (min-width: 992px) {
+        transform: rotate(0);
+        color: var(--wp--preset--color--contrast);
+        background-color: var(--wp--preset--color--accent-1);
+        border-color: var(--wp--preset--accent-1);
+      }
     }
   }
 }
