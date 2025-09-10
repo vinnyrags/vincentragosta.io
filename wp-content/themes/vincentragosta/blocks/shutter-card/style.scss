@@ -78,15 +78,13 @@
     position: absolute;
     bottom: var(--wp--preset--spacing--50);
     left: var(--wp--preset--spacing--50);
-    width: 48px;
-    height: 48px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 2px solid var(--wp--preset--color--contrast);
-    color: var(--wp--preset--color--contrast);
-    //cursor: pointer;
-    //opacity: 0;
-    //visibility: hidden;
-    //transition: opacity 0.3s ease-in, visibility 0s 0.3s;
+    color: var(--wp--preset--color--base);
+    background-color: var(--wp--preset--color--contrast);
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in, background-color 0.3s ease-in;
 
     .icon {
       width: 100%;
@@ -96,15 +94,15 @@
 
     .shutter-card--inactive & {
       color: var(--wp--preset--color--base);
-      border-color: var(--wp--preset--color--base)
+      border-color: var(--wp--preset--color--base);
+      transform: rotate(45deg);
+    }
+
+    .shutter-card--inactive:hover & {
+      transform: rotate(0);
+      color: var(--wp--preset--color--contrast);
+      background-color: var(--wp--preset--color--accent-1);
+      border-color: var(--wp--preset--accent-1);
     }
   }
-
-  //&:not(.shutter-card--inactive) {
-  //  .shutter-card__close-icon {
-  //    opacity: 1;
-  //    visibility: visible;
-  //    transition: opacity 0.3s ease-in 0.6s, visibility 0s 0s;
-  //  }
-  //}
 }
