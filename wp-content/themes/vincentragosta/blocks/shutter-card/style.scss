@@ -5,7 +5,7 @@
   background-color: var(--wp--preset--color--base);
   border: 1px solid var(--wp--preset--color--grey-2);
   color: var(--wp--preset--color--contrast);
-  padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50) calc(36px + 4rem);
+  padding: var(--wp--preset--spacing--50);
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1), flex-basis 0.6s ease-in-out, flex-grow 0.6s ease-in-out;
   height: 100%;
@@ -80,6 +80,7 @@
   }
 
   &__close-icon {
+    display: none;
     position: absolute;
     bottom: var(--wp--preset--spacing--50);
     left: var(--wp--preset--spacing--50);
@@ -90,6 +91,10 @@
     color: var(--wp--preset--color--base);
     background-color: var(--wp--preset--color--contrast);
     transition: all 0.3s ease-in-out;
+
+    @media (min-width: 992px) {
+      display: block;
+    }
 
     .icon {
       width: 100%;
