@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             throttleTimeout = setTimeout(() => {
                 setMinHeight();
-            }, 50);
+            }, 250);
         }
 
         if (cards.length >= 2) {
@@ -37,9 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     card.classList.add('shutter-card--inactive');
                 }
             });
-
-            // Set initial min-height on page load after inactive classes are applied
-            throttledSetMinHeight();
 
             // Update min-height on throttled resize
             window.addEventListener('resize', throttledSetMinHeight);

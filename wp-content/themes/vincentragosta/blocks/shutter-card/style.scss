@@ -5,7 +5,7 @@
   background-color: var(--wp--preset--color--base);
   border: 1px solid var(--wp--preset--color--grey-2);
   color: var(--wp--preset--color--contrast);
-  padding: var(--wp--preset--spacing--50);
+  padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--50) calc(36px + var(--wp--preset--spacing--80));
   overflow: hidden;
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -13,6 +13,10 @@
   flex-grow: 1;
   flex-shrink: 1;
   flex-basis: 40%;
+
+  @media (min-width: 782px) {
+    padding-bottom: var(--wp--preset--spacing--50);
+  }
 
   // Inactive (collapsed) state.
   &.shutter-card--inactive {
