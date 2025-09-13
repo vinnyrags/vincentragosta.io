@@ -102,7 +102,6 @@ class StarterSite extends Site
      */
     public function enqueue_custom_editor_scripts()
     {
-        // --- START: Add these lines ---
         // Enqueue the master block script
         $blocks_script_asset_path = get_template_directory() . '/blocks/build/index.asset.php';
         if (file_exists($blocks_script_asset_path)) {
@@ -115,15 +114,19 @@ class StarterSite extends Site
                 true
             );
         }
-        // --- END: Add these lines ---
 
         $script_asset_path = get_template_directory() . '/assets/src/build/js/main.asset.php';
         if (file_exists($script_asset_path)) {
             $script_asset = require($script_asset_path);
+            $dependencies = $script_asset['dependencies'];
+            if (!in_array('wp-element', $dependencies)) {
+                $dependencies[] = 'wp-element';
+            }
+
             wp_enqueue_script(
                 'vincentragosta-js',
                 get_template_directory_uri() . '/assets/src/build/js/main.js',
-                $script_asset['dependencies'],
+                $dependencies,
                 $script_asset['version'],
                 true
             );
@@ -148,6 +151,9 @@ class StarterSite extends Site
         if (function_exists('get_theme_svg')) {
             $twig->addFunction(new TwigFunction('get_theme_svg', 'get_theme_svg'));
         }
+        if (function_exists('get_theme_svg_sprite')) {
+            $twig->addFunction(new TwigFunction('get_theme_svg_sprite', 'get_theme_svg_sprite'));
+        }
 
         return $twig;
     }
@@ -171,28 +177,6 @@ class StarterSite extends Site
         }
     }
 
-//    /**
-//     * Registers custom taxonomies from JSON files in the /config directory.
-//     */
-//    public function register_custom_taxonomies()
-//    {
-//        $config_dir = get_template_directory() . '/config/';
-//        if (!is_dir($config_dir)) {
-//            return;
-//        }
-//        $json_files = glob($config_dir . '/*_tax.json'); // Use a suffix for taxonomy files
-//        foreach ($json_files as $file) {
-//            $content = file_get_contents($file);
-//            $data = json_decode($content, true);
-//            if (json_last_error() === JSON_ERROR_NONE && isset($data['taxonomy']) && isset($data['post_types']) && isset($data['args'])) {
-//                register_taxonomy($data['taxonomy'], $data['post_types'], $data['args']);
-//            }
-//        }
-//    }
-
-    /**
-     * Registers custom Gutenberg blocks defined in the /blocks directory.
-     */
     public function register_native_blocks()
     {
         $blocks = ['hero', 'projects', 'shutter-cards', 'shutter-card'];
@@ -234,7 +218,6 @@ class StarterSite extends Site
 
             $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
 
-            // Localize the data to the correct master block script handle.
             wp_localize_script($master_block_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
         }
 
@@ -245,14 +228,15 @@ class StarterSite extends Site
             $button_icon_options = [['label' => __('— No Icon —', 'vincentragosta'), 'value' => '']];
             $button_icon_content_map = [];
 
-            if (is_dir($sprite_svg_dir) && function_exists('get_theme_svg')) {
+            // FIX: This section now correctly checks for and uses the `get_theme_svg_sprite` function.
+            if (is_dir($sprite_svg_dir) && function_exists('get_theme_svg_sprite')) {
                 $sprite_svg_files = glob($sprite_svg_dir . '*.svg');
                 if ($sprite_svg_files) {
                     foreach ($sprite_svg_files as $file_path) {
                         $filename = basename($file_path);
                         $label = ucwords(str_replace(['icon-', '-', '_', '.svg'], ['', ' ', ' ', ''], pathinfo($filename, PATHINFO_FILENAME)));
                         $button_icon_options[] = ['label' => $label, 'value' => $filename];
-                        $button_icon_content_map[$filename] = get_theme_svg($filename, true);
+                        $button_icon_content_map[$filename] = get_theme_svg_sprite($filename);
                     }
                 }
             }
@@ -274,10 +258,11 @@ class StarterSite extends Site
         if (
             isset($block['blockName']) && $block['blockName'] === 'core/button' &&
             !empty($block['attrs']['selectedIcon']) &&
-            function_exists('get_theme_svg')
+            // FIX: This section now correctly checks for and uses the `get_theme_svg_sprite` function.
+            function_exists('get_theme_svg_sprite')
         ) {
             $icon_filename = $block['attrs']['selectedIcon'];
-            $svg_content = get_theme_svg($icon_filename, true);
+            $svg_content = get_theme_svg_sprite($icon_filename);
 
             if (empty($svg_content)) {
                 return $block_content;

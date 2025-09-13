@@ -1,16 +1,120 @@
-import { addFilter } from '@wordpress/hooks';
-import { __ } from '@wordpress/i18n';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import { Fragment, useEffect, useState } from '@wordpress/element';
-import { InspectorControls, RichText, BlockControls } from '@wordpress/block-editor';
-import { PanelBody, SelectControl, BaseControl } from '@wordpress/components';
+import { Fragment } from '@wordpress/element';
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, SelectControl } from '@wordpress/components';
+import { addFilter } from '@wordpress/hooks';
 
-const NAMESPACE = 'vincentragosta-theme/button-icon';
+console.log('button.js script is loaded.');
 
-// This function remains the same
-const addButtonIconAttributes = (settings, name) => {
-    if (name === 'core/button') {
-        const newAttributes = {
+const withButtonIconAttributes = createHigherOrderComponent((BlockEdit) => {
+    return (props) => {
+        const {
+            name,
+            attributes,
+            setAttributes,
+            isSelected,
+        } = props;
+
+        // Ensure we're targeting the core/button block
+        if (name !== 'core/button') {
+            return <BlockEdit {...props} />;
+        }
+
+        console.log('Editing the core/button block.');
+
+        // Get the icon data from the global object
+        const iconData = window.vincentragostaButtonIconData;
+        console.log('Icon Data from global object:', iconData);
+
+        const { selectedIcon, iconPosition } = attributes;
+
+        // Make sure we have the necessary data to render the UI
+        if (!iconData || !iconData.iconOptions) {
+            console.error('vincentragostaButtonIconData is not available. Check `localize_block_editor_data` in StarterSite.php.');
+            return <BlockEdit {...props} />;
+        }
+
+        const iconOptions = iconData.iconOptions;
+        const iconContentMap = iconData.iconContentMap;
+
+        // Function to create and insert an icon element
+        const renderIcon = (iconName) => {
+            if (!iconName || !iconContentMap[iconName]) {
+                return null;
+            }
+            // Temporarily insert a div to see if the content is there
+            return (
+                <div
+                    dangerouslySetInnerHTML={{ __html: iconContentMap[iconName] }}
+                    style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '5px' }}
+                />
+            );
+        };
+
+        const iconLabel = selectedIcon ?
+            iconOptions.find(option => option.value === selectedIcon)?.label : '— No Icon —';
+
+        console.log('Selected Icon:', selectedIcon);
+        console.log('Icon Position:', iconPosition);
+
+        return (
+            <Fragment>
+                <BlockEdit {...props} />
+                {isSelected && (
+                    <InspectorControls>
+                        <PanelBody title="Button Icon" initialOpen={true}>
+                            <SelectControl
+                                label="Select Icon"
+                                value={selectedIcon}
+                                options={iconOptions}
+                                onChange={(value) => {
+                                    setAttributes({ selectedIcon: value });
+                                    console.log('Icon selected:', value);
+                                }}
+                            />
+                            <SelectControl
+                                label="Icon Position"
+                                value={iconPosition || 'left'}
+                                options={[
+                                    { label: 'Left', value: 'left' },
+                                    { label: 'Right', value: 'right' },
+                                ]}
+                                onChange={(value) => {
+                                    setAttributes({ iconPosition: value });
+                                    console.log('Icon position changed:', value);
+                                }}
+                            />
+                            {selectedIcon && (
+                                <p>
+                                    Preview: {renderIcon(selectedIcon)} {iconLabel}
+                                </p>
+                            )}
+                        </PanelBody>
+                    </InspectorControls>
+                )}
+            </Fragment>
+        );
+    };
+}, 'withButtonIconAttributes');
+
+addFilter(
+    'editor.BlockEdit',
+    'vincentragosta/with-button-icon-attributes',
+    withButtonIconAttributes
+);
+
+const addIconAttributes = (settings) => {
+    // Ensure we're targeting the core/button block.
+    if (settings.name !== 'core/button') {
+        return settings;
+    }
+
+    console.log('Adding custom attributes to core/button settings.');
+
+    // Add our custom attributes.
+    return {
+        ...settings,
+        attributes: {
             ...settings.attributes,
             selectedIcon: {
                 type: 'string',
@@ -20,107 +124,12 @@ const addButtonIconAttributes = (settings, name) => {
                 type: 'string',
                 default: 'left',
             },
-        };
-        // Clean up old, unused attributes if they exist
-        if (newAttributes.hasOwnProperty('hasIcon')) {
-            delete newAttributes.hasIcon;
-        }
-        if (newAttributes.hasOwnProperty('iconSvgString')) {
-            delete newAttributes.iconSvgString;
-        }
-        return { ...settings, attributes: newAttributes };
-    }
-    return settings;
+        },
+    };
 };
 
 addFilter(
     'blocks.registerBlockType',
-    `${NAMESPACE}/add-button-icon-attributes`,
-    addButtonIconAttributes
-);
-
-// This Higher-Order Component logic remains the same
-const withButtonIconEdit = createHigherOrderComponent((OriginalBlockEdit) => {
-    return (props) => {
-        // Since this HOC is now ONLY applied to core/button,
-        // we no longer need the `if (props.name !== 'core/button')` check.
-
-        const { attributes, setAttributes } = props;
-        const { selectedIcon, iconPosition, text, placeholder } = attributes;
-
-        const [iconData, setIconData] = useState({
-            options: [{ label: __('— No Icon —', 'vincentragosta'), value: '' }],
-            contentMap: {},
-        });
-
-        useEffect(() => {
-            if (window.vincentragostaButtonIconData) {
-                setIconData({
-                    options: window.vincentragostaButtonIconData.iconOptions || [],
-                    contentMap: window.vincentragostaButtonIconData.iconContentMap || {},
-                });
-            }
-        }, []);
-
-        const handleIconChange = (newIconFile) => {
-            setAttributes({ selectedIcon: newIconFile || '' });
-        };
-
-        const currentSvgContent = selectedIcon && iconData.contentMap[selectedIcon] ? iconData.contentMap[selectedIcon] : null;
-
-        return (
-            <Fragment>
-                <InspectorControls>
-                    <PanelBody title={__('Icon Settings', 'vincentragosta')} initialOpen={true}>
-                        <SelectControl
-                            label={__('Select Icon', 'vincentragosta')}
-                            value={selectedIcon}
-                            options={iconData.options}
-                            onChange={handleIconChange}
-                        />
-                        {selectedIcon && (
-                            <SelectControl
-                                label={__('Icon Position', 'vincentragosta')}
-                                value={iconPosition}
-                                options={[
-                                    { label: __('Left', 'vincentragosta'), value: 'left' },
-                                    { label: __('Right', 'vincentragosta'), value: 'right' },
-                                ]}
-                                onChange={(val) => setAttributes({ iconPosition: val })}
-                            />
-                        )}
-                    </PanelBody>
-                </InspectorControls>
-
-                {/* We can now safely render the original block edit component */}
-                <OriginalBlockEdit {...props} />
-
-                {/* Optional: Add an icon preview inside the button in the editor */}
-                {currentSvgContent && (
-                    <div className="vrt-button-icon-editor-preview-wrapper">
-                        <span
-                            className={`vrt-button-icon-editor-svg is-position-${iconPosition}`}
-                            dangerouslySetInnerHTML={{ __html: currentSvgContent }}
-                        />
-                    </div>
-                )}
-            </Fragment>
-        );
-    };
-}, 'withButtonIconEdit');
-
-// --- THIS IS THE CRUCIAL CHANGE ---
-// We change the filter from the global 'editor.BlockEdit'
-// to the targeted 'blocks.BlockEdit'
-addFilter(
-    'blocks.BlockEdit',
-    `${NAMESPACE}/with-button-icon-edit`,
-    (BlockEditComponent, block) => {
-        // We only apply our modification to the 'core/button' block
-        if (block.name === 'core/button') {
-            return withButtonIconEdit(BlockEditComponent);
-        }
-        // For all other blocks, return the original component unmodified.
-        return BlockEditComponent;
-    }
+    'vincentragosta/add-button-icon-attributes',
+    addIconAttributes
 );
