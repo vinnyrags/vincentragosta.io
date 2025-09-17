@@ -4,62 +4,58 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, SelectControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 
-console.log('button.js script is loaded.');
-
 const withButtonIconAttributes = createHigherOrderComponent((BlockEdit) => {
     return (props) => {
         const {
             name,
             attributes,
             setAttributes,
-            isSelected,
+            isSelected
         } = props;
 
-        // Ensure we're targeting the core/button block
         if (name !== 'core/button') {
             return <BlockEdit {...props} />;
         }
 
-        console.log('Editing the core/button block.');
-
-        // Get the icon data from the global object
         const iconData = window.vincentragostaButtonIconData;
-        console.log('Icon Data from global object:', iconData);
 
         const { selectedIcon, iconPosition } = attributes;
 
-        // Make sure we have the necessary data to render the UI
         if (!iconData || !iconData.iconOptions) {
             console.error('vincentragostaButtonIconData is not available. Check `localize_block_editor_data` in StarterSite.php.');
-            return <BlockEdit {...props} />;
         }
 
-        const iconOptions = iconData.iconOptions;
-        const iconContentMap = iconData.iconContentMap;
+        const iconOptions = iconData ? iconData.iconOptions : [];
+        const iconContentMap = iconData ? iconData.iconContentMap : {};
 
-        // Function to create and insert an icon element
         const renderIcon = (iconName) => {
             if (!iconName || !iconContentMap[iconName]) {
                 return null;
             }
-            // Temporarily insert a div to see if the content is there
+
             return (
-                <div
-                    dangerouslySetInnerHTML={{ __html: iconContentMap[iconName] }}
-                    style={{ display: 'inline-block', verticalAlign: 'middle', marginRight: '5px' }}
-                />
+                <span className="wp-block-button__icon">
+                    <span dangerouslySetInnerHTML={{ __html: iconContentMap[iconName] }} />
+                </span>
             );
         };
 
         const iconLabel = selectedIcon ?
             iconOptions.find(option => option.value === selectedIcon)?.label : '— No Icon —';
 
-        console.log('Selected Icon:', selectedIcon);
-        console.log('Icon Position:', iconPosition);
-
         return (
             <Fragment>
-                <BlockEdit {...props} />
+                <BlockEdit {...props}>
+                    {/* Check if an icon is selected and render it inside the button content */}
+                    {selectedIcon && iconPosition === 'left' && (
+                        renderIcon(selectedIcon)
+                    )}
+                    {/* The original block content is passed as children. We'll render it here. */}
+                    {props.children}
+                    {selectedIcon && iconPosition === 'right' && (
+                        renderIcon(selectedIcon)
+                    )}
+                </BlockEdit>
                 {isSelected && (
                     <InspectorControls>
                         <PanelBody title="Button Icon" initialOpen={true}>
@@ -69,7 +65,6 @@ const withButtonIconAttributes = createHigherOrderComponent((BlockEdit) => {
                                 options={iconOptions}
                                 onChange={(value) => {
                                     setAttributes({ selectedIcon: value });
-                                    console.log('Icon selected:', value);
                                 }}
                             />
                             <SelectControl
@@ -81,12 +76,11 @@ const withButtonIconAttributes = createHigherOrderComponent((BlockEdit) => {
                                 ]}
                                 onChange={(value) => {
                                     setAttributes({ iconPosition: value });
-                                    console.log('Icon position changed:', value);
                                 }}
                             />
                             {selectedIcon && (
                                 <p>
-                                    Preview: {renderIcon(selectedIcon)} {iconLabel}
+                                    Preview: {iconLabel}
                                 </p>
                             )}
                         </PanelBody>
@@ -104,14 +98,11 @@ addFilter(
 );
 
 const addIconAttributes = (settings) => {
-    // Ensure we're targeting the core/button block.
     if (settings.name !== 'core/button') {
         return settings;
     }
 
-    console.log('Adding custom attributes to core/button settings.');
 
-    // Add our custom attributes.
     return {
         ...settings,
         attributes: {
