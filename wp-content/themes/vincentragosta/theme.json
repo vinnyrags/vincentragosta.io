@@ -68,6 +68,11 @@
           "color": "#afafb6",
           "name": "Grey 3",
           "slug": "grey-3"
+        },
+        {
+          "color": "#494950",
+          "name": "Grey 4",
+          "slug": "grey-4"
         }
       ]
     },

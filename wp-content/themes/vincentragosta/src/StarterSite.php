@@ -84,6 +84,18 @@ class StarterSite extends Site
             array(),
             wp_get_theme()->get('Version')
         );
+
+        // Enqueue frontend JavaScript (separate from editor scripts)
+        $script_path = get_template_directory() . '/assets/src/build/js/frontend.js';
+        if (file_exists($script_path)) {
+            wp_enqueue_script(
+                'vincentragosta-frontend-js',
+                get_template_directory_uri() . '/assets/src/build/js/frontend.js',
+                array(),
+                wp_get_theme()->get('Version'),
+                true
+            );
+        }
     }
 
     /**
@@ -148,14 +160,28 @@ class StarterSite extends Site
      */
     public function additional_timber_functions($twig)
     {
-        if (function_exists('get_theme_svg')) {
-            $twig->addFunction(new TwigFunction('get_theme_svg', 'get_theme_svg'));
-        }
+        $twig->addFunction(new TwigFunction('get_theme_svg', array($this, 'get_svg_content')));
+
         if (function_exists('get_theme_svg_sprite')) {
             $twig->addFunction(new TwigFunction('get_theme_svg_sprite', 'get_theme_svg_sprite'));
         }
 
         return $twig;
+    }
+
+    /**
+     * Get the content of an SVG file from the theme's assets/images/svg directory.
+     *
+     * @param string $filename The name of the SVG file.
+     * @return string The content of the SVG file.
+     */
+    public function get_svg_content($filename)
+    {
+        $path = get_template_directory() . '/assets/images/svg/' . $filename;
+        if (file_exists($path)) {
+            return file_get_contents($path);
+        }
+        return '';
     }
 
     /**

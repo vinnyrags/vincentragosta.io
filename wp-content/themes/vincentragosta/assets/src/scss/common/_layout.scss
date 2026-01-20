@@ -1,3 +1,8 @@
+// look into a theme.json way to handle this
+body > .wp-site-blocks {
+  padding-top: 0;
+}
+
 main[role="main"] {
   margin-top: 0;
 }

@@ -1,0 +1,169 @@
+// Header CSS custom properties for theme switching
+:root {
+  --header-height: 72px; // Fallback, JS will calculate actual value
+  --header-bg: var(--wp--preset--color--contrast);
+  --header-text: var(--wp--preset--color--base);
+  --header-border: var(--wp--preset--color--grey-2);
+}
+
+.light-mode {
+  --header-bg: var(--wp--preset--color--base);
+  --header-text: var(--wp--preset--color--contrast);
+  --header-border: var(--wp--preset--color--grey-3);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
+  }
+
+  // Mode toggle button (left)
+  &__mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--header-text);
+    border: 1px solid var(--wp--preset--color--grey-4);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      border-color: var(--header-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--header-text);
+      outline-offset: 2px;
+    }
+  }
+
+  // Mode icons
+  &__mode-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    // In nightmode (default), show sun icon, hide moon
+    &--sun {
+      display: flex;
+    }
+
+    &--moon {
+      display: none;
+    }
+
+    .light-mode & {
+      // In light mode, hide sun icon, show moon
+      &--sun {
+        display: none;
+      }
+
+      &--moon {
+        display: flex;
+      }
+    }
+  }
+
+  // Logo (center)
+  &__logo {
+    margin: 0;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    a {
+      color: var(--header-text);
+      text-decoration: none;
+      transition: opacity 0.2s ease, color 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--header-text);
+        outline-offset: 4px;
+      }
+    }
+  }
+
+  // Menu toggle / hamburger (right)
+  &__menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--wp--preset--color--base);
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--header-text);
+      outline-offset: 2px;
+    }
+  }
+
+  &__menu-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--wp--preset--color--contrast);
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+  }
+
+  // Light mode: swap hamburger colors
+  .light-mode &__menu-toggle {
+    background: var(--wp--preset--color--contrast);
+  }
+
+  .light-mode &__menu-line {
+    background-color: var(--wp--preset--color--base);
+  }
+}
+
+// Add padding to body to account for fixed header
+body {
+  padding-top: var(--header-height);
+}
+
+// Reduced motion: disable transitions for users who prefer reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .header__mode-toggle,
+  .header__logo a,
+  .header__menu-line {
+    transition: none;
+  }
+}

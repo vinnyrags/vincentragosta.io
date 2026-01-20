@@ -11,4 +11,12 @@
     <link rel="author" href="{{ site.theme.link }}/humans.txt" />
     <link rel="pingback" href="{{ site.pingback_url }}" />
     <link rel="profile" href="http://gmpg.org/xfn/11">
+    <script>
+        (function() {
+            var saved = localStorage.getItem('theme-mode');
+            if (saved === 'light' || (!saved && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
     {{function('wp_head')}}

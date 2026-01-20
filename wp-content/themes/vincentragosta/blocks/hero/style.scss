@@ -22,12 +22,6 @@
   overflow: hidden;
   position: relative;
 
-  &.hero--has-video {
-    .hero__svg:before {
-      content: none;
-    }
-  }
-
   .hero__video {
     position: absolute;
     top: 50%;
@@ -74,6 +68,9 @@
       align-items: center;
       width: 100%;
       z-index: 1;
+      // GPU acceleration for the SVG container
+      transform: translateZ(0);
+      backface-visibility: hidden;
 
       @media (min-width: 768px) {
         justify-content: flex-end;
@@ -82,21 +79,6 @@
         inset: 0;
         margin-left: auto;
         flex: 1;
-      }
-
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        pointer-events: none;
-        z-index: 1;
-        background: linear-gradient(to bottom, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
-        linear-gradient(to top, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%),
-        linear-gradient(to right, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 60%),
-        linear-gradient(to left, rgba(21, 21, 21, 1), rgba(21, 21, 21, 0) 30%);
       }
 
       svg {
@@ -119,6 +101,8 @@
       opacity: 0;
       animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
       animation-delay: 0.2s;
+      // Subtle text halo for readability over SVG
+      text-shadow: 0 0 10px var(--color-bg), 0 0 20px var(--color-bg);
     }
 
     &__links {
@@ -157,6 +141,9 @@
   animation: draw-mask-stroke cubic-bezier(0.4, 0, 0.2, 1) 0s 1 forwards;
   stroke: #fff;
   fill: none;
+  // GPU acceleration for smoother stroke animation
+  transform: translateZ(0);
+  will-change: stroke-dashoffset;
 }
 
 .wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-0 {
@@ -205,4 +192,34 @@
 
 .hero__title .line-mask:nth-child(2) .line-content {
   animation-delay: 0.2s;
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-block-vincentragosta-hero {
+    .hero__svg svg.squiggle-3 .mask {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+
+    .hero__title {
+      animation: none;
+      transform: none;
+      opacity: 1;
+    }
+
+    .hero__links .wp-block-button {
+      animation: none;
+      opacity: 1;
+    }
+
+    .line-content {
+      animation: none;
+      transform: none;
+      opacity: 1;
+    }
+  }
 }
