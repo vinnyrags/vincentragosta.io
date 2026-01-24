@@ -34,8 +34,8 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => implode(' ', $blo
 
     <div class="hero__svg">
         <?php // The SVG graphic itself is only rendered if NO video URL is provided.
-        if (empty($video_url) && !empty($svg_asset) && function_exists('get_theme_svg')) {
-            echo get_theme_svg($svg_asset, false);
+        if (empty($video_url) && !empty($svg_asset)) {
+            echo new Icon($svg_asset);
         }
         ?>
     </div>

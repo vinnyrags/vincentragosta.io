@@ -4,6 +4,8 @@ use Timber\Site;
 use Timber\Timber;
 use Twig\TwigFunction;
 
+require_once __DIR__ . '/Icon.php';
+
 /**
  * Class StarterSite
  */
@@ -160,28 +162,11 @@ class StarterSite extends Site
      */
     public function additional_timber_functions($twig)
     {
-        $twig->addFunction(new TwigFunction('get_theme_svg', array($this, 'get_svg_content')));
-
-        if (function_exists('get_theme_svg_sprite')) {
-            $twig->addFunction(new TwigFunction('get_theme_svg_sprite', 'get_theme_svg_sprite'));
-        }
+        $twig->addFunction(new TwigFunction('icon', function (string $name): Icon {
+            return new Icon($name);
+        }));
 
         return $twig;
-    }
-
-    /**
-     * Get the content of an SVG file from the theme's assets/images/svg directory.
-     *
-     * @param string $filename The name of the SVG file.
-     * @return string The content of the SVG file.
-     */
-    public function get_svg_content($filename)
-    {
-        $path = get_template_directory() . '/assets/images/svg/' . $filename;
-        if (file_exists($path)) {
-            return file_get_contents($path);
-        }
-        return '';
     }
 
     /**
@@ -219,60 +204,22 @@ class StarterSite extends Site
      */
     public function localize_block_editor_data()
     {
-        // The handle for the master script that contains all block code.
+        // Hero block SVG data
         $master_block_script_handle = 'vincentragosta-blocks-js';
-
-        // Check if the master block script is actually loaded.
         if (wp_script_is($master_block_script_handle, 'registered') || wp_script_is($master_block_script_handle, 'enqueued')) {
-
-            // --- Hero Block Specific Localization ---
-            $svg_dir_hero = get_template_directory() . '/assets/images/svg/';
-            $svg_options_hero = [['label' => __('Select SVG for Hero', 'vincentragosta'), 'value' => '']];
-            $svg_content_map_hero = [];
-
-            if (is_dir($svg_dir_hero) && function_exists('get_theme_svg')) {
-                $svg_files_hero = glob($svg_dir_hero . '*.svg');
-                if ($svg_files_hero) {
-                    foreach ($svg_files_hero as $file_path) {
-                        $filename = basename($file_path);
-                        $label = ucwords(str_replace(['-', '_', '.svg'], ' ', pathinfo($filename, PATHINFO_FILENAME)));
-                        $svg_options_hero[] = ['label' => $label, 'value' => $filename];
-                        $svg_content_map_hero[$filename] = get_theme_svg($filename);
-                    }
-                }
-            }
-
-            $hero_localized_data = ['svgOptions' => $svg_options_hero, 'svgContent' => $svg_content_map_hero];
-
-            wp_localize_script($master_block_script_handle, 'vincentragostaHeroBlockData', $hero_localized_data);
+            wp_localize_script($master_block_script_handle, 'vincentragostaHeroBlockData', [
+                'svgOptions' => Icon::options('svg', __('Select SVG for Hero', 'vincentragosta')),
+                'svgContent' => Icon::contentMap('svg'),
+            ]);
         }
 
-        // --- Button Icon Enhancement Data Localization ---
+        // Button icon data
         $main_editor_script_handle = 'vincentragosta-js';
         if (wp_script_is($main_editor_script_handle, 'registered') || wp_script_is($main_editor_script_handle, 'enqueued')) {
-            $sprite_svg_dir = get_template_directory() . '/assets/images/svg-sprite/';
-            $button_icon_options = [['label' => __('— No Icon —', 'vincentragosta'), 'value' => '']];
-            $button_icon_content_map = [];
-
-            // FIX: This section now correctly checks for and uses the `get_theme_svg_sprite` function.
-            if (is_dir($sprite_svg_dir) && function_exists('get_theme_svg_sprite')) {
-                $sprite_svg_files = glob($sprite_svg_dir . '*.svg');
-                if ($sprite_svg_files) {
-                    foreach ($sprite_svg_files as $file_path) {
-                        $filename = basename($file_path);
-                        $label = ucwords(str_replace(['icon-', '-', '_', '.svg'], ['', ' ', ' ', ''], pathinfo($filename, PATHINFO_FILENAME)));
-                        $button_icon_options[] = ['label' => $label, 'value' => $filename];
-                        $button_icon_content_map[$filename] = get_theme_svg_sprite($filename);
-                    }
-                }
-            }
-
-            $button_icon_localized_data = [
-                'iconOptions' => $button_icon_options,
-                'iconContentMap' => $button_icon_content_map,
-            ];
-
-            wp_localize_script($main_editor_script_handle, 'vincentragostaButtonIconData', $button_icon_localized_data);
+            wp_localize_script($main_editor_script_handle, 'vincentragostaButtonIconData', [
+                'iconOptions' => Icon::options('sprite', __('— No Icon —', 'vincentragosta')),
+                'iconContentMap' => Icon::contentMap('sprite'),
+            ]);
         }
     }
 
@@ -281,57 +228,54 @@ class StarterSite extends Site
      */
     public function render_button_with_icon_frontend($block_content, $block)
     {
-        if (
-            isset($block['blockName']) && $block['blockName'] === 'core/button' &&
-            !empty($block['attrs']['selectedIcon']) &&
-            // FIX: This section now correctly checks for and uses the `get_theme_svg_sprite` function.
-            function_exists('get_theme_svg_sprite')
-        ) {
-            $icon_filename = $block['attrs']['selectedIcon'];
-            $svg_content = get_theme_svg_sprite($icon_filename);
+        if (!isset($block['blockName']) || $block['blockName'] !== 'core/button' || empty($block['attrs']['selectedIcon'])) {
+            return $block_content;
+        }
 
-            if (empty($svg_content)) {
-                return $block_content;
-            }
+        $icon = new Icon($block['attrs']['selectedIcon']);
+        if (!$icon->exists()) {
+            return $block_content;
+        }
 
-            $icon_position = isset($block['attrs']['iconPosition']) ? $block['attrs']['iconPosition'] : 'left';
-            $class_to_add = ' has-icon icon-pos-' . esc_attr($icon_position);
+        $svg_content = (string) $icon;
+        $icon_position = $block['attrs']['iconPosition'] ?? 'left';
+        $class_to_add = ' has-icon icon-pos-' . esc_attr($icon_position);
 
-            if (strpos($block_content, 'class="') !== false) {
-                $block_content = preg_replace(
-                    '/(<div\s+[^>]*class=")([^"]*wp-block-button[^"]*)/i',
-                    '$1$2' . $class_to_add . '"',
-                    $block_content,
-                    1
-                );
-            } else {
-                $block_content = preg_replace(
-                    '/(<div\s+[^>]*wp-block-button)/i',
-                    '$1 class="' . trim($class_to_add) . '"',
-                    $block_content,
-                    1
-                );
-            }
-
-            $pattern = '/(<(a|button)\s+[^>]*class="[^"]*wp-block-button__link[^"]*"[^>]*>)(.*?)(<\/\2>)/is';
-            $block_content = preg_replace_callback(
-                $pattern,
-                function ($matches) use ($svg_content, $icon_position) {
-                    $opening_tag = $matches[1];
-                    $link_text = $matches[3];
-                    $closing_tag = $matches[4];
-                    $icon_html = '<span class="wp-block-button__icon" aria-hidden="true">' . $svg_content . '</span>';
-
-                    if ($icon_position === 'right') {
-                        return $opening_tag . $link_text . $icon_html . $closing_tag;
-                    } else {
-                        return $opening_tag . $icon_html . $link_text . $closing_tag;
-                    }
-                },
+        // Add class to wrapper div
+        if (strpos($block_content, 'class="') !== false) {
+            $block_content = preg_replace(
+                '/(<div\s+[^>]*class=")([^"]*wp-block-button[^"]*)/i',
+                '$1$2' . $class_to_add . '"',
+                $block_content,
+                1
+            );
+        } else {
+            $block_content = preg_replace(
+                '/(<div\s+[^>]*wp-block-button)/i',
+                '$1 class="' . trim($class_to_add) . '"',
                 $block_content,
                 1
             );
         }
+
+        // Insert icon into button/link
+        $pattern = '/(<(a|button)\s+[^>]*class="[^"]*wp-block-button__link[^"]*"[^>]*>)(.*?)(<\/\2>)/is';
+        $block_content = preg_replace_callback(
+            $pattern,
+            function ($matches) use ($svg_content, $icon_position) {
+                $opening_tag = $matches[1];
+                $link_text = $matches[3];
+                $closing_tag = $matches[4];
+                $icon_html = '<span class="wp-block-button__icon" aria-hidden="true">' . $svg_content . '</span>';
+
+                return $icon_position === 'right'
+                    ? $opening_tag . $link_text . $icon_html . $closing_tag
+                    : $opening_tag . $icon_html . $link_text . $closing_tag;
+            },
+            $block_content,
+            1
+        );
+
         return $block_content;
     }
 
