@@ -3,6 +3,7 @@
 namespace ChildTheme\Providers;
 
 use ChildTheme\Blocks\ButtonIconEnhancer;
+use ChildTheme\Contracts\Registrable;
 use ChildTheme\Services\Icon;
 
 /**
@@ -20,13 +21,31 @@ class BlockServiceProvider extends ServiceProvider
         'shutter-card',
     ];
 
+    /**
+     * Block enhancers to register.
+     *
+     * @var array<class-string<Registrable>>
+     */
+    protected array $enhancers = [
+        ButtonIconEnhancer::class,
+    ];
+
     public function register(): void
     {
         add_action('init', [$this, 'registerBlocks']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
-        // Register the button icon enhancer
-        (new ButtonIconEnhancer())->register();
+        $this->registerEnhancers();
+    }
+
+    /**
+     * Register all block enhancers.
+     */
+    protected function registerEnhancers(): void
+    {
+        foreach ($this->enhancers as $enhancer) {
+            (new $enhancer())->register();
+        }
     }
 
     /**

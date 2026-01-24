@@ -2,6 +2,7 @@
 
 namespace ChildTheme;
 
+use ChildTheme\Contracts\Registrable;
 use Timber\Site;
 use Timber\Timber;
 
@@ -14,6 +15,8 @@ class Theme extends Site
 {
     /**
      * Service providers to register.
+     *
+     * @var array<class-string<Registrable>>
      */
     protected array $providers = [
         Providers\ThemeServiceProvider::class,
@@ -27,18 +30,20 @@ class Theme extends Site
     {
         Timber::$dirname = ['templates', 'views', 'blocks'];
 
-        $this->registerProviders();
+        $this->registerAll($this->providers);
 
         parent::__construct();
     }
 
     /**
-     * Register all service providers.
+     * Register all classes that implement Registrable.
+     *
+     * @param array<class-string<Registrable>> $classes
      */
-    protected function registerProviders(): void
+    protected function registerAll(array $classes): void
     {
-        foreach ($this->providers as $providerClass) {
-            (new $providerClass())->register();
+        foreach ($classes as $class) {
+            (new $class())->register();
         }
     }
 }

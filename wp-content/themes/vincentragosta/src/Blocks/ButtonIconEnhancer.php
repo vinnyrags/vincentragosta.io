@@ -2,16 +2,18 @@
 
 namespace ChildTheme\Blocks;
 
+use ChildTheme\Contracts\Registrable;
 use ChildTheme\Services\Icon;
+use DOMDocument;
+use DOMXPath;
 
 /**
  * Enhances the core/button block with icon support on the frontend.
+ *
+ * Uses DOMDocument for robust HTML manipulation.
  */
-class ButtonIconEnhancer
+class ButtonIconEnhancer implements Registrable
 {
-    /**
-     * Register the block filter.
-     */
     public function register(): void
     {
         add_filter('render_block_core/button', [$this, 'render'], 10, 2);
@@ -20,20 +22,20 @@ class ButtonIconEnhancer
     /**
      * Filter the button block output to add icons.
      */
-    public function render(string $block_content, array $block): string
+    public function render(string $content, array $block): string
     {
         if (!$this->shouldEnhance($block)) {
-            return $block_content;
+            return $content;
         }
 
         $icon = new Icon($block['attrs']['selectedIcon']);
         if (!$icon->exists()) {
-            return $block_content;
+            return $content;
         }
 
-        $position = $block['attrs']['iconPosition'] ?? 'left';
-        $block_content = $this->addWrapperClass($block_content, $position);
-        return $this->insertIcon($block_content, (string) $icon, $position);
+        $position = $block['attrs']['iconPosition'] ?? 'right';
+
+        return $this->enhanceButton($content, (string) $icon, $position);
     }
 
     /**
@@ -47,50 +49,116 @@ class ButtonIconEnhancer
     }
 
     /**
-     * Add icon-related classes to the button wrapper.
+     * Enhance the button HTML with icon using DOMDocument.
      */
-    private function addWrapperClass(string $content, string $position): string
+    private function enhanceButton(string $content, string $svg, string $position): string
     {
-        $class = ' has-icon icon-pos-' . esc_attr($position);
-
-        if (strpos($content, 'class="') !== false) {
-            return preg_replace(
-                '/(<div\s+[^>]*class=")([^"]*wp-block-button[^"]*)/i',
-                '$1$2' . $class . '"',
-                $content,
-                1
-            );
+        $dom = $this->createDom($content);
+        if (!$dom) {
+            return $content;
         }
 
-        return preg_replace(
-            '/(<div\s+[^>]*wp-block-button)/i',
-            '$1 class="' . trim($class) . '"',
-            $content,
-            1
-        );
+        $xpath = new DOMXPath($dom);
+
+        $this->addWrapperClasses($xpath, $position);
+        $this->insertIcon($dom, $xpath, $svg, $position);
+
+        return $this->getInnerHtml($dom);
     }
 
     /**
-     * Insert the icon into the button/link element.
+     * Create a DOMDocument from HTML content.
      */
-    private function insertIcon(string $content, string $svg, string $position): string
+    private function createDom(string $content): ?DOMDocument
     {
-        $pattern = '/(<(a|button)\s+[^>]*class="[^"]*wp-block-button__link[^"]*"[^>]*>)(.*?)(<\/\2>)/is';
+        $dom = new DOMDocument();
 
-        return preg_replace_callback(
-            $pattern,
-            function ($matches) use ($svg, $position) {
-                $opening = $matches[1];
-                $text = $matches[3];
-                $closing = $matches[4];
-                $icon = '<span class="wp-block-button__icon" aria-hidden="true">' . $svg . '</span>';
+        $wrapped = '<div id="__wrapper__">' . $content . '</div>';
+        if (!@$dom->loadHTML(
+            '<?xml encoding="UTF-8">' . $wrapped,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        )) {
+            return null;
+        }
 
-                return $position === 'right'
-                    ? $opening . $text . $icon . $closing
-                    : $opening . $icon . $text . $closing;
-            },
-            $content,
-            1
-        );
+        return $dom;
+    }
+
+    /**
+     * Add icon-related classes to the button wrapper div.
+     */
+    private function addWrapperClasses(DOMXPath $xpath, string $position): void
+    {
+        $wrappers = $xpath->query("//*[contains(@class, 'wp-block-button')]");
+
+        foreach ($wrappers as $wrapper) {
+            $currentClass = $wrapper->getAttribute('class');
+            $newClasses = $currentClass . ' has-icon icon-pos-' . esc_attr($position);
+            $wrapper->setAttribute('class', $newClasses);
+        }
+    }
+
+    /**
+     * Insert the icon span into the button/link element.
+     */
+    private function insertIcon(DOMDocument $dom, DOMXPath $xpath, string $svg, string $position): void
+    {
+        $links = $xpath->query("//*[contains(@class, 'wp-block-button__link')]");
+
+        foreach ($links as $link) {
+            $iconSpan = $dom->createElement('span');
+            $iconSpan->setAttribute('class', 'wp-block-button__icon');
+            $iconSpan->setAttribute('aria-hidden', 'true');
+
+            $svgNode = $this->createSvgFragment($dom, $svg);
+            if ($svgNode) {
+                $iconSpan->appendChild($svgNode);
+            }
+
+            if ($position === 'right') {
+                $link->appendChild($iconSpan);
+            } else {
+                $link->insertBefore($iconSpan, $link->firstChild);
+            }
+        }
+    }
+
+    /**
+     * Create a document fragment from SVG content.
+     */
+    private function createSvgFragment(DOMDocument $dom, string $svg): ?\DOMNode
+    {
+        $tempDom = new DOMDocument();
+        if (!@$tempDom->loadHTML(
+            '<?xml encoding="UTF-8"><div>' . $svg . '</div>',
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        )) {
+            return null;
+        }
+
+        $svgElement = $tempDom->getElementsByTagName('svg')->item(0);
+        if (!$svgElement) {
+            return null;
+        }
+
+        return $dom->importNode($svgElement, true);
+    }
+
+    /**
+     * Extract the inner HTML from the wrapper div.
+     */
+    private function getInnerHtml(DOMDocument $dom): string
+    {
+        $wrapper = $dom->getElementById('__wrapper__');
+        if (!$wrapper) {
+            return '';
+        }
+
+        $html = '';
+        foreach ($wrapper->childNodes as $child) {
+            $html .= $dom->saveHTML($child);
+        }
+
+        return $html;
     }
 }

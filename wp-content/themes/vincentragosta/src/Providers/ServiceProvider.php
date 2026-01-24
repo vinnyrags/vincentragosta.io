@@ -2,12 +2,14 @@
 
 namespace ChildTheme\Providers;
 
+use ChildTheme\Contracts\Registrable;
+
 /**
  * Base service provider class.
  *
  * All service providers should extend this class and implement the register method.
  */
-abstract class ServiceProvider
+abstract class ServiceProvider implements Registrable
 {
     /**
      * Register the service provider.

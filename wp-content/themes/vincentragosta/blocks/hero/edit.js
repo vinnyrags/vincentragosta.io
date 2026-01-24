@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import {
     useBlockProps,
-    RichText,
     InspectorControls,
     BlockControls,
     AlignmentToolbar,
@@ -18,10 +17,10 @@ import { useState, useEffect } from '@wordpress/element';
 
 import './editor.scss';
 
-const ALLOWED_BLOCKS = [ 'core/buttons' ];
+const ALLOWED_BLOCKS = ['core/buttons', 'core/heading', 'core/paragraph'];
 
-export default function Edit({ attributes, setAttributes, clientId }) {
-    const { title, svgAsset, align, videoUrl } = attributes;
+export default function Edit({ attributes, setAttributes }) {
+    const { svgAsset, align, videoUrl } = attributes;
 
     const blockProps = useBlockProps({
         className: videoUrl ? 'hero--has-video' : '',
@@ -57,9 +56,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
 
     const svgOptions = blockData.svgOptions;
     const svgContentMap = blockData.svgContent;
-    const onChangeTitle = (newTitle) => setAttributes({ title: newTitle });
     const onChangeSvgAsset = (newSvg) => setAttributes({ svgAsset: newSvg });
-    const onChangeAlign = ( newAlign ) => setAttributes( { align: newAlign === undefined ? null : newAlign } );
+    const onChangeAlign = (newAlign) => setAttributes({ align: newAlign === undefined ? null : newAlign });
     const onChangeVideoUrl = (newVideoUrl) => setAttributes({ videoUrl: newVideoUrl });
 
     const currentSvgContent = svgAsset && typeof svgContentMap[svgAsset] === 'string' && svgContentMap[svgAsset].trim() !== ''
@@ -73,7 +71,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
             </BlockControls>
 
             <InspectorControls>
-                <PanelBody title={__('Video Background', 'vincentragosta')} initialOpen={true}>
+                <PanelBody title={__('Video Background', 'vincentragosta')} initialOpen>
                     <TextControl
                         label={__('Video URL', 'vincentragosta')}
                         value={videoUrl}
@@ -82,8 +80,8 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     />
                 </PanelBody>
 
-                { ! videoUrl && (
-                    <PanelBody title={__('SVG Asset', 'vincentragosta')} initialOpen={true}>
+                {!videoUrl && (
+                    <PanelBody title={__('SVG Asset', 'vincentragosta')} initialOpen>
                         <SelectControl
                             label={__('Select SVG', 'vincentragosta')}
                             value={svgAsset}
@@ -100,7 +98,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
             </InspectorControls>
 
             <div {...blockProps}>
-                { videoUrl ? (
+                {videoUrl ? (
                     <video
                         className="hero__video"
                         src={videoUrl}
@@ -110,9 +108,6 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                         playsInline
                     />
                 ) : (
-                    // This is the updated section:
-                    // The SVG content is now rendered directly inside the .hero__svg container,
-                    // removing the extra .hero-editor__svg-preview wrapper.
                     currentSvgContent && (
                         <div
                             className="hero__svg"
@@ -121,20 +116,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     )
                 )}
                 <div className="hero__content">
-                    <RichText
-                        tagName="h1"
-                        className="hero__title"
-                        value={title}
-                        onChange={onChangeTitle}
-                        placeholder={__('Enter Hero Title...', 'vincentragosta')}
-                        allowedFormats={['core/bold', 'core/italic', 'vincentragosta/inline-block']}
-                        withoutInteractiveFormatting
-                    />
-                    <div className="hero__links">
-                        <InnerBlocks
-                            allowedBlocks={ALLOWED_BLOCKS}
-                        />
-                    </div>
+                    <InnerBlocks allowedBlocks={ALLOWED_BLOCKS} />
                 </div>
             </div>
         </>
