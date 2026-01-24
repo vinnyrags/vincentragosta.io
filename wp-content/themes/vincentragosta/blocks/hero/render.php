@@ -10,6 +10,8 @@
  * @return string HTML markup for the hero block.
  */
 
+use ChildTheme\Services\Icon;
+
 /** @var array $attributes */
 /** @var string $content */
 /** @var WP_Block $block */

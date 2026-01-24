@@ -1,0 +1,29 @@
+<?php
+
+namespace ChildTheme\Providers;
+
+use ChildTheme\Services\Icon;
+use Twig\TwigFunction;
+
+/**
+ * Registers custom Twig functions and filters.
+ */
+class TwigServiceProvider extends ServiceProvider
+{
+    public function register(): void
+    {
+        add_filter('timber/twig', [$this, 'addTwigFunctions']);
+    }
+
+    /**
+     * Add custom functions to Twig.
+     */
+    public function addTwigFunctions(\Twig\Environment $twig): \Twig\Environment
+    {
+        $twig->addFunction(new TwigFunction('icon', function (string $name): Icon {
+            return new Icon($name);
+        }));
+
+        return $twig;
+    }
+}

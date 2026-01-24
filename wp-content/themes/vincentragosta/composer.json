@@ -1,12 +1,11 @@
 {
-  "name": "upstatement/timber-starter-theme",
-  "description": "Starter theme to build a Timber theme",
-  "type":"wordpress-theme",
+  "name": "vincentragosta/theme",
+  "description": "Vincent Ragosta portfolio theme",
+  "type": "wordpress-theme",
   "license": "MIT",
   "authors": [
     {
-      "email": "jared@upstatement.com",
-      "name": "jarednova"
+      "name": "Vincent Ragosta"
     }
   ],
   "repositories": [
@@ -16,13 +15,17 @@
     }
   ],
   "require": {
+    "php": ">=8.0",
     "timber/timber": "2.x-dev"
   },
   "require-dev": {
     "automattic/wordbless": "^0.4.2",
     "yoast/wp-test-utils": "^1.0"
   },
-  "extra": {
+  "autoload": {
+    "psr-4": {
+      "ChildTheme\\": "src/"
+    }
   },
   "config": {
     "allow-plugins": {
