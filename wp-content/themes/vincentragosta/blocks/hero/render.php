@@ -7,7 +7,7 @@
  * @param WP_Block $block      The block instance.
  */
 
-use ChildTheme\Services\Icon;
+use ChildTheme\Services\IconService;
 
 $svg_asset = $attributes['svgAsset'] ?? '';
 $video_url = $attributes['videoUrl'] ?? '';
@@ -26,7 +26,7 @@ $wrapper_attributes = get_block_wrapper_attributes(['class' => implode(' ', $blo
 
     <div class="hero__svg">
         <?php if (empty($video_url) && !empty($svg_asset)) : ?>
-            <?= new Icon($svg_asset); ?>
+            <?= new IconService($svg_asset); ?>
         <?php endif; ?>
     </div>
 

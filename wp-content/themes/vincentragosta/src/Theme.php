@@ -19,9 +19,9 @@ class Theme extends Site
      * @var array<class-string<Registrable>>
      */
     protected array $providers = [
-        Providers\ThemeServiceProvider::class,
+        Providers\ThemeService\Provider::class,
         Providers\AssetServiceProvider::class,
-        Providers\BlockServiceProvider::class,
+        Providers\BlockService\BlockServiceProvider::class,
         Providers\PostTypeServiceProvider::class,
         Providers\TwigServiceProvider::class,
     ];

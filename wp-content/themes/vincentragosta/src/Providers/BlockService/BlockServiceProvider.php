@@ -1,10 +1,10 @@
 <?php
 
-namespace ChildTheme\Providers;
+namespace ChildTheme\Providers\BlockService;
 
-use ChildTheme\Blocks\ButtonIconEnhancer;
-use ChildTheme\Contracts\Registrable;
-use ChildTheme\Services\Icon;
+use ChildTheme\Providers\BlockService\Features\ButtonIconEnhancer;
+use ChildTheme\Providers\ServiceProvider;
+use ChildTheme\Services\IconService;
 
 /**
  * Handles block registration and block editor data.
@@ -21,12 +21,7 @@ class BlockServiceProvider extends ServiceProvider
         'shutter-card',
     ];
 
-    /**
-     * Block enhancers to register.
-     *
-     * @var array<class-string<Registrable>>
-     */
-    protected array $enhancers = [
+    protected array $features = [
         ButtonIconEnhancer::class,
     ];
 
@@ -35,17 +30,7 @@ class BlockServiceProvider extends ServiceProvider
         add_action('init', [$this, 'registerBlocks']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
-        $this->registerEnhancers();
-    }
-
-    /**
-     * Register all block enhancers.
-     */
-    protected function registerEnhancers(): void
-    {
-        foreach ($this->enhancers as $enhancer) {
-            (new $enhancer())->register();
-        }
+        parent::register();
     }
 
     /**
@@ -81,8 +66,8 @@ class BlockServiceProvider extends ServiceProvider
         }
 
         wp_localize_script($handle, 'vincentragostaHeroBlockData', [
-            'svgOptions' => Icon::options('svg', __('Select SVG for Hero', 'vincentragosta')),
-            'svgContent' => Icon::contentMap('svg'),
+            'svgOptions' => IconService::options('svg', __('Select Squiggle', 'vincentragosta')),
+            'svgContent' => IconService::contentMap('svg'),
         ]);
     }
 
@@ -97,8 +82,8 @@ class BlockServiceProvider extends ServiceProvider
         }
 
         wp_localize_script($handle, 'vincentragostaButtonIconData', [
-            'iconOptions' => Icon::options('sprite', __('— No Icon —', 'vincentragosta')),
-            'iconContentMap' => Icon::contentMap('sprite'),
+            'iconOptions' => IconService::options('sprite', __('— No Icon —', 'vincentragosta')),
+            'iconContentMap' => IconService::contentMap('sprite'),
         ]);
     }
 

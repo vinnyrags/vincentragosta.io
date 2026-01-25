@@ -2,7 +2,7 @@
 
 namespace ChildTheme\Providers;
 
-use ChildTheme\Services\Icon;
+use ChildTheme\Services\IconService;
 use Twig\TwigFunction;
 
 /**
@@ -20,8 +20,8 @@ class TwigServiceProvider extends ServiceProvider
      */
     public function addTwigFunctions(\Twig\Environment $twig): \Twig\Environment
     {
-        $twig->addFunction(new TwigFunction('icon', function (string $name): Icon {
-            return new Icon($name);
+        $twig->addFunction(new TwigFunction('icon', function (string $name): IconService {
+            return new IconService($name);
         }));
 
         return $twig;

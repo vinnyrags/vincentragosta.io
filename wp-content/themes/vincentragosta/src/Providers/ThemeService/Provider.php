@@ -1,16 +1,25 @@
 <?php
 
-namespace ChildTheme\Providers;
+namespace ChildTheme\Providers\ThemeService;
+
+use ChildTheme\Providers\ServiceProvider;
+use ChildTheme\Providers\ThemeService\Features\DisableComments;
 
 /**
  * Handles core theme setup and configuration.
  */
-class ThemeServiceProvider extends ServiceProvider
+class Provider extends ServiceProvider
 {
+    protected array $features = [
+        DisableComments::class,
+    ];
+
     public function register(): void
     {
         add_action('after_setup_theme', [$this, 'addThemeSupports']);
         add_filter('show_admin_bar', '__return_false');
+
+        parent::register();
     }
 
     /**
@@ -23,8 +32,6 @@ class ThemeServiceProvider extends ServiceProvider
         add_theme_support('post-thumbnails');
         add_theme_support('menus');
         add_theme_support('html5', [
-            'comment-form',
-            'comment-list',
             'gallery',
             'caption',
             'style',

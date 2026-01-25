@@ -1,9 +1,9 @@
 <?php
 
-namespace ChildTheme\Blocks;
+namespace ChildTheme\Providers\BlockService\Features;
 
 use ChildTheme\Contracts\Registrable;
-use ChildTheme\Services\Icon;
+use ChildTheme\Services\IconService;
 use DOMDocument;
 use DOMXPath;
 
@@ -28,7 +28,7 @@ class ButtonIconEnhancer implements Registrable
             return $content;
         }
 
-        $icon = new Icon($block['attrs']['selectedIcon']);
+        $icon = new IconService($block['attrs']['selectedIcon']);
         if (!$icon->exists()) {
             return $content;
         }

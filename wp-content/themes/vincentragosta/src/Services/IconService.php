@@ -9,11 +9,11 @@ namespace ChildTheme\Services;
  * assets/images/svg-sprite/ and assets/images/svg/ directories.
  *
  * Usage:
- *   echo new Icon('arrow');
- *   echo Icon::get('arrow')->withClass('icon-lg');
- *   echo Icon::get('squiggle')->withAttributes(['aria-hidden' => 'true']);
+ *   echo new IconService('arrow');
+ *   echo IconService::get('arrow')->withClass('icon-lg');
+ *   echo IconService::get('squiggle')->withAttributes(['aria-hidden' => 'true']);
  */
-class Icon
+class IconService
 {
     private string $name;
     private ?string $resolvedPath = null;
@@ -155,11 +155,9 @@ class Icon
     public static function contentMap(string $type = 'all'): array
     {
         $map = [];
-
         foreach (self::all($type) as $icon) {
             $map[$icon['name']] = (string) new self($icon['name']);
         }
-
         return $map;
     }
 

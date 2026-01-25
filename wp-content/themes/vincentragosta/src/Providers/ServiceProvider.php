@@ -12,9 +12,30 @@ use ChildTheme\Contracts\Registrable;
 abstract class ServiceProvider implements Registrable
 {
     /**
+     * Feature classes to register.
+     *
+     * @var array<class-string<Registrable>>
+     */
+    protected array $features = [];
+
+    /**
      * Register the service provider.
      *
-     * This method should add all necessary hooks, filters, and actions.
+     * Child classes should override this method and call parent::register()
+     * to ensure features are registered.
      */
-    abstract public function register(): void;
+    public function register(): void
+    {
+        $this->registerFeatures();
+    }
+
+    /**
+     * Register all feature classes.
+     */
+    protected function registerFeatures(): void
+    {
+        foreach ($this->features as $feature) {
+            (new $feature())->register();
+        }
+    }
 }
