@@ -1,23 +1,21 @@
-.wp-block-vincentragosta-shutter-cards {
+.shutter-cards {
+  container: shutter-cards / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--50);
   opacity: 1;
   visibility: visible;
   transition: opacity 0.6s ease-in, visibility 0s 0s;
 
-  &.shutter-cards--preload {
+  @include container(shutter-cards, lg) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 450px;
+  }
+
+  &--preload {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.6s ease-out, visibility 0s 0.6s;
-  }
-
-  .shutter-cards-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--wp--preset--spacing--40, 1.5rem);
-
-    @media (min-width: 992px) {
-      flex-direction: row;
-      flex-wrap: nowrap;
-      height: 450px;
-    }
   }
 }

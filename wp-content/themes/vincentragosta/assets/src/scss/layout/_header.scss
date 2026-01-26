@@ -153,11 +153,6 @@
   }
 }
 
-// Add padding to body to account for fixed header
-body {
-  padding-top: var(--header-height);
-}
-
 // Reduced motion: disable transitions for users who prefer reduced motion
 @media (prefers-reduced-motion: reduce) {
   .header,

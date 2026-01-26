@@ -2,5 +2,5 @@ vendor/
 wordpress/
 node_modules/
 
-assets/**/build/
-blocks/**/build/
+# Compiled assets
+dist/

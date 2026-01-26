@@ -7,14 +7,18 @@
     "test": "tests"
   },
   "scripts": {
-    "build-assets": "wp-scripts build assets/src/js/main.js assets/src/js/frontend.js --output-path=assets/src/build/js",
+    "build-assets": "wp-scripts build assets/src/js/main.js assets/src/js/frontend.js --output-path=dist/js",
     "compile-theme-css": "sass assets/src/scss/main.scss style.css --no-source-map --style=expanded",
-    "build-blocks": "wp-scripts build blocks/index.js blocks/index-view.js --output-path=blocks/build",
-    "build": "npm run build-assets && npm run build-blocks && npm run compile-theme-css",
-    "start-assets": "wp-scripts start assets/src/js/main.js assets/src/js/frontend.js --output-path=assets/src/build/js",
+    "compile-providers": "node scripts/compile-providers.js",
+    "watch-providers": "node scripts/compile-providers.js --watch",
+    "build-blocks": "wp-scripts build blocks/index.js --output-path=dist/blocks",
+    "build-block-views": "node scripts/build-block-views.js",
+    "watch-block-views": "node scripts/build-block-views.js --watch",
+    "build": "npm run build-assets && npm run build-blocks && npm run build-block-views && npm run compile-theme-css && npm run compile-providers",
+    "start-assets": "wp-scripts start assets/src/js/main.js assets/src/js/frontend.js --output-path=dist/js",
     "watch-theme-css": "sass assets/src/scss/main.scss style.css --no-source-map --style=expanded --watch",
-    "start-blocks": "wp-scripts start blocks/index.js blocks/index-view.js --output-path=blocks/build",
-    "start": "npm-run-all --parallel start-assets start-blocks watch-theme-css"
+    "start-blocks": "wp-scripts start blocks/index.js --output-path=dist/blocks",
+    "start": "npm-run-all --parallel start-assets start-blocks watch-block-views watch-theme-css watch-providers"
   },
   "keywords": [],
   "author": "",

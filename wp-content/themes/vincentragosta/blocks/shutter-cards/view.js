@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const shutterCardsContainers = document.querySelectorAll('.wp-block-vincentragosta-shutter-cards .shutter-cards-container');
+    const shutterCardsContainers = document.querySelectorAll('.shutter-cards');
 
     shutterCardsContainers.forEach(container => {
         const cards = container.querySelectorAll('.shutter-card');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Remove preload class after all calculations are done
             setTimeout(() => {
-                container.closest('.wp-block-vincentragosta-shutter-cards').classList.remove('shutter-cards--preload');
+                container.classList.remove('shutter-cards--preload');
             }, 500)
         }
     });

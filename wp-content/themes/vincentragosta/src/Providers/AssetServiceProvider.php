@@ -34,11 +34,11 @@ class AssetServiceProvider extends ServiceProvider
             wp_get_theme()->get('Version')
         );
 
-        $script_path = get_template_directory() . '/assets/src/build/js/frontend.js';
+        $script_path = get_template_directory() . '/dist/js/frontend.js';
         if (file_exists($script_path)) {
             wp_enqueue_script(
                 'vincentragosta-frontend-js',
-                get_template_directory_uri() . '/assets/src/build/js/frontend.js',
+                get_template_directory_uri() . '/dist/js/frontend.js',
                 [],
                 wp_get_theme()->get('Version'),
                 true
@@ -69,22 +69,22 @@ class AssetServiceProvider extends ServiceProvider
      */
     public function enqueueBlockAssets(): void
     {
-        $blocks_style_path = get_template_directory() . '/blocks/build/style-index.css';
+        $blocks_style_path = get_template_directory() . '/dist/blocks/style-index.css';
         if (file_exists($blocks_style_path)) {
             wp_enqueue_style(
                 'vincentragosta-blocks-style',
-                get_template_directory_uri() . '/blocks/build/style-index.css',
+                get_template_directory_uri() . '/dist/blocks/style-index.css',
                 [],
                 filemtime($blocks_style_path)
             );
         }
 
         if (is_admin()) {
-            $blocks_editor_style_path = get_template_directory() . '/blocks/build/index.css';
+            $blocks_editor_style_path = get_template_directory() . '/dist/blocks/index.css';
             if (file_exists($blocks_editor_style_path)) {
                 wp_enqueue_style(
                     'vincentragosta-blocks-editor-style',
-                    get_template_directory_uri() . '/blocks/build/index.css',
+                    get_template_directory_uri() . '/dist/blocks/index.css',
                     ['wp-edit-blocks', 'vincentragosta-blocks-style'],
                     filemtime($blocks_editor_style_path)
                 );
@@ -97,7 +97,7 @@ class AssetServiceProvider extends ServiceProvider
      */
     private function enqueueBlocksScript(): void
     {
-        $asset_path = get_template_directory() . '/blocks/build/index.asset.php';
+        $asset_path = get_template_directory() . '/dist/blocks/index.asset.php';
         if (!file_exists($asset_path)) {
             return;
         }
@@ -105,7 +105,7 @@ class AssetServiceProvider extends ServiceProvider
         $asset = require $asset_path;
         wp_enqueue_script(
             'vincentragosta-blocks-js',
-            get_template_directory_uri() . '/blocks/build/index.js',
+            get_template_directory_uri() . '/dist/blocks/index.js',
             $asset['dependencies'],
             $asset['version'],
             true
@@ -117,7 +117,7 @@ class AssetServiceProvider extends ServiceProvider
      */
     private function enqueueMainEditorScript(): void
     {
-        $asset_path = get_template_directory() . '/assets/src/build/js/main.asset.php';
+        $asset_path = get_template_directory() . '/dist/js/main.asset.php';
         if (!file_exists($asset_path)) {
             return;
         }
@@ -130,7 +130,7 @@ class AssetServiceProvider extends ServiceProvider
 
         wp_enqueue_script(
             'vincentragosta-js',
-            get_template_directory_uri() . '/assets/src/build/js/main.js',
+            get_template_directory_uri() . '/dist/js/main.js',
             $dependencies,
             $asset['version'],
             true

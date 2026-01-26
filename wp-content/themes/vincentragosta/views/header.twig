@@ -1,0 +1,35 @@
+<header class="header">
+    <div class="header__container">
+        <!-- Left: Mode Toggle -->
+        <button
+            class="header__mode-toggle"
+            type="button"
+            aria-label="Switch to light mode"
+            aria-pressed="false"
+        >
+            <span class="header__mode-icon header__mode-icon--sun" aria-hidden="true">
+                {{ icon('sun') | raw }}
+            </span>
+            <span class="header__mode-icon header__mode-icon--moon" aria-hidden="true">
+                {{ icon('moon') | raw }}
+            </span>
+        </button>
+
+        <!-- Center: Logo -->
+        <p class="header__logo">
+            <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
+        </p>
+
+        <!-- Right: Hamburger -->
+        <button
+            class="header__menu-toggle"
+            type="button"
+            aria-label="Open menu"
+            aria-expanded="false"
+        >
+            <span class="header__menu-line" aria-hidden="true"></span>
+            <span class="header__menu-line" aria-hidden="true"></span>
+            <span class="header__menu-line" aria-hidden="true"></span>
+        </button>
+    </div>
+</header>

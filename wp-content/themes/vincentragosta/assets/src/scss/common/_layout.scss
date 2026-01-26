@@ -1,8 +1,40 @@
-// look into a theme.json way to handle this
-body > .wp-site-blocks {
-  padding-top: 0;
-}
+.site-main {
+  // Offset for fixed header
+  padding-block-start: var(--header-height);
 
-main[role="main"] {
-  margin-top: 0;
+  // Root padding (replaces has-global-padding)
+  padding-inline: var(--wp--preset--spacing--40);
+  padding-block-end: var(--wp--preset--spacing--50);
+
+  // Block gap (vertical spacing between direct children)
+  > * + * {
+    margin-block-start: var(--wp--style--block-gap, var(--wp--preset--spacing--40));
+  }
+
+  // First child spacing
+  > *:first-child {
+    margin-block-start: var(--wp--preset--spacing--50);
+  }
+
+  // Full-bleed blocks: negate horizontal padding, no top margin if first
+  > .alignfull {
+    margin-inline: calc(-1 * var(--wp--preset--spacing--40));
+    max-width: none;
+    width: calc(100% + (2 * var(--wp--preset--spacing--40)));
+  }
+
+  > .alignfull:first-child {
+    margin-block-start: 0;
+  }
+
+  // Constrained content width (replaces is-layout-constrained)
+  > *:not(.alignwide):not(.alignfull) {
+    max-width: var(--wp--style--global--content-size, 1280px);
+    margin-inline: auto;
+  }
+
+  > .alignwide {
+    max-width: var(--wp--style--global--wide-size, 1440px);
+    margin-inline: auto;
+  }
 }

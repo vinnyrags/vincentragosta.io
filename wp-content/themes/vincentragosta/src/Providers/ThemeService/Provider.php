@@ -17,9 +17,18 @@ class Provider extends ServiceProvider
     public function register(): void
     {
         add_action('after_setup_theme', [$this, 'addThemeSupports']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
         add_filter('show_admin_bar', '__return_false');
 
         parent::register();
+    }
+
+    /**
+     * Enqueue frontend assets.
+     */
+    public function enqueueAssets(): void
+    {
+        $this->enqueueStyle('vincentragosta-theme-service', 'theme-service.css');
     }
 
     /**

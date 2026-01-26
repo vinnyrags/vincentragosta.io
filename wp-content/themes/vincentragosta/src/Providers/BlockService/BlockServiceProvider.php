@@ -28,9 +28,35 @@ class BlockServiceProvider extends ServiceProvider
     public function register(): void
     {
         add_action('init', [$this, 'registerBlocks']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+        add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
         parent::register();
+    }
+
+    /**
+     * Enqueue frontend assets.
+     */
+    public function enqueueAssets(): void
+    {
+        $this->enqueueStyle('vincentragosta-block-service', 'block-service.css');
+    }
+
+    /**
+     * Enqueue editor assets.
+     */
+    public function enqueueEditorAssets(): void
+    {
+        $this->enqueueStyle('vincentragosta-block-service', 'block-service.css');
+        $this->enqueueScript('vincentragosta-block-service-js', 'button.js', [
+            'wp-blocks',
+            'wp-element',
+            'wp-block-editor',
+            'wp-components',
+            'wp-compose',
+            'wp-hooks',
+        ]);
     }
 
     /**
@@ -76,7 +102,7 @@ class BlockServiceProvider extends ServiceProvider
      */
     private function localizeButtonIconData(): void
     {
-        $handle = 'vincentragosta-js';
+        $handle = 'vincentragosta-block-service-js';
         if (!$this->isScriptActive($handle)) {
             return;
         }

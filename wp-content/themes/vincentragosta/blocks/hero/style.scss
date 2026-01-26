@@ -1,20 +1,14 @@
-// Keyframes for the hero button simple fade-in
 @keyframes heroButtonSimpleFadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes draw-mask-stroke {
-  to {
-    stroke-dashoffset: 0;
-  }
+  to { stroke-dashoffset: 0; }
 }
 
-.wp-block-vincentragosta-hero {
+.hero {
+  container: hero / inline-size;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
@@ -22,7 +16,16 @@
   overflow: hidden;
   position: relative;
 
-  .hero__video {
+  @include container(hero, md) {
+    padding-top: 20%;
+  }
+
+  // Text shadow for readability over SVG/video backgrounds
+  :is(.wp-block-heading, .wp-block-paragraph) {
+    text-shadow: 0 0 10px var(--color-bg), 0 0 20px var(--color-bg);
+  }
+
+  &__video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -34,192 +37,106 @@
     opacity: 0.5;
   }
 
-  @media (min-width: 768px) {
-    padding-top: 20%;
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    position: relative;
+    z-index: 2;
+
+    @include container(hero, md) {
+      width: 70%;
+    }
   }
 
-  .hero {
-    &__content {
-      width: 100%;
-      display: flex;
-      flex-flow: row wrap;
-      position: relative;
-      z-index: 2;
+  &__mask {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+  }
 
-      @media (min-width: 768px) {
-        width: 70%;
-      }
+  &__svg {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    z-index: 1;
+    transform: translateZ(0);
+    backface-visibility: hidden;
 
-      .wp-block-button {
-        display: flex;
-      }
+    @include container(hero, md) {
+      justify-content: flex-end;
+      width: 65%;
+      position: absolute;
+      inset: 0;
+      margin-left: auto;
+      flex: 1;
     }
 
-    &__mask {
+    svg {
       display: block;
-      overflow: hidden;
-      width: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
     }
+  }
 
-    &__svg {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      z-index: 1;
-      // GPU acceleration for the SVG container
-      transform: translateZ(0);
-      backface-visibility: hidden;
-
-      @media (min-width: 768px) {
-        justify-content: flex-end;
-        width: 65%;
-        position: absolute;
-        inset: 0;
-        margin-left: auto;
-        flex: 1;
-      }
-
-      svg {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-      }
-    }
-
-    &__title {
-      width: 100%;
-      font-size: var(--wp--preset--font-size--heading-medium);
-      font-weight: 500;
-      line-height: 1.2;
-      display: block;
-      margin-bottom: var(--wp--preset--spacing--50);
-      transform: translateY(110%);
-      opacity: 0;
-      animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-      animation-delay: 0.2s;
-      // Subtle text halo for readability over SVG
-      text-shadow: 0 0 10px var(--color-bg), 0 0 20px var(--color-bg);
-    }
-
-    &__links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--wp--preset--spacing--30);
-      width: 100%;
-
-      .wp-block-button {
-        opacity: 0;
-        animation-name: heroButtonSimpleFadeIn;
-        animation-duration: 1.2s;
-        animation-fill-mode: forwards;
-        animation-timing-function: cubic-bezier(0.25, 1, 0.5, 1);
-
-        &:nth-child(1) {
-          animation-delay: 0.6s;
-        }
-
-        &:nth-child(2) {
-          animation-delay: 0.8s;
-        }
-
-        &:nth-child(3) {
-          animation-delay: 1.0s;
-        }
-      }
-    }
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wp--preset--spacing--30);
+    width: 100%;
   }
 }
 
-// SVG Mask animation
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask {
+// ==========================================================================
+// SVG Mask Animation (separate to reduce nesting)
+// ==========================================================================
+
+.hero__svg .mask {
   stroke-dasharray: 100;
   stroke-dashoffset: 100;
   animation: draw-mask-stroke cubic-bezier(0.4, 0, 0.2, 1) 0s 1 forwards;
   stroke: #fff;
   fill: none;
-  // GPU acceleration for smoother stroke animation
   transform: translateZ(0);
   will-change: stroke-dashoffset;
+
+  &.mask-0 { animation-delay: 0s; animation-duration: 0.6s; }
+  &.mask-1 { animation-delay: 0.3s; animation-duration: 0.5s; }
+  &.mask-2 { animation-delay: 0.6s; animation-duration: 0.5s; }
+  &.mask-3 { animation-delay: 0.9s; animation-duration: 0.4s; }
+  &.mask-4 { animation-delay: 1.1s; animation-duration: 0.4s; }
+  &.mask-5 { animation-delay: 1.3s; animation-duration: 0.4s; }
 }
 
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-0 {
-  animation-delay: 0s;
-  animation-duration: 0.6s;
-}
+// ==========================================================================
+// Button Animation (separate to reduce nesting)
+// ==========================================================================
 
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-1 {
-  animation-delay: 0.3s;
-  animation-duration: 0.5s;
-}
-
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-2 {
-  animation-delay: 0.6s;
-  animation-duration: 0.5s;
-}
-
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-3 {
-  animation-delay: 0.9s;
-  animation-duration: 0.4s;
-}
-
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-4 {
-  animation-delay: 1.1s;
-  animation-duration: 0.4s;
-}
-
-.wp-block-vincentragosta-hero .hero__svg svg.squiggle-3 .mask.mask-5 {
-  animation-delay: 1.3s;
-  animation-duration: 0.4s;
-}
-
-// Line mask animation for title
-.line-mask {
-  display: block;
-  overflow: hidden;
-  position: relative;
-}
-
-.line-content {
-  display: block;
-  transform: translateY(110%);
+.hero__links .wp-block-button {
   opacity: 0;
-  animation: slide-up-reveal 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
+  animation: heroButtonSimpleFadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
 
-.hero__title .line-mask:nth-child(2) .line-content {
-  animation-delay: 0.2s;
+  &:nth-child(1) { animation-delay: 0.6s; }
+  &:nth-child(2) { animation-delay: 0.8s; }
+  &:nth-child(3) { animation-delay: 1.0s; }
 }
 
 // ==========================================================================
 // Reduced Motion
 // ==========================================================================
 
-@media (prefers-reduced-motion: reduce) {
-  .wp-block-vincentragosta-hero {
-    .hero__svg svg.squiggle-3 .mask {
-      animation: none;
-      stroke-dashoffset: 0;
-    }
+@include reduced-motion {
+  .hero__svg .mask {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 
-    .hero__title {
-      animation: none;
-      transform: none;
-      opacity: 1;
-    }
-
-    .hero__links .wp-block-button {
-      animation: none;
-      opacity: 1;
-    }
-
-    .line-content {
-      animation: none;
-      transform: none;
-      opacity: 1;
-    }
+  .hero__links .wp-block-button {
+    animation: none;
+    opacity: 1;
   }
 }

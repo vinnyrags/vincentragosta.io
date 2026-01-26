@@ -34,9 +34,9 @@
 // If PHP adds a class like 'icon-pos-right' or 'icon-pos-left' to the main .wp-block-button div
 // or to the .wp-block-button__link itself.
 .wp-block-button.has-icon .wp-block-button__link {
-  display: inline-flex; // Ensure flex context for buttons with icons
+  display: inline-flex;
   align-items: center;
-  gap: 0.5em; // Default gap
+  gap: var(--wp--preset--spacing--20);
 }
 
 .wp-block-button.icon-pos-right .wp-block-button__link {

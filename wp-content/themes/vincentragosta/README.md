@@ -1,38 +1,137 @@
-# The Timber Starter Theme
+# Vincent Ragosta Theme
 
-[![Build Status](https://travis-ci.com/timber/starter-theme.svg?branch=master)](https://travis-ci.com/github/timber/starter-theme)
-[![Packagist Version](https://img.shields.io/packagist/v/upstatement/timber-starter-theme?include_prereleases)](https://packagist.org/packages/upstatement/timber-starter-theme)
+A modern WordPress theme built with Timber/Twig templating and a hybrid block editor approach. This theme combines the flexibility of classic PHP templating for structural elements (header, footer) with the power of the WordPress block editor for page content.
 
-The "_s" for Timber: a dead-simple theme that you can build from. The primary purpose of this theme is to provide a file structure rather than a framework for markup or styles. Configure your SASS files, scripts, and task runners however you would like!
+## Requirements
 
-## Installing the theme
+- PHP 8.0+
+- WordPress 6.4+
+- Node.js 18+
+- Composer
 
-Follow the guide on [how to Install Timber using the Starter Theme](https://timber.github.io/docs/v2/installation/installation/#use-the-starter-theme).
+## Quick Start
 
-Then,
+```bash
+# Install PHP dependencies
+composer install
 
-1. Rename the theme folder to something that makes sense for your website. You could keep the name `timber-starter-theme` but the point of a starter theme is to make it your own!
-2. Activate the theme in the WordPress Dashboard under **Appearance → Themes**.
-3. Do your thing! And read [the docs](https://timber.github.io/docs/).
+# Install Node dependencies
+npm install
 
-## The `StarterSite` class
+# Build assets (production)
+npm run build
 
-In **functions.php**, we call `new StarterSite();`. The `StarterSite` class sits in the **src** folder. You can update this class to add functionality to your theme. This approach is just one example for how you could do it.
+# Development mode (watch for changes)
+npm run start
+```
 
-The **src** folder would be the right place to put your classes that [extend Timber’s functionality](https://timber.github.io/docs/v2/guides/extending-timber/).
+## Project Structure
 
-Small tip: You can make use of Composer’s [autoloading functionality](https://getcomposer.org/doc/04-schema.md#psr-4) to automatically load your PHP classes when they are requested instead of requiring one by one in **functions.php**.
+```
+vincentragosta/
+├── assets/
+│   └── src/
+│       ├── js/                    # JavaScript source files
+│       ├── scss/                  # SCSS source files
+│       │   ├── common/            # Shared styles & utilities
+│       │   │   ├── _breakpoints.scss  # Breakpoint variables & mixins
+│       │   │   ├── _color-mode.scss   # Light/dark mode styles
+│       │   │   ├── _function.scss     # SCSS functions
+│       │   │   ├── _layout.scss       # Site layout styles
+│       │   │   └── _animation.scss    # Animation utilities
+│       │   ├── elements/          # Element-level styles
+│       │   ├── layout/            # Layout components (header, etc.)
+│       │   ├── utilities/         # Utility classes
+│       │   └── main.scss          # Main stylesheet entry
+├── blocks/                        # Custom Gutenberg blocks
+│   ├── hero/                      # Hero block
+│   ├── projects/                  # Projects grid block
+│   ├── shutter-cards/             # Shutter cards container
+│   ├── shutter-card/              # Individual shutter card
+│   └── index.js                   # Block registration (editor)
+├── dist/                          # Compiled assets (gitignored)
+│   ├── blocks/                    # Compiled block JS/CSS
+│   ├── css/                       # Compiled provider CSS
+│   └── js/                        # Compiled theme JS
+├── docs/                          # Documentation
+│   ├── ARCHITECTURE.md            # Technical architecture
+│   ├── BLOCKS.md                  # Block development guide
+│   └── STYLING.md                 # CSS/SCSS conventions
+├── src/                           # PHP source (PSR-4)
+│   ├── Contracts/                 # Interfaces
+│   ├── Providers/                 # Service providers
+│   ├── Services/                  # Utility services
+│   └── Theme.php                  # Main theme class
+├── views/                         # Twig templates
+│   ├── base.twig                  # Base layout template
+│   ├── head.twig                  # HTML head
+│   ├── header.twig                # Site header
+│   ├── footer.twig                # Site footer
+│   └── ...                        # Page templates
+├── functions.php                  # Theme bootstrap
+├── theme.json                     # Block editor configuration
+├── webpack.config.js              # Custom webpack configuration
+└── style.css                      # Compiled main stylesheet
+```
 
-## What else is there?
+## Architecture Overview
 
-- `static/` is where you can keep your static front-end scripts, styles, or images. In other words, your Sass files, JS files, fonts, and SVGs would live here.
-- `views/` contains all of your Twig templates. These pretty much correspond 1 to 1 with the PHP files that respond to the WordPress template hierarchy. At the end of each PHP template, you’ll notice a `Timber::render()` function whose first parameter is the Twig file where that data (or `$context`) will be used. Just an FYI.
-- `tests/` ... basically don’t worry about (or remove) this unless you know what it is and want to.
+This theme uses a **hybrid architecture**:
 
-## Other Resources
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| Templating | Timber/Twig | Header, footer, page structure |
+| Page Content | Block Editor | Flexible content via Gutenberg |
+| Design Tokens | theme.json | Colors, typography, spacing |
+| Custom Blocks | React + PHP | Hero, projects, shutter cards |
 
-* [This branch](https://github.com/laras126/timber-starter-theme/tree/tackle-box) of the starter theme has some more example code with ACF and a slightly different set up.
-* [Twig for Timber Cheatsheet](http://notlaura.com/the-twig-for-timber-cheatsheet/)
-* [Timber and Twig Reignited My Love for WordPress](https://css-tricks.com/timber-and-twig-reignited-my-love-for-wordpress/) on CSS-Tricks
-* [A real live Timber theme](https://github.com/laras126/yuling-theme).
-* [Timber Video Tutorials](http://timber.github.io/timber/#video-tutorials) and [an incomplete set of screencasts](https://www.youtube.com/playlist?list=PLuIlodXmVQ6pkqWyR6mtQ5gQZ6BrnuFx-) for building a Timber theme from scratch.
+### Why Hybrid?
+
+- **Header/Footer in Twig**: Complex interactive elements (dark mode toggle, animated menu) are easier to maintain in traditional templates
+- **Content in Blocks**: Editors get visual control over page layouts
+- **Best of Both**: Developers maintain structural control while content creators have flexibility
+
+## Build System
+
+The theme uses `@wordpress/scripts` with a custom webpack configuration that auto-injects SCSS breakpoint mixins into all block stylesheets.
+
+### Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run build` | Production build (all assets) |
+| `npm run start` | Development mode with watch |
+| `npm run build-blocks` | Build blocks only |
+| `npm run build-assets` | Build JS assets only |
+| `npm run compile-theme-css` | Compile main stylesheet |
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) - Technical decisions and patterns
+- [Custom Blocks](docs/BLOCKS.md) - Block development guide
+- [Styling](docs/STYLING.md) - CSS methodology and conventions
+
+## Design Tokens
+
+All design tokens are defined in `theme.json` and exposed as CSS custom properties:
+
+```css
+/* Colors */
+var(--wp--preset--color--base)
+var(--wp--preset--color--contrast)
+var(--wp--preset--color--accent-1)
+
+/* Spacing */
+var(--wp--preset--spacing--20)  /* 0.5rem */
+var(--wp--preset--spacing--40)  /* 1rem */
+var(--wp--preset--spacing--50)  /* 1.5rem */
+
+/* Typography */
+var(--wp--preset--font-size--body-small)
+var(--wp--preset--font-size--body-large)
+var(--wp--preset--font-family--reckless-neue)
+```
+
+## License
+
+MIT

@@ -4,15 +4,19 @@
  * Author: Upstatement and YOU!
 */
 
-@use 'common/variables';
+// Common utilities
+@use 'common/breakpoints';
 @use 'common/function';
-@use 'common/color-mode';
 @use 'common/animation';
 @use 'common/layout';
+
+// Utilities
 @use 'utilities/display';
 @use 'utilities/text';
+
+// Elements
 @use 'elements/block-text';
 @use 'elements/headings';
-@use 'layout/header';
 
-@use 'button-icon-enhancement-style';
+// Layout components
+@use 'layout/header';

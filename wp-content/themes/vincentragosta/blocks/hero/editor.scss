@@ -2,7 +2,9 @@
 // We rely on the frontend `style.scss` for the base styles.
 // These rules adjust the block for a better editing experience.
 
-// Ensure the RichText placeholder is visible against any background.
-.wp-block-vincentragosta-hero .hero__title.is-root-container .block-editor-rich-text__editable::before {
-  color: hsla(0, 0%, 100%, .5);
+// Ensure placeholders are visible against any background.
+.hero {
+  .block-editor-rich-text__editable[data-empty="true"]::before {
+    color: hsla(0, 0%, 100%, 0.5);
+  }
 }

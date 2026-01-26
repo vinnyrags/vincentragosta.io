@@ -1,2 +1,1 @@
 import './formats';
-import './button';

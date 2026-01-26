@@ -16,6 +16,6 @@
     }
   },
   "textdomain": "vincentragosta",
-  "viewScript": "file:../build/index-view.js",
+  "viewScript": "file:../../dist/blocks/shutter-cards-view.js",
   "render": "file:./render.php"
 }

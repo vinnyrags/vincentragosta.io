@@ -12,25 +12,30 @@ use ChildTheme\Services\IconService;
 $svg_asset = $attributes['svgAsset'] ?? '';
 $video_url = $attributes['videoUrl'] ?? '';
 
-$block_classes = ['hero'];
+// Inner container classes (BEM)
+$inner_classes = ['hero'];
 if (!empty($video_url)) {
-    $block_classes[] = 'hero--has-video';
+    $inner_classes[] = 'hero--has-video';
 }
-$wrapper_attributes = get_block_wrapper_attributes(['class' => implode(' ', $block_classes)]);
+
+// Top-level wrapper: only WordPress-managed attributes
+$wrapper_attributes = get_block_wrapper_attributes();
 
 ?>
 <div <?= $wrapper_attributes; ?>>
-    <?php if (!empty($video_url)) : ?>
-        <video class="hero__video" src="<?= esc_url($video_url); ?>" autoplay muted loop playsinline></video>
-    <?php endif; ?>
-
-    <div class="hero__svg">
-        <?php if (empty($video_url) && !empty($svg_asset)) : ?>
-            <?= new IconService($svg_asset); ?>
+    <div class="<?= esc_attr(implode(' ', $inner_classes)); ?>">
+        <?php if (!empty($video_url)) : ?>
+            <video class="hero__video" src="<?= esc_url($video_url); ?>" autoplay muted loop playsinline></video>
         <?php endif; ?>
-    </div>
 
-    <div class="hero__content">
-        <?= $content; ?>
+        <div class="hero__svg">
+            <?php if (empty($video_url) && !empty($svg_asset)) : ?>
+                <?= new IconService($svg_asset); ?>
+            <?php endif; ?>
+        </div>
+
+        <div class="hero__content">
+            <?= $content; ?>
+        </div>
     </div>
 </div>

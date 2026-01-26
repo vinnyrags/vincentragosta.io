@@ -1,5 +1,5 @@
 {% block html_head_container %}
-    {% include 'html-header.twig' %}
+    {% include 'head.twig' %}
     {% block head %}{% endblock %}
     </head>
 {% endblock %}
@@ -7,61 +7,20 @@
 <body {{ function('body_class') }}>
     {{ function('wp_body_open') }}
     <a class="skip-link screen-reader-text" href="#wp--skip-link--target">{{ _e( 'Skip to content') }}</a>
-    <div class="wp-site-blocks">
-        <header class="header" role="banner">
-            <div class="header__container">
-                <!-- Left: Mode Toggle -->
-                <button
-                    class="header__mode-toggle"
-                    type="button"
-                    aria-label="Switch to light mode"
-                    aria-pressed="false"
-                >
-                    <span class="header__mode-icon header__mode-icon--sun" aria-hidden="true">
-                        {{ icon('sun') | raw }}
-                    </span>
-                    <span class="header__mode-icon header__mode-icon--moon" aria-hidden="true">
-                        {{ icon('moon') | raw }}
-                    </span>
-                </button>
 
-                <!-- Center: Logo -->
-                {% if function('is_front_page') %}
-                <h1 class="header__logo">
-                    <a href="{{ site.url }}" rel="home">Vincent Ragosta</a>
-                </h1>
-                {% else %}
-                <p class="header__logo">
-                    <a href="{{ site.url }}" rel="home">Vincent Ragosta</a>
-                </p>
-                {% endif %}
+    {% include 'header.twig' %}
 
-                <!-- Right: Hamburger -->
-                <button
-                    class="header__menu-toggle"
-                    type="button"
-                    aria-label="Open menu"
-                    aria-expanded="false"
-                >
-                    <span class="header__menu-line" aria-hidden="true"></span>
-                    <span class="header__menu-line" aria-hidden="true"></span>
-                    <span class="header__menu-line" aria-hidden="true"></span>
-                </button>
-            </div>
-        </header>
-
-        <main id="wp--skip-link--target" role="main" class="wp-block-group has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-            {% block content %}
-                {{ post.content }}
-            {% endblock %}
-        </main>
-
-        {% block footer %}
-            <footer id="footer">
-                {% include 'footer.twig' %}
-            </footer>
-            {{ function('wp_footer') }}
+    <main id="wp--skip-link--target" class="site-main">
+        {% block content %}
+            {{ post.content }}
         {% endblock %}
-    </div>
+    </main>
+
+    {% block footer %}
+        <footer id="footer">
+            {% include 'footer.twig' %}
+        </footer>
+        {{ function('wp_footer') }}
+    {% endblock %}
 </body>
 </html>

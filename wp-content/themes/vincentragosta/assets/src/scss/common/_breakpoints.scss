@@ -1,0 +1,60 @@
+// ==========================================================================
+// Breakpoints
+// ==========================================================================
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1440px;
+
+// ==========================================================================
+// Mixins
+// ==========================================================================
+
+// Container query mixin
+// Usage: @include container($name, $size) { ... }
+// Example: @include container(hero, md) { width: 70%; }
+@mixin container($name, $size: md) {
+  $breakpoint: $breakpoint-md;
+
+  @if $size == sm {
+    $breakpoint: $breakpoint-sm;
+  } @else if $size == md {
+    $breakpoint: $breakpoint-md;
+  } @else if $size == lg {
+    $breakpoint: $breakpoint-lg;
+  } @else if $size == xl {
+    $breakpoint: $breakpoint-xl;
+  }
+
+  @container #{$name} (min-width: #{$breakpoint}) {
+    @content;
+  }
+}
+
+// Media query mixin (for non-container contexts like global layout)
+// Usage: @include media($size) { ... }
+@mixin media($size: md) {
+  $breakpoint: $breakpoint-md;
+
+  @if $size == sm {
+    $breakpoint: $breakpoint-sm;
+  } @else if $size == md {
+    $breakpoint: $breakpoint-md;
+  } @else if $size == lg {
+    $breakpoint: $breakpoint-lg;
+  } @else if $size == xl {
+    $breakpoint: $breakpoint-xl;
+  }
+
+  @media (min-width: #{$breakpoint}) {
+    @content;
+  }
+}
+
+// Reduced motion media query
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

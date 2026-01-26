@@ -1,12 +1,12 @@
-.wp-block-vincentragosta-shutter-cards {
-  border: 1px dashed #ccc;
-  padding: 1rem;
-  padding-bottom: 0.5rem; // Adjust padding
+// Editor-only styles for the shutter cards container
+.shutter-cards {
+  border: 1px dashed var(--wp--preset--color--grey-3);
+  padding: var(--wp--preset--spacing--40);
+  padding-bottom: var(--wp--preset--spacing--20);
+}
 
-  // Style our new custom button
-  .shutter-cards-appender {
-    width: 100%;
-    justify-content: center;
-    margin-top: 1.5rem;
-  }
+.shutter-cards-appender {
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--wp--preset--spacing--50);
 }
