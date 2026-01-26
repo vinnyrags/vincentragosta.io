@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "child-theme/shutter-card",
+  "title": "Shutter Card (Item)",
+  "category": "design",
+  "icon": "media-text",
+  "description": "A single card item for the Shutter Cards block. Can only be used inside the 'Shutter Cards' container.",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "source": "html",
+      "selector": ".shutter-card__title"
+    },
+    "subtitle": {
+      "type": "string",
+      "source": "html",
+      "selector": ".shutter-card__subtitle"
+    },
+    "description": {
+      "type": "string",
+      "source": "html",
+      "selector": ".shutter-card__description"
+    },
+    "cardIndex": {
+      "type": "string",
+      "default": "00"
+    }
+  },
+  "parent": [ "child-theme/shutter-cards" ],
+  "supports": {
+    "html": false,
+    "reusable": false
+  },
+  "textdomain": "child-theme"
+}

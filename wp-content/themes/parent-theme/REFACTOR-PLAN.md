@@ -17,7 +17,9 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | File | Description |
 |------|-------------|
 | `Contracts/Registrable.php` | Base interface for registrable classes |
-| `Providers/ServiceProvider.php` | Abstract base class with asset enqueueing helpers |
+| `Contracts/HasAssets.php` | Interface for classes that enqueue assets |
+| `Traits/HasAssets.php` | Default implementation for asset enqueueing |
+| `Providers/ServiceProvider.php` | Abstract base class using HasAssets trait |
 | `Providers/AssetServiceProvider.php` | Generic frontend/editor asset enqueueing |
 | `Providers/PostTypeServiceProvider.php` | Generic custom post type registration |
 | `Providers/TwigServiceProvider.php` | Timber/Twig setup and custom functions |
@@ -82,7 +84,7 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | `composer.json` | PHP dependencies (Timber, etc.) |
 | `package.json` | NPM dependencies and build scripts |
 | `webpack.config.js` | Webpack configuration for blocks |
-| `scripts/compile-providers.js` | Provider SCSS auto-discovery compiler |
+| `scripts/compile-providers.js` | Provider asset auto-discovery (SCSS → CSS, JS → JS) |
 | `scripts/build-block-views.js` | Block view.js auto-discovery compiler |
 
 ---
@@ -97,7 +99,7 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | `Services/IconService.php` | Portfolio-specific icon system |
 | `Providers/BlockService/BlockServiceProvider.php` | Custom block registration |
 | `Providers/BlockService/Features/ButtonIconEnhancer.php` | Button icon picker (uses IconService) |
-| `Providers/BlockService/assets/` | Block service JS and SCSS |
+| `Providers/BlockService/assets/` | Block service source JS and SCSS |
 
 ### Twig Templates (`views/`)
 
@@ -132,8 +134,38 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | File | Description |
 |------|-------------|
 | `style.css` | Theme header + site-specific styles |
-| `theme.json` | Design system (colors, fonts, spacing) |
+| `theme.json` | Design system (colors, fonts, spacing) - version 3 |
 | `config/project.json` | Project CPT configuration |
+
+---
+
+## Compiled Output (`dist/`)
+
+All compiled assets are output to a centralized `dist/` directory:
+
+```
+dist/
+├── blocks/                    # Block editor and view scripts
+│   ├── index.js              # Compiled block editor JS
+│   ├── index.asset.php       # WP dependencies manifest
+│   ├── index.css             # Block editor styles
+│   ├── style-index.css       # Block frontend styles
+│   └── {block}-view.js       # Auto-discovered view scripts
+├── css/                       # Provider stylesheets
+│   └── {provider-name}.css   # e.g., block-service.css
+└── js/                        # Provider and theme scripts
+    ├── main.js               # Editor main script
+    ├── frontend.js           # Frontend script
+    └── {provider-name}/      # Provider scripts
+        └── {script}.js       # e.g., block-service/button.js
+```
+
+**Build Pipeline:**
+- `npm run build-assets` → `dist/js/main.js`, `dist/js/frontend.js`
+- `npm run build-blocks` → `dist/blocks/index.js`, `dist/blocks/style-index.css`
+- `npm run build-block-views` → `dist/blocks/{block}-view.js` (auto-discovered)
+- `npm run compile-providers` → `dist/css/{provider}.css`, `dist/js/{provider}/*.js`
+- `npm run compile-theme-css` → `style.css` (root, required by WP)
 
 ---
 
@@ -155,9 +187,13 @@ parent-theme/
 ├── page.php
 ├── 404.php
 ├── style.css
+├── theme.json                 # Base theme.json (version 3)
 ├── src/
 │   ├── Contracts/
-│   │   └── Registrable.php
+│   │   ├── Registrable.php
+│   │   └── HasAssets.php
+│   ├── Traits/
+│   │   └── HasAssets.php
 │   ├── Providers/
 │   │   ├── ServiceProvider.php
 │   │   ├── AssetServiceProvider.php
@@ -204,7 +240,7 @@ parent-theme/
 ├── scripts/
 │   ├── compile-providers.js
 │   └── build-block-views.js
-├── dist/
+├── dist/                      # Compiled output (gitignored)
 ├── composer.json
 ├── package.json
 └── webpack.config.js
@@ -217,7 +253,7 @@ vincentragosta/
 ├── functions.php
 ├── front-page.php
 ├── style.css
-├── theme.json
+├── theme.json                 # Site-specific design tokens (version 3)
 ├── src/
 │   ├── Theme.php
 │   ├── Services/
@@ -257,7 +293,7 @@ vincentragosta/
 │           └── formats.js
 ├── config/
 │   └── project.json
-└── dist/
+└── dist/                      # Compiled output (gitignored)
 ```
 
 ---
@@ -271,7 +307,7 @@ vincentragosta/
 4. Copy webpack.config.js and build scripts
 
 ### Phase 2: Move PHP Infrastructure
-1. Copy Contracts and base Providers to parent
+1. Copy Contracts, Traits, and base Providers to parent
 2. Update namespaces from `ChildTheme` to `ParentTheme`
 3. Create base Theme.php class in parent
 4. Update child Theme.php to extend parent
@@ -305,6 +341,7 @@ vincentragosta/
 ### Parent Theme
 ```php
 namespace ParentTheme\Contracts;
+namespace ParentTheme\Traits;
 namespace ParentTheme\Providers;
 namespace ParentTheme\Providers\ThemeService;
 namespace ParentTheme\Providers\ThemeService\Features;
@@ -320,10 +357,48 @@ namespace ChildTheme\Providers\BlockService\Features;
 
 ---
 
+## HasAssets Contract Pattern
+
+The `HasAssets` interface and trait provide a reusable pattern for asset enqueueing:
+
+### Interface (`Contracts/HasAssets.php`)
+```php
+interface HasAssets
+{
+    public function enqueueStyle(string $handle, string $filename, array $deps = []): void;
+    public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void;
+}
+```
+
+### Trait (`Traits/HasAssets.php`)
+Provides default implementation that:
+- Loads styles from `dist/css/{filename}`
+- Loads scripts from `dist/js/{provider-slug}/{filename}`
+- Auto-detects provider slug from class name (e.g., `BlockServiceProvider` → `block-service`)
+- Handles file existence checks and cache busting via `filemtime()`
+
+### Usage
+```php
+class BlockServiceProvider extends ServiceProvider
+{
+    // ServiceProvider uses HasAssets trait, so these methods are available:
+
+    public function enqueueEditorAssets(): void
+    {
+        $this->enqueueStyle('my-handle', 'block-service.css');
+        $this->enqueueScript('my-handle-js', 'button.js', ['wp-blocks']);
+    }
+}
+```
+
+---
+
 ## Notes
 
 - Parent theme provides the foundation; child theme adds site-specific features
 - Child can override any parent template by creating same-named file
 - Child's Theme.php extends parent's Theme.php and adds its own providers
-- Build tools (webpack, scripts) can be shared or duplicated based on needs
-- Consider using `get_template_directory()` (parent) vs `get_stylesheet_directory()` (child) appropriately
+- All compiled assets go to `dist/` directory (gitignored)
+- Build tools auto-discover provider assets - no manual config needed
+- Use `get_template_directory()` (parent) vs `get_stylesheet_directory()` (child) appropriately
+- theme.json uses version 3 schema with `defaultFontSizes` and `defaultSpacingSizes` set to false

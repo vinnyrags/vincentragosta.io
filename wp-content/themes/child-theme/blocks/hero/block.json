@@ -1,0 +1,35 @@
+{
+  "apiVersion": 3,
+  "name": "child-theme/hero",
+  "title": "Hero",
+  "category": "design",
+  "icon": "cover-image",
+  "description": "Native hero block with title, subtitle, buttons, and SVG.",
+  "keywords": ["hero", "native", "banner", "svg", "buttons"],
+  "attributes": {
+    "svgAsset": {
+      "type": "string",
+      "default": ""
+    },
+    "align": {
+      "type": "string",
+      "default": ""
+    },
+    "videoUrl": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "anchor": true,
+    "innerBlocks": true
+  },
+  "usesContext": ["postId", "queryId"],
+  "providesContext": {
+    "parentBlock": "child-theme/hero"
+  },
+  "textdomain": "child-theme",
+  "render": "file:./render.php"
+}

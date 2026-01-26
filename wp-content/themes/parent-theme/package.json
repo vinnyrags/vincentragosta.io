@@ -1,0 +1,10 @@
+{
+  "name": "parent-theme",
+  "version": "1.0.0",
+  "description": "A foundational WordPress parent theme providing PHP infrastructure",
+  "scripts": {
+    "build": "echo 'Parent theme has no assets to build'",
+    "start": "echo 'Parent theme has no assets to watch'"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,20 @@
+{
+  "name": "developer/parent-theme",
+  "description": "A foundational WordPress parent theme with Timber support",
+  "type": "wordpress-theme",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.1",
+    "timber/timber": "2.x-dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "ParentTheme\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "apiVersion": 3,
+  "name": "child-theme/projects",
+  "title": "Projects",
+  "category": "design",
+  "icon": "portfolio",
+  "description": "Displays a list of recent or curated projects.",
+  "keywords": ["projects", "portfolio", "grid"],
+  "attributes": {
+    "mode": {
+      "type": "string",
+      "default": "latest"
+    },
+    "selectedProjects": {
+      "type": "array",
+      "default": []
+    },
+    "align": {
+      "type": "string",
+      "default": "wide"
+    }
+  },
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "textdomain": "child-theme",
+  "render": "file:./render.php"
+}

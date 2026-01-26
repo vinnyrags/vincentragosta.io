@@ -1,0 +1,39 @@
+{
+  "name": "developer/child-theme",
+  "description": "Child theme extending parent-theme",
+  "type": "wordpress-theme",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vincent Ragosta"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "timber/timber": "2.x-dev"
+  },
+  "require-dev": {
+    "automattic/wordbless": "^0.4.2",
+    "yoast/wp-test-utils": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ChildTheme\\": "src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "roots/wordpress-core-installer": false
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  }
+}
