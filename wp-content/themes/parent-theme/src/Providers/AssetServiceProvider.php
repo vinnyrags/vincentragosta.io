@@ -29,12 +29,16 @@ class AssetServiceProvider extends ServiceProvider
      */
     public function enqueueFrontendAssets(): void
     {
-        wp_enqueue_style(
-            $this->handlePrefix . '-style',
-            get_stylesheet_uri(),
-            [],
-            wp_get_theme()->get('Version')
-        );
+        // Enqueue parent theme's main stylesheet from dist
+        $parent_style_path = get_template_directory() . '/dist/css/main.css';
+        if (file_exists($parent_style_path)) {
+            wp_enqueue_style(
+                $this->handlePrefix . '-style',
+                get_template_directory_uri() . '/dist/css/main.css',
+                [],
+                filemtime($parent_style_path)
+            );
+        }
 
         $script_path = get_stylesheet_directory() . '/dist/js/frontend.js';
         if (file_exists($script_path)) {

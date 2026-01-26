@@ -1,8 +1,8 @@
 const defaultConfig = require('@wordpress/scripts/config/webpack.config');
 const path = require('path');
 
-// Path to breakpoints file
-const breakpointsPath = path.resolve(__dirname, 'assets/src/scss/common/_breakpoints.scss');
+// Path to breakpoints file (in parent-theme)
+const breakpointsPath = path.resolve(__dirname, '../parent-theme/assets/src/scss/common/_breakpoints.scss');
 
 // Clone the default config
 const config = {

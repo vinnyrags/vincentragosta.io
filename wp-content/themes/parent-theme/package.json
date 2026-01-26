@@ -1,10 +1,14 @@
 {
   "name": "parent-theme",
   "version": "1.0.0",
-  "description": "A foundational WordPress parent theme providing PHP infrastructure",
+  "description": "A foundational WordPress parent theme providing PHP infrastructure and base frontend assets",
   "scripts": {
-    "build": "echo 'Parent theme has no assets to build'",
-    "start": "echo 'Parent theme has no assets to watch'"
+    "compile-theme-css": "sass assets/src/scss/main.scss dist/css/main.css --no-source-map --style=expanded",
+    "watch-theme-css": "sass assets/src/scss/main.scss dist/css/main.css --no-source-map --style=expanded --watch",
+    "build": "npm run compile-theme-css",
+    "start": "npm run watch-theme-css"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "sass": "^1.86.0"
+  }
 }
