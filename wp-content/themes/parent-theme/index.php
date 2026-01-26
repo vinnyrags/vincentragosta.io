@@ -1,11 +1,16 @@
 <?php
 /**
- * Main template file.
+ * The main template file.
  *
- * This is a required file for WordPress themes.
- * Child themes should override this with their own templates.
+ * This is the most generic template file in a WordPress theme
+ * and one of the two required files for a theme (the other being style.css).
+ * It is used to display a page when nothing more specific matches a query.
  *
- * @package ParentTheme
+ * @package  ParentTheme
  */
 
-// Silence is golden.
+$context = Timber::context();
+
+$context['posts'] = Timber::get_posts();
+
+Timber::render('index.twig', $context);

@@ -5,7 +5,7 @@
  * This template is used when the site's front page is set to display
  * a static page or latest posts.
  *
- * @package  child-theme
+ * @package  ParentTheme
  */
 
 $context = Timber::context();
