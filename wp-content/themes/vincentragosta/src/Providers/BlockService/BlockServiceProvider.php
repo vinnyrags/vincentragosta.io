@@ -49,6 +49,15 @@ class BlockServiceProvider extends ServiceProvider
     public function enqueueEditorAssets(): void
     {
         $this->enqueueStyle('vincentragosta-block-service', 'block-service.css');
+
+        // Debug logging
+        error_log('=== BlockServiceProvider Debug ===');
+        error_log('Provider slug: ' . $this->getProviderSlug());
+        error_log('Script path: ' . ($this->getScriptPath('button.js') ?? 'NULL'));
+        error_log('Script URI: ' . ($this->getScriptUri('button.js') ?? 'NULL'));
+        error_log('Dist path: ' . $this->getDistPath());
+        error_log('File exists check: ' . (file_exists($this->getDistPath() . '/js/' . $this->getProviderSlug() . '/button.js') ? 'YES' : 'NO'));
+
         $this->enqueueScript('vincentragosta-block-service-js', 'button.js', [
             'wp-blocks',
             'wp-element',
