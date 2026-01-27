@@ -7,14 +7,8 @@
 
 use WorDBless\Load;
 
-// Load Composer autoloaders.
+// Load Composer autoloader.
 require_once dirname(__DIR__) . '/vendor/autoload.php';
-
-// Load parent theme autoloader for ParentTheme namespace.
-$parent_autoloader = dirname(dirname(__DIR__)) . '/parent-theme/vendor/autoload.php';
-if (file_exists($parent_autoloader)) {
-    require_once $parent_autoloader;
-}
 
 // Define ABSPATH to point to wordpress-no-content before loading WorDBless.
 if (!defined('ABSPATH')) {
@@ -36,20 +30,12 @@ copy(
     $wp_content_dir . '/db.php'
 );
 
-// Symlink child theme for WordPress to find it.
+// Symlink parent theme for WordPress to find it.
 $theme_name = basename(dirname(__DIR__));
 $theme_src = dirname(__DIR__);
 $theme_dest = $wp_content_dir . '/themes/' . $theme_name;
 if (is_dir($theme_src) && !file_exists($theme_dest)) {
     symlink($theme_src, $theme_dest);
-}
-
-// Symlink parent theme as well.
-$parent_theme_name = 'parent-theme';
-$parent_theme_src = dirname(dirname(__DIR__)) . '/' . $parent_theme_name;
-$parent_theme_dest = $wp_content_dir . '/themes/' . $parent_theme_name;
-if (is_dir($parent_theme_src) && !file_exists($parent_theme_dest)) {
-    symlink($parent_theme_src, $parent_theme_dest);
 }
 
 // Load WordPress via WorDBless.

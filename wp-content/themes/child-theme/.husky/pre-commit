@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Get the repository root
+REPO_ROOT=$(git rev-parse --show-toplevel)
+
+# Get list of staged PHP files
+STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
+
+if [ -n "$STAGED_PHP" ]; then
+    # Check if child-theme PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/themes/child-theme/"; then
+        echo "Running child-theme PHP tests..."
+        cd "$REPO_ROOT/wp-content/themes/child-theme" && composer test
+        if [ $? -ne 0 ]; then
+            echo ""
+            echo "Child-theme tests failed. Commit aborted."
+            echo "Fix the failing tests or use --no-verify to bypass."
+            exit 1
+        fi
+        echo "Child-theme tests passed."
+    fi
+
+    # Check if parent-theme PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/themes/parent-theme/"; then
+        # Only run if parent-theme has tests configured
+        if [ -f "$REPO_ROOT/wp-content/themes/parent-theme/phpunit.xml" ]; then
+            echo "Running parent-theme PHP tests..."
+            cd "$REPO_ROOT/wp-content/themes/parent-theme" && composer test
+            if [ $? -ne 0 ]; then
+                echo ""
+                echo "Parent-theme tests failed. Commit aborted."
+                echo "Fix the failing tests or use --no-verify to bypass."
+                exit 1
+            fi
+            echo "Parent-theme tests passed."
+        fi
+    fi
+fi
+
+exit 0
