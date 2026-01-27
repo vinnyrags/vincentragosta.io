@@ -30,7 +30,7 @@ $wrapper_attributes = get_block_wrapper_attributes();
 
         <div class="hero__svg">
             <?php if (empty($video_url) && !empty($svg_asset)) : ?>
-                <?= new IconService($svg_asset); ?>
+                <?= new IconService('squiggle/' . $svg_asset); ?>
             <?php endif; ?>
         </div>
 

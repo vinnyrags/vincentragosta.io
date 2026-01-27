@@ -107,19 +107,21 @@ class IconService
      * Get all available icons of a given type.
      *
      * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $subdir Optional subdirectory within the type's directory (e.g., 'squiggle')
      * @return array Array of icon data with 'name', 'label', and 'type' keys
      */
-    public static function all(string $type = 'all'): array
+    public static function all(string $type = 'all', string $subdir = ''): array
     {
         $icons = [];
         $themeDir = get_stylesheet_directory();
+        $subdirPath = $subdir ? $subdir . '/' : '';
 
         if ($type === 'sprite' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SPRITE_DIR, 'sprite'));
+            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SPRITE_DIR . $subdirPath, 'sprite'));
         }
 
         if ($type === 'svg' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SVG_DIR, 'svg'));
+            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SVG_DIR . $subdirPath, 'svg'));
         }
 
         return $icons;
@@ -130,13 +132,14 @@ class IconService
      *
      * @param string $type 'sprite', 'svg', or 'all'
      * @param string $emptyLabel Label for the empty/no-selection option
+     * @param string $subdir Optional subdirectory within the type's directory
      * @return array Array of ['label' => string, 'value' => string]
      */
-    public static function options(string $type = 'all', string $emptyLabel = '— No Icon —'): array
+    public static function options(string $type = 'all', string $emptyLabel = '— No Icon —', string $subdir = ''): array
     {
         $options = [['label' => $emptyLabel, 'value' => '']];
 
-        foreach (self::all($type) as $icon) {
+        foreach (self::all($type, $subdir) as $icon) {
             $options[] = [
                 'label' => $icon['label'],
                 'value' => $icon['name'],
@@ -150,24 +153,48 @@ class IconService
      * Get a map of icon names to their rendered content.
      *
      * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $subdir Optional subdirectory within the type's directory
      * @return array Associative array of name => rendered SVG content
      */
-    public static function contentMap(string $type = 'all'): array
+    public static function contentMap(string $type = 'all', string $subdir = ''): array
     {
         $map = [];
-        foreach (self::all($type) as $icon) {
-            $map[$icon['name']] = (string) new self($icon['name']);
+        foreach (self::all($type, $subdir) as $icon) {
+            // Include subdir in the path for resolution
+            $iconPath = $subdir ? $subdir . '/' . $icon['name'] : $icon['name'];
+            $map[$icon['name']] = (string) new self($iconPath);
         }
         return $map;
     }
 
     /**
      * Sanitize the icon name to prevent directory traversal.
+     * Allows subdirectory paths like 'squiggle/squiggle-1'.
      */
     private function sanitizeName(string $name): string
     {
-        $name = basename($name);
+        // Remove .svg extension
         $name = preg_replace('/\.svg$/i', '', $name);
+
+        // Normalize backslashes to forward slashes
+        $name = str_replace('\\', '/', $name);
+
+        // Remove all directory traversal sequences
+        while (strpos($name, '..') !== false) {
+            $name = str_replace('..', '', $name);
+        }
+
+        // Clean up multiple consecutive slashes
+        $name = preg_replace('#/+#', '/', $name);
+
+        // If path starts with /, it's absolute - only keep basename
+        if (strpos($name, '/') === 0) {
+            $name = basename($name);
+        }
+
+        // Trim any remaining leading/trailing slashes
+        $name = trim($name, '/');
+
         return $name;
     }
 

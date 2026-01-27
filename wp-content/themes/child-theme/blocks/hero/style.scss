@@ -81,6 +81,11 @@
       width: auto;
       height: auto;
     }
+
+    // Flip squiggle-2 via CSS (cleaner than SVG transform)
+    .squiggle-2 {
+      transform: scaleX(-1);
+    }
   }
 
   &__links {

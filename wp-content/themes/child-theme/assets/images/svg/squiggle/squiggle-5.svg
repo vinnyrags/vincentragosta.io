@@ -1,25 +1,24 @@
-<svg class="squiggle squiggle-2" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 981.52 707.46">
+<svg class="squiggle squiggle-5" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 981.52 707.46">
     <defs>
         <mask id="sq2-uyerhecf" maskUnits="userSpaceOnUse">
-            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="43" d="M9.07 46.38s129.81-60.44 145.32 7.09-19.49 127.6-19.49 127.6l-31.01 98.36" class="mask mask-0" pathLength="100" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 299.069px;"></path>
+            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="43" d="M9.07 46.38s129.81-60.44 145.32 7.09-19.49 127.6-19.49 127.6l-31.01 98.36" class="mask mask-0" pathLength="100"></path>
         </mask>
         <mask id="sq2-iapjyphp" maskUnits="userSpaceOnUse">
-            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="56" d="M79.96 293.67c57.23-64.75 113.02-118.64 151.52-142.74 13.96-8.74 60.57-37.17 126.71-53.17 22.2-5.37 55.67-7.04 69.11-2.66 24 7.83 38.85 28.36-19.49 54.05-51.39 22.63-88.61 47.95-130.25 76.2-29.97 20.33-100.49 69.48-118.74 146.2-7.72 32.45-1.43 50.28 1.77 57.6 11.7 26.78 39.04 38.15 63.8 48.73 16.05 6.87 188.78 24.48 224.07 25.47" class="mask mask-1" pathLength="100" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 1113.56px;"></path>
+            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="56" d="M79.96 293.67c57.23-64.75 113.02-118.64 151.52-142.74 13.96-8.74 60.57-37.17 126.71-53.17 22.2-5.37 55.67-7.04 69.11-2.66 24 7.83 38.85 28.36-19.49 54.05-51.39 22.63-88.61 47.95-130.25 76.2-29.97 20.33-100.49 69.48-118.74 146.2-7.72 32.45-1.43 50.28 1.77 57.6 11.7 26.78 39.04 38.15 63.8 48.73 16.05 6.87 188.78 24.48 224.07 25.47" class="mask mask-1" pathLength="100"></path>
         </mask>
         <mask id="sq2-kwgecapj" maskUnits="userSpaceOnUse">
-            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="73" d="M427.71 495.76c59.86-7.28 103.63-27.25 128.93-41.2 39.04-21.52 63.88-45.13 74.43-55.82 28.28-28.65 50.95-50.72 55.82-86.39 1.01-7.4 7.86-57.54-25.25-89.05-6.15-5.85-25.41-22.23-71.77-23.92-64-2.34-157.32 24.1-216.65 103.67-70.53 94.6-51.41 183.25-47.54 200.33" class="mask mask-2" pathLength="100" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 869.713px;"></path>
+            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="73" d="M427.71 495.76c59.86-7.28 103.63-27.25 128.93-41.2 39.04-21.52 63.88-45.13 74.43-55.82 28.28-28.65 50.95-50.72 55.82-86.39 1.01-7.4 7.86-57.54-25.25-89.05-6.15-5.85-25.41-22.23-71.77-23.92-64-2.34-157.32 24.1-216.65 103.67-70.53 94.6-51.41 183.25-47.54 200.33" class="mask mask-2" pathLength="100"></path>
         </mask>
         <mask id="sq2-jqumqwld" maskUnits="userSpaceOnUse">
-            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="67" d="M319.2 483.22c0 35.44 59.71 198.71 332.04 190.44 179.04-5.44 289.82-146.39 303.63-164.53" class="mask mask-3" pathLength="100" style="stroke-dashoffset: 0; stroke-dasharray: 100px, 674.382px;"></path>
+            <path fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="67" d="M319.2 483.22c0 35.44 59.71 198.71 332.04 190.44 179.04-5.44 289.82-146.39 303.63-164.53" class="mask mask-3" pathLength="100"></path>
         </mask>
         <linearGradient id="sq2-nugsziwd" x1="15.807" x2="680.495" y1="-19.352" y2="626.42" gradientUnits="userSpaceOnUse">
             <stop stop-color="#CEFF00"></stop>
             <stop offset="1" stop-color="#151515"></stop>
         </linearGradient>
-
         <linearGradient id="sq2-kfibslsae" x1="235.07907048" x2="569.83981987" y1="340.90337525" y2="626.42" gradientUnits="userSpaceOnUse">
-            <stop stop-color="#C8F700"></stop>
-            <stop offset="1" stop-color="#EFEAE6"></stop>
+            <stop stop-color="#CEFF00"></stop>
+            <stop offset="1" stop-color="#151515"></stop>
         </linearGradient>
     </defs>
     <g class="squiggle-2-group" fill="url(#sq2-nugsziwd)" transform="scale(-1, 1) translate(-981.52, 0)">

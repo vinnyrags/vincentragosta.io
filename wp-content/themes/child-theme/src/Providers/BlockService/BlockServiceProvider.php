@@ -92,8 +92,8 @@ class BlockServiceProvider extends ServiceProvider
         }
 
         wp_localize_script($handle, 'childThemeHeroBlockData', [
-            'svgOptions' => IconService::options('svg', __('Select Squiggle', 'child-theme')),
-            'svgContent' => IconService::contentMap('svg'),
+            'svgOptions' => IconService::options('svg', __('Select Squiggle', 'child-theme'), 'squiggle'),
+            'svgContent' => IconService::contentMap('svg', 'squiggle'),
         ]);
     }
 
