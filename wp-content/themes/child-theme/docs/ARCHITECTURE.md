@@ -1,64 +1,43 @@
 # Architecture
 
-This document explains the technical architecture and design decisions behind the Vincent Ragosta theme.
+This document explains the technical architecture and design decisions behind the Vincent Ragosta theme (child-theme).
+
+For documentation on the parent theme's base infrastructure (contracts, traits, service providers), see the [parent-theme docs](../../parent-theme/docs/).
 
 ## Table of Contents
 
-- [Parent/Child Theme Structure](#parentchild-theme-structure)
+- [Overview](#overview)
 - [Hybrid Theme Approach](#hybrid-theme-approach)
 - [PHP Architecture](#php-architecture)
 - [Template Hierarchy](#template-hierarchy)
-- [Service Provider Pattern](#service-provider-pattern)
 - [Block Editor Integration](#block-editor-integration)
 - [Build System](#build-system)
 
-## Parent/Child Theme Structure
+## Overview
 
-This theme uses a WordPress parent/child theme architecture:
-
-```
-themes/
-├── parent-theme/           # Infrastructure & base classes
-│   ├── src/
-│   │   ├── Contracts/      # Interfaces (Registrable, HasAssets)
-│   │   ├── Traits/         # Implementations (HasAssets)
-│   │   ├── Providers/      # Base service providers
-│   │   └── Theme.php       # Base theme class
-│   └── vendor/             # Composer dependencies (Timber)
-│
-└── child-theme/            # Site-specific implementation
-    ├── src/
-    │   ├── Providers/      # Extended/custom providers
-    │   ├── Services/       # Site-specific services
-    │   └── Theme.php       # Extends ParentTheme\Theme
-    ├── blocks/             # Custom Gutenberg blocks
-    ├── views/              # Twig templates
-    └── vendor/             # Child theme dependencies
-```
-
-### Why Parent/Child?
-
-| Benefit | Description |
-|---------|-------------|
-| **Reusability** | Base classes can be used across multiple sites |
-| **Separation** | Infrastructure vs. site-specific code |
-| **Maintainability** | Update parent without touching child |
-| **Inheritance** | Child extends and overrides as needed |
-
-### Namespace Structure
+This child theme extends `parent-theme` to implement the Vincent Ragosta portfolio site:
 
 ```
-ParentTheme\              # Parent theme namespace
-├── Contracts\
-├── Traits\
-├── Providers\
-└── Theme
-
-ChildTheme\               # Child theme namespace
-├── Providers\
-├── Services\
-└── Theme
+child-theme/
+├── src/
+│   ├── Providers/          # Extended service providers
+│   │   ├── AssetServiceProvider.php
+│   │   ├── BlockService/
+│   │   ├── PostTypeServiceProvider.php
+│   │   ├── ThemeService/
+│   │   └── TwigServiceProvider.php
+│   ├── Services/
+│   │   └── IconService.php
+│   └── Theme.php           # Extends ParentTheme\Theme
+├── blocks/                 # Custom Gutenberg blocks
+├── views/                  # Twig templates
+└── vendor/                 # Composer dependencies
 ```
+
+It inherits infrastructure from `parent-theme`:
+- **Contracts**: `Registrable`, `HasAssets` interfaces
+- **Traits**: `HasAssets` for asset enqueueing
+- **Base Classes**: `Theme`, `ServiceProvider`
 
 ## Hybrid Theme Approach
 
@@ -203,77 +182,19 @@ views/
 
 ## Service Provider Pattern
 
-All theme functionality is organized into service providers. The parent theme provides base classes and contracts:
+All theme functionality is organized into service providers that extend base classes from `parent-theme`.
 
-### Contracts (from parent-theme)
+For detailed documentation on contracts, traits, and base classes, see [parent-theme Service Providers](../../parent-theme/docs/SERVICE-PROVIDERS.md).
 
-```php
-namespace ParentTheme\Contracts;
+### Child Theme Providers
 
-interface Registrable
-{
-    public function register(): void;
-}
-
-interface HasAssets
-{
-    public function enqueueStyle(string $handle, string $filename, array $deps = []): void;
-    public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void;
-}
-```
-
-### Base ServiceProvider (from parent-theme)
-
-```php
-namespace ParentTheme\Providers;
-
-abstract class ServiceProvider implements Registrable, HasAssets
-{
-    use \ParentTheme\Traits\HasAssets;
-
-    protected array $features = [];
-
-    public function register(): void
-    {
-        $this->registerFeatures();
-    }
-}
-```
-
-### Child Theme Provider Example
-
-```php
-namespace ChildTheme\Providers;
-
-use ParentTheme\Providers\AssetServiceProvider as BaseAssetServiceProvider;
-
-class AssetServiceProvider extends BaseAssetServiceProvider
-{
-    protected string $handlePrefix = 'child-theme';
-
-    public function register(): void
-    {
-        parent::register();
-        add_action('wp_head', [$this, 'addFontPreconnects']);
-    }
-
-    public function enqueueFrontendAssets(): void
-    {
-        // Add Google Fonts
-        wp_enqueue_style('fira-code-font', '...');
-
-        // Call parent for standard assets
-        parent::enqueueFrontendAssets();
-    }
-}
-```
-
-### Benefits
-
-1. **Inheritance**: Extend parent providers, override only what's needed
-2. **Separation of Concerns**: Each provider handles one aspect
-3. **Testability**: Providers can be unit tested in isolation
-4. **Organization**: Clear structure for finding code
+| Provider | Responsibility |
+|----------|----------------|
+| `AssetServiceProvider` | Enqueues styles, scripts, fonts |
+| `BlockServiceProvider` | Registers custom Gutenberg blocks |
+| `PostTypeServiceProvider` | Registers custom post types |
+| `TwigServiceProvider` | Adds Twig filters and functions |
+| `ThemeServiceProvider` | Theme setup and features |
 
 ## Block Editor Integration
 

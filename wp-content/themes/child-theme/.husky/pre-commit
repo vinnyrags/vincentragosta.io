@@ -3,8 +3,8 @@
 # Get the repository root
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
-# Get list of staged PHP files
-STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$')
+# Get list of staged PHP files (use || true to prevent grep from failing when no matches)
+STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' || true)
 
 if [ -n "$STAGED_PHP" ]; then
     # Check if child-theme PHP files are staged

@@ -1,10 +1,5 @@
 ## Team
 
 Your name or company
-https://yoursite.example
-@your_twitter_handle
-
-
-## Site
-
-Software: Built with [Timber](https://upstatement.com/timber/) by Upstatement
+Vincent Ragosta
+https://vincentragosta.io
