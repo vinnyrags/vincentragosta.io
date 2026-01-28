@@ -237,18 +237,18 @@ Always prefer CSS custom properties from theme.json:
 var(--wp--preset--color--base)           // #FFFFFF
 var(--wp--preset--color--contrast)       // #151515
 var(--wp--preset--color--accent-1)       // #ceff00
-var(--wp--preset--color--accent-2)       // #F6CFF4
+var(--wp--preset--color--accent-2)       // #686868
 var(--wp--preset--color--grey-1)         // #1c1c1f
 var(--wp--preset--color--grey-2)         // #313135
 var(--wp--preset--color--grey-3)         // #afafb6
+var(--wp--preset--color--grey-4)         // #494950
 
-// Spacing
-var(--wp--preset--spacing--20)           // 0.5rem
-var(--wp--preset--spacing--30)           // 0.75rem
-var(--wp--preset--spacing--40)           // 1rem
-var(--wp--preset--spacing--50)           // 1.5rem
-var(--wp--preset--spacing--60)           // 2.25rem
-var(--wp--preset--spacing--70)           // 3rem
+// Spacing (8px grid)
+var(--wp--preset--spacing--20)           // 0.5rem (8px)  - tight
+var(--wp--preset--spacing--30)           // 1rem (16px)   - small
+var(--wp--preset--spacing--40)           // 1.5rem (24px) - medium
+var(--wp--preset--spacing--50)           // 2.5rem (40px) - large
+var(--wp--preset--spacing--60)           // 4rem (64px)   - section gaps
 
 // Typography
 var(--wp--preset--font-size--body-tiny)       // 0.875rem

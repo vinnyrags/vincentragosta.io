@@ -30,19 +30,9 @@
           "slug": "accent-1"
         },
         {
-          "color": "#F6CFF4",
+          "color": "#686868",
           "name": "Accent 2",
           "slug": "accent-2"
-        },
-        {
-          "color": "#503AA8",
-          "name": "Accent 3",
-          "slug": "accent-3"
-        },
-        {
-          "color": "#686868",
-          "name": "Accent 4",
-          "slug": "accent-4"
         },
         {
           "color": "#1c1c1f",
@@ -77,32 +67,22 @@
         {
           "name": "30",
           "slug": "30",
-          "size": "0.75rem"
+          "size": "1rem"
         },
         {
           "name": "40",
           "slug": "40",
-          "size": "1rem"
+          "size": "1.5rem"
         },
         {
           "name": "50",
           "slug": "50",
-          "size": "1.5rem"
+          "size": "2.5rem"
         },
         {
           "name": "60",
           "slug": "60",
-          "size": "2.25rem"
-        },
-        {
-          "name": "70",
-          "slug": "70",
-          "size": "3rem"
-        },
-        {
-          "name": "80",
-          "slug": "80",
-          "size": "10rem"
+          "size": "4rem"
         }
       ]
     },
@@ -316,7 +296,7 @@
         },
         ":focus": {
           "outline": {
-            "color": "var:preset|color|accent-4",
+            "color": "var:preset|color|accent-2",
             "offset": "2px"
           }
         },
