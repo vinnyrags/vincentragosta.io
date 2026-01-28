@@ -110,11 +110,11 @@
         },
         {
           "fluid": {
-            "max": "1.5rem",
-            "min": "1rem"
+            "max": "1.875rem",
+            "min": "1.25rem"
           },
           "name": "Body Default",
-          "size": "1.5rem",
+          "size": "1.875rem",
           "slug": "body-default"
         },
         {
