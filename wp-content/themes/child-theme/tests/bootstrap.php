@@ -3,6 +3,8 @@
  * PHPUnit bootstrap file.
  *
  * Sets up the WordPress test environment using WorDBless.
+ * Test WordPress files are stored in tests/.wp-test/ to keep them
+ * associated with the test suite.
  */
 
 use WorDBless\Load;
@@ -16,10 +18,15 @@ if (file_exists($parent_autoloader)) {
     require_once $parent_autoloader;
 }
 
-// Define ABSPATH to point to wordpress-no-content before loading WorDBless.
-if (!defined('ABSPATH')) {
-    define('ABSPATH', dirname(__DIR__) . '/vendor/roots/wordpress-no-content/');
+// Set up test WordPress directory inside tests/.wp-test/
+$wp_test_dir = __DIR__ . '/.wp-test';
+if (!file_exists($wp_test_dir)) {
+    mkdir($wp_test_dir, 0755, true);
 }
+
+// Define ABSPATH before loading WorDBless to override its default.
+// Must be defined before WorDBless\Load::load() is called.
+define('ABSPATH', $wp_test_dir . '/');
 
 // Create wp-content directory structure for WorDBless.
 $wp_content_dir = ABSPATH . 'wp-content';
@@ -28,6 +35,23 @@ if (!file_exists($wp_content_dir)) {
 }
 if (!file_exists($wp_content_dir . '/themes')) {
     mkdir($wp_content_dir . '/themes', 0755, true);
+}
+
+// Copy WordPress core files from wordpress-no-content.
+$wp_source = dirname(__DIR__) . '/vendor/roots/wordpress-no-content';
+if (is_dir($wp_source)) {
+    // Copy wp-settings.php if not present
+    if (!file_exists(ABSPATH . 'wp-settings.php')) {
+        copy($wp_source . '/wp-settings.php', ABSPATH . 'wp-settings.php');
+    }
+    // Copy wp-includes if not present
+    if (!file_exists(ABSPATH . 'wp-includes') && is_dir($wp_source . '/wp-includes')) {
+        symlink($wp_source . '/wp-includes', ABSPATH . 'wp-includes');
+    }
+    // Copy wp-admin if not present
+    if (!file_exists(ABSPATH . 'wp-admin') && is_dir($wp_source . '/wp-admin')) {
+        symlink($wp_source . '/wp-admin', ABSPATH . 'wp-admin');
+    }
 }
 
 // Copy WorDBless database mock.
