@@ -3,6 +3,7 @@
 namespace ParentTheme\Providers\ThemeService;
 
 use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\ThemeService\Features\DisableBlocks;
 use ParentTheme\Providers\ThemeService\Features\DisableComments;
 
 /**
@@ -19,6 +20,7 @@ class ThemeServiceProvider extends ServiceProvider
      * @var array<class-string>
      */
     protected array $features = [
+        DisableBlocks::class,
         DisableComments::class,
     ];
 
