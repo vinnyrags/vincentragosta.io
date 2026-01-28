@@ -3,9 +3,6 @@
   to { opacity: 1; }
 }
 
-@keyframes draw-mask-stroke {
-  to { stroke-dashoffset: 0; }
-}
 
 .hero {
   container: hero / inline-size;
@@ -78,9 +75,10 @@
       height: auto;
     }
 
+
     // Flip squiggle-2 via CSS (cleaner than SVG transform)
     .squiggle-2 {
-      transform: scaleX(-1);
+      transform: scaleX(-1) translateZ(0);
     }
   }
 
@@ -93,22 +91,29 @@
 }
 
 // ==========================================================================
-// SVG Mask Animation (separate to reduce nesting)
+// SVG Animation (left-to-right fade using CSS mask)
 // ==========================================================================
 
-.hero__svg .mask {
-  stroke-dasharray: 101;
-  stroke-dashoffset: 101;
-  animation: draw-mask-stroke cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  stroke: #fff;
-  fill: none;
+.hero__svg .squiggle {
+  opacity: 0;
+  mask-image: linear-gradient(to right, #000 50%, transparent 100%);
+  mask-size: 250% 100%;
+  mask-position: 100% 0;
+  animation: fadeLeftToRight 2.5s ease-out 0.3s forwards;
+}
 
-  &.mask-0 { animation-delay: 0.05s; animation-duration: 0.6s; }
-  &.mask-1 { animation-delay: 0.35s; animation-duration: 0.5s; }
-  &.mask-2 { animation-delay: 0.65s; animation-duration: 0.5s; }
-  &.mask-3 { animation-delay: 0.95s; animation-duration: 0.4s; }
-  &.mask-4 { animation-delay: 1.15s; animation-duration: 0.4s; }
-  &.mask-5 { animation-delay: 1.35s; animation-duration: 0.4s; }
+@keyframes fadeLeftToRight {
+  0% {
+    opacity: 0;
+    mask-position: 100% 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    mask-position: 0% 0;
+  }
 }
 
 // ==========================================================================
@@ -129,9 +134,9 @@
 // ==========================================================================
 
 @include reduced-motion {
-  .hero__svg .mask {
+  .hero__svg .squiggle {
     animation: none;
-    stroke-dashoffset: 0;
+    mask-image: none;
   }
 
   .hero__links .wp-block-button {
