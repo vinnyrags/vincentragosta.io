@@ -83,6 +83,11 @@
           "name": "60",
           "slug": "60",
           "size": "4rem"
+        },
+        {
+          "name": "70",
+          "slug": "70",
+          "size": "10rem"
         }
       ]
     },
@@ -160,7 +165,7 @@
   },
   "styles": {
     "spacing": {
-      "blockGap": "var:preset|spacing|40",
+      "blockGap": "var:preset|spacing|70",
       "padding": {
         "top": "var:preset|spacing|50",
         "right": "var:preset|spacing|40",
@@ -176,7 +181,8 @@
       "fontFamily": "var:preset|font-family|system-sans",
       "fontSize": "var:preset|font-size|body-default",
       "fontWeight": "300",
-      "letterSpacing": "-0.3px"
+      "letterSpacing": "-0.3px",
+      "lineHeight": "1.5"
     },
     "blocks": {
       "core/button": {
@@ -188,15 +194,20 @@
         "spacing": {
           "padding": {
             "right": "var:preset|spacing|50",
-            "bottom": "var:preset|spacing|40",
+            "bottom": "var:preset|spacing|30",
             "left": "var:preset|spacing|50",
-            "top": "var:preset|spacing|40"
+            "top": "var:preset|spacing|30"
           }
         }
       },
       "core/columns": {
         "spacing": {
           "blockGap": "var:preset|spacing|50"
+        }
+      },
+      "core/group": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|40"
         }
       },
       "core/buttons": {

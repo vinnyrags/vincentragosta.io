@@ -249,6 +249,7 @@ var(--wp--preset--spacing--30)           // 1rem (16px)   - small
 var(--wp--preset--spacing--40)           // 1.5rem (24px) - medium
 var(--wp--preset--spacing--50)           // 2.5rem (40px) - large
 var(--wp--preset--spacing--60)           // 4rem (64px)   - section gaps
+var(--wp--preset--spacing--70)           // 10rem (160px) - page-level gaps
 
 // Typography
 var(--wp--preset--font-size--body-tiny)       // 0.875rem
