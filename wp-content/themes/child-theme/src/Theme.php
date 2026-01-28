@@ -2,11 +2,11 @@
 
 namespace ChildTheme;
 
-use ChildTheme\Providers\AssetServiceProvider;
+use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use ChildTheme\Providers\BlockService\BlockServiceProvider;
-use ChildTheme\Providers\PostTypeServiceProvider;
+use ChildTheme\Providers\PostTypeService\PostTypeServiceProvider;
 use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
-use ChildTheme\Providers\TwigServiceProvider;
+use ChildTheme\Providers\TwigService\TwigServiceProvider;
 use ParentTheme\Theme as BaseTheme;
 
 /**

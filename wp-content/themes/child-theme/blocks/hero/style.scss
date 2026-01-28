@@ -1,146 +1,148 @@
-@keyframes heroButtonSimpleFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-
-.hero {
-  container: hero / inline-size;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  min-height: 80vh;
-  overflow: hidden;
-  position: relative;
-
-  @include container(hero, md) {
-    padding-top: 20%;
-  }
-
-  // Text shadow for readability over SVG/video backgrounds
-  :is(.wp-block-heading, .wp-block-paragraph) {
-    text-shadow: 0 0 10px var(--color-bg), 0 0 20px var(--color-bg);
-  }
-
-  &__video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transform: translate(-50%, -50%);
-    z-index: 0;
-    opacity: 0.5;
-  }
-
-  &__content {
-    width: 100%;
-    max-width: var(--wp--style--global--content-size);
-    margin-inline: auto;
-    padding-inline: var(--wp--preset--spacing--40);
-    display: flex;
-    flex-direction: column;
-    gap: var(--wp--preset--spacing--40);
-    position: relative;
-    z-index: 2;
-  }
-
-  &__mask {
-    display: block;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  &__svg {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    z-index: 1;
-
-    @include container(hero, md) {
-      justify-content: center;
-      width: 75%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    svg {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-
-    // Flip squiggle-2 via CSS (cleaner than SVG transform)
-    .squiggle-2 {
-      transform: scaleX(-1) translateZ(0);
-    }
-  }
-
-  &__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--wp--preset--spacing--30);
-    width: 100%;
-  }
-}
-
-// ==========================================================================
-// SVG Animation (left-to-right fade using CSS mask)
-// ==========================================================================
-
-.hero__svg .squiggle {
-  opacity: 0;
-  mask-image: linear-gradient(to right, #000 50%, transparent 100%);
-  mask-size: 250% 100%;
-  mask-position: 100% 0;
-  animation: fadeLeftToRight 2.5s ease-out 0.3s forwards;
-}
-
-@keyframes fadeLeftToRight {
-  0% {
-    opacity: 0;
-    mask-position: 100% 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    mask-position: 0% 0;
-  }
-}
-
-// ==========================================================================
-// Button Animation (separate to reduce nesting)
-// ==========================================================================
-
-.hero__links .wp-block-button {
-  opacity: 0;
-  animation: heroButtonSimpleFadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-
-  &:nth-child(1) { animation-delay: 0.6s; }
-  &:nth-child(2) { animation-delay: 0.8s; }
-  &:nth-child(3) { animation-delay: 1.0s; }
-}
-
-// ==========================================================================
-// Reduced Motion
-// ==========================================================================
-
-@include reduced-motion {
-  .hero__svg .squiggle {
-    animation: none;
-    mask-image: none;
-  }
-
-  .hero__links .wp-block-button {
-    animation: none;
-    opacity: 1;
-  }
-}
+//@keyframes heroButtonSimpleFadeIn {
+//  from { opacity: 0; }
+//  to { opacity: 1; }
+//}
+//
+//
+//.wp-block-child-theme-hero {
+//  container: hero / inline-size;
+//}
+//
+//.hero {
+//  display: flex;
+//  flex-wrap: wrap;
+//  align-items: flex-end;
+//  overflow: hidden;
+//  position: relative;
+//
+//  @include container(hero, lg) {
+//    min-height: calc(100vh - var(--header-height));
+//  }
+//
+//  // Text shadow for readability over SVG/video backgrounds
+//  :is(.wp-block-heading, .wp-block-paragraph) {
+//    text-shadow: 0 0 10px var(--color-bg), 0 0 20px var(--color-bg);
+//  }
+//
+//  &__video {
+//    position: absolute;
+//    top: 50%;
+//    left: 50%;
+//    width: 100%;
+//    height: 100%;
+//    object-fit: cover;
+//    transform: translate(-50%, -50%);
+//    z-index: 0;
+//    opacity: 0.5;
+//  }
+//
+//  &__content {
+//    width: 100%;
+//    max-width: var(--wp--style--global--content-size);
+//    margin-inline: auto;
+//    padding-inline: var(--wp--preset--spacing--40);
+//    display: flex;
+//    flex-direction: column;
+//    gap: var(--wp--preset--spacing--40);
+//    position: relative;
+//    z-index: 2;
+//  }
+//
+//  &__mask {
+//    display: block;
+//    overflow: hidden;
+//    width: 100%;
+//  }
+//
+//  &__svg {
+//    position: relative;
+//    display: flex;
+//    justify-content: center;
+//    align-items: center;
+//    width: 100%;
+//    z-index: 1;
+//
+//    @include container(hero, md) {
+//      justify-content: center;
+//      width: 75%;
+//      position: absolute;
+//      top: 50%;
+//      left: 50%;
+//      transform: translate(-50%, -50%);
+//    }
+//
+//    svg {
+//      display: block;
+//      width: 100%;
+//      height: auto;
+//    }
+//
+//
+//    // Flip squiggle-2 via CSS (cleaner than SVG transform)
+//    .squiggle-2 {
+//      transform: scaleX(-1) translateZ(0);
+//    }
+//  }
+//
+//  &__links {
+//    display: flex;
+//    flex-wrap: wrap;
+//    gap: var(--wp--preset--spacing--30);
+//    width: 100%;
+//  }
+//}
+//
+//// ==========================================================================
+//// SVG Animation (left-to-right fade using CSS mask)
+//// ==========================================================================
+//
+//.hero__svg .squiggle {
+//  opacity: 0;
+//  mask-image: linear-gradient(to right, #000 50%, transparent 100%);
+//  mask-size: 250% 100%;
+//  mask-position: 100% 0;
+//  animation: fadeLeftToRight 2.5s ease-out 0.3s forwards;
+//}
+//
+//@keyframes fadeLeftToRight {
+//  0% {
+//    opacity: 0;
+//    mask-position: 100% 0;
+//  }
+//  10% {
+//    opacity: 1;
+//  }
+//  100% {
+//    opacity: 1;
+//    mask-position: 0% 0;
+//  }
+//}
+//
+//// ==========================================================================
+//// Button Animation (separate to reduce nesting)
+//// ==========================================================================
+//
+//.hero__links .wp-block-button {
+//  opacity: 0;
+//  animation: heroButtonSimpleFadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+//
+//  &:nth-child(1) { animation-delay: 0.6s; }
+//  &:nth-child(2) { animation-delay: 0.8s; }
+//  &:nth-child(3) { animation-delay: 1.0s; }
+//}
+//
+//// ==========================================================================
+//// Reduced Motion
+//// ==========================================================================
+//
+//@include reduced-motion {
+//  .hero__svg .squiggle {
+//    animation: none;
+//    mask-image: none;
+//  }
+//
+//  .hero__links .wp-block-button {
+//    animation: none;
+//    opacity: 1;
+//  }
+//}

@@ -1,6 +1,8 @@
 <?php
 
-namespace ParentTheme\Providers;
+namespace ParentTheme\Providers\PostTypeService;
+
+use ParentTheme\Providers\ServiceProvider;
 
 /**
  * Registers custom post types from JSON configuration files.

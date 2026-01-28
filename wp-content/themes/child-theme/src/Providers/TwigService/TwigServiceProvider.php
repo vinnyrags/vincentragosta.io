@@ -1,9 +1,9 @@
 <?php
 
-namespace ChildTheme\Providers;
+namespace ChildTheme\Providers\TwigService;
 
 use ChildTheme\Services\IconService;
-use ParentTheme\Providers\TwigServiceProvider as BaseTwigServiceProvider;
+use ParentTheme\Providers\TwigService\TwigServiceProvider as BaseTwigServiceProvider;
 use Twig\TwigFunction;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace ChildTheme\Tests\Integration\Providers;
 
-use ChildTheme\Providers\AssetServiceProvider;
+use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use WorDBless\BaseTestCase;
 
 /**
@@ -31,7 +31,7 @@ class AssetServiceProviderTest extends BaseTestCase
      */
     public function testProviderExtendsParentProvider(): void
     {
-        $this->assertInstanceOf(\ParentTheme\Providers\AssetServiceProvider::class, $this->provider);
+        $this->assertInstanceOf(\ParentTheme\Providers\AssetService\AssetServiceProvider::class, $this->provider);
     }
 
     /**

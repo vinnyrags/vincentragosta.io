@@ -1,8 +1,8 @@
 <?php
 
-namespace ChildTheme\Providers;
+namespace ChildTheme\Providers\AssetService;
 
-use ParentTheme\Providers\AssetServiceProvider as BaseAssetServiceProvider;
+use ParentTheme\Providers\AssetService\AssetServiceProvider as BaseAssetServiceProvider;
 
 /**
  * Handles all asset enqueueing for frontend and editor.

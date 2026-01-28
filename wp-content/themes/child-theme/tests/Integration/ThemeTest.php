@@ -3,11 +3,11 @@
 namespace ChildTheme\Tests\Integration;
 
 use ChildTheme\Theme;
-use ChildTheme\Providers\AssetServiceProvider;
+use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use ChildTheme\Providers\BlockService\BlockServiceProvider;
-use ChildTheme\Providers\PostTypeServiceProvider;
+use ChildTheme\Providers\PostTypeService\PostTypeServiceProvider;
 use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
-use ChildTheme\Providers\TwigServiceProvider;
+use ChildTheme\Providers\TwigService\TwigServiceProvider;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 

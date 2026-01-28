@@ -1,6 +1,8 @@
 <?php
 
-namespace ParentTheme\Providers;
+namespace ParentTheme\Providers\AssetService;
+
+use ParentTheme\Providers\ServiceProvider;
 
 /**
  * Base asset service provider for frontend and editor assets.

@@ -1,6 +1,8 @@
 <?php
 
-namespace ParentTheme\Providers;
+namespace ParentTheme\Providers\TwigService;
+
+use ParentTheme\Providers\ServiceProvider;
 
 /**
  * Base Twig service provider for registering custom functions and filters.
