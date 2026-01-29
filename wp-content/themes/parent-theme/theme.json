@@ -193,9 +193,9 @@
         },
         "spacing": {
           "padding": {
-            "right": "var:preset|spacing|30",
+            "right": "var:preset|spacing|40",
             "bottom": "var:preset|spacing|30",
-            "left": "var:preset|spacing|30",
+            "left": "var:preset|spacing|40",
             "top": "var:preset|spacing|30"
           }
         }
@@ -203,6 +203,11 @@
       "core/columns": {
         "spacing": {
           "blockGap": "var:preset|spacing|50"
+        }
+      },
+      "core/column": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|40"
         }
       },
       "core/group": {
