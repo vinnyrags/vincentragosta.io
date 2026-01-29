@@ -60,29 +60,27 @@
           "fontFace": [
             {
               "fontFamily": "Reckless Neue",
-              "fontWeight": "200",
+              "fontWeight": "400",
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
                 "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin.eot"
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff"
               ]
             },
             {
               "fontFamily": "Reckless Neue",
-              "fontWeight": "200",
+              "fontWeight": "400",
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
                 "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.eot"
+                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff"
               ]
             },
             {
               "fontFamily": "Reckless Neue",
-              "fontWeight": "300",
+              "fontWeight": "700",
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
@@ -92,7 +90,7 @@
             },
             {
               "fontFamily": "Reckless Neue",
-              "fontWeight": "300",
+              "fontWeight": "700",
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
@@ -109,7 +107,7 @@
           "fontFace": [
             {
               "fontFamily": "Roobert",
-              "fontWeight": "300",
+              "fontWeight": "400",
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
@@ -118,7 +116,16 @@
             },
             {
               "fontFamily": "Roobert",
-              "fontWeight": "500",
+              "fontWeight": "400",
+              "fontStyle": "italic",
+              "fontStretch": "normal",
+              "src": [
+                "file:./assets/fonts/roobert/roobert-light-italic.otf"
+              ]
+            },
+            {
+              "fontFamily": "Roobert",
+              "fontWeight": "700",
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
@@ -127,7 +134,7 @@
             },
             {
               "fontFamily": "Roobert",
-              "fontWeight": "500",
+              "fontWeight": "700",
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [

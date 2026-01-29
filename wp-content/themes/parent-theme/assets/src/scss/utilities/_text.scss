@@ -3,19 +3,11 @@
     text-decoration: underline;
   }
 
-  &--thin {
-    font-weight: 200;
-  }
-
-  &--light {
-    font-weight: 300;
-  }
-
   &--regular {
     font-weight: 400;
   }
 
-  &--medium {
-    font-weight: 500;
+  &--bold {
+    font-weight: 700;
   }
 }

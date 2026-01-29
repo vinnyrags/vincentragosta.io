@@ -98,60 +98,60 @@
       "fontSizes": [
         {
           "fluid": false,
-          "name": "Body Tiny",
+          "name": "14px",
           "size": "0.875rem",
-          "slug": "body-tiny"
+          "slug": "20"
         },
         {
           "fluid": false,
-          "name": "Body Small",
+          "name": "16px",
           "size": "1rem",
-          "slug": "body-small"
+          "slug": "30"
         },
         {
           "fluid": {
             "max": "1.875rem",
             "min": "1.25rem"
           },
-          "name": "Body Default",
+          "name": "20px / 30px",
           "size": "1.875rem",
-          "slug": "body-default"
+          "slug": "40"
         },
         {
           "fluid": {
             "max": "2.4rem",
             "min": "2rem"
           },
-          "name": "Body Large",
+          "name": "32px / 38px",
           "size": "2.4rem",
-          "slug": "body-large"
+          "slug": "50"
         },
         {
           "fluid": {
             "max": "4.5rem",
             "min": "3.125rem"
           },
-          "name": "Heading Medium",
+          "name": "50px / 72px",
           "size": "3.125rem",
-          "slug": "heading-medium"
+          "slug": "60"
         },
         {
           "fluid": {
             "max": "5.5rem",
             "min": "4rem"
           },
-          "name": "Heading Large",
+          "name": "64px / 88px",
           "size": "4rem",
-          "slug": "heading-large"
+          "slug": "70"
         },
         {
           "fluid": {
             "max": "6.5rem",
             "min": "5rem"
           },
-          "name": "Heading Extra Large",
+          "name": "80px / 104px",
           "size": "5rem",
-          "slug": "heading-x-large"
+          "slug": "80"
         }
       ],
       "fontFamilies": [
@@ -179,16 +179,16 @@
     },
     "typography": {
       "fontFamily": "var:preset|font-family|system-sans",
-      "fontSize": "var:preset|font-size|body-default",
-      "fontWeight": "300",
+      "fontSize": "var:preset|font-size|40",
+      "fontWeight": "400",
       "letterSpacing": "-0.3px",
       "lineHeight": "1.5"
     },
     "blocks": {
       "core/button": {
         "typography": {
-          "fontSize": "var:preset|font-size|body-small",
-          "fontWeight": "400",
+          "fontSize": "var:preset|font-size|30",
+          "fontWeight": "700",
           "textTransform": "uppercase"
         },
         "spacing": {
@@ -248,16 +248,16 @@
           }
         },
         "typography": {
-          "fontSize": "var:preset|font-size|body-small",
-          "fontWeight": "500",
+          "fontSize": "var:preset|font-size|30",
+          "fontWeight": "700",
           "textTransform": "uppercase"
         }
       },
       "heading": {
         "typography": {
-          "fontWeight": "200",
+          "fontWeight": "400",
           "lineHeight": "1",
-          "fontSize": "var:preset|font-size|body-large"
+          "fontSize": "var:preset|font-size|50"
         },
         "color": {
           "text": "var:preset|color|base"

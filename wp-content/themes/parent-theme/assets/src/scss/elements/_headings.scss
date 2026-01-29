@@ -15,18 +15,18 @@ h6 {
 
   strong, b {
     font-family: var(--wp--preset--font-family--roobert);
-    font-weight: 500;
+    font-weight: 700;
   }
 }
 
 .is-style-heading--medium {
-  font-size: var(--wp--preset--font-size--heading-medium);
+  font-size: var(--wp--preset--font-size--60);
 }
 
 .is-style-heading--large {
-  font-size: var(--wp--preset--font-size--heading-large);
+  font-size: var(--wp--preset--font-size--70);
 }
 
 .is-style-heading--xlarge {
-  font-size: var(--wp--preset--font-size--heading-x-large);
+  font-size: var(--wp--preset--font-size--80);
 }
