@@ -193,9 +193,9 @@
         },
         "spacing": {
           "padding": {
-            "right": "var:preset|spacing|50",
+            "right": "var:preset|spacing|30",
             "bottom": "var:preset|spacing|30",
-            "left": "var:preset|spacing|50",
+            "left": "var:preset|spacing|30",
             "top": "var:preset|spacing|30"
           }
         }
@@ -206,6 +206,11 @@
         }
       },
       "core/group": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|40"
+        }
+      },
+      "core/cover": {
         "spacing": {
           "blockGap": "var:preset|spacing|40"
         }
@@ -241,14 +246,6 @@
           "fontSize": "var:preset|font-size|body-small",
           "fontWeight": "500",
           "textTransform": "uppercase"
-        },
-        "spacing": {
-          "padding": {
-            "right": "var:preset|spacing|20",
-            "bottom": "var:preset|spacing|30",
-            "left": "var:preset|spacing|20",
-            "top": "var:preset|spacing|30"
-          }
         }
       },
       "heading": {

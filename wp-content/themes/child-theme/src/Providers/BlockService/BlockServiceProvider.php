@@ -3,6 +3,7 @@
 namespace ChildTheme\Providers\BlockService;
 
 use ChildTheme\Providers\BlockService\Features\ButtonIconEnhancer;
+use ChildTheme\Providers\BlockService\Features\CoverBlockStyles;
 use ChildTheme\Providers\ServiceProvider;
 use ChildTheme\Services\IconService;
 
@@ -23,6 +24,7 @@ class BlockServiceProvider extends ServiceProvider
 
     protected array $features = [
         ButtonIconEnhancer::class,
+        CoverBlockStyles::class,
     ];
 
     public function register(): void

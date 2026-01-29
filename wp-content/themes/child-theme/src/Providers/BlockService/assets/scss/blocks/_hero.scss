@@ -1,0 +1,42 @@
+// Animated cover block style (core/cover with "Animated Background" style)
+// SVG background animation
+
+.wp-block-cover.is-style-animated {
+  .wp-block-cover__image-background {
+    opacity: 0;
+    mask-image: linear-gradient(to right, #000 50%, transparent 100%);
+    mask-size: 250% 100%;
+    mask-position: 100% 0;
+    animation: coverFadeLeftToRight 2.5s ease-out 0.3s forwards;
+  }
+}
+
+// ==========================================================================
+// SVG Animation (left-to-right fade using CSS mask)
+// ==========================================================================
+
+@keyframes coverFadeLeftToRight {
+  0% {
+    opacity: 0;
+    mask-position: 100% 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    mask-position: 0% 0;
+  }
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-block-cover.is-style-animated .wp-block-cover__image-background {
+    animation: none;
+    opacity: 1;
+    mask-image: none;
+  }
+}

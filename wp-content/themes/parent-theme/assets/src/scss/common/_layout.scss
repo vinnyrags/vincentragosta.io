@@ -2,6 +2,16 @@
   // Offset for fixed header
   padding-block-start: var(--header-height);
 
+  // No header offset when first child is a full-bleed hero-type block
+  // (cover blocks, or container blocks with backgrounds)
+  &:has(> :first-child:is(
+    .wp-block-cover,
+    .wp-block-columns.has-background,
+    .wp-block-group.has-background
+  )) {
+    padding-block-start: 0;
+  }
+
   // Root padding (replaces has-global-padding)
   padding-inline: var(--wp--preset--spacing--40);
   padding-block-end: var(--wp--preset--spacing--50);

@@ -102,7 +102,6 @@ class DisableBlocks implements Registrable
         'core/more',
 
         // Content blocks
-        'core/cover',
         'core/media-text',
         'core/verse',
         'core/details',
