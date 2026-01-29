@@ -26,16 +26,11 @@
     margin-block-start: var(--wp--preset--spacing--50);
   }
 
-  // Full-bleed blocks: negate horizontal padding, no top margin if first
+  // Full-bleed blocks: negate horizontal padding
   > .alignfull {
     margin-inline: calc(-1 * var(--wp--preset--spacing--40));
     max-width: none;
     width: calc(100% + (2 * var(--wp--preset--spacing--40)));
-
-    // Layout containers need padding to keep content readable
-    &[class*="is-layout-"] {
-      padding-inline: var(--wp--preset--spacing--40);
-    }
   }
 
   > .alignfull:first-child {
