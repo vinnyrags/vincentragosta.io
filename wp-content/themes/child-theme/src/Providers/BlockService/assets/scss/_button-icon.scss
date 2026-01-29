@@ -27,6 +27,12 @@
       height: 1.2em; // Example: adjust to match font size or be fixed
       display: inline-block; // Ensure it behaves as an inline block
       vertical-align: middle; // Good fallback for alignment
+
+      // Two-tone icons: background uses currentColor (fill = button text color),
+      // foreground stroke should match the button background color.
+      [stroke]:not([stroke="none"]):not([stroke="currentColor"]) {
+        stroke: var(--color-button-bg);
+      }
     }
   }
 }
