@@ -2,6 +2,11 @@
 // core/cover Block Styles
 // ==========================================================================
 
+.wp-block-cover {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 // Animated Background style - left-to-right mask reveal animation
 
 .wp-block-cover.is-style-animated {
