@@ -4,13 +4,14 @@
 PARENT_THEME_DIR := $(shell dirname $(CURDIR))/parent-theme
 CHILD_THEME_DIR := $(CURDIR)
 
-.PHONY: help install install-parent install-child build watch clean autoload
+.PHONY: help install install-parent install-child build watch clean autoload test
 
 # Default target
 help:
 	@echo "Available targets:"
 	@echo "  make install   - Install all dependencies (both themes)"
 	@echo "  make build     - Build child theme assets"
+	@echo "  make test      - Run test suite (both themes)"
 	@echo "  make watch     - Start watch mode for development"
 	@echo "  make clean     - Remove all generated files"
 	@echo "  make autoload  - Regenerate composer autoloaders"
@@ -54,3 +55,13 @@ autoload:
 	cd $(PARENT_THEME_DIR) && composer dump-autoload
 	cd $(CHILD_THEME_DIR) && composer dump-autoload
 	@echo "✓ Autoloaders regenerated"
+
+# Run test suite for both themes
+test:
+	@echo "Running parent theme tests..."
+	cd $(PARENT_THEME_DIR) && composer test
+	@echo ""
+	@echo "Running child theme tests..."
+	cd $(CHILD_THEME_DIR) && composer test
+	@echo ""
+	@echo "✓ All tests complete"
