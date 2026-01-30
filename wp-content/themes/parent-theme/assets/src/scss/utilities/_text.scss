@@ -1,13 +1,10 @@
-.text {
-  &--underline {
-    text-decoration: underline;
-  }
-
-  &--regular {
-    font-weight: 400;
-  }
-
-  &--bold {
-    font-weight: 700;
-  }
+// Global underline styling
+// - <u> element
+// - WordPress inline style from Cmd+U shortcut (!important needed to override inline styles)
+u,
+[style*="text-decoration: underline"] {
+  text-decoration-line: underline !important;
+  text-decoration-color: var(--wp--preset--color--accent-1) !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 0.15em !important;
 }

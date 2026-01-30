@@ -1,1 +1,1 @@
-import './formats';
+// Child theme editor scripts
