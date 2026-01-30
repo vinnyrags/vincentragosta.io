@@ -5,6 +5,7 @@ namespace ParentTheme\Providers\ThemeService;
 use ParentTheme\Providers\ServiceProvider;
 use ParentTheme\Providers\ThemeService\Features\DisableBlocks;
 use ParentTheme\Providers\ThemeService\Features\DisableComments;
+use ParentTheme\Providers\ThemeService\Features\DisablePosts;
 use ParentTheme\Providers\ThemeService\Features\EnableSvgUploads;
 
 /**
@@ -23,6 +24,7 @@ class ThemeServiceProvider extends ServiceProvider
     protected array $features = [
         DisableBlocks::class,
         DisableComments::class,
+        DisablePosts::class,
         EnableSvgUploads::class,
     ];
 
