@@ -26,7 +26,7 @@ $context = Timber::context();
 $context['projects'] = Timber::get_posts($args);
 $context['attributes'] = $attributes ?? [];
 
-// Get block wrapper attributes and echo the block.
+// Get block wrapper attributes (alignment comes from block attribute, defaults to full).
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';

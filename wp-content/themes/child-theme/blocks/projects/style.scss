@@ -1,25 +1,22 @@
-.projects-grid {
+// Block wrapper is the container
+.wp-block-child-theme-projects {
   container: projects / inline-size;
+}
+
+.projects-grid {
   display: grid;
-  gap: var(--wp--preset--spacing--50);
+  gap: var(--wp--preset--spacing--40);
   grid-template-columns: 1fr;
 
   @include container(projects, lg) {
     grid-template-columns: repeat(10, 1fr);
-  }
-}
 
-// Grid placement for cards at larger sizes
-@include container(projects, lg) {
-  .projects-grid > .project-card:nth-child(1) { grid-column: span 4; }
-  .projects-grid > .project-card:nth-child(2) { grid-column: span 6; }
-  .projects-grid > .project-card:nth-child(3) { grid-column: span 10; }
-  .projects-grid > .project-card:nth-child(4) { grid-column: span 6; }
-  .projects-grid > .project-card:nth-child(5) { grid-column: span 4; }
-
-  // Third card gets taller image
-  .projects-grid > .project-card:nth-child(3) .project-card__image-link {
-    height: 440px;
+    // Alternating 35%/65% layout that flips each row
+    // Row 1: 4 cols / 6 cols, Row 2: 6 cols / 4 cols, etc.
+    > .project-card:nth-child(4n+1) { grid-column: span 4; }
+    > .project-card:nth-child(4n+2) { grid-column: span 6; }
+    > .project-card:nth-child(4n+3) { grid-column: span 6; }
+    > .project-card:nth-child(4n+4) { grid-column: span 4; }
   }
 }
 
