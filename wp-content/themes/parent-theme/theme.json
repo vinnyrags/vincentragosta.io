@@ -6,8 +6,7 @@
     "useRootPaddingAwareAlignments": true,
     "layout": {
       "contentSize": "1440px",
-      "wideSize": "1600px",
-      "allowEditing": false
+      "wideSize": "1600px"
     },
     "color": {
       "defaultDuotone": false,
