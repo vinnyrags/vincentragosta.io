@@ -52,6 +52,26 @@ $breakpoint-xl: 1440px;
   }
 }
 
+// Media query mixin for max-width (mobile-first down)
+// Usage: @include media-down($size) { ... }
+@mixin media-down($size: md) {
+  $breakpoint: $breakpoint-md;
+
+  @if $size == sm {
+    $breakpoint: $breakpoint-sm;
+  } @else if $size == md {
+    $breakpoint: $breakpoint-md;
+  } @else if $size == lg {
+    $breakpoint: $breakpoint-lg;
+  } @else if $size == xl {
+    $breakpoint: $breakpoint-xl;
+  }
+
+  @media (max-width: #{$breakpoint - 1px}) {
+    @content;
+  }
+}
+
 // Reduced motion media query
 @mixin reduced-motion {
   @media (prefers-reduced-motion: reduce) {
