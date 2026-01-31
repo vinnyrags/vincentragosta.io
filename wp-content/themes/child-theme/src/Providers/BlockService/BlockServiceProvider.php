@@ -5,7 +5,7 @@ namespace ChildTheme\Providers\BlockService;
 use ChildTheme\Providers\BlockService\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\BlockService\Features\CoverBlockStyles;
 use ChildTheme\Providers\ServiceProvider;
-use ChildTheme\Services\IconService;
+use ParentTheme\Services\IconService;
 
 /**
  * Handles block registration and block editor data.

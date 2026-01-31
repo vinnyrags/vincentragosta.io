@@ -1,8 +1,8 @@
 <?php
 
-namespace ChildTheme\Tests\Unit\Services;
+namespace ParentTheme\Tests\Unit\Services;
 
-use ChildTheme\Services\IconService;
+use ParentTheme\Services\IconService;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

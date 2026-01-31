@@ -1,6 +1,6 @@
 <?php
 
-namespace ChildTheme\Services;
+namespace ParentTheme\Services;
 
 /**
  * Icon class for retrieving and rendering SVG icons from the theme.

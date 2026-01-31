@@ -3,6 +3,8 @@
 namespace ParentTheme\Providers\TwigService;
 
 use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Services\IconService;
+use Twig\TwigFunction;
 
 /**
  * Base Twig service provider for registering custom functions and filters.
@@ -24,7 +26,10 @@ class TwigServiceProvider extends ServiceProvider
      */
     public function addTwigFunctions(\Twig\Environment $twig): \Twig\Environment
     {
-        // Base implementation - child themes can add their own functions
+        $twig->addFunction(new TwigFunction('icon', function (string $name): IconService {
+            return new IconService($name);
+        }));
+
         return $twig;
     }
 }
