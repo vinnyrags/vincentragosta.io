@@ -3,8 +3,7 @@
  * Server-side rendering for the Shutter Cards container block.
  */
 
-// Top-level wrapper: only WordPress-managed attributes
-$wrapper_attributes = get_block_wrapper_attributes();
+use Timber\Timber;
 
 $inner_blocks = isset($block) ? $block->inner_blocks : [];
 $card_count = count($inner_blocks);
@@ -13,15 +12,22 @@ $container_styles = '';
 // If we have more than one card, calculate the inactive width and set it as a CSS variable.
 if ($card_count > 1) {
     $inactive_width_percentage = 60 / $card_count;
-    $container_styles = sprintf('style="--card-inactive-width: %f%%;"', $inactive_width_percentage);
+    $container_styles = sprintf('--card-inactive-width: %f%%;', $inactive_width_percentage);
 }
-?>
-<div <?php echo $wrapper_attributes; ?>>
-    <div class="shutter-cards shutter-cards--preload" <?php echo $container_styles; ?>>
-        <?php if (!empty($inner_blocks)) : ?>
-            <?php foreach ($inner_blocks as $index => $inner_block) : ?>
-                <?php echo $inner_block->render(); ?>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
-</div>
+
+// Render inner blocks to HTML strings.
+$rendered_inner_blocks = [];
+foreach ($inner_blocks as $inner_block) {
+    $rendered_inner_blocks[] = $inner_block->render();
+}
+
+$context = Timber::context();
+$context['inner_blocks'] = $rendered_inner_blocks;
+$context['container_styles'] = $container_styles;
+
+// Get block wrapper attributes.
+$wrapper_attributes = get_block_wrapper_attributes();
+
+echo '<div ' . $wrapper_attributes . '>';
+Timber::render('blocks/shutter-cards/shutter-cards.twig', $context);
+echo '</div>';

@@ -1,0 +1,21 @@
+<div class="shutter-card">
+    <span class="shutter-card__id">{{ card_index }}</span>
+
+    {% if title %}
+        <h3 class="shutter-card__title">{{ title|raw }}</h3>
+    {% endif %}
+
+    {% if subtitle %}
+        <p class="shutter-card__subtitle">{{ subtitle|raw }}</p>
+    {% endif %}
+
+    {% if description %}
+        <div class="shutter-card__description">{{ description|raw }}</div>
+    {% endif %}
+
+    <div class="shutter-card__close-icon">
+        <svg class="icon icon-close" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 48 48">
+            <path fill="currentColor" d="m32.166 17.479-1.645-1.645L24 22.356l-6.522-6.522-1.645 1.645 6.522 6.522-6.522 6.521 1.645 1.645L24 25.646l6.521 6.521 1.645-1.645-6.521-6.521 6.521-6.522Z"></path>
+        </svg>
+    </div>
+</div>

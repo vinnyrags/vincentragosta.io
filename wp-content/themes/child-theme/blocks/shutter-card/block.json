@@ -6,28 +6,26 @@
   "category": "design",
   "icon": "media-text",
   "description": "A single card item for the Shutter Cards block. Can only be used inside the 'Shutter Cards' container.",
+  "render": "file:./render.php",
   "attributes": {
     "title": {
       "type": "string",
-      "source": "html",
-      "selector": ".shutter-card__title"
+      "default": ""
     },
     "subtitle": {
       "type": "string",
-      "source": "html",
-      "selector": ".shutter-card__subtitle"
+      "default": ""
     },
     "description": {
       "type": "string",
-      "source": "html",
-      "selector": ".shutter-card__description"
+      "default": ""
     },
     "cardIndex": {
       "type": "string",
       "default": "00"
     }
   },
-  "parent": [ "child-theme/shutter-cards" ],
+  "parent": ["child-theme/shutter-cards"],
   "supports": {
     "html": false,
     "reusable": false

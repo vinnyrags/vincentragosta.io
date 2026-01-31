@@ -16,7 +16,6 @@ class BlockServiceProvider extends ServiceProvider
      * Blocks to register.
      */
     protected array $blocks = [
-        'hero',
         'projects',
         'shutter-cards',
         'shutter-card',
@@ -79,24 +78,7 @@ class BlockServiceProvider extends ServiceProvider
      */
     public function localizeEditorData(): void
     {
-        $this->localizeHeroBlockData();
         $this->localizeButtonIconData();
-    }
-
-    /**
-     * Localize SVG data for the Hero block.
-     */
-    private function localizeHeroBlockData(): void
-    {
-        $handle = 'child-theme-blocks-js';
-        if (!$this->isScriptActive($handle)) {
-            return;
-        }
-
-        wp_localize_script($handle, 'childThemeHeroBlockData', [
-            'svgOptions' => IconService::options('svg', __('Select Squiggle', 'child-theme'), 'squiggle'),
-            'svgContent' => IconService::contentMap('svg', 'squiggle'),
-        ]);
     }
 
     /**
