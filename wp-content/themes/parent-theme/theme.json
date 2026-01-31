@@ -100,12 +100,21 @@
           "fluid": false,
           "name": "14px",
           "size": "0.875rem",
-          "slug": "20"
+          "slug": "10"
         },
         {
           "fluid": false,
           "name": "16px",
           "size": "1rem",
+          "slug": "20"
+        },
+        {
+          "fluid": {
+            "max": "1.375rem",
+            "min": "1.125rem"
+          },
+          "name": "18px / 22px",
+          "size": "1.375rem",
           "slug": "30"
         },
         {
@@ -119,11 +128,11 @@
         },
         {
           "fluid": {
-            "max": "2.4rem",
+            "max": "2.75rem",
             "min": "2rem"
           },
-          "name": "32px / 38px",
-          "size": "2.4rem",
+          "name": "32px / 44px",
+          "size": "2.75rem",
           "slug": "50"
         },
         {
@@ -134,24 +143,6 @@
           "name": "50px / 72px",
           "size": "3.125rem",
           "slug": "60"
-        },
-        {
-          "fluid": {
-            "max": "5.5rem",
-            "min": "4rem"
-          },
-          "name": "64px / 88px",
-          "size": "4rem",
-          "slug": "70"
-        },
-        {
-          "fluid": {
-            "max": "6.5rem",
-            "min": "5rem"
-          },
-          "name": "80px / 104px",
-          "size": "5rem",
-          "slug": "80"
         }
       ],
       "fontFamilies": [
@@ -187,7 +178,7 @@
     "blocks": {
       "core/button": {
         "typography": {
-          "fontSize": "var:preset|font-size|30",
+          "fontSize": "var:preset|font-size|20",
           "fontWeight": "700",
           "textTransform": "uppercase"
         },
@@ -248,7 +239,7 @@
           }
         },
         "typography": {
-          "fontSize": "var:preset|font-size|30",
+          "fontSize": "var:preset|font-size|20",
           "fontWeight": "700",
           "textTransform": "uppercase"
         }
