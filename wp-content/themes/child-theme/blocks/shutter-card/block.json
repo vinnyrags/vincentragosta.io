@@ -6,7 +6,7 @@
   "category": "design",
   "icon": "media-text",
   "description": "A single card item for the Shutter Cards block. Can only be used inside the 'Shutter Cards' container.",
-  "render": "file:./render.php",
+  "render": "file:./frontend/render.php",
   "attributes": {
     "title": {
       "type": "string",

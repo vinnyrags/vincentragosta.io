@@ -29,5 +29,5 @@
     }
   },
   "textdomain": "child-theme",
-  "render": "file:./render.php"
+  "render": "file:./frontend/render.php"
 }

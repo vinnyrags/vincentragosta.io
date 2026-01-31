@@ -1,6 +1,6 @@
 <div class="projects-grid">
     {% for project in projects %}
-        {% include 'projects/project-card.twig' with { post: project } %}
+        {% include 'blocks/projects/templates/card.twig' with { post: project } %}
     {% else %}
         <p>No projects to display.</p>
     {% endfor %}

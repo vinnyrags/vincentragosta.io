@@ -35,7 +35,8 @@ function discoverViewScripts() {
     for (const entry of entries) {
         if (!entry.isDirectory()) continue;
 
-        const viewPath = path.join(BLOCKS_DIR, entry.name, 'view.js');
+        // Look for view.js in frontend/ subdirectory
+        const viewPath = path.join(BLOCKS_DIR, entry.name, 'frontend', 'view.js');
 
         if (fs.existsSync(viewPath)) {
             viewScripts.push({

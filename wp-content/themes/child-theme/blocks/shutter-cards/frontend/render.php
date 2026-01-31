@@ -29,5 +29,5 @@ $context['container_styles'] = $container_styles;
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';
-Timber::render('blocks/shutter-cards/shutter-cards.twig', $context);
+Timber::render('blocks/shutter-cards/templates/container.twig', $context);
 echo '</div>';
