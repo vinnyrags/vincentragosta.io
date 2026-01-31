@@ -5,4 +5,5 @@
  * @package  ParentTheme
  */
 
-Timber::render( array( 'sidebar.twig' ), $data );
+$context = Timber::context();
+Timber::render('sidebar.twig', $context);

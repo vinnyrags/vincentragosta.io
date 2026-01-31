@@ -1,0 +1,28 @@
+{% block html_head_container %}
+    {% include 'head.twig' %}
+    {% block head %}{% endblock %}
+    </head>
+{% endblock %}
+
+<body {{ function('body_class') }}>
+    {{ function('wp_body_open') }}
+    <a class="skip-link screen-reader-text" href="#wp--skip-link--target">{{ _e('Skip to content') }}</a>
+
+    {% block header %}
+        {% include 'header.twig' %}
+    {% endblock %}
+
+    <main id="wp--skip-link--target" class="site-main">
+        {% block content %}
+            {{ post.content }}
+        {% endblock %}
+    </main>
+
+    {% block footer %}
+        <footer id="footer">
+            {% include 'footer.twig' %}
+        </footer>
+        {{ function('wp_footer') }}
+    {% endblock %}
+</body>
+</html>

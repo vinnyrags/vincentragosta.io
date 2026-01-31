@@ -14,6 +14,4 @@ if (file_exists($parent_autoloader)) {
 // Load child theme's autoloader.
 require_once __DIR__ . '/vendor/autoload.php';
 
-Timber\Timber::init();
-
 new Theme();

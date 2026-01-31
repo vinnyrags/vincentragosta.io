@@ -30,11 +30,23 @@ class Theme extends Site
 
     public function __construct()
     {
+        $this->initializeTimber();
+
         Timber::$dirname = $this->templateDirectories;
 
         $this->registerAll($this->providers);
 
         parent::__construct();
+    }
+
+    /**
+     * Initialize Timber framework.
+     */
+    protected function initializeTimber(): void
+    {
+        if (class_exists('Timber\Timber')) {
+            Timber::init();
+        }
     }
 
     /**

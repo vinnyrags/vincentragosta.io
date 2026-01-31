@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <header class="search__header">
+        <h1 class="search__title">{{ title }}</h1>
+    </header>
+
+    <div class="posts">
+        {% for post in posts %}
+            {% include 'tease.twig' %}
+        {% else %}
+            <p>No results found for "{{ function('get_search_query') }}".</p>
+        {% endfor %}
+    </div>
+
+    {% include 'partial/pagination.twig' %}
+{% endblock %}

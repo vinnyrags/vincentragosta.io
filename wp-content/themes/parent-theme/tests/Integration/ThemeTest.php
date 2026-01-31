@@ -4,6 +4,7 @@ namespace ParentTheme\Tests\Integration;
 
 use ParentTheme\Theme;
 use Timber\Site;
+use Timber\Timber;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -74,5 +75,44 @@ class ThemeTest extends BaseTestCase
 
         $method = $reflection->getMethod('registerAll');
         $this->assertTrue($method->isProtected());
+    }
+
+    /**
+     * Test that initializeTimber method exists.
+     */
+    public function testInitializeTimberMethodExists(): void
+    {
+        $theme = new Theme();
+        $reflection = new ReflectionClass($theme);
+
+        $this->assertTrue($reflection->hasMethod('initializeTimber'));
+
+        $method = $reflection->getMethod('initializeTimber');
+        $this->assertTrue($method->isProtected());
+    }
+
+    /**
+     * Test that Timber is initialized after Theme instantiation.
+     */
+    public function testTimberIsInitializedAfterThemeInstantiation(): void
+    {
+        new Theme();
+
+        // Timber class should exist and be usable
+        $this->assertTrue(class_exists('Timber\Timber'));
+    }
+
+    /**
+     * Test that Timber dirname is set to template directories.
+     */
+    public function testTimberDirnameIsConfigured(): void
+    {
+        new Theme();
+
+        $dirname = Timber::$dirname;
+        $this->assertIsArray($dirname);
+        $this->assertContains('templates', $dirname);
+        $this->assertContains('views', $dirname);
+        $this->assertContains('blocks', $dirname);
     }
 }

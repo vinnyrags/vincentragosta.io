@@ -1,0 +1,15 @@
+<article class="post post--tease">
+    <header class="post__header">
+        <h2 class="post__title">
+            <a href="{{ post.link }}">{{ post.title }}</a>
+        </h2>
+        <p class="post__meta">
+            <time datetime="{{ post.date|date('c') }}">{{ post.date|date('F j, Y') }}</time>
+        </p>
+    </header>
+    {% if post.preview %}
+        <div class="post__excerpt">
+            <p>{{ post.preview }}</p>
+        </div>
+    {% endif %}
+</article>
