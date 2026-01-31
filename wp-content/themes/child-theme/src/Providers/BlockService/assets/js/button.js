@@ -46,7 +46,7 @@
 
         return createElement(
             BaseControl,
-            { label: 'Preview' },
+            { label: 'Preview', __nextHasNoMarginBottom: true },
             createElement('div', { dangerouslySetInnerHTML: { __html: html } })
         );
     };
@@ -102,6 +102,8 @@
                                 value: selectedIcon || '',
                                 options: options,
                                 onChange: (value) => setAttributes({ selectedIcon: value }),
+                                __next40pxDefaultSize: true,
+                                __nextHasNoMarginBottom: true,
                             }),
                             selectedIcon && createElement(
                                 Fragment,
@@ -111,6 +113,8 @@
                                     value: iconPosition,
                                     options: POSITION_OPTIONS,
                                     onChange: (value) => setAttributes({ iconPosition: value }),
+                                    __next40pxDefaultSize: true,
+                                    __nextHasNoMarginBottom: true,
                                 }),
                                 createElement(IconPreview, { html: iconHtml })
                             )

@@ -29,7 +29,7 @@ class BlockServiceProvider extends ServiceProvider
     public function register(): void
     {
         add_action('init', [$this, 'registerBlocks']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+        add_action('enqueue_block_assets', [$this, 'enqueueBlockAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
@@ -37,19 +37,18 @@ class BlockServiceProvider extends ServiceProvider
     }
 
     /**
-     * Enqueue frontend assets.
+     * Enqueue assets for both frontend and editor iframe.
      */
-    public function enqueueAssets(): void
+    public function enqueueBlockAssets(): void
     {
         $this->enqueueStyle('child-theme-block-service', 'block-service.css');
     }
 
     /**
-     * Enqueue editor assets.
+     * Enqueue editor-only assets (scripts for block controls).
      */
     public function enqueueEditorAssets(): void
     {
-        $this->enqueueStyle('child-theme-block-service', 'block-service.css');
         $this->enqueueScript('child-theme-block-service-js', 'button.js', [
             'wp-blocks',
             'wp-element',
