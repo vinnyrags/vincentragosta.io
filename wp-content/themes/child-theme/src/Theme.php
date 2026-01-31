@@ -4,7 +4,7 @@ namespace ChildTheme;
 
 use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use ChildTheme\Providers\BlockService\BlockServiceProvider;
-use ChildTheme\Providers\PostTypeService\PostTypeServiceProvider;
+use ChildTheme\Providers\ProjectService\ProjectServiceProvider;
 use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
 use ChildTheme\Providers\TwigService\TwigServiceProvider;
 use ParentTheme\Theme as BaseTheme;
@@ -26,7 +26,7 @@ class Theme extends BaseTheme
         ThemeServiceProvider::class,
         AssetServiceProvider::class,
         BlockServiceProvider::class,
-        PostTypeServiceProvider::class,
+        ProjectServiceProvider::class,
         TwigServiceProvider::class,
     ];
 }

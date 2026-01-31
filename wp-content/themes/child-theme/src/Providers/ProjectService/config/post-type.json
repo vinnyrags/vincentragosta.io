@@ -16,6 +16,7 @@
     "has_archive": true,
     "rewrite": { "slug": "projects" },
     "supports": ["title", "editor", "thumbnail", "excerpt", "custom-fields"],
+    "taxonomies": ["category"],
     "menu_icon": "dashicons-portfolio",
     "show_in_rest": true
   }
