@@ -12,7 +12,8 @@
     "php": ">=7.4",
     "composer/installers": "^1.12 || ^2.0",
     "johnpbloch/wordpress": "^6.5",
-    "wpackagist-theme/twentytwentyfive": "^1.2"
+    "wpackagist-theme/twentytwentyfive": "^1.2",
+    "ext-dom": "*"
   },
   "extra": {
     "wordpress-install-dir": "wp",
