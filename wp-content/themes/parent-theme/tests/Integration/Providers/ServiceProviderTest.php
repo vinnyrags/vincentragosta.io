@@ -5,6 +5,7 @@ namespace ParentTheme\Tests\Integration\Providers;
 use ParentTheme\Providers\ServiceProvider;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Contracts\HasAssets;
+use ParentTheme\Providers\Contracts\HasBlocks;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -119,5 +120,103 @@ class ServiceProviderTest extends BaseTestCase
     {
         $provider = $this->createConcreteProvider();
         $this->assertTrue(method_exists($provider, 'enqueueScript'));
+    }
+
+    /**
+     * Test that ServiceProvider implements HasBlocks.
+     */
+    public function testImplementsHasBlocks(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertInstanceOf(HasBlocks::class, $provider);
+    }
+
+    /**
+     * Test that ServiceProvider has blocks property.
+     */
+    public function testHasBlocksProperty(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('blocks');
+        $property->setAccessible(true);
+
+        $blocks = $property->getValue($provider);
+        $this->assertIsArray($blocks);
+    }
+
+    /**
+     * Test that provider has getBlocks method from HasBlocks trait.
+     */
+    public function testHasGetBlocksMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertTrue(method_exists($provider, 'getBlocks'));
+        $this->assertIsArray($provider->getBlocks());
+    }
+
+    /**
+     * Test that provider has getBlocksPath method from HasBlocks trait.
+     */
+    public function testHasGetBlocksPathMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertTrue(method_exists($provider, 'getBlocksPath'));
+        $this->assertIsString($provider->getBlocksPath());
+    }
+
+    /**
+     * Test that provider has registerBlocks method from HasBlocks trait.
+     */
+    public function testHasRegisterBlocksMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertTrue(method_exists($provider, 'registerBlocks'));
+    }
+
+    /**
+     * Test that provider has enqueueBlockAssets method from HasBlocks trait.
+     */
+    public function testHasEnqueueBlockAssetsMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertTrue(method_exists($provider, 'enqueueBlockAssets'));
+    }
+
+    /**
+     * Test that provider has enqueueBlockEditorAssets method from HasBlocks trait.
+     */
+    public function testHasEnqueueBlockEditorAssetsMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertTrue(method_exists($provider, 'enqueueBlockEditorAssets'));
+    }
+
+    /**
+     * Test that register method calls initializeBlocks.
+     */
+    public function testRegisterCallsInitializeBlocks(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $reflection = new ReflectionClass($provider);
+
+        $this->assertTrue($reflection->hasMethod('initializeBlocks'));
+
+        $method = $reflection->getMethod('initializeBlocks');
+        $this->assertTrue($method->isProtected());
+    }
+
+    /**
+     * Test that provider has enqueueEditorScript method from HasBlocks trait.
+     */
+    public function testHasEnqueueEditorScriptMethod(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $reflection = new ReflectionClass($provider);
+
+        $this->assertTrue($reflection->hasMethod('enqueueEditorScript'));
+
+        $method = $reflection->getMethod('enqueueEditorScript');
+        $this->assertTrue($method->isProtected());
     }
 }

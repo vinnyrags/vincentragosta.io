@@ -1,6 +1,6 @@
 <?php
 
-namespace ChildTheme\Providers\BlockService\Features;
+namespace ChildTheme\Providers\ThemeService\Features;
 
 use ParentTheme\Providers\Contracts\Registrable;
 

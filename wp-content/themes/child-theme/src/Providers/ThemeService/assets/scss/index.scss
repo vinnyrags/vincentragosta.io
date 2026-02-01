@@ -1,2 +1,6 @@
 // ThemeService styles entry point
 @use 'color-mode';
+@use 'button-icon';
+
+// Block styles
+@use 'blocks/wp-block-cover';

@@ -2,16 +2,23 @@
 
 namespace ChildTheme\Providers\ProjectService;
 
-use ParentTheme\Providers\ServiceProvider;
+use ChildTheme\Providers\ServiceProvider;
 
 /**
  * Project Service Provider.
  *
  * Self-contained provider for all project-related functionality.
- * Reads configuration from its own /config directory.
+ * Includes the projects block, post type, and configuration.
  */
 class ProjectServiceProvider extends ServiceProvider
 {
+    /**
+     * Blocks to register.
+     */
+    protected array $blocks = [
+        'projects',
+    ];
+
     private string $configPath;
     private string $textDomain = 'child-theme';
 
@@ -23,6 +30,25 @@ class ProjectServiceProvider extends ServiceProvider
     public function register(): void
     {
         add_action('init', [$this, 'registerPostType']);
+
+        parent::register();
+    }
+
+    /**
+     * Enqueue block assets for frontend and editor.
+     */
+    public function enqueueBlockAssets(): void
+    {
+        $this->enqueueStyle('child-theme-projects-block', 'projects.css');
+    }
+
+    /**
+     * Enqueue block editor assets.
+     */
+    public function enqueueBlockEditorAssets(): void
+    {
+        $this->enqueueEditorScript('child-theme-projects-block-editor', 'projects.js');
+        $this->enqueueStyle('child-theme-projects-block-editor', 'projects-editor.css');
     }
 
     /**
