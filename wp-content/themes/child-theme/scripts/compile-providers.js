@@ -11,6 +11,7 @@
  *
  * Block Assets:
  *   Editor: src/Providers/[name]/blocks/[block]/editor/index.js => dist/js/[block-name].js
+ *   View:   src/Providers/[name]/blocks/[block]/frontend/view.js => dist/js/[block-name]-view.js
  *   Styles: src/Providers/[name]/blocks/[block]/frontend/style.scss => dist/css/[block-name].css
  *   Editor Styles: src/Providers/[name]/blocks/[block]/editor/editor.scss => dist/css/[block-name]-editor.css
  *
@@ -98,6 +99,7 @@ function discoverProviderBlocks(providerPath, providerName) {
             path: blockPath,
             provider: providerName,
             editorScript: null,
+            viewScript: null,
             editorStyle: null,
             frontendStyle: null,
         };
@@ -126,6 +128,15 @@ function discoverProviderBlocks(providerPath, providerName) {
             block.frontendStyle = {
                 inputPath: frontendStylePath,
                 outputPath: path.join(CSS_OUTPUT_DIR, `${entry.name}.css`),
+            };
+        }
+
+        // Check for frontend view script
+        const viewScriptPath = path.join(blockPath, 'frontend', 'view.js');
+        if (fs.existsSync(viewScriptPath)) {
+            block.viewScript = {
+                inputPath: viewScriptPath,
+                outputPath: path.join(JS_OUTPUT_DIR, `${entry.name}-view.js`),
             };
         }
 
@@ -319,6 +330,33 @@ async function compileBlockEditorScript(block) {
 }
 
 /**
+ * Compile a block's frontend view script
+ */
+async function compileBlockViewScript(block) {
+    if (!block.viewScript) return true;
+
+    try {
+        ensureDir(JS_OUTPUT_DIR);
+
+        await esbuild.build({
+            entryPoints: [block.viewScript.inputPath],
+            outfile: block.viewScript.outputPath,
+            bundle: true,
+            minify: !isWatch,
+            sourcemap: isWatch,
+            target: ['es2020'],
+            format: 'iife',
+        });
+
+        console.log(`  Block View JS: ${path.relative(process.cwd(), block.viewScript.outputPath)}`);
+        return true;
+    } catch (error) {
+        console.error(`  Block View JS Error (${block.name}): ${error.message}`);
+        return false;
+    }
+}
+
+/**
  * Build SCSS import statements for parent theme dependencies
  */
 function getSassImports() {
@@ -415,10 +453,11 @@ async function compileBlocks(provider) {
     for (const block of provider.blocks) {
         console.log(`  Block: ${block.name}`);
 
-        const scriptSuccess = await compileBlockEditorScript(block);
+        const editorScriptSuccess = await compileBlockEditorScript(block);
+        const viewScriptSuccess = await compileBlockViewScript(block);
         const styleSuccess = compileBlockStyles(block);
 
-        if (!scriptSuccess || !styleSuccess) {
+        if (!editorScriptSuccess || !viewScriptSuccess || !styleSuccess) {
             allSuccess = false;
         }
     }
@@ -518,7 +557,12 @@ async function watchProviders() {
                     compileBlockStyles(block);
                 } else if (filename.endsWith('.js')) {
                     console.log(`\nBlock JS change in ${provider.name}/${blockName}...`);
-                    await compileBlockEditorScript(block);
+                    // Check if it's a view script or editor script
+                    if (filename.includes('frontend') && filename.includes('view.js')) {
+                        await compileBlockViewScript(block);
+                    } else {
+                        await compileBlockEditorScript(block);
+                    }
                 }
             });
         }
