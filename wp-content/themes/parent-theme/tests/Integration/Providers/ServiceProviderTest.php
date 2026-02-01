@@ -3,8 +3,8 @@
 namespace ParentTheme\Tests\Integration\Providers;
 
 use ParentTheme\Providers\ServiceProvider;
-use ParentTheme\Contracts\Registrable;
-use ParentTheme\Contracts\HasAssets;
+use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\HasAssets;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 

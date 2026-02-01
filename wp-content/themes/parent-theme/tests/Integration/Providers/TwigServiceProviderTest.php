@@ -3,7 +3,7 @@
 namespace ParentTheme\Tests\Integration\Providers;
 
 use ParentTheme\Providers\TwigService\TwigServiceProvider;
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 use Twig\Environment;
 use WorDBless\BaseTestCase;
 use ReflectionClass;

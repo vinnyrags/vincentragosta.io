@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Providers\ThemeService\Features;
 
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 
 /**
  * Disables the default "post" post type.

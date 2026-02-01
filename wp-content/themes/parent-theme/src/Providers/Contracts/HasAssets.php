@@ -1,6 +1,6 @@
 <?php
 
-namespace ParentTheme\Contracts;
+namespace ParentTheme\Providers\Contracts;
 
 /**
  * Contract for classes that can enqueue assets.

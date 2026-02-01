@@ -2,8 +2,8 @@
 
 namespace ParentTheme\Providers;
 
-use ParentTheme\Contracts\HasAssets;
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\HasAssets;
+use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Traits\HasAssets as HasAssetsTrait;
 
 /**

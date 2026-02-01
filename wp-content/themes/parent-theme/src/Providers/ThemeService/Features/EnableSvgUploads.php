@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Providers\ThemeService\Features;
 
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 
 /**
  * Enables SVG uploads in the WordPress media library.

@@ -2,7 +2,7 @@
 
 namespace ParentTheme;
 
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 use Timber\Site;
 use Timber\Timber;
 

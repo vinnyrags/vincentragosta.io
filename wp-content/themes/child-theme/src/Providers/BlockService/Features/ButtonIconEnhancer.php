@@ -3,7 +3,7 @@
 namespace ChildTheme\Providers\BlockService\Features;
 
 use ParentTheme\Services\IconService;
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 use DOMDocument;
 use DOMXPath;
 

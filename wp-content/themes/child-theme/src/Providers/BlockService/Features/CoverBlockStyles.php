@@ -2,7 +2,7 @@
 
 namespace ChildTheme\Providers\BlockService\Features;
 
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 
 /**
  * Registers custom block styles for core/cover.

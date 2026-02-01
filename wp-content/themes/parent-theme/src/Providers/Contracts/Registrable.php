@@ -1,6 +1,6 @@
 <?php
 
-namespace ParentTheme\Contracts;
+namespace ParentTheme\Providers\Contracts;
 
 /**
  * Interface for classes that can be registered with WordPress.

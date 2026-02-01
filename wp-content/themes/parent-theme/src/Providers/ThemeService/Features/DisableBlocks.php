@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Providers\ThemeService\Features;
 
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 use WP_Block_Type_Registry;
 
 /**
