@@ -86,7 +86,7 @@
         {
           "name": "70",
           "slug": "70",
-          "size": "clamp(6rem, 8vw + 3rem, 15rem)"
+          "size": "clamp(6rem, 15vw, 20rem)"
         }
       ]
     },
