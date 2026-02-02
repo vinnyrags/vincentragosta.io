@@ -1,3 +1,5 @@
+@use 'sass:meta';
+
 // ==========================================================================
 // Breakpoints
 // ==========================================================================
@@ -17,7 +19,10 @@ $breakpoint-xl: 1440px;
 @mixin container($name, $size: md) {
   $breakpoint: $breakpoint-md;
 
-  @if $size == sm {
+  // Support custom pixel values or predefined sizes
+  @if meta.type-of($size) == 'number' {
+    $breakpoint: $size;
+  } @else if $size == sm {
     $breakpoint: $breakpoint-sm;
   } @else if $size == md {
     $breakpoint: $breakpoint-md;
@@ -37,7 +42,10 @@ $breakpoint-xl: 1440px;
 @mixin media($size: md) {
   $breakpoint: $breakpoint-md;
 
-  @if $size == sm {
+  // Support custom pixel values or predefined sizes
+  @if meta.type-of($size) == 'number' {
+    $breakpoint: $size;
+  } @else if $size == sm {
     $breakpoint: $breakpoint-sm;
   } @else if $size == md {
     $breakpoint: $breakpoint-md;
@@ -57,7 +65,10 @@ $breakpoint-xl: 1440px;
 @mixin media-down($size: md) {
   $breakpoint: $breakpoint-md;
 
-  @if $size == sm {
+  // Support custom pixel values or predefined sizes
+  @if meta.type-of($size) == 'number' {
+    $breakpoint: $size;
+  } @else if $size == sm {
     $breakpoint: $breakpoint-sm;
   } @else if $size == md {
     $breakpoint: $breakpoint-md;

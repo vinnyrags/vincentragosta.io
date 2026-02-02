@@ -1,12 +1,18 @@
-// Editor-only styles for the shutter cards container
-.shutter-cards {
-  border: 1px dashed var(--wp--preset--color--grey-3);
-  padding: var(--wp--preset--spacing--40);
-  padding-bottom: var(--wp--preset--spacing--20);
-}
+// Editor styles for shutter-cards container
 
-.shutter-cards-appender {
-  width: 100%;
-  justify-content: center;
-  margin-top: var(--wp--preset--spacing--50);
+.wp-block-child-theme-shutter-cards {
+  container: shutter-cards / inline-size;
+
+  // Style the block editor layout
+  .block-editor-block-list__layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--wp--preset--spacing--20);
+
+    @include container(shutter-cards, 1200px) {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      height: 450px;
+    }
+  }
 }

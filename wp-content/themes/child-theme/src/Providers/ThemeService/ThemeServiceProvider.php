@@ -73,6 +73,12 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
     {
         $this->enqueueStyle('child-theme-shutter-cards-block', 'shutter-cards.css');
         $this->enqueueStyle('child-theme-shutter-card-block', 'shutter-card.css');
+
+        // Editor-only styles (enqueued here for iframe compatibility)
+        if (is_admin()) {
+            $this->enqueueStyle('child-theme-shutter-cards-block-editor', 'shutter-cards-editor.css');
+            $this->enqueueStyle('child-theme-shutter-card-block-editor', 'shutter-card-editor.css');
+        }
     }
 
     /**
@@ -82,8 +88,6 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
     {
         $this->enqueueEditorScript('child-theme-shutter-cards-block-editor', 'shutter-cards.js');
         $this->enqueueEditorScript('child-theme-shutter-card-block-editor', 'shutter-card.js');
-        $this->enqueueStyle('child-theme-shutter-cards-block-editor', 'shutter-cards-editor.css');
-        $this->enqueueStyle('child-theme-shutter-card-block-editor', 'shutter-card-editor.css');
     }
 
     /**

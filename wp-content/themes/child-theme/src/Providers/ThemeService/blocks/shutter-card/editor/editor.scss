@@ -1,0 +1,115 @@
+// Editor styles for shutter-card
+
+.wp-block-child-theme-shutter-card {
+  display: flex;
+  transition: flex 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Mobile: stacked, all cards equal
+  flex: 0 0 auto;
+
+  // Desktop: flex behavior
+  @include container(shutter-cards, 1200px) {
+    flex: 1 1 0;
+
+    &.is-inactive {
+      flex: 0 0 var(--card-inactive-width, 15%);
+    }
+  }
+
+  .shutter-card {
+    --close-icon-size: var(--wp--custom--icon-size--md, 36px);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--wp--preset--spacing--40);
+    flex: 1;
+    min-height: 0;
+    background-color: var(--wp--preset--color--base);
+    border: 1px solid var(--wp--preset--color--grey-2);
+    color: var(--wp--preset--color--contrast);
+    padding: var(--wp--preset--spacing--50);
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  // Inactive visual styling - only on desktop
+  @include container(shutter-cards, 1200px) {
+    &.is-inactive .shutter-card {
+      cursor: pointer;
+      background-color: var(--wp--preset--color--grey-1);
+      color: var(--wp--preset--color--base);
+    }
+  }
+
+  .shutter-card__id {
+    font-size: var(--wp--preset--font-size--20);
+    font-weight: 400;
+    color: var(--wp--preset--color--grey-3);
+  }
+
+  .shutter-card__title {
+    color: inherit;
+    font-size: var(--wp--preset--font-size--50);
+    font-family: var(--wp--preset--font-family--reckless-neue);
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+    margin-top: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40));
+  }
+
+  .shutter-card__subtitle {
+    font-size: var(--wp--preset--font-size--10);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+    transition: opacity 0.3s ease, visibility 0s 0.3s;
+  }
+
+  .shutter-card__description {
+    font-size: var(--wp--preset--font-size--20);
+    line-height: 1.5rem;
+    margin: 0;
+    min-height: 0;
+    overflow-y: auto;
+    transition: opacity 0.3s ease, visibility 0s;
+  }
+
+  .shutter-card__close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: var(--close-icon-size);
+    height: var(--close-icon-size);
+    margin-top: auto;
+    border-radius: 50%;
+    border: 2px solid var(--wp--preset--color--contrast);
+    color: var(--wp--preset--color--base);
+    background-color: var(--wp--preset--color--contrast);
+    transition: all 0.3s ease-in-out;
+
+    .icon {
+      width: 60%;
+      height: 60%;
+      fill: currentColor;
+    }
+  }
+
+  // Inactive state content - only hide on desktop
+  @include container(shutter-cards, 1200px) {
+    &.is-inactive {
+      .shutter-card__subtitle,
+      .shutter-card__description {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .shutter-card__close-icon {
+        color: var(--wp--preset--color--base);
+        border-color: var(--wp--preset--color--base);
+        background-color: transparent;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
