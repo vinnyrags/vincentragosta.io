@@ -3,15 +3,15 @@
   display: flex;
   transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 
-  // Mobile: equal height cards stacked
-  flex: 1 1 auto;
+  // Mobile: all cards same width, height controlled by content
+  flex: 0 0 auto;
 
   // Desktop: active card grows to fill remaining space
   @include container(shutter-cards, lg) {
     flex: 1 1 0;
   }
 
-  // Inactive state - only on desktop
+  // Inactive state
   &.is-inactive {
     @include container(shutter-cards, lg) {
       flex: 0 0 var(--card-inactive-width, 15%);
@@ -25,7 +25,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: var(--wp--preset--spacing--40);
   flex: 1;
+  min-height: 0; // Allow flex item to shrink below content size
   background-color: var(--wp--preset--color--base);
   border: 1px solid var(--wp--preset--color--grey-2);
   color: var(--wp--preset--color--contrast);
@@ -33,20 +35,17 @@
   overflow: hidden;
   transition: background-color 0.4s ease, color 0.4s ease;
 
-  // Inactive visual state
+  // Inactive visual state - applies on all screen sizes
   .is-inactive & {
-    @include container(shutter-cards, lg) {
-      cursor: pointer;
-      background-color: var(--wp--preset--color--grey-1);
-      color: var(--wp--preset--color--base);
-    }
+    cursor: pointer;
+    background-color: var(--wp--preset--color--grey-1);
+    color: var(--wp--preset--color--base);
   }
 
   &__id {
     font-size: var(--wp--preset--font-size--20);
     font-weight: 400;
     color: var(--wp--preset--color--grey-3);
-    margin-bottom: var(--wp--preset--spacing--20);
   }
 
   &__title {
@@ -55,80 +54,79 @@
     font-family: var(--wp--preset--font-family--reckless-neue);
     font-weight: 400;
     line-height: 1.2;
-    margin: 0 0 var(--wp--preset--spacing--40);
+    margin: 0;
+    margin-top: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40)); // Reduce gap for tighter id→title spacing
   }
 
   &__subtitle {
     font-size: var(--wp--preset--font-size--10);
     font-weight: 700;
     text-transform: uppercase;
-    margin: 0 0 var(--wp--preset--spacing--40);
-    transition: opacity 0.3s ease, visibility 0s 0.3s;
+    margin: 0;
+    transition: opacity 0.3s ease, visibility 0s 0.3s, max-height 0.3s ease;
   }
 
   &__description {
     font-size: var(--wp--preset--font-size--20);
     line-height: 1.5rem;
+    margin: 0;
+    min-height: 0; // Allow flex item to shrink below content size
+    overflow-y: auto;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.3s ease 0.2s, visibility 0s;
+    transition: opacity 0.3s ease 0.2s, visibility 0s, max-height 0.4s ease;
 
     p {
-      margin-top: 0;
-      &:last-child { margin-bottom: 0; }
+      margin: 0;
+
+      + p {
+        margin-top: var(--wp--preset--spacing--30);
+      }
     }
   }
 
   &__close-icon {
-    display: none;
-    position: absolute;
-    bottom: var(--wp--preset--spacing--50);
-    left: var(--wp--preset--spacing--50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
     width: var(--close-icon-size);
     height: var(--close-icon-size);
+    margin-top: auto; // Push to bottom of flex container
     border-radius: 50%;
     border: 2px solid var(--wp--preset--color--contrast);
     color: var(--wp--preset--color--base);
     background-color: var(--wp--preset--color--contrast);
     transition: all 0.3s ease-in-out;
 
-    @include container(shutter-cards, lg) {
-      display: block;
-    }
-
     .icon {
-      width: 100%;
-      height: 100%;
+      width: 60%;
+      height: 60%;
       fill: currentColor;
     }
   }
 }
 
-// Inactive state content visibility
+// Inactive state content visibility - applies on all screen sizes
 .is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
-  @include container(shutter-cards, lg) {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s ease-out, visibility 0s 0.2s;
-  }
+  opacity: 0;
+  visibility: hidden;
+  max-height: 0;
+  transition: opacity 0.2s ease-out, visibility 0s 0.2s, max-height 0.3s ease;
 }
 
 .is-inactive .shutter-card__close-icon {
-  @include container(shutter-cards, lg) {
-    color: var(--wp--preset--color--base);
-    border-color: var(--wp--preset--color--base);
-    background-color: transparent;
-    transform: rotate(45deg);
-  }
+  color: var(--wp--preset--color--base);
+  border-color: var(--wp--preset--color--base);
+  background-color: transparent;
+  transform: rotate(45deg);
 }
 
 .is-inactive:hover .shutter-card__close-icon {
-  @include container(shutter-cards, lg) {
-    transform: rotate(0);
-    color: var(--wp--preset--color--contrast);
-    background-color: var(--wp--preset--color--accent-1);
-    border-color: var(--wp--preset--color--accent-1);
-  }
+  transform: rotate(0);
+  color: var(--wp--preset--color--contrast);
+  background-color: var(--wp--preset--color--accent-1);
+  border-color: var(--wp--preset--color--accent-1);
 }
 
 // ==========================================================================
@@ -142,10 +140,8 @@
 }
 
 .light-mode .is-inactive .shutter-card {
-  @include container(shutter-cards, lg) {
-    background-color: var(--wp--preset--color--grey-3);
-    color: var(--wp--preset--color--contrast);
-  }
+  background-color: var(--wp--preset--color--grey-3);
+  color: var(--wp--preset--color--contrast);
 }
 
 .light-mode .shutter-card__id {
@@ -159,17 +155,13 @@
 }
 
 .light-mode .is-inactive .shutter-card__close-icon {
-  @include container(shutter-cards, lg) {
-    color: var(--wp--preset--color--contrast);
-    border-color: var(--wp--preset--color--contrast);
-    background-color: transparent;
-  }
+  color: var(--wp--preset--color--contrast);
+  border-color: var(--wp--preset--color--contrast);
+  background-color: transparent;
 }
 
 .light-mode .is-inactive:hover .shutter-card__close-icon {
-  @include container(shutter-cards, lg) {
-    color: var(--wp--preset--color--contrast);
-    background-color: var(--wp--preset--color--accent-1);
-    border-color: var(--wp--preset--color--accent-1);
-  }
+  color: var(--wp--preset--color--contrast);
+  background-color: var(--wp--preset--color--accent-1);
+  border-color: var(--wp--preset--color--accent-1);
 }
