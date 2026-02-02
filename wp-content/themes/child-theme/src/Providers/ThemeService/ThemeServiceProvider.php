@@ -71,7 +71,6 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
      */
     public function enqueueBlockAssets(): void
     {
-        // Shutter card blocks
         $this->enqueueStyle('child-theme-shutter-cards-block', 'shutter-cards.css');
         $this->enqueueStyle('child-theme-shutter-card-block', 'shutter-card.css');
     }

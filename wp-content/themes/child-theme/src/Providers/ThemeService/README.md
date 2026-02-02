@@ -11,6 +11,15 @@ Extends the parent theme's ThemeServiceProvider to add site-specific configurati
 
 Block files are located in `blocks/shutter-cards/` and `blocks/shutter-card/`.
 
+### Block Architecture
+
+Both blocks are **dynamic blocks** with server-side rendering:
+
+- **Editor**: React components in `editor/index.js` and `editor/edit.js`
+- **Frontend**: PHP rendering via `frontend/render.php` with Twig templates in `templates/`
+
+The shutter-cards container uses `InnerBlocks` and must return `<InnerBlocks.Content />` from its save function to persist child blocks.
+
 ## Features
 
 ### ButtonIconEnhancer
@@ -82,6 +91,7 @@ All features from the parent ThemeServiceProvider are inherited:
 - **Theme Supports** - Standard WordPress theme supports
 - **DisableBlocks** - Gutenberg block restrictions
 - **DisableComments** - Comment functionality disabled
+- **DisablePosts** - Hides Posts from admin menu (uses Projects instead)
 - **EnableSvgUploads** - SVG upload support with sanitization
 
 ## Overriding Parent Features
@@ -143,13 +153,22 @@ ThemeService/
     │   ├── block.json
     │   ├── editor/
     │   │   ├── index.js
+    │   │   ├── edit.js
     │   │   └── editor.scss
-    │   └── frontend/
-    │       └── style.scss
+    │   ├── frontend/
+    │   │   ├── render.php
+    │   │   ├── style.scss
+    │   │   └── view.js
+    │   └── templates/
+    │       └── container.twig
     └── shutter-card/
         ├── block.json
         ├── editor/
-        │   └── index.js
-        └── frontend/
-            └── style.scss
+        │   ├── index.js
+        │   └── edit.js
+        ├── frontend/
+        │   ├── render.php
+        │   └── style.scss
+        └── templates/
+            └── card.twig
 ```

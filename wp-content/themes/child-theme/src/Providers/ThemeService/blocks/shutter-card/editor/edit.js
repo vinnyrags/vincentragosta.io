@@ -25,8 +25,7 @@ export default function Edit({ attributes, setAttributes }) {
                     allowedFormats={['core/bold', 'core/italic']}
                 />
                 <RichText
-                    tagName="div"
-                    multiline="p"
+                    tagName="p"
                     className="shutter-card__description"
                     value={description}
                     onChange={(newDescription) => setAttributes({ description: newDescription })}

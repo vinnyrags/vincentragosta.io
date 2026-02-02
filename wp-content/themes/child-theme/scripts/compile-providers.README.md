@@ -73,7 +73,7 @@ import { registerBlockType } from '@wordpress/blocks';
 
 ### JSX Support
 
-Block editor scripts support JSX syntax for React components.
+Block editor scripts support JSX syntax. JSX is compiled to use WordPress's element system (`wp.element.createElement`) rather than React directly, ensuring compatibility with the WordPress block editor.
 
 ### Parent Theme Imports
 
@@ -107,7 +107,9 @@ ThemeService:
   Block Style: dist/css/shutter-card.css
   Block: shutter-cards
   Block Editor JS: dist/js/shutter-cards.js
+  Block View JS: dist/js/shutter-cards-view.js
   Block Style: dist/css/shutter-cards.css
+  Block Editor Style: dist/css/shutter-cards-editor.css
 
 Done: 2 succeeded, 0 failed
 ```

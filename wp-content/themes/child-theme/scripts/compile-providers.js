@@ -283,6 +283,9 @@ async function compileBlockEditorScript(block) {
             format: 'iife',
             // Use JSX loader for .js files (WordPress blocks use JSX)
             loader: { '.js': 'jsx' },
+            // Configure JSX to use WordPress element
+            jsxFactory: 'wp.element.createElement',
+            jsxFragment: 'wp.element.Fragment',
             // Map WordPress packages to globals
             external: Object.keys(wpExternals),
             plugins: [

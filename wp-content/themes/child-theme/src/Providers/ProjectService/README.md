@@ -10,6 +10,15 @@ Self-contained provider for all project-related functionality, including the pro
 
 Block files are located in `blocks/projects/`.
 
+### Block Architecture
+
+The projects block is a **dynamic block** with server-side rendering:
+
+- **Editor**: React component in `editor/index.js` for block settings (mode, project selection)
+- **Frontend**: PHP rendering via `frontend/render.php` with Twig template in `templates/`
+
+The block queries `project` posts and renders them using Timber/Twig.
+
 ## Custom Post Type
 
 Registers the `project` post type from JSON configuration.
@@ -51,9 +60,13 @@ ProjectService/
 │       ├── block.json
 │       ├── editor/
 │       │   ├── index.js
+│       │   ├── edit.js
 │       │   └── editor.scss
-│       └── frontend/
-│           └── style.scss
+│       ├── frontend/
+│       │   ├── render.php
+│       │   └── style.scss
+│       └── templates/
+│           └── grid.twig
 └── config/
     └── post-type.json
 ```

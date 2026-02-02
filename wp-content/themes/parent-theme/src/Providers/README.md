@@ -67,7 +67,16 @@ class MyProvider extends ServiceProvider
 }
 ```
 
-Block assets are compiled to `dist/css/` and `dist/js/` by the build system. The `enqueueEditorScript()` helper automatically includes WordPress block editor dependencies.
+Block assets are compiled to `dist/css/` and `dist/js/` by the build system. The `enqueueEditorScript()` helper automatically includes WordPress block editor dependencies:
+
+- `wp-blocks`
+- `wp-element`
+- `wp-block-editor`
+- `wp-components`
+- `wp-i18n`
+- `wp-data`
+
+Additional dependencies can be passed as the third argument.
 
 ### Features
 

@@ -134,6 +134,8 @@ trait HasBlocksTrait
             'wp-element',
             'wp-block-editor',
             'wp-components',
+            'wp-i18n',
+            'wp-data',
         ];
 
         $allDeps = array_unique(array_merge($defaultDeps, $deps));
