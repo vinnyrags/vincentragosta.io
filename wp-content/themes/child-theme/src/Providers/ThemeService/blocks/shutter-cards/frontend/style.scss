@@ -1,8 +1,11 @@
-.shutter-cards {
+.wp-block-child-theme-shutter-cards {
   container: shutter-cards / inline-size;
+}
+
+.shutter-cards {
   display: flex;
   flex-direction: column;
-  gap: var(--wp--preset--spacing--50);
+  gap: var(--wp--preset--spacing--20);
   opacity: 1;
   visibility: visible;
   transition: opacity 0.6s ease-in, visibility 0s 0s;

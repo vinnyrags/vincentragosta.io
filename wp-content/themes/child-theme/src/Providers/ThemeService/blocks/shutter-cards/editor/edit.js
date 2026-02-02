@@ -5,7 +5,7 @@ import './editor.scss';
 
 const ALLOWED_BLOCKS = ['child-theme/shutter-card'];
 const TEMPLATE = [['child-theme/shutter-card']];
-const MAX_CARDS = 4;
+const MAX_CARDS = 5;
 
 export default function Edit({ clientId }) {
     const blockProps = useBlockProps();

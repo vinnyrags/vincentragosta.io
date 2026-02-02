@@ -16,6 +16,6 @@
     }
   },
   "textdomain": "child-theme",
-  "viewScript": "file:../../dist/blocks/shutter-cards-view.js",
+  "viewScript": "file:../../../../../dist/js/shutter-cards-view.js",
   "render": "file:./frontend/render.php"
 }
