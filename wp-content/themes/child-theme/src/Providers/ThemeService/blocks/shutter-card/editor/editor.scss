@@ -17,7 +17,7 @@
   }
 
   .shutter-card {
-    --close-icon-size: var(--wp--custom--icon-size--md, 36px);
+    --toggle-size: var(--wp--custom--icon-size--md, 36px);
 
     display: flex;
     flex-direction: column;
@@ -74,13 +74,13 @@
     transition: opacity 0.3s ease, visibility 0s;
   }
 
-  .shutter-card__close-icon {
+  .shutter-card__toggle {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: var(--close-icon-size);
-    height: var(--close-icon-size);
+    width: var(--toggle-size);
+    height: var(--toggle-size);
     margin-top: auto;
     border-radius: 50%;
     border: 2px solid var(--wp--preset--color--contrast);
@@ -104,7 +104,7 @@
         opacity: 0;
       }
 
-      .shutter-card__close-icon {
+      .shutter-card__toggle {
         color: var(--wp--preset--color--base);
         border-color: var(--wp--preset--color--base);
         background-color: transparent;
