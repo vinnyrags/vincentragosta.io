@@ -1,22 +1,6 @@
-// The WordPress wrapper is the flex item
+// The WordPress wrapper is the grid item
 .wp-block-child-theme-shutter-card {
   display: flex;
-  transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-
-  // Mobile: all cards same width, height controlled by content
-  flex: 0 0 auto;
-
-  // Desktop: active card grows to fill remaining space
-  @include container(shutter-cards, lg) {
-    flex: 1 1 0;
-  }
-
-  // Inactive state
-  &.is-inactive {
-    @include container(shutter-cards, lg) {
-      flex: 0 0 var(--card-inactive-width, 15%);
-    }
-  }
 
   // Focus styles for keyboard navigation
   &:focus {
@@ -42,7 +26,6 @@
   flex-direction: column;
   gap: var(--wp--preset--spacing--40);
   flex: 1;
-  min-height: 0;
   background-color: var(--wp--preset--color--base);
   border: 1px solid var(--wp--preset--color--grey-2);
   color: var(--wp--preset--color--contrast);
@@ -85,8 +68,6 @@
     font-size: var(--wp--preset--font-size--20);
     line-height: 1.5rem;
     margin: 0;
-    min-height: 0;
-    overflow-y: auto;
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease 0.2s, visibility 0s, max-height 0.4s ease;
@@ -139,12 +120,21 @@
   }
 }
 
-// Inactive state content visibility - applies on all screen sizes
+// Mobile: collapse content for accordion
 .is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
   opacity: 0;
   visibility: hidden;
   max-height: 0;
-  transition: opacity 0.2s ease-out, visibility 0s 0.2s, max-height 0.3s ease;
+  overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0s 0.3s, max-height 0.4s ease;
+}
+
+// Desktop: just fade, preserve space
+@include container(shutter-cards, lg) {
+  .is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
+    max-height: none;
+    overflow: visible;
+  }
 }
 
 .is-inactive .shutter-card__toggle {

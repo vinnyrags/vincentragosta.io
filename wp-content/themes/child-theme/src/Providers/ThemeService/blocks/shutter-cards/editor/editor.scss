@@ -12,7 +12,7 @@
     @include container(shutter-cards, 1200px) {
       flex-direction: row;
       flex-wrap: nowrap;
-      height: 450px;
+      align-items: flex-start;
     }
   }
 }

@@ -23,7 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update tabindex for keyboard navigation
                 card.setAttribute('tabindex', isActive ? '-1' : '0');
-                card.setAttribute('role', isActive ? null : 'button');
+                if (!isActive) {
+                    card.setAttribute('role', 'button');
+                } else {
+                    card.removeAttribute('role');
+                }
 
                 // Update toggle button label
                 const toggle = innerCard?.querySelector('.shutter-card__toggle');
@@ -43,42 +47,38 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Set initial state: first card active, rest inactive
+        // Set initial state
         activateCard(cards[0]);
+
+        // Remove preload class
+        container.classList.remove('shutter-cards--preload');
 
         // Event listeners for each card
         cards.forEach(card => {
             // Click handler for inactive cards
             card.addEventListener('click', function (e) {
-                // Don't activate if clicking inside an active card (allow normal interaction)
                 if (!this.classList.contains('is-inactive')) return;
-
-                // Don't activate if clicking the toggle button (handled separately)
                 if (e.target.closest('.shutter-card__toggle')) return;
-
                 handleActivation(this);
             });
 
             // Keyboard handler for inactive cards
             card.addEventListener('keydown', function (e) {
                 if (!this.classList.contains('is-inactive')) return;
-
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     handleActivation(this);
                 }
             });
 
-            // Toggle button handler (works on active cards too)
+            // Toggle button handler
             const toggle = card.querySelector('.shutter-card__toggle');
             if (toggle) {
                 toggle.addEventListener('click', function (e) {
                     e.stopPropagation();
-
                     const isActive = !card.classList.contains('is-inactive');
 
                     if (isActive) {
-                        // If clicking toggle on active card, activate the next card (or first)
                         const currentIndex = Array.from(cards).indexOf(card);
                         const nextCard = cards[(currentIndex + 1) % cards.length];
                         activateCard(nextCard);
@@ -88,11 +88,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             }
-        });
-
-        // Remove preload class after initial setup
-        requestAnimationFrame(() => {
-            container.classList.remove('shutter-cards--preload');
         });
     });
 });
