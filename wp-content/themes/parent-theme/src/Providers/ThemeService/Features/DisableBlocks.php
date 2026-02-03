@@ -97,7 +97,6 @@ class DisableBlocks implements Registrable
 
         // Layout blocks
         'core/spacer',
-        'core/separator',
         'core/nextpage',
         'core/more',
 

@@ -77,7 +77,6 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
         // Editor-only styles (enqueued here for iframe compatibility)
         if (is_admin()) {
             $this->enqueueStyle('child-theme-shutter-cards-block-editor', 'shutter-cards-editor.css');
-            $this->enqueueStyle('child-theme-shutter-card-block-editor', 'shutter-card-editor.css');
         }
     }
 

@@ -76,11 +76,11 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     placeholder={__('Enter description here...', 'child-theme')}
                     allowedFormats={['core/bold', 'core/italic', 'core/link']}
                 />
-                <div className="shutter-card__toggle">
+                <button type="button" className="shutter-card__toggle" aria-label="Toggle card" tabIndex={-1}>
                     <svg className="icon icon-close" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" viewBox="0 0 48 48">
                         <path fill="currentColor" d="m32.166 17.479-1.645-1.645L24 22.356l-6.522-6.522-1.645 1.645 6.522 6.522-6.522 6.521 1.645 1.645L24 25.646l6.521 6.521 1.645-1.645-6.521-6.521 6.521-6.522Z"></path>
                     </svg>
-                </div>
+                </button>
             </div>
         </div>
     );

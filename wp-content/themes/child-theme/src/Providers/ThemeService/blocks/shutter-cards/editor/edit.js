@@ -1,6 +1,6 @@
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const ALLOWED_BLOCKS = ['child-theme/shutter-card'];
 const TEMPLATE = [['child-theme/shutter-card']];
@@ -9,14 +9,12 @@ const MAX_CARDS = 5;
 export default function Edit({ clientId }) {
     const blockProps = useBlockProps();
     const { updateBlockAttributes } = useDispatch('core/block-editor');
-    const [activeCardId, setActiveCardId] = useState(null);
 
-    const { innerBlocks, cardCount, selectedBlockId } = useSelect((select) => {
-        const { getBlocks, getBlockCount, getSelectedBlockClientId } = select('core/block-editor');
+    const { innerBlocks, cardCount } = useSelect((select) => {
+        const { getBlocks, getBlockCount } = select('core/block-editor');
         return {
             innerBlocks: getBlocks(clientId),
             cardCount: getBlockCount(clientId),
-            selectedBlockId: getSelectedBlockClientId(),
         };
     });
 
@@ -28,35 +26,10 @@ export default function Edit({ clientId }) {
                 updateBlockAttributes(block.clientId, { cardIndex: formattedIndex });
             }
         });
-
-        // Set first card as active by default
-        if (innerBlocks.length > 0 && !activeCardId) {
-            setActiveCardId(innerBlocks[0].clientId);
-        }
-
-        // If active card was removed, activate first card
-        if (activeCardId && !innerBlocks.find(b => b.clientId === activeCardId)) {
-            setActiveCardId(innerBlocks[0]?.clientId || null);
-        }
-    }, [innerBlocks, updateBlockAttributes, activeCardId]);
-
-    // When a shutter-card is selected, make it active
-    useEffect(() => {
-        const isShutterCard = innerBlocks.some(b => b.clientId === selectedBlockId);
-        if (isShutterCard && selectedBlockId !== activeCardId) {
-            setActiveCardId(selectedBlockId);
-        }
-    }, [selectedBlockId, innerBlocks, activeCardId]);
-
-    // Calculate inactive width
-    const inactiveWidth = cardCount > 1 ? `${60 / cardCount}%` : '20%';
+    }, [innerBlocks, updateBlockAttributes]);
 
     return (
-        <div
-            {...blockProps}
-            style={{ '--card-inactive-width': inactiveWidth }}
-            data-active-card={activeCardId}
-        >
+        <div {...blockProps}>
             <InnerBlocks
                 allowedBlocks={ALLOWED_BLOCKS}
                 template={TEMPLATE}
