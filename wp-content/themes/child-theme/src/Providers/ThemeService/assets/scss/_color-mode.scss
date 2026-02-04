@@ -26,6 +26,9 @@
 }
 
 .light-mode {
+  // Override accent-1 with darker variant for better contrast on light backgrounds
+  --wp--preset--color--accent-1: var(--wp--preset--color--accent-1-dark);
+
   // Primary backgrounds and text
   --color-bg: var(--wp--preset--color--base);
   --color-text: var(--wp--preset--color--contrast);
@@ -68,7 +71,8 @@
   }
 
   // Paragraphs and body text
-  p, li, span, div {
+  // Note: Buttons and their children handle their own colors via component styles
+  p, li {
     color: inherit;
   }
 
@@ -86,6 +90,11 @@
     &:hover {
       background-color: var(--color-button-hover-bg);
       color: var(--color-button-hover-text);
+
+      // Button icon stroke color
+      .wp-block-button__icon svg [stroke]:not([stroke=none]):not([stroke=currentColor]) {
+        stroke: var(--wp--preset--color--base);
+      }
     }
   }
 
@@ -99,6 +108,11 @@
       background-color: var(--color-button-bg);
       color: var(--color-button-text);
     }
+  }
+
+  // Cover block background overlay
+  .wp-block-cover .wp-block-cover__background {
+    opacity: 0.1;
   }
 }
 

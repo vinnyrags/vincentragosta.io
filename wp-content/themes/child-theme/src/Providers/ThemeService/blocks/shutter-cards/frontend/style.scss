@@ -35,3 +35,20 @@
     transition: opacity 0.6s ease-out, visibility 0s 0.6s;
   }
 }
+
+// ==========================================================================
+// Light Mode Overrides
+// ==========================================================================
+// Container is purely structural (grid layout) with no color-dependent styles.
+// Individual shutter-card items handle their own light mode color overrides.
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .shutter-cards,
+  .shutter-cards--preload {
+    transition: none;
+  }
+}

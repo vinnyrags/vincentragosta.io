@@ -20,6 +20,11 @@
           "slug": "accent-1"
         },
         {
+          "color": "#7a9b00",
+          "name": "Accent 1 Dark",
+          "slug": "accent-1-dark"
+        },
+        {
           "color": "#686868",
           "name": "Accent 2",
           "slug": "accent-2"
