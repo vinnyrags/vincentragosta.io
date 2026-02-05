@@ -41,6 +41,27 @@ class StubFeatureDisabled implements Registrable
     }
 }
 
+class StubFeatureThrowing implements Registrable
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+        throw new \RuntimeException('Feature registration failed intentionally');
+    }
+}
+
+class StubFeatureAfterThrowing implements Registrable
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
 /**
  * Unit tests for the FeatureManager class.
  */
@@ -57,6 +78,8 @@ class FeatureManagerTest extends BaseTestCase
         StubFeatureA::$registered = false;
         StubFeatureB::$registered = false;
         StubFeatureDisabled::$registered = false;
+        StubFeatureThrowing::$registered = false;
+        StubFeatureAfterThrowing::$registered = false;
     }
 
     /**
@@ -238,5 +261,64 @@ class FeatureManagerTest extends BaseTestCase
         $manager->registerAll();
 
         $this->assertTrue(true);
+    }
+
+    /**
+     * Test registerAll continues after one feature throws an exception.
+     */
+    public function testRegisterAllContinuesAfterFeatureException(): void
+    {
+        $manager = new FeatureManager([
+            StubFeatureA::class => true,
+            StubFeatureThrowing::class => true,
+            StubFeatureAfterThrowing::class => true,
+        ], $this->container);
+
+        // Should not throw - exceptions are caught internally
+        $manager->registerAll();
+
+        // First feature registered before the throwing one
+        $this->assertTrue(StubFeatureA::$registered);
+
+        // Throwing feature was called (it sets $registered before throwing)
+        $this->assertTrue(StubFeatureThrowing::$registered);
+
+        // Feature after the throwing one should still register
+        $this->assertTrue(StubFeatureAfterThrowing::$registered);
+    }
+
+    /**
+     * Test registerAll handles container resolution failures gracefully.
+     */
+    public function testRegisterAllHandlesContainerResolutionFailure(): void
+    {
+        $manager = new FeatureManager([
+            StubFeatureA::class => true,
+            'NonExistent\\Feature\\Class' => true,
+            StubFeatureB::class => true,
+        ], $this->container);
+
+        // Should not throw - container errors are caught
+        $manager->registerAll();
+
+        // Features that could be resolved should still register
+        $this->assertTrue(StubFeatureA::$registered);
+        $this->assertTrue(StubFeatureB::$registered);
+    }
+
+    /**
+     * Test registerAll isolates errors to individual features.
+     */
+    public function testRegisterAllIsolatesErrors(): void
+    {
+        $manager = new FeatureManager([
+            StubFeatureThrowing::class => true,
+            StubFeatureB::class => true,
+        ], $this->container);
+
+        $manager->registerAll();
+
+        // Despite first feature throwing, second should register
+        $this->assertTrue(StubFeatureB::$registered);
     }
 }

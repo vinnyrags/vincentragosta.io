@@ -96,34 +96,45 @@ class DisableCommentsTest extends BaseTestCase
     }
 
     /**
-     * Test that removePostTypeSupport method exists.
+     * Test that comments_open filter returns false after registration.
      */
-    public function testRemovePostTypeSupportMethodExists(): void
+    public function testCommentsOpenFilterReturnsFalse(): void
     {
-        $this->assertTrue(method_exists($this->feature, 'removePostTypeSupport'));
+        $this->feature->register();
+
+        // Filter should return false regardless of the input
+        $result = apply_filters('comments_open', true, 123);
+        $this->assertFalse($result);
+
+        $result = apply_filters('comments_open', true, 456);
+        $this->assertFalse($result);
     }
 
     /**
-     * Test that removeAdminMenu method exists.
+     * Test that pings_open filter returns false after registration.
      */
-    public function testRemoveAdminMenuMethodExists(): void
+    public function testPingsOpenFilterReturnsFalse(): void
     {
-        $this->assertTrue(method_exists($this->feature, 'removeAdminMenu'));
+        $this->feature->register();
+
+        $result = apply_filters('pings_open', true, 123);
+        $this->assertFalse($result);
     }
 
     /**
-     * Test that redirectAdminPage method exists.
+     * Test that comments_array filter returns empty array after registration.
      */
-    public function testRedirectAdminPageMethodExists(): void
+    public function testCommentsArrayFilterReturnsEmptyArray(): void
     {
-        $this->assertTrue(method_exists($this->feature, 'redirectAdminPage'));
-    }
+        $this->feature->register();
 
-    /**
-     * Test that removeFromAdminBar method exists.
-     */
-    public function testRemoveFromAdminBarMethodExists(): void
-    {
-        $this->assertTrue(method_exists($this->feature, 'removeFromAdminBar'));
+        $comments = [
+            ['comment_ID' => 1, 'comment_content' => 'Test comment'],
+            ['comment_ID' => 2, 'comment_content' => 'Another comment'],
+        ];
+
+        $result = apply_filters('comments_array', $comments, 123);
+        $this->assertIsArray($result);
+        $this->assertEmpty($result);
     }
 }

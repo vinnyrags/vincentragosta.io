@@ -110,4 +110,163 @@ class ButtonIconEnhancerTest extends BaseTestCase
 
         $this->assertEquals($content, $result);
     }
+
+    /**
+     * Test that render returns unmodified content when icon doesn't exist.
+     *
+     * Note: Positive icon injection tests require the actual theme directory
+     * to be accessible via get_stylesheet_directory(). In test environment,
+     * icons won't be found, so we verify the graceful fallback behavior.
+     */
+    public function testRenderReturnsUnmodifiedContentForNonexistentIcon(): void
+    {
+        $content = '<div class="wp-block-button"><a class="wp-block-button__link">Click me</a></div>';
+        $block = [
+            'blockName' => 'core/button',
+            'attrs' => [
+                'selectedIcon' => 'definitely-nonexistent-icon-xyz',
+                'iconPosition' => 'right',
+            ],
+        ];
+
+        $result = $this->feature->render($content, $block);
+
+        $this->assertEquals($content, $result);
+    }
+
+    /**
+     * Test that render handles malformed HTML gracefully when icon not found.
+     */
+    public function testRenderHandlesMalformedHtmlGracefully(): void
+    {
+        $content = '<div class="wp-block-button"><a class="wp-block-button__link">Click me</div>';
+        $block = [
+            'blockName' => 'core/button',
+            'attrs' => [
+                'selectedIcon' => 'nonexistent-icon',
+                'iconPosition' => 'right',
+            ],
+        ];
+
+        $result = $this->feature->render($content, $block);
+
+        // When icon not found, should return original content unchanged
+        $this->assertEquals($content, $result);
+    }
+
+    /**
+     * Test that shouldEnhance correctly identifies button blocks with icons.
+     */
+    public function testShouldEnhanceReturnsTrueForValidButtonWithIcon(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('shouldEnhance');
+        $method->setAccessible(true);
+
+        $block = [
+            'blockName' => 'core/button',
+            'attrs' => ['selectedIcon' => 'arrow'],
+        ];
+
+        $this->assertTrue($method->invoke($this->feature, $block));
+    }
+
+    /**
+     * Test that shouldEnhance returns false for non-button blocks.
+     */
+    public function testShouldEnhanceReturnsFalseForNonButtonBlock(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('shouldEnhance');
+        $method->setAccessible(true);
+
+        $block = [
+            'blockName' => 'core/paragraph',
+            'attrs' => ['selectedIcon' => 'arrow'],
+        ];
+
+        $this->assertFalse($method->invoke($this->feature, $block));
+    }
+
+    /**
+     * Test that shouldEnhance returns false when no icon selected.
+     */
+    public function testShouldEnhanceReturnsFalseWithoutIcon(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('shouldEnhance');
+        $method->setAccessible(true);
+
+        $block = [
+            'blockName' => 'core/button',
+            'attrs' => [],
+        ];
+
+        $this->assertFalse($method->invoke($this->feature, $block));
+    }
+
+    /**
+     * Test that shouldEnhance returns false when selectedIcon is empty.
+     */
+    public function testShouldEnhanceReturnsFalseWithEmptyIcon(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('shouldEnhance');
+        $method->setAccessible(true);
+
+        $block = [
+            'blockName' => 'core/button',
+            'attrs' => ['selectedIcon' => ''],
+        ];
+
+        $this->assertFalse($method->invoke($this->feature, $block));
+    }
+
+    /**
+     * Test that shouldEnhance returns false when blockName is missing.
+     */
+    public function testShouldEnhanceReturnsFalseWithoutBlockName(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('shouldEnhance');
+        $method->setAccessible(true);
+
+        $block = [
+            'attrs' => ['selectedIcon' => 'arrow'],
+        ];
+
+        $this->assertFalse($method->invoke($this->feature, $block));
+    }
+
+    /**
+     * Test that createDom handles valid HTML.
+     */
+    public function testCreateDomReturnsDocumentForValidHtml(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $method = $reflection->getMethod('createDom');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->feature, '<div>test</div>');
+
+        $this->assertInstanceOf(\DOMDocument::class, $result);
+    }
+
+    /**
+     * Test that getInnerHtml extracts content from wrapper.
+     */
+    public function testGetInnerHtmlExtractsContent(): void
+    {
+        $reflection = new \ReflectionClass($this->feature);
+        $createDom = $reflection->getMethod('createDom');
+        $createDom->setAccessible(true);
+        $getInnerHtml = $reflection->getMethod('getInnerHtml');
+        $getInnerHtml->setAccessible(true);
+
+        $dom = $createDom->invoke($this->feature, '<p>Hello World</p>');
+        $result = $getInnerHtml->invoke($this->feature, $dom);
+
+        $this->assertStringContainsString('Hello World', $result);
+        $this->assertStringContainsString('<p>', $result);
+    }
 }

@@ -189,4 +189,91 @@ class AssetManagerTest extends BaseTestCase
         @rmdir($distPath . '/js');
         @rmdir($distPath);
     }
+
+    /**
+     * Test enqueueManifestScript loads script with manifest dependencies.
+     */
+    public function testEnqueueManifestScriptUsesDependenciesFromManifest(): void
+    {
+        $distPath = sys_get_temp_dir() . '/asset-manager-manifest-test-' . uniqid();
+        @mkdir($distPath . '/blocks', 0777, true);
+
+        // Create JS file
+        file_put_contents($distPath . '/blocks/index.js', '// block js');
+
+        // Create .asset.php manifest
+        $manifest = [
+            'dependencies' => ['wp-blocks', 'wp-element', 'wp-editor'],
+            'version' => '1.2.3',
+        ];
+        file_put_contents(
+            $distPath . '/blocks/index.asset.php',
+            '<?php return ' . var_export($manifest, true) . ';'
+        );
+
+        $manager = new AssetManager('theme', $distPath, 'https://example.com/dist');
+        $manager->enqueueManifestScript('test-manifest-script', 'blocks/index.js');
+
+        $this->assertTrue(wp_script_is('test-manifest-script', 'enqueued'));
+
+        // Clean up
+        @unlink($distPath . '/blocks/index.js');
+        @unlink($distPath . '/blocks/index.asset.php');
+        @rmdir($distPath . '/blocks');
+        @rmdir($distPath);
+    }
+
+    /**
+     * Test enqueueManifestScript merges extra dependencies with manifest deps.
+     */
+    public function testEnqueueManifestScriptMergesExtraDependencies(): void
+    {
+        $distPath = sys_get_temp_dir() . '/asset-manager-merge-deps-' . uniqid();
+        @mkdir($distPath . '/blocks', 0777, true);
+
+        file_put_contents($distPath . '/blocks/editor.js', '// editor js');
+
+        $manifest = [
+            'dependencies' => ['wp-blocks'],
+            'version' => '2.0.0',
+        ];
+        file_put_contents(
+            $distPath . '/blocks/editor.asset.php',
+            '<?php return ' . var_export($manifest, true) . ';'
+        );
+
+        $manager = new AssetManager('theme', $distPath, 'https://example.com/dist');
+        $manager->enqueueManifestScript('test-merge-deps', 'blocks/editor.js', ['custom-dep', 'another-dep']);
+
+        $this->assertTrue(wp_script_is('test-merge-deps', 'enqueued'));
+
+        // Clean up
+        @unlink($distPath . '/blocks/editor.js');
+        @unlink($distPath . '/blocks/editor.asset.php');
+        @rmdir($distPath . '/blocks');
+        @rmdir($distPath);
+    }
+
+    /**
+     * Test enqueueManifestScript skips when JS file exists but manifest doesn't.
+     */
+    public function testEnqueueManifestScriptSkipsWhenOnlyJsFileExists(): void
+    {
+        $distPath = sys_get_temp_dir() . '/asset-manager-no-manifest-' . uniqid();
+        @mkdir($distPath . '/blocks', 0777, true);
+
+        // Create JS file but no manifest
+        file_put_contents($distPath . '/blocks/view.js', '// view js');
+
+        $manager = new AssetManager('theme', $distPath, 'https://example.com/dist');
+        $manager->enqueueManifestScript('test-no-manifest', 'blocks/view.js');
+
+        // Should not be enqueued because manifest is missing
+        $this->assertFalse(wp_script_is('test-no-manifest', 'enqueued'));
+
+        // Clean up
+        @unlink($distPath . '/blocks/view.js');
+        @rmdir($distPath . '/blocks');
+        @rmdir($distPath);
+    }
 }

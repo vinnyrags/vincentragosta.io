@@ -163,46 +163,6 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that provider has addResourceHints method for preconnects.
-     */
-    public function testHasAddResourceHintsMethod(): void
-    {
-        $this->assertTrue(method_exists($this->provider, 'addResourceHints'));
-    }
-
-    /**
-     * Test that provider has enqueueBlockAssets method.
-     */
-    public function testHasEnqueueBlockAssetsMethod(): void
-    {
-        $this->assertTrue(method_exists($this->provider, 'enqueueBlockAssets'));
-    }
-
-    /**
-     * Test that provider has enqueueBlockEditorAssets method.
-     */
-    public function testHasEnqueueBlockEditorAssetsMethod(): void
-    {
-        $this->assertTrue(method_exists($this->provider, 'enqueueBlockEditorAssets'));
-    }
-
-    /**
-     * Test that provider has enqueueButtonEditorAssets method.
-     */
-    public function testHasEnqueueButtonEditorAssetsMethod(): void
-    {
-        $this->assertTrue(method_exists($this->provider, 'enqueueButtonEditorAssets'));
-    }
-
-    /**
-     * Test that provider has localizeEditorData method.
-     */
-    public function testHasLocalizeEditorDataMethod(): void
-    {
-        $this->assertTrue(method_exists($this->provider, 'localizeEditorData'));
-    }
-
-    /**
      * Test that addResourceHints adds preconnect URLs.
      */
     public function testAddResourceHintsAddsPreconnectUrls(): void

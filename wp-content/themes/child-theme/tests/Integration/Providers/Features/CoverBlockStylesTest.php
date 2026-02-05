@@ -49,16 +49,6 @@ class CoverBlockStylesTest extends BaseTestCase
     }
 
     /**
-     * Test that registerStyles can be called without error.
-     */
-    public function testRegisterStylesCanBeCalled(): void
-    {
-        // This should not throw an exception
-        $this->feature->registerStyles();
-        $this->assertTrue(true);
-    }
-
-    /**
      * Test that the animated block style is registered after calling registerStyles.
      */
     public function testAnimatedStyleIsRegistered(): void

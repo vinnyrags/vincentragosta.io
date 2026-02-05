@@ -201,6 +201,117 @@ class IconServiceTest extends TestCase
     }
 
     /**
+     * Test that applyAttributes adds class attribute to SVG.
+     */
+    public function testApplyAttributesAddsClassToSvg(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'applyAttributes');
+
+        // Set type to 'svg' and attributes
+        $this->setPrivateProperty($service, 'type', 'svg');
+        $this->setPrivateProperty($service, 'attributes', ['class' => 'my-icon']);
+
+        $content = '<svg xmlns="http://www.w3.org/2000/svg"><path d="M0 0"/></svg>';
+        $result = $method->invoke($service, $content);
+
+        $this->assertStringContainsString('class="my-icon"', $result);
+        $this->assertStringStartsWith('<svg', $result);
+    }
+
+    /**
+     * Test that applyAttributes preserves existing SVG structure.
+     */
+    public function testApplyAttributesPreservesExistingStructure(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'applyAttributes');
+
+        $this->setPrivateProperty($service, 'type', 'svg');
+        $this->setPrivateProperty($service, 'attributes', ['aria-hidden' => 'true', 'role' => 'img']);
+
+        $content = '<svg viewBox="0 0 24 24"><path d="M0 0"/></svg>';
+        $result = $method->invoke($service, $content);
+
+        $this->assertStringContainsString('viewBox="0 0 24 24"', $result);
+        $this->assertStringContainsString('<path', $result);
+        $this->assertStringContainsString('aria-hidden="true"', $result);
+        $this->assertStringContainsString('role="img"', $result);
+    }
+
+    /**
+     * Test that applyAttributes wraps sprite content without SVG tag.
+     */
+    public function testApplyAttributesWrapsSpriteContent(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'applyAttributes');
+
+        $this->setPrivateProperty($service, 'type', 'sprite');
+        $this->setPrivateProperty($service, 'attributes', ['class' => 'sprite-icon']);
+
+        // Sprite content without SVG wrapper
+        $content = '<path d="M0 0"/><circle cx="10" cy="10" r="5"/>';
+        $result = $method->invoke($service, $content);
+
+        $this->assertStringStartsWith('<svg', $result);
+        $this->assertStringContainsString('class="sprite-icon"', $result);
+        $this->assertStringContainsString('xmlns="http://www.w3.org/2000/svg"', $result);
+        $this->assertStringContainsString('<path', $result);
+    }
+
+    /**
+     * Test that applyAttributes returns content unchanged when no attributes.
+     */
+    public function testApplyAttributesReturnsUnchangedWhenNoAttributes(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'applyAttributes');
+
+        $this->setPrivateProperty($service, 'type', 'svg');
+        $this->setPrivateProperty($service, 'attributes', []);
+
+        $content = '<svg><path d="M0 0"/></svg>';
+        $result = $method->invoke($service, $content);
+
+        $this->assertEquals($content, $result);
+    }
+
+    /**
+     * Test that sanitizeName allows subdirectory paths.
+     */
+    public function testSanitizeNameAllowsSubdirectoryPaths(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'sanitizeName');
+
+        $this->assertEquals('squiggle/squiggle-1', $method->invoke($service, 'squiggle/squiggle-1'));
+        $this->assertEquals('subdir/icon', $method->invoke($service, 'subdir/icon.svg'));
+    }
+
+    /**
+     * Test that sanitizeName normalizes backslashes.
+     */
+    public function testSanitizeNameNormalizesBackslashes(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'sanitizeName');
+
+        $this->assertEquals('subdir/icon', $method->invoke($service, 'subdir\\icon'));
+    }
+
+    /**
+     * Test that sanitizeName handles absolute paths by extracting basename.
+     */
+    public function testSanitizeNameHandlesAbsolutePaths(): void
+    {
+        $service = new IconService('test');
+        $method = $this->getPrivateMethod($service, 'sanitizeName');
+
+        $this->assertEquals('icon', $method->invoke($service, '/absolute/path/to/icon'));
+    }
+
+    /**
      * Helper to get a private method via reflection.
      */
     private function getPrivateMethod(object $object, string $methodName): \ReflectionMethod
@@ -220,5 +331,16 @@ class IconServiceTest extends TestCase
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         return $property->getValue($object);
+    }
+
+    /**
+     * Helper to set a private property value via reflection.
+     */
+    private function setPrivateProperty(object $object, string $propertyName, mixed $value): void
+    {
+        $reflection = new ReflectionClass($object);
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
     }
 }
