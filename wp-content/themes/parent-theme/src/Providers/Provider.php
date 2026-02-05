@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers;
 
 use DI\Container;
@@ -10,6 +12,7 @@ use ParentTheme\Providers\Support\AbstractRegistry;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Support\Rest\RestManager;
 use ReflectionClass;
+use ReflectionMethod;
 use Twig\Environment;
 
 /**
@@ -73,7 +76,7 @@ abstract class Provider implements Registrable
         $this->init();
         $this->registerFeatures();
         $this->blockManager->initializeHooks($this);
-        add_filter('timber/twig', [$this, 'addTwigFunctions']);
+        $this->maybeRegisterTwigFilter();
 
         if (!empty($this->restManager->getEnabled())) {
             add_action('rest_api_init', [$this, 'registerRoutes']);
@@ -89,6 +92,22 @@ abstract class Provider implements Registrable
     public function addTwigFunctions(Environment $twig): Environment
     {
         return $twig;
+    }
+
+    /**
+     * Register timber/twig filter only if addTwigFunctions() is overridden.
+     *
+     * Avoids no-op filter callbacks for providers that don't add Twig functions.
+     */
+    protected function maybeRegisterTwigFilter(): void
+    {
+        $reflection = new ReflectionMethod($this, 'addTwigFunctions');
+        $declaringClass = $reflection->getDeclaringClass()->getName();
+
+        // Only register if a subclass overrides the method
+        if ($declaringClass !== self::class) {
+            add_filter('timber/twig', [$this, 'addTwigFunctions']);
+        }
     }
 
     /**
@@ -111,8 +130,8 @@ abstract class Provider implements Registrable
 
         $this->configPath = $providerDir . '/config';
         $this->textDomain = str_starts_with($providerDir, get_stylesheet_directory())
-            ? get_stylesheet()
-            : get_template();
+            ? (get_stylesheet() ?: 'theme')
+            : (get_template() ?: 'theme');
         $this->assets = new AssetManager($slug, $distPath, $distUri);
 
         $blocksPath = $providerDir . '/blocks';
@@ -208,9 +227,22 @@ abstract class Provider implements Registrable
         }
 
         $content = file_get_contents($filepath);
+
+        if ($content === false) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log(sprintf('Provider::loadConfig: Could not read file: %s', $filepath));
+            return null;
+        }
+
         $data = json_decode($content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log(sprintf(
+                'Provider::loadConfig: Invalid JSON in %s: %s',
+                $filepath,
+                json_last_error_msg()
+            ));
             return null;
         }
 

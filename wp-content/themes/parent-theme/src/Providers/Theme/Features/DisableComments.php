@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers\Theme\Features;
 
 use ParentTheme\Providers\Contracts\Registrable;
@@ -49,8 +51,8 @@ class DisableComments implements Registrable
         global $pagenow;
 
         if ($pagenow === 'edit-comments.php') {
-            wp_redirect(admin_url());
-            exit;
+            wp_safe_redirect(admin_url());
+            $this->terminate();
         }
     }
 
@@ -61,5 +63,17 @@ class DisableComments implements Registrable
     {
         global $wp_admin_bar;
         $wp_admin_bar->remove_menu('comments');
+    }
+
+    /**
+     * Terminate script execution.
+     *
+     * Extracted to allow tests to override without killing the test runner.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function terminate(): void
+    {
+        exit;
     }
 }

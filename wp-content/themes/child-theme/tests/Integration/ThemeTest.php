@@ -5,6 +5,7 @@ namespace ChildTheme\Tests\Integration;
 use ChildTheme\Theme;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
+use ParentTheme\Theme as BaseTheme;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -20,8 +21,17 @@ class ThemeTest extends BaseTestCase
     public function set_up(): void
     {
         parent::set_up();
+        // Reset the singleton before each test
+        BaseTheme::resetInstance();
         $this->theme = new Theme();
         $this->theme->bootstrap();
+    }
+
+    public function tear_down(): void
+    {
+        // Reset after each test to ensure clean state
+        BaseTheme::resetInstance();
+        parent::tear_down();
     }
 
     /**

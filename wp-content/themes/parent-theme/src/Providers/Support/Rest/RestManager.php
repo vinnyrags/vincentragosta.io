@@ -6,6 +6,7 @@ namespace ParentTheme\Providers\Support\Rest;
 
 use DI\Container;
 use ParentTheme\Providers\Support\AbstractRegistry;
+use Throwable;
 
 /**
  * Manages REST API endpoint registration for providers.
@@ -34,13 +35,25 @@ class RestManager extends AbstractRegistry
 
     /**
      * Resolve and register all enabled endpoints via register_rest_route().
+     *
+     * Catches exceptions per-endpoint so a single broken endpoint doesn't
+     * prevent subsequent endpoints from registering.
      */
     public function registerAll(): void
     {
         foreach ($this->getEnabled() as $routeClass) {
-            /** @var Endpoint $endpoint */
-            $endpoint = $this->container->get($routeClass);
-            register_rest_route($this->namespace, $endpoint->getRoute(), $endpoint->toRouteArgs());
+            try {
+                /** @var Endpoint $endpoint */
+                $endpoint = $this->container->get($routeClass);
+                register_rest_route($this->namespace, $endpoint->getRoute(), $endpoint->toRouteArgs());
+            } catch (Throwable $e) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                error_log(sprintf(
+                    'RestManager: Failed to register endpoint %s: %s',
+                    $routeClass,
+                    $e->getMessage()
+                ));
+            }
         }
     }
 }

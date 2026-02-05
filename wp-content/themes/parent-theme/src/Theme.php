@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme;
 
 use DI\Container;
@@ -36,9 +38,15 @@ class Theme extends Site
     /**
      * Constructor — DI only.
      * Builds the container. All other setup happens in bootstrap().
+     *
+     * @throws \RuntimeException If Theme is instantiated more than once.
      */
     public function __construct()
     {
+        if (self::$containerInstance !== null) {
+            throw new \RuntimeException('Theme has already been initialized. Only one instance is allowed.');
+        }
+
         $this->container = $this->buildContainer();
         self::$containerInstance = $this->container;
     }
@@ -95,6 +103,16 @@ class Theme extends Site
             throw new \RuntimeException('Container not initialized.');
         }
         return self::$containerInstance;
+    }
+
+    /**
+     * Reset the singleton instance for testing purposes.
+     *
+     * @internal For testing only. Do not use in production code.
+     */
+    public static function resetInstance(): void
+    {
+        self::$containerInstance = null;
     }
 
     /**

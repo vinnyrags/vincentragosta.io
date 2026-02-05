@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChildTheme\Providers\Theme\Features;
 
 use ParentTheme\Services\IconService;

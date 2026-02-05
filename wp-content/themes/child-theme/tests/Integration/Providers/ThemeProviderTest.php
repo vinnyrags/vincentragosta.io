@@ -96,14 +96,10 @@ class ThemeProviderTest extends BaseTestCase
             has_action('wp_enqueue_scripts', [$this->provider, 'enqueueAssets'])
         );
 
+        // Preconnects now use wp_resource_hints filter instead of wp_head
         $this->assertGreaterThan(
             0,
-            has_filter('show_admin_bar', '__return_false')
-        );
-
-        $this->assertGreaterThan(
-            0,
-            has_action('wp_head', [$this->provider, 'addFontPreconnects'])
+            has_filter('wp_resource_hints', [$this->provider, 'addResourceHints'])
         );
 
         $this->assertGreaterThan(
@@ -167,11 +163,11 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that provider has addFontPreconnects method.
+     * Test that provider has addResourceHints method for preconnects.
      */
-    public function testHasAddFontPreconnectsMethod(): void
+    public function testHasAddResourceHintsMethod(): void
     {
-        $this->assertTrue(method_exists($this->provider, 'addFontPreconnects'));
+        $this->assertTrue(method_exists($this->provider, 'addResourceHints'));
     }
 
     /**
@@ -204,5 +200,34 @@ class ThemeProviderTest extends BaseTestCase
     public function testHasLocalizeEditorDataMethod(): void
     {
         $this->assertTrue(method_exists($this->provider, 'localizeEditorData'));
+    }
+
+    /**
+     * Test that addResourceHints adds preconnect URLs.
+     */
+    public function testAddResourceHintsAddsPreconnectUrls(): void
+    {
+        $urls = $this->provider->addResourceHints([], 'preconnect');
+
+        $this->assertCount(2, $urls);
+
+        // Check for fonts.googleapis.com
+        $this->assertContains(['href' => 'https://fonts.googleapis.com'], $urls);
+
+        // Check for fonts.gstatic.com with crossorigin
+        $this->assertContains([
+            'href' => 'https://fonts.gstatic.com',
+            'crossorigin' => 'anonymous',
+        ], $urls);
+    }
+
+    /**
+     * Test that addResourceHints doesn't add URLs for other relation types.
+     */
+    public function testAddResourceHintsIgnoresOtherRelationTypes(): void
+    {
+        $urls = $this->provider->addResourceHints([], 'dns-prefetch');
+
+        $this->assertEmpty($urls);
     }
 }

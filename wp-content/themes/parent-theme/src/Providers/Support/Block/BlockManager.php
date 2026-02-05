@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers\Support\Block;
 
 /**

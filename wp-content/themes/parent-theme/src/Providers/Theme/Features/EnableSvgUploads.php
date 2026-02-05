@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers\Theme\Features;
 
+use enshrined\svgSanitize\Sanitizer;
 use ParentTheme\Providers\Contracts\Registrable;
 
 /**
  * Enables SVG uploads in the WordPress media library.
  *
- * Adds SVG to allowed mime types and provides basic sanitization
- * to remove potentially harmful content.
+ * Adds SVG to allowed mime types for administrators only and provides
+ * comprehensive sanitization via enshrined/svg-sanitize to remove
+ * potentially harmful content including XSS vectors.
  */
 class EnableSvgUploads implements Registrable
 {
@@ -20,13 +24,20 @@ class EnableSvgUploads implements Registrable
     }
 
     /**
-     * Add SVG to allowed mime types.
+     * Add SVG to allowed mime types for administrators only.
+     *
+     * SVG files can contain malicious content. Even with sanitization,
+     * restricting uploads to administrators provides defense in depth.
      *
      * @param array<string, string> $mimes Allowed mime types.
      * @return array<string, string>
      */
     public function addSvgMimeType(array $mimes): array
     {
+        if (!current_user_can('manage_options')) {
+            return $mimes;
+        }
+
         $mimes['svg'] = 'image/svg+xml';
         $mimes['svgz'] = 'image/svg+xml';
 
@@ -91,71 +102,40 @@ class EnableSvgUploads implements Registrable
     }
 
     /**
-     * Sanitize SVG content.
+     * Sanitize SVG content using enshrined/svg-sanitize.
      *
-     * Removes scripts, event handlers, and other potentially harmful content.
+     * This library handles all known SVG attack vectors including:
+     * - <script> elements
+     * - Event handler attributes (onclick, onload, etc.)
+     * - <foreignObject> elements (embeds arbitrary HTML)
+     * - <use> with external references
+     * - <style> elements with malicious CSS
+     * - <embed>, <object>, <iframe> elements
+     * - javascript: and data: URI schemes
+     * - CSS url() with javascript:
      *
      * @param string $content SVG content.
      * @return string|false Sanitized content or false on failure.
      */
     protected function sanitizeSvgContent(string $content): string|false
     {
-        // Check for valid XML
-        libxml_use_internal_errors(true);
-        $dom = new \DOMDocument();
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
+        $sanitizer = new Sanitizer();
 
-        if (!$dom->loadXML($content)) {
-            libxml_clear_errors();
+        // Remove remote references (external SVGs, stylesheets, etc.)
+        $sanitizer->removeRemoteReferences(true);
+
+        // Remove XML tag to prevent XML-based attacks
+        $sanitizer->removeXMLTag(true);
+
+        // Minify output to remove comments and whitespace
+        $sanitizer->minify(true);
+
+        $clean = $sanitizer->sanitize($content);
+
+        if ($clean === false || $clean === '') {
             return false;
         }
 
-        libxml_clear_errors();
-
-        // Remove script elements
-        $scripts = $dom->getElementsByTagName('script');
-        while ($scripts->length > 0) {
-            $scripts->item(0)->parentNode->removeChild($scripts->item(0));
-        }
-
-        // Remove event handler attributes (onclick, onload, etc.)
-        $xpath = new \DOMXPath($dom);
-        $elements = $xpath->query('//*[@*[starts-with(name(), "on")]]');
-
-        foreach ($elements as $element) {
-            $attributes = $element->attributes;
-            $toRemove = [];
-
-            foreach ($attributes as $attr) {
-                if (str_starts_with($attr->name, 'on')) {
-                    $toRemove[] = $attr->name;
-                }
-            }
-
-            foreach ($toRemove as $name) {
-                $element->removeAttribute($name);
-            }
-        }
-
-        // Remove href attributes with javascript:
-        $hrefs = $xpath->query('//*[@href]');
-        foreach ($hrefs as $element) {
-            $href = $element->getAttribute('href');
-            if (str_contains(strtolower($href), 'javascript:')) {
-                $element->removeAttribute('href');
-            }
-        }
-
-        // Remove xlink:href with javascript:
-        $xlinks = $xpath->query('//*[@xlink:href]');
-        foreach ($xlinks as $element) {
-            $href = $element->getAttribute('xlink:href');
-            if (str_contains(strtolower($href), 'javascript:')) {
-                $element->removeAttribute('xlink:href');
-            }
-        }
-
-        return $dom->saveXML();
+        return $clean;
     }
 }

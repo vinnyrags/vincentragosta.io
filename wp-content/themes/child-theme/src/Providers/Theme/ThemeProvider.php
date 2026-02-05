@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
@@ -40,8 +42,7 @@ class ThemeProvider extends BaseThemeProvider
     {
         // Add site-specific hooks
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
-        add_action('wp_head', [$this, 'addFontPreconnects']);
-        add_filter('show_admin_bar', '__return_false');
+        add_filter('wp_resource_hints', [$this, 'addResourceHints'], 10, 2);
 
         // Block editor assets and data localization
         add_action('enqueue_block_editor_assets', [$this, 'enqueueButtonEditorAssets']);
@@ -68,12 +69,25 @@ class ThemeProvider extends BaseThemeProvider
     }
 
     /**
-     * Add preconnect links for Google Fonts.
+     * Add preconnect hints for Google Fonts using wp_resource_hints filter.
+     *
+     * @param array<int, string|array<string, string>> $urls URLs to add hints for.
+     * @param string $relation_type The relation type (dns-prefetch, preconnect, etc.).
+     * @return array<int, string|array<string, string>>
      */
-    public function addFontPreconnects(): void
+    public function addResourceHints(array $urls, string $relation_type): array
     {
-        echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
-        echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+        if ($relation_type === 'preconnect') {
+            $urls[] = [
+                'href' => 'https://fonts.googleapis.com',
+            ];
+            $urls[] = [
+                'href' => 'https://fonts.gstatic.com',
+                'crossorigin' => 'anonymous',
+            ];
+        }
+
+        return $urls;
     }
 
     /**
@@ -126,6 +140,9 @@ class ThemeProvider extends BaseThemeProvider
 
     /**
      * Localize icon data for the button icon picker.
+     *
+     * Uses wp_add_inline_script with wp_json_encode for reliable data serialization,
+     * which handles special characters better than wp_localize_script.
      */
     private function localizeButtonIconData(): void
     {
@@ -134,10 +151,16 @@ class ThemeProvider extends BaseThemeProvider
             return;
         }
 
-        wp_localize_script($handle, 'childThemeButtonIconData', [
+        $data = [
             'iconOptions' => IconService::options('sprite', __('— No Icon —', 'child-theme')),
             'iconContentMap' => IconService::contentMap('sprite'),
-        ]);
+        ];
+
+        wp_add_inline_script(
+            $handle,
+            'var childThemeButtonIconData = ' . wp_json_encode($data) . ';',
+            'before'
+        );
     }
 
     /**

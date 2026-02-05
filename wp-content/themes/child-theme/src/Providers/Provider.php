@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChildTheme\Providers;
 
 use ParentTheme\Providers\Provider as BaseProvider;

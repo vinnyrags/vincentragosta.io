@@ -13,6 +13,20 @@ use ReflectionClass;
  */
 class ThemeTest extends BaseTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        // Reset the Theme singleton before each test
+        Theme::resetInstance();
+    }
+
+    protected function tearDown(): void
+    {
+        // Reset after each test to ensure clean state
+        Theme::resetInstance();
+        parent::tearDown();
+    }
+
     /**
      * Test that Theme can be instantiated.
      */
@@ -120,5 +134,18 @@ class ThemeTest extends BaseTestCase
         $this->assertContains('templates', $dirname);
         $this->assertContains('views', $dirname);
         $this->assertContains('blocks', $dirname);
+    }
+
+    /**
+     * Test that instantiating Theme twice throws an exception.
+     */
+    public function testDoubleInstantiationThrowsException(): void
+    {
+        new Theme();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Theme has already been initialized');
+
+        new Theme();
     }
 }

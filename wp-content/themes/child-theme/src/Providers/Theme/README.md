@@ -54,14 +54,6 @@ Registers custom block styles for `core/cover`:
 
 ## What It Adds
 
-### Admin Bar Hidden
-
-Hides the WordPress admin bar on the frontend:
-
-```php
-add_filter('show_admin_bar', '__return_false');
-```
-
 ### Theme Styles
 
 Enqueues `theme.css` for frontend styling related to the theme provider.

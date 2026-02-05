@@ -19,8 +19,7 @@
     "timber/timber": "2.x-dev"
   },
   "require-dev": {
-    "automattic/wordbless": "^0.4.2",
-    "yoast/wp-test-utils": "^1.0"
+    "automattic/wordbless": "^0.4.2"
   },
   "autoload": {
     "psr-4": {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChildTheme\Providers\Project;
 
 use ParentTheme\Models\Post;

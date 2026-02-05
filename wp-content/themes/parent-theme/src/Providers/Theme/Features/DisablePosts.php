@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers\Theme\Features;
 
 use ParentTheme\Providers\Contracts\Registrable;
@@ -40,13 +42,25 @@ class DisablePosts implements Registrable
         global $pagenow;
 
         if ($pagenow === 'edit.php' && ! isset($_GET['post_type'])) {
-            wp_redirect(admin_url());
-            exit;
+            wp_safe_redirect(admin_url());
+            $this->terminate();
         }
 
         if ($pagenow === 'post-new.php' && ! isset($_GET['post_type'])) {
-            wp_redirect(admin_url());
-            exit;
+            wp_safe_redirect(admin_url());
+            $this->terminate();
         }
+    }
+
+    /**
+     * Terminate script execution.
+     *
+     * Extracted to allow tests to override without killing the test runner.
+     *
+     * @codeCoverageIgnore
+     */
+    protected function terminate(): void
+    {
+        exit;
     }
 }

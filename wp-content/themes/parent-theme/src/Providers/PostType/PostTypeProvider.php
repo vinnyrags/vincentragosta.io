@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ParentTheme\Providers\PostType;
 
 use ParentTheme\Providers\Provider;
@@ -15,6 +17,8 @@ class PostTypeProvider extends Provider
     public function register(): void
     {
         add_action('init', [$this, 'registerPostTypes']);
+
+        parent::register();
     }
 
     /**
@@ -28,6 +32,10 @@ class PostTypeProvider extends Provider
         }
 
         $json_files = glob($config_dir . '*.json');
+        if ($json_files === false) {
+            return;
+        }
+
         foreach ($json_files as $file) {
             $this->registerFromConfig($file);
         }
@@ -39,13 +47,28 @@ class PostTypeProvider extends Provider
     protected function registerFromConfig(string $file): void
     {
         $content = file_get_contents($file);
+
+        if ($content === false) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log(sprintf('PostTypeProvider: Could not read config file: %s', $file));
+            return;
+        }
+
         $data = json_decode($content, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log(sprintf(
+                'PostTypeProvider: Invalid JSON in config file %s: %s',
+                $file,
+                json_last_error_msg()
+            ));
             return;
         }
 
         if (!isset($data['post_type'], $data['args'])) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log(sprintf('PostTypeProvider: Missing post_type or args in config file: %s', $file));
             return;
         }
 

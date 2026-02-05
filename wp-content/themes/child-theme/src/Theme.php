@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ChildTheme;
 
 use ChildTheme\Providers\Project\ProjectProvider;
