@@ -15,7 +15,7 @@ namespace ParentTheme\Services;
  */
 class IconService
 {
-    private string $name;
+    private readonly string $name;
     private ?string $resolvedPath = null;
     private ?string $type = null;
     private array $attributes = [];
@@ -180,7 +180,7 @@ class IconService
         $name = str_replace('\\', '/', $name);
 
         // Remove all directory traversal sequences
-        while (strpos($name, '..') !== false) {
+        while (str_contains($name, '..')) {
             $name = str_replace('..', '', $name);
         }
 
@@ -188,7 +188,7 @@ class IconService
         $name = preg_replace('#/+#', '/', $name);
 
         // If path starts with /, it's absolute - only keep basename
-        if (strpos($name, '/') === 0) {
+        if (str_starts_with($name, '/')) {
             $name = basename($name);
         }
 
@@ -280,7 +280,7 @@ class IconService
         }
 
         // For sprite content (no root <svg> tag), wrap it
-        if ($this->type === 'sprite' && stripos($content, '<svg') === false) {
+        if ($this->type === 'sprite' && !str_contains(strtolower($content), '<svg')) {
             return '<svg' . $attrString . ' xmlns="http://www.w3.org/2000/svg">' . $content . '</svg>';
         }
 

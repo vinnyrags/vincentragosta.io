@@ -288,11 +288,7 @@ class Repository implements RepositoryInterface
      */
     protected function buildArgs(array $args): array
     {
-        return array_merge(
-            $this->defaultArgs,
-            ['post_type' => $this->postType()],
-            $args
-        );
+        return [...$this->defaultArgs, 'post_type' => $this->postType(), ...$args];
     }
 
     /**

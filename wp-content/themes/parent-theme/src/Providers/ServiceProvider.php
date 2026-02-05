@@ -35,14 +35,12 @@ abstract class ServiceProvider implements Registrable
     protected ?AssetManager $assets = null;
     protected ?BlockManager $blockManager = null;
     protected ?FeatureManager $featureManager = null;
-    protected Container $container;
     protected string $configPath;
     protected string $textDomain;
 
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        protected readonly Container $container,
+    ) {}
 
     /**
      * Register the service provider.
@@ -139,9 +137,6 @@ abstract class ServiceProvider implements Registrable
 
     /**
      * Load a JSON configuration file from the provider's config directory.
-     *
-     * @param string $filename The config file name.
-     * @return array|null The decoded config array or null if not found/invalid.
      */
     protected function loadConfig(string $filename): ?array
     {

@@ -26,8 +26,6 @@ class Theme extends BaseTheme
 
     protected function getContainerDefinitions(): array
     {
-        return array_merge(parent::getContainerDefinitions(), [
-            get_stylesheet_directory() . '/src/config/container.php',
-        ]);
+        return [...parent::getContainerDefinitions(), get_stylesheet_directory() . '/src/config/container.php'];
     }
 }

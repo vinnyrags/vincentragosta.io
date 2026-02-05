@@ -193,27 +193,19 @@ class DisableBlocks implements Registrable
 
     /**
      * Filter allowed block types to remove disabled blocks.
-     *
-     * @param array|bool $allowedBlocks Array of allowed blocks or true for all.
-     * @param \WP_Block_Editor_Context $context The editor context.
-     * @return array|bool Filtered allowed blocks.
      */
-    public function filterAllowedBlocks($allowedBlocks, $context)
+    public function filterAllowedBlocks(array|bool $allowedBlocks, \WP_Block_Editor_Context $context): array|bool
     {
         $disabledBlocks = $this->getDisabledBlocks();
 
-        if (is_array($allowedBlocks)) {
-            return array_values(array_diff($allowedBlocks, $disabledBlocks));
-        }
-
-        if ($allowedBlocks === true) {
-            $registry = WP_Block_Type_Registry::get_instance();
-            $allBlocks = array_keys($registry->get_all_registered());
-
-            return array_values(array_diff($allBlocks, $disabledBlocks));
-        }
-
-        return $allowedBlocks;
+        return match (true) {
+            is_array($allowedBlocks) => array_values(array_diff($allowedBlocks, $disabledBlocks)),
+            $allowedBlocks === true => array_values(array_diff(
+                array_keys(WP_Block_Type_Registry::get_instance()->get_all_registered()),
+                $disabledBlocks,
+            )),
+            default => $allowedBlocks,
+        };
     }
 
     /**

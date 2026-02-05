@@ -13,18 +13,11 @@ use ParentTheme\Providers\Contracts\Registrable;
  */
 class FeatureManager
 {
-    /** @var array<class-string, bool> */
-    private array $features;
-    private Container $container;
-
-    /**
-     * @param array<class-string, bool> $features Normalized feature map.
-     */
-    public function __construct(array $features, Container $container)
-    {
-        $this->features = $features;
-        $this->container = $container;
-    }
+    public function __construct(
+        /** @var array<class-string, bool> */
+        private readonly array $features,
+        private readonly Container $container,
+    ) {}
 
     /**
      * Normalize a mixed features array into [class => bool].

@@ -45,7 +45,7 @@ class EnableSvgUploads implements Registrable
      * @param string|false $real_mime Real mime type from finfo.
      * @return array<string, string|false>
      */
-    public function fixSvgMimeType(array $data, string $file, string $filename, ?array $mimes, $real_mime): array
+    public function fixSvgMimeType(array $data, string $file, string $filename, ?array $mimes, string|false $real_mime): array
     {
         if (empty($data['ext']) || empty($data['type'])) {
             $ext = pathinfo($filename, PATHINFO_EXTENSION);
@@ -98,7 +98,7 @@ class EnableSvgUploads implements Registrable
      * @param string $content SVG content.
      * @return string|false Sanitized content or false on failure.
      */
-    protected function sanitizeSvgContent(string $content)
+    protected function sanitizeSvgContent(string $content): string|false
     {
         // Check for valid XML
         libxml_use_internal_errors(true);
@@ -128,7 +128,7 @@ class EnableSvgUploads implements Registrable
             $toRemove = [];
 
             foreach ($attributes as $attr) {
-                if (strpos($attr->name, 'on') === 0) {
+                if (str_starts_with($attr->name, 'on')) {
                     $toRemove[] = $attr->name;
                 }
             }
@@ -142,7 +142,7 @@ class EnableSvgUploads implements Registrable
         $hrefs = $xpath->query('//*[@href]');
         foreach ($hrefs as $element) {
             $href = $element->getAttribute('href');
-            if (stripos($href, 'javascript:') !== false) {
+            if (str_contains(strtolower($href), 'javascript:')) {
                 $element->removeAttribute('href');
             }
         }
@@ -151,7 +151,7 @@ class EnableSvgUploads implements Registrable
         $xlinks = $xpath->query('//*[@xlink:href]');
         foreach ($xlinks as $element) {
             $href = $element->getAttribute('xlink:href');
-            if (stripos($href, 'javascript:') !== false) {
+            if (str_contains(strtolower($href), 'javascript:')) {
                 $element->removeAttribute('xlink:href');
             }
         }

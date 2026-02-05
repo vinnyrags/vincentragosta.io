@@ -5,7 +5,7 @@
 
 use Timber\Timber;
 
-$inner_blocks = isset($block) ? $block->inner_blocks : [];
+$inner_blocks = $block?->inner_blocks ?? [];
 
 // Render inner blocks to HTML strings.
 $rendered_inner_blocks = [];

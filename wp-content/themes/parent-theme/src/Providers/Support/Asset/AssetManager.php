@@ -10,16 +10,11 @@ namespace ParentTheme\Providers\Support\Asset;
  */
 class AssetManager
 {
-    private string $slug;
-    private string $distPath;
-    private string $distUri;
-
-    public function __construct(string $slug, string $distPath, string $distUri)
-    {
-        $this->slug = $slug;
-        $this->distPath = $distPath;
-        $this->distUri = $distUri;
-    }
+    public function __construct(
+        private readonly string $slug,
+        private readonly string $distPath,
+        private readonly string $distUri,
+    ) {}
 
     /**
      * Convert a PascalCase class name to a kebab-case slug.
@@ -88,10 +83,6 @@ class AssetManager
 
     /**
      * Enqueue a stylesheet from the dist/css directory.
-     *
-     * @param string $handle   Unique handle for the stylesheet.
-     * @param string $filename Filename relative to dist/css.
-     * @param array  $deps     Optional. Dependencies array.
      */
     public function enqueueStyle(string $handle, string $filename, array $deps = []): void
     {
@@ -100,11 +91,6 @@ class AssetManager
 
     /**
      * Enqueue a script from the dist/js/{provider-slug}/ directory.
-     *
-     * @param string $handle   Unique handle for the script.
-     * @param string $filename Filename relative to dist/js/{provider-slug}/.
-     * @param array  $deps     Optional. Dependencies array.
-     * @param bool   $inFooter Optional. Whether to enqueue in footer. Default true.
      */
     public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void
     {
@@ -113,10 +99,6 @@ class AssetManager
 
     /**
      * Enqueue a stylesheet from any path relative to dist/.
-     *
-     * @param string $handle Unique handle for the stylesheet.
-     * @param string $path   Path relative to dist/ (e.g. 'blocks/style-index.css').
-     * @param array  $deps   Optional. Dependencies array.
      */
     public function enqueueDistStyle(string $handle, string $path, array $deps = []): void
     {
@@ -130,11 +112,6 @@ class AssetManager
 
     /**
      * Enqueue a script from any path relative to dist/.
-     *
-     * @param string $handle   Unique handle for the script.
-     * @param string $path     Path relative to dist/ (e.g. 'js/frontend.js').
-     * @param array  $deps     Optional. Dependencies array.
-     * @param bool   $inFooter Optional. Whether to enqueue in footer. Default true.
      */
     public function enqueueDistScript(string $handle, string $path, array $deps = [], bool $inFooter = true): void
     {
@@ -166,7 +143,7 @@ class AssetManager
         }
 
         $asset = require $assetFile;
-        $deps = array_unique(array_merge($asset['dependencies'], $extraDeps));
+        $deps = array_unique([...$asset['dependencies'], ...$extraDeps]);
         $uri = $this->distUri . '/' . $path;
 
         wp_enqueue_script($handle, $uri, $deps, $asset['version'], $inFooter);

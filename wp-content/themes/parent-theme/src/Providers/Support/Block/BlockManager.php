@@ -10,34 +10,14 @@ namespace ParentTheme\Providers\Support\Block;
  */
 class BlockManager
 {
-    private string $blocksPath;
-    private string $blocksUri;
-    private string $distPath;
-    private string $distUri;
-
-    /** @var string[] */
-    private array $blocks;
-
-    /**
-     * @param string   $blocksPath Absolute path to the blocks directory.
-     * @param string   $blocksUri  URI to the blocks directory.
-     * @param string   $distPath   Absolute path to the dist directory.
-     * @param string   $distUri    URI to the dist directory.
-     * @param string[] $blocks     Block directory names to register.
-     */
     public function __construct(
-        string $blocksPath,
-        string $blocksUri,
-        string $distPath,
-        string $distUri,
-        array $blocks = []
-    ) {
-        $this->blocksPath = $blocksPath;
-        $this->blocksUri = $blocksUri;
-        $this->distPath = $distPath;
-        $this->distUri = $distUri;
-        $this->blocks = $blocks;
-    }
+        private readonly string $blocksPath,
+        private readonly string $blocksUri,
+        private readonly string $distPath,
+        private readonly string $distUri,
+        /** @var string[] */
+        private readonly array $blocks = [],
+    ) {}
 
     /**
      * Get the blocks to register.
@@ -86,10 +66,6 @@ class BlockManager
      *
      * Block editor scripts are output directly to dist/js/ (not in a subdirectory)
      * and include standard WordPress block editor dependencies.
-     *
-     * @param string $handle   Unique handle for the script.
-     * @param string $filename Filename relative to dist/js/.
-     * @param array  $deps     Optional. Additional dependencies to merge with defaults.
      */
     public function enqueueEditorScript(string $handle, string $filename, array $deps = []): void
     {
@@ -109,7 +85,7 @@ class BlockManager
             'wp-data',
         ];
 
-        $allDeps = array_unique(array_merge($defaultDeps, $deps));
+        $allDeps = array_unique([...$defaultDeps, ...$deps]);
 
         wp_enqueue_script($handle, $uri, $allDeps, filemtime($path), true);
     }
