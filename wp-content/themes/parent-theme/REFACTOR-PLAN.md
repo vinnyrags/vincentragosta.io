@@ -84,7 +84,7 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | `composer.json` | PHP dependencies (Timber, etc.) |
 | `package.json` | NPM dependencies and build scripts |
 | `webpack.config.js` | Webpack configuration for blocks |
-| `scripts/compile-providers.js` | Provider asset auto-discovery (SCSS → CSS, JS → JS) |
+| `scripts/build-providers.js` | Provider asset auto-discovery (SCSS → CSS, JS → JS) |
 | `scripts/build-block-views.js` | Block view.js auto-discovery compiler |
 
 ---
@@ -161,10 +161,10 @@ dist/
 ```
 
 **Build Pipeline:**
-- `npm run compile-providers` → `dist/js/theme/frontend.js`, `dist/css/theme.css`
+- `npm run build-providers` → `dist/js/theme/frontend.js`, `dist/css/theme.css`
 - `npm run build-blocks` → `dist/blocks/index.js`, `dist/blocks/style-index.css`
 - `npm run build-block-views` → `dist/blocks/{block}-view.js` (auto-discovered)
-- `npm run compile-providers` → `dist/css/{provider}.css`, `dist/js/{provider}/*.js`
+- `npm run build-providers` → `dist/css/{provider}.css`, `dist/js/{provider}/*.js`
 - `npm run compile-theme-css` → `style.css` (root, required by WP)
 
 ---
@@ -223,7 +223,7 @@ parent-theme/
 │   └── partial/
 │       └── pagination.twig
 ├── scripts/
-│   └── compile-providers.js
+│   └── build-providers.js
 ├── dist/                      # Compiled output (gitignored)
 ├── composer.json
 ├── package.json

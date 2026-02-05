@@ -7,3 +7,4 @@
 - separate parent theme into its own composer repository
 - confirm that everything still compiles down to one dist directory in the theme root
 - change compile-providers to build-providers
+- do we really need /src/config? 

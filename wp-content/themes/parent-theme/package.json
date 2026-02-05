@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "A foundational WordPress parent theme providing PHP infrastructure and base frontend assets",
   "scripts": {
-    "compile-providers": "node scripts/compile-providers.js",
-    "watch-providers": "node scripts/compile-providers.js --watch",
-    "build": "npm run compile-providers",
+    "build-providers": "node scripts/build-providers.js",
+    "watch-providers": "node scripts/build-providers.js --watch",
+    "build": "npm run build-providers",
     "start": "npm run watch-providers"
   },
   "devDependencies": {

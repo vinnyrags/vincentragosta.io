@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * Compile Provider Assets
+ * Build Provider Assets
  *
- * Automatically discovers and compiles assets from all provider directories.
+ * Automatically discovers and builds assets from all provider directories.
+ * Uses process.cwd() as the theme root so child themes can run this script directly.
  *
  * Provider Assets:
  *   SCSS: src/Providers/[name]/assets/scss/index.scss => dist/css/[provider-name].css
@@ -16,8 +17,8 @@
  *   Editor Styles: src/Providers/[name]/blocks/[block]/editor/editor.scss => dist/css/[block-name]-editor.css
  *
  * Usage:
- *   node scripts/compile-providers.js          # Build once
- *   node scripts/compile-providers.js --watch  # Watch mode
+ *   node scripts/build-providers.js          # Build once
+ *   node scripts/build-providers.js --watch  # Watch mode
  */
 
 const fs = require('fs');
@@ -25,16 +26,26 @@ const path = require('path');
 const sass = require('sass');
 const esbuild = require('esbuild');
 
-const PROVIDERS_DIR = path.join(__dirname, '..', 'src', 'Providers');
-const DIST_DIR = path.join(__dirname, '..', 'dist');
+// Use process.cwd() so child themes can invoke this script from their own root
+const THEME_ROOT = process.cwd();
+const PROVIDERS_DIR = path.join(THEME_ROOT, 'src', 'Providers');
+const DIST_DIR = path.join(THEME_ROOT, 'dist');
 const CSS_OUTPUT_DIR = path.join(DIST_DIR, 'css');
 const JS_OUTPUT_DIR = path.join(DIST_DIR, 'js');
 const isWatch = process.argv.includes('--watch');
 
-// Path to parent theme breakpoints for SCSS compilation
-const PARENT_THEME_DIR = path.join(__dirname, '..', '..', 'parent-theme');
-const BREAKPOINTS_PATH = path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss', 'common', '_breakpoints.scss');
-const MIXINS_PATH = path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss', 'common', '_mixins.scss');
+/**
+ * Load optional theme-specific config file.
+ *
+ * If scripts/build-providers.config.js exists in the theme root, it may export:
+ *   - sassImports: string[] — absolute paths to SCSS files prepended to block SCSS
+ *   - sassLoadPaths: string[] — additional load paths for sass compiler
+ */
+let config = { sassImports: [], sassLoadPaths: [] };
+const configPath = path.join(THEME_ROOT, 'scripts', 'build-providers.config.js');
+if (fs.existsSync(configPath)) {
+    config = { ...config, ...require(configPath) };
+}
 
 /**
  * WordPress externals for block editor scripts
@@ -223,7 +234,7 @@ function compileScss(provider) {
         });
 
         fs.writeFileSync(provider.scss.outputPath, result.css);
-        console.log(`  SCSS: ${path.relative(process.cwd(), provider.scss.outputPath)}`);
+        console.log(`  SCSS: ${path.relative(THEME_ROOT, provider.scss.outputPath)}`);
         return true;
     } catch (error) {
         console.error(`  SCSS Error: ${error.message}`);
@@ -254,7 +265,7 @@ async function compileJs(provider) {
                 format: 'iife',
             });
 
-            console.log(`  JS: ${path.relative(process.cwd(), jsFile.outputPath)}`);
+            console.log(`  JS: ${path.relative(THEME_ROOT, jsFile.outputPath)}`);
         } catch (error) {
             console.error(`  JS Error (${path.basename(jsFile.inputPath)}): ${error.message}`);
             allSuccess = false;
@@ -281,15 +292,11 @@ async function compileBlockEditorScript(block) {
             sourcemap: isWatch,
             target: ['es2020'],
             format: 'iife',
-            // Use JSX loader for .js files (WordPress blocks use JSX)
             loader: { '.js': 'jsx' },
-            // Configure JSX to use WordPress element
             jsxFactory: 'wp.element.createElement',
             jsxFragment: 'wp.element.Fragment',
-            // Map WordPress packages to globals
             external: Object.keys(wpExternals),
             plugins: [
-                // Ignore CSS/SCSS imports (compiled separately)
                 {
                     name: 'ignore-styles',
                     setup(build) {
@@ -301,11 +308,9 @@ async function compileBlockEditorScript(block) {
                         });
                     },
                 },
-                // Handle WordPress externals
                 {
                     name: 'wordpress-externals',
                     setup(build) {
-                        // Rewrite imports to use WordPress globals
                         build.onResolve({ filter: /^@wordpress\// }, args => {
                             return { path: args.path, namespace: 'wp-external' };
                         });
@@ -324,7 +329,7 @@ async function compileBlockEditorScript(block) {
             ],
         });
 
-        console.log(`  Block Editor JS: ${path.relative(process.cwd(), block.editorScript.outputPath)}`);
+        console.log(`  Block Editor JS: ${path.relative(THEME_ROOT, block.editorScript.outputPath)}`);
         return true;
     } catch (error) {
         console.error(`  Block Editor JS Error (${block.name}): ${error.message}`);
@@ -351,7 +356,7 @@ async function compileBlockViewScript(block) {
             format: 'iife',
         });
 
-        console.log(`  Block View JS: ${path.relative(process.cwd(), block.viewScript.outputPath)}`);
+        console.log(`  Block View JS: ${path.relative(THEME_ROOT, block.viewScript.outputPath)}`);
         return true;
     } catch (error) {
         console.error(`  Block View JS Error (${block.name}): ${error.message}`);
@@ -360,33 +365,26 @@ async function compileBlockViewScript(block) {
 }
 
 /**
- * Build SCSS import statements for parent theme dependencies
+ * Build SCSS import statements from config
  */
 function getSassImports() {
-    const imports = [];
+    if (config.sassImports.length === 0) return '';
 
-    // Add breakpoints if available
-    if (fs.existsSync(BREAKPOINTS_PATH)) {
-        imports.push(`@use "${BREAKPOINTS_PATH.replace(/\\/g, '/')}" as *;`);
-    }
+    const imports = config.sassImports
+        .filter(p => fs.existsSync(p))
+        .map(p => `@use "${p.replace(/\\/g, '/')}" as *;`);
 
-    // Add mixins if available
-    if (fs.existsSync(MIXINS_PATH)) {
-        imports.push(`@use "${MIXINS_PATH.replace(/\\/g, '/')}" as *;`);
-    }
-
-    return imports.join('\n') + '\n';
+    return imports.length > 0 ? imports.join('\n') + '\n' : '';
 }
 
 /**
- * Compile SCSS with parent theme imports
+ * Compile SCSS with config-driven imports and load paths
  */
 function compileSassWithImports(inputPath, outputPath) {
     const imports = getSassImports();
     const originalContent = fs.readFileSync(inputPath, 'utf8');
     const contentWithImports = imports + originalContent;
 
-    // Create a temporary file with the imports prepended
     const tempDir = path.join(DIST_DIR, '.temp');
     ensureDir(tempDir);
     const tempFile = path.join(tempDir, path.basename(inputPath));
@@ -398,14 +396,13 @@ function compileSassWithImports(inputPath, outputPath) {
             sourceMap: false,
             loadPaths: [
                 path.dirname(inputPath),
-                path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss'),
+                ...config.sassLoadPaths,
             ],
         });
 
         fs.writeFileSync(outputPath, result.css);
         return true;
     } finally {
-        // Clean up temp file
         if (fs.existsSync(tempFile)) {
             fs.unlinkSync(tempFile);
         }
@@ -417,13 +414,24 @@ function compileSassWithImports(inputPath, outputPath) {
  */
 function compileBlockStyles(block) {
     let allSuccess = true;
+    const hasSassConfig = config.sassImports.length > 0;
 
     // Compile frontend style
     if (block.frontendStyle) {
         try {
             ensureDir(CSS_OUTPUT_DIR);
-            compileSassWithImports(block.frontendStyle.inputPath, block.frontendStyle.outputPath);
-            console.log(`  Block Style: ${path.relative(process.cwd(), block.frontendStyle.outputPath)}`);
+
+            if (hasSassConfig) {
+                compileSassWithImports(block.frontendStyle.inputPath, block.frontendStyle.outputPath);
+            } else {
+                const result = sass.compile(block.frontendStyle.inputPath, {
+                    style: 'expanded',
+                    sourceMap: false,
+                });
+                fs.writeFileSync(block.frontendStyle.outputPath, result.css);
+            }
+
+            console.log(`  Block Style: ${path.relative(THEME_ROOT, block.frontendStyle.outputPath)}`);
         } catch (error) {
             console.error(`  Block Style Error (${block.name}): ${error.message}`);
             allSuccess = false;
@@ -434,8 +442,18 @@ function compileBlockStyles(block) {
     if (block.editorStyle) {
         try {
             ensureDir(CSS_OUTPUT_DIR);
-            compileSassWithImports(block.editorStyle.inputPath, block.editorStyle.outputPath);
-            console.log(`  Block Editor Style: ${path.relative(process.cwd(), block.editorStyle.outputPath)}`);
+
+            if (hasSassConfig) {
+                compileSassWithImports(block.editorStyle.inputPath, block.editorStyle.outputPath);
+            } else {
+                const result = sass.compile(block.editorStyle.inputPath, {
+                    style: 'expanded',
+                    sourceMap: false,
+                });
+                fs.writeFileSync(block.editorStyle.outputPath, result.css);
+            }
+
+            console.log(`  Block Editor Style: ${path.relative(THEME_ROOT, block.editorStyle.outputPath)}`);
         } catch (error) {
             console.error(`  Block Editor Style Error (${block.name}): ${error.message}`);
             allSuccess = false;
@@ -526,9 +544,8 @@ async function watchProviders() {
         await compileProvider(provider);
     }
 
-    // Watch each provider's assets directory
+    // Watch each provider's assets and blocks directories
     for (const provider of providers) {
-        // Watch assets directory if it exists
         if (fs.existsSync(provider.assetsPath)) {
             fs.watch(provider.assetsPath, { recursive: true }, async (eventType, filename) => {
                 if (!filename) return;
@@ -543,13 +560,11 @@ async function watchProviders() {
             });
         }
 
-        // Watch blocks directory if it exists
         const blocksPath = path.join(provider.providerPath, 'blocks');
         if (fs.existsSync(blocksPath)) {
             fs.watch(blocksPath, { recursive: true }, async (eventType, filename) => {
                 if (!filename) return;
 
-                // Find which block was changed
                 const blockName = filename.split(path.sep)[0];
                 const block = provider.blocks.find(b => b.name === blockName);
 
@@ -560,7 +575,6 @@ async function watchProviders() {
                     compileBlockStyles(block);
                 } else if (filename.endsWith('.js')) {
                     console.log(`\nBlock JS change in ${provider.name}/${blockName}...`);
-                    // Check if it's a view script or editor script
                     if (filename.includes('frontend') && filename.includes('view.js')) {
                         await compileBlockViewScript(block);
                     } else {

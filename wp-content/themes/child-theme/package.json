@@ -8,9 +8,9 @@
   },
   "scripts": {
     "build-parent": "npm --prefix ../parent-theme run build",
-    "compile-providers": "node scripts/compile-providers.js",
-    "watch-providers": "node scripts/compile-providers.js --watch",
-    "build": "npm run build-parent && npm run compile-providers",
+    "build-providers": "node ../parent-theme/scripts/build-providers.js",
+    "watch-providers": "node ../parent-theme/scripts/build-providers.js --watch",
+    "build": "npm run build-parent && npm run build-providers",
     "watch-parent": "npm --prefix ../parent-theme run start",
     "start": "npm-run-all --parallel watch-parent watch-providers",
     "prepare": "cd ../../.. && husky wp-content/themes/child-theme/.husky",
