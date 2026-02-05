@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Tests\Integration\Providers;
 
-use ParentTheme\Providers\ThemeService\Features\DisableComments;
+use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 

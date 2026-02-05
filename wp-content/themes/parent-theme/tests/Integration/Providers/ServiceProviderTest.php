@@ -4,10 +4,62 @@ namespace ParentTheme\Tests\Integration\Providers;
 
 use ParentTheme\Providers\ServiceProvider;
 use ParentTheme\Providers\Contracts\Registrable;
-use ParentTheme\Providers\Contracts\HasAssets;
-use ParentTheme\Providers\Contracts\HasBlocks;
+use ParentTheme\Providers\Support\Feature\FeatureManager;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
+
+// Test feature stubs for collectFeatures tests.
+class StubFeatureOne implements Registrable
+{
+    public function register(): void
+    {
+    }
+}
+
+class StubFeatureTwo implements Registrable
+{
+    public function register(): void
+    {
+    }
+}
+
+class StubFeatureThree implements Registrable
+{
+    public function register(): void
+    {
+    }
+}
+
+// Simulates a parent-level provider with features.
+class StubParentProvider extends ServiceProvider
+{
+    protected array $features = [
+        StubFeatureOne::class,
+        StubFeatureTwo::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a child provider that adds its own feature and disables a parent one.
+class StubChildProvider extends StubParentProvider
+{
+    protected array $features = [
+        StubFeatureThree::class,
+        StubFeatureTwo::class => false,
+    ];
+}
+
+// Simulates a child provider that inherits all parent features without changes.
+class StubChildNoOverrideProvider extends StubParentProvider
+{
+    protected array $features = [
+        StubFeatureThree::class,
+    ];
+}
 
 /**
  * Integration tests for the abstract ServiceProvider class.
@@ -37,186 +89,111 @@ class ServiceProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that ServiceProvider implements HasAssets.
-     */
-    public function testImplementsHasAssets(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertInstanceOf(HasAssets::class, $provider);
-    }
-
-    /**
-     * Test that ServiceProvider has features property.
-     */
-    public function testHasFeaturesProperty(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $reflection = new ReflectionClass($provider);
-        $property = $reflection->getProperty('features');
-        $property->setAccessible(true);
-
-        $features = $property->getValue($provider);
-        $this->assertIsArray($features);
-    }
-
-    /**
      * Test that register method calls registerFeatures.
      */
     public function testRegisterCallsRegisterFeatures(): void
     {
         $provider = $this->createConcreteProvider();
-
-        // If register() runs without error, registerFeatures was called
         $provider->register();
         $this->assertTrue(true);
     }
 
     /**
-     * Test that ServiceProvider with features registers them.
+     * Test that boot creates a FeatureManager instance.
      */
-    public function testFeaturesAreRegistered(): void
+    public function testBootCreatesFeatureManager(): void
     {
-        // Create a test feature class
-        $featureRegistered = false;
-
-        $feature = new class($featureRegistered) implements Registrable {
-            private bool $registered;
-
-            public function __construct(bool &$registered)
-            {
-                $this->registered = &$registered;
-            }
-
-            public function register(): void
-            {
-                $this->registered = true;
-            }
-        };
-
-        // We can't easily inject features, but we can verify the mechanism works
-        // by checking the registerFeatures method exists and is called
         $provider = $this->createConcreteProvider();
+        $provider->register();
+
         $reflection = new ReflectionClass($provider);
-
-        $this->assertTrue($reflection->hasMethod('registerFeatures'));
-
-        $method = $reflection->getMethod('registerFeatures');
-        $this->assertTrue($method->isProtected());
-    }
-
-    /**
-     * Test that provider has enqueueStyle method from HasAssets trait.
-     */
-    public function testHasEnqueueStyleMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'enqueueStyle'));
-    }
-
-    /**
-     * Test that provider has enqueueScript method from HasAssets trait.
-     */
-    public function testHasEnqueueScriptMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'enqueueScript'));
-    }
-
-    /**
-     * Test that ServiceProvider implements HasBlocks.
-     */
-    public function testImplementsHasBlocks(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertInstanceOf(HasBlocks::class, $provider);
-    }
-
-    /**
-     * Test that ServiceProvider has blocks property.
-     */
-    public function testHasBlocksProperty(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $reflection = new ReflectionClass($provider);
-        $property = $reflection->getProperty('blocks');
+        $property = $reflection->getProperty('featureManager');
         $property->setAccessible(true);
 
-        $blocks = $property->getValue($provider);
-        $this->assertIsArray($blocks);
+        $this->assertInstanceOf(FeatureManager::class, $property->getValue($provider));
     }
 
     /**
-     * Test that provider has getBlocks method from HasBlocks trait.
+     * Test that collectFeatures returns empty for base provider with no features.
      */
-    public function testHasGetBlocksMethod(): void
+    public function testCollectFeaturesReturnsEmptyForBaseProvider(): void
     {
         $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'getBlocks'));
-        $this->assertIsArray($provider->getBlocks());
-    }
 
-    /**
-     * Test that provider has getBlocksPath method from HasBlocks trait.
-     */
-    public function testHasGetBlocksPathMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'getBlocksPath'));
-        $this->assertIsString($provider->getBlocksPath());
-    }
-
-    /**
-     * Test that provider has registerBlocks method from HasBlocks trait.
-     */
-    public function testHasRegisterBlocksMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'registerBlocks'));
-    }
-
-    /**
-     * Test that provider has enqueueBlockAssets method from HasBlocks trait.
-     */
-    public function testHasEnqueueBlockAssetsMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'enqueueBlockAssets'));
-    }
-
-    /**
-     * Test that provider has enqueueBlockEditorAssets method from HasBlocks trait.
-     */
-    public function testHasEnqueueBlockEditorAssetsMethod(): void
-    {
-        $provider = $this->createConcreteProvider();
-        $this->assertTrue(method_exists($provider, 'enqueueBlockEditorAssets'));
-    }
-
-    /**
-     * Test that register method calls initializeBlocks.
-     */
-    public function testRegisterCallsInitializeBlocks(): void
-    {
-        $provider = $this->createConcreteProvider();
         $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
 
-        $this->assertTrue($reflection->hasMethod('initializeBlocks'));
-
-        $method = $reflection->getMethod('initializeBlocks');
-        $this->assertTrue($method->isProtected());
+        $this->assertSame([], $method->invoke($provider));
     }
 
     /**
-     * Test that provider has enqueueEditorScript method from HasBlocks trait.
+     * Test that collectFeatures merges parent features into a child provider.
      */
-    public function testHasEnqueueEditorScriptMethod(): void
+    public function testCollectFeaturesMergesParentAndChild(): void
     {
-        $provider = $this->createConcreteProvider();
+        $provider = new StubChildNoOverrideProvider();
+
         $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
 
-        $this->assertTrue($reflection->hasMethod('enqueueEditorScript'));
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features);
+        $enabled = $manager->getEnabled();
 
-        $method = $reflection->getMethod('enqueueEditorScript');
-        $this->assertTrue($method->isProtected());
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureTwo::class, $enabled);
+        $this->assertContains(StubFeatureThree::class, $enabled);
+        $this->assertCount(3, $enabled);
+    }
+
+    /**
+     * Test that a child provider can opt out of a parent feature.
+     */
+    public function testCollectFeaturesChildOptOutDisablesParentFeature(): void
+    {
+        $provider = new StubChildProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features);
+
+        // StubFeatureTwo was disabled by child
+        $this->assertFalse($manager->isEnabled(StubFeatureTwo::class));
+        $this->assertContains(StubFeatureTwo::class, $manager->getDisabled());
+
+        // Other features remain enabled
+        $this->assertTrue($manager->isEnabled(StubFeatureOne::class));
+        $this->assertTrue($manager->isEnabled(StubFeatureThree::class));
+
+        $enabled = $manager->getEnabled();
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureThree::class, $enabled);
+        $this->assertNotContains(StubFeatureTwo::class, $enabled);
+        $this->assertCount(2, $enabled);
+    }
+
+    /**
+     * Test that a parent provider's features are collected without a child.
+     */
+    public function testCollectFeaturesParentOnly(): void
+    {
+        $provider = new StubParentProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features);
+        $enabled = $manager->getEnabled();
+
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureTwo::class, $enabled);
+        $this->assertCount(2, $enabled);
     }
 }

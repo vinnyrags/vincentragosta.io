@@ -3,9 +3,9 @@
 namespace ChildTheme\Tests\Integration;
 
 use ChildTheme\Theme;
-use ChildTheme\Providers\ProjectService\ProjectServiceProvider;
-use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
-use ChildTheme\Providers\TwigService\TwigServiceProvider;
+use ChildTheme\Providers\Project\ProjectProvider;
+use ChildTheme\Providers\Theme\ThemeProvider;
+use ChildTheme\Providers\Twig\TwigProvider;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -58,9 +58,9 @@ class ThemeTest extends BaseTestCase
 
         $providers = $property->getValue($this->theme);
 
-        $this->assertContains(ThemeServiceProvider::class, $providers);
-        $this->assertContains(ProjectServiceProvider::class, $providers);
-        $this->assertContains(TwigServiceProvider::class, $providers);
+        $this->assertContains(ThemeProvider::class, $providers);
+        $this->assertContains(ProjectProvider::class, $providers);
+        $this->assertContains(TwigProvider::class, $providers);
     }
 
     /**

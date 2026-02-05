@@ -6,11 +6,9 @@ Child theme providers extend the parent theme's base providers to add site-speci
 
 | Provider | Extends | Purpose |
 |----------|---------|---------|
-| [AssetService](./AssetService/) | Parent | Adds Google Fonts and preconnects |
-| [BlockService](./BlockService/) | Base | Custom blocks and button icon enhancement |
-| [PostTypeService](./PostTypeService/) | Parent | Site-specific post type configuration |
-| [ThemeService](./ThemeService/) | Parent | Site-specific theme supports and features |
-| [TwigService](./TwigService/) | Parent | Adds `icon()` function |
+| [Theme](./Theme/) | Parent | Site-specific theme supports, features, and blocks |
+| [Project](./Project/) | Base | Project post type and projects block |
+| [Twig](./Twig/) | Parent | Adds `icon()` function |
 
 ## Provider Registration
 
@@ -19,38 +17,34 @@ Providers are registered in the `Theme` class:
 ```php
 namespace ChildTheme;
 
-use ChildTheme\Providers\AssetService\AssetServiceProvider;
-use ChildTheme\Providers\BlockService\BlockServiceProvider;
-use ChildTheme\Providers\PostTypeService\PostTypeServiceProvider;
-use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
-use ChildTheme\Providers\TwigService\TwigServiceProvider;
+use ChildTheme\Providers\Theme\ThemeProvider;
+use ChildTheme\Providers\Project\ProjectProvider;
+use ChildTheme\Providers\Twig\TwigProvider;
 use ParentTheme\Theme as BaseTheme;
 
 class Theme extends BaseTheme
 {
     protected array $providers = [
-        ThemeServiceProvider::class,
-        AssetServiceProvider::class,
-        BlockServiceProvider::class,
-        PostTypeServiceProvider::class,
-        TwigServiceProvider::class,
+        ThemeProvider::class,
+        ProjectProvider::class,
+        TwigProvider::class,
     ];
 }
 ```
 
 ## Adding New Providers
 
-1. Create a new directory under `Providers/` (e.g., `MyService/`)
+1. Create a new directory under `Providers/` (e.g., `MyFeature/`)
 2. Create a provider class extending `ServiceProvider` (or a parent provider)
 3. Add a `README.md` documenting the provider
 4. Add to the providers array in `Theme.php`
 
 ```php
-namespace ChildTheme\Providers\MyService;
+namespace ChildTheme\Providers\MyFeature;
 
 use ParentTheme\Providers\ServiceProvider;
 
-class MyServiceProvider extends ServiceProvider
+class MyFeatureProvider extends ServiceProvider
 {
     public function register(): void
     {

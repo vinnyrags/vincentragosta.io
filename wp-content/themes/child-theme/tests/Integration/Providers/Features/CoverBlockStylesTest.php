@@ -2,7 +2,7 @@
 
 namespace ChildTheme\Tests\Integration\Providers\Features;
 
-use ChildTheme\Providers\ThemeService\Features\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 

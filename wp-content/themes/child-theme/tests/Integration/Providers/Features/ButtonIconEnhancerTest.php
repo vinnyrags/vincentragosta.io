@@ -2,7 +2,7 @@
 
 namespace ChildTheme\Tests\Integration\Providers\Features;
 
-use ChildTheme\Providers\ThemeService\Features\ButtonIconEnhancer;
+use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 

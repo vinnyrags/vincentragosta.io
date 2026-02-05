@@ -9,9 +9,9 @@ Service providers handle specific areas of theme functionality. Each provider is
 All providers extend `ServiceProvider`, which implements:
 
 - `Registrable` interface (requires `register()` method)
-- `HasAssets` interface with trait (provides asset enqueueing helpers)
-- `HasBlocks` interface with trait (provides block registration capabilities)
-- Feature registration system
+- [`AssetManager`](./Support/Asset/) composition (provides asset enqueueing helpers)
+- [`BlockManager`](./Support/Block/) composition (provides block registration capabilities)
+- [`FeatureManager`](./Support/Feature/) composition (provides feature registration with inheritance and opt-out)
 
 ```php
 use ParentTheme\Providers\ServiceProvider;
@@ -80,10 +80,10 @@ Additional dependencies can be passed as the third argument.
 
 ### Features
 
-Features are smaller, focused classes that handle a single responsibility. They implement `Registrable` and are automatically instantiated by their parent provider.
+Features are smaller, focused classes that handle a single responsibility. They implement `Registrable` and are automatically instantiated and registered by the `FeatureManager`.
 
 ```php
-use ParentTheme\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Registrable;
 
 class MyFeature implements Registrable
 {
@@ -94,25 +94,34 @@ class MyFeature implements Registrable
 }
 ```
 
+Features are inherited automatically from parent providers. Child providers only need to declare their own features, and can opt out of inherited features using `=> false`:
+
+```php
+// Child provider -- parent features are inherited automatically
+protected array $features = [
+    MyChildFeature::class,
+    SomeParentFeature::class => false,  // disable inherited feature
+];
+```
+
 ## Available Providers
 
 | Provider | Purpose |
 |----------|---------|
-| [AssetService](./AssetService/) | Frontend and editor asset enqueueing |
-| [PostTypeService](./PostTypeService/) | Custom post type registration from JSON config |
-| [TwigService](./TwigService/) | Custom Twig functions and filters |
-| [ThemeService](./ThemeService/) | Theme supports and core features |
+| [PostType](./PostType/) | Custom post type registration from JSON config |
+| [Twig](./Twig/) | Custom Twig functions and filters |
+| [Theme](./Theme/) | Theme supports and core features |
 
 ## Extending in Child Themes
 
 Child themes can extend parent providers to add or modify functionality:
 
 ```php
-namespace ChildTheme\Providers\AssetService;
+namespace ChildTheme\Providers\Theme;
 
-use ParentTheme\Providers\AssetService\AssetServiceProvider as BaseAssetServiceProvider;
+use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
 
-class AssetServiceProvider extends BaseAssetServiceProvider
+class ThemeProvider extends BaseThemeProvider
 {
     protected string $handlePrefix = 'child-theme';
 

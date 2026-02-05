@@ -2,9 +2,9 @@
 
 namespace ChildTheme;
 
-use ChildTheme\Providers\ProjectService\ProjectServiceProvider;
-use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
-use ChildTheme\Providers\TwigService\TwigServiceProvider;
+use ChildTheme\Providers\Project\ProjectProvider;
+use ChildTheme\Providers\Theme\ThemeProvider;
+use ChildTheme\Providers\Twig\TwigProvider;
 use ParentTheme\Theme as BaseTheme;
 
 /**
@@ -21,8 +21,8 @@ class Theme extends BaseTheme
      * @var array<class-string>
      */
     protected array $providers = [
-        ThemeServiceProvider::class,
-        ProjectServiceProvider::class,
-        TwigServiceProvider::class,
+        ThemeProvider::class,
+        ProjectProvider::class,
+        TwigProvider::class,
     ];
 }
