@@ -48,6 +48,7 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
     {
         // Add site-specific hooks
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
+        add_action('wp_head', [$this, 'addFontPreconnects']);
         add_filter('show_admin_bar', '__return_false');
 
         // Block editor assets and data localization
@@ -63,7 +64,24 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
      */
     public function enqueueAssets(): void
     {
+        // Google Fonts
+        wp_enqueue_style(
+            'fira-code-font',
+            'https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap',
+            [],
+            null
+        );
+
         $this->enqueueStyle('child-theme-theme-service', 'theme-service.css');
+    }
+
+    /**
+     * Add preconnect links for Google Fonts.
+     */
+    public function addFontPreconnects(): void
+    {
+        echo '<link rel="preconnect" href="https://fonts.googleapis.com">' . "\n";
+        echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
     }
 
     /**
@@ -71,6 +89,8 @@ class ThemeServiceProvider extends BaseThemeServiceProvider
      */
     public function enqueueBlockAssets(): void
     {
+        parent::enqueueBlockAssets();
+
         $this->enqueueStyle('child-theme-shutter-cards-block', 'shutter-cards.css');
         $this->enqueueStyle('child-theme-shutter-card-block', 'shutter-card.css');
 

@@ -2,7 +2,6 @@
 
 namespace ChildTheme;
 
-use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use ChildTheme\Providers\ProjectService\ProjectServiceProvider;
 use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
 use ChildTheme\Providers\TwigService\TwigServiceProvider;
@@ -23,7 +22,6 @@ class Theme extends BaseTheme
      */
     protected array $providers = [
         ThemeServiceProvider::class,
-        AssetServiceProvider::class,
         ProjectServiceProvider::class,
         TwigServiceProvider::class,
     ];

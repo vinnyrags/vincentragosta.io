@@ -103,12 +103,33 @@ class ThemeServiceProviderTest extends BaseTestCase
 
         $this->assertGreaterThan(
             0,
+            has_action('wp_head', [$this->provider, 'addFontPreconnects'])
+        );
+
+        $this->assertGreaterThan(
+            0,
             has_action('enqueue_block_editor_assets', [$this->provider, 'enqueueButtonEditorAssets'])
         );
 
         $this->assertGreaterThan(
             0,
             has_action('enqueue_block_editor_assets', [$this->provider, 'localizeEditorData'])
+        );
+
+        // Core asset hooks (inherited from parent ThemeServiceProvider)
+        $this->assertGreaterThan(
+            0,
+            has_action('wp_enqueue_scripts', [$this->provider, 'enqueueFrontendAssets'])
+        );
+
+        $this->assertGreaterThan(
+            0,
+            has_action('enqueue_block_editor_assets', [$this->provider, 'enqueueEditorAssets'])
+        );
+
+        $this->assertGreaterThan(
+            0,
+            has_action('enqueue_block_assets', [$this->provider, 'enqueueBlockAssets'])
         );
     }
 
@@ -143,6 +164,14 @@ class ThemeServiceProviderTest extends BaseTestCase
 
         $this->assertDirectoryExists($blocksPath . '/shutter-card');
         $this->assertFileExists($blocksPath . '/shutter-card/block.json');
+    }
+
+    /**
+     * Test that provider has addFontPreconnects method.
+     */
+    public function testHasAddFontPreconnectsMethod(): void
+    {
+        $this->assertTrue(method_exists($this->provider, 'addFontPreconnects'));
     }
 
     /**

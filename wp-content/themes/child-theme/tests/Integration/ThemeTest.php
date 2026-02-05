@@ -3,7 +3,6 @@
 namespace ChildTheme\Tests\Integration;
 
 use ChildTheme\Theme;
-use ChildTheme\Providers\AssetService\AssetServiceProvider;
 use ChildTheme\Providers\ProjectService\ProjectServiceProvider;
 use ChildTheme\Providers\ThemeService\ThemeServiceProvider;
 use ChildTheme\Providers\TwigService\TwigServiceProvider;
@@ -60,7 +59,6 @@ class ThemeTest extends BaseTestCase
         $providers = $property->getValue($this->theme);
 
         $this->assertContains(ThemeServiceProvider::class, $providers);
-        $this->assertContains(AssetServiceProvider::class, $providers);
         $this->assertContains(ProjectServiceProvider::class, $providers);
         $this->assertContains(TwigServiceProvider::class, $providers);
     }
