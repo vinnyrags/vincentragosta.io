@@ -64,7 +64,7 @@ This document outlines the plan to separate core WordPress infrastructure into a
 | `404.php` | 404 template delegator |
 | `index.php` | Main template fallback |
 
-### SCSS Assets (`assets/src/scss/`)
+### SCSS Assets (`src/Providers/Theme/assets/scss/`)
 
 | Directory/File | Description |
 |----------------|-------------|
@@ -124,10 +124,10 @@ This document outlines the plan to separate core WordPress infrastructure into a
 
 | File | Description |
 |------|-------------|
-| `assets/src/scss/layout/_header.scss` | Header styling |
-| `assets/src/js/header.js` | Header behavior (mode toggle, menu) |
-| `assets/src/js/formats.js` | Custom editor formats |
-| `assets/src/scss/main.scss` | Main stylesheet entry (imports parent + overrides) |
+| `src/Providers/Theme/assets/scss/layout/_header.scss` | Header styling |
+| `src/Providers/Theme/assets/js/header.js` | Header behavior (mode toggle, menu) |
+| `src/Providers/Theme/assets/js/formats.js` | Custom editor formats |
+| `src/Providers/Theme/assets/scss/index.scss` | Main stylesheet entry (imports parent + overrides) |
 
 ### Configuration
 
@@ -161,7 +161,7 @@ dist/
 ```
 
 **Build Pipeline:**
-- `npm run build-assets` → `dist/js/main.js`, `dist/js/frontend.js`
+- `npm run compile-providers` → `dist/js/theme/frontend.js`, `dist/css/theme.css`
 - `npm run build-blocks` → `dist/blocks/index.js`, `dist/blocks/style-index.css`
 - `npm run build-block-views` → `dist/blocks/{block}-view.js` (auto-discovered)
 - `npm run compile-providers` → `dist/css/{provider}.css`, `dist/js/{provider}/*.js`
@@ -222,24 +222,8 @@ parent-theme/
 │   ├── sidebar.twig
 │   └── partial/
 │       └── pagination.twig
-├── assets/
-│   └── src/
-│       └── scss/
-│           ├── common/
-│           │   ├── _breakpoints.scss
-│           │   ├── _function.scss
-│           │   ├── _animation.scss
-│           │   └── _layout.scss
-│           ├── utilities/
-│           │   ├── _display.scss
-│           │   └── _text.scss
-│           ├── elements/
-│           │   ├── _headings.scss
-│           │   └── _block-text.scss
-│           └── main.scss
 ├── scripts/
-│   ├── compile-providers.js
-│   └── build-block-views.js
+│   └── compile-providers.js
 ├── dist/                      # Compiled output (gitignored)
 ├── composer.json
 ├── package.json
@@ -280,17 +264,6 @@ vincentragosta/
 │   ├── projects/
 │   ├── shutter-cards/
 │   └── shutter-card/
-├── assets/
-│   └── src/
-│       ├── scss/
-│       │   ├── layout/
-│       │   │   └── _header.scss
-│       │   └── main.scss
-│       └── js/
-│           ├── main.js
-│           ├── frontend.js
-│           ├── header.js
-│           └── formats.js
 ├── config/
 │   └── project.json
 └── dist/                      # Compiled output (gitignored)

@@ -79,20 +79,20 @@ class ThemeProvider extends ServiceProvider
      */
     public function enqueueFrontendAssets(): void
     {
-        // Parent theme's main.css uses get_template_directory() (parent path),
+        // Parent theme's theme.css uses get_template_directory() (parent path),
         // while AssetManager uses get_stylesheet_directory() (active theme path).
         // Keep this as a direct call to preserve the correct base path.
-        $parent_style_path = get_template_directory() . '/dist/css/main.css';
+        $parent_style_path = get_template_directory() . '/dist/css/theme.css';
         if (file_exists($parent_style_path)) {
             wp_enqueue_style(
                 $this->handlePrefix . '-style',
-                get_template_directory_uri() . '/dist/css/main.css',
+                get_template_directory_uri() . '/dist/css/theme.css',
                 [],
                 filemtime($parent_style_path)
             );
         }
 
-        $this->enqueueDistScript($this->handlePrefix . '-frontend-js', 'js/frontend.js');
+        $this->enqueueScript($this->handlePrefix . '-frontend-js', 'frontend.js');
     }
 
     /**
@@ -101,13 +101,6 @@ class ThemeProvider extends ServiceProvider
     public function enqueueEditorAssets(): void
     {
         $this->enqueueManifestScript($this->handlePrefix . '-blocks-js', 'blocks/index.js');
-        $this->enqueueManifestScript($this->handlePrefix . '-js', 'js/main.js', ['wp-element']);
-
-        wp_set_script_translations(
-            $this->handlePrefix . '-js',
-            $this->handlePrefix,
-            get_stylesheet_directory() . '/languages'
-        );
     }
 
     /**

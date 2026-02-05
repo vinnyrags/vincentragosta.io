@@ -221,8 +221,8 @@ class DisableBlocks implements Registrable
      */
     public function enqueueEditorAssets(): void
     {
-        $script_path = get_template_directory() . '/assets/src/js/disable-blocks.js';
-        $script_url = get_template_directory_uri() . '/assets/src/js/disable-blocks.js';
+        $script_path = get_template_directory() . '/dist/js/theme/disable-blocks.js';
+        $script_url = get_template_directory_uri() . '/dist/js/theme/disable-blocks.js';
 
         if (!file_exists($script_path)) {
             return;

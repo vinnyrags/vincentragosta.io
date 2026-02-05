@@ -33,8 +33,8 @@ const isWatch = process.argv.includes('--watch');
 
 // Path to parent theme breakpoints for SCSS compilation
 const PARENT_THEME_DIR = path.join(__dirname, '..', '..', 'parent-theme');
-const BREAKPOINTS_PATH = path.join(PARENT_THEME_DIR, 'assets', 'src', 'scss', 'common', '_breakpoints.scss');
-const MIXINS_PATH = path.join(PARENT_THEME_DIR, 'assets', 'src', 'scss', 'common', '_mixins.scss');
+const BREAKPOINTS_PATH = path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss', 'common', '_breakpoints.scss');
+const MIXINS_PATH = path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss', 'common', '_mixins.scss');
 
 /**
  * WordPress externals for block editor scripts
@@ -398,7 +398,7 @@ function compileSassWithImports(inputPath, outputPath) {
             sourceMap: false,
             loadPaths: [
                 path.dirname(inputPath),
-                path.join(PARENT_THEME_DIR, 'assets', 'src', 'scss'),
+                path.join(PARENT_THEME_DIR, 'src', 'Providers', 'Theme', 'assets', 'scss'),
             ],
         });
 

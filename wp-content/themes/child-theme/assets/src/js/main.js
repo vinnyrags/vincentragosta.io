@@ -1,1 +1,0 @@
-// Child theme editor scripts

@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "A foundational WordPress parent theme providing PHP infrastructure and base frontend assets",
   "scripts": {
-    "compile-theme-css": "sass assets/src/scss/main.scss dist/css/main.css --no-source-map --style=expanded",
-    "watch-theme-css": "sass assets/src/scss/main.scss dist/css/main.css --no-source-map --style=expanded --watch",
-    "build": "npm run compile-theme-css",
-    "start": "npm run watch-theme-css"
+    "compile-providers": "node scripts/compile-providers.js",
+    "watch-providers": "node scripts/compile-providers.js --watch",
+    "build": "npm run compile-providers",
+    "start": "npm run watch-providers"
   },
   "devDependencies": {
+    "esbuild": "^0.25.1",
     "sass": "^1.86.0"
   }
 }

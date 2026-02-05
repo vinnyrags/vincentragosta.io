@@ -7,14 +7,12 @@
     "test": "tests"
   },
   "scripts": {
-    "build-assets": "wp-scripts build assets/src/js/main.js assets/src/js/frontend.js --output-path=dist/js",
     "build-parent": "npm --prefix ../parent-theme run build",
     "compile-providers": "node scripts/compile-providers.js",
     "watch-providers": "node scripts/compile-providers.js --watch",
-    "build": "npm run build-parent && npm run build-assets && npm run compile-providers",
-    "start-assets": "wp-scripts start assets/src/js/main.js assets/src/js/frontend.js --output-path=dist/js",
+    "build": "npm run build-parent && npm run compile-providers",
     "watch-parent": "npm --prefix ../parent-theme run start",
-    "start": "npm-run-all --parallel start-assets watch-parent watch-providers",
+    "start": "npm-run-all --parallel watch-parent watch-providers",
     "prepare": "cd ../../.. && husky wp-content/themes/child-theme/.husky",
     "test:php": "composer test",
     "test:php:parent": "composer --working-dir=../parent-theme test",

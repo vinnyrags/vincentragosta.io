@@ -37,24 +37,11 @@ make watch
 
 ```
 child-theme/
-├── assets/
-│   └── src/
-│       ├── js/                    # JavaScript source files
-│       └── scss/                  # SCSS source files
-│           ├── common/            # Shared styles & utilities
-│           ├── elements/          # Element-level styles
-│           ├── layout/            # Layout components
-│           └── main.scss          # Main entry point
-├── blocks/                        # Custom Gutenberg blocks
-│   ├── hero/
-│   ├── projects/
-│   ├── shutter-card/
-│   └── shutter-cards/
 ├── config/                        # JSON configuration files
 │   └── *.json                     # Post type definitions
 ├── dist/                          # Compiled assets (gitignored)
 ├── src/
-│   ├── Providers/                 # Service providers
+│   ├── Providers/                 # Service providers (assets live here)
 │   ├── Services/
 │   │   └── IconService.php        # SVG icon handling
 │   └── Theme.php                  # Main theme class
@@ -289,11 +276,11 @@ Breakpoints: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1440px)
 
 | Source | Output |
 |--------|--------|
-| `assets/src/scss/main.scss` | `dist/css/main.css` |
-| `src/Providers/*/assets/scss/*.scss` | `dist/css/{provider}.css` |
+| `src/Providers/*/assets/scss/index.scss` | `dist/css/{provider}.css` |
 | `src/Providers/*/assets/js/*.js` | `dist/js/{provider}/*.js` |
-| `blocks/*/index.js` | `dist/blocks/` |
-| `blocks/*/view.js` | `dist/blocks/*-view.js` |
+| `src/Providers/*/blocks/*/editor/index.js` | `dist/js/{block}.js` |
+| `src/Providers/*/blocks/*/frontend/view.js` | `dist/js/{block}-view.js` |
+| `src/Providers/*/blocks/*/frontend/style.scss` | `dist/css/{block}.css` |
 
 ---
 
@@ -381,8 +368,8 @@ git commit --no-verify
 
 ### Adding Icons
 
-- **Sprite icons:** Add SVG to `assets/images/svg-sprite/`
-- **Standalone SVGs:** Add to `assets/images/svg/`
+- **Sprite icons:** Add SVG to `src/Providers/Theme/assets/images/svg-sprite/`
+- **Standalone SVGs:** Add to `src/Providers/Theme/assets/images/svg/`
 - **In Twig:** `{{ icon('icon-name') }}`
 - **In PHP:** `new IconService('icon-name')`
 

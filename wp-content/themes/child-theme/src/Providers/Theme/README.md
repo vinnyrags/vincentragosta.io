@@ -152,8 +152,16 @@ Theme/
 │   ├── ButtonIconEnhancer.php
 │   └── CoverBlockStyles.php
 ├── assets/
+│   ├── fonts/                     # Custom web fonts
+│   │   ├── reckless-neue/
+│   │   └── roobert/
+│   ├── images/                    # SVG icons and images
+│   │   ├── svg-sprite/            # Sprite icons (icon-arrow, etc.)
+│   │   └── svg/                   # Standalone SVGs
 │   ├── js/
-│   │   └── button.js          → dist/js/theme/button.js
+│   │   ├── button.js          → dist/js/theme/button.js
+│   │   ├── frontend.js        → dist/js/theme/frontend.js
+│   │   └── header.js             # Imported by frontend.js
 │   └── scss/
 │       ├── index.scss         → dist/css/theme.css
 │       ├── _button-icon.scss

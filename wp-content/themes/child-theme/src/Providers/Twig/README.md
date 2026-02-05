@@ -34,7 +34,7 @@ Returns an `IconService` instance for rendering SVG icons from the sprite.
 
 The `icon()` function returns an `IconService` instance which:
 
-- Looks up the icon in the SVG sprite (`assets/images/svg/sprite.svg`)
+- Looks up the icon in the SVG sprite (`src/Providers/Theme/assets/images/svg-sprite/`)
 - Returns the `<svg><use></use></svg>` markup when cast to string
 - Returns empty string if icon doesn't exist
 

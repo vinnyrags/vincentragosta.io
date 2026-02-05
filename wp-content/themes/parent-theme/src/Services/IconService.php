@@ -6,7 +6,7 @@ namespace ParentTheme\Services;
  * Icon class for retrieving and rendering SVG icons from the theme.
  *
  * Provides a fluent interface for working with SVG icons stored in the theme's
- * assets/images/svg-sprite/ and assets/images/svg/ directories.
+ * src/Providers/Theme/assets/images/svg-sprite/ and src/Providers/Theme/assets/images/svg/ directories.
  *
  * Usage:
  *   echo new IconService('arrow');
@@ -20,8 +20,8 @@ class IconService
     private ?string $type = null;
     private array $attributes = [];
 
-    private const SPRITE_DIR = '/assets/images/svg-sprite/';
-    private const SVG_DIR = '/assets/images/svg/';
+    private const SPRITE_DIR = '/src/Providers/Theme/assets/images/svg-sprite/';
+    private const SVG_DIR = '/src/Providers/Theme/assets/images/svg/';
 
     public function __construct(string $name)
     {

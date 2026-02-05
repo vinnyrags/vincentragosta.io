@@ -7,7 +7,7 @@ This document outlines the plan for implementing frontend JavaScript testing whe
 The frontend JavaScript consists of:
 - **Block components** (`blocks/*/edit.js`, `save.js`) - React/Gutenberg components
 - **View scripts** (`blocks/*/view.js`) - Frontend interactivity (vanilla JS)
-- **Asset scripts** (`assets/src/js/`) - General frontend utilities
+- **Asset scripts** (`src/Providers/*/assets/js/`) - General frontend utilities
 
 ## When to Implement
 
@@ -76,13 +76,17 @@ If no tests exist, it will report "No tests found".
 #### 2. Create Test Directory Structure
 
 ```
-blocks/
-├── shutter-cards/
-│   ├── view.js
-│   └── view.test.js      # Co-located test
-assets/
-└── src/
+src/Providers/Theme/
+├── blocks/
+│   └── shutter-cards/
+│       ├── frontend/
+│       │   ├── view.js
+│       │   └── view.test.js      # Co-located test
+│       └── editor/
+│           └── index.js
+└── assets/
     └── js/
+        ├── frontend.js
         ├── utils/
         │   ├── helpers.js
         │   └── helpers.test.js
