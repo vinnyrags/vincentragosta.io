@@ -1,8 +1,8 @@
 # Vincent Ragosta Theme - Build System
 # Usage: make [target]
 
-PARENT_THEME_DIR := $(shell dirname $(CURDIR))/parent-theme
-CHILD_THEME_DIR := $(CURDIR)
+PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
+CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
 .PHONY: help install install-parent install-child build watch clean autoload test
 
@@ -21,8 +21,9 @@ install: install-parent install-child
 	@echo "✓ All dependencies installed"
 
 install-parent:
-	@echo "Installing parent theme dependencies (composer only)..."
+	@echo "Installing parent theme dependencies..."
 	cd $(PARENT_THEME_DIR) && composer install --no-interaction
+	cd $(PARENT_THEME_DIR) && npm install
 
 install-child:
 	@echo "Installing child theme dependencies..."
@@ -44,6 +45,8 @@ watch:
 clean:
 	@echo "Cleaning generated files..."
 	rm -rf $(PARENT_THEME_DIR)/vendor
+	rm -rf $(PARENT_THEME_DIR)/node_modules
+	rm -rf $(PARENT_THEME_DIR)/dist
 	rm -rf $(CHILD_THEME_DIR)/vendor
 	rm -rf $(CHILD_THEME_DIR)/node_modules
 	rm -rf $(CHILD_THEME_DIR)/dist
