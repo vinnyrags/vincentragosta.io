@@ -6,7 +6,9 @@ use DI\Container;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Asset\AssetManager;
 use ParentTheme\Providers\Support\Block\BlockManager;
+use ParentTheme\Providers\Support\AbstractRegistry;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
+use ParentTheme\Providers\Support\Rest\RestManager;
 use ReflectionClass;
 use Twig\Environment;
 
@@ -32,9 +34,27 @@ abstract class Provider implements Registrable
      */
     protected array $blocks = [];
 
+    /**
+     * REST API endpoint classes to register.
+     *
+     * @var array<class-string<\ParentTheme\Providers\Contracts\Routable>>
+     */
+    protected array $routes = [];
+
+    /**
+     * REST API namespace prefix (defaults to provider slug).
+     */
+    protected string $routeNamespace = '';
+
+    /**
+     * REST API version string.
+     */
+    protected string $routeVersion = 'v1';
+
     protected ?AssetManager $assets = null;
     protected ?BlockManager $blockManager = null;
     protected ?FeatureManager $featureManager = null;
+    protected ?RestManager $restManager = null;
     protected string $configPath;
     protected string $textDomain;
 
@@ -54,6 +74,10 @@ abstract class Provider implements Registrable
         $this->registerFeatures();
         $this->blockManager->initializeHooks($this);
         add_filter('timber/twig', [$this, 'addTwigFunctions']);
+
+        if (!empty($this->restManager->getEnabled())) {
+            add_action('rest_api_init', [$this, 'registerRoutes']);
+        }
     }
 
     /**
@@ -99,6 +123,13 @@ abstract class Provider implements Registrable
 
         $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
         $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
+
+        $routeNamespace = $this->routeNamespace ?: $slug;
+        $this->restManager = new RestManager(
+            $this->collectRoutes(),
+            $this->container,
+            $routeNamespace . '/' . $this->routeVersion,
+        );
     }
 
     /**
@@ -112,27 +143,55 @@ abstract class Provider implements Registrable
     /**
      * Collect and merge features from the class hierarchy.
      *
+     * @return array<class-string, bool>
+     */
+    protected function collectFeatures(): array
+    {
+        return $this->collectItems('features');
+    }
+
+    /**
+     * Collect and merge routes from the class hierarchy.
+     *
+     * @return array<class-string, bool>
+     */
+    protected function collectRoutes(): array
+    {
+        return $this->collectItems('routes');
+    }
+
+    /**
+     * Collect and merge a property from the class hierarchy.
+     *
      * Walks from the concrete class up toward Provider, normalizing
-     * each level's $features into [class => bool]. Child entries override
+     * each level's array into [class => bool]. Child entries override
      * parent entries, allowing opt-out via `ClassName::class => false`.
      *
      * @return array<class-string, bool>
      */
-    protected function collectFeatures(): array
+    private function collectItems(string $property): array
     {
         $merged = [];
         $class = new ReflectionClass($this);
 
         while ($class && $class->getName() !== self::class) {
             $defaults = $class->getDefaultProperties();
-            if (isset($defaults['features'])) {
-                $normalized = FeatureManager::normalize($defaults['features']);
+            if (isset($defaults[$property])) {
+                $normalized = AbstractRegistry::normalize($defaults[$property]);
                 $merged = array_merge($normalized, $merged);
             }
             $class = $class->getParentClass();
         }
 
         return $merged;
+    }
+
+    /**
+     * Register all REST API routes via the RestManager.
+     */
+    public function registerRoutes(): void
+    {
+        $this->restManager->registerAll();
     }
 
     /**
