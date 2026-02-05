@@ -7,6 +7,9 @@ use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
+use ParentTheme\Services\IconService;
+use Twig\Environment;
+use Twig\TwigFunction;
 
 /**
  * Handles core theme setup, configuration, and asset enqueueing.
@@ -117,5 +120,19 @@ class ThemeProvider extends ServiceProvider
                 ['wp-edit-blocks', $this->handlePrefix . '-blocks-style']
             );
         }
+    }
+
+    /**
+     * Add core Twig functions.
+     */
+    public function addTwigFunctions(Environment $twig): Environment
+    {
+        $twig = parent::addTwigFunctions($twig);
+
+        $twig->addFunction(new TwigFunction('icon', function (string $name): IconService {
+            return new IconService($name);
+        }));
+
+        return $twig;
     }
 }

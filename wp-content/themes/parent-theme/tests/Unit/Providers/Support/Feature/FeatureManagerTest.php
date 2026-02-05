@@ -2,8 +2,10 @@
 
 namespace ParentTheme\Tests\Unit\Providers\Support\Feature;
 
+use DI\Container;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
+use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 
 /**
@@ -44,9 +46,14 @@ class StubFeatureDisabled implements Registrable
  */
 class FeatureManagerTest extends BaseTestCase
 {
+    use HasContainer;
+
+    private Container $container;
+
     protected function setUp(): void
     {
         parent::setUp();
+        $this->container = $this->buildTestContainer();
         StubFeatureA::$registered = false;
         StubFeatureB::$registered = false;
         StubFeatureDisabled::$registered = false;
@@ -116,7 +123,7 @@ class FeatureManagerTest extends BaseTestCase
         $manager = new FeatureManager([
             'App\Features\FeatureA' => true,
             'App\Features\FeatureB' => true,
-        ]);
+        ], $this->container);
 
         $this->assertSame([
             'App\Features\FeatureA',
@@ -133,7 +140,7 @@ class FeatureManagerTest extends BaseTestCase
             'App\Features\FeatureA' => true,
             'App\Features\FeatureB' => false,
             'App\Features\FeatureC' => true,
-        ]);
+        ], $this->container);
 
         $this->assertSame([
             'App\Features\FeatureA',
@@ -148,7 +155,7 @@ class FeatureManagerTest extends BaseTestCase
     {
         $manager = new FeatureManager([
             'App\Features\FeatureA' => true,
-        ]);
+        ], $this->container);
 
         $this->assertTrue($manager->isEnabled('App\Features\FeatureA'));
     }
@@ -160,7 +167,7 @@ class FeatureManagerTest extends BaseTestCase
     {
         $manager = new FeatureManager([
             'App\Features\FeatureA' => false,
-        ]);
+        ], $this->container);
 
         $this->assertFalse($manager->isEnabled('App\Features\FeatureA'));
     }
@@ -170,7 +177,7 @@ class FeatureManagerTest extends BaseTestCase
      */
     public function testIsEnabledReturnsFalseForUnknown(): void
     {
-        $manager = new FeatureManager([]);
+        $manager = new FeatureManager([], $this->container);
 
         $this->assertFalse($manager->isEnabled('App\Features\Unknown'));
     }
@@ -184,7 +191,7 @@ class FeatureManagerTest extends BaseTestCase
             'App\Features\FeatureA' => true,
             'App\Features\FeatureB' => false,
             'App\Features\FeatureC' => false,
-        ]);
+        ], $this->container);
 
         $this->assertSame([
             'App\Features\FeatureB',
@@ -199,7 +206,7 @@ class FeatureManagerTest extends BaseTestCase
     {
         $manager = new FeatureManager([
             'App\Features\FeatureA' => true,
-        ]);
+        ], $this->container);
 
         $this->assertSame([], $manager->getDisabled());
     }
@@ -213,7 +220,7 @@ class FeatureManagerTest extends BaseTestCase
             StubFeatureA::class => true,
             StubFeatureB::class => true,
             StubFeatureDisabled::class => false,
-        ]);
+        ], $this->container);
 
         $manager->registerAll();
 
@@ -227,7 +234,7 @@ class FeatureManagerTest extends BaseTestCase
      */
     public function testRegisterAllWithEmptyFeatures(): void
     {
-        $manager = new FeatureManager([]);
+        $manager = new FeatureManager([], $this->container);
         $manager->registerAll();
 
         $this->assertTrue(true);

@@ -4,7 +4,7 @@ Manages asset path resolution and enqueueing for service providers.
 
 ## Overview
 
-Each provider gets its own `AssetManager` instance during `boot()`. The manager resolves file paths and URIs within the `dist/` directory and handles WordPress `wp_enqueue_style` / `wp_enqueue_script` calls.
+Each provider gets its own `AssetManager` instance during `init()`. The manager resolves file paths and URIs within the `dist/` directory and handles WordPress `wp_enqueue_style` / `wp_enqueue_script` calls.
 
 ## Path Conventions
 

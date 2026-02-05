@@ -4,7 +4,6 @@ namespace ChildTheme;
 
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ChildTheme\Providers\Twig\TwigProvider;
 use ParentTheme\Theme as BaseTheme;
 
 /**
@@ -23,6 +22,12 @@ class Theme extends BaseTheme
     protected array $providers = [
         ThemeProvider::class,
         ProjectProvider::class,
-        TwigProvider::class,
     ];
+
+    protected function getContainerDefinitions(): array
+    {
+        return array_merge(parent::getContainerDefinitions(), [
+            get_stylesheet_directory() . '/src/config/container.php',
+        ]);
+    }
 }

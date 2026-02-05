@@ -8,7 +8,6 @@ Child theme providers extend the parent theme's base providers to add site-speci
 |----------|---------|---------|
 | [Theme](./Theme/) | Parent | Site-specific theme supports, features, and blocks |
 | [Project](./Project/) | Base | Project post type and projects block |
-| [Twig](./Twig/) | Parent | Adds `icon()` function |
 
 ## Provider Registration
 
@@ -19,7 +18,6 @@ namespace ChildTheme;
 
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Project\ProjectProvider;
-use ChildTheme\Providers\Twig\TwigProvider;
 use ParentTheme\Theme as BaseTheme;
 
 class Theme extends BaseTheme
@@ -27,7 +25,6 @@ class Theme extends BaseTheme
     protected array $providers = [
         ThemeProvider::class,
         ProjectProvider::class,
-        TwigProvider::class,
     ];
 }
 ```

@@ -104,13 +104,36 @@ protected array $features = [
 ];
 ```
 
+### Twig Functions
+
+Providers can register custom Twig functions by overriding `addTwigFunctions()`. Called on the `timber/twig` filter.
+
+```php
+use ParentTheme\Providers\ServiceProvider;
+use Twig\Environment;
+use Twig\TwigFunction;
+
+class MyProvider extends ServiceProvider
+{
+    public function addTwigFunctions(Environment $twig): Environment
+    {
+        $twig = parent::addTwigFunctions($twig);
+
+        $twig->addFunction(new TwigFunction('my_func', function (string $arg) {
+            return strtoupper($arg);
+        }));
+
+        return $twig;
+    }
+}
+```
+
 ## Available Providers
 
 | Provider | Purpose |
 |----------|---------|
 | [PostType](./PostType/) | Custom post type registration from JSON config |
-| [Twig](./Twig/) | Custom Twig functions and filters |
-| [Theme](./Theme/) | Theme supports and core features |
+| [Theme](./Theme/) | Theme supports, core features, and Twig functions |
 
 ## Extending in Child Themes
 

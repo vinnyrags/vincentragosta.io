@@ -5,7 +5,6 @@ namespace ChildTheme\Tests\Integration;
 use ChildTheme\Theme;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ChildTheme\Providers\Twig\TwigProvider;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -22,6 +21,7 @@ class ThemeTest extends BaseTestCase
     {
         parent::set_up();
         $this->theme = new Theme();
+        $this->theme->bootstrap();
     }
 
     /**
@@ -60,7 +60,6 @@ class ThemeTest extends BaseTestCase
 
         $this->assertContains(ThemeProvider::class, $providers);
         $this->assertContains(ProjectProvider::class, $providers);
-        $this->assertContains(TwigProvider::class, $providers);
     }
 
     /**

@@ -4,25 +4,26 @@ A foundational WordPress parent theme providing PHP infrastructure for child the
 
 ## Overview
 
-This theme provides reusable contracts, traits, and base classes that child themes can extend. It handles common WordPress functionality like:
+This theme provides reusable base classes and support systems that child themes extend. It handles common WordPress functionality like:
 
-- Theme supports registration
-- Asset enqueueing infrastructure
+- Service provider pattern with dependency injection (PHP-DI)
+- Asset, block, feature, and Twig function management via `ServiceProvider`
 - Post type registration from JSON config
-- Twig/Timber integration
-- Comment disabling
-- SVG upload support
+- Timber/Twig integration
+- Comment/post disabling, SVG upload support
 
 ## Requirements
 
 - PHP 8.1+
 - WordPress 6.0+
 - Composer
+- Node.js 18+
 
 ## Installation
 
 ```bash
 composer install
+npm install
 ```
 
 ## Directory Structure
@@ -30,23 +31,29 @@ composer install
 ```
 parent-theme/
 ├── src/
-│   ├── Contracts/
-│   │   ├── HasAssets.php      # Interface for asset enqueueing
-│   │   └── Registrable.php    # Interface for registrable classes
-│   ├── Traits/
-│   │   └── HasAssets.php      # Asset enqueueing implementation
+│   ├── Models/
+│   │   └── Post.php                  # Base post model (extends Timber\Post)
 │   ├── Providers/
-│   │   ├── ServiceProvider.php         # Base provider class
-│   │   ├── AssetServiceProvider.php    # Frontend/editor assets
-│   │   ├── PostTypeServiceProvider.php # JSON-based CPT registration
-│   │   ├── TwigServiceProvider.php     # Twig function registration
-│   │   └── ThemeService/
-│   │       ├── ThemeServiceProvider.php
-│   │       └── Features/
-│   │           ├── DisableBlocks.php
-│   │           ├── DisableComments.php
-│   │           └── EnableSvgUploads.php
-│   └── Theme.php              # Base theme class (extends Timber\Site)
+│   │   ├── Contracts/
+│   │   │   └── Registrable.php       # Interface for registrable classes
+│   │   ├── Support/
+│   │   │   ├── Asset/AssetManager    # Asset enqueueing helpers
+│   │   │   ├── Block/BlockManager    # Block registration helpers
+│   │   │   └── Feature/FeatureManager # Feature registration with inheritance
+│   │   ├── PostType/
+│   │   │   └── PostTypeProvider.php  # JSON-based CPT registration
+│   │   ├── Theme/
+│   │   │   ├── ThemeProvider.php     # Theme supports, assets, Twig functions
+│   │   │   └── Features/            # DisableBlocks, DisableComments, etc.
+│   │   └── ServiceProvider.php       # Abstract base provider
+│   ├── Repositories/
+│   │   ├── Repository.php            # Base repository class
+│   │   └── RepositoryInterface.php
+│   ├── Services/
+│   │   └── IconService.php           # SVG icon handling
+│   ├── config/
+│   │   └── container.php             # DI container definitions
+│   └── Theme.php                     # Base theme class (extends Timber\Site)
 ├── composer.json
 ├── functions.php
 ├── style.css
@@ -94,15 +101,21 @@ child-theme/
 // src/Theme.php
 namespace ChildTheme;
 
+use ChildTheme\Providers\Theme\ThemeProvider;
 use ParentTheme\Theme as BaseTheme;
 
 class Theme extends BaseTheme
 {
     protected array $providers = [
-        \ChildTheme\Providers\ThemeServiceProvider::class,
-        \ChildTheme\Providers\AssetServiceProvider::class,
-        // Add your providers...
+        ThemeProvider::class,
     ];
+
+    protected function getContainerDefinitions(): array
+    {
+        return array_merge(parent::getContainerDefinitions(), [
+            get_stylesheet_directory() . '/src/config/container.php',
+        ]);
+    }
 }
 ```
 
@@ -119,113 +132,108 @@ if (file_exists($parent_autoloader)) {
 // Load child theme's autoloader
 require_once __DIR__ . '/vendor/autoload.php';
 
-Timber\Timber::init();
-new \ChildTheme\Theme();
+(new \ChildTheme\Theme())->bootstrap();
 ```
 
 ---
 
 ## Service Provider Pattern
 
-The service provider pattern organizes theme functionality into discrete, testable units.
+The service provider pattern organizes theme functionality into discrete, testable modules. Each provider is a self-contained unit with its own assets, blocks, features, and Twig functions.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Theme Bootstrap                       │
 ├─────────────────────────────────────────────────────────┤
-│  foreach ($providers as $provider) {                    │
-│      (new $provider())->register();                     │
-│  }                                                      │
+│  Container resolves each provider via autowiring,       │
+│  then calls $provider->register()                       │
 └─────────────────────────────────────────────────────────┘
          │              │              │
          ▼              ▼              ▼
 ┌─────────────┐ ┌─────────────┐ ┌─────────────┐
-│   Assets    │ │   Blocks    │ │  PostTypes  │
+│   Theme     │ │  PostType   │ │  Project    │
 │  Provider   │ │  Provider   │ │  Provider   │
 └─────────────┘ └─────────────┘ └─────────────┘
 ```
 
-### Contracts
+### ServiceProvider Base Class
 
-#### Registrable
+All providers extend `ServiceProvider`, which composes:
 
-All providers must implement the `Registrable` interface:
+- **AssetManager** — style/script enqueueing with slug-based paths
+- **BlockManager** — Gutenberg block registration and editor asset hooks
+- **FeatureManager** — feature class registration with inheritance and opt-out
 
-```php
-interface Registrable
-{
-    public function register(): void;
-}
-```
-
-#### HasAssets
-
-Providers that enqueue styles or scripts implement `HasAssets`:
+Every provider automatically gets these capabilities. The base `register()` method wires up features, blocks, and a `timber/twig` filter:
 
 ```php
-interface HasAssets
-{
-    public function enqueueStyle(string $handle, string $filename, array $deps = []): void;
-    public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void;
-}
-```
-
-### HasAssets Trait
-
-The trait provides asset enqueueing with automatic handle prefixing:
-
-```php
-// In your provider
-$this->enqueueStyle('main', 'block-service.css');
-$this->enqueueScript('button', 'block-service/button.js');
-```
-
-Slug generation from class name:
-
-| Class Name | Generated Slug |
-|------------|----------------|
-| `AssetServiceProvider` | `asset` |
-| `BlockServiceProvider` | `block` |
-| `ThemeServiceProvider` | `theme` |
-
-### Creating Providers
-
-#### Basic Provider
-
-```php
-namespace ChildTheme\Providers;
-
 use ParentTheme\Providers\ServiceProvider;
 
-class MyFeatureProvider extends ServiceProvider
+class MyProvider extends ServiceProvider
 {
+    protected array $features = [
+        MyFeature::class,
+    ];
+
+    protected array $blocks = [
+        'my-block',
+    ];
+
     public function register(): void
     {
-        parent::register();
-        add_action('init', [$this, 'init']);
-    }
-
-    public function init(): void
-    {
-        // Implementation
+        add_action('init', [$this, 'doSomething']);
+        parent::register(); // registers features, blocks, and twig filter
     }
 }
 ```
 
-#### Extending Parent Providers
+### Dependency Injection
+
+Providers receive a `DI\Container` via constructor injection. The container uses autowiring — no manual definitions needed for most classes. Container definitions can be added in `src/config/container.php`.
+
+### Features
+
+Features are smaller, focused classes that implement `Registrable`. They're listed in a provider's `$features` array and automatically instantiated via the container.
+
+Features are inherited from parent providers. Child providers only declare their own, and can opt out with `=> false`:
 
 ```php
-namespace ChildTheme\Providers;
+protected array $features = [
+    MyChildFeature::class,
+    SomeParentFeature::class => false,  // disable inherited feature
+];
+```
 
-use ParentTheme\Providers\AssetServiceProvider as BaseProvider;
+### Twig Functions
 
-class AssetServiceProvider extends BaseProvider
+Any provider can register Twig functions by overriding `addTwigFunctions()`:
+
+```php
+use Twig\Environment;
+use Twig\TwigFunction;
+
+public function addTwigFunctions(Environment $twig): Environment
 {
-    public function register(): void
-    {
-        parent::register();
-        add_action('wp_head', [$this, 'addFontPreconnects'], 1);
-    }
+    $twig = parent::addTwigFunctions($twig);
+
+    $twig->addFunction(new TwigFunction('my_func', function (string $arg) {
+        return strtoupper($arg);
+    }));
+
+    return $twig;
+}
+```
+
+### Extending Parent Providers
+
+```php
+namespace ChildTheme\Providers\Theme;
+
+use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
+
+class ThemeProvider extends BaseThemeProvider
+{
+    protected string $handlePrefix = 'child-theme';
 
     public function enqueueFrontendAssets(): void
     {
@@ -235,162 +243,51 @@ class AssetServiceProvider extends BaseProvider
 }
 ```
 
-### Features System
+### Asset Compilation
 
-Providers can register "features" - smaller classes for specific functionality:
+Assets live inside each provider's directory. The build system auto-discovers them:
 
-```php
-class BlockServiceProvider extends ServiceProvider
-{
-    protected array $features = [
-        Features\ButtonIconEnhancer::class,
-        Features\BlockPatterns::class,
-    ];
+| Source | Output |
+|--------|--------|
+| `src/Providers/*/assets/scss/index.scss` | `dist/css/{slug}.css` |
+| `src/Providers/*/assets/js/*.js` | `dist/js/{slug}/*.js` |
+| `src/Providers/*/blocks/*/editor/index.js` | `dist/js/{block}.js` |
+| `src/Providers/*/blocks/*/frontend/view.js` | `dist/js/{block}-view.js` |
+| `src/Providers/*/blocks/*/frontend/style.scss` | `dist/css/{block}.css` |
 
-    public function register(): void
-    {
-        parent::register(); // Registers features automatically
-    }
-}
-```
-
-Creating a feature:
-
-```php
-namespace ChildTheme\Providers\BlockService\Features;
-
-use ParentTheme\Contracts\Registrable;
-
-class ButtonIconEnhancer implements Registrable
-{
-    public function register(): void
-    {
-        add_filter('render_block_core/button', [$this, 'addIconToButton'], 10, 2);
-    }
-}
-```
-
-### Best Practices
-
-1. **Single Responsibility** - Each provider handles one aspect
-2. **Call Parent Methods** - Always call `parent::register()` when extending
-3. **Use Hooks Appropriately** - Register hooks in `register()`, implement logic in separate methods
-4. **Keep Features Small** - Features should do one thing
+Slug is derived from the provider class name minus "Provider" suffix (e.g., `ThemeProvider` -> `theme`).
 
 ---
 
 ## Testing
 
-The parent theme uses PHPUnit with WorDBless for testing.
+Uses PHPUnit 9 with WorDBless for WordPress function stubs.
 
 ### Test Structure
 
 ```
 tests/
 ├── bootstrap.php
-├── Unit/                   # No WordPress dependencies
-│   └── Traits/
-│       └── HasAssetsTraitTest.php
-└── Integration/            # With WordPress
-    ├── ThemeTest.php
-    └── Providers/
-        ├── ServiceProviderTest.php
-        └── DisableCommentsTest.php
+├── Support/
+│   └── HasContainer.php        # Test helper for DI container
+├── Unit/
+│   ├── Models/
+│   ├── Providers/Support/      # AssetManager, BlockManager, FeatureManager
+│   ├── Repositories/
+│   └── Services/
+└── Integration/
+    ├── Models/
+    ├── Providers/
+    ├── Repositories/
+    └── ThemeTest.php
 ```
 
 ### Running Tests
 
 ```bash
-# All tests
-composer test
-
-# Unit tests only
-composer test:unit
-
-# Integration tests only
-composer test:integration
-```
-
-### Writing Tests
-
-#### Unit Test
-
-```php
-namespace ParentTheme\Tests\Unit\Traits;
-
-use PHPUnit\Framework\TestCase;
-use ParentTheme\Traits\HasAssets;
-
-class HasAssetsTraitTest extends TestCase
-{
-    public function testGetSlugFromClassName(): void
-    {
-        $mock = new class {
-            use HasAssets;
-
-            public function exposeGetSlug(): string
-            {
-                return $this->getSlug();
-            }
-        };
-
-        $this->assertIsString($mock->exposeGetSlug());
-    }
-}
-```
-
-#### Integration Test
-
-```php
-namespace ParentTheme\Tests\Integration\Providers;
-
-use ParentTheme\Providers\ThemeService\Features\DisableComments;
-use Yoast\WPTestUtils\WPIntegration\TestCase;
-
-class DisableCommentsTest extends TestCase
-{
-    public function testRemovesCommentsFromAdminBar(): void
-    {
-        $provider = new DisableComments();
-        $provider->register();
-
-        $this->assertNotFalse(
-            has_action('wp_before_admin_bar_render', [$provider, 'removeFromAdminBar'])
-        );
-    }
-}
-```
-
-### PHPUnit Configuration
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/bootstrap.php" colors="true" verbose="true">
-    <testsuites>
-        <testsuite name="Unit">
-            <directory suffix="Test.php">./tests/Unit</directory>
-        </testsuite>
-        <testsuite name="Integration">
-            <directory suffix="Test.php">./tests/Integration</directory>
-        </testsuite>
-    </testsuites>
-    <coverage>
-        <include>
-            <directory suffix=".php">./src</directory>
-        </include>
-    </coverage>
-</phpunit>
-```
-
-### Dependencies
-
-```json
-{
-  "require-dev": {
-    "automattic/wordbless": "^0.4.2",
-    "yoast/wp-test-utils": "^1.0"
-  }
-}
+composer test            # All tests
+composer test:unit       # Unit tests only
+composer test:integration # Integration tests only
 ```
 
 ---

@@ -2,6 +2,7 @@
 
 namespace ParentTheme\Providers\Support\Feature;
 
+use DI\Container;
 use ParentTheme\Providers\Contracts\Registrable;
 
 /**
@@ -14,13 +15,15 @@ class FeatureManager
 {
     /** @var array<class-string, bool> */
     private array $features;
+    private Container $container;
 
     /**
      * @param array<class-string, bool> $features Normalized feature map.
      */
-    public function __construct(array $features)
+    public function __construct(array $features, Container $container)
     {
         $this->features = $features;
+        $this->container = $container;
     }
 
     /**
@@ -82,7 +85,7 @@ class FeatureManager
     {
         foreach ($this->getEnabled() as $feature) {
             /** @var Registrable $instance */
-            $instance = new $feature();
+            $instance = $this->container->get($feature);
             $instance->register();
         }
     }

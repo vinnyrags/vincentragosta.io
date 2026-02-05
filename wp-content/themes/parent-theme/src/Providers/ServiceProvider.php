@@ -2,11 +2,13 @@
 
 namespace ParentTheme\Providers;
 
+use DI\Container;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Asset\AssetManager;
 use ParentTheme\Providers\Support\Block\BlockManager;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ReflectionClass;
+use Twig\Environment;
 
 /**
  * Base service provider class.
@@ -33,6 +35,14 @@ abstract class ServiceProvider implements Registrable
     protected ?AssetManager $assets = null;
     protected ?BlockManager $blockManager = null;
     protected ?FeatureManager $featureManager = null;
+    protected Container $container;
+    protected string $configPath;
+    protected string $textDomain;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Register the service provider.
@@ -42,9 +52,21 @@ abstract class ServiceProvider implements Registrable
      */
     public function register(): void
     {
-        $this->boot();
+        $this->init();
         $this->registerFeatures();
         $this->blockManager->initializeHooks($this);
+        add_filter('timber/twig', [$this, 'addTwigFunctions']);
+    }
+
+    /**
+     * Add custom Twig functions.
+     *
+     * Override this method to register provider-specific Twig functions.
+     * Called on 'timber/twig' filter.
+     */
+    public function addTwigFunctions(Environment $twig): Environment
+    {
+        return $twig;
     }
 
     /**
@@ -52,7 +74,7 @@ abstract class ServiceProvider implements Registrable
      *
      * Idempotent — safe to call multiple times.
      */
-    protected function boot(): void
+    protected function init(): void
     {
         if ($this->assets !== null) {
             return;
@@ -65,6 +87,10 @@ abstract class ServiceProvider implements Registrable
         $distPath = get_stylesheet_directory() . '/dist';
         $distUri = get_stylesheet_directory_uri() . '/dist';
 
+        $this->configPath = $providerDir . '/config';
+        $this->textDomain = str_starts_with($providerDir, get_stylesheet_directory())
+            ? get_stylesheet()
+            : get_template();
         $this->assets = new AssetManager($slug, $distPath, $distUri);
 
         $blocksPath = $providerDir . '/blocks';
@@ -74,7 +100,7 @@ abstract class ServiceProvider implements Registrable
         $blocksUri = $themeUri . $relativePath;
 
         $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
-        $this->featureManager = new FeatureManager($this->collectFeatures());
+        $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
     }
 
     /**
@@ -112,11 +138,56 @@ abstract class ServiceProvider implements Registrable
     }
 
     /**
+     * Load a JSON configuration file from the provider's config directory.
+     *
+     * @param string $filename The config file name.
+     * @return array|null The decoded config array or null if not found/invalid.
+     */
+    protected function loadConfig(string $filename): ?array
+    {
+        $this->init();
+
+        $filepath = $this->configPath . '/' . $filename;
+
+        if (!file_exists($filepath)) {
+            return null;
+        }
+
+        $content = file_get_contents($filepath);
+        $data = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return null;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Translate an array of label strings using the provider's text domain.
+     *
+     * @param array<string, string> $labels
+     * @return array<string, string>
+     */
+    protected function translateLabels(array $labels): array
+    {
+        $this->init();
+
+        $translated = [];
+
+        foreach ($labels as $key => $label) {
+            $translated[$key] = __($label, $this->textDomain);
+        }
+
+        return $translated;
+    }
+
+    /**
      * Enqueue a stylesheet from the dist/css directory.
      */
     public function enqueueStyle(string $handle, string $filename, array $deps = []): void
     {
-        $this->boot();
+        $this->init();
         $this->assets->enqueueStyle($handle, $filename, $deps);
     }
 
@@ -125,7 +196,7 @@ abstract class ServiceProvider implements Registrable
      */
     public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void
     {
-        $this->boot();
+        $this->init();
         $this->assets->enqueueScript($handle, $filename, $deps, $inFooter);
     }
 
@@ -134,7 +205,7 @@ abstract class ServiceProvider implements Registrable
      */
     protected function enqueueDistStyle(string $handle, string $path, array $deps = []): void
     {
-        $this->boot();
+        $this->init();
         $this->assets->enqueueDistStyle($handle, $path, $deps);
     }
 
@@ -143,7 +214,7 @@ abstract class ServiceProvider implements Registrable
      */
     protected function enqueueDistScript(string $handle, string $path, array $deps = [], bool $inFooter = true): void
     {
-        $this->boot();
+        $this->init();
         $this->assets->enqueueDistScript($handle, $path, $deps, $inFooter);
     }
 
@@ -152,7 +223,7 @@ abstract class ServiceProvider implements Registrable
      */
     protected function enqueueManifestScript(string $handle, string $path, array $extraDeps = [], bool $inFooter = true): void
     {
-        $this->boot();
+        $this->init();
         $this->assets->enqueueManifestScript($handle, $path, $extraDeps, $inFooter);
     }
 
@@ -161,7 +232,7 @@ abstract class ServiceProvider implements Registrable
      */
     protected function enqueueEditorScript(string $handle, string $filename, array $deps = []): void
     {
-        $this->boot();
+        $this->init();
         $this->blockManager->enqueueEditorScript($handle, $filename, $deps);
     }
 
@@ -194,7 +265,7 @@ abstract class ServiceProvider implements Registrable
      */
     public function getBlocks(): array
     {
-        $this->boot();
+        $this->init();
         return $this->blockManager->getBlocks();
     }
 
@@ -203,7 +274,7 @@ abstract class ServiceProvider implements Registrable
      */
     public function getBlocksPath(): string
     {
-        $this->boot();
+        $this->init();
         return $this->blockManager->getBlocksPath();
     }
 
@@ -212,7 +283,7 @@ abstract class ServiceProvider implements Registrable
      */
     public function getBlocksUri(): string
     {
-        $this->boot();
+        $this->init();
         return $this->blockManager->getBlocksUri();
     }
 
@@ -221,7 +292,7 @@ abstract class ServiceProvider implements Registrable
      */
     public function registerBlocks(): void
     {
-        $this->boot();
+        $this->init();
         $this->blockManager->registerBlocks();
     }
 }

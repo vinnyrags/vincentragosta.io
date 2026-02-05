@@ -2,6 +2,7 @@
 
 namespace ChildTheme\Tests\Integration\Providers;
 
+use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
@@ -11,6 +12,7 @@ use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
+use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -19,12 +21,16 @@ use ReflectionClass;
  */
 class ThemeProviderTest extends BaseTestCase
 {
+    use HasContainer;
+
     private ThemeProvider $provider;
+    private Container $container;
 
     public function set_up(): void
     {
         parent::set_up();
-        $this->provider = new ThemeProvider();
+        $this->container = $this->buildTestContainer();
+        $this->provider = new ThemeProvider($this->container);
     }
 
     /**
@@ -53,7 +59,7 @@ class ThemeProviderTest extends BaseTestCase
         $method->setAccessible(true);
 
         $features = $method->invoke($this->provider);
-        $manager = new FeatureManager($features);
+        $manager = new FeatureManager($features, $this->container);
         $enabled = $manager->getEnabled();
 
         // Child theme features

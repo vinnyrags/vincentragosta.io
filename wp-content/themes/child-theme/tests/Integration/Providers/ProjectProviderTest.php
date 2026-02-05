@@ -2,8 +2,10 @@
 
 namespace ChildTheme\Tests\Integration\Providers;
 
+use DI\Container;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 
 /**
@@ -11,12 +13,16 @@ use WorDBless\BaseTestCase;
  */
 class ProjectProviderTest extends BaseTestCase
 {
+    use HasContainer;
+
     private ProjectProvider $provider;
+    private Container $container;
 
     public function set_up(): void
     {
         parent::set_up();
-        $this->provider = new ProjectProvider();
+        $this->container = $this->buildTestContainer();
+        $this->provider = new ProjectProvider($this->container);
     }
 
     /**

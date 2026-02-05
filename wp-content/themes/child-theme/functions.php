@@ -14,4 +14,4 @@ if (file_exists($parent_autoloader)) {
 // Load child theme's autoloader.
 require_once __DIR__ . '/vendor/autoload.php';
 
-new Theme();
+(new Theme())->bootstrap();

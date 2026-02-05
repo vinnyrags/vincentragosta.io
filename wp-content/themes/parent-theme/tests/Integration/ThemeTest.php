@@ -19,6 +19,7 @@ class ThemeTest extends BaseTestCase
     public function testThemeCanBeInstantiated(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $this->assertInstanceOf(Theme::class, $theme);
     }
 
@@ -28,6 +29,7 @@ class ThemeTest extends BaseTestCase
     public function testThemeExtendsSite(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $this->assertInstanceOf(Site::class, $theme);
     }
 
@@ -37,6 +39,7 @@ class ThemeTest extends BaseTestCase
     public function testThemeHasEmptyProvidersByDefault(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $reflection = new ReflectionClass($theme);
         $property = $reflection->getProperty('providers');
         $property->setAccessible(true);
@@ -52,6 +55,7 @@ class ThemeTest extends BaseTestCase
     public function testThemeHasTemplateDirectories(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $reflection = new ReflectionClass($theme);
         $property = $reflection->getProperty('templateDirectories');
         $property->setAccessible(true);
@@ -69,6 +73,7 @@ class ThemeTest extends BaseTestCase
     public function testRegisterAllMethodExists(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $reflection = new ReflectionClass($theme);
 
         $this->assertTrue($reflection->hasMethod('registerAll'));
@@ -83,6 +88,7 @@ class ThemeTest extends BaseTestCase
     public function testInitializeTimberMethodExists(): void
     {
         $theme = new Theme();
+        $theme->bootstrap();
         $reflection = new ReflectionClass($theme);
 
         $this->assertTrue($reflection->hasMethod('initializeTimber'));
@@ -96,7 +102,7 @@ class ThemeTest extends BaseTestCase
      */
     public function testTimberIsInitializedAfterThemeInstantiation(): void
     {
-        new Theme();
+        (new Theme())->bootstrap();
 
         // Timber class should exist and be usable
         $this->assertTrue(class_exists('Timber\Timber'));
@@ -107,7 +113,7 @@ class ThemeTest extends BaseTestCase
      */
     public function testTimberDirnameIsConfigured(): void
     {
-        new Theme();
+        (new Theme())->bootstrap();
 
         $dirname = Timber::$dirname;
         $this->assertIsArray($dirname);

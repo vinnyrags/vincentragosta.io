@@ -19,14 +19,6 @@ class ProjectProvider extends ServiceProvider
         'projects',
     ];
 
-    private string $configPath;
-    private string $textDomain = 'child-theme';
-
-    public function __construct()
-    {
-        $this->configPath = __DIR__ . '/config';
-    }
-
     public function register(): void
     {
         add_action('init', [$this, 'registerPostType']);
@@ -69,46 +61,5 @@ class ProjectProvider extends ServiceProvider
         }
 
         register_post_type($config['post_type'], $args);
-    }
-
-    /**
-     * Translate an array of label strings.
-     *
-     * @param array<string, string> $labels
-     * @return array<string, string>
-     */
-    protected function translateLabels(array $labels): array
-    {
-        $translated = [];
-
-        foreach ($labels as $key => $label) {
-            $translated[$key] = __($label, $this->textDomain);
-        }
-
-        return $translated;
-    }
-
-    /**
-     * Load a JSON configuration file.
-     *
-     * @param string $filename The config file name
-     * @return array|null The config array or null if not found/invalid
-     */
-    protected function loadConfig(string $filename): ?array
-    {
-        $filepath = $this->configPath . '/' . $filename;
-
-        if (!file_exists($filepath)) {
-            return null;
-        }
-
-        $content = file_get_contents($filepath);
-        $data = json_decode($content, true);
-
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return null;
-        }
-
-        return $data;
     }
 }

@@ -2,9 +2,11 @@
 
 namespace ParentTheme\Tests\Integration\Providers;
 
+use DI\Container;
 use ParentTheme\Providers\ServiceProvider;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
+use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -66,12 +68,22 @@ class StubChildNoOverrideProvider extends StubParentProvider
  */
 class ServiceProviderTest extends BaseTestCase
 {
+    use HasContainer;
+
+    private Container $container;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->container = $this->buildTestContainer();
+    }
+
     /**
      * Create a concrete implementation of the abstract ServiceProvider.
      */
     private function createConcreteProvider(): ServiceProvider
     {
-        return new class extends ServiceProvider {
+        return new class($this->container) extends ServiceProvider {
             public function register(): void
             {
                 parent::register();
@@ -99,7 +111,7 @@ class ServiceProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that boot creates a FeatureManager instance.
+     * Test that init creates a FeatureManager instance.
      */
     public function testBootCreatesFeatureManager(): void
     {
@@ -132,14 +144,14 @@ class ServiceProviderTest extends BaseTestCase
      */
     public function testCollectFeaturesMergesParentAndChild(): void
     {
-        $provider = new StubChildNoOverrideProvider();
+        $provider = new StubChildNoOverrideProvider($this->container);
 
         $reflection = new ReflectionClass($provider);
         $method = $reflection->getMethod('collectFeatures');
         $method->setAccessible(true);
 
         $features = $method->invoke($provider);
-        $manager = new FeatureManager($features);
+        $manager = new FeatureManager($features, $this->container);
         $enabled = $manager->getEnabled();
 
         $this->assertContains(StubFeatureOne::class, $enabled);
@@ -153,14 +165,14 @@ class ServiceProviderTest extends BaseTestCase
      */
     public function testCollectFeaturesChildOptOutDisablesParentFeature(): void
     {
-        $provider = new StubChildProvider();
+        $provider = new StubChildProvider($this->container);
 
         $reflection = new ReflectionClass($provider);
         $method = $reflection->getMethod('collectFeatures');
         $method->setAccessible(true);
 
         $features = $method->invoke($provider);
-        $manager = new FeatureManager($features);
+        $manager = new FeatureManager($features, $this->container);
 
         // StubFeatureTwo was disabled by child
         $this->assertFalse($manager->isEnabled(StubFeatureTwo::class));
@@ -182,18 +194,32 @@ class ServiceProviderTest extends BaseTestCase
      */
     public function testCollectFeaturesParentOnly(): void
     {
-        $provider = new StubParentProvider();
+        $provider = new StubParentProvider($this->container);
 
         $reflection = new ReflectionClass($provider);
         $method = $reflection->getMethod('collectFeatures');
         $method->setAccessible(true);
 
         $features = $method->invoke($provider);
-        $manager = new FeatureManager($features);
+        $manager = new FeatureManager($features, $this->container);
         $enabled = $manager->getEnabled();
 
         $this->assertContains(StubFeatureOne::class, $enabled);
         $this->assertContains(StubFeatureTwo::class, $enabled);
         $this->assertCount(2, $enabled);
+    }
+
+    /**
+     * Test that default addTwigFunctions returns the Environment unchanged.
+     */
+    public function testAddTwigFunctionsReturnsEnvironmentUnchanged(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $loader = new \Twig\Loader\ArrayLoader([]);
+        $twig = new \Twig\Environment($loader);
+
+        $result = $provider->addTwigFunctions($twig);
+
+        $this->assertSame($twig, $result);
     }
 }

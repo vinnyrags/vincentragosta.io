@@ -2,6 +2,8 @@
 
 namespace ParentTheme;
 
+use DI\Container;
+use DI\ContainerBuilder;
 use ParentTheme\Providers\Contracts\Registrable;
 use Timber\Site;
 use Timber\Timber;
@@ -28,7 +30,24 @@ class Theme extends Site
      */
     protected array $templateDirectories = ['templates', 'views', 'blocks'];
 
+    private static ?Container $containerInstance = null;
+    protected Container $container;
+
+    /**
+     * Constructor — DI only.
+     * Builds the container. All other setup happens in bootstrap().
+     */
     public function __construct()
+    {
+        $this->container = $this->buildContainer();
+        self::$containerInstance = $this->container;
+    }
+
+    /**
+     * Initialize the theme.
+     * Called from functions.php after construction.
+     */
+    public function bootstrap(): void
     {
         $this->initializeTimber();
 
@@ -37,6 +56,45 @@ class Theme extends Site
         $this->registerAll($this->providers);
 
         parent::__construct();
+    }
+
+    protected function buildContainer(): Container
+    {
+        $builder = new ContainerBuilder();
+        $builder->useAutowiring(true);
+
+        foreach ($this->getContainerDefinitions() as $definitionFile) {
+            if (file_exists($definitionFile)) {
+                $builder->addDefinitions($definitionFile);
+            }
+        }
+
+        return $builder->build();
+    }
+
+    /**
+     * Get container definition file paths.
+     * Child themes override this to add their own definitions.
+     *
+     * @return string[]
+     */
+    protected function getContainerDefinitions(): array
+    {
+        return [
+            get_template_directory() . '/src/config/container.php',
+        ];
+    }
+
+    /**
+     * Static accessor for edge cases (Twig closures, static contexts).
+     * Prefer constructor injection everywhere else.
+     */
+    public static function container(): Container
+    {
+        if (self::$containerInstance === null) {
+            throw new \RuntimeException('Container not initialized.');
+        }
+        return self::$containerInstance;
     }
 
     /**
@@ -57,7 +115,8 @@ class Theme extends Site
     protected function registerAll(array $classes): void
     {
         foreach ($classes as $class) {
-            (new $class())->register();
+            $provider = $this->container->get($class);
+            $provider->register();
         }
     }
 }

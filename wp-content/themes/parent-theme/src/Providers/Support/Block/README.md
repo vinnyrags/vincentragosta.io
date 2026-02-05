@@ -4,7 +4,7 @@ Manages block registration and editor script enqueueing for service providers.
 
 ## Overview
 
-Each provider gets its own `BlockManager` instance during `boot()`. The manager handles WordPress `register_block_type` calls and hooks for block asset enqueueing.
+Each provider gets its own `BlockManager` instance during `init()`. The manager handles WordPress `register_block_type` calls and hooks for block asset enqueueing.
 
 ## Block Directory Structure
 

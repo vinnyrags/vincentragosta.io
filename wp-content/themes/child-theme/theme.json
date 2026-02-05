@@ -69,8 +69,8 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin.woff"
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin.woff2",
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin.woff"
               ]
             },
             {
@@ -79,8 +79,8 @@
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-thin-italic.woff"
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin-italic.woff2",
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin-italic.woff"
               ]
             },
             {
@@ -89,8 +89,8 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/reckless-neue/reckless-neue-light.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-light.woff"
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light.woff2",
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light.woff"
               ]
             },
             {
@@ -99,8 +99,8 @@
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/reckless-neue/reckless-neue-light-italic.woff2",
-                "file:./assets/fonts/reckless-neue/reckless-neue-light-italic.woff"
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light-italic.woff2",
+                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light-italic.woff"
               ]
             }
           ]
@@ -116,7 +116,7 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/roobert/roobert-light.otf"
+                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-light.otf"
               ]
             },
             {
@@ -125,7 +125,7 @@
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/roobert/roobert-light-italic.otf"
+                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-light-italic.otf"
               ]
             },
             {
@@ -134,7 +134,7 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/roobert/roobert-medium.otf"
+                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-medium.otf"
               ]
             },
             {
@@ -143,7 +143,7 @@
               "fontStyle": "italic",
               "fontStretch": "normal",
               "src": [
-                "file:./assets/fonts/roobert/roobert-medium-italic.otf"
+                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-medium-italic.otf"
               ]
             }
           ]

@@ -29,6 +29,7 @@ make watch
 |---------|-------------|
 | `make install` | Install Composer & npm dependencies for both themes |
 | `make build` | Build all child theme assets |
+| `make test` | Run test suite for both themes |
 | `make watch` | Start watch mode for development |
 | `make clean` | Remove all generated files |
 | `make autoload` | Regenerate Composer autoloaders |
@@ -37,17 +38,19 @@ make watch
 
 ```
 child-theme/
-├── config/                        # JSON configuration files
-│   └── *.json                     # Post type definitions
 ├── dist/                          # Compiled assets (gitignored)
 ├── src/
-│   ├── Providers/                 # Service providers (assets live here)
+│   ├── Providers/
+│   │   ├── Theme/                 # Theme supports, blocks, features, assets
+│   │   └── Project/               # Project post type and projects block
 │   ├── Services/
 │   │   └── IconService.php        # SVG icon handling
+│   ├── config/
+│   │   └── container.php          # DI container definitions
 │   └── Theme.php                  # Main theme class
 ├── views/                         # Twig templates
 ├── theme.json                     # Block editor configuration
-└── docs/                          # Implementation plans
+└── style.css
 ```
 
 ---
@@ -60,16 +63,16 @@ This theme combines traditional Timber/Twig templating with the Block Editor:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                     WordPress                            │
+│                     WordPress                           │
 ├─────────────────────────────────────────────────────────┤
-│  Timber/Twig Templates          │  Block Editor Content  │
-│  ─────────────────────          │  ───────────────────── │
-│  • base.twig (layout)           │  • Page content        │
-│  • header.twig                  │  • Custom blocks       │
-│  • footer.twig                  │  • Core blocks         │
+│  Timber/Twig Templates          │  Block Editor Content │
+│  ─────────────────────          │  ───────────────────  │
+│  • base.twig (layout)           │  • Page content       │
+│  • header.twig                  │  • Custom blocks      │
+│  • footer.twig                  │  • Core blocks        │
 ├─────────────────────────────────────────────────────────┤
-│                    theme.json                            │
-│            (Shared design tokens & settings)             │
+│                    theme.json                           │
+│            (Shared design tokens & settings)            │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -77,10 +80,12 @@ This theme combines traditional Timber/Twig templating with the Block Editor:
 
 This theme extends `parent-theme` which provides:
 
-- **Contracts:** `Registrable`, `HasAssets`
-- **Traits:** `HasAssets` (asset enqueueing)
 - **Base Classes:** `ServiceProvider`, `Theme`
-- **Features:** DisableBlocks, DisableComments, EnableSvgUploads
+- **Support:** `AssetManager`, `BlockManager`, `FeatureManager`
+- **Contracts:** `Registrable`
+- **Features:** DisableBlocks, DisableComments, DisablePosts, EnableSvgUploads
+- **Models:** `Post` base model (extends `Timber\Post`)
+- **Services:** `IconService`
 
 ### Bootstrap Flow
 
@@ -90,19 +95,15 @@ $parent_autoloader = get_template_directory() . '/vendor/autoload.php';
 require_once $parent_autoloader;
 require_once __DIR__ . '/vendor/autoload.php';
 
-Timber\Timber::init();
-new \ChildTheme\Theme();
+(new \ChildTheme\Theme())->bootstrap();
 ```
 
 ### Service Providers
 
 | Provider | Purpose |
 |----------|---------|
-| `ThemeServiceProvider` | Theme setup, admin bar, theme CSS |
-| `AssetServiceProvider` | Frontend/editor assets, Google Fonts |
-| `BlockServiceProvider` | Block registration, editor data |
-| `PostTypeServiceProvider` | CPTs from JSON config |
-| `TwigServiceProvider` | Custom Twig functions (`icon()`) |
+| `ThemeProvider` | Theme supports, frontend/editor assets, blocks (shutter-cards), Twig functions (`icon()`), features |
+| `ProjectProvider` | Project post type, projects block |
 
 ---
 
@@ -112,27 +113,32 @@ new \ChildTheme\Theme();
 
 | Block | Name | Description |
 |-------|------|-------------|
-| Hero | `child-theme/hero` | Full-width hero with SVG/video background |
 | Projects | `child-theme/projects` | Asymmetric project grid |
 | Shutter Cards | `child-theme/shutter-cards` | Accordion card container |
 | Shutter Card | `child-theme/shutter-card` | Individual expanding card |
 
 ### Block File Structure
 
+Blocks live inside their provider's `blocks/` directory:
+
 ```
-blocks/hero/
-├── block.json      # Block metadata (required)
-├── index.js        # Block registration
-├── edit.js         # Editor component (React)
-├── save.js         # Save function (or null for dynamic)
-├── render.php      # Server-side rendering
-├── style.scss      # Frontend + editor styles
-└── editor.scss     # Editor-only styles
+src/Providers/Theme/blocks/shutter-cards/
+├── block.json                # Block metadata (required)
+├── editor/
+│   ├── index.js              # Block registration
+│   ├── edit.js               # Editor component (React)
+│   └── editor.scss           # Editor-only styles
+├── frontend/
+│   ├── render.php            # Server-side rendering
+│   ├── style.scss            # Frontend + editor styles
+│   └── view.js               # Frontend-only script
+└── templates/
+    └── container.twig        # Twig template for markup
 ```
 
 ### Creating a New Block
 
-1. Create block directory: `blocks/{block-name}/`
+1. Create block directory: `src/Providers/MyProvider/blocks/{block-name}/`
 
 2. Create `block.json`:
 ```json
@@ -141,11 +147,11 @@ blocks/hero/
   "name": "child-theme/my-block",
   "title": "My Block",
   "category": "design",
-  "render": "file:./render.php"
+  "render": "file:./frontend/render.php"
 }
 ```
 
-3. Create edit component (`edit.js`):
+3. Create edit component (`editor/edit.js`):
 ```javascript
 import { useBlockProps } from '@wordpress/block-editor';
 
@@ -160,7 +166,7 @@ export default function Edit({ attributes, setAttributes }) {
 }
 ```
 
-4. Create server render (`render.php`):
+4. Create server render (`frontend/render.php`):
 ```php
 <?php
 $wrapper_attributes = get_block_wrapper_attributes();
@@ -172,14 +178,18 @@ $wrapper_attributes = get_block_wrapper_attributes();
 </div>
 ```
 
-5. Register in `BlockServiceProvider`:
+5. Add to your provider's `$blocks` array:
 ```php
-protected array $blocks = ['hero', 'projects', 'my-block'];
+protected array $blocks = ['my-block'];
 ```
 
-6. Add to `blocks/index.js`:
+6. Register editor entry point (`editor/index.js`):
 ```javascript
-import './my-block';
+import { registerBlockType } from '@wordpress/blocks';
+import Edit from './edit';
+import metadata from '../block.json';
+
+registerBlockType(metadata.name, { edit: Edit, save: () => null });
 ```
 
 ### Wrapper Pattern
@@ -274,10 +284,12 @@ Breakpoints: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1440px)
 
 ### Asset Compilation
 
+Assets live inside each provider's directory. The build system auto-discovers them:
+
 | Source | Output |
 |--------|--------|
-| `src/Providers/*/assets/scss/index.scss` | `dist/css/{provider}.css` |
-| `src/Providers/*/assets/js/*.js` | `dist/js/{provider}/*.js` |
+| `src/Providers/*/assets/scss/index.scss` | `dist/css/{slug}.css` |
+| `src/Providers/*/assets/js/*.js` | `dist/js/{slug}/*.js` |
 | `src/Providers/*/blocks/*/editor/index.js` | `dist/js/{block}.js` |
 | `src/Providers/*/blocks/*/frontend/view.js` | `dist/js/{block}-view.js` |
 | `src/Providers/*/blocks/*/frontend/style.scss` | `dist/css/{block}.css` |
@@ -286,80 +298,28 @@ Breakpoints: `sm` (576px), `md` (768px), `lg` (992px), `xl` (1440px)
 
 ## Testing
 
-### PHP Testing
-
-Uses PHPUnit with WorDBless. Tests run automatically on commit.
+Uses PHPUnit 9 with WorDBless for WordPress function stubs.
 
 ```bash
-# All tests
-composer test
-
-# Unit tests only
-composer test:unit
-
-# Integration tests only
-composer test:integration
-
-# Both themes
-npm run test:php:all
+composer test              # All tests
+composer test:unit         # Unit tests only
+composer test:integration  # Integration tests only
+make test                  # Both themes
 ```
 
-#### Test Structure
+### Test Structure
 
 ```
 tests/
 ├── bootstrap.php
-├── Unit/
-│   └── Services/
-│       └── IconServiceTest.php
-└── Integration/
-    ├── Providers/
-    │   └── AssetServiceProviderTest.php
-    └── ThemeTest.php
-```
-
-#### Writing Tests
-
-**Unit Test:**
-```php
-namespace ChildTheme\Tests\Unit\Services;
-
-use ChildTheme\Services\IconService;
-use PHPUnit\Framework\TestCase;
-
-class IconServiceTest extends TestCase
-{
-    public function testWithClassAddsClass(): void
-    {
-        $service = IconService::get('test')->withClass('icon-lg');
-        // assertions...
-    }
-}
-```
-
-**Integration Test:**
-```php
-namespace ChildTheme\Tests\Integration;
-
-use ChildTheme\Theme;
-use Yoast\WPTestUtils\WPIntegration\TestCase;
-
-class ThemeTest extends TestCase
-{
-    public function testProvidersAreRegistered(): void
-    {
-        $theme = new Theme();
-        // assertions...
-    }
-}
-```
-
-### Pre-Commit Hook
-
-Tests run automatically when PHP files are staged. Bypass with:
-
-```bash
-git commit --no-verify
+├── Fixtures/
+│   └── svg/                          # Test SVG fixtures
+├── Integration/
+│   ├── Providers/
+│   │   ├── Features/                 # ButtonIconEnhancer, CoverBlockStyles
+│   │   ├── ProjectProviderTest.php
+│   │   └── ThemeProviderTest.php
+│   └── ThemeTest.php
 ```
 
 ---
@@ -375,18 +335,9 @@ git commit --no-verify
 
 ### Adding a Provider with Assets
 
-1. Create `src/Providers/YourService/YourServiceProvider.php`
-2. Add `assets/scss/main.scss` and/or `assets/js/*.js`
+1. Create `src/Providers/MyFeature/MyFeatureProvider.php`
+2. Add `assets/scss/index.scss` and/or `assets/js/*.js`
 3. Run `make build` — assets are auto-discovered
-
----
-
-## Implementation Plans
-
-See `docs/` for future implementation plans:
-
-- `CHANGELOG-RELEASES.md` - Conventional commits and release management
-- `FRONTEND-TESTING.md` - Frontend JavaScript testing strategy
 
 ---
 
