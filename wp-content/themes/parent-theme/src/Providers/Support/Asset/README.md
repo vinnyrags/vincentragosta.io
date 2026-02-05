@@ -1,6 +1,6 @@
 # AssetManager
 
-Manages asset path resolution and enqueueing for service providers.
+Manages asset path resolution and enqueueing for providers.
 
 ## Overview
 
@@ -51,7 +51,7 @@ All enqueue methods skip silently if the file doesn't exist on disk. Version cac
 
 ## Usage
 
-`AssetManager` is not used directly -- `ServiceProvider` exposes wrapper methods that delegate to it:
+`AssetManager` is not used directly -- `Provider` exposes wrapper methods that delegate to it:
 
 ```php
 // In a provider class

@@ -80,7 +80,7 @@ This theme combines traditional Timber/Twig templating with the Block Editor:
 
 This theme extends `parent-theme` which provides:
 
-- **Base Classes:** `ServiceProvider`, `Theme`
+- **Base Classes:** `Provider`, `Theme`
 - **Support:** `AssetManager`, `BlockManager`, `FeatureManager`
 - **Contracts:** `Registrable`
 - **Features:** DisableBlocks, DisableComments, DisablePosts, EnableSvgUploads

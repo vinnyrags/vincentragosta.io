@@ -2,15 +2,15 @@
 
 namespace ChildTheme\Providers\Project;
 
-use ChildTheme\Providers\ServiceProvider;
+use ChildTheme\Providers\Provider;
 
 /**
- * Project Service Provider.
+ * Project Provider.
  *
  * Self-contained provider for all project-related functionality.
  * Includes the projects block, post type, and configuration.
  */
-class ProjectProvider extends ServiceProvider
+class ProjectProvider extends Provider
 {
     /**
      * Blocks to register.

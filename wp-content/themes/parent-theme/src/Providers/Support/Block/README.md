@@ -1,6 +1,6 @@
 # BlockManager
 
-Manages block registration and editor script enqueueing for service providers.
+Manages block registration and editor script enqueueing for providers.
 
 ## Overview
 
@@ -50,7 +50,7 @@ Additional dependencies can be passed as the third argument.
 
 ### Hook Initialization
 
-`initializeHooks` is called during `ServiceProvider::register()` and is a no-op when the provider has no blocks. When blocks are present, it registers:
+`initializeHooks` is called during `Provider::register()` and is a no-op when the provider has no blocks. When blocks are present, it registers:
 
 - `init` -> `registerBlocks()`
 - `enqueue_block_assets` -> `$provider->enqueueBlockAssets()`
@@ -61,7 +61,7 @@ Additional dependencies can be passed as the third argument.
 `BlockManager` is not used directly -- providers declare blocks via the `$blocks` property and override the asset methods:
 
 ```php
-class MyProvider extends ServiceProvider
+class MyProvider extends Provider
 {
     protected array $blocks = ['my-block'];
 

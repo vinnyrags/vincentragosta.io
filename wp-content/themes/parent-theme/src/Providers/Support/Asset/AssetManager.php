@@ -20,7 +20,7 @@ class AssetManager
      * Convert a PascalCase class name to a kebab-case slug.
      *
      * Removes the "Provider" suffix before converting.
-     * Example: "BlockServiceProvider" → "block-service"
+     * Example: "BlockProvider" → "block"
      */
     public static function slugify(string $className): string
     {

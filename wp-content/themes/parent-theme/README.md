@@ -7,7 +7,7 @@ A foundational WordPress parent theme providing PHP infrastructure for child the
 This theme provides reusable base classes and support systems that child themes extend. It handles common WordPress functionality like:
 
 - Service provider pattern with dependency injection (PHP-DI)
-- Asset, block, feature, and Twig function management via `ServiceProvider`
+- Asset, block, feature, and Twig function management via `Provider`
 - Post type registration from JSON config
 - Timber/Twig integration
 - Comment/post disabling, SVG upload support
@@ -45,7 +45,7 @@ parent-theme/
 │   │   ├── Theme/
 │   │   │   ├── ThemeProvider.php     # Theme supports, assets, Twig functions
 │   │   │   └── Features/            # DisableBlocks, DisableComments, etc.
-│   │   └── ServiceProvider.php       # Abstract base provider
+│   │   └── Provider.php              # Abstract base provider
 │   ├── Repositories/
 │   │   ├── Repository.php            # Base repository class
 │   │   └── RepositoryInterface.php
@@ -156,9 +156,9 @@ The service provider pattern organizes theme functionality into discrete, testab
 └─────────────┘ └─────────────┘ └─────────────┘
 ```
 
-### ServiceProvider Base Class
+### Provider Base Class
 
-All providers extend `ServiceProvider`, which composes:
+All providers extend `Provider`, which composes:
 
 - **AssetManager** — style/script enqueueing with slug-based paths
 - **BlockManager** — Gutenberg block registration and editor asset hooks
@@ -167,9 +167,9 @@ All providers extend `ServiceProvider`, which composes:
 Every provider automatically gets these capabilities. The base `register()` method wires up features, blocks, and a `timber/twig` filter:
 
 ```php
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 
-class MyProvider extends ServiceProvider
+class MyProvider extends Provider
 {
     protected array $features = [
         MyFeature::class,

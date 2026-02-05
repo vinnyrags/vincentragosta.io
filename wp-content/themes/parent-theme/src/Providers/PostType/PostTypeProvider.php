@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Providers\PostType;
 
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 
 /**
  * Registers custom post types from JSON configuration files.
@@ -10,7 +10,7 @@ use ParentTheme\Providers\ServiceProvider;
  * Reads JSON files from the child theme's /config directory and registers
  * post types based on their configuration.
  */
-class PostTypeProvider extends ServiceProvider
+class PostTypeProvider extends Provider
 {
     public function register(): void
     {

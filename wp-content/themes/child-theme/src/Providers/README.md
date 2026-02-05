@@ -32,16 +32,16 @@ class Theme extends BaseTheme
 ## Adding New Providers
 
 1. Create a new directory under `Providers/` (e.g., `MyFeature/`)
-2. Create a provider class extending `ServiceProvider` (or a parent provider)
+2. Create a provider class extending `Provider` (or a parent provider)
 3. Add a `README.md` documenting the provider
 4. Add to the providers array in `Theme.php`
 
 ```php
 namespace ChildTheme\Providers\MyFeature;
 
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 
-class MyFeatureProvider extends ServiceProvider
+class MyFeatureProvider extends Provider
 {
     public function register(): void
     {

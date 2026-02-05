@@ -15,23 +15,15 @@ class AssetManagerTest extends BaseTestCase
      */
     public function testSlugifyRemovesProviderSuffix(): void
     {
-        $this->assertEquals('block-service', AssetManager::slugify('BlockServiceProvider'));
+        $this->assertEquals('block', AssetManager::slugify('BlockProvider'));
     }
 
     /**
-     * Test slugify with ThemeServiceProvider.
+     * Test slugify with AssetProvider.
      */
-    public function testSlugifyForThemeService(): void
+    public function testSlugifyForAssetProvider(): void
     {
-        $this->assertEquals('theme-service', AssetManager::slugify('ThemeServiceProvider'));
-    }
-
-    /**
-     * Test slugify with AssetServiceProvider.
-     */
-    public function testSlugifyForAssetService(): void
-    {
-        $this->assertEquals('asset-service', AssetManager::slugify('AssetServiceProvider'));
+        $this->assertEquals('asset', AssetManager::slugify('AssetProvider'));
     }
 
     /**

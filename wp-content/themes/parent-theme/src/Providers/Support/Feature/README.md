@@ -1,10 +1,10 @@
 # FeatureManager
 
-Manages feature registration for service providers with support for inheritance and opt-out.
+Manages feature registration for providers with support for inheritance and opt-out.
 
 ## Overview
 
-`FeatureManager` receives a normalized map of `[class-string => bool]` and handles filtering and registration. It works with `ServiceProvider::collectFeatures()`, which walks the class hierarchy to merge parent and child feature arrays.
+`FeatureManager` receives a normalized map of `[class-string => bool]` and handles filtering and registration. It works with `Provider::collectFeatures()`, which walks the class hierarchy to merge parent and child feature arrays.
 
 ## Feature Inheritance
 
@@ -62,7 +62,7 @@ Result: `DisablePosts` is excluded. The remaining 5 features are registered.
 
 ## How It Works
 
-1. `ServiceProvider::init()` calls `collectFeatures()`, which walks the class hierarchy via reflection
+1. `Provider::init()` calls `collectFeatures()`, which walks the class hierarchy via reflection
 2. Each level's `$features` array is normalized via `FeatureManager::normalize()`
 3. Arrays are merged bottom-up so child entries override parent entries for the same class
 4. The merged map is passed to the `FeatureManager` constructor

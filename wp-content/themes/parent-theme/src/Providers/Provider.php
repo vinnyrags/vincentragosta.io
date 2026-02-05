@@ -11,12 +11,12 @@ use ReflectionClass;
 use Twig\Environment;
 
 /**
- * Base service provider class.
+ * Base provider class.
  *
- * All service providers should extend this class and implement the register method.
+ * All providers should extend this class and implement the register method.
  * Provides asset enqueueing via AssetManager and block registration via BlockManager.
  */
-abstract class ServiceProvider implements Registrable
+abstract class Provider implements Registrable
 {
     /**
      * Feature classes to register.
@@ -112,7 +112,7 @@ abstract class ServiceProvider implements Registrable
     /**
      * Collect and merge features from the class hierarchy.
      *
-     * Walks from the concrete class up toward ServiceProvider, normalizing
+     * Walks from the concrete class up toward Provider, normalizing
      * each level's $features into [class => bool]. Child entries override
      * parent entries, allowing opt-out via `ClassName::class => false`.
      *

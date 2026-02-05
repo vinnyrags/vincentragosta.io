@@ -3,7 +3,7 @@
 namespace ParentTheme\Tests\Integration\Providers;
 
 use DI\Container;
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Tests\Support\HasContainer;
@@ -33,7 +33,7 @@ class StubFeatureThree implements Registrable
 }
 
 // Simulates a parent-level provider with features.
-class StubParentProvider extends ServiceProvider
+class StubParentProvider extends Provider
 {
     protected array $features = [
         StubFeatureOne::class,
@@ -64,9 +64,9 @@ class StubChildNoOverrideProvider extends StubParentProvider
 }
 
 /**
- * Integration tests for the abstract ServiceProvider class.
+ * Integration tests for the abstract Provider class.
  */
-class ServiceProviderTest extends BaseTestCase
+class ProviderTest extends BaseTestCase
 {
     use HasContainer;
 
@@ -79,11 +79,11 @@ class ServiceProviderTest extends BaseTestCase
     }
 
     /**
-     * Create a concrete implementation of the abstract ServiceProvider.
+     * Create a concrete implementation of the abstract Provider.
      */
-    private function createConcreteProvider(): ServiceProvider
+    private function createConcreteProvider(): Provider
     {
-        return new class($this->container) extends ServiceProvider {
+        return new class($this->container) extends Provider {
             public function register(): void
             {
                 parent::register();
@@ -92,7 +92,7 @@ class ServiceProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that ServiceProvider implements Registrable.
+     * Test that Provider implements Registrable.
      */
     public function testImplementsRegistrable(): void
     {

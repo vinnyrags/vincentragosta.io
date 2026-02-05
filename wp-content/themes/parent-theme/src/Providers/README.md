@@ -4,9 +4,9 @@ Service providers handle specific areas of theme functionality. Each provider is
 
 ## Architecture
 
-### Base ServiceProvider
+### Base Provider
 
-All providers extend `ServiceProvider`, which implements:
+All providers extend `Provider`, which implements:
 
 - `Registrable` interface (requires `register()` method)
 - [`AssetManager`](./Support/Asset/) composition (provides asset enqueueing helpers)
@@ -14,9 +14,9 @@ All providers extend `ServiceProvider`, which implements:
 - [`FeatureManager`](./Support/Feature/) composition (provides feature registration with inheritance and opt-out)
 
 ```php
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 
-class MyProvider extends ServiceProvider
+class MyProvider extends Provider
 {
     protected array $features = [
         MyFeature::class,
@@ -38,9 +38,9 @@ class MyProvider extends ServiceProvider
 Providers can register their own Gutenberg blocks by defining a `$blocks` property and placing block directories in a `blocks/` subdirectory relative to the provider class file.
 
 ```php
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 
-class MyProvider extends ServiceProvider
+class MyProvider extends Provider
 {
     protected array $blocks = [
         'my-block',
@@ -109,11 +109,11 @@ protected array $features = [
 Providers can register custom Twig functions by overriding `addTwigFunctions()`. Called on the `timber/twig` filter.
 
 ```php
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 use Twig\Environment;
 use Twig\TwigFunction;
 
-class MyProvider extends ServiceProvider
+class MyProvider extends Provider
 {
     public function addTwigFunctions(Environment $twig): Environment
     {

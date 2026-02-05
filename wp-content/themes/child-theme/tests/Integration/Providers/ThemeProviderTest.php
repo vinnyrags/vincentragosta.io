@@ -6,7 +6,7 @@ use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
@@ -42,11 +42,11 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that provider extends parent theme's ServiceProvider.
+     * Test that provider extends parent theme's Provider.
      */
-    public function testProviderExtendsServiceProvider(): void
+    public function testProviderExtendsBaseProvider(): void
     {
-        $this->assertInstanceOf(ServiceProvider::class, $this->provider);
+        $this->assertInstanceOf(Provider::class, $this->provider);
     }
 
     /**

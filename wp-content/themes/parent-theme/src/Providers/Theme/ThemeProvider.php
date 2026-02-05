@@ -2,7 +2,7 @@
 
 namespace ParentTheme\Providers\Theme;
 
-use ParentTheme\Providers\ServiceProvider;
+use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
@@ -18,7 +18,7 @@ use Twig\TwigFunction;
  * frontend and editor assets. Can be extended by child themes
  * for additional functionality.
  */
-class ThemeProvider extends ServiceProvider
+class ThemeProvider extends Provider
 {
     /**
      * Theme handle prefix for asset registration.
