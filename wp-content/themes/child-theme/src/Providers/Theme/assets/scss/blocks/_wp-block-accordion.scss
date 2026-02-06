@@ -1,0 +1,43 @@
+.wp-block-accordion-heading__toggle:hover .wp-block-accordion-heading__toggle-title {
+  text-decoration: none;
+}
+
+.wp-block-accordion-heading__toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: var(--wp--preset--color--accent-1);
+  }
+
+  svg {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--wp--preset--color--contrast);
+    transition: transform 0.3s ease;
+  }
+}
+
+// Rotate when expanded — the button carries aria-expanded
+.wp-block-accordion-heading__toggle[aria-expanded="true"] {
+  .wp-block-accordion-heading__toggle-icon svg {
+    transform: rotate(180deg);
+  }
+}
+
+.wp-block-accordion-panel {
+  margin-block-start: var(--wp--preset--spacing--40);
+  color: var(--wp--preset--color--grey-5);
+
+  &.is-layout-flow > * {
+    margin-block-start: var(--wp--preset--spacing--40);
+  }
+}

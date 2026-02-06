@@ -52,6 +52,11 @@
           "color": "#494950",
           "name": "Grey 4",
           "slug": "grey-4"
+        },
+        {
+          "color": "#95959d",
+          "name": "Grey 5",
+          "slug": "grey-5"
         }
       ]
     },
@@ -127,12 +132,21 @@
         },
         {
           "fluid": {
+            "max": "2.25rem",
+            "min": "1.5rem"
+          },
+          "name": "24px / 36px",
+          "size": "2.25rem",
+          "slug": "50"
+        },
+        {
+          "fluid": {
             "max": "2.75rem",
             "min": "2rem"
           },
           "name": "32px / 44px",
           "size": "2.75rem",
-          "slug": "50"
+          "slug": "60"
         },
         {
           "fluid": {
@@ -141,7 +155,7 @@
           },
           "name": "50px / 72px",
           "size": "3.125rem",
-          "slug": "60"
+          "slug": "70"
         }
       ],
       "fontFamilies": [
@@ -247,7 +261,7 @@
         "typography": {
           "fontWeight": "400",
           "lineHeight": "1",
-          "fontSize": "var:preset|font-size|50"
+          "fontSize": "var:preset|font-size|60"
         },
         "color": {
           "text": "var:preset|color|base"

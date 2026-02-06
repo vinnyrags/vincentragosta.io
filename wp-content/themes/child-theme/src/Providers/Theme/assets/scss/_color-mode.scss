@@ -91,9 +91,9 @@
       background-color: var(--color-button-hover-bg);
       color: var(--color-button-hover-text);
 
-      // Button icon stroke color
-      .wp-block-button__icon svg [stroke]:not([stroke=none]):not([stroke=currentColor]) {
-        stroke: var(--wp--preset--color--base);
+      // Arrow icon: override arrow color on hover
+      .wp-block-button__icon.icon-arrow svg {
+        color: var(--wp--preset--color--base);
       }
     }
   }

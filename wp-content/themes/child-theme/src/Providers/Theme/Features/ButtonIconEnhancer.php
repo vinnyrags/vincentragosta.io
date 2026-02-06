@@ -42,14 +42,15 @@ class ButtonIconEnhancer implements Registrable
             return $content;
         }
 
-        $icon = $this->iconFactory->create($block['attrs']['selectedIcon']);
+        $iconName = $block['attrs']['selectedIcon'];
+        $icon = $this->iconFactory->create($iconName);
         if (!$icon->exists()) {
             return $content;
         }
 
         $position = $block['attrs']['iconPosition'] ?? 'right';
 
-        return $this->enhanceButton($content, (string) $icon, $position);
+        return $this->enhanceButton($content, (string) $icon, $position, $iconName);
     }
 
     /**
@@ -70,8 +71,9 @@ class ButtonIconEnhancer implements Registrable
      * @param string $content Original button block HTML.
      * @param string $svg Rendered SVG markup for the icon.
      * @param string $position Icon position relative to the label ('left' or 'right').
+     * @param string $iconName The selected icon name for CSS targeting.
      */
-    private function enhanceButton(string $content, string $svg, string $position): string
+    private function enhanceButton(string $content, string $svg, string $position, string $iconName): string
     {
         $dom = $this->createDom($content);
         if (!$dom) {
@@ -81,7 +83,7 @@ class ButtonIconEnhancer implements Registrable
         $xpath = new DOMXPath($dom);
 
         $this->addWrapperClasses($xpath, $position);
-        $this->insertIcon($dom, $xpath, $svg, $position);
+        $this->insertIcon($dom, $xpath, $svg, $position, $iconName);
 
         return $this->getInnerHtml($dom);
     }
@@ -131,14 +133,15 @@ class ButtonIconEnhancer implements Registrable
      * @param DOMXPath $xpath XPath instance for locating the link element.
      * @param string $svg Rendered SVG markup to embed inside the icon span.
      * @param string $position 'left' prepends, 'right' appends the icon span.
+     * @param string $iconName The selected icon name for CSS targeting.
      */
-    private function insertIcon(DOMDocument $dom, DOMXPath $xpath, string $svg, string $position): void
+    private function insertIcon(DOMDocument $dom, DOMXPath $xpath, string $svg, string $position, string $iconName): void
     {
         $links = $xpath->query("//*[contains(@class, 'wp-block-button__link')]");
 
         foreach ($links as $link) {
             $iconSpan = $dom->createElement('span');
-            $iconSpan->setAttribute('class', 'wp-block-button__icon');
+            $iconSpan->setAttribute('class', 'wp-block-button__icon ' . esc_attr($iconName));
             $iconSpan->setAttribute('aria-hidden', 'true');
 
             $svgNode = $this->createSvgFragment($dom, $svg);

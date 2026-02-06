@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme;
 
+use ChildTheme\Providers\Theme\Features\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
 use DI\Container;
@@ -27,6 +28,7 @@ class ThemeProvider extends BaseThemeProvider
      * to opt out of an inherited parent feature.
      */
     protected array $features = [
+        AccordionIconEnhancer::class,
         ButtonIconEnhancer::class,
         CoverBlockStyles::class,
     ];

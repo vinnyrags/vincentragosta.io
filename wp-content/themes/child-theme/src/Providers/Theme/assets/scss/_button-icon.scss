@@ -1,37 +1,35 @@
 // Frontend and common styles for button icon
 // These styles target the structure created by the PHP render_block filter.
 .wp-block-button__link {
-  // Core button might already be inline-flex or flex.
-  // If this enhancement adds an icon, ensure flex properties are set for alignment.
-  // Check if adding these universally causes issues with theme styles.
-  // It might be better to add a helper class like 'has-icon' on the button via PHP filter.
-
-  // display: inline-flex; // Re-evaluate if this is needed globally or only for buttons with icons
-  // align-items: center;
-  // gap: 0.5em; // Default gap
-
   .wp-block-button__icon {
-    display: inline-flex; // Helps align SVG content
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    line-height: 0; // Crucial for SVG vertical alignment within the flex item
-
-    // Spacing is handled by `gap` on the parent .wp-block-button__link usually.
-    // If `gap` is not consistently supported or desired, use margins here.
-    // e.g. for icon on left: margin-right: 0.35em;
-    // e.g. for icon on right: margin-left: 0.35em;
+    line-height: 0;
+    position: relative;
 
     svg {
       fill: currentColor;
-      width: 1.2em;  // Example: adjust to match font size or be fixed
-      height: 1.2em; // Example: adjust to match font size or be fixed
-      display: inline-block; // Ensure it behaves as an inline block
-      vertical-align: middle; // Good fallback for alignment
+      width: 1.2em;
+      height: 1.2em;
+      display: inline-block;
+      vertical-align: middle;
+    }
 
-      // Two-tone icons: background uses currentColor (fill = button text color),
-      // foreground stroke should match the button background color.
-      [stroke]:not([stroke="none"]):not([stroke="currentColor"]) {
-        stroke: var(--color-button-bg);
+    // Circle background only for arrow icons
+    &.icon-arrow {
+      &::before {
+        content: '';
+        position: absolute;
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 50%;
+        background-color: currentColor;
+      }
+
+      svg {
+        position: relative;
+        color: var(--color-button-bg);
       }
     }
   }
@@ -59,7 +57,7 @@
     transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out, border-color 0.4s ease-in-out;
 
     .wp-block-button__icon svg {
-      transition: transform 0.25s ease-in-out; // Add transition for smoothness
+      transition: transform 0.25s ease-in-out;
     }
 
     &:hover {
