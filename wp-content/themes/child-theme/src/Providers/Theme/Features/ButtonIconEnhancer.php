@@ -16,6 +16,11 @@ use DOMXPath;
  */
 class ButtonIconEnhancer implements Registrable
 {
+    /**
+     * Create the enhancer with its icon factory dependency.
+     *
+     * @param IconServiceFactory $iconFactory Factory for resolving icon SVG content.
+     */
     public function __construct(
         private readonly IconServiceFactory $iconFactory,
     ) {}
@@ -27,6 +32,9 @@ class ButtonIconEnhancer implements Registrable
 
     /**
      * Filter the button block output to add icons.
+     *
+     * @param string $content Rendered block HTML.
+     * @param array{blockName: string, attrs: array<string, mixed>} $block Parsed block data.
      */
     public function render(string $content, array $block): string
     {
@@ -45,7 +53,9 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Check if this button should be enhanced with an icon.
+     * Check if this button block has a selected icon attribute.
+     *
+     * @param array{blockName?: string, attrs?: array<string, mixed>} $block Parsed block data.
      */
     private function shouldEnhance(array $block): bool
     {
@@ -55,7 +65,11 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Enhance the button HTML with icon using DOMDocument.
+     * Enhance the button HTML by injecting an icon span via DOMDocument.
+     *
+     * @param string $content Original button block HTML.
+     * @param string $svg Rendered SVG markup for the icon.
+     * @param string $position Icon position relative to the label ('left' or 'right').
      */
     private function enhanceButton(string $content, string $svg, string $position): string
     {
@@ -73,7 +87,10 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Create a DOMDocument from HTML content.
+     * Create a DOMDocument from HTML content wrapped in a root element.
+     *
+     * @param string $content Raw HTML to parse.
+     * @return DOMDocument|null The parsed document, or null on parse failure.
      */
     private function createDom(string $content): ?DOMDocument
     {
@@ -91,7 +108,10 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Add icon-related classes to the button wrapper div.
+     * Add icon-related CSS classes to the .wp-block-button wrapper.
+     *
+     * @param DOMXPath $xpath XPath instance bound to the button document.
+     * @param string $position Icon position ('left' or 'right') for the directional class.
      */
     private function addWrapperClasses(DOMXPath $xpath, string $position): void
     {
@@ -105,7 +125,12 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Insert the icon span into the button/link element.
+     * Insert an icon span into the .wp-block-button__link element.
+     *
+     * @param DOMDocument $dom The button document for creating new nodes.
+     * @param DOMXPath $xpath XPath instance for locating the link element.
+     * @param string $svg Rendered SVG markup to embed inside the icon span.
+     * @param string $position 'left' prepends, 'right' appends the icon span.
      */
     private function insertIcon(DOMDocument $dom, DOMXPath $xpath, string $svg, string $position): void
     {
@@ -130,7 +155,11 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Create a document fragment from SVG content.
+     * Parse SVG markup and import it as a node into the target document.
+     *
+     * @param DOMDocument $dom Target document to import the SVG node into.
+     * @param string $svg Raw SVG markup string.
+     * @return \DOMNode|null The imported SVG node, or null on parse failure.
      */
     private function createSvgFragment(DOMDocument $dom, string $svg): ?\DOMNode
     {
@@ -151,7 +180,9 @@ class ButtonIconEnhancer implements Registrable
     }
 
     /**
-     * Extract the inner HTML from the wrapper div.
+     * Extract the inner HTML from the __wrapper__ div used during parsing.
+     *
+     * @param DOMDocument $dom The document containing the wrapper element.
      */
     private function getInnerHtml(DOMDocument $dom): string
     {

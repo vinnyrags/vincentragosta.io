@@ -39,6 +39,12 @@ class ThemeProvider extends BaseThemeProvider
         'shutter-card',
     ];
 
+    /**
+     * Create the child theme provider with its dependencies.
+     *
+     * @param Container $container DI container for feature resolution.
+     * @param IconServiceFactory $iconFactory Factory for creating IconService instances.
+     */
     public function __construct(
         Container $container,
         IconServiceFactory $iconFactory,
@@ -46,6 +52,13 @@ class ThemeProvider extends BaseThemeProvider
         parent::__construct($container, $iconFactory);
     }
 
+    /**
+     * Register child-specific hooks before delegating to the parent.
+     *
+     * Adds site-specific asset enqueueing, resource hints, and block editor
+     * data localization, then calls parent::register() for theme supports,
+     * features, and blocks.
+     */
     public function register(): void
     {
         // Add site-specific hooks
@@ -151,6 +164,7 @@ class ThemeProvider extends BaseThemeProvider
      *
      * Uses wp_add_inline_script with wp_json_encode for reliable data serialization,
      * which handles special characters better than wp_localize_script.
+     * Skips localization if the button script hasn't been registered.
      */
     private function localizeButtonIconData(): void
     {

@@ -110,7 +110,7 @@ class IconService
      *
      * @param string $type 'sprite', 'svg', or 'all'
      * @param string $subdir Optional subdirectory within the type's directory (e.g., 'squiggle')
-     * @return array Array of icon data with 'name', 'label', and 'type' keys
+     * @return array<int, array{name: string, label: string, type: string, filename: string}>
      */
     public static function all(string $type = 'all', string $subdir = ''): array
     {
@@ -135,7 +135,7 @@ class IconService
      * @param string $type 'sprite', 'svg', or 'all'
      * @param string $emptyLabel Label for the empty/no-selection option
      * @param string $subdir Optional subdirectory within the type's directory
-     * @return array Array of ['label' => string, 'value' => string]
+     * @return array<int, array{label: string, value: string}>
      */
     public static function options(string $type = 'all', string $emptyLabel = '— No Icon —', string $subdir = ''): array
     {
@@ -171,7 +171,10 @@ class IconService
 
     /**
      * Sanitize the icon name to prevent directory traversal.
-     * Allows subdirectory paths like 'squiggle/squiggle-1'.
+     *
+     * Strips the .svg extension, normalizes slashes, removes traversal sequences,
+     * and reduces absolute paths to their basename. Allows subdirectory paths
+     * like 'squiggle/squiggle-1'.
      */
     private function sanitizeName(string $name): string
     {
@@ -201,7 +204,11 @@ class IconService
     }
 
     /**
-     * Resolve the icon path by checking directories in order.
+     * Resolve the icon path by checking directories in priority order.
+     *
+     * Checks the sprite directory first (exact match, then icon- prefix),
+     * then falls back to the SVG directory. Sets resolvedPath and type
+     * on the first match.
      */
     private function resolve(): void
     {
@@ -233,7 +240,7 @@ class IconService
     }
 
     /**
-     * Validate that a path points to a readable SVG file.
+     * Validate that a path points to a readable file with an .svg extension.
      */
     private function isValidSvgFile(string $path): bool
     {
@@ -244,6 +251,9 @@ class IconService
 
     /**
      * Sanitize SVG content to remove potentially harmful elements.
+     *
+     * Strips script tags, event handler attributes, XML declarations,
+     * and DOCTYPE nodes from the raw SVG string.
      */
     private function sanitizeContent(string $content): string
     {
@@ -265,7 +275,10 @@ class IconService
     }
 
     /**
-     * Apply custom attributes to the SVG element.
+     * Apply custom attributes to the root SVG element.
+     *
+     * For sprite content without a root <svg> tag, wraps the content in one.
+     * For standard SVGs, injects the attributes into the existing <svg> tag.
      */
     private function applyAttributes(string $content): string
     {
@@ -299,6 +312,8 @@ class IconService
 
     /**
      * Scan a directory for SVG files and return icon metadata.
+     *
+     * @return array<int, array{name: string, label: string, type: string, filename: string}>
      */
     private static function scanDirectory(string $dir, string $type): array
     {

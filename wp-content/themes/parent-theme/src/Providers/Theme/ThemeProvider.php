@@ -42,6 +42,12 @@ class ThemeProvider extends Provider
         EnableSvgUploads::class,
     ];
 
+    /**
+     * Create the theme provider with its dependencies.
+     *
+     * @param Container $container DI container for feature resolution.
+     * @param IconServiceFactory $iconFactory Factory for creating IconService instances.
+     */
     public function __construct(
         Container $container,
         protected readonly IconServiceFactory $iconFactory,

@@ -21,6 +21,9 @@ class ProjectProvider extends Provider
         'projects',
     ];
 
+    /**
+     * Register the project post type and delegate to the parent for blocks and features.
+     */
     public function register(): void
     {
         add_action('init', [$this, 'registerPostType']);

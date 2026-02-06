@@ -18,6 +18,7 @@ class ProjectRepository extends Repository
     /**
      * Get featured projects.
      *
+     * @param int $limit Maximum number of posts to return.
      * @return ProjectPost[]
      */
     public function featured(int $limit = 5): array
@@ -28,6 +29,8 @@ class ProjectRepository extends Repository
     /**
      * Get projects by category.
      *
+     * @param string|int $category Category slug or term ID.
+     * @param int $limit Maximum number of posts to return (-1 for unlimited).
      * @return ProjectPost[]
      */
     public function inCategory(string|int $category, int $limit = -1): array

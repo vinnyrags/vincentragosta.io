@@ -16,6 +16,11 @@ use ParentTheme\Services\SvgSanitizerService;
  */
 class EnableSvgUploads implements Registrable
 {
+    /**
+     * Create the feature with its sanitizer dependency.
+     *
+     * @param SvgSanitizerService $sanitizer Handles SVG content sanitization.
+     */
     public function __construct(
         private readonly SvgSanitizerService $sanitizer,
     ) {}
