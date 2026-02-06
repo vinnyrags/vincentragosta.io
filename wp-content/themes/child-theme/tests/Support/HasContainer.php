@@ -1,6 +1,6 @@
 <?php
 
-namespace ParentTheme\Tests\Support;
+namespace ChildTheme\Tests\Support;
 
 use DI\Container;
 use DI\ContainerBuilder;

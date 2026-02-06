@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Theme\Features;
 
-use enshrined\svgSanitize\Sanitizer;
 use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Services\SvgSanitizerService;
 
 /**
  * Enables SVG uploads in the WordPress media library.
@@ -16,6 +16,10 @@ use ParentTheme\Providers\Contracts\Registrable;
  */
 class EnableSvgUploads implements Registrable
 {
+    public function __construct(
+        private readonly SvgSanitizerService $sanitizer,
+    ) {}
+
     public function register(): void
     {
         add_filter('upload_mimes', [$this, 'addSvgMimeType']);
@@ -102,9 +106,9 @@ class EnableSvgUploads implements Registrable
     }
 
     /**
-     * Sanitize SVG content using enshrined/svg-sanitize.
+     * Sanitize SVG content using the injected SvgSanitizerService.
      *
-     * This library handles all known SVG attack vectors including:
+     * The service handles all known SVG attack vectors including:
      * - <script> elements
      * - Event handler attributes (onclick, onload, etc.)
      * - <foreignObject> elements (embeds arbitrary HTML)
@@ -119,23 +123,6 @@ class EnableSvgUploads implements Registrable
      */
     protected function sanitizeSvgContent(string $content): string|false
     {
-        $sanitizer = new Sanitizer();
-
-        // Remove remote references (external SVGs, stylesheets, etc.)
-        $sanitizer->removeRemoteReferences(true);
-
-        // Remove XML tag to prevent XML-based attacks
-        $sanitizer->removeXMLTag(true);
-
-        // Minify output to remove comments and whitespace
-        $sanitizer->minify(true);
-
-        $clean = $sanitizer->sanitize($content);
-
-        if ($clean === false || $clean === '') {
-            return false;
-        }
-
-        return $clean;
+        return $this->sanitizer->sanitize($content);
     }
 }

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Theme;
 
+use DI\Container;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
-use ParentTheme\Services\IconService;
+use ParentTheme\Services\IconServiceFactory;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -40,6 +41,13 @@ class ThemeProvider extends Provider
         DisablePosts::class,
         EnableSvgUploads::class,
     ];
+
+    public function __construct(
+        Container $container,
+        protected readonly IconServiceFactory $iconFactory,
+    ) {
+        parent::__construct($container);
+    }
 
     public function register(): void
     {
@@ -131,8 +139,9 @@ class ThemeProvider extends Provider
     {
         $twig = parent::addTwigFunctions($twig);
 
-        $twig->addFunction(new TwigFunction('icon', function (string $name): IconService {
-            return new IconService($name);
+        $factory = $this->iconFactory;
+        $twig->addFunction(new TwigFunction('icon', function (string $name) use ($factory) {
+            return $factory->create($name);
         }));
 
         return $twig;

@@ -80,7 +80,7 @@ protected array $features = [
 
 **Constructors are for DI only** — No initialization logic in constructors. Setup happens in `init()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method.
 
-**Autowiring-first** — Container definition files (`src/config/container.php`) exist in both themes but stay empty. PHP-DI's autowiring resolves everything. Only add explicit definitions when autowiring can't figure it out.
+**Autowiring-first** — PHP-DI's autowiring resolves everything by default. To add explicit definitions when autowiring can't figure it out, override `getContainerDefinitions()` in Theme.php and create a `src/Config/container.php` file that returns an array of definitions.
 
 **Lazy initialization** — `Provider::init()` is idempotent and defers manager setup until actually needed. Multiple calls are safe.
 
@@ -224,6 +224,6 @@ These are patterns the codebase has evolved away from. Avoid reintroducing them:
 - **Hardcoded parent paths in child** — The build script uses `process.cwd()` and reflection-based paths. Don't hardcode `get_template_directory()` where `get_stylesheet_directory()` is correct (or vice versa)
 - **Duplicated build scripts** — There is one canonical `build-providers.js` in the parent theme. The child runs it, it doesn't copy it
 - **Initialization in constructors** — Constructors take DI parameters only. Setup logic goes in `init()`, `register()`, or `bootstrap()`
-- **Explicit container definitions for autowirable classes** — If PHP-DI can resolve it automatically, don't add a definition. The container config files should stay minimal
+- **Explicit container definitions for autowirable classes** — If PHP-DI can resolve it automatically, don't add a definition
 - **Calling `init()` on Theme** — The entry point is `bootstrap()`. Using `init()` conflicts with `Timber\Site::init()`
 - **`new` for feature classes** — Features are resolved through the container via `FeatureManager`. This enables autowiring of their dependencies

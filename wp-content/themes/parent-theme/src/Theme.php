@@ -82,15 +82,24 @@ class Theme extends Site
 
     /**
      * Get container definition file paths.
-     * Child themes override this to add their own definitions.
+     *
+     * PHP-DI autowiring handles most classes automatically. Override this method
+     * to add explicit definitions when autowiring can't resolve a dependency.
+     *
+     * Example: Create src/Config/container.php returning an array:
+     *   return [
+     *       SomeInterface::class => \DI\autowire(ConcreteClass::class),
+     *       'config.value' => 'some-value',
+     *   ];
+     *
+     * Then add it here:
+     *   return [get_template_directory() . '/src/Config/container.php'];
      *
      * @return string[]
      */
     protected function getContainerDefinitions(): array
     {
-        return [
-            get_template_directory() . '/src/config/container.php',
-        ];
+        return [];
     }
 
     /**

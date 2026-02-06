@@ -3,6 +3,7 @@
 namespace ChildTheme\Tests\Integration\Providers\Features;
 
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
+use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
@@ -11,12 +12,15 @@ use WorDBless\BaseTestCase;
  */
 class ButtonIconEnhancerTest extends BaseTestCase
 {
+    use HasContainer;
+
     private ButtonIconEnhancer $feature;
 
     public function set_up(): void
     {
         parent::set_up();
-        $this->feature = new ButtonIconEnhancer();
+        $container = $this->buildTestContainer();
+        $this->feature = $container->get(ButtonIconEnhancer::class);
     }
 
     /**

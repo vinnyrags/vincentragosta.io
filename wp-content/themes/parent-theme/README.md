@@ -51,8 +51,6 @@ parent-theme/
 │   │   └── RepositoryInterface.php
 │   ├── Services/
 │   │   └── IconService.php           # SVG icon handling
-│   ├── config/
-│   │   └── container.php             # DI container definitions
 │   └── Theme.php                     # Base theme class (extends Timber\Site)
 ├── composer.json
 ├── functions.php
@@ -109,13 +107,6 @@ class Theme extends BaseTheme
     protected array $providers = [
         ThemeProvider::class,
     ];
-
-    protected function getContainerDefinitions(): array
-    {
-        return array_merge(parent::getContainerDefinitions(), [
-            get_stylesheet_directory() . '/src/config/container.php',
-        ]);
-    }
 }
 ```
 
@@ -189,7 +180,27 @@ class MyProvider extends Provider
 
 ### Dependency Injection
 
-Providers receive a `DI\Container` via constructor injection. The container uses autowiring — no manual definitions needed for most classes. Container definitions can be added in `src/config/container.php`.
+Providers receive a `DI\Container` via constructor injection. The container uses autowiring — no manual definitions needed for most classes.
+
+To add explicit definitions when autowiring can't resolve a dependency, override `getContainerDefinitions()` in your Theme class:
+
+```php
+protected function getContainerDefinitions(): array
+{
+    return [
+        get_stylesheet_directory() . '/src/Config/container.php',
+    ];
+}
+```
+
+Then create `src/Config/container.php`:
+
+```php
+<?php
+return [
+    SomeInterface::class => \DI\autowire(ConcreteClass::class),
+];
+```
 
 ### Features
 

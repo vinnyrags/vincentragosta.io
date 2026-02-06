@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme\Features;
 
-use ParentTheme\Services\IconService;
+use ParentTheme\Services\IconServiceFactory;
 use ParentTheme\Providers\Contracts\Registrable;
 use DOMDocument;
 use DOMXPath;
@@ -16,6 +16,10 @@ use DOMXPath;
  */
 class ButtonIconEnhancer implements Registrable
 {
+    public function __construct(
+        private readonly IconServiceFactory $iconFactory,
+    ) {}
+
     public function register(): void
     {
         add_filter('render_block_core/button', [$this, 'render'], 10, 2);
@@ -30,7 +34,7 @@ class ButtonIconEnhancer implements Registrable
             return $content;
         }
 
-        $icon = new IconService($block['attrs']['selectedIcon']);
+        $icon = $this->iconFactory->create($block['attrs']['selectedIcon']);
         if (!$icon->exists()) {
             return $content;
         }

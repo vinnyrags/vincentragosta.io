@@ -6,8 +6,9 @@ namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
+use DI\Container;
 use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
-use ParentTheme\Services\IconService;
+use ParentTheme\Services\IconServiceFactory;
 
 /**
  * Handles core theme setup and configuration.
@@ -37,6 +38,13 @@ class ThemeProvider extends BaseThemeProvider
         'shutter-cards',
         'shutter-card',
     ];
+
+    public function __construct(
+        Container $container,
+        IconServiceFactory $iconFactory,
+    ) {
+        parent::__construct($container, $iconFactory);
+    }
 
     public function register(): void
     {
@@ -152,8 +160,8 @@ class ThemeProvider extends BaseThemeProvider
         }
 
         $data = [
-            'iconOptions' => IconService::options('sprite', __('— No Icon —', 'child-theme')),
-            'iconContentMap' => IconService::contentMap('sprite'),
+            'iconOptions' => $this->iconFactory->options('sprite', __('— No Icon —', 'child-theme')),
+            'iconContentMap' => $this->iconFactory->contentMap('sprite'),
         ];
 
         wp_add_inline_script(

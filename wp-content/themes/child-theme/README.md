@@ -45,8 +45,6 @@ child-theme/
 │   │   └── Project/               # Project post type and projects block
 │   ├── Services/
 │   │   └── IconService.php        # SVG icon handling
-│   ├── config/
-│   │   └── container.php          # DI container definitions
 │   └── Theme.php                  # Main theme class
 ├── views/                         # Twig templates
 ├── theme.json                     # Block editor configuration

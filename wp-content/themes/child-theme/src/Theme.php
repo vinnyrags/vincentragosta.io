@@ -25,9 +25,4 @@ class Theme extends BaseTheme
         ThemeProvider::class,
         ProjectProvider::class,
     ];
-
-    protected function getContainerDefinitions(): array
-    {
-        return [...parent::getContainerDefinitions(), get_stylesheet_directory() . '/src/config/container.php'];
-    }
 }

@@ -6,13 +6,13 @@ use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
+use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
-use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -30,7 +30,7 @@ class ThemeProviderTest extends BaseTestCase
     {
         parent::set_up();
         $this->container = $this->buildTestContainer();
-        $this->provider = new ThemeProvider($this->container);
+        $this->provider = $this->container->get(ThemeProvider::class);
     }
 
     /**
