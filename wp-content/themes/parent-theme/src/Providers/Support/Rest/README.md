@@ -120,7 +120,7 @@ This produces the namespace `my-api/v2`, so a route `/health` registers at `/wp-
 
 ## How It Works
 
-1. `Provider::init()` calls `collectRoutes()`, which walks the class hierarchy via reflection
+1. `Provider::setup()` calls `collectRoutes()`, which walks the class hierarchy via reflection
 2. Each level's `$routes` array is normalized via `AbstractRegistry::normalize()`
 3. Arrays are merged bottom-up so child entries override parent entries for the same class
 4. The merged map is passed to the `RestManager` constructor along with the namespace

@@ -73,7 +73,7 @@ abstract class Provider implements Registrable
      */
     public function register(): void
     {
-        $this->init();
+        $this->setup();
         $this->registerFeatures();
         $this->blockManager->initializeHooks($this);
         $this->maybeRegisterTwigFilter();
@@ -111,11 +111,11 @@ abstract class Provider implements Registrable
     }
 
     /**
-     * Initialize the asset, block, and feature managers.
+     * Set up the asset, block, feature, and REST managers.
      *
      * Idempotent — safe to call multiple times.
      */
-    protected function init(): void
+    protected function setup(): void
     {
         if ($this->assets !== null) {
             return;
@@ -218,7 +218,7 @@ abstract class Provider implements Registrable
      */
     protected function loadConfig(string $filename): ?array
     {
-        $this->init();
+        $this->setup();
 
         $filepath = $this->configPath . '/' . $filename;
 
@@ -257,7 +257,7 @@ abstract class Provider implements Registrable
      */
     protected function translateLabels(array $labels): array
     {
-        $this->init();
+        $this->setup();
 
         $translated = [];
 
@@ -273,7 +273,7 @@ abstract class Provider implements Registrable
      */
     public function enqueueStyle(string $handle, string $filename, array $deps = []): void
     {
-        $this->init();
+        $this->setup();
         $this->assets->enqueueStyle($handle, $filename, $deps);
     }
 
@@ -282,7 +282,7 @@ abstract class Provider implements Registrable
      */
     public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void
     {
-        $this->init();
+        $this->setup();
         $this->assets->enqueueScript($handle, $filename, $deps, $inFooter);
     }
 
@@ -291,7 +291,7 @@ abstract class Provider implements Registrable
      */
     protected function enqueueDistStyle(string $handle, string $path, array $deps = []): void
     {
-        $this->init();
+        $this->setup();
         $this->assets->enqueueDistStyle($handle, $path, $deps);
     }
 
@@ -300,7 +300,7 @@ abstract class Provider implements Registrable
      */
     protected function enqueueDistScript(string $handle, string $path, array $deps = [], bool $inFooter = true): void
     {
-        $this->init();
+        $this->setup();
         $this->assets->enqueueDistScript($handle, $path, $deps, $inFooter);
     }
 
@@ -309,7 +309,7 @@ abstract class Provider implements Registrable
      */
     protected function enqueueManifestScript(string $handle, string $path, array $extraDeps = [], bool $inFooter = true): void
     {
-        $this->init();
+        $this->setup();
         $this->assets->enqueueManifestScript($handle, $path, $extraDeps, $inFooter);
     }
 
@@ -318,7 +318,7 @@ abstract class Provider implements Registrable
      */
     protected function enqueueEditorScript(string $handle, string $filename, array $deps = []): void
     {
-        $this->init();
+        $this->setup();
         $this->blockManager->enqueueEditorScript($handle, $filename, $deps);
     }
 
@@ -351,7 +351,7 @@ abstract class Provider implements Registrable
      */
     public function getBlocks(): array
     {
-        $this->init();
+        $this->setup();
         return $this->blockManager->getBlocks();
     }
 
@@ -360,7 +360,7 @@ abstract class Provider implements Registrable
      */
     public function getBlocksPath(): string
     {
-        $this->init();
+        $this->setup();
         return $this->blockManager->getBlocksPath();
     }
 
@@ -369,7 +369,7 @@ abstract class Provider implements Registrable
      */
     public function getBlocksUri(): string
     {
-        $this->init();
+        $this->setup();
         return $this->blockManager->getBlocksUri();
     }
 
@@ -378,7 +378,7 @@ abstract class Provider implements Registrable
      */
     public function registerBlocks(): void
     {
-        $this->init();
+        $this->setup();
         $this->blockManager->registerBlocks();
     }
 }

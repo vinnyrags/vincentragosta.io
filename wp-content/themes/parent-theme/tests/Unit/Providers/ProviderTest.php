@@ -28,7 +28,7 @@ class TestableProvider extends Provider
 
     /**
      * Set a custom config path for testing.
-     * Must be called before loadConfig to override the init()-derived path.
+     * Must be called before loadConfig to override the setup()-derived path.
      */
     public function setTestConfigPath(string $path): void
     {
@@ -41,14 +41,14 @@ class TestableProvider extends Provider
     public function testLoadConfig(string $filename): ?array
     {
         // Initialize normally first
-        $this->init();
+        $this->setup();
 
         // Override configPath if a test path was set
         if ($this->testConfigPath !== null) {
             $this->configPath = $this->testConfigPath;
         }
 
-        // Build the filepath manually to avoid calling init() again
+        // Build the filepath manually to avoid calling setup() again
         $filepath = $this->configPath . '/' . $filename;
 
         if (!file_exists($filepath)) {
@@ -87,7 +87,7 @@ class TwigOverrideProvider extends Provider
 
     public function register(): void
     {
-        $this->init();
+        $this->setup();
         $this->maybeRegisterTwigFilter();
     }
 

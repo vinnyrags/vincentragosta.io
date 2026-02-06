@@ -62,7 +62,7 @@ Result: `DisablePosts` is excluded. The remaining 5 features are registered.
 
 ## How It Works
 
-1. `Provider::init()` calls `collectFeatures()`, which walks the class hierarchy via reflection
+1. `Provider::setup()` calls `collectFeatures()`, which walks the class hierarchy via reflection
 2. Each level's `$features` array is normalized via `AbstractRegistry::normalize()`
 3. Arrays are merged bottom-up so child entries override parent entries for the same class
 4. The merged map is passed to the `FeatureManager` constructor

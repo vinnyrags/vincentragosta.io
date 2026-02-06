@@ -45,11 +45,11 @@ class MyFeatureProvider extends Provider
 {
     public function register(): void
     {
-        add_action('init', [$this, 'init']);
+        add_action('init', [$this, 'initialize']);
         parent::register();
     }
 
-    public function init(): void
+    public function initialize(): void
     {
         // Your initialization logic
     }

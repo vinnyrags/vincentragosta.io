@@ -34,7 +34,7 @@ Each provider composes three managers rather than inheriting them:
 - **BlockManager** — registers dynamic blocks from the provider's `blocks/` directory
 - **FeatureManager** — resolves and registers small `Registrable` feature classes via the DI container
 
-Managers are instantiated in `Provider::init()`, which runs lazily (idempotent, deferred until first access).
+Managers are instantiated in `Provider::setup()`, which runs lazily (idempotent, deferred until first access).
 
 ### Provider Registration Flow
 
@@ -44,7 +44,7 @@ functions.php → (new Theme())->bootstrap()
   → registerAll($providers)
     → container->get(ThemeProvider::class)  // autowired
     → provider->register()
-      → init()          // creates managers, sets configPath
+      → setup()         // creates managers, sets configPath
       → registerFeatures()  // FeatureManager resolves + registers all
       → blockManager->initializeHooks()
 ```
@@ -78,11 +78,11 @@ protected array $features = [
 
 **Composition over inheritance** — Providers compose AssetManager, BlockManager, and FeatureManager as internal collaborators. The managers are not part of any inheritance chain.
 
-**Constructors are for DI only** — No initialization logic in constructors. Setup happens in `init()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method.
+**Constructors are for DI only** — No initialization logic in constructors. Setup happens in `setup()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method.
 
 **Autowiring-first** — PHP-DI's autowiring resolves everything by default. To add explicit definitions when autowiring can't figure it out, override `getContainerDefinitions()` in Theme.php and create a `src/Config/container.php` file that returns an array of definitions.
 
-**Lazy initialization** — `Provider::init()` is idempotent and defers manager setup until actually needed. Multiple calls are safe.
+**Lazy initialization** — `Provider::setup()` is idempotent and defers manager setup until actually needed. Multiple calls are safe.
 
 **Silent asset failures** — If a CSS or JS file doesn't exist in `dist/`, the enqueue call silently skips it. This prevents errors when a provider has PHP logic but no compiled assets.
 
@@ -223,7 +223,7 @@ These are patterns the codebase has evolved away from. Avoid reintroducing them:
 - **Assets at theme root** — All assets live inside their provider's `assets/` or `blocks/` directory, not in a top-level `assets/` folder
 - **Hardcoded parent paths in child** — The build script uses `process.cwd()` and reflection-based paths. Don't hardcode `get_template_directory()` where `get_stylesheet_directory()` is correct (or vice versa)
 - **Duplicated build scripts** — There is one canonical `build-providers.js` in the parent theme. The child runs it, it doesn't copy it
-- **Initialization in constructors** — Constructors take DI parameters only. Setup logic goes in `init()`, `register()`, or `bootstrap()`
+- **Initialization in constructors** — Constructors take DI parameters only. Setup logic goes in `setup()`, `register()`, or `bootstrap()`
 - **Explicit container definitions for autowirable classes** — If PHP-DI can resolve it automatically, don't add a definition
 - **Calling `init()` on Theme** — The entry point is `bootstrap()`. Using `init()` conflicts with `Timber\Site::init()`
 - **`new` for feature classes** — Features are resolved through the container via `FeatureManager`. This enables autowiring of their dependencies

@@ -4,7 +4,7 @@ Internal infrastructure classes that power the provider system.
 
 ## Overview
 
-Support classes are the composition layer between providers and WordPress. Each provider composes manager instances that handle a specific concern — assets, blocks, features, or REST endpoints. Managers are created with `new` in `Provider::init()` because they receive provider-specific runtime arguments (paths, slugs, feature lists) that are computed from reflection.
+Support classes are the composition layer between providers and WordPress. Each provider composes manager instances that handle a specific concern — assets, blocks, features, or REST endpoints. Managers are created with `new` in `Provider::setup()` because they receive provider-specific runtime arguments (paths, slugs, feature lists) that are computed from reflection.
 
 ## Structure
 
@@ -33,7 +33,7 @@ Base class shared by `FeatureManager` and `RestManager`. Provides the normalized
 Managers are internal collaborators — providers expose wrapper methods that delegate to them:
 
 ```php
-// Provider::init() creates the managers
+// Provider::setup() creates the managers
 $this->assets = new AssetManager($slug, $distPath, $distUri);
 $this->blockManager = new BlockManager($blocksPath, $blocksUri, ...);
 $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
