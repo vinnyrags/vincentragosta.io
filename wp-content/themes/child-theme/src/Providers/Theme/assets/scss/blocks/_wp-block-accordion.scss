@@ -1,5 +1,32 @@
-.wp-block-accordion-heading__toggle:hover .wp-block-accordion-heading__toggle-title {
-  text-decoration: none;
+// Accordion item numbering (01, 02, 03…)
+.wp-block-accordion {
+  --accordion-number-width: 2.5rem;
+  --accordion-number-gap: var(--wp--preset--spacing--40);
+  --accordion-content-offset: calc(var(--accordion-number-width) + var(--accordion-number-gap));
+
+  counter-reset: accordion-index;
+}
+
+.wp-block-accordion-item {
+  counter-increment: accordion-index;
+}
+
+.wp-block-accordion-heading__toggle {
+  &::before {
+    content: counter(accordion-index, decimal-leading-zero);
+    font-weight: 400;
+    color: var(--wp--preset--color--grey-3);
+    min-width: var(--accordion-number-width);
+    margin-right: var(--accordion-number-gap);
+  }
+
+  &:hover .wp-block-accordion-heading__toggle-title {
+    text-decoration: none;
+  }
+}
+
+.light-mode .wp-block-accordion-heading__toggle::before {
+  color: var(--wp--preset--color--grey-4);
 }
 
 .wp-block-accordion-heading__toggle-icon {
@@ -23,17 +50,19 @@
     height: 1.5rem;
     color: var(--wp--preset--color--contrast);
     transition: transform 0.3s ease;
+    transform: rotate(315deg);
   }
 }
 
 // Rotate when expanded — the button carries aria-expanded
 .wp-block-accordion-heading__toggle[aria-expanded="true"] {
   .wp-block-accordion-heading__toggle-icon svg {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
   }
 }
 
 .wp-block-accordion-panel {
+  margin-inline-start: var(--accordion-content-offset);
   margin-block-start: var(--wp--preset--spacing--40);
   color: var(--wp--preset--color--grey-5);
 
