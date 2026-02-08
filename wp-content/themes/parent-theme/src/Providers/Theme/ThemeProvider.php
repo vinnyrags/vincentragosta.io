@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace ParentTheme\Providers\Theme;
 
 use DI\Container;
+use ParentTheme\Models\Image;
+use ParentTheme\Models\Post;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Services\IconServiceFactory;
+use Timber\Attachment;
 use Twig\Environment;
 use Twig\TwigFunction;
 
@@ -58,6 +61,7 @@ class ThemeProvider extends Provider
     public function register(): void
     {
         add_action('after_setup_theme', [$this, 'addThemeSupports']);
+        add_filter('timber/post/classmap', [$this, 'registerClassMap']);
 
         // Core asset enqueueing
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
@@ -65,6 +69,32 @@ class ThemeProvider extends Provider
         add_action('enqueue_block_assets', [$this, 'enqueueBlockAssets']);
 
         parent::register();
+    }
+
+    /**
+     * Register the Timber post class map.
+     *
+     * Maps core post types to custom model classes. Child themes can
+     * override this method to add their own mappings.
+     *
+     * @param array<string, class-string> $classMap Existing class map.
+     * @return array<string, class-string|callable> Updated class map.
+     */
+    public function registerClassMap(array $classMap): array
+    {
+        $classMap['post'] = Post::class;
+        $classMap['page'] = Post::class;
+        $classMap['attachment'] = function ($post) {
+            $mimeType = $post->post_mime_type ?? '';
+
+            if (str_starts_with($mimeType, 'image/')) {
+                return Image::class;
+            }
+
+            return Attachment::class;
+        };
+
+        return $classMap;
     }
 
     /**

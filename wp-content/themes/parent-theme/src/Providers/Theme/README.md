@@ -17,6 +17,16 @@ Registers standard WordPress theme supports:
 - `custom-spacing`
 - `align-wide`
 
+## Class Map
+
+The `registerClassMap()` method registers the `timber/post/classmap` filter as core infrastructure. This maps WordPress post types to custom model classes:
+
+- `post` → `ParentTheme\Models\Post`
+- `page` → `ParentTheme\Models\Post`
+- `attachment` → `ParentTheme\Models\Image` (for `image/*` mime types) or `Timber\Attachment` (for other attachments)
+
+This ensures that `post.thumbnail` returns an `Image` instance with the fluent resize/crop API. Child themes can override `registerClassMap()` to add their own mappings (e.g., `project` → `ProjectPost`) while calling `parent::registerClassMap()` to preserve the base map.
+
 ## Features
 
 ### DisableBlocks
