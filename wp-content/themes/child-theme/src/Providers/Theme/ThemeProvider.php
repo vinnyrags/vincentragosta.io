@@ -55,6 +55,16 @@ class ThemeProvider extends BaseThemeProvider
     }
 
     /**
+     * Extend parent theme supports with child editor styles.
+     */
+    public function addThemeSupports(): void
+    {
+        parent::addThemeSupports();
+
+        add_editor_style('dist/css/theme.css');
+    }
+
+    /**
      * Register child-specific hooks before delegating to the parent.
      *
      * Adds site-specific asset enqueueing, resource hints, and block editor

@@ -9,9 +9,17 @@
 
 .wp-block-accordion-item {
   counter-increment: accordion-index;
+
+  .is-layout-flow > & + & {
+    margin-block-start: var(--wp--preset--spacing--40);
+    border-top: 1px solid var(--wp--preset--color--grey-5);
+    padding-block-start: var(--wp--preset--spacing--40);
+  }
 }
 
 .wp-block-accordion-heading__toggle {
+  padding: 0;
+
   &::before {
     content: counter(accordion-index, decimal-leading-zero);
     font-weight: 400;
@@ -34,30 +42,31 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  width: var(--wp--custom--icon-size--md);
+  height: var(--wp--custom--icon-size--md);
 
   &::before {
     content: '';
     position: absolute;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: inherit;
+    height: inherit;
     border-radius: 50%;
     background-color: var(--wp--preset--color--accent-1);
   }
 
   svg {
     position: relative;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: var(--wp--custom--icon-size--md);
+    height: var(--wp--custom--icon-size--md);
     color: var(--wp--preset--color--contrast);
     transition: transform 0.3s ease;
-    transform: rotate(315deg);
   }
 }
 
-// Rotate when expanded — the button carries aria-expanded
+// Flip upward when expanded — the button carries aria-expanded
 .wp-block-accordion-heading__toggle[aria-expanded="true"] {
   .wp-block-accordion-heading__toggle-icon svg {
-    transform: rotate(90deg);
+    transform: rotate(135deg);
   }
 }
 

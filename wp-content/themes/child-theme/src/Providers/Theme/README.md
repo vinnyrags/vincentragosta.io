@@ -22,6 +22,18 @@ The shutter-cards container uses `InnerBlocks` and must return `<InnerBlocks.Con
 
 ## Features
 
+### AccordionIconEnhancer
+
+Replaces the default +/− text in `core/accordion-heading` toggle icons with an SVG arrow from the icon sprite.
+
+#### How It Works
+
+1. Hooks into `render_block_core/accordion-heading`
+2. Resolves the `icon-arrow` SVG via `IconServiceFactory`
+3. Replaces the text content of the `.wp-block-accordion-heading__toggle-icon` span with the SVG
+
+CSS in `_wp-block-accordion.scss` handles rotation based on `aria-expanded` state, panel indentation, and accordion numbering. These styles appear in both the frontend and the block editor (via `add_editor_style`).
+
 ### ButtonIconEnhancer
 
 Enhances the core `core/button` block with icon support on the frontend.
@@ -56,7 +68,7 @@ Registers custom block styles for `core/cover`:
 
 ### Theme Styles
 
-Enqueues `theme.css` for frontend styling related to the theme provider.
+Enqueues `theme.css` for frontend styling and loads it in the block editor via `add_editor_style()` for WYSIWYG parity.
 
 ## Assets
 
@@ -141,6 +153,7 @@ Theme/
 ├── ThemeProvider.php
 ├── README.md
 ├── Features/
+│   ├── AccordionIconEnhancer.php
 │   ├── ButtonIconEnhancer.php
 │   └── CoverBlockStyles.php
 ├── assets/
@@ -159,6 +172,7 @@ Theme/
 │       ├── _button-icon.scss
 │       ├── _color-mode.scss
 │       └── blocks/
+│           ├── _wp-block-accordion.scss
 │           └── _wp-block-cover.scss
 └── blocks/
     ├── shutter-cards/

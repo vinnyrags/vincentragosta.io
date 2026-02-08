@@ -95,6 +95,13 @@
         }
       ]
     },
+    "custom": {
+      "iconSize": {
+        "sm": "24px",
+        "md": "36px",
+        "lg": "48px"
+      }
+    },
     "typography": {
       "writingMode": true,
       "defaultFontSizes": false,

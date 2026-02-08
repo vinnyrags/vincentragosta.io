@@ -38,7 +38,7 @@ class AccordionIconEnhancer implements Registrable
      */
     public function render(string $content, array $block): string
     {
-        $icon = $this->iconFactory->create('arrow');
+        $icon = $this->iconFactory->create('chevron');
         if (!$icon->exists()) {
             return $content;
         }
