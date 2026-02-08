@@ -4,7 +4,7 @@
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
-.PHONY: help install install-parent install-child build watch clean autoload test
+.PHONY: help install install-parent install-child build watch clean autoload test update
 
 # Default target
 help:
@@ -14,6 +14,7 @@ help:
 	@echo "  make test      - Run test suite (both themes)"
 	@echo "  make watch     - Start watch mode for development"
 	@echo "  make clean     - Remove all generated files"
+	@echo "  make update    - Update composer dependencies (root + both themes)"
 	@echo "  make autoload  - Regenerate composer autoloaders"
 
 # Install all dependencies
@@ -51,6 +52,19 @@ clean:
 	rm -rf $(CHILD_THEME_DIR)/node_modules
 	rm -rf $(CHILD_THEME_DIR)/dist
 	@echo "✓ Clean complete"
+
+# Update composer dependencies
+update:
+	@echo "Updating root dependencies..."
+	composer update --no-interaction
+	@echo ""
+	@echo "Updating parent theme dependencies..."
+	cd $(PARENT_THEME_DIR) && composer update --no-interaction
+	@echo ""
+	@echo "Updating child theme dependencies..."
+	cd $(CHILD_THEME_DIR) && composer update --no-interaction
+	@echo ""
+	@echo "✓ All dependencies updated"
 
 # Composer dump-autoload for both themes
 autoload:
