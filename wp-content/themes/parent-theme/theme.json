@@ -218,17 +218,17 @@
       },
       "core/column": {
         "spacing": {
-          "blockGap": "var:preset|spacing|40"
+          "blockGap": "var:preset|spacing|50"
         }
       },
       "core/group": {
         "spacing": {
-          "blockGap": "var:preset|spacing|40"
+          "blockGap": "var:preset|spacing|50"
         }
       },
       "core/cover": {
         "spacing": {
-          "blockGap": "var:preset|spacing|40"
+          "blockGap": "var:preset|spacing|50"
         }
       },
       "core/buttons": {
