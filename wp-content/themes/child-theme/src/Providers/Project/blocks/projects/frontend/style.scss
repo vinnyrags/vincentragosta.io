@@ -1,5 +1,6 @@
-// Block wrapper is the container
-.wp-block-child-theme-projects {
+// Block wrapper and archive wrapper are the container
+.wp-block-child-theme-projects,
+.projects-archive {
   container: projects / inline-size;
 }
 

@@ -1,0 +1,7 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <div class="projects-archive">
+        {% include 'partials/projects-grid.twig' with { projects: posts } %}
+    </div>
+{% endblock %}

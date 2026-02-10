@@ -1,0 +1,7 @@
+<div class="projects-grid">
+    {% for project in projects %}
+        {% include 'partials/project-card.twig' with { project: project } only %}
+    {% else %}
+        <p>No projects to display.</p>
+    {% endfor %}
+</div>
