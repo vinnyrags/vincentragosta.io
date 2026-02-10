@@ -1,8 +1,20 @@
 {% extends "base.twig" %}
 
 {% block content %}
+    <h1 class="projects-archive__heading has-70-font-size">Project Showcase</h1>
     <div class="projects-archive">
-        <h1 class="projects-archive__heading has-70-font-size">Project Showcase</h1>
+        <div class="projects-sort">
+            {% include 'partials/dropdown.twig' with {
+                name: 'sort',
+                options: [
+                    { value: 'date-desc', label: 'Newest' },
+                    { value: 'date-asc', label: 'Oldest' },
+                    { value: 'title-asc', label: 'A → Z' },
+                    { value: 'title-desc', label: 'Z → A' },
+                ],
+                selected: 'date-desc'
+            } only %}
+        </div>
         {% include 'partials/projects-grid.twig' with { projects: posts } %}
     </div>
 {% endblock %}

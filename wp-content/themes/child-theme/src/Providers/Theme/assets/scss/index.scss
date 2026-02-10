@@ -7,6 +7,9 @@
 @use 'layout/footer';
 @use 'layout/nav-overlay';
 
+// Components
+@use 'dropdown';
+
 // Block styles
 @use 'blocks/wp-block-accordion';
 @use 'blocks/wp-block-cover';

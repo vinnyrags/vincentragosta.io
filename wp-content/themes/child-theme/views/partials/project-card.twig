@@ -1,5 +1,5 @@
 {% set project_category = project.terms('project_category')|first %}
-<div class="project-card">
+<div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.date('Y-m-d H:i:s') }}">
     <a href="{{ project.link }}" class="project-card__image-link" aria-label="View project: {{ project.title }}">
         {% if project.thumbnail %}
             <img src="{{ project.thumbnail.src | resize(800) }}"

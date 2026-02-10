@@ -1,3 +1,9 @@
+.projects-sort {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 .projects-archive.has-scroll-reveal .project-card {
     opacity: 0;
     transform: translateY(20px);

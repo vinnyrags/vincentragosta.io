@@ -1,0 +1,29 @@
+{% set selected = selected|default(options[0].value) %}
+{% set selected_label = '' %}
+{% for option in options %}
+    {% if option.value == selected %}
+        {% set selected_label = option.label %}
+    {% endif %}
+{% endfor %}
+
+<div class="dropdown" data-dropdown="{{ name }}">
+    <button class="wp-element-button button dropdown__toggle"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="listbox">
+        <span class="dropdown__label">{{ selected_label }}</span>
+        <span class="dropdown__icon" aria-hidden="true">{{ icon('chevron') | raw }}</span>
+    </button>
+    <ul class="dropdown__menu" role="listbox" aria-label="{{ name }}" tabindex="-1">
+        {% for option in options %}
+            <li class="dropdown__item"
+                id="{{ name }}-option-{{ loop.index0 }}"
+                role="option"
+                data-value="{{ option.value }}"
+                tabindex="-1"
+                aria-selected="{{ option.value == selected ? 'true' : 'false' }}">
+                {{ option.label }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>

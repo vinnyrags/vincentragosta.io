@@ -1,1 +1,5 @@
-- create image class
+- optimize build process
+- project detail
+- content changes in CMS
+- revisit adding < hr /> separator after projects, and in turn, revisit the addition of a 6rem/10rem new spacing variable called 65
+- confirm in CMS that heading and paragraph spacing is correct
