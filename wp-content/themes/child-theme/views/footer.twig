@@ -1,9 +1,9 @@
-<div class="footer">
+<footer class="footer">
     <div class="footer__inner">
         {# Contact Section #}
-        <section class="footer__contact">
+        <section class="footer__contact" aria-labelledby="footer-contact-heading">
             <div class="footer__contact-heading">
-                <h2 class="footer__heading">Let's start a <strong>conversation</strong></h2>
+                <h2 class="footer__heading" id="footer-contact-heading">Let's start a <strong>conversation</strong></h2>
                 <a href="mailto:hello@vincentragosta.io" class="wp-element-button button has-icon">
                     Get in touch today
                     <span class="button__icon icon-arrow" aria-hidden="true">
@@ -37,19 +37,19 @@
             </div>
 
             <nav class="footer__social-nav" aria-label="Social media links">
-                <ul>
+                <ul role="list">
                     <li>
-                        <a href="https://instagram.com/vinnyrags" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                        <a href="https://instagram.com/vinnyrags" class="footer__social-link" aria-label="Instagram (opens in new tab)" target="_blank" rel="noopener noreferrer">
                             {{ icon('instagram') | raw }}
                         </a>
                     </li>
                     <li>
-                        <a href="https://x.com/vinnyrags" class="footer__social-link" aria-label="X" target="_blank" rel="noopener noreferrer">
+                        <a href="https://x.com/vinnyrags" class="footer__social-link" aria-label="X (opens in new tab)" target="_blank" rel="noopener noreferrer">
                             {{ icon('x') | raw }}
                         </a>
                     </li>
                     <li>
-                        <a href="https://linkedin.com/in/vincentragosta" class="footer__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                        <a href="https://linkedin.com/in/vincentragosta" class="footer__social-link" aria-label="LinkedIn (opens in new tab)" target="_blank" rel="noopener noreferrer">
                             {{ icon('linkedin') | raw }}
                         </a>
                     </li>
@@ -57,4 +57,4 @@
             </nav>
         </div>
     </div>
-</div>
+</footer>
