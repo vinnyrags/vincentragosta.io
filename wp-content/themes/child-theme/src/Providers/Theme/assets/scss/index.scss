@@ -2,6 +2,9 @@
 @use 'color-mode';
 @use 'button-icon';
 
+// Layout
+@use 'layout/footer';
+
 // Block styles
 @use 'blocks/wp-block-accordion';
 @use 'blocks/wp-block-cover';

@@ -201,14 +201,6 @@
           "fontSize": "var:preset|font-size|20",
           "fontWeight": "700",
           "textTransform": "uppercase"
-        },
-        "spacing": {
-          "padding": {
-            "right": "var:preset|spacing|40",
-            "bottom": "var:preset|spacing|30",
-            "left": "var:preset|spacing|40",
-            "top": "var:preset|spacing|30"
-          }
         }
       },
       "core/columns": {
@@ -239,9 +231,20 @@
     },
     "elements": {
       "button": {
+        "border": {
+          "radius": "9999px"
+        },
         "color": {
           "background": "var:preset|color|base",
           "text": "var:preset|color|contrast"
+        },
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|30",
+            "right": "var:preset|spacing|40",
+            "bottom": "var:preset|spacing|30",
+            "left": "var:preset|spacing|40"
+          }
         },
         ":focus": {
           "outline": {

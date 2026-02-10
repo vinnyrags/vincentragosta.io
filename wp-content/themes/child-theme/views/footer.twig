@@ -1,7 +1,65 @@
-{#Copyright {{"now"|date('Y')}}#}
-{#<div class="site-footer">#}
-{#    {{ icon('vr-logo-1') | raw }}#}
-{#    <div class="site-footer__social">#}
+<div class="footer">
+    <div class="footer__inner">
+        {# Contact Section #}
+        <section class="footer__contact">
+            <div class="footer__contact-heading">
+                <h2 class="footer__heading">Let's start a <strong>conversation</strong></h2>
+                <a href="mailto:hello@vincentragosta.io" class="wp-element-button button has-icon">
+                    Get in touch today
+                    <span class="button__icon icon-arrow" aria-hidden="true">
+                        {{ icon('arrow') | raw }}
+                    </span>
+                </a>
+            </div>
+            <div class="footer__contact-body">
+                <p class="footer__description">We'd love to hear from you, let's have a conversation about what we do and how we can help your brand.</p>
+                <a href="mailto:hello@vincentragosta.io" class="footer__email-link">
+                    hello@vincentragosta.io
+                    <span aria-hidden="true">{{ icon('arrow') | raw }}</span>
+                </a>
+            </div>
+        </section>
 
-{#    </div>#}
-{#</div>#}
+        <hr class="footer__separator" aria-hidden="true">
+
+        {# Bar: Logo, Copyright, Nav, Social #}
+        <div class="footer__bar">
+            <div class="footer__logo" aria-hidden="true">
+                {{ icon('vr-logo-1') | raw }}
+            </div>
+
+            <div class="footer__meta">
+                <p class="footer__copyright">&copy; {{ "now"|date('Y') }} Vincent Ragosta</p>
+                <nav class="footer__nav" aria-label="Footer navigation">
+                    {{ function('wp_nav_menu', {
+                        theme_location: 'footer',
+                        container: false,
+                        menu_class: 'footer__nav-list',
+                        depth: 1,
+                        fallback_cb: false
+                    }) }}
+                </nav>
+            </div>
+
+            <nav class="footer__social-nav" aria-label="Social media links">
+                <ul>
+                    <li>
+                        <a href="https://instagram.com/vinnyrags" class="footer__social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                            {{ icon('instagram') | raw }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://x.com/vinnyrags" class="footer__social-link" aria-label="X" target="_blank" rel="noopener noreferrer">
+                            {{ icon('x') | raw }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://linkedin.com/in/vincentragosta" class="footer__social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+                            {{ icon('linkedin') | raw }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

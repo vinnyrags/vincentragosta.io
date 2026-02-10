@@ -231,6 +231,7 @@ function compileScss(provider) {
         const result = sass.compile(provider.scss.inputPath, {
             style: 'expanded',
             sourceMap: false,
+            loadPaths: config.sassLoadPaths,
         });
 
         fs.writeFileSync(provider.scss.outputPath, result.css);

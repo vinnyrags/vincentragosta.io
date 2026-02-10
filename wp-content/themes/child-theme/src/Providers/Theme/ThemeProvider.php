@@ -55,11 +55,16 @@ class ThemeProvider extends BaseThemeProvider
     }
 
     /**
-     * Extend parent theme supports with child editor styles.
+     * Extend parent theme supports with child editor styles and nav menus.
      */
     public function addThemeSupports(): void
     {
         parent::addThemeSupports();
+
+        register_nav_menus([
+            'primary' => __('Primary Navigation', 'child-theme'),
+            'footer'  => __('Footer Navigation', 'child-theme'),
+        ]);
 
         add_editor_style('dist/css/theme.css');
     }

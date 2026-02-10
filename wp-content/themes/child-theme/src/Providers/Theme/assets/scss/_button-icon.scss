@@ -1,69 +1,83 @@
-// Frontend and common styles for button icon
-// These styles target the structure created by the PHP render_block filter.
-.wp-block-button__link {
-  .wp-block-button__icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 0;
-    position: relative;
+// ==========================================================================
+// Button Icon System
+// ==========================================================================
+// Shared icon styles for both block buttons (.wp-block-button) and
+// template buttons (.button). Theme.json owns base button appearance;
+// this file owns icon enhancements only.
+// ==========================================================================
 
-    svg {
-      fill: currentColor;
-      width: 1.2em;
-      height: 1.2em;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    // Circle background only for arrow icons
-    &.icon-arrow {
-      &::before {
-        content: '';
-        position: absolute;
-        width: 1.2em;
-        height: 1.2em;
-        border-radius: 50%;
-        background-color: currentColor;
-      }
-
-      svg {
-        position: relative;
-        color: var(--color-button-bg);
-      }
-    }
-  }
+// Minimal .button additions (theme.json handles the rest via .wp-element-button)
+.button {
+  cursor: pointer;
 }
 
-// If PHP adds a class like 'icon-pos-right' or 'icon-pos-left' to the main .wp-block-button div
-// or to the .wp-block-button__link itself.
-.wp-block-button.has-icon .wp-block-button__link {
+// Flex layout for buttons with icons
+.wp-block-button.has-icon .wp-block-button__link,
+.button.has-icon {
   display: inline-flex;
   align-items: center;
   gap: var(--wp--preset--spacing--20);
 }
 
-.wp-block-button.icon-pos-right .wp-block-button__link {
-  flex-direction: row;
-}
+// Icon position (block buttons only — PHP sets these classes)
+.wp-block-button.icon-pos-right .wp-block-button__link { flex-direction: row; }
+.wp-block-button.icon-pos-left .wp-block-button__link { flex-direction: row-reverse; }
 
-.wp-block-button.icon-pos-left .wp-block-button__link {
-  flex-direction: row-reverse; // Default, but explicit
-}
+// --------------------------------------------------------------------------
+// Shared icon wrapper styles (placeholder extended by both button types)
+// --------------------------------------------------------------------------
+%button-icon-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  position: relative;
 
-.wp-block-button {
-  // This targets the .wp-block-button__link which is the actual <a> or <button> tag
-  .wp-block-button__link {
-    transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+  svg {
+    fill: currentColor;
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-block;
+    vertical-align: middle;
+  }
 
-    .wp-block-button__icon svg {
-      transition: transform 0.25s ease-in-out;
+  // Circle background for arrow icons
+  &.icon-arrow {
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1.2em;
+      height: 1.2em;
+      border-radius: 50%;
+      background-color: currentColor;
     }
 
-    &:hover {
-      .wp-block-button__icon svg {
-        transform: rotate(45deg);
-      }
+    svg {
+      position: relative;
+      color: var(--color-button-bg);
     }
   }
+}
+
+// Apply shared styles to both button types
+.wp-block-button__link .wp-block-button__icon { @extend %button-icon-base; }
+.button .button__icon { @extend %button-icon-base; }
+
+// --------------------------------------------------------------------------
+// Transitions + hover
+// --------------------------------------------------------------------------
+.wp-block-button .wp-block-button__link,
+.button {
+  transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+}
+
+// SVG hover rotation for both icon wrapper types
+.wp-block-button__icon svg,
+.button__icon svg {
+  transition: transform 0.25s ease-in-out;
+}
+
+.wp-block-button__link:hover .wp-block-button__icon svg,
+.button:hover .button__icon svg {
+  transform: rotate(45deg);
 }

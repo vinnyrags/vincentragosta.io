@@ -83,7 +83,8 @@
 
   // Buttons
   .wp-block-button__link,
-  .wp-element-button {
+  .wp-element-button,
+  .button {
     background-color: var(--color-button-bg);
     color: var(--color-button-text);
 
@@ -92,7 +93,8 @@
       color: var(--color-button-hover-text);
 
       // Arrow icon: override arrow color on hover
-      .wp-block-button__icon.icon-arrow svg {
+      .wp-block-button__icon.icon-arrow svg,
+      .button__icon.icon-arrow svg {
         color: var(--wp--preset--color--base);
       }
     }
@@ -124,7 +126,8 @@
 body,
 h1, h2, h3, h4, h5, h6,
 p, a,
-.wp-block-button__link {
+.wp-block-button__link,
+.button {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -132,7 +135,8 @@ p, a,
   body,
   h1, h2, h3, h4, h5, h6,
   p, a,
-  .wp-block-button__link {
+  .wp-block-button__link,
+  .button {
     transition: none;
   }
 }
