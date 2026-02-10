@@ -1,0 +1,11 @@
+:focus-visible {
+  outline: 2px solid var(--wp--preset--color--accent-1);
+  outline-offset: 2px;
+}
+
+// theme.json only supports :focus (not :focus-visible), so WordPress buttons
+// show outlines on mouse click. Suppress that — keep keyboard-only outlines.
+.wp-element-button:focus:not(:focus-visible),
+.wp-block-button__link:focus:not(:focus-visible) {
+  outline: none;
+}

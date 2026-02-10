@@ -48,7 +48,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--header-text);
+      outline: 2px solid var(--wp--preset--color--accent-1);
       outline-offset: 2px;
     }
   }
@@ -103,7 +103,7 @@
       }
 
       &:focus-visible {
-        outline: 2px solid var(--header-text);
+        outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: 4px;
       }
     }
@@ -130,7 +130,7 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--header-text);
+      outline: 2px solid var(--wp--preset--color--accent-1);
       outline-offset: 2px;
     }
   }

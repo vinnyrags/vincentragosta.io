@@ -248,7 +248,7 @@
         },
         ":focus": {
           "outline": {
-            "color": "var:preset|color|accent-2",
+            "color": "var:preset|color|accent-1",
             "offset": "2px"
           }
         },

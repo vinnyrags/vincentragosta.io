@@ -21,6 +21,10 @@
   }
 }
 
+.project-card__image-link:focus-visible {
+  outline-offset: 4px;
+}
+
 .project-card {
   background-color: transparent;
   color: var(--wp--preset--color--base);
