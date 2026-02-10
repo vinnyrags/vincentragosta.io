@@ -9,3 +9,27 @@
 .wp-block-button__link:focus:not(:focus-visible) {
   outline: none;
 }
+
+// Skip-to-content link — hidden offscreen, slides into view on focus.
+// Styled as a pill button to match theme.json button element.
+.skip-link.screen-reader-text:focus {
+  position: fixed;
+  top: var(--wp--preset--spacing--30);
+  left: var(--wp--preset--spacing--40);
+  z-index: 1001; // above the fixed header
+  display: inline-block;
+  width: auto;
+  height: auto;
+  clip: auto;
+  clip-path: none;
+  padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+  background: var(--wp--preset--color--accent-1);
+  color: var(--wp--preset--color--contrast);
+  font-size: var(--wp--preset--font-size--20);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 9999px;
+  outline: 2px solid var(--wp--preset--color--accent-1);
+  outline-offset: 2px;
+}
