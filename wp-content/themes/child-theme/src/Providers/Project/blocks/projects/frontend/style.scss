@@ -2,6 +2,9 @@
 .wp-block-child-theme-projects,
 .projects-archive {
   container: projects / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--60);
 }
 
 .projects-grid {
