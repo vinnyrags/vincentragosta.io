@@ -1,0 +1,97 @@
+// Scroll lock when overlay is open
+html.nav-overlay-open {
+  overflow: hidden;
+}
+
+.nav-overlay {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background: var(--header-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &__content {
+    width: 100%;
+    padding: var(--wp--preset--spacing--50);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--wp--preset--spacing--40);
+
+    li {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          transition-delay: #{($i - 1) * 0.07}s;
+        }
+      }
+    }
+
+    .is-open & li {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    a {
+      color: var(--header-text);
+      text-decoration: none;
+      font-size: var(--wp--preset--font-size--60);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 400;
+      transition: color 0.2s ease;
+
+      @media (min-width: 768px) {
+        font-size: var(--wp--preset--font-size--70);
+      }
+
+      &:hover {
+        color: var(--wp--preset--color--accent-1);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 4px;
+      }
+    }
+  }
+}
+
+// Reduced motion: disable all overlay transitions
+@media (prefers-reduced-motion: reduce) {
+  .nav-overlay {
+    transition: none;
+  }
+
+  .nav-overlay__list li {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}

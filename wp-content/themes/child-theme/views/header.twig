@@ -26,10 +26,29 @@
             type="button"
             aria-label="Open menu"
             aria-expanded="false"
+            aria-controls="nav-overlay"
         >
             <span class="header__menu-line" aria-hidden="true"></span>
             <span class="header__menu-line" aria-hidden="true"></span>
             <span class="header__menu-line" aria-hidden="true"></span>
         </button>
     </div>
+
+    {# Full-screen navigation overlay #}
+    <nav
+        id="nav-overlay"
+        class="nav-overlay"
+        aria-label="Primary navigation"
+        hidden
+    >
+        <div class="nav-overlay__content">
+            {{ function('wp_nav_menu', {
+                theme_location: 'primary',
+                container: false,
+                menu_class: 'nav-overlay__list',
+                depth: 1,
+                fallback_cb: false
+            }) }}
+        </div>
+    </nav>
 </header>

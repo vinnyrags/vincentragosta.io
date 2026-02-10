@@ -89,15 +89,71 @@ function updateModeToggleState(toggle, isLightMode) {
 }
 
 /**
+ * Get all focusable elements within a container
+ * @param {HTMLElement} container
+ * @returns {HTMLElement[]}
+ */
+function getFocusableElements(container) {
+    return Array.from(
+        container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+    );
+}
+
+/**
+ * Toggle the navigation overlay open or closed
+ * @param {HTMLElement} toggle - The hamburger button
+ * @param {HTMLElement} overlay - The nav overlay element
+ * @param {boolean} isOpen - Whether to open or close
+ */
+function toggleOverlay(toggle, overlay, isOpen) {
+    updateMenuToggleState(toggle, isOpen);
+
+    if (isOpen) {
+        overlay.removeAttribute('hidden');
+        overlay.offsetHeight; // force reflow
+        overlay.classList.add('is-open');
+        document.documentElement.classList.add('nav-overlay-open');
+
+        const firstLink = overlay.querySelector('a');
+        if (firstLink) {
+            firstLink.focus({ preventScroll: true });
+        }
+    } else {
+        overlay.classList.remove('is-open');
+        document.documentElement.classList.remove('nav-overlay-open');
+
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) {
+            overlay.setAttribute('hidden', '');
+        } else {
+            overlay.addEventListener('transitionend', function handler(e) {
+                if (e.propertyName === 'opacity') {
+                    overlay.setAttribute('hidden', '');
+                    overlay.removeEventListener('transitionend', handler);
+                }
+            });
+        }
+    }
+}
+
+/**
  * Initialize hamburger menu toggle functionality
  */
 function initMenuToggle() {
     const menuToggle = document.querySelector('.header__menu-toggle');
-    if (!menuToggle) return;
+    const overlay = document.getElementById('nav-overlay');
+    if (!menuToggle || !overlay) return;
 
     menuToggle.addEventListener('click', () => {
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-        updateMenuToggleState(menuToggle, !isExpanded);
+        toggleOverlay(menuToggle, overlay, !isExpanded);
+    });
+
+    // Close overlay when a nav link is clicked
+    overlay.addEventListener('click', (e) => {
+        if (e.target.closest('a')) {
+            toggleOverlay(menuToggle, overlay, false);
+        }
     });
 
     // Close menu on Escape key
@@ -105,8 +161,31 @@ function initMenuToggle() {
         if (e.key === 'Escape') {
             const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
             if (isExpanded) {
-                updateMenuToggleState(menuToggle, false);
+                toggleOverlay(menuToggle, overlay, false);
                 menuToggle.focus();
+            }
+        }
+    });
+
+    // Focus trapping within overlay
+    document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        if (!isExpanded) return;
+
+        const focusable = [menuToggle, ...getFocusableElements(overlay)];
+        const firstEl = focusable[0];
+        const lastEl = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+            if (document.activeElement === firstEl) {
+                e.preventDefault();
+                lastEl.focus();
+            }
+        } else {
+            if (document.activeElement === lastEl) {
+                e.preventDefault();
+                firstEl.focus();
             }
         }
     });
