@@ -31,12 +31,20 @@
 .footer {
   background-color: var(--footer-bg);
   color: var(--footer-text);
-  padding: var(--wp--preset--spacing--60) var(--wp--preset--spacing--40);
+  padding: var(--wp--preset--spacing--60) var(--wp--preset--spacing--50);
+  border-top: 1px solid var(--footer-border);
 }
 
 .footer__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--40);
   max-width: var(--wp--style--global--content-size, 1440px);
   margin-inline: auto;
+
+  @include media(md) {
+    gap: var(--wp--preset--spacing--60);
+  }
 }
 
 // --------------------------------------------------------------------------
@@ -44,24 +52,31 @@
 // --------------------------------------------------------------------------
 
 .footer__contact {
-  padding-bottom: var(--wp--preset--spacing--50);
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--40);
 
-  @include media(md) {
-    display: flex;
+  @include media(lg) {
+    flex-direction: row;
     align-items: center;
-    gap: var(--wp--preset--spacing--50);
+    gap: var(--wp--preset--spacing--70);
   }
 }
 
 .footer__contact-heading {
-  @include media(md) {
-    flex: 0 0 35%;
+  @include media(lg) {
+    flex: 1 1 35%;
   }
 }
 
 .footer__contact-body {
-  @include media(md) {
-    flex: 0 0 65%;
+  font-size: var(--wp--preset--font-size--30);
+
+  @include media(lg) {
+    flex: 1 1 65%;
+    min-width: 0;
+    max-width: 450px;
+    margin-inline: auto;
   }
 }
 
@@ -107,28 +122,18 @@
 }
 
 // --------------------------------------------------------------------------
-// Bar (Logo, Copyright, Nav, Social)
+// Bar (Copyright, Nav, Social)
 // --------------------------------------------------------------------------
 
 .footer__bar {
   display: flex;
   flex-direction: column;
   gap: var(--wp--preset--spacing--40);
-  padding-top: var(--wp--preset--spacing--50);
 
   @include media(md) {
     flex-direction: row;
     align-items: center;
-  }
-}
-
-.footer__logo {
-  line-height: 0;
-
-  svg {
-    width: auto;
-    height: 32px;
-    fill: currentColor;
+    justify-content: center;
   }
 }
 
@@ -136,6 +141,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--wp--preset--spacing--20);
+  font-size: var(--wp--preset--font-size--10);
 
   @include media(md) {
     flex-direction: row;

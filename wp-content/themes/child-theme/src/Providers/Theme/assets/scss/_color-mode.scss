@@ -77,7 +77,7 @@
   }
 
   // Links
-  a:not(.wp-block-button__link) {
+  a:not(.wp-block-button__link):not(.wp-element-button) {
     color: var(--color-text);
   }
 
