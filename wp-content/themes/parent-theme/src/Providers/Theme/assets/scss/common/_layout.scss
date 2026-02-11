@@ -21,6 +21,12 @@
     margin-block-start: var(--wp--style--block-gap, var(--wp--preset--spacing--40));
   }
 
+  // Section-level spacing around container blocks
+  > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
+    margin-block-start: var(--wp--preset--spacing--70);
+  }
+
   // First child spacing
   > *:first-child {
     margin-block-start: var(--wp--preset--spacing--50);
