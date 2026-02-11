@@ -48,16 +48,15 @@
   &::before {
     content: '';
     position: absolute;
-    width: inherit;
-    height: inherit;
+    inset: 0;
     border-radius: 50%;
     background-color: var(--wp--preset--color--accent-1);
   }
 
   svg {
     position: relative;
-    width: var(--wp--custom--icon-size--md);
-    height: var(--wp--custom--icon-size--md);
+    width: var(--wp--custom--icon-size--sm);
+    height: var(--wp--custom--icon-size--sm);
     color: var(--wp--preset--color--contrast);
     transition: transform 0.3s ease;
   }

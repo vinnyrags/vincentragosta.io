@@ -106,8 +106,8 @@
   }
 
   svg {
-    width: var(--wp--custom--icon-size--sm, 24px);
-    height: var(--wp--custom--icon-size--sm, 24px);
+    width: var(--wp--custom--icon-size--sm);
+    height: var(--wp--custom--icon-size--sm);
     fill: currentColor;
   }
 }
@@ -207,8 +207,8 @@
   }
 
   svg {
-    width: var(--wp--custom--icon-size--sm, 24px);
-    height: var(--wp--custom--icon-size--sm, 24px);
+    width: var(--wp--custom--icon-size--sm);
+    height: var(--wp--custom--icon-size--sm);
     fill: currentColor;
   }
 }

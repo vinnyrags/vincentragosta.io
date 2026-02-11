@@ -113,8 +113,8 @@
     }
 
     .icon {
-      width: 60%;
-      height: 60%;
+      width: var(--wp--custom--icon-size--sm);
+      height: var(--wp--custom--icon-size--sm);
       fill: currentColor;
     }
   }
