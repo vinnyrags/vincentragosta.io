@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
+use ChildTheme\Theme;
 use ParentTheme\Models\Post;
 
 /**
@@ -41,5 +42,96 @@ class ProjectPost extends Post
     {
         $categories = $this->categories();
         return $categories[0]->slug ?? null;
+    }
+
+    /**
+     * Get the client name.
+     */
+    public function client(): string
+    {
+        return (string) $this->getField('client');
+    }
+
+    /**
+     * Get the role on the project.
+     */
+    public function role(): string
+    {
+        return (string) $this->getField('role');
+    }
+
+    /**
+     * Get the project year or date range.
+     */
+    public function year(): string
+    {
+        return (string) $this->getField('year');
+    }
+
+    /**
+     * Get the raw comma-separated technologies string.
+     */
+    public function technologies(): string
+    {
+        return (string) $this->getField('technologies');
+    }
+
+    /**
+     * Get technologies as a trimmed array.
+     *
+     * @return string[]
+     */
+    public function technologyList(): array
+    {
+        $tech = $this->technologies();
+
+        if ($tech === '') {
+            return [];
+        }
+
+        return array_map('trim', explode(',', $tech));
+    }
+
+    /**
+     * Get the external project URL.
+     */
+    public function externalUrl(): string
+    {
+        return (string) $this->getField('external_url');
+    }
+
+    /**
+     * Whether any project detail field is populated.
+     */
+    public function hasProjectDetails(): bool
+    {
+        return $this->client() !== ''
+            || $this->role() !== ''
+            || $this->year() !== ''
+            || $this->technologies() !== ''
+            || $this->externalUrl() !== '';
+    }
+
+    /**
+     * Get related projects in the same category.
+     *
+     * @return ProjectPost[]
+     */
+    public function relatedProjects(int $limit = 3): array
+    {
+        $categories = $this->categories();
+
+        if (empty($categories)) {
+            return [];
+        }
+
+        $repository = Theme::container()->get(ProjectRepository::class);
+        $related = $repository->inCategory($categories[0]->slug, $limit + 1);
+
+        // Exclude the current post
+        return array_values(array_filter(
+            $related,
+            fn (ProjectPost $project) => $project->ID !== $this->ID,
+        ));
     }
 }

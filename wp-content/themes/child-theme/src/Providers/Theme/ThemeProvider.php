@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme;
 
+use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Theme\Features\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
@@ -67,6 +68,20 @@ class ThemeProvider extends BaseThemeProvider
         ]);
 
         add_editor_style('dist/css/theme.css');
+    }
+
+    /**
+     * Register the Timber post class map with project mapping.
+     *
+     * @param array<string, class-string> $classMap Existing class map.
+     * @return array<string, class-string|callable> Updated class map.
+     */
+    public function registerClassMap(array $classMap): array
+    {
+        $classMap = parent::registerClassMap($classMap);
+        $classMap['project'] = ProjectPost::class;
+
+        return $classMap;
     }
 
     /**

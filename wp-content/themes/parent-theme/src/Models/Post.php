@@ -61,6 +61,18 @@ class Post extends TimberPost
     }
 
     /**
+     * Get an ACF field value, with fallback to post meta.
+     */
+    public function getField(string $key): mixed
+    {
+        if (function_exists('get_field')) {
+            return get_field($key, $this->ID) ?: '';
+        }
+
+        return $this->getMeta($key);
+    }
+
+    /**
      * Get a meta value.
      */
     public function getMeta(string $key, bool $single = true): mixed

@@ -29,8 +29,11 @@ class ProjectProvider extends Provider
         add_action('init', [$this, 'registerPostType']);
         add_action('pre_get_posts', [$this, 'loadAllArchiveProjects']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueArchiveAssets']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
 
         parent::register();
+
+        $this->acfManager->registerSavePath();
     }
 
     /**
@@ -41,6 +44,18 @@ class ProjectProvider extends Provider
         if (!is_admin() && $query->is_main_query() && $query->is_post_type_archive('project')) {
             $query->set('posts_per_page', 100);
         }
+    }
+
+    /**
+     * Enqueue styles on single project pages.
+     */
+    public function enqueueSingleAssets(): void
+    {
+        if (!is_singular('project')) {
+            return;
+        }
+
+        $this->enqueueStyle('child-theme-project-single', 'project.css');
     }
 
     /**

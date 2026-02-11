@@ -247,6 +247,31 @@ class PostMethodsTest extends TestCase
     }
 
     // ===================
+    // getField() tests
+    // ===================
+
+    /**
+     * Test getField() falls back to getMeta() when ACF is not available.
+     */
+    public function testGetFieldFallsBackToGetMeta(): void
+    {
+        $post = MockPost::create();
+        $post->setMockMeta(['client' => 'Acme Corp']);
+
+        $this->assertEquals('Acme Corp', $post->getField('client'));
+    }
+
+    /**
+     * Test getField() returns empty string for non-existent field without ACF.
+     */
+    public function testGetFieldReturnsEmptyForNonExistentField(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertEquals('', $post->getField('nonexistent'));
+    }
+
+    // ===================
     // setMeta() tests
     // ===================
 

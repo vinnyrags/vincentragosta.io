@@ -2,6 +2,7 @@
 
 namespace ChildTheme\Tests\Integration\Providers;
 
+use ChildTheme\Providers\Project\ProjectPost;
 use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
@@ -189,5 +190,28 @@ class ThemeProviderTest extends BaseTestCase
         $urls = $this->provider->addResourceHints([], 'dns-prefetch');
 
         $this->assertEmpty($urls);
+    }
+
+    /**
+     * Test that registerClassMap includes project post type mapping.
+     */
+    public function testRegisterClassMapIncludesProjectMapping(): void
+    {
+        $classMap = $this->provider->registerClassMap([]);
+
+        $this->assertArrayHasKey('project', $classMap);
+        $this->assertEquals(ProjectPost::class, $classMap['project']);
+    }
+
+    /**
+     * Test that registerClassMap preserves parent mappings.
+     */
+    public function testRegisterClassMapPreservesParentMappings(): void
+    {
+        $classMap = $this->provider->registerClassMap([]);
+
+        $this->assertArrayHasKey('post', $classMap);
+        $this->assertArrayHasKey('page', $classMap);
+        $this->assertArrayHasKey('attachment', $classMap);
     }
 }

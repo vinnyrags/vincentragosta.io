@@ -534,12 +534,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "9f5c080a89e23022226ff3c6172b35228b759ed5"
+                "reference": "75145db88dbb37d62142a1187434e924cad7fb0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/9f5c080a89e23022226ff3c6172b35228b759ed5",
-                "reference": "9f5c080a89e23022226ff3c6172b35228b759ed5",
+                "url": "https://api.github.com/repos/timber/timber/zipball/75145db88dbb37d62142a1187434e924cad7fb0e",
+                "reference": "75145db88dbb37d62142a1187434e924cad7fb0e",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +644,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-01-22T09:13:35+00:00"
+            "time": "2026-02-11T13:05:22+00:00"
         },
         {
             "name": "twig/twig",
@@ -1398,16 +1398,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.32",
+            "version": "9.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "492ee10a8369a1c1ac390a3b46e0c846e384c5a4"
+                "reference": "b36f02317466907a230d3aa1d34467041271ef4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/492ee10a8369a1c1ac390a3b46e0c846e384c5a4",
-                "reference": "492ee10a8369a1c1ac390a3b46e0c846e384c5a4",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b36f02317466907a230d3aa1d34467041271ef4a",
+                "reference": "b36f02317466907a230d3aa1d34467041271ef4a",
                 "shasum": ""
             },
             "require": {
@@ -1481,7 +1481,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.32"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.34"
             },
             "funding": [
                 {
@@ -1505,11 +1505,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-24T16:04:20+00:00"
+            "time": "2026-01-27T05:45:00+00:00"
         },
         {
             "name": "roots/wordpress",
-            "version": "6.9",
+            "version": "6.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roots/wordpress.git",
@@ -1540,7 +1540,7 @@
             ],
             "support": {
                 "issues": "https://github.com/roots/wordpress/issues",
-                "source": "https://github.com/roots/wordpress/tree/6.9"
+                "source": "https://github.com/roots/wordpress/tree/6.9.1"
             },
             "funding": [
                 {
@@ -1619,23 +1619,23 @@
         },
         {
             "name": "roots/wordpress-no-content",
-            "version": "6.9",
+            "version": "6.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress.git",
-                "reference": "6.9"
+                "reference": "6.9.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/release/wordpress-6.9-no-content.zip",
-                "reference": "6.9",
-                "shasum": "2d8cb4b253b690e255afde1d451e87380e6a5cb5"
+                "url": "https://downloads.wordpress.org/release/wordpress-6.9.1-no-content.zip",
+                "reference": "6.9.1",
+                "shasum": "27121719e788b7c9e35cfcf8984ad8b42bd423d6"
             },
             "require": {
                 "php": ">= 7.2.24"
             },
             "provide": {
-                "wordpress/core-implementation": "6.9"
+                "wordpress/core-implementation": "6.9.1"
             },
             "suggest": {
                 "ext-curl": "Performs remote request operations.",
@@ -1686,7 +1686,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2025-12-02T19:09:36+00:00"
+            "time": "2026-02-03T17:39:17+00:00"
         },
         {
             "name": "sebastian/cli-parser",

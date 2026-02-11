@@ -1,0 +1,112 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <article class="project-detail">
+
+        {# Back navigation #}
+        <a href="{{ function('get_post_type_archive_link', 'project') }}" class="project-detail__back-link">
+            <span class="project-detail__back-icon">{{ icon('arrow') | raw }}</span>
+            Back to Projects
+        </a>
+
+        {# Hero image #}
+        {% if post.thumbnail %}
+            <div class="project-detail__hero">
+                <img
+                    class="project-detail__hero-image"
+                    src="{{ post.thumbnail.src | resize(1200) }}"
+                    alt="{{ post.thumbnail.alt }}"
+                    width="{{ post.thumbnail.width }}"
+                    height="{{ post.thumbnail.height }}"
+                />
+            </div>
+        {% endif %}
+
+        {# Header: title + category badges #}
+        <header class="project-detail__header">
+            <h1 class="project-detail__title has-70-font-size">{{ post.title }}</h1>
+
+            {% set categories = post.categories() %}
+            {% if categories is not empty %}
+                <div class="project-detail__categories">
+                    {% for category in categories %}
+                        <span class="project-detail__category-badge">{{ category.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </header>
+
+        {# Metadata #}
+        {% if post.hasProjectDetails() %}
+            <dl class="project-detail__meta">
+                {% if post.client() %}
+                    <div class="project-detail__meta-item">
+                        <dt class="project-detail__meta-label">Client</dt>
+                        <dd class="project-detail__meta-value">{{ post.client() }}</dd>
+                    </div>
+                {% endif %}
+
+                {% if post.role() %}
+                    <div class="project-detail__meta-item">
+                        <dt class="project-detail__meta-label">Role</dt>
+                        <dd class="project-detail__meta-value">{{ post.role() }}</dd>
+                    </div>
+                {% endif %}
+
+                {% if post.year() %}
+                    <div class="project-detail__meta-item">
+                        <dt class="project-detail__meta-label">Year</dt>
+                        <dd class="project-detail__meta-value">{{ post.year() }}</dd>
+                    </div>
+                {% endif %}
+
+                {% if post.technologyList() is not empty %}
+                    <div class="project-detail__meta-item">
+                        <dt class="project-detail__meta-label">Technologies</dt>
+                        <dd class="project-detail__meta-value">
+                            {% for tech in post.technologyList() %}
+                                <span class="project-detail__tech-tag">{{ tech }}</span>
+                            {% endfor %}
+                        </dd>
+                    </div>
+                {% endif %}
+
+                {% if post.externalUrl() %}
+                    <div class="project-detail__meta-item">
+                        <dt class="project-detail__meta-label">Website</dt>
+                        <dd class="project-detail__meta-value">
+                            <a href="{{ post.externalUrl() }}" class="project-detail__external-link" target="_blank" rel="noopener noreferrer">
+                                Visit Project
+                                <span class="project-detail__external-icon">{{ icon('arrow') | raw }}</span>
+                            </a>
+                        </dd>
+                    </div>
+                {% endif %}
+            </dl>
+        {% endif %}
+
+        {# Excerpt #}
+        {% if post.preview.length > 0 %}
+            <div class="project-detail__excerpt">
+                <p class="has-50-font-size">{{ post.preview }}</p>
+            </div>
+        {% endif %}
+
+        {# Content #}
+        {% if post.content %}
+            <div class="project-detail__content">
+                {{ post.content }}
+            </div>
+        {% endif %}
+
+        {# Related projects #}
+        {% set related = post.relatedProjects(3) %}
+        {% if related is not empty %}
+            <section class="project-detail__related">
+                <h2 class="project-detail__related-heading has-50-font-size">Related Projects</h2>
+                {% include 'partials/projects-grid.twig' with { projects: related } only %}
+            </section>
+        {% endif %}
+
+    </article>
+{% endblock %}

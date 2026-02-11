@@ -6,6 +6,7 @@ namespace ParentTheme\Providers;
 
 use DI\Container;
 use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Support\Acf\AcfManager;
 use ParentTheme\Providers\Support\Asset\AssetManager;
 use ParentTheme\Providers\Support\Block\BlockManager;
 use ParentTheme\Providers\Support\AbstractRegistry;
@@ -54,6 +55,7 @@ abstract class Provider implements Registrable
      */
     protected string $routeVersion = 'v1';
 
+    protected ?AcfManager $acfManager = null;
     protected ?AssetManager $assets = null;
     protected ?BlockManager $blockManager = null;
     protected ?FeatureManager $featureManager = null;
@@ -75,6 +77,7 @@ abstract class Provider implements Registrable
     {
         $this->setup();
         $this->registerFeatures();
+        $this->acfManager->initializeHooks();
         $this->blockManager->initializeHooks($this);
         $this->maybeRegisterTwigFilter();
 
@@ -142,6 +145,7 @@ abstract class Provider implements Registrable
 
         $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
         $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
+        $this->acfManager = new AcfManager($providerDir);
 
         $routeNamespace = $this->routeNamespace ?: $slug;
         $this->restManager = new RestManager(
