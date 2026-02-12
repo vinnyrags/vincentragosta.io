@@ -27,6 +27,11 @@
     margin-block-start: var(--wp--preset--spacing--70);
   }
 
+  // Default vertical padding for container blocks with backgrounds
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+    padding-block: var(--wp--preset--spacing--70);
+  }
+
   // First child spacing
   > *:first-child {
     margin-block-start: var(--wp--preset--spacing--50);
