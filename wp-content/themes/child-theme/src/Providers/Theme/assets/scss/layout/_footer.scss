@@ -36,6 +36,10 @@
   margin-block-start: var(--wp--preset--spacing--70);
 }
 
+.site-main:has(> :last-child.has-background) + .footer {
+  margin-block-start: 0;
+}
+
 .footer__inner {
   display: flex;
   flex-direction: column;

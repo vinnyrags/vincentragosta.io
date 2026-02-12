@@ -12,6 +12,15 @@
     padding-block-start: 0;
   }
 
+  // No bottom padding when last child is a full-bleed background block
+  &:has(> :last-child:is(
+    .wp-block-cover,
+    .wp-block-columns.has-background,
+    .wp-block-group.has-background
+  )) {
+    padding-block-end: 0;
+  }
+
   // Root padding (replaces has-global-padding)
   padding-inline: var(--wp--preset--spacing--40);
   padding-block-end: var(--wp--preset--spacing--50);

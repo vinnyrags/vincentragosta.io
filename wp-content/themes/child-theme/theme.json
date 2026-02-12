@@ -160,6 +160,13 @@
     "typography": {
       "fontFamily": "var:preset|font-family|roobert"
     },
+    "blocks": {
+      "core/separator": {
+        "color": {
+          "text": "var:preset|color|grey-2"
+        }
+      }
+    },
     "elements": {
       "heading": {
         "typography": {
