@@ -227,6 +227,11 @@
         "spacing": {
           "blockGap": "var:preset|spacing|50"
         }
+      },
+      "core/separator": {
+        "border": {
+          "width": "1px"
+        }
       }
     },
     "elements": {
