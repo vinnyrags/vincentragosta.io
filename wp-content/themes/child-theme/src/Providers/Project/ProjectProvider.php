@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
-use ChildTheme\Providers\Provider;
+use ParentTheme\Providers\Provider;
 
 /**
  * Project Provider.
