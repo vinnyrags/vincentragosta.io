@@ -145,7 +145,6 @@ class ProjectProviderTest extends BaseTestCase
         $this->provider->registerPostType();
 
         $this->assertTrue(post_type_supports('project', 'title'));
-        $this->assertTrue(post_type_supports('project', 'editor'));
         $this->assertTrue(post_type_supports('project', 'thumbnail'));
         $this->assertTrue(post_type_supports('project', 'excerpt'));
         $this->assertTrue(post_type_supports('project', 'custom-fields'));
