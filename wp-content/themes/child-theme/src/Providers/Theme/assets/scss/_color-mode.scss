@@ -49,6 +49,31 @@
 }
 
 // ==========================================================================
+// Background Pattern Overlay
+// ==========================================================================
+// Group blocks with SVG background-image patterns need a semi-transparent
+// overlay in light mode to fade the dark SVGs. The pseudo-element exists in
+// both modes (transparent by default) so the transition is smooth.
+
+.wp-block-group[style*="background-image"] {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(255, 255, 255, 0);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// ==========================================================================
 // Global Overrides
 // ==========================================================================
 // Override WordPress default styles when in light mode
@@ -116,6 +141,11 @@
   .wp-block-cover .wp-block-cover__background {
     opacity: 0.1;
   }
+
+  // Group blocks with SVG background patterns — fade via overlay
+  .wp-block-group[style*="background-image"]::before {
+    background-color: rgba(255, 255, 255, 0.85);
+  }
 }
 
 // ==========================================================================
@@ -131,12 +161,20 @@ p, a,
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+.wp-block-group[style*="background-image"]::before {
+  transition: background-color 0.3s ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   body,
   h1, h2, h3, h4, h5, h6,
   p, a,
   .wp-block-button__link,
   .button {
+    transition: none;
+  }
+
+  .wp-block-group[style*="background-image"]::before {
     transition: none;
   }
 }
