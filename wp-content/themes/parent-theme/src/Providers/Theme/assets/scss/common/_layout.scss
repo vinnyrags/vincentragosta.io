@@ -59,11 +59,11 @@
 
   // Constrain cover block inner content to narrow content width.
   > .wp-block-cover.alignfull > .wp-block-cover__inner-container {
+    box-sizing: border-box;
     max-width: var(--wp--style--global--content-size);
     margin-left: auto !important;
     margin-right: auto !important;
     width: 100%;
-    padding: 0;
   }
 
   // Override WordPress core custom-position selectors (specificity 0,5,0)

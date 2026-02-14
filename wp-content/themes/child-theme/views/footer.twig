@@ -11,12 +11,11 @@
                     </span>
                 </a>
             </div>
-            <div class="footer__contact-body">
-                <p class="footer__description">We'd love to hear from you, let's have a conversation about what we do and how we can help your brand.</p>
-                <a href="mailto:hello@vincentragosta.io" class="footer__email-link">
-                    hello@vincentragosta.io
-                </a>
-            </div>
+            {% if options.footer_description %}
+                <div class="footer__contact-body">
+                    <div class="footer__description">{{ options.footer_description | raw }}</div>
+                </div>
+            {% endif %}
         </section>
 
         <hr class="footer__separator" aria-hidden="true">
@@ -36,25 +35,19 @@
                 </nav>
             </div>
 
-            <nav class="footer__social-nav" aria-label="Social media links">
-                <ul role="list">
-                    <li>
-                        <a href="https://instagram.com/vinnyrags" class="footer__social-link" aria-label="Instagram (opens in new tab)" target="_blank" rel="noopener noreferrer">
-                            {{ icon('instagram') | raw }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://x.com/vinnyrags" class="footer__social-link" aria-label="X (opens in new tab)" target="_blank" rel="noopener noreferrer">
-                            {{ icon('x') | raw }}
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://linkedin.com/in/vincentragosta" class="footer__social-link" aria-label="LinkedIn (opens in new tab)" target="_blank" rel="noopener noreferrer">
-                            {{ icon('linkedin') | raw }}
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            {% if options.social_icons %}
+                <nav class="footer__social-nav" aria-label="Social media links">
+                    <ul role="list">
+                        {% for social in options.social_icons %}
+                            <li>
+                                <a href="{{ social.url }}" class="footer__social-link" aria-label="{{ social.platform }} (opens in new tab)" target="_blank" rel="noopener noreferrer">
+                                    {{ icon(social.icon) | raw }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
         </div>
     </div>
 </footer>

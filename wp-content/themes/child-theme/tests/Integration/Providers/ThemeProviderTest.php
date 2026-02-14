@@ -128,6 +128,16 @@ class ThemeProviderTest extends BaseTestCase
             0,
             has_action('enqueue_block_assets', [$this->provider, 'enqueueBlockAssets'])
         );
+
+        $this->assertGreaterThan(
+            0,
+            has_action('acf/init', [$this->provider, 'registerOptionsPage'])
+        );
+
+        $this->assertGreaterThan(
+            0,
+            has_filter('timber/context', [$this->provider, 'addOptionsToContext'])
+        );
     }
 
     /**
@@ -213,5 +223,38 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertArrayHasKey('post', $classMap);
         $this->assertArrayHasKey('page', $classMap);
         $this->assertArrayHasKey('attachment', $classMap);
+    }
+
+    /**
+     * Test that addOptionsToContext preserves existing context data.
+     */
+    public function testAddOptionsToContextPreservesExistingData(): void
+    {
+        $existingContext = [
+            'site' => 'test-site',
+            'menu' => ['item1', 'item2'],
+        ];
+
+        $context = $this->provider->addOptionsToContext($existingContext);
+
+        $this->assertArrayHasKey('site', $context);
+        $this->assertEquals('test-site', $context['site']);
+        $this->assertArrayHasKey('menu', $context);
+    }
+
+    /**
+     * Test that addOptionsToContext returns context with options key when ACF is available.
+     */
+    public function testAddOptionsToContextReturnsOptionsKey(): void
+    {
+        $context = $this->provider->addOptionsToContext([]);
+
+        if (function_exists('get_field')) {
+            $this->assertArrayHasKey('options', $context);
+            $this->assertArrayHasKey('footer_description', $context['options']);
+            $this->assertArrayHasKey('social_icons', $context['options']);
+        } else {
+            $this->assertEmpty($context);
+        }
     }
 }

@@ -4,11 +4,13 @@
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
-.PHONY: help install install-parent install-child build watch clean autoload test update
+.PHONY: help start stop install install-parent install-child build watch clean autoload test update
 
 # Default target
 help:
 	@echo "Available targets:"
+	@echo "  make start     - Start DDEV, install dependencies, and build assets"
+	@echo "  make stop      - Stop DDEV environment"
 	@echo "  make install   - Install all dependencies (both themes)"
 	@echo "  make build     - Build child theme assets"
 	@echo "  make test      - Run test suite (both themes)"
@@ -16,6 +18,21 @@ help:
 	@echo "  make clean     - Remove all generated files"
 	@echo "  make update    - Update composer dependencies (root + both themes)"
 	@echo "  make autoload  - Regenerate composer autoloaders"
+
+# Start DDEV environment, install dependencies, and build assets
+start:
+	@echo "Starting DDEV environment..."
+	ddev start
+	@$(MAKE) install
+	@$(MAKE) build
+	@echo ""
+	@echo "✓ Project is running at https://vincentragosta.io.ddev.site"
+
+# Stop DDEV environment
+stop:
+	@echo "Stopping DDEV environment..."
+	ddev stop
+	@echo "✓ DDEV stopped"
 
 # Install all dependencies
 install: install-parent install-child

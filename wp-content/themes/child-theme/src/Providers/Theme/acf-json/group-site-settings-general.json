@@ -1,0 +1,78 @@
+{
+    "key": "group_site_settings_general",
+    "title": "Site Settings — General",
+    "fields": [
+        {
+            "key": "field_general_tab",
+            "label": "General",
+            "type": "tab",
+            "placement": "left"
+        },
+        {
+            "key": "field_footer_description",
+            "label": "Footer Description",
+            "name": "footer_description",
+            "type": "wysiwyg",
+            "instructions": "Description text displayed in the footer contact section.",
+            "required": 0,
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_social_icons",
+            "label": "Social Icons",
+            "name": "social_icons",
+            "type": "repeater",
+            "instructions": "Social media links displayed in the footer.",
+            "required": 0,
+            "layout": "table",
+            "button_label": "Add Social Link",
+            "sub_fields": [
+                {
+                    "key": "field_social_platform",
+                    "label": "Platform",
+                    "name": "platform",
+                    "type": "text",
+                    "instructions": "Platform name for accessibility label (e.g. Instagram).",
+                    "required": 1,
+                    "placeholder": "e.g. Instagram"
+                },
+                {
+                    "key": "field_social_icon",
+                    "label": "Icon",
+                    "name": "icon",
+                    "type": "text",
+                    "instructions": "SVG sprite icon name (e.g. instagram).",
+                    "required": 1,
+                    "placeholder": "e.g. instagram"
+                },
+                {
+                    "key": "field_social_url",
+                    "label": "URL",
+                    "name": "url",
+                    "type": "url",
+                    "instructions": "Full URL to social profile.",
+                    "required": 1,
+                    "placeholder": "https://"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "site-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}

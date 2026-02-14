@@ -89,26 +89,20 @@
 .footer__description {
   color: var(--footer-text-muted);
   margin: 0 0 var(--wp--preset--spacing--40);
-}
 
-.footer__email-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--wp--preset--spacing--20);
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--wp--preset--spacing--20);
 
-  &:hover {
-    color: var(--footer-link-hover);
-  }
+    &:hover {
+      color: var(--footer-link-hover);
+    }
 
-  &:focus-visible {
-    outline: 2px solid var(--footer-link-hover);
-    outline-offset: 4px;
-  }
-
-  svg {
-    width: var(--wp--custom--icon-size--sm);
-    height: var(--wp--custom--icon-size--sm);
-    fill: currentColor;
+    &:focus-visible {
+      outline: 2px solid var(--footer-link-hover);
+      outline-offset: 4px;
+    }
   }
 }
 

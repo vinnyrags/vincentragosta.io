@@ -101,8 +101,15 @@ class ThemeProvider extends BaseThemeProvider
         add_action('enqueue_block_editor_assets', [$this, 'enqueueButtonEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
+        // ACF options page and Timber context
+        add_action('acf/init', [$this, 'registerOptionsPage']);
+        add_filter('timber/context', [$this, 'addOptionsToContext']);
+
         // Call parent to register theme supports, features, and blocks
         parent::register();
+
+        // Register ACF JSON save path for this provider's acf-json directory
+        $this->acfManager->registerSavePath();
     }
 
     /**
@@ -141,6 +148,46 @@ class ThemeProvider extends BaseThemeProvider
         }
 
         return $urls;
+    }
+
+    /**
+     * Register the Site Settings options page.
+     */
+    public function registerOptionsPage(): void
+    {
+        if (!function_exists('acf_add_options_page')) {
+            return;
+        }
+
+        acf_add_options_page([
+            'page_title' => __('Site Settings', 'child-theme'),
+            'menu_title' => __('Site Settings', 'child-theme'),
+            'menu_slug'  => 'site-settings',
+            'capability' => 'edit_posts',
+            'redirect'   => false,
+            'icon_url'   => 'dashicons-admin-settings',
+            'position'   => 59,
+        ]);
+    }
+
+    /**
+     * Add options page data to the Timber context.
+     *
+     * @param array<string, mixed> $context Timber context.
+     * @return array<string, mixed>
+     */
+    public function addOptionsToContext(array $context): array
+    {
+        if (!function_exists('get_field')) {
+            return $context;
+        }
+
+        $context['options'] = [
+            'footer_description' => get_field('footer_description', 'option') ?: '',
+            'social_icons'       => get_field('social_icons', 'option') ?: [],
+        ];
+
+        return $context;
     }
 
     /**
