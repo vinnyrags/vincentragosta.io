@@ -9,8 +9,8 @@ CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 # Default target
 help:
 	@echo "Available targets:"
-	@echo "  make start     - Start DDEV, install dependencies, and build assets"
-	@echo "  make stop      - Stop DDEV environment"
+	@echo "  make start     - Start DDEV, restore DB snapshot, install deps, and build"
+	@echo "  make stop      - Snapshot database and stop DDEV"
 	@echo "  make install   - Install all dependencies (both themes)"
 	@echo "  make build     - Build child theme assets"
 	@echo "  make test      - Run test suite (both themes)"
@@ -23,16 +23,23 @@ help:
 start:
 	@echo "Starting DDEV environment..."
 	ddev start
+	@if ddev snapshot restore --latest 2>/dev/null; then \
+		echo "✓ Database restored from latest snapshot"; \
+	else \
+		echo "No snapshot found, using existing database"; \
+	fi
 	@$(MAKE) install
 	@$(MAKE) build
 	@echo ""
 	@echo "✓ Project is running at https://vincentragosta.io.ddev.site"
 
-# Stop DDEV environment
+# Snapshot database and stop DDEV environment
 stop:
+	@echo "Snapshotting database..."
+	ddev snapshot --name=pre-stop
 	@echo "Stopping DDEV environment..."
 	ddev stop
-	@echo "✓ DDEV stopped"
+	@echo "✓ Database snapshotted and DDEV stopped"
 
 # Install all dependencies
 install: install-parent install-child
