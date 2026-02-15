@@ -7,6 +7,7 @@ use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Features\SocialIconChoices;
 use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
@@ -66,6 +67,7 @@ class ThemeProviderTest extends BaseTestCase
         // Child theme features
         $this->assertContains(ButtonIconEnhancer::class, $enabled);
         $this->assertContains(CoverBlockStyles::class, $enabled);
+        $this->assertContains(SocialIconChoices::class, $enabled);
 
         // Parent theme features (inherited)
         $this->assertContains(DisableBlocks::class, $enabled);

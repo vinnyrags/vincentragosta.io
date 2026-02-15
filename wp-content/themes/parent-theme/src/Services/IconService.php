@@ -4,16 +4,29 @@ declare(strict_types=1);
 
 namespace ParentTheme\Services;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
 /**
  * Icon class for retrieving and rendering SVG icons from the theme.
  *
  * Provides a fluent interface for working with SVG icons stored in the theme's
- * src/Providers/Theme/assets/images/svg-sprite/ and src/Providers/Theme/assets/images/svg/ directories.
+ * src/Providers/Theme/assets/images/svg/ directory.
+ *
+ * Directory layout:
+ *   svg/icons/          — general icons (arrow, chevron, etc.)
+ *   svg/icons/social/   — social media icons (instagram, linkedin, etc.)
+ *   svg/                — standalone SVGs (logos, decorative graphics)
+ *
+ * Resolution order for icon('name'):
+ *   1. svg/icons/{name}.svg          — direct icon match
+ *   2. Recursive scan of svg/icons/  — finds name in subdirectories
+ *   3. svg/{name}.svg                — root SVG match
  *
  * Usage:
  *   echo new IconService('arrow');
  *   echo IconService::get('arrow')->withClass('icon-lg');
- *   echo IconService::get('squiggle')->withAttributes(['aria-hidden' => 'true']);
+ *   echo IconService::get('squiggle/squiggle-1')->withAttributes(['aria-hidden' => 'true']);
  */
 class IconService
 {
@@ -22,7 +35,6 @@ class IconService
     private ?string $type = null;
     private array $attributes = [];
 
-    private const SPRITE_DIR = '/src/Providers/Theme/assets/images/svg-sprite/';
     private const SVG_DIR = '/src/Providers/Theme/assets/images/svg/';
 
     public function __construct(string $name)
@@ -59,7 +71,7 @@ class IconService
     }
 
     /**
-     * Get the resolved type ('sprite' or 'svg').
+     * Get the resolved type ('icon' or 'svg').
      */
     public function getType(): ?string
     {
@@ -108,18 +120,23 @@ class IconService
     /**
      * Get all available icons of a given type.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
-     * @param string $subdir Optional subdirectory within the type's directory (e.g., 'squiggle')
+     * @param string $type 'icon' (svg/icons/), 'svg' (svg/ root), or 'all' (both). 'sprite' is accepted as an alias for 'icon'.
+     * @param string $subdir Optional subdirectory within the type's directory (e.g., 'social' for icons, 'squiggle' for svg)
      * @return array<int, array{name: string, label: string, type: string, filename: string}>
      */
     public static function all(string $type = 'all', string $subdir = ''): array
     {
+        // Backward compatibility: 'sprite' maps to 'icon'
+        if ($type === 'sprite') {
+            $type = 'icon';
+        }
+
         $icons = [];
         $themeDir = get_stylesheet_directory();
         $subdirPath = $subdir ? $subdir . '/' : '';
 
-        if ($type === 'sprite' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SPRITE_DIR . $subdirPath, 'sprite'));
+        if ($type === 'icon' || $type === 'all') {
+            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SVG_DIR . 'icons/' . $subdirPath, 'icon'));
         }
 
         if ($type === 'svg' || $type === 'all') {
@@ -132,7 +149,7 @@ class IconService
     /**
      * Get icon options formatted for block editor dropdowns.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $type 'icon', 'svg', or 'all'. 'sprite' is accepted as an alias for 'icon'.
      * @param string $emptyLabel Label for the empty/no-selection option
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array<int, array{label: string, value: string}>
@@ -154,7 +171,7 @@ class IconService
     /**
      * Get a map of icon names to their rendered content.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $type 'icon', 'svg', or 'all'. 'sprite' is accepted as an alias for 'icon'.
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array Associative array of name => rendered SVG content
      */
@@ -174,7 +191,7 @@ class IconService
      *
      * Strips the .svg extension, normalizes slashes, removes traversal sequences,
      * and reduces absolute paths to their basename. Allows subdirectory paths
-     * like 'squiggle/squiggle-1'.
+     * like 'squiggle/squiggle-1' or 'social/instagram'.
      */
     private function sanitizeName(string $name): string
     {
@@ -206,37 +223,70 @@ class IconService
     /**
      * Resolve the icon path by checking directories in priority order.
      *
-     * Checks the sprite directory first (exact match, then icon- prefix),
-     * then falls back to the SVG directory. Sets resolvedPath and type
-     * on the first match.
+     * 1. svg/icons/{name}.svg — direct icon match (handles 'arrow', 'social/instagram')
+     * 2. Recursive scan of svg/icons/ — finds 'instagram' in icons/social/ without knowing the path
+     * 3. svg/{name}.svg — root SVGs ('vr-logo', 'squiggle/squiggle-1')
      */
     private function resolve(): void
     {
         $themeDir = get_stylesheet_directory();
 
-        // Check svg-sprite directory first (exact match)
-        $spritePath = $themeDir . self::SPRITE_DIR . $this->name . '.svg';
-        if ($this->isValidSvgFile($spritePath)) {
-            $this->resolvedPath = $spritePath;
-            $this->type = 'sprite';
+        // 1. Direct match in icons directory
+        $iconPath = $themeDir . self::SVG_DIR . 'icons/' . $this->name . '.svg';
+        if ($this->isValidSvgFile($iconPath)) {
+            $this->resolvedPath = $iconPath;
+            $this->type = 'icon';
             return;
         }
 
-        // Check svg-sprite with icon- prefix
-        $spriteIconPath = $themeDir . self::SPRITE_DIR . 'icon-' . $this->name . '.svg';
-        if ($this->isValidSvgFile($spriteIconPath)) {
-            $this->resolvedPath = $spriteIconPath;
-            $this->type = 'sprite';
+        // 2. Recursive scan of icons/ subdirectories
+        $iconsDir = $themeDir . self::SVG_DIR . 'icons/';
+        $found = $this->findInSubdirectories($iconsDir, $this->name);
+        if ($found !== null) {
+            $this->resolvedPath = $found;
+            $this->type = 'icon';
             return;
         }
 
-        // Fall back to svg directory
+        // 3. Fall back to root svg directory
         $svgPath = $themeDir . self::SVG_DIR . $this->name . '.svg';
         if ($this->isValidSvgFile($svgPath)) {
             $this->resolvedPath = $svgPath;
             $this->type = 'svg';
             return;
         }
+    }
+
+    /**
+     * Search subdirectories recursively for an SVG file matching the given name.
+     *
+     * Only scans subdirectories (not the root of $dir itself, since that's
+     * already checked by the direct match in resolve()).
+     */
+    private function findInSubdirectories(string $dir, string $name): ?string
+    {
+        if (!is_dir($dir)) {
+            return null;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        $target = $name . '.svg';
+
+        foreach ($iterator as $file) {
+            if ($file->getFilename() === $target && $this->isValidSvgFile($file->getPathname())) {
+                // Skip files in the root icons/ dir (already checked in step 1)
+                if (dirname($file->getPathname()) === rtrim($dir, '/')) {
+                    continue;
+                }
+                return $file->getPathname();
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -277,7 +327,7 @@ class IconService
     /**
      * Apply custom attributes to the root SVG element.
      *
-     * For sprite content without a root <svg> tag, wraps the content in one.
+     * For content without a root <svg> tag, wraps the content in one.
      * For standard SVGs, injects the attributes into the existing <svg> tag.
      */
     private function applyAttributes(string $content): string
@@ -294,8 +344,8 @@ class IconService
             $attrString .= " {$key}=\"{$value}\"";
         }
 
-        // For sprite content (no root <svg> tag), wrap it
-        if ($this->type === 'sprite' && !str_contains(strtolower($content), '<svg')) {
+        // For content without a root <svg> tag, wrap it
+        if (!str_contains(strtolower($content), '<svg')) {
             return '<svg' . $attrString . ' xmlns="http://www.w3.org/2000/svg">' . $content . '</svg>';
         }
 
@@ -333,9 +383,7 @@ class IconService
             $name = pathinfo($filename, PATHINFO_FILENAME);
 
             // Generate a human-readable label
-            $label = $name;
-            $label = preg_replace('/^icon-/', '', $label);
-            $label = str_replace(['-', '_'], ' ', $label);
+            $label = str_replace(['-', '_'], ' ', $name);
             $label = ucwords($label);
 
             $icons[] = [

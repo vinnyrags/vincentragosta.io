@@ -118,8 +118,8 @@
       color: var(--color-button-hover-text);
 
       // Arrow icon: override arrow color on hover
-      .wp-block-button__icon.icon-arrow svg,
-      .button__icon.icon-arrow svg {
+      .wp-block-button__icon.arrow svg,
+      .button__icon.arrow svg {
         color: var(--wp--preset--color--base);
       }
     }

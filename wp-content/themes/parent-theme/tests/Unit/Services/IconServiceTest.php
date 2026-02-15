@@ -240,22 +240,22 @@ class IconServiceTest extends TestCase
     }
 
     /**
-     * Test that applyAttributes wraps sprite content without SVG tag.
+     * Test that applyAttributes wraps content without SVG tag.
      */
-    public function testApplyAttributesWrapsSpriteContent(): void
+    public function testApplyAttributesWrapsContentWithoutSvgTag(): void
     {
         $service = new IconService('test');
         $method = $this->getPrivateMethod($service, 'applyAttributes');
 
-        $this->setPrivateProperty($service, 'type', 'sprite');
-        $this->setPrivateProperty($service, 'attributes', ['class' => 'sprite-icon']);
+        $this->setPrivateProperty($service, 'type', 'icon');
+        $this->setPrivateProperty($service, 'attributes', ['class' => 'my-icon']);
 
-        // Sprite content without SVG wrapper
+        // Content without SVG wrapper
         $content = '<path d="M0 0"/><circle cx="10" cy="10" r="5"/>';
         $result = $method->invoke($service, $content);
 
         $this->assertStringStartsWith('<svg', $result);
-        $this->assertStringContainsString('class="sprite-icon"', $result);
+        $this->assertStringContainsString('class="my-icon"', $result);
         $this->assertStringContainsString('xmlns="http://www.w3.org/2000/svg"', $result);
         $this->assertStringContainsString('<path', $result);
     }

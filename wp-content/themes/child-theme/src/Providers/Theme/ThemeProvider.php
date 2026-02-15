@@ -8,6 +8,7 @@ use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Theme\Features\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Features\SocialIconChoices;
 use DI\Container;
 use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
 use ParentTheme\Services\IconServiceFactory;
@@ -32,6 +33,7 @@ class ThemeProvider extends BaseThemeProvider
         AccordionIconEnhancer::class,
         ButtonIconEnhancer::class,
         CoverBlockStyles::class,
+        SocialIconChoices::class,
     ];
 
     /**
@@ -253,8 +255,8 @@ class ThemeProvider extends BaseThemeProvider
         }
 
         $data = [
-            'iconOptions' => $this->iconFactory->options('sprite', __('— No Icon —', 'child-theme')),
-            'iconContentMap' => $this->iconFactory->contentMap('sprite'),
+            'iconOptions' => $this->iconFactory->options('icon', __('— No Icon —', 'child-theme')),
+            'iconContentMap' => $this->iconFactory->contentMap('icon'),
         ];
 
         wp_add_inline_script(

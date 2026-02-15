@@ -24,8 +24,8 @@ class IconServiceFactory
     /**
      * Get all available icons of a given type.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
-     * @param string $subdir Optional subdirectory within the type's directory
+     * @param string $type 'icon' (svg/icons/), 'svg' (svg/ root), or 'all' (both). 'sprite' is accepted as an alias for 'icon'.
+     * @param string $subdir Optional subdirectory within the type's directory (e.g., 'social' for icons)
      * @return array<int, array{name: string, label: string, type: string, filename: string}>
      */
     public function all(string $type = 'all', string $subdir = ''): array
@@ -36,7 +36,7 @@ class IconServiceFactory
     /**
      * Get icon options formatted for block editor dropdowns.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $type 'icon', 'svg', or 'all'. 'sprite' is accepted as an alias for 'icon'.
      * @param string $emptyLabel Label for the empty/no-selection option
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array<int, array{label: string, value: string}>
@@ -49,7 +49,7 @@ class IconServiceFactory
     /**
      * Get a map of icon names to their rendered content.
      *
-     * @param string $type 'sprite', 'svg', or 'all'
+     * @param string $type 'icon', 'svg', or 'all'. 'sprite' is accepted as an alias for 'icon'.
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array<string, string> Associative array of name => rendered SVG content
      */

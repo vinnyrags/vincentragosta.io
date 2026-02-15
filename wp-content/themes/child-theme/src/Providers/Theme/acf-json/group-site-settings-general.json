@@ -43,10 +43,14 @@
                     "key": "field_social_icon",
                     "label": "Icon",
                     "name": "icon",
-                    "type": "text",
-                    "instructions": "SVG sprite icon name (e.g. instagram).",
+                    "type": "select",
+                    "instructions": "Select a social media icon.",
                     "required": 1,
-                    "placeholder": "e.g. instagram"
+                    "choices": [],
+                    "return_format": "value",
+                    "ui": 1,
+                    "allow_null": 0,
+                    "placeholder": "Select an icon"
                 },
                 {
                     "key": "field_social_url",
