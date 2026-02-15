@@ -1,7 +1,23 @@
 (function () {
-    const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
 
-    if (!headings.length) return;
+    const STAGGER_DELAY = 0.1; // seconds between sibling reveals
+
+    // Selectors for elements that should animate in on scroll
+    const selectors = [
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        '.site-main p',
+        '.site-main .wp-block-image',
+        '.site-main .wp-block-button',
+        '.site-main .wp-block-buttons',
+        '.footer__contact-heading',
+        '.footer__contact-body',
+        '.footer__bar',
+    ].join(',');
+
+    const elements = document.querySelectorAll(selectors);
+    if (!elements.length) return;
 
     const observer = new IntersectionObserver(
         (entries) => {
@@ -15,16 +31,29 @@
         { rootMargin: '0px 0px -50px 0px' }
     );
 
-    headings.forEach((heading) => {
-        const rect = heading.getBoundingClientRect();
+    // Track stagger index per parent container
+    const parentCounters = new Map();
+
+    elements.forEach((el) => {
+        const rect = el.getBoundingClientRect();
         const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
 
-        heading.classList.add('fade-up');
+        el.classList.add('fade-up');
+
+        // Calculate stagger delay based on sibling index within same parent
+        const parent = el.parentElement;
+        if (parent) {
+            const index = parentCounters.get(parent) || 0;
+            if (index > 0) {
+                el.style.transitionDelay = `${index * STAGGER_DELAY}s`;
+            }
+            parentCounters.set(parent, index + 1);
+        }
 
         if (inViewport) {
-            heading.classList.add('is-visible');
+            el.classList.add('is-visible');
         } else {
-            observer.observe(heading);
+            observer.observe(el);
         }
     });
 })();

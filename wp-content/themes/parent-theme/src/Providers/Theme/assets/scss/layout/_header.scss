@@ -55,34 +55,50 @@
     }
   }
 
-  // Mode icons
-  &__mode-icon {
+  // Mode icon container — relative so absolute-positioned icons stack
+  &__mode-icon-wrapper {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: var(--wp--custom--icon-size--sm);
+    height: var(--wp--custom--icon-size--sm);
+  }
+
+  // Mode icons — both always in DOM, crossfade via opacity + rotation
+  &__mode-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
 
     svg {
       width: var(--wp--custom--icon-size--sm);
       height: var(--wp--custom--icon-size--sm);
     }
 
-    // In nightmode (default), show sun icon, hide moon
+    // In dark mode (default): sun visible, moon hidden
     &--sun {
-      display: flex;
+      opacity: 1;
+      transform: rotate(0deg);
     }
 
     &--moon {
-      display: none;
+      opacity: 0;
+      transform: rotate(-90deg);
     }
 
+    // In light mode: sun rotates out, moon rotates in
     .light-mode & {
-      // In light mode, hide sun icon, show moon
       &--sun {
-        display: none;
+        opacity: 0;
+        transform: rotate(90deg);
       }
 
       &--moon {
-        display: flex;
+        opacity: 1;
+        transform: rotate(0deg);
       }
     }
   }
@@ -172,6 +188,7 @@
 @media (prefers-reduced-motion: reduce) {
   .header,
   .header__mode-toggle,
+  .header__mode-icon,
   .header__logo a,
   .header__menu-toggle,
   .header__menu-line {

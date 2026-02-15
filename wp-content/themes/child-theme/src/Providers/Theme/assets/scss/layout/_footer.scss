@@ -194,9 +194,11 @@
   align-items: center;
   justify-content: center;
   color: var(--footer-text-muted);
+  transition: color 0.2s ease, transform 0.2s ease;
 
   &:hover {
     color: var(--footer-link-hover);
+    transform: scale(1.15) translateY(-2px);
   }
 
   &:focus-visible {
@@ -208,5 +210,15 @@
     width: var(--wp--custom--icon-size--sm);
     height: var(--wp--custom--icon-size--sm);
     fill: currentColor;
+  }
+}
+
+@include reduced-motion {
+  .footer__social-link {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
   }
 }

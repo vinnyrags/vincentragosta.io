@@ -7,11 +7,13 @@
             aria-label="Switch to light mode"
             aria-pressed="false"
         >
-            <span class="header__mode-icon header__mode-icon--sun" aria-hidden="true">
-                {{ icon('sun') | raw }}
-            </span>
-            <span class="header__mode-icon header__mode-icon--moon" aria-hidden="true">
-                {{ icon('moon') | raw }}
+            <span class="header__mode-icon-wrapper">
+                <span class="header__mode-icon header__mode-icon--sun" aria-hidden="true">
+                    {{ icon('sun') | raw }}
+                </span>
+                <span class="header__mode-icon header__mode-icon--moon" aria-hidden="true">
+                    {{ icon('moon') | raw }}
+                </span>
             </span>
         </button>
 
