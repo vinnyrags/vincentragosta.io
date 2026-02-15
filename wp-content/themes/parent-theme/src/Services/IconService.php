@@ -23,10 +23,12 @@ use RecursiveIteratorIterator;
  *   2. Recursive scan of svg/icons/  — finds name in subdirectories
  *   3. svg/{name}.svg                — root SVG match
  *
- * Usage:
- *   echo new IconService('arrow');
- *   echo IconService::get('arrow')->withClass('icon-lg');
- *   echo IconService::get('squiggle/squiggle-1')->withAttributes(['aria-hidden' => 'true']);
+ * Usage (via factory — preferred):
+ *   $icon = $iconFactory->create('arrow');
+ *   echo $icon->withClass('icon-lg');
+ *
+ * Direct usage:
+ *   echo new IconService('arrow', '/src/Providers/Theme/assets/images/svg/');
  */
 class IconService
 {
@@ -35,9 +37,7 @@ class IconService
     private ?string $type = null;
     private array $attributes = [];
 
-    private const SVG_DIR = '/src/Providers/Theme/assets/images/svg/';
-
-    public function __construct(string $name)
+    public function __construct(string $name, private readonly string $svgDir)
     {
         $this->name = $this->sanitizeName($name);
         $this->resolve();
@@ -46,9 +46,9 @@ class IconService
     /**
      * Static factory method for fluent usage.
      */
-    public static function get(string $name): self
+    public static function get(string $name, string $svgDir): self
     {
-        return new self($name);
+        return new self($name, $svgDir);
     }
 
     /**
@@ -124,7 +124,7 @@ class IconService
      * @param string $subdir Optional subdirectory within the type's directory (e.g., 'social' for icons, 'squiggle' for svg)
      * @return array<int, array{name: string, label: string, type: string, filename: string}>
      */
-    public static function all(string $type = 'all', string $subdir = ''): array
+    public static function all(string $svgDir, string $type = 'all', string $subdir = ''): array
     {
         // Backward compatibility: 'sprite' maps to 'icon'
         if ($type === 'sprite') {
@@ -136,11 +136,11 @@ class IconService
         $subdirPath = $subdir ? $subdir . '/' : '';
 
         if ($type === 'icon' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SVG_DIR . 'icons/' . $subdirPath, 'icon'));
+            $icons = array_merge($icons, self::scanDirectory($themeDir . $svgDir . 'icons/' . $subdirPath, 'icon'));
         }
 
         if ($type === 'svg' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . self::SVG_DIR . $subdirPath, 'svg'));
+            $icons = array_merge($icons, self::scanDirectory($themeDir . $svgDir . $subdirPath, 'svg'));
         }
 
         return $icons;
@@ -154,11 +154,11 @@ class IconService
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array<int, array{label: string, value: string}>
      */
-    public static function options(string $type = 'all', string $emptyLabel = '— No Icon —', string $subdir = ''): array
+    public static function options(string $svgDir, string $type = 'all', string $emptyLabel = '— No Icon —', string $subdir = ''): array
     {
         $options = [['label' => $emptyLabel, 'value' => '']];
 
-        foreach (self::all($type, $subdir) as $icon) {
+        foreach (self::all($svgDir, $type, $subdir) as $icon) {
             $options[] = [
                 'label' => $icon['label'],
                 'value' => $icon['name'],
@@ -175,13 +175,13 @@ class IconService
      * @param string $subdir Optional subdirectory within the type's directory
      * @return array Associative array of name => rendered SVG content
      */
-    public static function contentMap(string $type = 'all', string $subdir = ''): array
+    public static function contentMap(string $svgDir, string $type = 'all', string $subdir = ''): array
     {
         $map = [];
-        foreach (self::all($type, $subdir) as $icon) {
+        foreach (self::all($svgDir, $type, $subdir) as $icon) {
             // Include subdir in the path for resolution
             $iconPath = $subdir ? $subdir . '/' . $icon['name'] : $icon['name'];
-            $map[$icon['name']] = (string) new self($iconPath);
+            $map[$icon['name']] = (string) new self($iconPath, $svgDir);
         }
         return $map;
     }
@@ -232,7 +232,7 @@ class IconService
         $themeDir = get_stylesheet_directory();
 
         // 1. Direct match in icons directory
-        $iconPath = $themeDir . self::SVG_DIR . 'icons/' . $this->name . '.svg';
+        $iconPath = $themeDir . $this->svgDir . 'icons/' . $this->name . '.svg';
         if ($this->isValidSvgFile($iconPath)) {
             $this->resolvedPath = $iconPath;
             $this->type = 'icon';
@@ -240,7 +240,7 @@ class IconService
         }
 
         // 2. Recursive scan of icons/ subdirectories
-        $iconsDir = $themeDir . self::SVG_DIR . 'icons/';
+        $iconsDir = $themeDir . $this->svgDir . 'icons/';
         $found = $this->findInSubdirectories($iconsDir, $this->name);
         if ($found !== null) {
             $this->resolvedPath = $found;
@@ -249,7 +249,7 @@ class IconService
         }
 
         // 3. Fall back to root svg directory
-        $svgPath = $themeDir . self::SVG_DIR . $this->name . '.svg';
+        $svgPath = $themeDir . $this->svgDir . $this->name . '.svg';
         if ($this->isValidSvgFile($svgPath)) {
             $this->resolvedPath = $svgPath;
             $this->type = 'svg';

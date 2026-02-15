@@ -16,7 +16,7 @@ class IconServiceFactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->factory = new IconServiceFactory();
+        $this->factory = new IconServiceFactory('/test/svg/');
     }
 
     /**
@@ -75,11 +75,11 @@ class IconServiceFactoryTest extends TestCase
     }
 
     /**
-     * Test that factory can be instantiated without dependencies.
+     * Test that factory requires svgDir parameter.
      */
-    public function testFactoryHasNoDependencies(): void
+    public function testFactoryRequiresSvgDir(): void
     {
-        $factory = new IconServiceFactory();
+        $factory = new IconServiceFactory('/test/svg/');
 
         $this->assertInstanceOf(IconServiceFactory::class, $factory);
     }

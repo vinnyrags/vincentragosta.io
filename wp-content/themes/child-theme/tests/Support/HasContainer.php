@@ -8,8 +8,9 @@ use DI\ContainerBuilder;
 /**
  * Provides a DI container builder for test cases.
  *
- * Builds a real PHP-DI container with autowiring enabled and optional
- * definition overrides for stubbing or replacing services in tests.
+ * Builds a real PHP-DI container with autowiring enabled, loads the child
+ * theme's container definitions, and applies optional overrides for
+ * stubbing or replacing services in tests.
  */
 trait HasContainer
 {
@@ -22,6 +23,11 @@ trait HasContainer
     {
         $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
+
+        $definitionsFile = dirname(__DIR__, 2) . '/src/Config/container.php';
+        if (file_exists($definitionsFile)) {
+            $builder->addDefinitions($definitionsFile);
+        }
 
         if (!empty($overrides)) {
             $builder->addDefinitions($overrides);

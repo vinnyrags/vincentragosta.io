@@ -10,15 +10,27 @@ namespace ParentTheme\Services;
  * Provides an injectable service for creating IconService objects,
  * replacing direct `new IconService()` calls throughout the codebase.
  * This enables proper dependency injection and easier testing.
+ *
+ * The SVG base path is injected via the constructor and bound in the
+ * DI container definitions. This decouples IconService from any specific
+ * provider's directory structure.
  */
 class IconServiceFactory
 {
+    /**
+     * @param string $svgDir Relative path within the theme to the SVG directory (e.g., '/src/Providers/Theme/assets/images/svg/').
+     */
+    public function __construct(
+        private readonly string $svgDir,
+    ) {
+    }
+
     /**
      * Create an IconService instance for the given icon name.
      */
     public function create(string $name): IconService
     {
-        return new IconService($name);
+        return new IconService($name, $this->svgDir);
     }
 
     /**
@@ -30,7 +42,7 @@ class IconServiceFactory
      */
     public function all(string $type = 'all', string $subdir = ''): array
     {
-        return IconService::all($type, $subdir);
+        return IconService::all($this->svgDir, $type, $subdir);
     }
 
     /**
@@ -43,7 +55,7 @@ class IconServiceFactory
      */
     public function options(string $type = 'all', string $emptyLabel = '— No Icon —', string $subdir = ''): array
     {
-        return IconService::options($type, $emptyLabel, $subdir);
+        return IconService::options($this->svgDir, $type, $emptyLabel, $subdir);
     }
 
     /**
@@ -55,6 +67,6 @@ class IconServiceFactory
      */
     public function contentMap(string $type = 'all', string $subdir = ''): array
     {
-        return IconService::contentMap($type, $subdir);
+        return IconService::contentMap($this->svgDir, $type, $subdir);
     }
 }

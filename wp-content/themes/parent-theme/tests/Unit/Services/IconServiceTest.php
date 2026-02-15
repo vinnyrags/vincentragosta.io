@@ -18,7 +18,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeNameRemovesDirectoryTraversal(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeName');
 
         $this->assertEquals('icon', $method->invoke($service, '../../../icon'));
@@ -31,7 +31,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeNameRemovesSvgExtension(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeName');
 
         $this->assertEquals('arrow', $method->invoke($service, 'arrow.svg'));
@@ -44,7 +44,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeContentRemovesScriptTags(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeContent');
 
         $dirty = '<svg><script>alert("xss")</script><path d="M0 0"/></svg>';
@@ -59,7 +59,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeContentRemovesEventHandlers(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeContent');
 
         $dirty = '<svg onload="alert(1)" onclick="evil()"><path d="M0 0"/></svg>';
@@ -75,7 +75,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeContentRemovesXmlDeclaration(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeContent');
 
         $dirty = '<?xml version="1.0" encoding="UTF-8"?><svg><path d="M0 0"/></svg>';
@@ -90,7 +90,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeContentRemovesDoctype(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeContent');
 
         $dirty = '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg><path d="M0 0"/></svg>';
@@ -105,7 +105,7 @@ class IconServiceTest extends TestCase
      */
     public function testWithClassAddsClass(): void
     {
-        $service = IconService::get('test')->withClass('icon-lg');
+        $service = IconService::get('test', '/test/svg/')->withClass('icon-lg');
         $attributes = $this->getPrivateProperty($service, 'attributes');
 
         $this->assertArrayHasKey('class', $attributes);
@@ -117,7 +117,7 @@ class IconServiceTest extends TestCase
      */
     public function testWithClassAppendsToExistingClasses(): void
     {
-        $service = IconService::get('test')
+        $service = IconService::get('test', '/test/svg/')
             ->withClass('icon-lg')
             ->withClass('icon-primary');
 
@@ -132,7 +132,7 @@ class IconServiceTest extends TestCase
      */
     public function testWithAttributesMergesAttributes(): void
     {
-        $service = IconService::get('test')
+        $service = IconService::get('test', '/test/svg/')
             ->withClass('icon-lg')
             ->withAttributes(['aria-hidden' => 'true', 'role' => 'img']);
 
@@ -150,7 +150,7 @@ class IconServiceTest extends TestCase
      */
     public function testWithAttributesOverwritesExisting(): void
     {
-        $service = IconService::get('test')
+        $service = IconService::get('test', '/test/svg/')
             ->withAttributes(['data-id' => '1'])
             ->withAttributes(['data-id' => '2']);
 
@@ -164,7 +164,7 @@ class IconServiceTest extends TestCase
      */
     public function testGetReturnsInstance(): void
     {
-        $service = IconService::get('test');
+        $service = IconService::get('test', '/test/svg/');
 
         $this->assertInstanceOf(IconService::class, $service);
     }
@@ -174,7 +174,7 @@ class IconServiceTest extends TestCase
      */
     public function testExistsReturnsFalseForMissingIcon(): void
     {
-        $service = new IconService('definitely-does-not-exist-12345');
+        $service = new IconService('definitely-does-not-exist-12345', '/test/svg/');
 
         $this->assertFalse($service->exists());
     }
@@ -184,7 +184,7 @@ class IconServiceTest extends TestCase
      */
     public function testGetTypeReturnsNullForMissingIcon(): void
     {
-        $service = new IconService('definitely-does-not-exist-12345');
+        $service = new IconService('definitely-does-not-exist-12345', '/test/svg/');
 
         $this->assertNull($service->getType());
     }
@@ -194,7 +194,7 @@ class IconServiceTest extends TestCase
      */
     public function testRenderReturnsEmptyStringForMissingIcon(): void
     {
-        $service = new IconService('definitely-does-not-exist-12345');
+        $service = new IconService('definitely-does-not-exist-12345', '/test/svg/');
 
         $this->assertEquals('', $service->render());
         $this->assertEquals('', (string) $service);
@@ -205,7 +205,7 @@ class IconServiceTest extends TestCase
      */
     public function testApplyAttributesAddsClassToSvg(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'applyAttributes');
 
         // Set type to 'svg' and attributes
@@ -224,7 +224,7 @@ class IconServiceTest extends TestCase
      */
     public function testApplyAttributesPreservesExistingStructure(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'applyAttributes');
 
         $this->setPrivateProperty($service, 'type', 'svg');
@@ -244,7 +244,7 @@ class IconServiceTest extends TestCase
      */
     public function testApplyAttributesWrapsContentWithoutSvgTag(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'applyAttributes');
 
         $this->setPrivateProperty($service, 'type', 'icon');
@@ -265,7 +265,7 @@ class IconServiceTest extends TestCase
      */
     public function testApplyAttributesReturnsUnchangedWhenNoAttributes(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'applyAttributes');
 
         $this->setPrivateProperty($service, 'type', 'svg');
@@ -282,7 +282,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeNameAllowsSubdirectoryPaths(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeName');
 
         $this->assertEquals('squiggle/squiggle-1', $method->invoke($service, 'squiggle/squiggle-1'));
@@ -294,7 +294,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeNameNormalizesBackslashes(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeName');
 
         $this->assertEquals('subdir/icon', $method->invoke($service, 'subdir\\icon'));
@@ -305,7 +305,7 @@ class IconServiceTest extends TestCase
      */
     public function testSanitizeNameHandlesAbsolutePaths(): void
     {
-        $service = new IconService('test');
+        $service = new IconService('test', '/test/svg/');
         $method = $this->getPrivateMethod($service, 'sanitizeName');
 
         $this->assertEquals('icon', $method->invoke($service, '/absolute/path/to/icon'));
