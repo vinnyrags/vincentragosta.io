@@ -120,6 +120,9 @@ class IconService
     /**
      * Get all available icons of a given type.
      *
+     * Searches child theme first, then parent theme. Child icons win on name conflicts,
+     * matching WordPress's template hierarchy pattern.
+     *
      * @param string $type 'icon' (svg/icons/), 'svg' (svg/ root), or 'all' (both). 'sprite' is accepted as an alias for 'icon'.
      * @param string $subdir Optional subdirectory within the type's directory (e.g., 'social' for icons, 'squiggle' for svg)
      * @return array<int, array{name: string, label: string, type: string, filename: string}>
@@ -131,16 +134,28 @@ class IconService
             $type = 'icon';
         }
 
+        $seen = [];
         $icons = [];
-        $themeDir = get_stylesheet_directory();
         $subdirPath = $subdir ? $subdir . '/' : '';
 
-        if ($type === 'icon' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . $svgDir . 'icons/' . $subdirPath, 'icon'));
-        }
+        foreach (self::themeDirs() as $themeDir) {
+            if ($type === 'icon' || $type === 'all') {
+                foreach (self::scanDirectory($themeDir . $svgDir . 'icons/' . $subdirPath, 'icon') as $icon) {
+                    if (!isset($seen[$icon['name']])) {
+                        $seen[$icon['name']] = true;
+                        $icons[] = $icon;
+                    }
+                }
+            }
 
-        if ($type === 'svg' || $type === 'all') {
-            $icons = array_merge($icons, self::scanDirectory($themeDir . $svgDir . $subdirPath, 'svg'));
+            if ($type === 'svg' || $type === 'all') {
+                foreach (self::scanDirectory($themeDir . $svgDir . $subdirPath, 'svg') as $icon) {
+                    if (!isset($seen[$icon['name']])) {
+                        $seen[$icon['name']] = true;
+                        $icons[] = $icon;
+                    }
+                }
+            }
         }
 
         return $icons;
@@ -223,37 +238,39 @@ class IconService
     /**
      * Resolve the icon path by checking directories in priority order.
      *
-     * 1. svg/icons/{name}.svg — direct icon match (handles 'arrow', 'social/instagram')
-     * 2. Recursive scan of svg/icons/ — finds 'instagram' in icons/social/ without knowing the path
-     * 3. svg/{name}.svg — root SVGs ('vr-logo', 'squiggle/squiggle-1')
+     * Searches child theme first, then parent theme (matching WordPress template hierarchy).
+     * For each theme directory, checks:
+     *   1. svg/icons/{name}.svg — direct icon match (handles 'arrow', 'social/instagram')
+     *   2. Recursive scan of svg/icons/ — finds 'instagram' in icons/social/ without knowing the path
+     *   3. svg/{name}.svg — root SVGs ('vr-logo', 'squiggle/squiggle-1')
      */
     private function resolve(): void
     {
-        $themeDir = get_stylesheet_directory();
+        foreach (self::themeDirs() as $themeDir) {
+            // 1. Direct match in icons directory
+            $iconPath = $themeDir . $this->svgDir . 'icons/' . $this->name . '.svg';
+            if ($this->isValidSvgFile($iconPath)) {
+                $this->resolvedPath = $iconPath;
+                $this->type = 'icon';
+                return;
+            }
 
-        // 1. Direct match in icons directory
-        $iconPath = $themeDir . $this->svgDir . 'icons/' . $this->name . '.svg';
-        if ($this->isValidSvgFile($iconPath)) {
-            $this->resolvedPath = $iconPath;
-            $this->type = 'icon';
-            return;
-        }
+            // 2. Recursive scan of icons/ subdirectories
+            $iconsDir = $themeDir . $this->svgDir . 'icons/';
+            $found = $this->findInSubdirectories($iconsDir, $this->name);
+            if ($found !== null) {
+                $this->resolvedPath = $found;
+                $this->type = 'icon';
+                return;
+            }
 
-        // 2. Recursive scan of icons/ subdirectories
-        $iconsDir = $themeDir . $this->svgDir . 'icons/';
-        $found = $this->findInSubdirectories($iconsDir, $this->name);
-        if ($found !== null) {
-            $this->resolvedPath = $found;
-            $this->type = 'icon';
-            return;
-        }
-
-        // 3. Fall back to root svg directory
-        $svgPath = $themeDir . $this->svgDir . $this->name . '.svg';
-        if ($this->isValidSvgFile($svgPath)) {
-            $this->resolvedPath = $svgPath;
-            $this->type = 'svg';
-            return;
+            // 3. Fall back to root svg directory
+            $svgPath = $themeDir . $this->svgDir . $this->name . '.svg';
+            if ($this->isValidSvgFile($svgPath)) {
+                $this->resolvedPath = $svgPath;
+                $this->type = 'svg';
+                return;
+            }
         }
     }
 
@@ -358,6 +375,24 @@ class IconService
         );
 
         return $content;
+    }
+
+    /**
+     * Get theme directories to search, child first then parent.
+     *
+     * When a child theme is active, returns [child_dir, parent_dir].
+     * When no child theme is active, returns [theme_dir] (no duplicates).
+     *
+     * @return string[]
+     */
+    private static function themeDirs(): array
+    {
+        $dirs = [get_stylesheet_directory()];
+        $parentDir = get_template_directory();
+        if ($parentDir !== $dirs[0]) {
+            $dirs[] = $parentDir;
+        }
+        return $dirs;
     }
 
     /**

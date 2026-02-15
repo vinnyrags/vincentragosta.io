@@ -75,12 +75,27 @@ class IconServiceFactoryTest extends TestCase
     }
 
     /**
-     * Test that factory requires svgDir parameter.
+     * Test that factory accepts explicit svgDir parameter.
      */
-    public function testFactoryRequiresSvgDir(): void
+    public function testFactoryAcceptsExplicitSvgDir(): void
     {
         $factory = new IconServiceFactory('/test/svg/');
 
         $this->assertInstanceOf(IconServiceFactory::class, $factory);
+    }
+
+    /**
+     * Test that factory works with default svgDir parameter.
+     */
+    public function testFactoryWorksWithDefaultSvgDir(): void
+    {
+        $factory = new IconServiceFactory();
+
+        $this->assertInstanceOf(IconServiceFactory::class, $factory);
+
+        // Verify it can create an IconService (even if icon doesn't exist)
+        $icon = $factory->create('nonexistent');
+        $this->assertInstanceOf(IconService::class, $icon);
+        $this->assertFalse($icon->exists());
     }
 }

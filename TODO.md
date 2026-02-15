@@ -3,7 +3,6 @@
 - (HARD) check project aspect ratio with different sort selected on projects page
 
 ## MEDIUM PRIORITY
-- (HARD) test core/cover to ensure we are not bulldozing other variations with our current css-- content right aligned position variants are being overriden
 - (HARD) add other social icons like github
 
 ## LOW PRIORITY

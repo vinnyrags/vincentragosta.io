@@ -21,7 +21,7 @@ class IconServiceFactory
      * @param string $svgDir Relative path within the theme to the SVG directory (e.g., '/src/Providers/Theme/assets/images/svg/').
      */
     public function __construct(
-        private readonly string $svgDir,
+        private readonly string $svgDir = '/src/Providers/Theme/assets/images/svg/',
     ) {
     }
 

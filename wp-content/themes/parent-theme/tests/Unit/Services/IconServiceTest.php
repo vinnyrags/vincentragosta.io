@@ -312,6 +312,100 @@ class IconServiceTest extends TestCase
     }
 
     /**
+     * Test that themeDirs returns single directory when no child theme.
+     *
+     * In WorDBless, get_stylesheet_directory() and get_template_directory()
+     * return the same value, simulating a standalone (non-child) theme.
+     */
+    public function testThemeDirsReturnsSingleDirWithoutChildTheme(): void
+    {
+        $method = $this->getPrivateStaticMethod(IconService::class, 'themeDirs');
+        $dirs = $method->invoke(null);
+
+        $this->assertCount(1, $dirs);
+        $this->assertEquals(get_stylesheet_directory(), $dirs[0]);
+    }
+
+    /**
+     * Test that themeDirs does not duplicate when stylesheet equals template.
+     */
+    public function testThemeDirsNoDuplicatesWhenSameDir(): void
+    {
+        $method = $this->getPrivateStaticMethod(IconService::class, 'themeDirs');
+        $dirs = $method->invoke(null);
+
+        $this->assertCount(count(array_unique($dirs)), $dirs);
+    }
+
+    /**
+     * Test that resolve checks parent theme directory for icons.
+     *
+     * Creates a temporary SVG in the parent theme's icon path and verifies
+     * that IconService can resolve it.
+     */
+    public function testResolveFindsIconInParentThemeDir(): void
+    {
+        $themeDir = get_template_directory();
+        $svgDir = '/test-icons-' . uniqid() . '/';
+        $iconsDir = $themeDir . $svgDir . 'icons/';
+
+        // Create temporary directory and SVG
+        mkdir($iconsDir, 0755, true);
+        file_put_contents($iconsDir . 'test-resolve.svg', '<svg><path d="M0 0"/></svg>');
+
+        try {
+            $service = new IconService('test-resolve', $svgDir);
+            $this->assertTrue($service->exists());
+            $this->assertEquals('icon', $service->getType());
+            $this->assertStringContainsString('<path', $service->render());
+        } finally {
+            // Clean up
+            unlink($iconsDir . 'test-resolve.svg');
+            rmdir($iconsDir);
+            rmdir($themeDir . $svgDir);
+        }
+    }
+
+    /**
+     * Test that all() finds icons from the theme directory.
+     */
+    public function testAllFindsIconsFromThemeDir(): void
+    {
+        $themeDir = get_template_directory();
+        $svgDir = '/test-all-' . uniqid() . '/';
+        $iconsDir = $themeDir . $svgDir . 'icons/';
+
+        mkdir($iconsDir, 0755, true);
+        file_put_contents($iconsDir . 'alpha.svg', '<svg><path d="M0 0"/></svg>');
+        file_put_contents($iconsDir . 'beta.svg', '<svg><circle cx="5" cy="5" r="5"/></svg>');
+
+        try {
+            $icons = IconService::all($svgDir, 'icon');
+            $names = array_column($icons, 'name');
+
+            $this->assertContains('alpha', $names);
+            $this->assertContains('beta', $names);
+            $this->assertCount(2, $icons);
+        } finally {
+            unlink($iconsDir . 'alpha.svg');
+            unlink($iconsDir . 'beta.svg');
+            rmdir($iconsDir);
+            rmdir($themeDir . $svgDir);
+        }
+    }
+
+    /**
+     * Helper to get a private static method via reflection.
+     */
+    private function getPrivateStaticMethod(string $className, string $methodName): \ReflectionMethod
+    {
+        $reflection = new ReflectionClass($className);
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method;
+    }
+
+    /**
      * Helper to get a private method via reflection.
      */
     private function getPrivateMethod(object $object, string $methodName): \ReflectionMethod
