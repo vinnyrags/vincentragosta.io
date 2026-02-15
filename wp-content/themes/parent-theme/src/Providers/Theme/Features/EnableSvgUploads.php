@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Theme\Features;
 
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Feature;
 use ParentTheme\Services\SvgSanitizerService;
 
 /**
@@ -14,7 +14,7 @@ use ParentTheme\Services\SvgSanitizerService;
  * comprehensive sanitization via enshrined/svg-sanitize to remove
  * potentially harmful content including XSS vectors.
  */
-class EnableSvgUploads implements Registrable
+class EnableSvgUploads implements Feature
 {
     /**
      * Create the feature with its sanitizer dependency.

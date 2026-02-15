@@ -1,14 +1,15 @@
 <?php
 
-namespace ChildTheme\Tests\Integration\Providers\Features;
+namespace ChildTheme\Tests\Integration\Providers\Hooks;
 
-use ChildTheme\Providers\Theme\Features\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Tests\Support\HasContainer;
+use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**
- * Integration tests for the SocialIconChoices feature.
+ * Integration tests for the SocialIconChoices hook.
  */
 class SocialIconChoicesTest extends BaseTestCase
 {
@@ -29,6 +30,14 @@ class SocialIconChoicesTest extends BaseTestCase
     public function testImplementsRegistrable(): void
     {
         $this->assertInstanceOf(Registrable::class, $this->feature);
+    }
+
+    /**
+     * Test that SocialIconChoices implements Hook (always-active).
+     */
+    public function testImplementsHook(): void
+    {
+        $this->assertInstanceOf(Hook::class, $this->feature);
     }
 
     /**

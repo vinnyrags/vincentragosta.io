@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ParentTheme\Providers;
 
 use DI\Container;
+use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Acf\AcfManager;
 use ParentTheme\Providers\Support\Asset\AssetManager;
@@ -25,11 +26,18 @@ use Twig\Environment;
 abstract class Provider implements Registrable
 {
     /**
-     * Feature classes to register.
+     * Feature classes to register (toggleable via => false).
      *
      * @var array<class-string<Registrable>>
      */
     protected array $features = [];
+
+    /**
+     * Hook classes to register (always-active, additive only).
+     *
+     * @var array<class-string<Registrable>>
+     */
+    protected array $hooks = [];
 
     /**
      * Blocks to register.
@@ -76,6 +84,7 @@ abstract class Provider implements Registrable
     public function register(): void
     {
         $this->setup();
+        $this->registerHooks();
         $this->registerFeatures();
         $this->acfManager->initializeHooks();
         $this->blockManager->initializeHooks($this);
@@ -156,6 +165,41 @@ abstract class Provider implements Registrable
     }
 
     /**
+     * Register all hook classes (always-active behavioral wiring).
+     *
+     * Hooks are resolved from the DI container and registered unconditionally.
+     * Errors are isolated per-hook so a single failure doesn't prevent others.
+     */
+    protected function registerHooks(): void
+    {
+        foreach ($this->collectHooks() as $hook) {
+            try {
+                $instance = $this->container->get($hook);
+
+                if (!$instance instanceof Hook) {
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    error_log(sprintf(
+                        'Provider: %s does not implement Hook. '
+                        . 'Move it to $features for toggleable behavior, '
+                        . 'or implement Hook for always-active hooks.',
+                        $hook
+                    ));
+                    continue;
+                }
+
+                $instance->register();
+            } catch (\Throwable $e) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                error_log(sprintf(
+                    'Provider: Failed to register hook %s: %s',
+                    $hook,
+                    $e->getMessage()
+                ));
+            }
+        }
+    }
+
+    /**
      * Register all feature classes via the FeatureManager.
      */
     protected function registerFeatures(): void
@@ -171,6 +215,18 @@ abstract class Provider implements Registrable
     protected function collectFeatures(): array
     {
         return $this->collectItems('features');
+    }
+
+    /**
+     * Collect and merge hooks from the class hierarchy.
+     *
+     * Unlike features, hooks are additive only — no opt-out via => false.
+     *
+     * @return array<class-string>
+     */
+    protected function collectHooks(): array
+    {
+        return $this->collectAdditive('hooks');
     }
 
     /**
@@ -207,6 +263,30 @@ abstract class Provider implements Registrable
         }
 
         return $merged;
+    }
+
+    /**
+     * Collect and merge an additive property from the class hierarchy.
+     *
+     * Walks from the concrete class up toward Provider, producing a flat,
+     * deduplicated array. No => false support — purely additive.
+     *
+     * @return array<class-string>
+     */
+    private function collectAdditive(string $property): array
+    {
+        $merged = [];
+        $class = new ReflectionClass($this);
+
+        while ($class && $class->getName() !== self::class) {
+            $defaults = $class->getDefaultProperties();
+            if (isset($defaults[$property]) && is_array($defaults[$property])) {
+                $merged = array_merge($merged, $defaults[$property]);
+            }
+            $class = $class->getParentClass();
+        }
+
+        return array_values(array_unique($merged));
     }
 
     /**

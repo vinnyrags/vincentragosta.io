@@ -3,6 +3,7 @@
 namespace ParentTheme\Tests\Integration\Providers;
 
 use ParentTheme\Providers\Theme\Features\DisableComments;
+use ParentTheme\Providers\Contracts\Feature;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
@@ -25,6 +26,14 @@ class DisableCommentsTest extends BaseTestCase
     public function testImplementsRegistrable(): void
     {
         $this->assertInstanceOf(Registrable::class, $this->feature);
+    }
+
+    /**
+     * Test that DisableComments implements Feature (toggleable).
+     */
+    public function testImplementsFeature(): void
+    {
+        $this->assertInstanceOf(Feature::class, $this->feature);
     }
 
     /**

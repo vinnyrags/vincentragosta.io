@@ -1,13 +1,14 @@
 <?php
 
-namespace ChildTheme\Tests\Integration\Providers\Features;
+namespace ChildTheme\Tests\Integration\Providers\Hooks;
 
-use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**
- * Integration tests for the CoverBlockStyles feature.
+ * Integration tests for the CoverBlockStyles hook.
  */
 class CoverBlockStylesTest extends BaseTestCase
 {
@@ -25,6 +26,14 @@ class CoverBlockStylesTest extends BaseTestCase
     public function testImplementsRegistrable(): void
     {
         $this->assertInstanceOf(Registrable::class, $this->feature);
+    }
+
+    /**
+     * Test that CoverBlockStyles implements Hook (always-active).
+     */
+    public function testImplementsHook(): void
+    {
+        $this->assertInstanceOf(Hook::class, $this->feature);
     }
 
     /**

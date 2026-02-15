@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Theme\Features;
+namespace ChildTheme\Providers\Theme\Hooks;
 
 use ParentTheme\Services\IconServiceFactory;
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Hook;
 
 /**
- * Replaces the default +/− text in accordion toggle icons with an SVG arrow.
+ * Replaces the default +/- text in accordion toggle icons with an SVG arrow.
  *
  * Hooks into the accordion-heading block render to swap the text content
  * of the toggle-icon span with the icon-arrow SVG. CSS handles rotation
  * based on aria-expanded state.
  */
-class AccordionIconEnhancer implements Registrable
+class AccordionIconEnhancer implements Hook
 {
     /**
      * Create the enhancer with its icon factory dependency.
@@ -45,7 +45,7 @@ class AccordionIconEnhancer implements Registrable
 
         $svg = (string) $icon;
 
-        // Replace the text content (+/−) inside the toggle-icon span with the SVG
+        // Replace the text content (+/-) inside the toggle-icon span with the SVG
         return preg_replace(
             '/(<span\b[^>]*class="[^"]*wp-block-accordion-heading__toggle-icon[^"]*"[^>]*>)[^<]*(<\/span>)/i',
             '$1' . $svg . '$2',

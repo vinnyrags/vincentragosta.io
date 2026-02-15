@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Theme\Features;
 
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Feature;
 use WP_Block_Type_Registry;
 
 /**
@@ -27,7 +27,7 @@ use WP_Block_Type_Registry;
  *     return $blocks;
  * });
  */
-class DisableBlocks implements Registrable
+class DisableBlocks implements Feature
 {
     /**
      * Default block types to disable.

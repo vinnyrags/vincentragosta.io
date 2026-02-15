@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Theme\Features;
+namespace ChildTheme\Providers\Theme\Hooks;
 
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Hook;
 
 /**
  * Registers custom block styles for core/cover.
  */
-class CoverBlockStyles implements Registrable
+class CoverBlockStyles implements Hook
 {
     public function register(): void
     {

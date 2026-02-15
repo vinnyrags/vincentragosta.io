@@ -5,9 +5,10 @@ namespace ChildTheme\Tests\Integration\Providers;
 use ChildTheme\Providers\Project\ProjectPost;
 use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
-use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
-use ChildTheme\Providers\Theme\Features\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
@@ -52,9 +53,9 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that provider has features configured via collectFeatures.
+     * Test that provider inherits parent features only (child hooks excluded).
      */
-    public function testProviderHasFeatures(): void
+    public function testProviderInheritsParentFeatures(): void
     {
         $reflection = new ReflectionClass($this->provider);
         $method = $reflection->getMethod('collectFeatures');
@@ -64,16 +65,36 @@ class ThemeProviderTest extends BaseTestCase
         $manager = new FeatureManager($features, $this->container);
         $enabled = $manager->getEnabled();
 
-        // Child theme features
-        $this->assertContains(ButtonIconEnhancer::class, $enabled);
-        $this->assertContains(CoverBlockStyles::class, $enabled);
-        $this->assertContains(SocialIconChoices::class, $enabled);
-
         // Parent theme features (inherited)
         $this->assertContains(DisableBlocks::class, $enabled);
         $this->assertContains(DisableComments::class, $enabled);
         $this->assertContains(DisablePosts::class, $enabled);
         $this->assertContains(EnableSvgUploads::class, $enabled);
+        $this->assertCount(4, $enabled);
+
+        // Child hook classes should NOT be in features
+        $this->assertNotContains(ButtonIconEnhancer::class, $enabled);
+        $this->assertNotContains(CoverBlockStyles::class, $enabled);
+        $this->assertNotContains(SocialIconChoices::class, $enabled);
+        $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
+    }
+
+    /**
+     * Test that provider has hooks configured via collectHooks.
+     */
+    public function testProviderHasHooks(): void
+    {
+        $reflection = new ReflectionClass($this->provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $hooks = $method->invoke($this->provider);
+
+        $this->assertContains(AccordionIconEnhancer::class, $hooks);
+        $this->assertContains(ButtonIconEnhancer::class, $hooks);
+        $this->assertContains(CoverBlockStyles::class, $hooks);
+        $this->assertContains(SocialIconChoices::class, $hooks);
+        $this->assertCount(4, $hooks);
     }
 
     /**

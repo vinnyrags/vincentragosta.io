@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ChildTheme\Providers\Theme\Features\AccordionIconEnhancer;
-use ChildTheme\Providers\Theme\Features\ButtonIconEnhancer;
-use ChildTheme\Providers\Theme\Features\CoverBlockStyles;
-use ChildTheme\Providers\Theme\Features\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
 use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
 use ParentTheme\Services\IconServiceFactory;
@@ -23,13 +23,12 @@ use ParentTheme\Services\IconServiceFactory;
 class ThemeProvider extends BaseThemeProvider
 {
     /**
-     * Features to register.
+     * Hooks to register (always-active structural behavior).
      *
-     * Parent features are inherited automatically via collectFeatures().
-     * Add only child-specific features here. Use `ClassName::class => false`
-     * to opt out of an inherited parent feature.
+     * Hooks are additive — parent and child hooks are merged automatically.
+     * No opt-out syntax. For toggleable capabilities, use $features instead.
      */
-    protected array $features = [
+    protected array $hooks = [
         AccordionIconEnhancer::class,
         ButtonIconEnhancer::class,
         CoverBlockStyles::class,

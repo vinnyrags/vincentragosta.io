@@ -4,6 +4,8 @@ namespace ParentTheme\Tests\Integration\Providers;
 
 use DI\Container;
 use ParentTheme\Providers\Provider;
+use ParentTheme\Providers\Contracts\Feature;
+use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Support\Rest\Endpoint;
@@ -16,25 +18,103 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 // Test feature stubs for collectFeatures tests.
-class StubFeatureOne implements Registrable
+class StubFeatureOne implements Feature
 {
     public function register(): void
     {
     }
 }
 
-class StubFeatureTwo implements Registrable
+class StubFeatureTwo implements Feature
 {
     public function register(): void
     {
     }
 }
 
-class StubFeatureThree implements Registrable
+class StubFeatureThree implements Feature
 {
     public function register(): void
     {
     }
+}
+
+// Test hook stubs for collectHooks tests.
+class StubHookAlpha implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+class StubHookBeta implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+class StubHookGamma implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+// Stub that implements Registrable but NOT Hook — should be skipped by registerHooks.
+class StubNonHookRegistrable implements Registrable
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+// Provider that puts a non-Hook class in $hooks for testing validation.
+class StubInvalidHookProvider extends Provider
+{
+    protected array $hooks = [
+        StubNonHookRegistrable::class,
+        StubHookAlpha::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a parent provider with hooks.
+class StubHookParentProvider extends Provider
+{
+    protected array $hooks = [
+        StubHookAlpha::class,
+        StubHookBeta::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a child provider that adds its own hooks.
+class StubHookChildProvider extends StubHookParentProvider
+{
+    protected array $hooks = [
+        StubHookGamma::class,
+    ];
 }
 
 // Simulates a parent-level provider with features.
@@ -182,6 +262,10 @@ class ProviderTest extends BaseTestCase
     {
         parent::setUp();
         $this->container = $this->buildTestContainer();
+        StubHookAlpha::$registered = false;
+        StubHookBeta::$registered = false;
+        StubHookGamma::$registered = false;
+        StubNonHookRegistrable::$registered = false;
     }
 
     /**
@@ -426,5 +510,90 @@ class ProviderTest extends BaseTestCase
         $property->setAccessible(true);
 
         $this->assertInstanceOf(RestManager::class, $property->getValue($provider));
+    }
+
+    /**
+     * Test that collectHooks returns empty for base provider with no hooks.
+     */
+    public function testCollectHooksReturnsEmptyForBaseProvider(): void
+    {
+        $provider = $this->createConcreteProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $this->assertSame([], $method->invoke($provider));
+    }
+
+    /**
+     * Test that collectHooks merges parent and child hooks.
+     */
+    public function testCollectHooksMergesParentAndChild(): void
+    {
+        $provider = new StubHookChildProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $hooks = $method->invoke($provider);
+
+        $this->assertContains(StubHookAlpha::class, $hooks);
+        $this->assertContains(StubHookBeta::class, $hooks);
+        $this->assertContains(StubHookGamma::class, $hooks);
+        $this->assertCount(3, $hooks);
+    }
+
+    /**
+     * Test that collectHooks deduplicates entries.
+     */
+    public function testCollectHooksDeduplicates(): void
+    {
+        // Create a child that re-declares a parent hook
+        $provider = new class($this->container) extends StubHookParentProvider {
+            protected array $hooks = [
+                StubHookAlpha::class, // already in parent
+                StubHookGamma::class,
+            ];
+        };
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $hooks = $method->invoke($provider);
+
+        $this->assertCount(3, $hooks);
+        $this->assertContains(StubHookAlpha::class, $hooks);
+        $this->assertContains(StubHookBeta::class, $hooks);
+        $this->assertContains(StubHookGamma::class, $hooks);
+    }
+
+    /**
+     * Test that register calls registerHooks.
+     */
+    public function testRegisterCallsRegisterHooks(): void
+    {
+        $provider = new StubHookParentProvider($this->container);
+        $provider->register();
+
+        $this->assertTrue(StubHookAlpha::$registered);
+        $this->assertTrue(StubHookBeta::$registered);
+    }
+
+    /**
+     * Test that registerHooks skips classes that don't implement Hook.
+     */
+    public function testRegisterHooksSkipsNonHookRegistrable(): void
+    {
+        $provider = new StubInvalidHookProvider($this->container);
+        $provider->register();
+
+        // Non-Hook class should be skipped
+        $this->assertFalse(StubNonHookRegistrable::$registered);
+
+        // Hook class should still register
+        $this->assertTrue(StubHookAlpha::$registered);
     }
 }

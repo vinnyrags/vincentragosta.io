@@ -22,6 +22,8 @@ The hierarchy:
 
 ```
 Registrable (interface)
+  ├── Feature (marker) — toggleable, $features array, opt-out via => false
+  ├── Hook (marker) — always-active, $hooks array, additive only
   └── Provider (abstract base)
         ├── ThemeProvider — core theme setup, supports, global assets
         ├── PostTypeProvider — custom post types via JSON config
@@ -32,7 +34,7 @@ Each provider composes three managers rather than inheriting them:
 
 - **AssetManager** — enqueues CSS/JS from `dist/`, derives a kebab-case slug from the provider class name (e.g., `ThemeProvider` → `theme`, `PostTypeProvider` → `post-type`)
 - **BlockManager** — registers dynamic blocks from the provider's `blocks/` directory
-- **FeatureManager** — resolves and registers small `Registrable` feature classes via the DI container
+- **FeatureManager** — resolves and registers toggleable `Feature` classes via the DI container
 
 Managers are instantiated in `Provider::setup()`, which runs lazily (idempotent, deferred until first access).
 
@@ -44,28 +46,22 @@ functions.php → (new Theme())->bootstrap()
   → registerAll($providers)
     → container->get(ThemeProvider::class)  // autowired
     → provider->register()
-      → setup()         // creates managers, sets configPath
-      → registerFeatures()  // FeatureManager resolves + registers all
+      → setup()            // creates managers, sets configPath
+      → registerHooks()    // always-active structural behavior
+      → registerFeatures() // toggleable features via FeatureManager
       → blockManager->initializeHooks()
 ```
 
+### Features vs Hooks
+
+The codebase distinguishes two kinds of registrable classes:
+
+- **Features** (in `$features` array, `Features/` directory) — toggleable capabilities that implement the `Feature` interface. Child providers can opt out via `ClassName::class => false`. Examples: `DisableComments`, `DisablePosts`, `EnableSvgUploads`.
+- **Hooks** (in `$hooks` array, `Hooks/` directory) — always-active structural behavior that implements the `Hook` interface. Inheritance is additive only — no opt-out. Examples: `ButtonIconEnhancer`, `CoverBlockStyles`, `SocialIconChoices`.
+
 ### Feature Inheritance
 
-Child providers extend parent providers using aliases:
-
-```php
-use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
-
-class ThemeProvider extends BaseThemeProvider
-{
-    protected array $features = [
-        ButtonIconEnhancer::class,
-        CoverBlockStyles::class,
-    ];
-}
-```
-
-The child only declares its own features. `collectFeatures()` walks the class hierarchy and merges parent + child features automatically. To opt out of a parent feature:
+Child providers extend parent providers using aliases. Features support opt-out via `=> false`:
 
 ```php
 protected array $features = [
@@ -74,11 +70,28 @@ protected array $features = [
 ];
 ```
 
+`collectFeatures()` walks the class hierarchy and merges parent + child features automatically. `FeatureManager` validates that classes in `$features` implement the `Feature` interface — plain `Registrable` classes are skipped with a warning.
+
+### Hook Inheritance
+
+Hooks use additive-only inheritance — no opt-out syntax:
+
+```php
+protected array $hooks = [
+    ButtonIconEnhancer::class,
+    CoverBlockStyles::class,
+];
+```
+
+`collectHooks()` merges parent + child hooks and deduplicates. Hooks are resolved from the DI container and registered directly by the Provider (no Manager class needed).
+
 ## Design Patterns
 
 **Composition over inheritance** — Providers compose AssetManager, BlockManager, and FeatureManager as internal collaborators. The managers are not part of any inheritance chain.
 
 **Constructors are for DI only** (injectables) — No initialization logic in constructors of container-managed classes (providers, services, features). Setup happens in `setup()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method. **Newables** — short-lived objects created via `new` with runtime parameters (e.g., `IconService` instances) — may do initialization work in their constructor, since the container doesn't create them.
+
+**Features vs Hooks** — Features (in `$features` array, `Features/` directory) are toggleable — child providers can opt out via `ClassName::class => false`. They implement the `Feature` interface. Hooks (in `$hooks` array, `Hooks/` directory) are always-active structural behavior — inheritance is additive only, no opt-out. They implement the `Hook` interface. Both `Feature` and `Hook` extend `Registrable`. Placing a class in the wrong array triggers a runtime warning.
 
 **Autowiring-first** — PHP-DI's autowiring resolves everything by default. To add explicit definitions when autowiring can't figure it out, override `getContainerDefinitions()` in Theme.php and create a `src/Config/container.php` file that returns an array of definitions.
 
@@ -96,9 +109,12 @@ protected array $features = [
 src/Providers/{Name}/
 ├── {Name}Provider.php     # Provider class
 ├── README.md              # Documents the provider
-├── Features/              # Small Registrable classes
+├── Features/              # Toggleable Feature classes (opt-out via => false)
 │   ├── DisableComments.php
 │   └── EnableSvgUploads.php
+├── Hooks/                 # Always-active Registrable classes (additive only)
+│   ├── ButtonIconEnhancer.php
+│   └── CoverBlockStyles.php
 ├── assets/
 │   ├── js/                # Provider-scoped scripts
 │   └── scss/
@@ -227,3 +243,5 @@ These are patterns the codebase has evolved away from. Avoid reintroducing them:
 - **Explicit container definitions for autowirable classes** — If PHP-DI can resolve it automatically, don't add a definition
 - **Calling `init()` on Theme** — The entry point is `bootstrap()`. Using `init()` conflicts with `Timber\Site::init()`
 - **`new` for feature classes** — Features are resolved through the container via `FeatureManager`. This enables autowiring of their dependencies
+- **Hooks in `$features`** — Always-active behavioral classes (icon enhancers, block styles) belong in `$hooks`, not `$features`. `FeatureManager` validates this at runtime and skips non-`Feature` classes with a warning
+- **Wrong marker interface** — Feature classes implement `Feature`, hook classes implement `Hook`. Both extend `Registrable`. Placing a `Feature` in `$hooks` or a `Hook` in `$features` triggers a runtime warning and the class is skipped

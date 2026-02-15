@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Theme\Features;
+namespace ChildTheme\Providers\Theme\Hooks;
 
 use ParentTheme\Services\IconServiceFactory;
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Hook;
 use DOMDocument;
 use DOMXPath;
 
@@ -14,7 +14,7 @@ use DOMXPath;
  *
  * Uses DOMDocument for robust HTML manipulation.
  */
-class ButtonIconEnhancer implements Registrable
+class ButtonIconEnhancer implements Hook
 {
     /**
      * Create the enhancer with its icon factory dependency.

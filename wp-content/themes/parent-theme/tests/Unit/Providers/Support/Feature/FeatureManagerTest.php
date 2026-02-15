@@ -3,6 +3,7 @@
 namespace ParentTheme\Tests\Unit\Providers\Support\Feature;
 
 use DI\Container;
+use ParentTheme\Providers\Contracts\Feature;
 use ParentTheme\Providers\Contracts\Registrable;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Tests\Support\HasContainer;
@@ -11,7 +12,7 @@ use WorDBless\BaseTestCase;
 /**
  * Concrete test feature for registerAll tests.
  */
-class StubFeatureA implements Registrable
+class StubFeatureA implements Feature
 {
     public static bool $registered = false;
 
@@ -21,7 +22,7 @@ class StubFeatureA implements Registrable
     }
 }
 
-class StubFeatureB implements Registrable
+class StubFeatureB implements Feature
 {
     public static bool $registered = false;
 
@@ -31,7 +32,7 @@ class StubFeatureB implements Registrable
     }
 }
 
-class StubFeatureDisabled implements Registrable
+class StubFeatureDisabled implements Feature
 {
     public static bool $registered = false;
 
@@ -41,7 +42,7 @@ class StubFeatureDisabled implements Registrable
     }
 }
 
-class StubFeatureThrowing implements Registrable
+class StubFeatureThrowing implements Feature
 {
     public static bool $registered = false;
 
@@ -52,7 +53,20 @@ class StubFeatureThrowing implements Registrable
     }
 }
 
-class StubFeatureAfterThrowing implements Registrable
+class StubFeatureAfterThrowing implements Feature
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+/**
+ * Stub that implements Registrable but NOT Feature — should be skipped by FeatureManager.
+ */
+class StubRegistrableOnly implements Registrable
 {
     public static bool $registered = false;
 
@@ -80,6 +94,7 @@ class FeatureManagerTest extends BaseTestCase
         StubFeatureDisabled::$registered = false;
         StubFeatureThrowing::$registered = false;
         StubFeatureAfterThrowing::$registered = false;
+        StubRegistrableOnly::$registered = false;
     }
 
     /**
@@ -320,5 +335,24 @@ class FeatureManagerTest extends BaseTestCase
 
         // Despite first feature throwing, second should register
         $this->assertTrue(StubFeatureB::$registered);
+    }
+
+    /**
+     * Test registerAll skips classes that implement Registrable but not Feature.
+     */
+    public function testRegisterAllSkipsNonFeatureRegistrable(): void
+    {
+        $manager = new FeatureManager([
+            StubRegistrableOnly::class => true,
+            StubFeatureA::class => true,
+        ], $this->container);
+
+        $manager->registerAll();
+
+        // Registrable-only class should be skipped
+        $this->assertFalse(StubRegistrableOnly::$registered);
+
+        // Feature class should still register
+        $this->assertTrue(StubFeatureA::$registered);
     }
 }

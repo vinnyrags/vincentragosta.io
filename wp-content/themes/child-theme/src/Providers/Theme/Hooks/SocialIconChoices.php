@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Theme\Features;
+namespace ChildTheme\Providers\Theme\Hooks;
 
-use ParentTheme\Providers\Contracts\Registrable;
+use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Services\IconServiceFactory;
 
 /**
@@ -14,7 +14,7 @@ use ParentTheme\Services\IconServiceFactory;
  * and dynamically builds the choices array from SVG files in the
  * svg/icons/social/ directory.
  */
-class SocialIconChoices implements Registrable
+class SocialIconChoices implements Hook
 {
     public function __construct(
         private readonly IconServiceFactory $iconFactory,
