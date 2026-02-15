@@ -7,20 +7,6 @@
   "icon": "portfolio",
   "description": "Displays a list of recent or curated projects.",
   "keywords": ["projects", "portfolio", "grid"],
-  "attributes": {
-    "mode": {
-      "type": "string",
-      "default": "latest"
-    },
-    "selectedProjects": {
-      "type": "array",
-      "default": []
-    },
-    "align": {
-      "type": "string",
-      "default": "full"
-    }
-  },
   "supports": {
     "html": false,
     "align": true,
@@ -30,5 +16,8 @@
     }
   },
   "textdomain": "child-theme",
-  "render": "file:./frontend/render.php"
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "frontend/render.php"
+  }
 }

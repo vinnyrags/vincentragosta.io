@@ -81,15 +81,6 @@ class ProjectProvider extends Provider
     }
 
     /**
-     * Enqueue block editor assets.
-     */
-    public function enqueueBlockEditorAssets(): void
-    {
-        $this->enqueueEditorScript('child-theme-projects-block-editor', 'projects.js');
-        $this->enqueueStyle('child-theme-projects-block-editor', 'projects-editor.css');
-    }
-
-    /**
      * Register the project post type.
      */
     public function registerPostType(): void

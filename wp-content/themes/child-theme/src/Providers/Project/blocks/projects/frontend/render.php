@@ -5,8 +5,8 @@
 
 use Timber\Timber;
 
-$mode = $attributes['mode'] ?? 'latest';
-$selected_ids = $attributes['selectedProjects'] ?? [];
+$mode = get_field('display_mode') ?: 'latest';
+$selected_ids = get_field('selected_projects') ?: [];
 
 $args = [
     'post_type'      => 'project',
@@ -24,9 +24,8 @@ if ($mode === 'curated' && !empty($selected_ids)) {
 
 $context = Timber::context();
 $context['projects'] = Timber::get_posts($args);
-$context['attributes'] = $attributes ?? [];
 
-// Get block wrapper attributes (alignment comes from block attribute, defaults to full).
+// Get block wrapper attributes (alignment comes from block supports).
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';

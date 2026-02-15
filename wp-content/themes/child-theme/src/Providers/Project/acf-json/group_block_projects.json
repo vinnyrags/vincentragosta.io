@@ -1,0 +1,57 @@
+{
+    "key": "group_block_projects",
+    "title": "Projects Block",
+    "fields": [
+        {
+            "key": "field_block_projects_display_mode",
+            "label": "Display Mode",
+            "name": "display_mode",
+            "type": "select",
+            "instructions": "Choose how projects are selected.",
+            "required": 1,
+            "choices": {
+                "latest": "Latest Projects",
+                "curated": "Curated Selection"
+            },
+            "default_value": "latest",
+            "return_format": "value",
+            "allow_null": 0
+        },
+        {
+            "key": "field_block_projects_selected_projects",
+            "label": "Selected Projects",
+            "name": "selected_projects",
+            "type": "relationship",
+            "instructions": "Search and select up to 5 projects. Drag to reorder.",
+            "required": 0,
+            "post_type": ["project"],
+            "filters": ["search"],
+            "max": 5,
+            "return_format": "id",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_block_projects_display_mode",
+                        "operator": "==",
+                        "value": "curated"
+                    }
+                ]
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "child-theme/projects"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}
