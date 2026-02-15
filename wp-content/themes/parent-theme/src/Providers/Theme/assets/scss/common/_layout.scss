@@ -57,18 +57,19 @@
     margin-block-start: 0;
   }
 
-  // Constrain cover block inner content to narrow content width.
-  > .wp-block-cover.alignfull > .wp-block-cover__inner-container {
+  // Constrain cover block inner content to narrow content width and center it.
+  // Scoped to default (no position) and left positions only — right and center
+  // positions retain WordPress core's width and alignment behavior.
+  > .wp-block-cover.alignfull:not(.has-custom-content-position) > .wp-block-cover__inner-container,
+  > .wp-block-cover.alignfull.has-custom-content-position:is(
+    .is-position-top-left,
+    .is-position-center-left,
+    .is-position-bottom-left
+  ) > .wp-block-cover__inner-container {
     box-sizing: border-box;
     max-width: var(--wp--style--global--content-size);
     margin-left: auto !important;
     margin-right: auto !important;
-    width: 100%;
-  }
-
-  // Override WordPress core custom-position selectors (specificity 0,5,0)
-  // that reduce inner container width for positioned content.
-  > .wp-block-cover.alignfull.has-custom-content-position > .wp-block-cover__inner-container {
     width: 100%;
   }
 
