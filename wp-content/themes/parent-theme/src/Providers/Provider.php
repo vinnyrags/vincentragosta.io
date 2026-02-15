@@ -154,7 +154,7 @@ abstract class Provider implements Registrable
 
         $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
         $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
-        $this->acfManager = new AcfManager($providerDir);
+        $this->acfManager = new AcfManager($providerDir, $this->textDomain);
 
         $routeNamespace = $this->routeNamespace ?: $slug;
         $this->restManager = new RestManager(

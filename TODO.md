@@ -1,9 +1,6 @@
 ## HIGH PRIORITY
 - (HARD) project detail (continued)
 - (HARD) check project aspect ratio with different sort selected on projects page
-- (EASY) create src directory structure within theme provider to handle additional PHP features
-- (HARD) lets create an acf system or update our existing manager/system to account for defining options pages in acf-json without needing to explicitly register in theme provider, the system should be smart enough to glob all files and register them accordingly
-- (HARD) how do we define a feature? considering all of its use cases currently in our project, how would you say we are defining what a feature is? I think in my mind I was thinking of it as something toggleable, does the code tell the same story? if not what can we do to establish a POV within the code
 
 ## MEDIUM PRIORITY
 - (HARD) are we staying true to our DI principles and avoiding additional constructor behavior (deferring to init/register/bootstrap methods) across all of our php in both the child and parent themes? are there opportunities for improvement? lets enter plan mode to do a deep dive on what potentially needs to be fixed and the best and most efficient way to solve it.

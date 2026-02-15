@@ -1,0 +1,9 @@
+{
+    "page_title": "Site Settings",
+    "menu_title": "Site Settings",
+    "menu_slug": "site-settings",
+    "capability": "edit_posts",
+    "redirect": false,
+    "icon_url": "dashicons-admin-settings",
+    "position": 59
+}

@@ -152,9 +152,9 @@ class ThemeProviderTest extends BaseTestCase
             has_action('enqueue_block_assets', [$this->provider, 'enqueueBlockAssets'])
         );
 
-        $this->assertGreaterThan(
-            0,
-            has_action('acf/init', [$this->provider, 'registerOptionsPage'])
+        $this->assertNotFalse(
+            has_action('acf/init'),
+            'acf/init action should be registered for options page auto-discovery'
         );
 
         $this->assertGreaterThan(

@@ -102,8 +102,7 @@ class ThemeProvider extends BaseThemeProvider
         add_action('enqueue_block_editor_assets', [$this, 'enqueueButtonEditorAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
-        // ACF options page and Timber context
-        add_action('acf/init', [$this, 'registerOptionsPage']);
+        // Timber context for ACF options data
         add_filter('timber/context', [$this, 'addOptionsToContext']);
 
         // Call parent to register theme supports, features, and blocks
@@ -149,26 +148,6 @@ class ThemeProvider extends BaseThemeProvider
         }
 
         return $urls;
-    }
-
-    /**
-     * Register the Site Settings options page.
-     */
-    public function registerOptionsPage(): void
-    {
-        if (!function_exists('acf_add_options_page')) {
-            return;
-        }
-
-        acf_add_options_page([
-            'page_title' => __('Site Settings', 'child-theme'),
-            'menu_title' => __('Site Settings', 'child-theme'),
-            'menu_slug'  => 'site-settings',
-            'capability' => 'edit_posts',
-            'redirect'   => false,
-            'icon_url'   => 'dashicons-admin-settings',
-            'position'   => 59,
-        ]);
     }
 
     /**
