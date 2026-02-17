@@ -1,7 +1,6 @@
 ## HIGH PRIORITY
 - (HARD) project detail (continued)
 - (HARD) check project aspect ratio with different sort selected on projects page
-- what can we do to solve the contrast issue in light mode with new accent-1 color and the text color black, examples include button hover state and accordion arrow
 
 ## MEDIUM PRIORITY
 - (HARD) frontend testing with jest?
@@ -13,3 +12,4 @@
 - (EASY) update readmes, is it overkill with how many readmes we have?
 - (HARD) is there anything in the child theme that could go into the parent theme?
 - (HARD) are we staying true to our DI principles and avoiding additional constructor behavior (deferring to init/register/bootstrap methods) across all of our php in both the child and parent themes? are there opportunities for improvement? lets enter plan mode to do a deep dive on what potentially needs to be fixed and the best and most efficient way to solve it.
+- can we come up with a clever solution for the margin-block-start on the footer on the project detail template, we dont want it to apply here

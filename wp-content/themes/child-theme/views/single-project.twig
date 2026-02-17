@@ -79,12 +79,6 @@
 
             {# Right column: excerpt + content #}
             <div class="project-detail__content">
-                {% if post.preview.length > 0 %}
-                    <div class="project-detail__excerpt">
-                        <p class="has-50-font-size">{{ post.preview }}</p>
-                    </div>
-                {% endif %}
-
                 {% if post.post_content %}
                     <div class="project-detail__body-content">
                         {{ post.content | raw }}
