@@ -33,3 +33,7 @@
   outline: 2px solid var(--wp--preset--color--accent-1);
   outline-offset: 2px;
 }
+
+.light-mode .skip-link.screen-reader-text:focus {
+  color: var(--wp--preset--color--base);
+}

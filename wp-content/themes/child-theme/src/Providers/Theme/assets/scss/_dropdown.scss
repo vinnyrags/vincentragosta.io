@@ -74,6 +74,13 @@
     }
 }
 
+.light-mode .dropdown__item {
+    &:hover,
+    &:focus {
+        color: var(--wp--preset--color--base);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .dropdown__icon {
         transition: none;

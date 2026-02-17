@@ -1,6 +1,7 @@
 ## HIGH PRIORITY
 - (HARD) project detail (continued)
 - (HARD) check project aspect ratio with different sort selected on projects page
+- what can we do to solve the contrast issue in light mode with new accent-1 color and the text color black, examples include button hover state and accordion arrow
 
 ## MEDIUM PRIORITY
 - (HARD) frontend testing with jest?

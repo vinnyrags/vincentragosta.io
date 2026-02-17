@@ -62,6 +62,10 @@
   }
 }
 
+.light-mode .wp-block-accordion-heading__toggle-icon svg {
+  color: var(--wp--preset--color--base);
+}
+
 // Flip upward when expanded — the button carries aria-expanded
 .wp-block-accordion-heading__toggle[aria-expanded="true"] {
   .wp-block-accordion-heading__toggle-icon svg {

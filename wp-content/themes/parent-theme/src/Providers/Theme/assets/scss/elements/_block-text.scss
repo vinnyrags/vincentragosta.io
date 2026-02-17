@@ -4,3 +4,7 @@ body {
     color: var(--wp--preset--color--contrast);
   }
 }
+
+.light-mode ::selection {
+  color: var(--wp--preset--color--base);
+}

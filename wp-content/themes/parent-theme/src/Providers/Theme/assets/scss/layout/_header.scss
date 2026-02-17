@@ -164,6 +164,10 @@
   // Light mode: swap hamburger colors
   .light-mode &__menu-toggle {
     background: var(--wp--preset--color--contrast);
+
+    &:hover {
+      background-color: var(--wp--preset--color--accent-1);
+    }
   }
 
   .light-mode &__menu-line {

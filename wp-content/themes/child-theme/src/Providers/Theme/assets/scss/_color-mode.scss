@@ -45,7 +45,7 @@
   --color-button-bg: var(--wp--preset--color--contrast);
   --color-button-text: var(--wp--preset--color--base);
   --color-button-hover-bg: var(--wp--preset--color--accent-1);
-  --color-button-hover-text: var(--wp--preset--color--contrast);
+  --color-button-hover-text: var(--wp--preset--color--base);
 }
 
 // ==========================================================================
@@ -116,12 +116,6 @@
     &:hover {
       background-color: var(--color-button-hover-bg);
       color: var(--color-button-hover-text);
-
-      // Arrow icon: override arrow color on hover
-      .wp-block-button__icon.arrow svg,
-      .button__icon.arrow svg {
-        color: var(--wp--preset--color--base);
-      }
     }
   }
 
