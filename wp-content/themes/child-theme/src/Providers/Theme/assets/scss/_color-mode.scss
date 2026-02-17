@@ -101,8 +101,8 @@
     color: inherit;
   }
 
-  // Links
-  a:not(.wp-block-button__link):not(.wp-element-button) {
+  // Links (low specificity so component hover styles win naturally)
+  :where(a:not(.wp-block-button__link):not(.wp-element-button)) {
     color: var(--color-text);
   }
 
