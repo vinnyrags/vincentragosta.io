@@ -11,7 +11,10 @@
         align-items: center;
         gap: 0.5em;
         color: var(--wp--preset--color--grey-3);
-        text-decoration: none;
+        text-decoration-line: underline;
+        text-decoration-color: var(--wp--preset--color--accent-1);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
         font-size: var(--wp--preset--font-size--20);
         margin-bottom: var(--wp--preset--spacing--50);
         transition: color 0.2s ease;
@@ -23,16 +26,34 @@
 
     &__back-icon {
         display: inline-flex;
-        transform: rotate(180deg);
+        transform: rotate(225deg);
+        color: var(--wp--preset--color--accent-1);
 
         svg {
-            width: var(--wp--custom--icon-size--sm);
-            height: var(--wp--custom--icon-size--sm);
+            width: 10px;
+            height: 10px;
         }
     }
 
-    // Two-column split: info left, image right
-    &__hero-split {
+    // Hero image (full width)
+    &__hero {
+        width: 100%;
+        overflow: hidden;
+        border-radius: 4px;
+        margin-bottom: var(--wp--preset--spacing--50);
+    }
+
+    &__hero-image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        display: block;
+        border-radius: 4px;
+    }
+
+    // Two-column body: meta left, content right
+    &__body {
         display: flex;
         flex-direction: column;
         gap: var(--wp--preset--spacing--50);
@@ -44,40 +65,9 @@
         }
     }
 
-    &__info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    // Hero image
-    &__hero {
-        width: 100%;
-        overflow: hidden;
-        border-radius: 4px;
-
-        @include media(lg) {
-            flex: 1;
-            min-width: 0;
-        }
-    }
-
-    &__hero-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 4px;
-    }
-
     // Header
     &__header {
-        margin-bottom: var(--wp--preset--spacing--40);
-    }
-
-    &__title {
-        font-family: var(--wp--preset--font-family--reckless-neue);
-        font-weight: 400;
-        line-height: 1.05;
-        margin-bottom: var(--wp--preset--spacing--30);
+        margin-bottom: var(--wp--preset--spacing--50);
     }
 
     &__categories {
@@ -97,17 +87,22 @@
         color: var(--wp--preset--color--accent-1);
     }
 
-    // Metadata
+    // Metadata (left column)
     &__meta {
         display: flex;
         flex-direction: column;
         gap: var(--wp--preset--spacing--30);
-        border-top: 1px solid var(--wp--preset--color--grey-2);
-        padding-top: var(--wp--preset--spacing--40);
         margin: 0;
+
+        @include media(lg) {
+            flex: 0 0 280px;
+        }
     }
 
     &__meta-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
         margin: 0;
     }
 
@@ -117,14 +112,12 @@
         letter-spacing: 0.05em;
         color: var(--wp--preset--color--grey-3);
         font-weight: 700;
-        margin-bottom: 0.5em;
+        margin: 0;
     }
 
     &__meta-value {
         margin: 0;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
+        text-align: right;
     }
 
     &__tech-tag {
@@ -159,6 +152,12 @@
         }
     }
 
+    // Content (right column)
+    &__content {
+        flex: 1;
+        min-width: 0;
+    }
+
     // Excerpt
     &__excerpt {
         margin-bottom: var(--wp--preset--spacing--50);
@@ -171,9 +170,18 @@
         }
     }
 
-    // Content
-    &__content {
+    // Case study sections
+    &__case-study {
+        display: flex;
+        flex-direction: column;
+        gap: var(--wp--preset--spacing--50);
         margin-bottom: var(--wp--preset--spacing--60);
+    }
+
+    &__section-heading {
+        font-family: var(--wp--preset--font-family--reckless-neue);
+        font-weight: 400;
+        margin-bottom: var(--wp--preset--spacing--30);
     }
 
     // Related projects

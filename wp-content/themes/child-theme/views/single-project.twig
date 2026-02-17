@@ -9,99 +9,114 @@
             Back to Projects
         </a>
 
-        {# Two-column hero: left = info, right = image #}
-        <div class="project-detail__hero-split">
+        {# Title #}
+        <header class="project-detail__header">
+            <h1 class="project-detail__title has-70-font-size">{{ post.title }}</h1>
 
-            <div class="project-detail__info">
-                {# Title + categories #}
-                <header class="project-detail__header">
-                    <h1 class="project-detail__title has-70-font-size">{{ post.title }}</h1>
-
-                    {% set categories = post.categories() %}
-                    {% if categories is not empty %}
-                        <div class="project-detail__categories">
-                            {% for category in categories %}
-                                <span class="project-detail__category-badge">{{ category.name }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </header>
-
-                {# Metadata #}
-                {% if post.hasProjectDetails() %}
-                    <dl class="project-detail__meta">
-                        {% if post.client() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Client</dt>
-                                <dd class="project-detail__meta-value">{{ post.client() }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.role() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Role</dt>
-                                <dd class="project-detail__meta-value">{{ post.role() }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.year() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Year</dt>
-                                <dd class="project-detail__meta-value">{{ post.year() }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.technologyList() is not empty %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Technologies</dt>
-                                <dd class="project-detail__meta-value">
-                                    {% for tech in post.technologyList() %}
-                                        <span class="project-detail__tech-tag">{{ tech }}</span>
-                                    {% endfor %}
-                                </dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.externalUrl() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Website</dt>
-                                <dd class="project-detail__meta-value">
-                                    <a href="{{ post.externalUrl() }}" class="project-detail__external-link" target="_blank" rel="noopener noreferrer">
-                                        Visit Project
-                                        <span class="project-detail__external-icon">{{ icon('arrow') | raw }}</span>
-                                    </a>
-                                </dd>
-                            </div>
-                        {% endif %}
-                    </dl>
-                {% endif %}
-            </div>
-
-            {% if post.thumbnail %}
-                <div class="project-detail__hero">
-                    <img
-                        class="project-detail__hero-image"
-                        src="{{ post.thumbnail.src | resize(1200) }}"
-                        alt="{{ post.thumbnail.alt }}"
-                        width="{{ post.thumbnail.width }}"
-                        height="{{ post.thumbnail.height }}"
-                    />
+            {% set categories = post.categories() %}
+            {% if categories is not empty %}
+                <div class="project-detail__categories">
+                    {% for category in categories %}
+                        <span class="project-detail__category-badge">{{ category.name }}</span>
+                    {% endfor %}
                 </div>
             {% endif %}
+        </header>
 
-        </div>
-
-        {# Excerpt #}
-        {% if post.preview.length > 0 %}
-            <div class="project-detail__excerpt">
-                <p class="has-50-font-size">{{ post.preview }}</p>
+        {# Featured image #}
+        {% if post.thumbnail %}
+            <div class="project-detail__hero">
+                <img
+                    class="project-detail__hero-image"
+                    src="{{ post.thumbnail.src | resize(1200) }}"
+                    alt="{{ post.thumbnail.alt }}"
+                    width="{{ post.thumbnail.width }}"
+                    height="{{ post.thumbnail.height }}"
+                />
             </div>
         {% endif %}
 
-        {# Content #}
-        {% if post.content %}
+        {# Two-column: meta + content #}
+        <div class="project-detail__body">
+
+            {# Left column: metadata #}
+            {% if post.hasProjectDetails() %}
+                <dl class="project-detail__meta">
+                    {% if post.client() %}
+                        <div class="project-detail__meta-item">
+                            <dt class="project-detail__meta-label">Client</dt>
+                            <dd class="project-detail__meta-value">{{ post.client() }}</dd>
+                        </div>
+                    {% endif %}
+
+                    {% if post.role() %}
+                        <div class="project-detail__meta-item">
+                            <dt class="project-detail__meta-label">Role</dt>
+                            <dd class="project-detail__meta-value">{{ post.role() }}</dd>
+                        </div>
+                    {% endif %}
+
+                    {% if post.year() %}
+                        <div class="project-detail__meta-item">
+                            <dt class="project-detail__meta-label">Year</dt>
+                            <dd class="project-detail__meta-value">{{ post.year() }}</dd>
+                        </div>
+                    {% endif %}
+
+                    {% if post.externalUrl() %}
+                        <div class="project-detail__meta-item">
+                            <dt class="project-detail__meta-label">Website</dt>
+                            <dd class="project-detail__meta-value">
+                                <a href="{{ post.externalUrl() }}" class="project-detail__external-link" target="_blank" rel="noopener noreferrer">
+                                    Visit Project
+                                    <span class="project-detail__external-icon">{{ icon('arrow') | raw }}</span>
+                                </a>
+                            </dd>
+                        </div>
+                    {% endif %}
+                </dl>
+            {% endif %}
+
+            {# Right column: excerpt + content #}
             <div class="project-detail__content">
-                {{ post.content }}
+                {% if post.preview.length > 0 %}
+                    <div class="project-detail__excerpt">
+                        <p class="has-50-font-size">{{ post.preview }}</p>
+                    </div>
+                {% endif %}
+
+                {% if post.post_content %}
+                    <div class="project-detail__body-content">
+                        {{ post.content | raw }}
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+        {# Case Study #}
+        {% if post.hasCaseStudy() %}
+            <div class="project-detail__case-study">
+                {% if post.background() %}
+                    <section class="project-detail__section">
+                        <h2 class="project-detail__section-heading has-50-font-size">Background</h2>
+                        <div class="project-detail__section-content">{{ post.background() | raw }}</div>
+                    </section>
+                {% endif %}
+
+                {% if post.implementation() %}
+                    <section class="project-detail__section">
+                        <h2 class="project-detail__section-heading has-50-font-size">Implementation</h2>
+                        <div class="project-detail__section-content">{{ post.implementation() | raw }}</div>
+                    </section>
+                {% endif %}
+
+                {% if post.results() %}
+                    <section class="project-detail__section">
+                        <h2 class="project-detail__section-heading has-50-font-size">Results</h2>
+                        <div class="project-detail__section-content">{{ post.results() | raw }}</div>
+                    </section>
+                {% endif %}
             </div>
         {% endif %}
 

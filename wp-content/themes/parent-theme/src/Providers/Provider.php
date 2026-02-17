@@ -125,7 +125,7 @@ abstract class Provider implements Registrable
     /**
      * Set up the asset, block, feature, and REST managers.
      *
-     * Idempotent — safe to call multiple times.
+     * Called once by register(). Idempotent as a safety net.
      */
     protected function setup(): void
     {
@@ -298,6 +298,40 @@ abstract class Provider implements Registrable
     }
 
     /**
+     * Register a post type from a JSON config file.
+     *
+     * Reads the config via loadConfig(), registers the post type, and
+     * handles custom flags like "classic_editor": true.
+     *
+     * @return string|null The registered post type slug, or null on failure.
+     */
+    protected function registerPostTypeFromConfig(string $filename): ?string
+    {
+        $config = $this->loadConfig($filename);
+
+        if (!$config || !isset($config['post_type'], $config['args'])) {
+            return null;
+        }
+
+        $postType = $config['post_type'];
+        $args = $config['args'];
+
+        if (isset($args['labels'])) {
+            $args['labels'] = $this->translateLabels($args['labels']);
+        }
+
+        register_post_type($postType, $args);
+
+        if (!empty($config['classic_editor'])) {
+            add_filter('use_block_editor_for_post_type', static function (bool $use, string $type) use ($postType): bool {
+                return $type === $postType ? false : $use;
+            }, 10, 2);
+        }
+
+        return $postType;
+    }
+
+    /**
      * Load a JSON configuration file from the provider's config directory.
      */
     protected function loadConfig(string $filename): ?array
@@ -357,7 +391,6 @@ abstract class Provider implements Registrable
      */
     public function enqueueStyle(string $handle, string $filename, array $deps = []): void
     {
-        $this->setup();
         $this->assets->enqueueStyle($handle, $filename, $deps);
     }
 
@@ -366,7 +399,6 @@ abstract class Provider implements Registrable
      */
     public function enqueueScript(string $handle, string $filename, array $deps = [], bool $inFooter = true): void
     {
-        $this->setup();
         $this->assets->enqueueScript($handle, $filename, $deps, $inFooter);
     }
 
@@ -375,7 +407,6 @@ abstract class Provider implements Registrable
      */
     protected function enqueueDistStyle(string $handle, string $path, array $deps = []): void
     {
-        $this->setup();
         $this->assets->enqueueDistStyle($handle, $path, $deps);
     }
 
@@ -384,7 +415,6 @@ abstract class Provider implements Registrable
      */
     protected function enqueueDistScript(string $handle, string $path, array $deps = [], bool $inFooter = true): void
     {
-        $this->setup();
         $this->assets->enqueueDistScript($handle, $path, $deps, $inFooter);
     }
 
@@ -393,7 +423,6 @@ abstract class Provider implements Registrable
      */
     protected function enqueueManifestScript(string $handle, string $path, array $extraDeps = [], bool $inFooter = true): void
     {
-        $this->setup();
         $this->assets->enqueueManifestScript($handle, $path, $extraDeps, $inFooter);
     }
 
@@ -402,7 +431,6 @@ abstract class Provider implements Registrable
      */
     protected function enqueueEditorScript(string $handle, string $filename, array $deps = []): void
     {
-        $this->setup();
         $this->blockManager->enqueueEditorScript($handle, $filename, $deps);
     }
 
@@ -457,12 +485,4 @@ abstract class Provider implements Registrable
         return $this->blockManager->getBlocksUri();
     }
 
-    /**
-     * Register all blocks.
-     */
-    public function registerBlocks(): void
-    {
-        $this->setup();
-        $this->blockManager->registerBlocks();
-    }
 }

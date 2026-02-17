@@ -41,7 +41,7 @@ class ProjectProvider extends Provider
      */
     public function loadAllArchiveProjects(\WP_Query $query): void
     {
-        if (!is_admin() && $query->is_main_query() && $query->is_post_type_archive('project')) {
+        if (!is_admin() && $query->is_main_query() && $query->is_post_type_archive(ProjectPost::POST_TYPE)) {
             $query->set('posts_per_page', 100);
         }
     }
@@ -51,7 +51,7 @@ class ProjectProvider extends Provider
      */
     public function enqueueSingleAssets(): void
     {
-        if (!is_singular('project')) {
+        if (!is_singular(ProjectPost::POST_TYPE)) {
             return;
         }
 
@@ -63,7 +63,7 @@ class ProjectProvider extends Provider
      */
     public function enqueueArchiveAssets(): void
     {
-        if (!is_post_type_archive('project')) {
+        if (!is_post_type_archive(ProjectPost::POST_TYPE)) {
             return;
         }
 
@@ -85,18 +85,6 @@ class ProjectProvider extends Provider
      */
     public function registerPostType(): void
     {
-        $config = $this->loadConfig('post-type.json');
-
-        if (!$config || !isset($config['post_type'], $config['args'])) {
-            return;
-        }
-
-        $args = $config['args'];
-
-        if (isset($args['labels'])) {
-            $args['labels'] = $this->translateLabels($args['labels']);
-        }
-
-        register_post_type($config['post_type'], $args);
+        $this->registerPostTypeFromConfig('post-type.json');
     }
 }

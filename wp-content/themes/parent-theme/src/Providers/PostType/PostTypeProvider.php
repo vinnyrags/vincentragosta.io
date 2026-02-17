@@ -72,6 +72,19 @@ class PostTypeProvider extends Provider
             return;
         }
 
-        register_post_type($data['post_type'], $data['args']);
+        $args = $data['args'];
+
+        if (isset($args['labels'])) {
+            $args['labels'] = $this->translateLabels($args['labels']);
+        }
+
+        register_post_type($data['post_type'], $args);
+
+        if (!empty($data['classic_editor'])) {
+            $postType = $data['post_type'];
+            add_filter('use_block_editor_for_post_type', static function (bool $use, string $type) use ($postType): bool {
+                return $type === $postType ? false : $use;
+            }, 10, 2);
+        }
     }
 }

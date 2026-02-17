@@ -9,7 +9,10 @@
             "type": "text",
             "instructions": "Client or company name.",
             "required": 0,
-            "placeholder": "e.g. Acme Corp"
+            "placeholder": "e.g. Acme Corp",
+            "wrapper": {
+                "width": "33"
+            }
         },
         {
             "key": "field_project_role",
@@ -18,7 +21,10 @@
             "type": "text",
             "instructions": "Your role on the project.",
             "required": 0,
-            "placeholder": "e.g. Lead Developer"
+            "placeholder": "e.g. Lead Developer",
+            "wrapper": {
+                "width": "34"
+            }
         },
         {
             "key": "field_project_year",
@@ -27,7 +33,10 @@
             "type": "text",
             "instructions": "Year or date range.",
             "required": 0,
-            "placeholder": "e.g. 2023-2024"
+            "placeholder": "e.g. 2023-2024",
+            "wrapper": {
+                "width": "33"
+            }
         },
         {
             "key": "field_project_technologies",
@@ -36,7 +45,10 @@
             "type": "text",
             "instructions": "Comma-separated list of technologies used.",
             "required": 0,
-            "placeholder": "e.g. React, TypeScript, Node.js"
+            "placeholder": "e.g. React, TypeScript, Node.js",
+            "wrapper": {
+                "width": "50"
+            }
         },
         {
             "key": "field_project_external_url",
@@ -45,7 +57,52 @@
             "type": "url",
             "instructions": "Link to the live project.",
             "required": 0,
-            "placeholder": "https://"
+            "placeholder": "https://",
+            "wrapper": {
+                "width": "50"
+            }
+        },
+        {
+            "key": "field_project_background",
+            "label": "Background",
+            "name": "background",
+            "type": "wysiwyg",
+            "instructions": "Project background and context.",
+            "required": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "wrapper": {
+                "width": "100"
+            }
+        },
+        {
+            "key": "field_project_implementation",
+            "label": "Implementation",
+            "name": "implementation",
+            "type": "wysiwyg",
+            "instructions": "How the project was implemented.",
+            "required": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "wrapper": {
+                "width": "100"
+            }
+        },
+        {
+            "key": "field_project_results",
+            "label": "Results",
+            "name": "results",
+            "type": "wysiwyg",
+            "instructions": "Project outcomes and results.",
+            "required": 0,
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 1,
+            "wrapper": {
+                "width": "100"
+            }
         }
     ],
     "location": [

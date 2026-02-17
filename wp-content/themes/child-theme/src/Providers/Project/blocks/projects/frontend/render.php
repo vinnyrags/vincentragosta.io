@@ -3,13 +3,14 @@
  * Server-side rendering for the Projects block.
  */
 
+use ChildTheme\Providers\Project\ProjectPost;
 use Timber\Timber;
 
 $mode = get_field('display_mode') ?: 'latest';
 $selected_ids = get_field('selected_projects') ?: [];
 
 $args = [
-    'post_type'      => 'project',
+    'post_type'      => ProjectPost::POST_TYPE,
     'posts_per_page' => 5,
     'post_status'    => 'publish',
 ];

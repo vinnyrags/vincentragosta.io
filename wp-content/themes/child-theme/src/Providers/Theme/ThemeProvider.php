@@ -80,7 +80,7 @@ class ThemeProvider extends BaseThemeProvider
     public function registerClassMap(array $classMap): array
     {
         $classMap = parent::registerClassMap($classMap);
-        $classMap['project'] = ProjectPost::class;
+        $classMap[ProjectPost::POST_TYPE] = ProjectPost::class;
 
         return $classMap;
     }

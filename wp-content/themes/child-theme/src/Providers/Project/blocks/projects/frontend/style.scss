@@ -49,8 +49,8 @@
     aspect-ratio: 1 / 1;
 
     @include container(projects, lg) {
-      aspect-ratio: auto;
-      height: 100%;
+      aspect-ratio: unset;
+      height: 28cqi;
     }
 
     img {

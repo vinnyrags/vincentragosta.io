@@ -101,6 +101,30 @@ class ProjectPost extends Post
     }
 
     /**
+     * Get the project background.
+     */
+    public function background(): string
+    {
+        return (string) $this->getField('background');
+    }
+
+    /**
+     * Get the project implementation details.
+     */
+    public function implementation(): string
+    {
+        return (string) $this->getField('implementation');
+    }
+
+    /**
+     * Get the project results.
+     */
+    public function results(): string
+    {
+        return (string) $this->getField('results');
+    }
+
+    /**
      * Whether any project detail field is populated.
      */
     public function hasProjectDetails(): bool
@@ -110,6 +134,16 @@ class ProjectPost extends Post
             || $this->year() !== ''
             || $this->technologies() !== ''
             || $this->externalUrl() !== '';
+    }
+
+    /**
+     * Whether any case study section is populated.
+     */
+    public function hasCaseStudy(): bool
+    {
+        return $this->background() !== ''
+            || $this->implementation() !== ''
+            || $this->results() !== '';
     }
 
     /**

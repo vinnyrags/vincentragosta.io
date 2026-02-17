@@ -209,13 +209,123 @@ class ProjectPostTest extends TestCase
         $this->assertFalse($post->hasProjectDetails());
     }
 
+    // ===================
+    // Case study field tests
+    // ===================
+
+    /**
+     * Test background() returns field value.
+     */
+    public function testBackgroundReturnsFieldValue(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['background' => '<p>Project background content.</p>']);
+
+        $this->assertEquals('<p>Project background content.</p>', $post->background());
+    }
+
+    /**
+     * Test background() returns empty string when not set.
+     */
+    public function testBackgroundReturnsEmptyWhenNotSet(): void
+    {
+        $post = MockProjectPost::create();
+
+        $this->assertEquals('', $post->background());
+    }
+
+    /**
+     * Test implementation() returns field value.
+     */
+    public function testImplementationReturnsFieldValue(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['implementation' => '<p>How it was built.</p>']);
+
+        $this->assertEquals('<p>How it was built.</p>', $post->implementation());
+    }
+
+    /**
+     * Test implementation() returns empty string when not set.
+     */
+    public function testImplementationReturnsEmptyWhenNotSet(): void
+    {
+        $post = MockProjectPost::create();
+
+        $this->assertEquals('', $post->implementation());
+    }
+
+    /**
+     * Test results() returns field value.
+     */
+    public function testResultsReturnsFieldValue(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['results' => '<p>Project outcomes.</p>']);
+
+        $this->assertEquals('<p>Project outcomes.</p>', $post->results());
+    }
+
+    /**
+     * Test results() returns empty string when not set.
+     */
+    public function testResultsReturnsEmptyWhenNotSet(): void
+    {
+        $post = MockProjectPost::create();
+
+        $this->assertEquals('', $post->results());
+    }
+
+    /**
+     * Test hasCaseStudy() returns true when background is set.
+     */
+    public function testHasCaseStudyReturnsTrueWithBackground(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['background' => '<p>Content</p>']);
+
+        $this->assertTrue($post->hasCaseStudy());
+    }
+
+    /**
+     * Test hasCaseStudy() returns true when implementation is set.
+     */
+    public function testHasCaseStudyReturnsTrueWithImplementation(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['implementation' => '<p>Content</p>']);
+
+        $this->assertTrue($post->hasCaseStudy());
+    }
+
+    /**
+     * Test hasCaseStudy() returns true when results is set.
+     */
+    public function testHasCaseStudyReturnsTrueWithResults(): void
+    {
+        $post = MockProjectPost::create();
+        $post->setMockMeta(['results' => '<p>Content</p>']);
+
+        $this->assertTrue($post->hasCaseStudy());
+    }
+
+    /**
+     * Test hasCaseStudy() returns false when no case study fields set.
+     */
+    public function testHasCaseStudyReturnsFalseWhenEmpty(): void
+    {
+        $post = MockProjectPost::create();
+
+        $this->assertFalse($post->hasCaseStudy());
+    }
+
     /**
      * Test all accessor methods have correct return types.
      */
     public function testAccessorMethodReturnTypes(): void
     {
         $reflection = new \ReflectionClass(ProjectPost::class);
-        $stringMethods = ['client', 'role', 'year', 'technologies', 'externalUrl'];
+        $stringMethods = ['client', 'role', 'year', 'technologies', 'externalUrl', 'background', 'implementation', 'results'];
 
         foreach ($stringMethods as $method) {
             $returnType = $reflection->getMethod($method)->getReturnType();
@@ -224,6 +334,7 @@ class ProjectPostTest extends TestCase
 
         $this->assertEquals('array', (string) $reflection->getMethod('technologyList')->getReturnType());
         $this->assertEquals('bool', (string) $reflection->getMethod('hasProjectDetails')->getReturnType());
+        $this->assertEquals('bool', (string) $reflection->getMethod('hasCaseStudy')->getReturnType());
         $this->assertEquals('array', (string) $reflection->getMethod('relatedProjects')->getReturnType());
     }
 }

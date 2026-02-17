@@ -3,7 +3,7 @@
 - (HARD) check project aspect ratio with different sort selected on projects page
 
 ## MEDIUM PRIORITY
-- frontend testing with jest?
+- (HARD) frontend testing with jest?
 
 ## LOW PRIORITY
 - (HARD) optimize build process
