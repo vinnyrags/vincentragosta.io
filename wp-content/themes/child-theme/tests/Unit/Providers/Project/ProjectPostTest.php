@@ -94,17 +94,6 @@ class ProjectPostTest extends TestCase
     }
 
     /**
-     * Test role() returns field value.
-     */
-    public function testRoleReturnsFieldValue(): void
-    {
-        $post = MockProjectPost::create();
-        $post->setMockMeta(['role' => 'Lead Developer']);
-
-        $this->assertEquals('Lead Developer', $post->role());
-    }
-
-    /**
      * Test year() returns field value.
      */
     public function testYearReturnsFieldValue(): void
@@ -325,7 +314,7 @@ class ProjectPostTest extends TestCase
     public function testAccessorMethodReturnTypes(): void
     {
         $reflection = new \ReflectionClass(ProjectPost::class);
-        $stringMethods = ['client', 'role', 'year', 'technologies', 'externalUrl', 'background', 'implementation', 'results'];
+        $stringMethods = ['client', 'year', 'technologies', 'externalUrl', 'background', 'implementation', 'results'];
 
         foreach ($stringMethods as $method) {
             $returnType = $reflection->getMethod($method)->getReturnType();

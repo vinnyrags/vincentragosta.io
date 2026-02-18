@@ -15,18 +15,6 @@
             }
         },
         {
-            "key": "field_project_role",
-            "label": "Role",
-            "name": "role",
-            "type": "text",
-            "instructions": "Your role on the project.",
-            "required": 0,
-            "placeholder": "e.g. Lead Developer",
-            "wrapper": {
-                "width": "34"
-            }
-        },
-        {
             "key": "field_project_year",
             "label": "Year",
             "name": "year",

@@ -53,14 +53,6 @@ class ProjectPost extends Post
     }
 
     /**
-     * Get the role on the project.
-     */
-    public function role(): string
-    {
-        return (string) $this->getField('role');
-    }
-
-    /**
      * Get the project year or date range.
      */
     public function year(): string
@@ -130,7 +122,6 @@ class ProjectPost extends Post
     public function hasProjectDetails(): bool
     {
         return $this->client() !== ''
-            || $this->role() !== ''
             || $this->year() !== ''
             || $this->technologies() !== ''
             || $this->externalUrl() !== '';

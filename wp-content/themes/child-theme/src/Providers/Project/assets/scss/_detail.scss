@@ -1,9 +1,14 @@
 @use 'common/breakpoints' as *;
 
 .project-detail {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--wp--preset--spacing--40);
+
+    // Constrained inner wrapper (back-link through body)
+    &__inner {
+        max-width: 1200px;
+        margin-inline: auto;
+        padding-inline: var(--wp--preset--spacing--40);
+        padding-block-start: var(--wp--preset--spacing--50);
+    }
 
     // Back navigation
     &__back-link {
@@ -17,10 +22,6 @@
         text-underline-offset: 4px;
         font-size: var(--wp--preset--font-size--20);
         transition: color 0.2s ease;
-
-        &:hover {
-            color: var(--wp--preset--color--accent-1);
-        }
     }
 
     &__back-icon {
@@ -39,7 +40,7 @@
         width: 100%;
         overflow: hidden;
         border-radius: 4px;
-        margin-block-start: var(--wp--preset--spacing--50);
+        margin-block-start: var(--wp--preset--spacing--60);
     }
 
     &__hero-image {
@@ -55,7 +56,7 @@
     &__body {
         display: flex;
         flex-direction: column;
-        gap: var(--wp--preset--spacing--70);
+        gap: var(--wp--preset--spacing--60);
         margin-block-start: var(--wp--preset--spacing--50);
 
         @include media(lg) {
@@ -94,6 +95,10 @@
         display: flex;
         flex-direction: column;
         gap: var(--wp--preset--spacing--30);
+        font-size: var(--wp--preset--font-size--30);
+        border-top: 1px solid var(--wp--preset--color--grey-2);
+        border-bottom: 1px solid var(--wp--preset--color--grey-2);
+        padding-block: var(--wp--preset--spacing--30);
         margin: 0;
 
         @include media(lg) {
@@ -106,6 +111,11 @@
         justify-content: space-between;
         align-items: baseline;
         margin: 0;
+
+        & + & {
+            border-top: 1px solid var(--wp--preset--color--grey-2);
+            padding-block-start: var(--wp--preset--spacing--30);
+        }
     }
 
     &__meta-label {
@@ -132,26 +142,7 @@
     }
 
     &__external-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35em;
-        color: var(--wp--preset--color--accent-1);
         text-decoration: none;
-        transition: opacity 0.2s ease;
-
-        &:hover {
-            opacity: 0.8;
-        }
-    }
-
-    &__external-icon {
-        display: inline-flex;
-        transform: rotate(-45deg);
-
-        svg {
-            width: var(--wp--custom--icon-size--sm);
-            height: var(--wp--custom--icon-size--sm);
-        }
     }
 
     // Content (right column)
@@ -178,26 +169,76 @@
 
     // Case study sections
     &__case-study {
+        border-top: 1px solid var(--wp--preset--color--grey-2);
+        margin-block-start: var(--wp--preset--spacing--70);
+    }
+
+    $squiggle-path: '../../src/Providers/Theme/assets/images/svg/squiggle';
+
+    &__section {
+        padding-block: var(--wp--preset--spacing--70);
+        position: relative;
+
+        & + & {
+            border-top: 1px solid var(--wp--preset--color--grey-2);
+        }
+
+        &--background {
+            background-image: url('#{$squiggle-path}/squiggle-2-grey.svg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+        &--results {
+            background-image: url('#{$squiggle-path}/squiggle-4-grey.svg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    }
+
+    &__section-inner {
+        max-width: 1200px;
+        margin-inline: auto;
+        padding-inline: var(--wp--preset--spacing--40);
         display: flex;
         flex-direction: column;
-        gap: var(--wp--preset--spacing--50);
-        margin-block-start: var(--wp--preset--spacing--50);
+        gap: var(--wp--preset--spacing--30);
+
+        @include media(lg) {
+            flex-direction: row;
+            gap: var(--wp--preset--spacing--50);
+        }
     }
 
     &__section-heading {
         font-family: var(--wp--preset--font-family--reckless-neue);
         font-weight: 400;
+        margin: 0;
+
+        @include media(lg) {
+            flex: 0 0 35%;
+        }
     }
 
     &__section-content {
-        margin-block-start: var(--wp--preset--spacing--30);
+        min-width: 0;
+
+        @include media(lg) {
+            flex: 1;
+        }
     }
 
     // Related projects
     &__related {
         border-top: 1px solid var(--wp--preset--color--grey-2);
-        padding-top: var(--wp--preset--spacing--50);
-        margin-block-start: var(--wp--preset--spacing--50);
+        padding-block-start: var(--wp--preset--spacing--70);
+        margin-block-start: 0;
+    }
+
+    &__related-inner {
+        max-width: 1200px;
+        margin-inline: auto;
+        padding-inline: var(--wp--preset--spacing--40);
     }
 
     &__related-heading {
@@ -206,7 +247,7 @@
     }
 
     &__related .projects-grid {
-        margin-block-start: var(--wp--preset--spacing--40);
+        margin-block-start: var(--wp--preset--spacing--60);
         grid-template-columns: 1fr;
 
         @include media(md) {

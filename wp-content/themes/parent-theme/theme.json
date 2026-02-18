@@ -287,6 +287,9 @@
           "text": "currentColor"
         },
         ":hover": {
+          "color": {
+            "text": "var:preset|color|accent-1"
+          },
           "typography": {
             "textDecoration": "none"
           }

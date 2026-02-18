@@ -1,6 +1,8 @@
 ## HIGH PRIORITY
-- (HARD) project detail (continued)
-- (HARD) check project aspect ratio with different sort selected on projects page
+- contact page
+- content!!
+- full code audit
+- (HARD) frontend testing with jest?
 
 ## MEDIUM PRIORITY
 - (HARD) frontend testing with jest?
