@@ -409,6 +409,64 @@ class PostMethodsTest extends TestCase
     // resetTracking() tests
     // ===================
 
+    // ===================
+    // __call() magic method tests
+    // ===================
+
+    /**
+     * Test __call() returns field value for zero-argument call.
+     */
+    public function testCallReturnsFieldValue(): void
+    {
+        $post = MockPost::create();
+        $post->setMockMeta(['client' => 'Acme Corp']);
+
+        $this->assertEquals('Acme Corp', $post->client());
+    }
+
+    /**
+     * Test __call() converts camelCase to snake_case.
+     */
+    public function testCallConvertsCamelCaseToSnakeCase(): void
+    {
+        $post = MockPost::create();
+        $post->setMockMeta(['external_url' => 'https://example.com']);
+
+        $this->assertEquals('https://example.com', $post->externalUrl());
+    }
+
+    /**
+     * Test __call() returns empty string for non-existent field.
+     */
+    public function testCallReturnsEmptyStringForMissingField(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertSame('', $post->nonExistentField());
+    }
+
+    /**
+     * Test __call() handles multi-word camelCase conversion.
+     */
+    public function testCallHandlesMultiWordCamelCase(): void
+    {
+        $post = MockPost::create();
+        $post->setMockMeta(['my_long_field_name' => 'value']);
+
+        $this->assertEquals('value', $post->myLongFieldName());
+    }
+
+    /**
+     * Test __call() passes single-word fields unchanged.
+     */
+    public function testCallPassesSingleWordFieldUnchanged(): void
+    {
+        $post = MockPost::create();
+        $post->setMockMeta(['background' => 'Some content']);
+
+        $this->assertEquals('Some content', $post->background());
+    }
+
     /**
      * Test resetTracking() clears all flags.
      */

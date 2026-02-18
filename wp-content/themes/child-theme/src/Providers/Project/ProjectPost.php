@@ -45,30 +45,6 @@ class ProjectPost extends Post
     }
 
     /**
-     * Get the client name.
-     */
-    public function client(): string
-    {
-        return (string) $this->getField('client');
-    }
-
-    /**
-     * Get the project year or date range.
-     */
-    public function year(): string
-    {
-        return (string) $this->getField('year');
-    }
-
-    /**
-     * Get the raw comma-separated technologies string.
-     */
-    public function technologies(): string
-    {
-        return (string) $this->getField('technologies');
-    }
-
-    /**
      * Get technologies as a trimmed array.
      *
      * @return string[]
@@ -82,38 +58,6 @@ class ProjectPost extends Post
         }
 
         return array_map('trim', explode(',', $tech));
-    }
-
-    /**
-     * Get the external project URL.
-     */
-    public function externalUrl(): string
-    {
-        return (string) $this->getField('external_url');
-    }
-
-    /**
-     * Get the project background.
-     */
-    public function background(): string
-    {
-        return (string) $this->getField('background');
-    }
-
-    /**
-     * Get the project implementation details.
-     */
-    public function implementation(): string
-    {
-        return (string) $this->getField('implementation');
-    }
-
-    /**
-     * Get the project results.
-     */
-    public function results(): string
-    {
-        return (string) $this->getField('results');
     }
 
     /**

@@ -1,11 +1,11 @@
 ## HIGH PRIORITY
 - contact page
 - content!!
-- full code audit
-- (HARD) frontend testing with jest?
+- project archive cover at the top
 
 ## MEDIUM PRIORITY
 - (HARD) frontend testing with jest?
+- full code audit
 
 ## LOW PRIORITY
 - (HARD) optimize build process

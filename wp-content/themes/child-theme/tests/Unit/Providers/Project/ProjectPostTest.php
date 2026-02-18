@@ -309,17 +309,11 @@ class ProjectPostTest extends TestCase
     }
 
     /**
-     * Test all accessor methods have correct return types.
+     * Test remaining explicitly-defined methods have correct return types.
      */
-    public function testAccessorMethodReturnTypes(): void
+    public function testExplicitMethodReturnTypes(): void
     {
         $reflection = new \ReflectionClass(ProjectPost::class);
-        $stringMethods = ['client', 'year', 'technologies', 'externalUrl', 'background', 'implementation', 'results'];
-
-        foreach ($stringMethods as $method) {
-            $returnType = $reflection->getMethod($method)->getReturnType();
-            $this->assertEquals('string', $returnType->getName(), "$method should return string");
-        }
 
         $this->assertEquals('array', (string) $reflection->getMethod('technologyList')->getReturnType());
         $this->assertEquals('bool', (string) $reflection->getMethod('hasProjectDetails')->getReturnType());

@@ -61,6 +61,23 @@ class Post extends TimberPost
     }
 
     /**
+     * Magic method for dynamic ACF field access.
+     *
+     * Routes zero-argument method calls through getField() with
+     * automatic camelCase to snake_case conversion. This allows
+     * $post->externalUrl() to resolve to getField('external_url').
+     */
+    public function __call($field, $arguments)
+    {
+        if (empty($arguments)) {
+            $fieldKey = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $field));
+            return $this->getField($fieldKey);
+        }
+
+        return parent::__call($field, $arguments);
+    }
+
+    /**
      * Get an ACF field value, with fallback to post meta.
      */
     public function getField(string $key): mixed
