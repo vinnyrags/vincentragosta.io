@@ -1,8 +1,15 @@
 {% extends "base.twig" %}
 
 {% block content %}
-    <h1 class="projects-archive__heading has-70-font-size">Project Showcase</h1>
-    <div class="projects-archive">
+    <div class="wp-block-cover alignfull has-parallax has-custom-content-position is-position-bottom-left is-style-animated projects-archive-hero" style="padding-bottom:var(--wp--preset--spacing--60);min-height:100vh">
+        <div class="wp-block-cover__image-background has-parallax" style="background-position:50% 50%;background-image:url({{ site.theme.link }}/src/Providers/Theme/assets/images/svg/squiggle/squiggle-1.svg)"></div>
+        <span aria-hidden="true" class="wp-block-cover__background has-background-dim"></span>
+        <div class="wp-block-cover__inner-container">
+            <h1 class="wp-block-heading has-70-font-size">Project Showcase</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        </div>
+    </div>
+    <div class="projects-archive alignfull">
         <div class="projects-sort">
             {% include 'partials/dropdown.twig' with {
                 name: 'sort',

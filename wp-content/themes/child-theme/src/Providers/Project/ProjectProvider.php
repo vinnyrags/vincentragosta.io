@@ -67,6 +67,7 @@ class ProjectProvider extends Provider
             return;
         }
 
+        wp_enqueue_style('wp-block-cover');
         $this->enqueueStyle('child-theme-projects-block', 'projects.css');
         $this->enqueueStyle('child-theme-project-archive', 'project.css');
         $this->enqueueScript('child-theme-project-archive', 'archive.js');
