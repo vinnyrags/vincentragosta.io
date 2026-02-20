@@ -93,7 +93,7 @@
         {% if post.hasCaseStudy() %}
             <div class="project-detail__case-study">
                 {% if post.background() %}
-                    <section class="project-detail__section project-detail__section--background">
+                    <section id="background" class="project-detail__section project-detail__section--background">
                         <div class="project-detail__section-inner">
                             <h2 class="project-detail__section-heading has-50-font-size"><u>Background</u></h2>
                             <div class="project-detail__section-content">{{ post.background() | raw }}</div>
@@ -102,7 +102,7 @@
                 {% endif %}
 
                 {% if post.implementation() %}
-                    <section class="project-detail__section">
+                    <section id="implementation" class="project-detail__section">
                         <div class="project-detail__section-inner">
                             <h2 class="project-detail__section-heading has-50-font-size"><u>Implementation</u></h2>
                             <div class="project-detail__section-content">{{ post.implementation() | raw }}</div>
@@ -111,7 +111,7 @@
                 {% endif %}
 
                 {% if post.results() %}
-                    <section class="project-detail__section project-detail__section--results">
+                    <section id="results" class="project-detail__section project-detail__section--results">
                         <div class="project-detail__section-inner">
                             <h2 class="project-detail__section-heading has-50-font-size"><u>Results</u></h2>
                             <div class="project-detail__section-content">{{ post.results() | raw }}</div>
