@@ -7,6 +7,7 @@ namespace ChildTheme\Providers\Theme;
 use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
@@ -31,6 +32,7 @@ class ThemeProvider extends BaseThemeProvider
     protected array $hooks = [
         AccordionIconEnhancer::class,
         ButtonIconEnhancer::class,
+        ContainerBlockStyles::class,
         CoverBlockStyles::class,
         SocialIconChoices::class,
     ];
@@ -162,8 +164,11 @@ class ThemeProvider extends BaseThemeProvider
             return $context;
         }
 
+        $contactPage = get_field('contact_page', 'option');
+
         $context['options'] = [
             'footer_description' => get_field('footer_description', 'option') ?: '',
+            'contact_page_url'   => $contactPage ? get_permalink($contactPage) : '',
             'social_icons'       => get_field('social_icons', 'option') ?: [],
         ];
 

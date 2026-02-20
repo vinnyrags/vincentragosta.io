@@ -7,6 +7,7 @@ use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Tests\Support\HasContainer;
@@ -92,9 +93,10 @@ class ThemeProviderTest extends BaseTestCase
 
         $this->assertContains(AccordionIconEnhancer::class, $hooks);
         $this->assertContains(ButtonIconEnhancer::class, $hooks);
+        $this->assertContains(ContainerBlockStyles::class, $hooks);
         $this->assertContains(CoverBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
-        $this->assertCount(4, $hooks);
+        $this->assertCount(5, $hooks);
     }
 
     /**

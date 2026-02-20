@@ -94,3 +94,8 @@ html {
     margin-inline: auto;
   }
 }
+
+// Default padding for individual columns with backgrounds
+.wp-block-column.has-background {
+  padding: var(--wp--preset--spacing--40);
+}

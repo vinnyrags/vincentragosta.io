@@ -141,6 +141,19 @@ class ThemeProvider extends Provider
             );
         }
 
+        // WPForms float labels — companion JS for _wpforms.scss :placeholder-shown selectors.
+        // Enqueued from parent dist since AssetManager resolves from active (child) theme.
+        $floatLabelsPath = get_template_directory() . '/dist/js/theme/wpforms-float-labels.js';
+        if (file_exists($floatLabelsPath)) {
+            wp_enqueue_script(
+                $this->handlePrefix . '-wpforms-float-labels',
+                get_template_directory_uri() . '/dist/js/theme/wpforms-float-labels.js',
+                [],
+                filemtime($floatLabelsPath),
+                true
+            );
+        }
+
         $this->enqueueScript($this->handlePrefix . '-frontend-js', 'frontend.js');
     }
 

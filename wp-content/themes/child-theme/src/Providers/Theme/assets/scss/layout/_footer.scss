@@ -36,7 +36,7 @@
   margin-block-start: var(--wp--preset--spacing--70);
 }
 
-.site-main:has(> :last-child.has-background) + .footer {
+.site-main:has(> :last-child:is(.has-background, .wp-block-cover)) + .footer {
   margin-block-start: 0;
 }
 

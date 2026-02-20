@@ -3,6 +3,7 @@
 @use 'common/function';
 @use 'common/animation';
 @use 'common/layout';
+@use 'common/form-fields';
 @use 'common/scroll-reveal';
 
 // Utilities
@@ -16,3 +17,6 @@
 
 // Layout components
 @use 'layout/header';
+
+// Vendor
+@use 'vendor/wpforms';

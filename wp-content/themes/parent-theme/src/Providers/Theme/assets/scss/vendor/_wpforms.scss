@@ -1,0 +1,80 @@
+// Field container
+.wpforms-field {
+  position: relative;
+  padding-top: 1.25rem;
+  margin-bottom: var(--wp--preset--spacing--30);
+}
+
+// Label — placeholder state
+.wpforms-field-label {
+  position: absolute;
+  left: 0;
+  top: 1.25rem;
+  transform: translateY(var(--wp--preset--spacing--20));
+  font-size: var(--wp--preset--font-size--20);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 0.2s ease, font-size 0.2s ease, color 0.2s ease;
+}
+
+// Label — active state (focused or has value)
+.wpforms-field:focus-within .wpforms-field-label,
+.wpforms-field:has(input:not(:placeholder-shown)) .wpforms-field-label,
+.wpforms-field:has(textarea:not(:placeholder-shown)) .wpforms-field-label {
+  transform: translateY(-1.25rem);
+  font-size: var(--wp--preset--font-size--10);
+  color: var(--wp--preset--color--accent-1);
+}
+
+// Has value but not focused — muted color
+.wpforms-field:has(input:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label,
+.wpforms-field:has(textarea:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label {
+  color: var(--color-text-muted);
+}
+
+// Full width inputs (override WPForms .wpforms-field-medium)
+.wpforms-form input,
+.wpforms-form textarea {
+  width: 100% !important;
+}
+
+.wpforms-form textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+// Required asterisk
+.wpforms-required-label {
+  color: var(--wp--preset--color--accent-1);
+}
+
+// Submit container spacing
+.wpforms-submit-container {
+  margin-top: var(--wp--preset--spacing--40);
+}
+
+// Error states
+.wpforms-field.wpforms-has-error {
+  input, textarea { border-bottom-color: #e74c3c; }
+  .wpforms-field-label { color: #e74c3c; }
+}
+
+label.wpforms-error {
+  display: block;
+  margin-top: var(--wp--preset--spacing--20);
+  font-size: var(--wp--preset--font-size--10);
+  color: #e74c3c;
+}
+
+// Honeypot exclusion
+.wpforms-field[style*="position: absolute"] {
+  padding-top: 0;
+  margin-bottom: 0;
+  .wpforms-field-label { position: absolute; transform: none; transition: none; }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .wpforms-field-label { transition: none; }
+}

@@ -6,3 +6,4 @@
 import './header';
 import './dropdown';
 import './scroll-animation';
+import './wpforms-submit-icon';

@@ -4,12 +4,14 @@
         <section class="footer__contact" aria-labelledby="footer-contact-heading">
             <div class="footer__contact-heading">
                 <h2 class="footer__heading" id="footer-contact-heading">Let's start a <strong>conversation</strong></h2>
-                <a href="mailto:hello@vincentragosta.io" class="wp-element-button button has-icon">
-                    Get in touch today
-                    <span class="button__icon arrow" aria-hidden="true">
-                        {{ icon('arrow') | raw }}
-                    </span>
-                </a>
+                {% if options.contact_page_url %}
+                    <a href="{{ options.contact_page_url }}" class="wp-element-button button has-icon">
+                        Get in touch today
+                        <span class="button__icon arrow" aria-hidden="true">
+                            {{ icon('arrow') | raw }}
+                        </span>
+                    </a>
+                {% endif %}
             </div>
             {% if options.footer_description %}
                 <div class="footer__contact-body">

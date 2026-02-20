@@ -6,6 +6,7 @@ TODO.md
 .DS_Store
 
 vendor
+!wp-content/themes/*/src/Providers/*/assets/**/vendor
 
 wp
 wp-admin

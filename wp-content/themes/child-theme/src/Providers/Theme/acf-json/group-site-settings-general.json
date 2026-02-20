@@ -21,6 +21,20 @@
             "delay": 0
         },
         {
+            "key": "field_contact_page",
+            "label": "Contact Page",
+            "name": "contact_page",
+            "type": "post_object",
+            "instructions": "Select the contact page. The footer CTA button will link to this page. Leave empty to hide the button.",
+            "required": 0,
+            "post_type": ["page"],
+            "post_status": ["publish"],
+            "return_format": "object",
+            "allow_null": 1,
+            "ui": 1,
+            "multiple": 0
+        },
+        {
             "key": "field_social_icons",
             "label": "Social Icons",
             "name": "social_icons",

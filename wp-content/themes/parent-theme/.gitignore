@@ -1,4 +1,5 @@
 vendor/
+!src/Providers/*/assets/**/vendor/
 node_modules/
 
 # Compiled assets
