@@ -24,7 +24,7 @@
   clip-path: none;
   padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
   background: var(--wp--preset--color--accent-1);
-  color: var(--wp--preset--color--contrast);
+  color: var(--color-on-accent);
   font-size: var(--wp--preset--font-size--20);
   font-weight: 700;
   text-transform: uppercase;
@@ -32,8 +32,4 @@
   border-radius: 9999px;
   outline: 2px solid var(--wp--preset--color--accent-1);
   outline-offset: 2px;
-}
-
-.light-mode .skip-link.screen-reader-text:focus {
-  color: var(--wp--preset--color--base);
 }

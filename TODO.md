@@ -1,11 +1,15 @@
 ## HIGH PRIORITY
 - start working on content
 - same light mode behavior on project detail that we have on homepage, is there an opportunity to create a shared interface or standardize/generalize something here? lets enter plan mode to do a deep dive and understand the issue at hand and write up an efficient plan on this
+- change grey in light mode to something else
+- add border to section-nav pills container
 - consider changing language of newest/oldest to latest/???
 - consider dynamic search on project archive, search input bar to the left of the filters
+- is our css as lean as possible? are we using BEM syntax correctly and not needlessly creating higher specificity for no reason?
 
 ## MEDIUM PRIORITY
-- frontend testing with jest?
+- frontend testing with jest? cypress?
+- get wpforms block looking good in editor
 - DO LAST full code audit, revisit core concepts, see if we hold true to everything we tried to put forth, is there room for any optimizations, lets look at all php code first and then perform a separate audit with a separate plan for the frontend files.
 
 ## LOW PRIORITY

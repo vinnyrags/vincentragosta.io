@@ -61,7 +61,7 @@
     &:hover,
     &:focus {
         background: var(--wp--preset--color--accent-1);
-        color: var(--wp--preset--color--contrast);
+        color: var(--color-on-accent);
     }
 
     &[aria-selected="true"] {
@@ -71,13 +71,6 @@
     &:focus-visible {
         outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: -2px;
-    }
-}
-
-.light-mode .dropdown__item {
-    &:hover,
-    &:focus {
-        color: var(--wp--preset--color--base);
     }
 }
 

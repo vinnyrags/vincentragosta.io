@@ -1,10 +1,14 @@
 // ThemeService styles entry point
-@use 'color-mode';
+@use 'light-mode';
 @use 'focus';
 @use 'button-icon';
 
+// Elements
+@use 'elements/block-text';
+
 // Layout
 @use 'layout/footer';
+@use 'layout/header';
 @use 'layout/nav-overlay';
 
 // Components

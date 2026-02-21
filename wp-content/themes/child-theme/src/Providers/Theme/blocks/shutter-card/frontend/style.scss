@@ -1,3 +1,45 @@
+// ==========================================================================
+// Shutter Card — Component-Scoped Variables
+// ==========================================================================
+
+:root {
+  --_card-bg: var(--wp--preset--color--base);
+  --_card-border: var(--wp--preset--color--grey-2);
+  --_card-text: var(--wp--preset--color--contrast);
+  --_card-id: var(--wp--preset--color--grey-3);
+  --_card-inactive-bg: var(--wp--preset--color--grey-1);
+  --_card-inactive-text: var(--wp--preset--color--base);
+  --_card-toggle-bg: var(--wp--preset--color--contrast);
+  --_card-toggle-icon: var(--wp--preset--color--base);
+  --_card-toggle-border: var(--wp--preset--color--contrast);
+  --_card-toggle-inactive-icon: var(--wp--preset--color--base);
+  --_card-toggle-inactive-border: var(--wp--preset--color--base);
+  --_card-toggle-hover-bg: var(--wp--preset--color--accent-1);
+  --_card-toggle-hover-icon: var(--wp--preset--color--contrast);
+  --_card-toggle-hover-border: var(--wp--preset--color--accent-1);
+}
+
+.light-mode {
+  --_card-bg: var(--wp--preset--color--contrast);
+  --_card-border: var(--wp--preset--color--grey-4);
+  --_card-text: var(--wp--preset--color--base);
+  --_card-id: var(--wp--preset--color--grey-4);
+  --_card-inactive-bg: var(--wp--preset--color--grey-4);
+  --_card-inactive-text: var(--wp--preset--color--contrast);
+  --_card-toggle-bg: var(--wp--preset--color--base);
+  --_card-toggle-icon: var(--wp--preset--color--contrast);
+  --_card-toggle-border: var(--wp--preset--color--base);
+  --_card-toggle-inactive-icon: var(--wp--preset--color--base);
+  --_card-toggle-inactive-border: var(--wp--preset--color--base);
+  --_card-toggle-hover-bg: var(--wp--preset--color--base);
+  --_card-toggle-hover-icon: var(--wp--preset--color--contrast);
+  --_card-toggle-hover-border: var(--wp--preset--color--base);
+}
+
+// ==========================================================================
+// Component
+// ==========================================================================
+
 // The WordPress wrapper is the grid item
 .wp-block-child-theme-shutter-card {
   display: flex;
@@ -26,9 +68,9 @@
   flex-direction: column;
   gap: var(--wp--preset--spacing--40);
   flex: 1;
-  background-color: var(--wp--preset--color--base);
-  border: 1px solid var(--wp--preset--color--grey-2);
-  color: var(--wp--preset--color--contrast);
+  background-color: var(--_card-bg);
+  border: 1px solid var(--_card-border);
+  color: var(--_card-text);
   padding: var(--wp--preset--spacing--50);
   overflow: hidden;
   transition: background-color 0.4s ease, color 0.4s ease;
@@ -36,18 +78,17 @@
   // Inactive visual state - applies on all screen sizes
   .is-inactive & {
     cursor: pointer;
-    background-color: var(--wp--preset--color--grey-1);
-    color: var(--wp--preset--color--base);
+    background-color: var(--_card-inactive-bg);
+    color: var(--_card-inactive-text);
   }
 
   &__id {
     font-size: var(--wp--preset--font-size--20);
     font-weight: 400;
-    color: var(--wp--preset--color--grey-3);
+    color: var(--_card-id);
   }
 
   &__title {
-    color: inherit;
     font-size: var(--wp--preset--font-size--60);
     font-family: var(--wp--preset--font-family--reckless-neue);
     font-weight: 400;
@@ -81,7 +122,7 @@
     }
   }
 
-  // Toggle button (replaces close-icon div)
+  // Toggle button
   &__toggle {
     display: flex;
     align-items: center;
@@ -92,9 +133,9 @@
     margin-top: auto;
     padding: 0;
     border-radius: 50%;
-    border: 2px solid var(--wp--preset--color--contrast);
-    color: var(--wp--preset--color--base);
-    background-color: var(--wp--preset--color--contrast);
+    border: 2px solid var(--_card-toggle-border);
+    color: var(--_card-toggle-icon);
+    background-color: var(--_card-toggle-bg);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 
@@ -120,6 +161,12 @@
   }
 }
 
+// Override .light-mode heading globals (0,1,1) — inherit the card's
+// contextual color so active/inactive states both work correctly.
+.shutter-card .shutter-card__title {
+  color: inherit;
+}
+
 // Mobile: collapse content for accordion
 .is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
   opacity: 0;
@@ -138,8 +185,8 @@
 }
 
 .is-inactive .shutter-card__toggle {
-  color: var(--wp--preset--color--base);
-  border-color: var(--wp--preset--color--base);
+  color: var(--_card-toggle-inactive-icon);
+  border-color: var(--_card-toggle-inactive-border);
   background-color: transparent;
   transform: rotate(45deg);
 }
@@ -147,52 +194,9 @@
 .is-inactive:hover .shutter-card__toggle,
 .is-inactive .shutter-card__toggle:focus-visible {
   transform: rotate(0);
-  color: var(--wp--preset--color--contrast);
-  background-color: var(--wp--preset--color--accent-1);
-  border-color: var(--wp--preset--color--accent-1);
-}
-
-// ==========================================================================
-// Light Mode Overrides
-// ==========================================================================
-
-.light-mode .shutter-card {
-  background-color: var(--wp--preset--color--contrast);
-  border-color: var(--wp--preset--color--grey-4);
-  color: var(--wp--preset--color--base);
-
-  .shutter-card__title {
-    color: var(--wp--preset--color--base);
-  }
-}
-
-.light-mode .is-inactive .shutter-card {
-  background-color: var(--wp--preset--color--grey-4);
-  color: var(--wp--preset--color--contrast);
-}
-
-.light-mode .shutter-card__id {
-  color: var(--wp--preset--color--grey-4);
-}
-
-.light-mode .shutter-card__toggle {
-  border-color: var(--wp--preset--color--base);
-  color: var(--wp--preset--color--contrast);
-  background-color: var(--wp--preset--color--base);
-}
-
-.light-mode .is-inactive .shutter-card__toggle {
-  color: var(--wp--preset--color--base);
-  border-color: var(--wp--preset--color--base);
-  background-color: transparent;
-}
-
-.light-mode .is-inactive:hover .shutter-card__toggle,
-.light-mode .is-inactive .shutter-card__toggle:hover,
-.light-mode .is-inactive .shutter-card__toggle:focus-visible {
-  color: var(--wp--preset--color--contrast);
-  background-color: var(--wp--preset--color--base);
-  border-color: var(--wp--preset--color--base);
+  color: var(--_card-toggle-hover-icon);
+  background-color: var(--_card-toggle-hover-bg);
+  border-color: var(--_card-toggle-hover-border);
 }
 
 // ==========================================================================

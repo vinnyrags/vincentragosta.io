@@ -1,0 +1,23 @@
+// Header light-mode overrides
+// Uses html.light-mode (0,1,1) to beat the parent theme's :root (0,1,0)
+// regardless of stylesheet load order.
+html.light-mode {
+  --header-bg: var(--wp--preset--color--base);
+  --header-text: var(--wp--preset--color--contrast);
+  --header-border: var(--wp--preset--color--grey-5);
+  --header-toggle-bg: var(--wp--preset--color--contrast);
+  --header-toggle-icon: var(--wp--preset--color--base);
+}
+
+// Sun/moon icon animation — sun rotates out, moon rotates in
+.light-mode .header__mode-icon {
+  &--sun {
+    opacity: 0;
+    transform: rotate(90deg);
+  }
+
+  &--moon {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+}

@@ -23,7 +23,7 @@
   &::before {
     content: counter(accordion-index, decimal-leading-zero);
     font-weight: 400;
-    color: var(--wp--preset--color--grey-3);
+    color: var(--color-text-muted);
     min-width: var(--accordion-number-width);
     margin-right: var(--accordion-number-gap);
   }
@@ -31,10 +31,6 @@
   &:hover .wp-block-accordion-heading__toggle-title {
     text-decoration: none;
   }
-}
-
-.light-mode .wp-block-accordion-heading__toggle::before {
-  color: var(--wp--preset--color--grey-4);
 }
 
 .wp-block-accordion-heading__toggle-icon {
@@ -57,13 +53,9 @@
     position: relative;
     width: var(--wp--custom--icon-size--sm);
     height: var(--wp--custom--icon-size--sm);
-    color: var(--wp--preset--color--contrast);
+    color: var(--color-on-accent);
     transition: transform 0.3s ease;
   }
-}
-
-.light-mode .wp-block-accordion-heading__toggle-icon svg {
-  color: var(--wp--preset--color--base);
 }
 
 // Flip upward when expanded — the button carries aria-expanded

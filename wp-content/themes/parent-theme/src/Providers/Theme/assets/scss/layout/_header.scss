@@ -4,12 +4,8 @@
   --header-bg: var(--wp--preset--color--contrast);
   --header-text: var(--wp--preset--color--base);
   --header-border: var(--wp--preset--color--grey-2);
-}
-
-.light-mode {
-  --header-bg: var(--wp--preset--color--base);
-  --header-text: var(--wp--preset--color--contrast);
-  --header-border: var(--wp--preset--color--grey-5);
+  --header-toggle-bg: var(--wp--preset--color--base);
+  --header-toggle-icon: var(--wp--preset--color--contrast);
 }
 
 .header {
@@ -88,19 +84,6 @@
       opacity: 0;
       transform: rotate(-90deg);
     }
-
-    // In light mode: sun rotates out, moon rotates in
-    .light-mode & {
-      &--sun {
-        opacity: 0;
-        transform: rotate(90deg);
-      }
-
-      &--moon {
-        opacity: 1;
-        transform: rotate(0deg);
-      }
-    }
   }
 
   // Logo (center)
@@ -134,7 +117,7 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
-    background: var(--wp--preset--color--base);
+    background: var(--header-toggle-bg);
     border: none;
     border-radius: 50%;
     padding: 0;
@@ -157,21 +140,8 @@
     display: block;
     width: 20px;
     height: 2px;
-    background-color: var(--wp--preset--color--contrast);
+    background-color: var(--header-toggle-icon);
     transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
-  }
-
-  // Light mode: swap hamburger colors
-  .light-mode &__menu-toggle {
-    background: var(--wp--preset--color--contrast);
-
-    &:hover {
-      background-color: var(--wp--preset--color--accent-1);
-    }
-  }
-
-  .light-mode &__menu-line {
-    background-color: var(--wp--preset--color--base);
   }
 }
 

@@ -1,5 +1,5 @@
 // ==========================================================================
-// Color Mode System
+// Light Mode System
 // ==========================================================================
 // Semantic color variables that swap based on light/dark mode.
 // Use these variables throughout the theme for automatic mode switching.
@@ -23,6 +23,9 @@
   --color-button-text: var(--wp--preset--color--contrast);
   --color-button-hover-bg: var(--wp--preset--color--accent-1);
   --color-button-hover-text: var(--wp--preset--color--contrast);
+
+  // Text on accent-1 backgrounds (e.g. skip-link, dropdown hover, accordion icon)
+  --color-on-accent: var(--wp--preset--color--contrast);
 }
 
 .light-mode {
@@ -46,6 +49,9 @@
   --color-button-text: var(--wp--preset--color--base);
   --color-button-hover-bg: var(--wp--preset--color--accent-1);
   --color-button-hover-text: var(--wp--preset--color--base);
+
+  // Text on accent-1 backgrounds
+  --color-on-accent: var(--wp--preset--color--base);
 }
 
 // ==========================================================================
