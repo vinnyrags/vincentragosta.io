@@ -70,6 +70,12 @@
         font-weight: 700;
     }
 
+    &[aria-disabled="true"] {
+        opacity: 0.4;
+        pointer-events: none;
+        cursor: default;
+    }
+
     &:focus-visible {
         outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: -2px;

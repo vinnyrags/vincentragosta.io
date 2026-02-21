@@ -21,7 +21,8 @@
                 role="option"
                 data-value="{{ option.value }}"
                 tabindex="-1"
-                aria-selected="{{ option.value == selected ? 'true' : 'false' }}">
+                aria-selected="{{ option.value == selected ? 'true' : 'false' }}"
+                {% if option.value == selected %}aria-disabled="true"{% endif %}>
                 {{ option.label }}
             </li>
         {% endfor %}

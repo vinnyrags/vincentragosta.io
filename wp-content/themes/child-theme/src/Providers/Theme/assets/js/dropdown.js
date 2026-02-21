@@ -31,14 +31,18 @@
      * @param {HTMLElement} item - The selected .dropdown__item
      */
     function selectItem(dropdown, item) {
+        if (item.getAttribute('aria-disabled') === 'true') return;
+
         const toggle = dropdown.querySelector('.dropdown__toggle');
         const label = dropdown.querySelector('.dropdown__label');
         const menu = dropdown.querySelector('.dropdown__menu');
         const items = menu.querySelectorAll('.dropdown__item');
 
-        // Update aria-selected on all items
+        // Update aria-selected and aria-disabled on all items
         items.forEach((i) => {
-            i.setAttribute('aria-selected', i === item ? 'true' : 'false');
+            const isSelected = i === item;
+            i.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+            i.setAttribute('aria-disabled', isSelected ? 'true' : 'false');
         });
 
         // Update label text
