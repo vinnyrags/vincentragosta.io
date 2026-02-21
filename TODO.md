@@ -1,9 +1,7 @@
 ## HIGH PRIORITY
 - start working on content
-- same light mode behavior on project detail that we have on homepage regarding the background SVGs, is there an opportunity to create a shared interface or standardize/generalize something here? lets enter plan mode to do a deep dive and understand the issue at hand and write up an efficient plan on this
 - consider changing language of newest/oldest to latest/???
 - consider dynamic search on project archive, search input bar to the left of the filters
-- is our css as lean as possible? are we using BEM syntax correctly and not needlessly creating higher specificity for no reason?
 
 ## MEDIUM PRIORITY
 - frontend testing with jest? cypress?
@@ -19,5 +17,4 @@
 - revisit the idea of not using gap and instead deferring to margin-block-start and override p tag globally since its spitting out 1em margin-block-start/end anyway, maybe this is the precedence we should follow. if you agree with this lets set this up and do a deep dive in the code to see where we could remove redundant code, places where we know we are receiving <p> tags from like project-detail case study sections for example. lets find all offenders of this new way of doing things and update them accordingly-- lets get an efficient plan set forth to accomplish this (plan mode)
 - ask why the underscore in front of scss files
 - what else to add to contact page below hero section?
-- accessibility pass
-- 
+- accessibility pass, is our css setup to be accessibility driven (where applicable), lets do a deep dive on best practices and

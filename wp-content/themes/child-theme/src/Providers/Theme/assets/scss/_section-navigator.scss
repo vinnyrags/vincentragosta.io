@@ -2,21 +2,21 @@
 
 // Component-scoped custom properties for pill contrast
 :root {
-    --_pill-bg: var(--wp--preset--color--grey-2);
-    --_pill-text: var(--wp--preset--color--grey-3);
-    --_pill-hover-bg: var(--wp--preset--color--grey-4);
-    --_pill-hover-text: var(--wp--preset--color--base);
-    --_pill-active-bg: var(--wp--preset--color--accent-1);
-    --_pill-active-text: var(--wp--preset--color--contrast);
+    --section-nav-pill-bg: var(--wp--preset--color--grey-2);
+    --section-nav-pill-text: var(--wp--preset--color--grey-3);
+    --section-nav-pill-hover-bg: var(--wp--preset--color--grey-4);
+    --section-nav-pill-hover-text: var(--wp--preset--color--base);
+    --section-nav-pill-active-bg: var(--wp--preset--color--accent-1);
+    --section-nav-pill-active-text: var(--wp--preset--color--contrast);
 }
 
 .light-mode {
-    --_pill-bg: var(--wp--preset--color--base);
-    --_pill-text: var(--wp--preset--color--grey-4);
-    --_pill-hover-bg: var(--wp--preset--color--grey-5);
-    --_pill-hover-text: var(--wp--preset--color--contrast);
-    --_pill-active-bg: var(--wp--preset--color--accent-1);
-    --_pill-active-text: var(--wp--preset--color--base);
+    --section-nav-pill-bg: var(--wp--preset--color--base);
+    --section-nav-pill-text: var(--wp--preset--color--grey-4);
+    --section-nav-pill-hover-bg: var(--wp--preset--color--grey-5);
+    --section-nav-pill-hover-text: var(--wp--preset--color--contrast);
+    --section-nav-pill-active-bg: var(--wp--preset--color--accent-1);
+    --section-nav-pill-active-text: var(--wp--preset--color--base);
 }
 
 // Scroll offset for fixed header
@@ -55,14 +55,14 @@ html {
         text-transform: uppercase;
         letter-spacing: 0.05em;
         white-space: nowrap;
-        background: var(--_pill-bg);
-        color: var(--_pill-text);
+        background: var(--section-nav-pill-bg);
+        color: var(--section-nav-pill-text);
         transition: background-color 0.3s ease, color 0.3s ease;
 
         &:hover,
         &:focus {
-            background: var(--_pill-hover-bg);
-            color: var(--_pill-hover-text);
+            background: var(--section-nav-pill-hover-bg);
+            color: var(--section-nav-pill-hover-text);
         }
 
         &:focus-visible {
@@ -71,13 +71,13 @@ html {
         }
 
         &.is-active {
-            background: var(--_pill-active-bg);
-            color: var(--_pill-active-text);
+            background: var(--section-nav-pill-active-bg);
+            color: var(--section-nav-pill-active-text);
         }
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
     .section-nav__list {
         transition: none;
     }

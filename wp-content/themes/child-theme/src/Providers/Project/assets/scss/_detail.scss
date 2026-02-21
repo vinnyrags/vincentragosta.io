@@ -31,8 +31,8 @@
         color: var(--wp--preset--color--accent-1);
 
         svg {
-            width: 10px;
-            height: 10px;
+            width: var(--wp--custom--icon-size--xs);
+            height: var(--wp--custom--icon-size--xs);
         }
     }
 

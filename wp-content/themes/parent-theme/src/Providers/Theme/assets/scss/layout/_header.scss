@@ -1,3 +1,5 @@
+@use '../common/breakpoints' as *;
+
 // Header CSS custom properties for theme switching
 :root {
   --header-height: 72px; // Fallback, JS will calculate actual value
@@ -159,7 +161,7 @@
 }
 
 // Reduced motion: disable transitions for users who prefer reduced motion
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .header,
   .header__mode-toggle,
   .header__mode-icon,

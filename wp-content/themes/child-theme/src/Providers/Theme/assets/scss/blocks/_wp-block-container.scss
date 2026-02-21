@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 .is-style-dark {
     background-color: var(--color-surface);
     color: var(--color-text);
@@ -6,7 +8,7 @@
     padding: var(--wp--preset--spacing--40);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 
-    @media (prefers-reduced-motion: reduce) {
+    @include reduced-motion {
         transition: none;
     }
 }

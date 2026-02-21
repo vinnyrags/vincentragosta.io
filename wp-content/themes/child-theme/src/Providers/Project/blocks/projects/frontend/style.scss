@@ -41,6 +41,14 @@
 
   &:hover {
     transform: translateY(-5px);
+
+    .project-card__image-link img {
+      transform: scale(1.05);
+    }
+
+    .project-card__title a::after {
+      transform: scaleX(1);
+    }
   }
 
   &__image-link {
@@ -102,11 +110,24 @@
   }
 }
 
-// Hover states (separate for clarity)
-.project-card:hover .project-card__image-link img {
-  transform: scale(1.05);
-}
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
 
-.project-card:hover .project-card__title a::after {
-  transform: scaleX(1);
+@include reduced-motion {
+  .project-card {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .project-card__image-link img {
+    transition: none;
+  }
+
+  .project-card__title a::after {
+    transition: none;
+  }
 }

@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 .dropdown {
     position: relative;
     display: inline-block;
@@ -74,7 +76,7 @@
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
     .dropdown__icon {
         transition: none;
     }

@@ -1,3 +1,5 @@
+@use '../common/breakpoints' as *;
+
 // Field container
 .wpforms-field {
   position: relative;
@@ -56,15 +58,17 @@
 
 // Error states
 .wpforms-field.wpforms-has-error {
-  input, textarea { border-bottom-color: #e74c3c; }
-  .wpforms-field-label { color: #e74c3c; }
+  --color-error: #e74c3c;
+
+  input, textarea { border-bottom-color: var(--color-error); }
+  .wpforms-field-label { color: var(--color-error); }
 }
 
 label.wpforms-error {
   display: block;
   margin-top: var(--wp--preset--spacing--20);
   font-size: var(--wp--preset--font-size--10);
-  color: #e74c3c;
+  color: var(--color-error, #e74c3c);
 }
 
 // Honeypot exclusion
@@ -75,6 +79,6 @@ label.wpforms-error {
 }
 
 // Reduced motion
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   .wpforms-field-label { transition: none; }
 }

@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 // Accordion item numbering (01, 02, 03…)
 .wp-block-accordion {
   --accordion-number-width: 2.5rem;
@@ -62,6 +64,12 @@
 .wp-block-accordion-heading__toggle[aria-expanded="true"] {
   .wp-block-accordion-heading__toggle-icon svg {
     transform: rotate(135deg);
+  }
+}
+
+@include reduced-motion {
+  .wp-block-accordion-heading__toggle-icon svg {
+    transition: none;
   }
 }
 

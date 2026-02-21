@@ -97,6 +97,7 @@
     },
     "custom": {
       "iconSize": {
+        "xs": "10px",
         "sm": "16px",
         "md": "36px",
         "lg": "48px"

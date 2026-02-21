@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 // ==========================================================================
 // Button Icon System
 // ==========================================================================
@@ -26,7 +28,7 @@
 // --------------------------------------------------------------------------
 // Shared icon wrapper styles (placeholder extended by both button types)
 // --------------------------------------------------------------------------
-%button-icon-base {
+@mixin button-icon-base {
   --button-icon-size: 24px;
 
   display: inline-flex;
@@ -58,16 +60,16 @@
 
     svg {
       position: relative;
-      width: 10px;
-      height: 10px;
+      width: var(--wp--custom--icon-size--xs);
+      height: var(--wp--custom--icon-size--xs);
       color: var(--color-button-bg);
     }
   }
 }
 
 // Apply shared styles to both button types
-.wp-block-button__link .wp-block-button__icon { @extend %button-icon-base; }
-.button .button__icon { @extend %button-icon-base; }
+.wp-block-button__link .wp-block-button__icon { @include button-icon-base; }
+.button .button__icon { @include button-icon-base; }
 
 // --------------------------------------------------------------------------
 // Transitions + hover
@@ -86,4 +88,20 @@
 .wp-block-button__link:hover .wp-block-button__icon svg,
 .button:hover .button__icon svg {
   transform: rotate(45deg);
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .wp-block-button .wp-block-button__link,
+  .button {
+    transition: none;
+  }
+
+  .wp-block-button__icon svg,
+  .button__icon svg {
+    transition: none;
+  }
 }

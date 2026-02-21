@@ -1,3 +1,5 @@
+@use 'breakpoints' as *;
+
 fieldset {
   border: none;
   margin: 0;
@@ -22,7 +24,7 @@ textarea {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@include reduced-motion {
   input,
   textarea {
     transition: none;

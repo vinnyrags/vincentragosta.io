@@ -1,3 +1,5 @@
+@use 'breakpoints' as *;
+
 /// Sets up a transparent pseudo-element overlay on a container.
 /// The caller activates it (e.g., in a .light-mode block) by setting
 /// background-color on &::before.
@@ -13,7 +15,7 @@
     pointer-events: none;
     transition: background-color 0.3s ease;
 
-    @media (prefers-reduced-motion: reduce) {
+    @include reduced-motion {
       transition: none;
     }
   }
