@@ -48,6 +48,13 @@ html {
     margin-block-start: var(--wp--preset--spacing--70);
   }
 
+  // Deep-link scroll offset for sections without backgrounds — accounts for
+  // the section-level margin so the scroll lands at the visual start, not the
+  // content edge. Sections with backgrounds go full-bleed and don't need this.
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns)[id]:not(.has-background) {
+    scroll-margin-top: var(--wp--preset--spacing--70);
+  }
+
   // Default vertical padding for container blocks with backgrounds
   > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
     padding-block: var(--wp--preset--spacing--70);
