@@ -2,6 +2,12 @@
 // core/cover Block Styles
 // ==========================================================================
 
+// Override WP core's hardcoded #fff to use our semantic color variable,
+// so cover text adapts to the active color mode.
+.wp-block-cover:not(.has-text-color) {
+  color: var(--color-text);
+}
+
 // Animated Background style - left-to-right mask reveal animation
 
 .wp-block-cover.is-style-animated {

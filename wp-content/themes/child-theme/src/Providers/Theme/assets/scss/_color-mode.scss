@@ -35,10 +35,10 @@
 
   // Secondary/muted colors
   --color-text-muted: var(--wp--preset--color--grey-4);
-  --color-border: var(--wp--preset--color--grey-3);
+  --color-border: var(--wp--preset--color--grey-5);
 
   // Surface colors (cards, panels)
-  --color-surface: var(--wp--preset--color--grey-3);
+  --color-surface: var(--wp--preset--color--grey-4);
   --color-surface-text: var(--wp--preset--color--contrast);
 
   // Button colors (inverted from bg/text)
@@ -140,6 +140,21 @@
   .wp-block-group[style*="background-image"]::before {
     background-color: rgba(255, 255, 255, 0.85);
   }
+
+  // WPForms labels — keep white in all states
+  .wpforms-field-label,
+  .wpforms-field:focus-within .wpforms-field-label,
+  .wpforms-field:has(input:not(:placeholder-shown)) .wpforms-field-label,
+  .wpforms-field:has(textarea:not(:placeholder-shown)) .wpforms-field-label {
+    color: var(--wp--preset--color--base);
+  }
+
+  // WPForms inputs — white text and lighter border on dark surface
+  .wpforms-form input,
+  .wpforms-form textarea {
+    color: var(--wp--preset--color--base);
+    border-bottom-color: var(--wp--preset--color--grey-5);
+  }
 }
 
 // ==========================================================================
@@ -155,6 +170,12 @@ p, a,
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+.wpforms-form input,
+.wpforms-form textarea,
+.wpforms-field-label {
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
 .wp-block-group[style*="background-image"]::before {
   transition: background-color 0.3s ease;
 }
@@ -165,6 +186,12 @@ p, a,
   p, a,
   .wp-block-button__link,
   .button {
+    transition: none;
+  }
+
+  .wpforms-form input,
+  .wpforms-form textarea,
+  .wpforms-field-label {
     transition: none;
   }
 
