@@ -178,6 +178,19 @@ class ThemeProvider extends Provider
                 'blocks/index.css',
                 ['wp-edit-blocks', $this->handlePrefix . '-blocks-style']
             );
+
+            // Load parent compiled CSS in the editor so WPForms and form-field
+            // styles apply. Uses get_template_directory() directly because
+            // AssetManager resolves from the child theme (get_stylesheet_directory).
+            $parentDistCss = get_template_directory() . '/dist/css/theme.css';
+            if (file_exists($parentDistCss)) {
+                wp_enqueue_style(
+                    $this->handlePrefix . '-editor-parent-style',
+                    get_template_directory_uri() . '/dist/css/theme.css',
+                    [],
+                    filemtime($parentDistCss)
+                );
+            }
         }
     }
 

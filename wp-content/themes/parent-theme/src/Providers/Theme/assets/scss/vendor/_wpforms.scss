@@ -29,6 +29,12 @@
   color: var(--wp--preset--color--accent-1);
 }
 
+// Editor: raise labels when form is disabled (float-labels JS doesn't run in editor)
+fieldset[disabled] .wpforms-field-label {
+  transform: translateY(-1.25rem);
+  font-size: var(--wp--preset--font-size--10);
+}
+
 // Has value but not focused — muted color
 .wpforms-field:has(input:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label,
 .wpforms-field:has(textarea:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label {
