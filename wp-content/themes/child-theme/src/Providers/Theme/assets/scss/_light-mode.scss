@@ -1,3 +1,5 @@
+@use 'common/bg-overlay' as *;
+
 // ==========================================================================
 // Light Mode System
 // ==========================================================================
@@ -62,21 +64,7 @@
 // both modes (transparent by default) so the transition is smooth.
 
 .wp-block-group[style*="background-image"] {
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-color: rgba(255, 255, 255, 0);
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
+  @include bg-pattern-overlay;
 }
 
 // ==========================================================================
@@ -182,10 +170,6 @@ p, a,
   transition: color 0.3s ease, border-color 0.3s ease;
 }
 
-.wp-block-group[style*="background-image"]::before {
-  transition: background-color 0.3s ease;
-}
-
 @media (prefers-reduced-motion: reduce) {
   body,
   h1, h2, h3, h4, h5, h6,
@@ -201,7 +185,4 @@ p, a,
     transition: none;
   }
 
-  .wp-block-group[style*="background-image"]::before {
-    transition: none;
-  }
 }
