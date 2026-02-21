@@ -1,8 +1,6 @@
 ## HIGH PRIORITY
 - start working on content
-- consider changing language of newest/oldest to latest/???
 - consider dynamic search on project archive, search input bar to the left of the filters
-- about us deep link
 
 ## MEDIUM PRIORITY
 - frontend testing with jest? cypress?
