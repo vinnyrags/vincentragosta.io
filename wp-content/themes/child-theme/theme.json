@@ -161,6 +161,14 @@
       "fontFamily": "var:preset|font-family|roobert"
     },
     "blocks": {
+      "core/cover": {
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|60",
+            "bottom": "var:preset|spacing|60"
+          }
+        }
+      },
       "core/separator": {
         "color": {
           "text": "var:preset|color|grey-2"

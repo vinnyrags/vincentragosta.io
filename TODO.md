@@ -4,7 +4,6 @@
 
 ## MEDIUM PRIORITY
 - frontend testing with jest? cypress?
-- get wpforms block looking good in editor
 - DO LAST full code audit, revisit core concepts, see if we hold true to everything we tried to put forth, is there room for any optimizations, lets look at all php code first and then perform a separate audit with a separate plan for the frontend files.
 
 ## LOW PRIORITY
@@ -17,3 +16,4 @@
 - ask why the underscore in front of scss files
 - what else to add to contact page below hero section?
 - accessibility pass, is our css setup to be accessibility driven (where applicable), lets do a deep dive on best practices and
+- make sure we are not blurring the line with parent-theme responsibility, the parent theme should not hold too many opinions, if you were to do a deep dive over the parent them frontend and backend, are we violating this responsibility principle? can we enter plan mode and work out solutions to the various offenders?

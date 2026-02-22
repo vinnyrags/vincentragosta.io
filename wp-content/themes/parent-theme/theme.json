@@ -221,7 +221,11 @@
       },
       "core/cover": {
         "spacing": {
-          "blockGap": "var:preset|spacing|50"
+          "blockGap": "var:preset|spacing|50",
+          "padding": {
+            "left": "var:preset|spacing|40",
+            "right": "var:preset|spacing|40"
+          }
         }
       },
       "core/buttons": {
