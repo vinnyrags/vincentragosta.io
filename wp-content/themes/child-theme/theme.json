@@ -2,6 +2,16 @@
   "$schema": "https://schemas.wp.org/trunk/theme.json",
   "version": 3,
   "settings": {
+    "custom": {
+      "layout": {
+        "narrow": "1200px",
+        "small": "650px"
+      },
+      "borderRadius": "10px",
+      "color": {
+        "error": "#e74c3c"
+      }
+    },
     "color": {
       "palette": [
         {

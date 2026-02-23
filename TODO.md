@@ -12,9 +12,10 @@
 - update readmes, is it overkill with how many readmes we have? should we consolidate anywhere? should we have one big root directory read me that talks about everything? and let the code speak for itself with the directory readmes. I am leaning this way after building this entire project and littering the entire project with readmes, seems a bit tough to manage.
 - is there anything in the child theme that could go into the parent theme?
 - are we staying true to our DI principles and avoiding additional constructor behavior (deferring to init/register/bootstrap methods) across all of our php in both the child and parent themes? are there opportunities for improvement? lets enter plan mode to do a deep dive on what potentially needs to be fixed and the best and most efficient way to solve it.
-- revisit the idea of not using gap and instead deferring to margin-block-start and override p tag globally since its spitting out 1em margin-block-start/end anyway, maybe this is the precedence we should follow. if you agree with this lets set this up and do a deep dive in the code to see where we could remove redundant code, places where we know we are receiving <p> tags from like project-detail case study sections for example. lets find all offenders of this new way of doing things and update them accordingly-- lets get an efficient plan set forth to accomplish this (plan mode)
+- reset <p> default styling, gets 1em margin-block-start/end
 - accessibility pass, is our css setup to be accessibility driven (where applicable), lets do a deep dive on best practices and
 - make sure we are not blurring the line with parent-theme responsibility, the parent theme should not hold too many opinions, if you were to do a deep dive over the parent them frontend and backend, are we violating this responsibility principle? can we enter plan mode and work out solutions to the various offenders?
-- review theme.json in parent/child theme, make sure it makes sense
-- reevaluate if we are setting features as false correctly in parent theme
-- do a once over parent and child theme css and confirm we are not hard coding anything
+- review theme.json in parent/child theme, make sure it makes sense (do this manually)
+- reevaluate if we are setting features as false (as a default state) correctly in parent theme
+- fix light mode dropdown window state, would not pass contrast accessibility test, need white text
+- right now when we hit the bottom of the page document, the footer social icons get blocked by our section nav menu, maybe we have the section-nav fdade out when we hit the bottom of the document, or perhaps some scroll logic when the footer comes into view we fade out the section nav, I am not sure of the best approach for this, lets enter plan mode, do a deep dive on the code base and create an efficient and effective implementation plan for this.

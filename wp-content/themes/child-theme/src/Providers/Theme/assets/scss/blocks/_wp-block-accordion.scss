@@ -14,7 +14,7 @@
 
   .is-layout-flow > & + & {
     margin-block-start: var(--wp--preset--spacing--40);
-    border-top: 1px solid var(--wp--preset--color--grey-5);
+    border-block-start: 1px solid var(--wp--preset--color--grey-5);
     padding-block-start: var(--wp--preset--spacing--40);
   }
 }
@@ -27,7 +27,7 @@
     font-weight: 400;
     color: var(--color-text-muted);
     min-width: var(--accordion-number-width);
-    margin-right: var(--accordion-number-gap);
+    margin-inline-end: var(--accordion-number-gap);
   }
 
   &:hover .wp-block-accordion-heading__toggle-title {

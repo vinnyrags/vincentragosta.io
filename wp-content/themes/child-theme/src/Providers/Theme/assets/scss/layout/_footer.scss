@@ -32,7 +32,7 @@
   background-color: var(--footer-bg);
   color: var(--footer-text);
   padding: var(--wp--preset--spacing--60) var(--wp--preset--spacing--50);
-  border-top: 1px solid var(--footer-border);
+  border-block-start: 1px solid var(--footer-border);
   margin-block-start: var(--wp--preset--spacing--70);
 }
 
@@ -117,7 +117,7 @@
 
 .footer__separator {
   border: none;
-  border-top: 1px solid var(--footer-border);
+  border-block-start: 1px solid var(--footer-border);
   margin: 0;
 }
 

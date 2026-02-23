@@ -2,7 +2,6 @@
 
 // Header CSS custom properties for theme switching
 :root {
-  --header-height: 72px; // Fallback, JS will calculate actual value
   --header-bg: var(--wp--preset--color--contrast);
   --header-text: var(--wp--preset--color--base);
   --header-border: var(--wp--preset--color--grey-2);
@@ -12,12 +11,11 @@
 
 .header {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset-block-start: 0;
+  inset-inline: 0;
   z-index: 1000;
   background: var(--header-bg);
-  border-bottom: 1px solid var(--header-border);
+  border-block-end: 1px solid var(--header-border);
   transition: background-color 0.3s ease, border-color 0.3s ease;
 
   &__container {

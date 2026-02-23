@@ -10,7 +10,7 @@
 
 // Field spacing
 .wpforms-field {
-  margin-bottom: var(--wp--preset--spacing--30);
+  margin-block-end: var(--wp--preset--spacing--30);
 }
 
 // Full width inputs (override WPForms .wpforms-field-medium)
@@ -26,13 +26,13 @@
 
 // Submit container spacing
 .wpforms-submit-container {
-  margin-top: var(--wp--preset--spacing--40);
+  margin-block-start: var(--wp--preset--spacing--40);
 }
 
 // Honeypot exclusion
 .wpforms-field[style*="position: absolute"] {
-  padding-top: 0;
-  margin-bottom: 0;
+  padding-block-start: 0;
+  margin-block-end: 0;
   .wpforms-field-label { position: absolute; transform: none; transition: none; }
 }
 

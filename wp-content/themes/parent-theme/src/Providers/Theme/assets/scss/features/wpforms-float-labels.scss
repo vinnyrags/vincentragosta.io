@@ -11,14 +11,14 @@
 // Field container — padding-top creates room for the floated label
 .wpforms-field {
   position: relative;
-  padding-top: 1.25rem;
+  padding-block-start: 1.25rem;
 }
 
 // Label — placeholder (resting) state
 .wpforms-field-label {
   position: absolute;
-  left: 0;
-  top: 1.25rem;
+  inset-inline-start: 0;
+  inset-block-start: 1.25rem;
   transform: translateY(var(--wp--preset--spacing--20));
   font-size: var(--wp--preset--font-size--20);
   color: var(--color-text-muted);

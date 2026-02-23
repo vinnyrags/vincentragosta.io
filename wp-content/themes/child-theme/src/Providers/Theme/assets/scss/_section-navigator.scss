@@ -21,13 +21,13 @@
 
 // Scroll offset for fixed header
 html {
-    scroll-padding-top: var(--header-height, 0px);
+    scroll-padding-block-start: var(--header-height, 0px);
 }
 
 .section-nav {
     position: fixed;
-    bottom: var(--wp--preset--spacing--40);
-    right: var(--wp--preset--spacing--40);
+    inset-block-end: var(--wp--preset--spacing--40);
+    inset-inline-end: var(--wp--preset--spacing--40);
     z-index: 998;
     display: none;
 

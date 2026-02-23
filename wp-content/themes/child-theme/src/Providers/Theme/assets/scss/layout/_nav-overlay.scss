@@ -7,10 +7,7 @@ html.nav-overlay-open {
 
 .nav-overlay {
   position: fixed;
-  top: var(--header-height);
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: var(--header-height) 0 0;
   z-index: 999;
   background: var(--header-bg);
   display: flex;

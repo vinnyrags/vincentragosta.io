@@ -12,15 +12,13 @@
 
 // Error states
 .wpforms-field.wpforms-has-error {
-  --color-error: #e74c3c;
-
-  input, textarea { border-bottom-color: var(--color-error); }
-  .wpforms-field-label { color: var(--color-error); }
+  input, textarea { border-block-end-color: var(--wp--custom--color--error); }
+  .wpforms-field-label { color: var(--wp--custom--color--error); }
 }
 
 label.wpforms-error {
   display: block;
-  margin-top: var(--wp--preset--spacing--20);
+  margin-block-start: var(--wp--preset--spacing--20);
   font-size: var(--wp--preset--font-size--10);
-  color: var(--color-error, #e74c3c);
+  color: var(--wp--custom--color--error);
 }

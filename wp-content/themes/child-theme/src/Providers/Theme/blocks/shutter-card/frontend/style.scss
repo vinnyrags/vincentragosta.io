@@ -87,7 +87,7 @@
     font-weight: 400;
     line-height: 1.2;
     margin: 0;
-    margin-top: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40));
+    margin-block-start: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40));
   }
 
   // Descendant selector (0,2,0) ensures color inheritance beats the
@@ -116,7 +116,7 @@
       margin: 0;
 
       + p {
-        margin-top: var(--wp--preset--spacing--30);
+        margin-block-start: var(--wp--preset--spacing--30);
       }
     }
   }
@@ -129,7 +129,7 @@
     flex-shrink: 0;
     width: var(--toggle-size);
     height: var(--toggle-size);
-    margin-top: auto;
+    margin-block-start: auto;
     padding: 0;
     border-radius: 50%;
     border: 2px solid var(--shutter-card-toggle-border);

@@ -49,7 +49,7 @@ html {
   // the section-level margin so the scroll lands at the visual start, not the
   // content edge. Sections with backgrounds go full-bleed and don't need this.
   > :is(.wp-block-group, .wp-block-cover, .wp-block-columns)[id]:not(.has-background) {
-    scroll-margin-top: var(--wp--preset--spacing--70);
+    scroll-margin-block-start: var(--wp--preset--spacing--70);
   }
 
   // Default vertical padding for container blocks with backgrounds
@@ -84,8 +84,7 @@ html {
   ) > .wp-block-cover__inner-container {
     box-sizing: border-box;
     max-width: var(--wp--style--global--content-size);
-    margin-left: auto !important;
-    margin-right: auto !important;
+    margin-inline: auto !important;
     width: 100%;
   }
 

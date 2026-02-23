@@ -14,8 +14,8 @@
 // Styled as a pill button to match theme.json button element.
 .skip-link.screen-reader-text:focus {
   position: fixed;
-  top: var(--wp--preset--spacing--30);
-  left: var(--wp--preset--spacing--40);
+  inset-block-start: var(--wp--preset--spacing--30);
+  inset-inline-start: var(--wp--preset--spacing--40);
   z-index: 1001; // above the fixed header
   display: inline-block;
   width: auto;
