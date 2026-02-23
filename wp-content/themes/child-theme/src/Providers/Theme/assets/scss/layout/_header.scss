@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 // Header CSS custom properties for theme switching
@@ -179,6 +180,24 @@ html.light-mode {
   --header-border: var(--wp--preset--color--grey-5);
   --header-toggle-bg: var(--wp--preset--color--contrast);
   --header-toggle-icon: var(--wp--preset--color--base);
+}
+
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+  .header__mode-toggle {
+    border: 1px solid ButtonText;
+  }
+
+  .header__menu-toggle {
+    border: 1px solid ButtonText;
+  }
+
+  .header__menu-line {
+    background: ButtonText;
+  }
 }
 
 // Sun/moon icon animation — sun rotates out, moon rotates in

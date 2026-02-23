@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/bg-overlay' as *;
 @use 'common/breakpoints' as *;
 
@@ -55,6 +56,25 @@
 
   // Text on accent-1 backgrounds
   --color-on-accent: var(--wp--preset--color--base);
+}
+
+// ==========================================================================
+// High Contrast Overrides
+// ==========================================================================
+// Push semantic tokens toward stronger contrast when the user prefers it.
+// Because the entire theme reads from these custom properties, a single
+// override block cascades everywhere.
+
+@include high-contrast {
+  :root {
+    --color-text-muted: var(--wp--preset--color--grey-5);
+    --color-border: var(--wp--preset--color--grey-3);
+  }
+
+  .light-mode {
+    --color-text-muted: var(--wp--preset--color--grey-1);
+    --color-border: var(--wp--preset--color--grey-2);
+  }
 }
 
 // ==========================================================================

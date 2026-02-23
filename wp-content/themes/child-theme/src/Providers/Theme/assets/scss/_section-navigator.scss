@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 // Component-scoped custom properties for pill contrast
@@ -98,8 +99,17 @@ html {
     }
 }
 
-@media print {
-    .section-nav {
-        display: none;
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+    .section-nav__pill {
+        border: 1px solid ButtonText;
+
+        &.is-active {
+            background: Highlight;
+            color: HighlightText;
+        }
     }
 }

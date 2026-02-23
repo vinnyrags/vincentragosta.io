@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 // Accordion item numbering (01, 02, 03…)
@@ -70,6 +71,17 @@
 @include reduced-motion {
   .wp-block-accordion-heading__toggle-icon svg {
     transition: none;
+  }
+}
+
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+  .wp-block-accordion-heading__toggle-icon {
+    border: 1px solid ButtonText;
+    border-radius: 50%;
   }
 }
 

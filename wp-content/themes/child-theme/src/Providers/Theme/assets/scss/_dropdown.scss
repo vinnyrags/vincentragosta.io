@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 .dropdown {
@@ -89,5 +90,23 @@
 
     .dropdown__menu {
         transition: none;
+    }
+}
+
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+    .dropdown__menu {
+        border: 1px solid ButtonText;
+    }
+
+    .dropdown__item {
+        &:hover,
+        &:focus {
+            background: Highlight;
+            color: HighlightText;
+        }
     }
 }

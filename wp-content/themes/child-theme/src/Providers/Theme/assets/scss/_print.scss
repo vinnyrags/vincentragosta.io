@@ -1,0 +1,43 @@
+@use 'common/accessibility' as *;
+
+// ==========================================================================
+// Print Styles
+// ==========================================================================
+// Centralized print rules. Hide interactive chrome, force readable colors,
+// and surface link URLs in body content.
+
+@include print {
+  // Hide interactive chrome
+  .header,
+  .section-nav,
+  .skip-link,
+  .nav-overlay,
+  .footer__social-nav {
+    display: none;
+  }
+
+  // Force readable colors
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  // Show link URLs after body-content links
+  .site-main a[href]::after {
+    content: ' (' attr(href) ')';
+  }
+
+  // Exclude button links and anchor links from URL display
+  .site-main a[href^="#"]::after,
+  .site-main .wp-block-button__link::after,
+  .site-main .wp-element-button::after,
+  .site-main .button::after {
+    content: none;
+  }
+
+  // Prevent page breaks inside key components
+  .wp-block-accordion-item,
+  .wp-block-cover {
+    break-inside: avoid;
+  }
+}

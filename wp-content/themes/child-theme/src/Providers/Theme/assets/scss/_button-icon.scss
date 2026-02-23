@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 // ==========================================================================
@@ -103,5 +104,22 @@
   .wp-block-button__icon svg,
   .button__icon svg {
     transition: none;
+  }
+}
+
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+  .wp-block-button__link,
+  .wp-element-button,
+  .button {
+    border: 1px solid ButtonText;
+  }
+
+  .wp-block-button__icon.arrow::before,
+  .button__icon.arrow::before {
+    forced-color-adjust: none;
   }
 }

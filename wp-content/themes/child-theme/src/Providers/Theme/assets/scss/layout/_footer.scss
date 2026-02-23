@@ -1,3 +1,4 @@
+@use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
 // ==========================================================================
@@ -225,5 +226,15 @@
     &:hover {
       transform: none;
     }
+  }
+}
+
+// ==========================================================================
+// Forced Colors (Windows High Contrast Mode)
+// ==========================================================================
+
+@include forced-colors {
+  .footer__social-link {
+    border: 1px solid ButtonText;
   }
 }
