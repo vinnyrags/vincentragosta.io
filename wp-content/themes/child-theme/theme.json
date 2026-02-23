@@ -157,6 +157,11 @@
     }
   },
   "styles": {
+    "spacing": {
+      "padding": {
+        "top": "0"
+      }
+    },
     "color": {
       "background": "var:preset|color|contrast",
       "text": "var:preset|color|base"
