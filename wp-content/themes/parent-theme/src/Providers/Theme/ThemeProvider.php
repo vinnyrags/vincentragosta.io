@@ -12,6 +12,8 @@ use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
+use ParentTheme\Providers\Theme\Features\ScrollReveal;
+use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use ParentTheme\Services\IconServiceFactory;
 use Timber\Attachment;
 use Twig\Environment;
@@ -43,6 +45,8 @@ class ThemeProvider extends Provider
         DisableComments::class,
         DisablePosts::class,
         EnableSvgUploads::class,
+        ScrollReveal::class => false,
+        WpFormsFloatingLabels::class => false,
     ];
 
     /**
