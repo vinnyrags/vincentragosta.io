@@ -41,25 +41,13 @@ const isWatch = process.argv.includes('--watch');
  * Load optional theme-specific config file.
  *
  * If scripts/build-providers.config.js exists in the theme root, it may export:
- *   - sassImports: string[] — absolute paths to SCSS files prepended to block SCSS
  *   - sassLoadPaths: string[] — additional load paths for sass compiler
  */
-let config = { sassImports: [], sassLoadPaths: [] };
+let config = { sassLoadPaths: [] };
 const configPath = path.join(THEME_ROOT, 'scripts', 'build-providers.config.js');
 if (fs.existsSync(configPath)) {
     config = { ...config, ...require(configPath) };
 }
-
-// Cache sass imports once at startup — config is static for the entire build
-const cachedSassImports = (() => {
-    if (config.sassImports.length === 0) return '';
-
-    const imports = config.sassImports
-        .filter(p => fs.existsSync(p))
-        .map(p => `@use "${p.replace(/\\/g, '/')}" as *;`);
-
-    return imports.length > 0 ? imports.join('\n') + '\n' : '';
-})();
 
 /**
  * WordPress externals for block editor scripts
@@ -291,20 +279,15 @@ function discoverProviders() {
 }
 
 /**
- * Compile a single SCSS file — uses imports for block SCSS when config provides them,
- * plain compilation otherwise.
+ * Compile a single SCSS file
  */
-async function compileSingleScss(inputPath, outputPath, useImports, logger) {
-    if (useImports) {
-        await compileSassWithImports(inputPath, outputPath);
-    } else {
-        const result = await sass.compileAsync(inputPath, {
-            style: 'expanded',
-            sourceMap: false,
-            loadPaths: config.sassLoadPaths,
-        });
-        fs.writeFileSync(outputPath, result.css);
-    }
+async function compileSingleScss(inputPath, outputPath) {
+    const result = await sass.compileAsync(inputPath, {
+        style: 'expanded',
+        sourceMap: false,
+        loadPaths: config.sassLoadPaths,
+    });
+    fs.writeFileSync(outputPath, result.css);
 }
 
 /**
@@ -314,7 +297,7 @@ async function compileScss(provider, logger) {
     if (!provider.scss) return true;
 
     try {
-        await compileSingleScss(provider.scss.inputPath, provider.scss.outputPath, false, logger);
+        await compileSingleScss(provider.scss.inputPath, provider.scss.outputPath);
         logger.log(`  SCSS: ${path.relative(THEME_ROOT, provider.scss.outputPath)}`);
         return true;
     } catch (error) {
@@ -333,7 +316,7 @@ async function compileFeatureScss(provider, logger) {
 
     for (const feature of provider.featureScss) {
         try {
-            await compileSingleScss(feature.inputPath, feature.outputPath, false, logger);
+            await compileSingleScss(feature.inputPath, feature.outputPath);
             logger.log(`  Feature SCSS: ${path.relative(THEME_ROOT, feature.outputPath)}`);
         } catch (error) {
             logger.error(`  Feature SCSS Error (${path.basename(feature.inputPath)}): ${error.message}`);
@@ -457,31 +440,14 @@ async function compileBlockViewScript(block, logger) {
 }
 
 /**
- * Compile SCSS with config-driven imports and load paths
- */
-async function compileSassWithImports(inputPath, outputPath) {
-    const source = cachedSassImports + fs.readFileSync(inputPath, 'utf8');
-
-    const result = await sass.compileStringAsync(source, {
-        url: new URL('file://' + inputPath),
-        style: 'expanded',
-        sourceMap: false,
-        loadPaths: [path.dirname(inputPath), ...config.sassLoadPaths],
-    });
-
-    fs.writeFileSync(outputPath, result.css);
-}
-
-/**
  * Compile a block's styles
  */
 async function compileBlockStyles(block, logger) {
-    const hasSassConfig = config.sassImports.length > 0;
     const tasks = [];
 
     if (block.frontendStyle) {
         tasks.push(
-            compileSingleScss(block.frontendStyle.inputPath, block.frontendStyle.outputPath, hasSassConfig, logger)
+            compileSingleScss(block.frontendStyle.inputPath, block.frontendStyle.outputPath)
                 .then(() => logger.log(`  Block Style: ${path.relative(THEME_ROOT, block.frontendStyle.outputPath)}`))
                 .catch(error => {
                     logger.error(`  Block Style Error (${block.name}): ${error.message}`);
@@ -492,7 +458,7 @@ async function compileBlockStyles(block, logger) {
 
     if (block.editorStyle) {
         tasks.push(
-            compileSingleScss(block.editorStyle.inputPath, block.editorStyle.outputPath, hasSassConfig, logger)
+            compileSingleScss(block.editorStyle.inputPath, block.editorStyle.outputPath)
                 .then(() => logger.log(`  Block Editor Style: ${path.relative(THEME_ROOT, block.editorStyle.outputPath)}`))
                 .catch(error => {
                     logger.error(`  Block Editor Style Error (${block.name}): ${error.message}`);

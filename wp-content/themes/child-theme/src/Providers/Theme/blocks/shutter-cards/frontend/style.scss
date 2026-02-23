@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 .wp-block-child-theme-shutter-cards {
   container: shutter-cards / inline-size;
 }

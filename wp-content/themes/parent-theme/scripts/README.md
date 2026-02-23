@@ -55,23 +55,19 @@ src/Providers/{ProviderName}/
 
 ## Config File
 
-Child themes can create `scripts/build-providers.config.js` to customize block SCSS compilation:
+Child themes can create `scripts/build-providers.config.js` to customize SCSS compilation:
 
 ```js
 const path = require('path');
 const parentScss = path.resolve(__dirname, '..', '..', 'parent-theme', 'src', 'Providers', 'Theme', 'assets', 'scss');
 
 module.exports = {
-    // SCSS files prepended to block stylesheets via @use
-    sassImports: [
-        path.join(parentScss, 'common', '_breakpoints.scss'),
-    ],
     // Additional load paths for the sass compiler
     sassLoadPaths: [parentScss],
 };
 ```
 
-If no config file exists (e.g. in the parent theme), block SCSS builds without any prepended imports.
+This allows SCSS files to resolve cross-theme imports like `@use 'common/breakpoints' as *;`. Every SCSS file that uses shared mixins must include the explicit `@use` statement.
 
 ## Features
 

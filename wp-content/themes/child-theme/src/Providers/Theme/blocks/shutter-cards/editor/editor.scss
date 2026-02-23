@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 // Editor styles for shutter-cards container
 // Mirrors frontend grid layout for accurate preview
 // Uses :has() to count cards since .block-list-appender breaks nth-last-child selectors

@@ -169,7 +169,7 @@ The child theme runs the same script: `node ../parent-theme/scripts/build-provid
 - Block frontend style: `blocks/{name}/frontend/style.scss` → `dist/css/{name}.css`
 - Block editor style: `blocks/{name}/editor/editor.scss` → `dist/css/{name}-editor.css`
 
-**Theme-specific SCSS config** is optional via `scripts/build-providers.config.js`, which can export `sassImports` (prepended to block SCSS) and `sassLoadPaths` (extra directories for the Sass compiler). The child uses this to share the parent's breakpoints.
+**Theme-specific SCSS config** is optional via `scripts/build-providers.config.js`, which can export `sassLoadPaths` (extra directories for the Sass compiler). The child uses this so block and provider SCSS files can resolve `@use 'common/breakpoints' as *;` against the parent theme's SCSS directory. Every SCSS file that uses breakpoint mixins must include the explicit `@use` — there is no auto-injection.
 
 ## Commands
 
