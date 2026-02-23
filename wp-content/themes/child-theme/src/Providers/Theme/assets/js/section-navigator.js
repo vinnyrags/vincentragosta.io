@@ -77,4 +77,18 @@
     );
 
     sections.forEach((section) => observer.observe(section));
+
+    // Hide nav when footer enters viewport to prevent overlap
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        const footerObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    nav.classList.toggle('is-hidden', entry.isIntersecting);
+                });
+            },
+            { threshold: 0 }
+        );
+        footerObserver.observe(footer);
+    }
 })();

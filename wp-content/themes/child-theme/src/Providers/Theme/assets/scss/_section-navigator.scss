@@ -35,6 +35,13 @@ html {
         display: block;
     }
 
+    transition: opacity 0.3s ease;
+
+    &.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
     &__list {
         display: flex;
         gap: var(--wp--preset--spacing--20);
@@ -78,6 +85,10 @@ html {
 }
 
 @include reduced-motion {
+    .section-nav {
+        transition: none;
+    }
+
     .section-nav__list {
         transition: none;
     }
