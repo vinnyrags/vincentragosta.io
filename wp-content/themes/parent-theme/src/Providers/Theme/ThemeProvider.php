@@ -141,19 +141,6 @@ class ThemeProvider extends Provider
             );
         }
 
-        // WPForms float labels — companion JS for _wpforms.scss :placeholder-shown selectors.
-        // Enqueued from parent dist since AssetManager resolves from active (child) theme.
-        $floatLabelsPath = get_template_directory() . '/dist/js/theme/wpforms-float-labels.js';
-        if (file_exists($floatLabelsPath)) {
-            wp_enqueue_script(
-                $this->handlePrefix . '-wpforms-float-labels',
-                get_template_directory_uri() . '/dist/js/theme/wpforms-float-labels.js',
-                [],
-                filemtime($floatLabelsPath),
-                true
-            );
-        }
-
         $this->enqueueScript($this->handlePrefix . '-frontend-js', 'frontend.js');
     }
 
@@ -179,9 +166,9 @@ class ThemeProvider extends Provider
                 ['wp-edit-blocks', $this->handlePrefix . '-blocks-style']
             );
 
-            // Load parent compiled CSS in the editor so WPForms and form-field
-            // styles apply. Uses get_template_directory() directly because
-            // AssetManager resolves from the child theme (get_stylesheet_directory).
+            // Load parent compiled CSS in the editor so shared styles (form
+            // resets, layout, etc.) apply. Uses get_template_directory()
+            // directly because AssetManager resolves from the child theme.
             $parentDistCss = get_template_directory() . '/dist/css/theme.css';
             if (file_exists($parentDistCss)) {
                 wp_enqueue_style(

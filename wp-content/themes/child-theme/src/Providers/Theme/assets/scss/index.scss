@@ -3,13 +3,23 @@
 @use 'focus';
 @use 'button-icon';
 
+// Common (opinionated overrides of parent resets)
+@use 'common/form-fields';
+
+// Utilities
+@use 'utilities/text';
+
 // Elements
 @use 'elements/block-text';
+@use 'elements/headings';
 
 // Layout
 @use 'layout/footer';
 @use 'layout/header';
 @use 'layout/nav-overlay';
+
+// Vendor
+@use 'vendor/wpforms';
 
 // Components
 @use 'dropdown';

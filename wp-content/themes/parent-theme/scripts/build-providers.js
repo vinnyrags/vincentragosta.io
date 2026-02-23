@@ -10,6 +10,9 @@
  *   SCSS: src/Providers/[name]/assets/scss/index.scss => dist/css/[provider-name].css
  *   JS:   src/Providers/[name]/assets/js/*.js => dist/js/[provider-name]/*.js
  *
+ * Feature Assets:
+ *   SCSS: src/Providers/[name]/assets/scss/features/*.scss => dist/css/features/*.css
+ *
  * Block Assets:
  *   Editor: src/Providers/[name]/blocks/[block]/editor/index.js => dist/js/[block-name].js
  *   View:   src/Providers/[name]/blocks/[block]/frontend/view.js => dist/js/[block-name]-view.js
@@ -186,6 +189,7 @@ function discoverProviders() {
             providerPath,
             assetsPath,
             scss: null,
+            featureScss: [],
             jsFiles: [],
             blocks: [],
         };
@@ -196,6 +200,17 @@ function discoverProviders() {
                 inputPath: scssIndexPath,
                 outputPath: path.join(CSS_OUTPUT_DIR, `${kebabName}.css`),
             };
+        }
+
+        // Check for feature SCSS files (only if assets directory exists)
+        const featuresDir = path.join(assetsPath, 'scss', 'features');
+        if (fs.existsSync(assetsPath) && fs.existsSync(featuresDir)) {
+            const featureFiles = fs.readdirSync(featuresDir).filter(f => f.endsWith('.scss'));
+            const featureOutputDir = path.join(CSS_OUTPUT_DIR, 'features');
+            provider.featureScss = featureFiles.map(filename => ({
+                inputPath: path.join(featuresDir, filename),
+                outputPath: path.join(featureOutputDir, filename.replace('.scss', '.css')),
+            }));
         }
 
         // Check for JS files (only if assets directory exists)
@@ -210,8 +225,8 @@ function discoverProviders() {
         // Discover blocks within this provider
         provider.blocks = discoverProviderBlocks(providerPath, entry.name);
 
-        // Only add if provider has assets or blocks
-        if (provider.scss || provider.jsFiles.length > 0 || provider.blocks.length > 0) {
+        // Only add if provider has assets, features, or blocks
+        if (provider.scss || provider.featureScss.length > 0 || provider.jsFiles.length > 0 || provider.blocks.length > 0) {
             providers.push(provider);
         }
     }
@@ -241,6 +256,36 @@ function compileScss(provider) {
         console.error(`  SCSS Error: ${error.message}`);
         return false;
     }
+}
+
+/**
+ * Compile a provider's feature SCSS files
+ */
+function compileFeatureScss(provider) {
+    if (provider.featureScss.length === 0) return true;
+
+    const featureOutputDir = path.join(CSS_OUTPUT_DIR, 'features');
+    ensureDir(featureOutputDir);
+
+    let allSuccess = true;
+
+    for (const feature of provider.featureScss) {
+        try {
+            const result = sass.compile(feature.inputPath, {
+                style: 'expanded',
+                sourceMap: false,
+                loadPaths: config.sassLoadPaths,
+            });
+
+            fs.writeFileSync(feature.outputPath, result.css);
+            console.log(`  Feature SCSS: ${path.relative(THEME_ROOT, feature.outputPath)}`);
+        } catch (error) {
+            console.error(`  Feature SCSS Error (${path.basename(feature.inputPath)}): ${error.message}`);
+            allSuccess = false;
+        }
+    }
+
+    return allSuccess;
 }
 
 /**
@@ -494,10 +539,11 @@ async function compileProvider(provider) {
     console.log(`\n${provider.name}:`);
 
     const scssSuccess = compileScss(provider);
+    const featureScssSuccess = compileFeatureScss(provider);
     const jsSuccess = await compileJs(provider);
     const blocksSuccess = await compileBlocks(provider);
 
-    return scssSuccess && jsSuccess && blocksSuccess;
+    return scssSuccess && featureScssSuccess && jsSuccess && blocksSuccess;
 }
 
 /**
@@ -551,7 +597,10 @@ async function watchProviders() {
             fs.watch(provider.assetsPath, { recursive: true }, async (eventType, filename) => {
                 if (!filename) return;
 
-                if (filename.endsWith('.scss')) {
+                if (filename.endsWith('.scss') && filename.includes(path.join('scss', 'features'))) {
+                    console.log(`\nFeature SCSS change in ${provider.name}...`);
+                    compileFeatureScss(provider);
+                } else if (filename.endsWith('.scss')) {
                     console.log(`\nSCSS change in ${provider.name}...`);
                     compileScss(provider);
                 } else if (filename.endsWith('.js')) {

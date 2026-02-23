@@ -1,44 +1,16 @@
 @use '../common/breakpoints' as *;
 
-// Field container
+// ==========================================================================
+// WPForms — sensible defaults
+// ==========================================================================
+// Generic structural styles that any WPForms integration needs.
+// Opinionated visual styling (error colors, floating label layout, accent
+// colors) lives in the child theme or in the WpFormsFloatingLabels Feature.
+// ==========================================================================
+
+// Field spacing
 .wpforms-field {
-  position: relative;
-  padding-top: 1.25rem;
   margin-bottom: var(--wp--preset--spacing--30);
-}
-
-// Label — placeholder state
-.wpforms-field-label {
-  position: absolute;
-  left: 0;
-  top: 1.25rem;
-  transform: translateY(var(--wp--preset--spacing--20));
-  font-size: var(--wp--preset--font-size--20);
-  color: var(--color-text-muted);
-  pointer-events: none;
-  transform-origin: left top;
-  transition: transform 0.2s ease, font-size 0.2s ease, color 0.2s ease;
-}
-
-// Label — active state (focused or has value)
-.wpforms-field:focus-within .wpforms-field-label,
-.wpforms-field:has(input:not(:placeholder-shown)) .wpforms-field-label,
-.wpforms-field:has(textarea:not(:placeholder-shown)) .wpforms-field-label {
-  transform: translateY(-1.25rem);
-  font-size: var(--wp--preset--font-size--10);
-  color: var(--wp--preset--color--accent-1);
-}
-
-// Editor: raise labels when form is disabled (float-labels JS doesn't run in editor)
-fieldset[disabled] .wpforms-field-label {
-  transform: translateY(-1.25rem);
-  font-size: var(--wp--preset--font-size--10);
-}
-
-// Has value but not focused — muted color
-.wpforms-field:has(input:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label,
-.wpforms-field:has(textarea:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label {
-  color: var(--color-text-muted);
 }
 
 // Full width inputs (override WPForms .wpforms-field-medium)
@@ -52,29 +24,9 @@ fieldset[disabled] .wpforms-field-label {
   resize: none;
 }
 
-// Required asterisk
-.wpforms-required-label {
-  color: var(--wp--preset--color--accent-1);
-}
-
 // Submit container spacing
 .wpforms-submit-container {
   margin-top: var(--wp--preset--spacing--40);
-}
-
-// Error states
-.wpforms-field.wpforms-has-error {
-  --color-error: #e74c3c;
-
-  input, textarea { border-bottom-color: var(--color-error); }
-  .wpforms-field-label { color: var(--color-error); }
-}
-
-label.wpforms-error {
-  display: block;
-  margin-top: var(--wp--preset--spacing--20);
-  font-size: var(--wp--preset--font-size--10);
-  color: var(--color-error, #e74c3c);
 }
 
 // Honeypot exclusion

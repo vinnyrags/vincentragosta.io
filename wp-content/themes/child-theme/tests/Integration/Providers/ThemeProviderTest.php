@@ -17,6 +17,8 @@ use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
+use ParentTheme\Providers\Theme\Features\ScrollReveal;
+use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -71,7 +73,11 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(DisableComments::class, $enabled);
         $this->assertContains(DisablePosts::class, $enabled);
         $this->assertContains(EnableSvgUploads::class, $enabled);
-        $this->assertCount(4, $enabled);
+
+        // Child theme opt-in features
+        $this->assertContains(ScrollReveal::class, $enabled);
+        $this->assertContains(WpFormsFloatingLabels::class, $enabled);
+        $this->assertCount(6, $enabled);
 
         // Child hook classes should NOT be in features
         $this->assertNotContains(ButtonIconEnhancer::class, $enabled);

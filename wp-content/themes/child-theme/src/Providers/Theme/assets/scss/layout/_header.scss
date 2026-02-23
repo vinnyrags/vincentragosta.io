@@ -1,5 +1,179 @@
+@use 'common/breakpoints' as *;
+
+// Header CSS custom properties for theme switching
+:root {
+  --header-height: 72px; // Fallback, JS will calculate actual value
+  --header-bg: var(--wp--preset--color--contrast);
+  --header-text: var(--wp--preset--color--base);
+  --header-border: var(--wp--preset--color--grey-2);
+  --header-toggle-bg: var(--wp--preset--color--base);
+  --header-toggle-icon: var(--wp--preset--color--contrast);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: var(--wp--style--global--content-size, 1440px);
+    margin-inline: auto;
+    padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--50);
+  }
+
+  // Mode toggle button (left)
+  &__mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--header-text);
+    border: 1px solid var(--wp--preset--color--grey-4);
+    border-radius: 50%;
+    width: var(--wp--custom--icon-size--lg);
+    height: var(--wp--custom--icon-size--lg);
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      border-color: var(--header-text);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: 2px;
+    }
+  }
+
+  // Mode icon container — relative so absolute-positioned icons stack
+  &__mode-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--wp--custom--icon-size--sm);
+    height: var(--wp--custom--icon-size--sm);
+  }
+
+  // Mode icons — both always in DOM, crossfade via opacity + rotation
+  &__mode-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+
+    svg {
+      width: var(--wp--custom--icon-size--sm);
+      height: var(--wp--custom--icon-size--sm);
+    }
+
+    // In dark mode (default): sun visible, moon hidden
+    &--sun {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+
+    &--moon {
+      opacity: 0;
+      transform: rotate(-90deg);
+    }
+  }
+
+  // Logo (center)
+  &__logo {
+    margin: 0;
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+
+    a {
+      color: var(--header-text);
+      text-decoration: none;
+      transition: opacity 0.2s ease, color 0.3s ease;
+
+      &:hover {
+        opacity: 0.7;
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 4px;
+      }
+    }
+  }
+
+  // Menu toggle / hamburger (right)
+  &__menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--header-toggle-bg);
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    width: var(--wp--custom--icon-size--lg);
+    height: var(--wp--custom--icon-size--lg);
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var(--wp--preset--color--accent-1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: 2px;
+    }
+  }
+
+  &__menu-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--header-toggle-icon);
+    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+  }
+}
+
+// Hamburger to X animation
+.header__menu-toggle[aria-expanded="true"] {
+  .header__menu-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+  .header__menu-line:nth-child(2) {
+    opacity: 0;
+  }
+  .header__menu-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+}
+
+// Reduced motion: disable transitions for users who prefer reduced motion
+@include reduced-motion {
+  .header,
+  .header__mode-toggle,
+  .header__mode-icon,
+  .header__logo a,
+  .header__menu-toggle,
+  .header__menu-line {
+    transition: none;
+  }
+}
+
 // Header light-mode overrides
-// Uses html.light-mode (0,1,1) to beat the parent theme's :root (0,1,0)
+// Uses html.light-mode (0,1,1) to beat :root (0,1,0)
 // regardless of stylesheet load order.
 html.light-mode {
   --header-bg: var(--wp--preset--color--base);

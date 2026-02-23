@@ -11,6 +11,8 @@ use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
+use ParentTheme\Providers\Theme\Features\ScrollReveal;
+use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
 use ParentTheme\Services\IconServiceFactory;
 
@@ -23,6 +25,17 @@ use ParentTheme\Services\IconServiceFactory;
  */
 class ThemeProvider extends BaseThemeProvider
 {
+    /**
+     * Features to register (toggleable capabilities).
+     *
+     * Inherits parent features automatically. Add parent opt-in features here
+     * or opt out of parent features via ClassName::class => false.
+     */
+    protected array $features = [
+        ScrollReveal::class,
+        WpFormsFloatingLabels::class,
+    ];
+
     /**
      * Hooks to register (always-active structural behavior).
      *

@@ -1,5 +1,5 @@
 // ==========================================================================
-// Headings — generic reset
+// Headings — site-specific styling
 // ==========================================================================
 
 h1,
@@ -8,6 +8,8 @@ h3,
 h4,
 h5,
 h6 {
-  margin-top: 0;
-  margin-bottom: 0;
+  strong, b {
+    font-family: var(--wp--preset--font-family--roobert);
+    font-weight: 700;
+  }
 }

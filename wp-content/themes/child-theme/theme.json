@@ -157,6 +157,10 @@
     }
   },
   "styles": {
+    "color": {
+      "background": "var:preset|color|contrast",
+      "text": "var:preset|color|base"
+    },
     "typography": {
       "fontFamily": "var:preset|font-family|roobert"
     },
@@ -176,9 +180,39 @@
       }
     },
     "elements": {
+      "button": {
+        "color": {
+          "background": "var:preset|color|base",
+          "text": "var:preset|color|contrast"
+        },
+        ":focus": {
+          "outline": {
+            "color": "var:preset|color|accent-1"
+          }
+        },
+        ":hover": {
+          "color": {
+            "background": "var:preset|color|accent-1",
+            "text": "var:preset|color|contrast"
+          }
+        }
+      },
       "heading": {
         "typography": {
           "fontFamily": "var:preset|font-family|reckless-neue"
+        },
+        "color": {
+          "text": "var:preset|color|base"
+        }
+      },
+      "link": {
+        "color": {
+          "text": "currentColor"
+        },
+        ":hover": {
+          "color": {
+            "text": "var:preset|color|accent-1"
+          }
         }
       }
     }
