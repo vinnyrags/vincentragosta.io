@@ -20,3 +20,4 @@
 - do a once over parent and child theme css and confirm we are not hard coding anything
 - evaluate anywhere in child theme and parent theme where we are using margin-bottom, we need to fix that to gap/margin-block-start
 - can build-providers be optimized in anyway?
+- whats in build-providers.config.js, is it necessary?
