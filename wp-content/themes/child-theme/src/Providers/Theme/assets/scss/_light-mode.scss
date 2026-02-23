@@ -45,7 +45,7 @@
 
   // Surface colors (cards, panels)
   --color-surface: var(--wp--preset--color--grey-4);
-  --color-surface-text: var(--wp--preset--color--contrast);
+  --color-surface-text: var(--wp--preset--color--base);
 
   // Button colors (inverted from bg/text)
   --color-button-bg: var(--wp--preset--color--contrast);
@@ -90,9 +90,9 @@
     color: var(--color-text);
   }
 
-  // Paragraphs and body text
-  // Note: Buttons and their children handle their own colors via component styles
-  p, li {
+  // Paragraphs and body text — :where() zeros out selector specificity
+  // so any BEM component class (0,1,0) can override without escalation.
+  :where(p, li) {
     color: inherit;
   }
 

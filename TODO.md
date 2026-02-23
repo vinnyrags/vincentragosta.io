@@ -17,5 +17,4 @@
 - make sure we are not blurring the line with parent-theme responsibility, the parent theme should not hold too many opinions, if you were to do a deep dive over the parent them frontend and backend, are we violating this responsibility principle? can we enter plan mode and work out solutions to the various offenders?
 - review theme.json in parent/child theme, make sure it makes sense (do this manually)
 - reevaluate if we are setting features as false (as a default state) correctly in parent theme
-- fix light mode dropdown window state, would not pass contrast accessibility test, need white text
 - right now when we hit the bottom of the page document, the footer social icons get blocked by our section nav menu, maybe we have the section-nav fdade out when we hit the bottom of the document, or perhaps some scroll logic when the footer comes into view we fade out the section nav, I am not sure of the best approach for this, lets enter plan mode, do a deep dive on the code base and create an efficient and effective implementation plan for this.
