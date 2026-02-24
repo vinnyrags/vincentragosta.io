@@ -37,4 +37,19 @@ if [ -n "$STAGED_PHP" ]; then
     fi
 fi
 
+# Get list of staged JS files in child-theme source (use || true to prevent grep from failing)
+STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep 'wp-content/themes/child-theme/src/.*\.js$' || true)
+
+if [ -n "$STAGED_JS" ]; then
+    echo "Running child-theme JS tests..."
+    cd "$REPO_ROOT/wp-content/themes/child-theme" && npm run test:js
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "Child-theme JS tests failed. Commit aborted."
+        echo "Fix the failing tests or use --no-verify to bypass."
+        exit 1
+    fi
+    echo "Child-theme JS tests passed."
+fi
+
 exit 0

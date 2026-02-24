@@ -7,5 +7,5 @@
 
 ## LOW PRIORITY
 - consider dynamic search on project archive, search input bar to the left of the filters
--if you were to fully evaluate my current build process against 2026 best wordpress build process, what would you recommend i change or update to become more in line with those standards?
+- if you were to fully evaluate my current build process against 2026 best wordpress build process, what would you recommend i change or update to become more in line with those standards?
 - consider adding slightly larger row gap in projects block, column gap is good

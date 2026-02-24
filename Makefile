@@ -4,7 +4,7 @@
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
-.PHONY: help start stop install install-parent install-child build watch clean autoload test update
+.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update
 
 # Default target
 help:
@@ -105,4 +105,15 @@ test:
 	@echo "Running child theme tests..."
 	cd $(CHILD_THEME_DIR) && composer test
 	@echo ""
+	@echo "Running parent theme JS tests..."
+	cd $(PARENT_THEME_DIR) && npm run test:js
+	@echo ""
+	@echo "Running child theme JS tests..."
+	cd $(CHILD_THEME_DIR) && npm run test:js
+	@echo ""
 	@echo "✓ All tests complete"
+
+# Run JS tests only
+test-js:
+	cd $(PARENT_THEME_DIR) && npm run test:js
+	cd $(CHILD_THEME_DIR) && npm run test:js

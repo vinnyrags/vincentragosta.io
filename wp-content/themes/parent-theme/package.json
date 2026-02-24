@@ -6,10 +6,16 @@
     "build-providers": "node scripts/build-providers.js",
     "watch-providers": "node scripts/build-providers.js --watch",
     "build": "npm run build-providers",
-    "start": "npm run watch-providers"
+    "start": "npm run watch-providers",
+    "test:js": "vitest run",
+    "test:js:watch": "vitest"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "esbuild": "^0.25.1",
-    "sass": "^1.86.0"
+    "jsdom": "^25.0.1",
+    "sass": "^1.86.0",
+    "vitest": "^2.1.9"
   }
 }

@@ -5,13 +5,13 @@
  * - Dynamic header height calculation
  */
 
-const STORAGE_KEY = 'theme-mode';
-const LIGHT_MODE_CLASS = 'light-mode';
+export const STORAGE_KEY = 'theme-mode';
+export const LIGHT_MODE_CLASS = 'light-mode';
 
 /**
  * Calculate and set header height as CSS custom property
  */
-function setHeaderHeight() {
+export function setHeaderHeight() {
     const header = document.querySelector('.header');
     if (!header) return;
 
@@ -22,7 +22,7 @@ function setHeaderHeight() {
 /**
  * Initialize header height calculation with resize handling
  */
-function initHeaderHeight() {
+export function initHeaderHeight() {
     setHeaderHeight();
 
     // Recalculate on resize with debounce
@@ -37,7 +37,7 @@ function initHeaderHeight() {
  * Check if user prefers light mode (from localStorage or system preference)
  * @returns {boolean}
  */
-function prefersLightMode() {
+export function prefersLightMode() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         return saved === 'light';
@@ -48,7 +48,7 @@ function prefersLightMode() {
 /**
  * Initialize mode toggle functionality
  */
-function initModeToggle() {
+export function initModeToggle() {
     const modeToggle = document.querySelector('.header__mode-toggle');
     if (!modeToggle) return;
 
@@ -80,7 +80,7 @@ function initModeToggle() {
  * @param {HTMLElement} toggle - The toggle button element
  * @param {boolean} isLightMode - Whether light mode is active
  */
-function updateModeToggleState(toggle, isLightMode) {
+export function updateModeToggleState(toggle, isLightMode) {
     toggle.setAttribute('aria-pressed', isLightMode ? 'true' : 'false');
     toggle.setAttribute(
         'aria-label',
@@ -93,7 +93,7 @@ function updateModeToggleState(toggle, isLightMode) {
  * @param {HTMLElement} container
  * @returns {HTMLElement[]}
  */
-function getFocusableElements(container) {
+export function getFocusableElements(container) {
     return Array.from(
         container.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
     );
@@ -105,7 +105,7 @@ function getFocusableElements(container) {
  * @param {HTMLElement} overlay - The nav overlay element
  * @param {boolean} isOpen - Whether to open or close
  */
-function toggleOverlay(toggle, overlay, isOpen) {
+export function toggleOverlay(toggle, overlay, isOpen) {
     updateMenuToggleState(toggle, isOpen);
 
     if (isOpen) {
@@ -139,7 +139,7 @@ function toggleOverlay(toggle, overlay, isOpen) {
 /**
  * Initialize hamburger menu toggle functionality
  */
-function initMenuToggle() {
+export function initMenuToggle() {
     const menuToggle = document.querySelector('.header__menu-toggle');
     const overlay = document.getElementById('nav-overlay');
     if (!menuToggle || !overlay) return;
@@ -196,7 +196,7 @@ function initMenuToggle() {
  * @param {HTMLElement} toggle - The toggle button element
  * @param {boolean} isOpen - Whether the menu is open
  */
-function updateMenuToggleState(toggle, isOpen) {
+export function updateMenuToggleState(toggle, isOpen) {
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     toggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
 }
@@ -204,7 +204,7 @@ function updateMenuToggleState(toggle, isOpen) {
 /**
  * Initialize all header functionality
  */
-function initHeader() {
+export function initHeader() {
     initHeaderHeight();
     initModeToggle();
     initMenuToggle();
