@@ -9,7 +9,8 @@
 
 .projects-grid {
   display: grid;
-  gap: var(--wp--preset--spacing--40);
+  column-gap: var(--wp--preset--spacing--40);
+  row-gap: var(--wp--preset--spacing--50);
   grid-template-columns: 1fr;
 
   > p {
