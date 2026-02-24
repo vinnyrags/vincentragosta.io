@@ -108,7 +108,6 @@ protected array $hooks = [
 ```
 src/Providers/{Name}/
 ├── {Name}Provider.php     # Provider class
-├── README.md              # Documents the provider
 ├── Features/              # Toggleable Feature classes (opt-out via => false)
 │   ├── DisableComments.php
 │   └── EnableSvgUploads.php
@@ -140,7 +139,7 @@ src/Providers/{Name}/
 - `dist/` is git-ignored and rebuilt via `npm run build`
 - Tests mirror source structure: `tests/Unit/Providers/Support/{Asset,Block,Feature}/`
 - PSR-4 autoloading: namespace path matches directory path exactly
-- Support classes live at `src/Providers/Support/{Asset,Block,Feature}/` — each has a Manager class and README
+- Support classes live at `src/Providers/Support/{Asset,Block,Feature}/` — each has a Manager class
 
 ## Block Architecture
 
@@ -175,10 +174,13 @@ From the project root:
 
 | Command | What it does |
 |---------|-------------|
+| `make start` | Start DDEV, restore latest DB snapshot, install deps, build assets |
+| `make stop` | Snapshot database and stop DDEV |
 | `make install` | Install composer + npm dependencies for both themes |
 | `make build` | Build child theme assets (runs parent build first) |
 | `make watch` | Start watch mode for development |
 | `make test` | Run PHPUnit test suite for both themes |
+| `make update` | Update composer dependencies (root + both themes) |
 | `make clean` | Remove vendor, node_modules, and dist from both themes |
 | `make autoload` | Regenerate composer autoloaders for both themes |
 
