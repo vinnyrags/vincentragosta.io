@@ -20,5 +20,5 @@ $context['inner_blocks'] = $rendered_inner_blocks;
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';
-Timber::render(__DIR__ . '/../templates/container.twig', $context);
+Timber::render(__DIR__ . '/container.twig', $context);
 echo '</div>';

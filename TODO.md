@@ -13,6 +13,4 @@
 
 
 
-- is there anything in theme provider that could maybe be its own provider?
-- the current setup for providers/blocks block directory doesnt quite make sense, we have frontend and templates, well templates is considered frontend-- i know what I was trying to do but i think I am outgrowing it, lets remove the directories and go back to all of the files dumped in the block directory (effectively removing frontend and templates directories within the block directory). lets build out an efficient and effective implementation plan to address this work.
 - consider moving projects archive to CMS? what are pros and cons to this-- lets consider current setup, and community best practices.

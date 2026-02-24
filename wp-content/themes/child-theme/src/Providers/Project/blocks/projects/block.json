@@ -18,6 +18,6 @@
   "textdomain": "child-theme",
   "acf": {
     "mode": "preview",
-    "renderTemplate": "frontend/render.php"
+    "renderTemplate": "render.php"
   }
 }

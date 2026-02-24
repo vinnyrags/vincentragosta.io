@@ -23,13 +23,13 @@ shutter-cards (container)
 | File | Purpose |
 |------|---------|
 | `block.json` | Block metadata, attributes, and configuration |
+| `render.php` | Server-side rendering via Timber/Twig |
+| `style.scss` | Frontend styles with responsive grid layout |
+| `view.js` | Frontend JavaScript for interactivity |
+| `container.twig` | Twig template for the container markup |
 | `editor/index.js` | Block registration for the editor |
 | `editor/edit.js` | Editor component with InnerBlocks |
 | `editor/editor.scss` | Editor-specific styles (grid layout matching frontend) |
-| `frontend/render.php` | Server-side rendering via Timber/Twig |
-| `frontend/style.scss` | Frontend styles with responsive grid layout |
-| `frontend/view.js` | Frontend JavaScript for interactivity |
-| `templates/container.twig` | Twig template for the container markup |
 
 ### Grid Layout
 

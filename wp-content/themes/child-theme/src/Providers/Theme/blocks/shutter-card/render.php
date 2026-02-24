@@ -18,5 +18,5 @@ $context['card_index'] = esc_html($attributes['cardIndex'] ?? '00');
 $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';
-Timber::render(__DIR__ . '/../templates/card.twig', $context);
+Timber::render(__DIR__ . '/card.twig', $context);
 echo '</div>';

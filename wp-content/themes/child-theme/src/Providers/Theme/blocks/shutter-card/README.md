@@ -27,11 +27,11 @@ Each Shutter Card represents a single content item with a title, subtitle, descr
 | File | Purpose |
 |------|---------|
 | `block.json` | Block metadata and attributes |
+| `render.php` | Server-side rendering |
+| `style.scss` | Card styles (shared by editor and frontend) |
+| `card.twig` | Twig template for card markup |
 | `editor/index.js` | Block registration |
 | `editor/edit.js` | Editor component with RichText fields |
-| `frontend/render.php` | Server-side rendering |
-| `frontend/style.scss` | Card styles (shared by editor and frontend) |
-| `templates/card.twig` | Twig template for card markup |
 
 ### Attributes
 

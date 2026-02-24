@@ -16,12 +16,16 @@ Theme/
 └── blocks/
     ├── shutter-cards/
     │   ├── block.json
-    │   ├── editor/
-    │   └── frontend/
+    │   ├── render.php
+    │   ├── style.scss
+    │   ├── container.twig
+    │   └── editor/
     └── shutter-card/
         ├── block.json
-        ├── editor/
-        └── frontend/
+        ├── render.php
+        ├── style.scss
+        ├── card.twig
+        └── editor/
 ```
 
 ## API

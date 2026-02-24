@@ -17,5 +17,5 @@
   },
   "textdomain": "child-theme",
   "viewScript": "file:../../../../../dist/js/shutter-cards-view.js",
-  "render": "file:./frontend/render.php"
+  "render": "file:./render.php"
 }

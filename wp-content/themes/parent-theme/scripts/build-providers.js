@@ -15,8 +15,8 @@
  *
  * Block Assets:
  *   Editor: src/Providers/[name]/blocks/[block]/editor/index.js => dist/js/[block-name].js
- *   View:   src/Providers/[name]/blocks/[block]/frontend/view.js => dist/js/[block-name]-view.js
- *   Styles: src/Providers/[name]/blocks/[block]/frontend/style.scss => dist/css/[block-name].css
+ *   View:   src/Providers/[name]/blocks/[block]/view.js => dist/js/[block-name]-view.js
+ *   Styles: src/Providers/[name]/blocks/[block]/style.scss => dist/css/[block-name].css
  *   Editor Styles: src/Providers/[name]/blocks/[block]/editor/editor.scss => dist/css/[block-name]-editor.css
  *
  * Usage:
@@ -179,7 +179,7 @@ function discoverProviderBlocks(providerPath, providerName) {
         }
 
         // Check for frontend style
-        const frontendStylePath = path.join(blockPath, 'frontend', 'style.scss');
+        const frontendStylePath = path.join(blockPath, 'style.scss');
         if (fs.existsSync(frontendStylePath)) {
             block.frontendStyle = {
                 inputPath: frontendStylePath,
@@ -187,8 +187,8 @@ function discoverProviderBlocks(providerPath, providerName) {
             };
         }
 
-        // Check for frontend view script
-        const viewScriptPath = path.join(blockPath, 'frontend', 'view.js');
+        // Check for view script
+        const viewScriptPath = path.join(blockPath, 'view.js');
         if (fs.existsSync(viewScriptPath)) {
             block.viewScript = {
                 inputPath: viewScriptPath,
@@ -595,7 +595,7 @@ async function watchProviders() {
                     await compileBlockStyles(block, directLogger);
                 } else if (filename.endsWith('.js')) {
                     console.log(`\nBlock JS change in ${provider.name}/${blockName}...`);
-                    if (filename.includes('frontend') && filename.includes('view.js')) {
+                    if (path.basename(filename) === 'view.js') {
                         await compileBlockViewScript(block, directLogger);
                     } else {
                         await compileBlockEditorScript(block, directLogger);

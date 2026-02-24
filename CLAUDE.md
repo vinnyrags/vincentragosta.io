@@ -122,16 +122,14 @@ src/Providers/{Name}/
 ├── blocks/
 │   └── {block-name}/
 │       ├── block.json     # Block metadata
-│       ├── editor/        # React/JSX editor UI
-│       │   ├── index.js
-│       │   ├── edit.js
-│       │   └── editor.scss
-│       ├── frontend/      # Server-side rendering
-│       │   ├── render.php
-│       │   ├── style.scss
-│       │   └── view.js    # Optional frontend interactivity
-│       └── templates/     # Twig templates for render.php
-│           └── grid.twig
+│       ├── render.php     # Server-side rendering
+│       ├── style.scss     # Block styles (frontend + editor)
+│       ├── view.js        # Optional frontend interactivity
+│       ├── {name}.twig    # Twig template for render.php
+│       └── editor/        # React/JSX editor UI
+│           ├── index.js
+│           ├── edit.js
+│           └── editor.scss
 └── config/
     └── post-type.json     # JSON config loaded via loadConfig()
 ```
@@ -150,9 +148,9 @@ Blocks are WordPress dynamic blocks with server-side rendering:
 
 1. **`block.json`** — standard WordPress block metadata, references `render.php`
 2. **`editor/`** — React/JSX components for the block editor. WordPress package imports (`@wordpress/blocks`, etc.) map to globals at build time via esbuild externals
-3. **`frontend/render.php`** — receives `$attributes` and `$content`, builds a Timber context, renders a Twig template
-4. **`frontend/style.scss`** — block styles for both frontend and editor
-5. **`templates/`** — Twig templates consumed by `render.php`
+3. **`render.php`** — receives `$attributes` and `$content`, builds a Timber context, renders a Twig template
+4. **`style.scss`** — block styles for both frontend and editor
+5. **`{name}.twig`** — Twig template consumed by `render.php`
 
 Blocks are declared in the provider's `$blocks` array and live in the provider's `blocks/` subdirectory. The BlockManager handles registration and hook wiring.
 
@@ -166,7 +164,7 @@ The child theme runs the same script: `node ../parent-theme/scripts/build-provid
 - Provider SCSS: `src/Providers/{Name}/assets/scss/index.scss` → `dist/css/{slug}.css`
 - Provider JS: `src/Providers/{Name}/assets/js/*.js` → `dist/js/{slug}/*.js`
 - Block editor JS: `blocks/{name}/editor/index.js` → `dist/js/{name}.js`
-- Block frontend style: `blocks/{name}/frontend/style.scss` → `dist/css/{name}.css`
+- Block frontend style: `blocks/{name}/style.scss` → `dist/css/{name}.css`
 - Block editor style: `blocks/{name}/editor/editor.scss` → `dist/css/{name}-editor.css`
 
 **Theme-specific SCSS config** is optional via `scripts/build-providers.config.js`, which can export `sassLoadPaths` (extra directories for the Sass compiler). The child uses this so block and provider SCSS files can resolve `@use 'common/breakpoints' as *;` against the parent theme's SCSS directory. Every SCSS file that uses breakpoint mixins must include the explicit `@use` — there is no auto-injection.

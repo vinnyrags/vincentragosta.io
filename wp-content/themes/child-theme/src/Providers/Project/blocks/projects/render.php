@@ -31,5 +31,5 @@ $wrapper_attributes = get_block_wrapper_attributes();
 
 echo '<div ' . $wrapper_attributes . '>';
 // Render the Twig file, passing the context.
-Timber::render(__DIR__ . '/../templates/grid.twig', $context);
+Timber::render(__DIR__ . '/grid.twig', $context);
 echo '</div>';
