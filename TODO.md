@@ -12,7 +12,6 @@
 - update readmes, is it overkill with how many readmes we have? should we consolidate anywhere? should we have one big root directory read me that talks about everything? and let the code speak for itself with the directory readmes. I am leaning this way after building this entire project and littering the entire project with readmes, seems a bit tough to manage.
 
 
-- review theme.json in parent/child theme, make sure it makes sense (do this manually)
 - are there any colors in both theme.json color palettes that we are not using?
 - lets add generic spacing sizes in parent theme.json, and override in the child, looks like spacing 70 is the only offender
 - what is writingMode in typography in theme.json?
@@ -30,3 +29,6 @@
   }
   }
 - from the child theme theme.json, styles.blocks.core/cover.spacing.paddingtop/bottom lets move these to the parent theme.json
+- do i need Config/container.php in my child theme?
+- i dont like the idea of referencing partials directory from a provider, the twig ttemplate code should live with the provider, same thing for dropdown.twig this should exist with the code (I am assuming is in theme provider?)
+- is there anything in theme provider that could maybe be its own provider?

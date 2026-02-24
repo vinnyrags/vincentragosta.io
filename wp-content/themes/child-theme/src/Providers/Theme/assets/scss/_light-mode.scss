@@ -34,7 +34,7 @@
 
 .light-mode {
   // Override accent-1 with darker variant for better contrast on light backgrounds
-  --wp--preset--color--accent-1: var(--wp--preset--color--accent-1-dark);
+  --wp--preset--color--accent-1: var(--wp--custom--color--accent-1-dark);
 
   // Primary backgrounds and text
   --color-bg: var(--wp--preset--color--base);

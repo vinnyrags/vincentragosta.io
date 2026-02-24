@@ -79,13 +79,6 @@
     gap: var(--wp--preset--spacing--20);
   }
 
-  &__category {
-    font-size: var(--wp--preset--font-size--10);
-    text-transform: uppercase;
-    color: var(--wp--preset--color--accent-2);
-    display: block;
-  }
-
   &__title {
     font-size: var(--wp--preset--font-size--60);
     font-family: var(--wp--preset--font-family--reckless-neue);

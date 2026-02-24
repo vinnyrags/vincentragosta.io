@@ -1,4 +1,3 @@
-{% set project_category = project.terms('project_category')|first %}
 <div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.date('Y-m-d H:i:s') }}">
     <a href="{{ project.link }}" class="project-card__image-link" aria-label="View project: {{ project.title }}">
         {% if project.thumbnail %}
@@ -12,9 +11,6 @@
         {% endif %}
     </a>
     <div class="project-card__content">
-        {% if project_category %}
-            <span class="project-card__category">{{ project_category.name }}</span>
-        {% endif %}
         <h3 class="project-card__title">
             <a href="{{ project.link }}">{{ project.title }}</a>
         </h3>

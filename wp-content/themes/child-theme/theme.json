@@ -9,7 +9,8 @@
       },
       "borderRadius": "10px",
       "color": {
-        "error": "#e74c3c"
+        "error": "#e74c3c",
+        "accent1Dark": "#3d8500"
       }
     },
     "color": {
@@ -28,16 +29,6 @@
           "color": "#ceff00",
           "name": "Accent 1",
           "slug": "accent-1"
-        },
-        {
-          "color": "#3d8500",
-          "name": "Accent 1 Dark",
-          "slug": "accent-1-dark"
-        },
-        {
-          "color": "#686868",
-          "name": "Accent 2",
-          "slug": "accent-2"
         },
         {
           "color": "#1c1c1f",
