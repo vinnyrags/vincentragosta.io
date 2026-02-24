@@ -217,4 +217,36 @@ class ProviderTest extends BaseTestCase
 
         $this->assertInstanceOf(Registrable::class, $provider);
     }
+
+    /**
+     * Test getTemplatePath returns null when no templates directory exists.
+     */
+    public function testGetTemplatePathReturnsNullWhenNoTemplatesDir(): void
+    {
+        $provider = new TestableProvider($this->container);
+
+        $this->assertNull($provider->getTemplatePath());
+    }
+
+    /**
+     * Test getTemplatePath returns path when templates directory exists.
+     */
+    public function testGetTemplatePathReturnsPathWhenTemplatesDirExists(): void
+    {
+        // TestableProvider's file is in this test directory — create a templates/ sibling
+        $reflection = new \ReflectionClass(TestableProvider::class);
+        $providerDir = dirname($reflection->getFileName());
+        $templatesDir = $providerDir . '/templates';
+
+        mkdir($templatesDir, 0777, true);
+
+        try {
+            $provider = new TestableProvider($this->container);
+            $result = $provider->getTemplatePath();
+
+            $this->assertSame($templatesDir, $result);
+        } finally {
+            rmdir($templatesDir);
+        }
+    }
 }

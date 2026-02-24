@@ -137,13 +137,32 @@ class Theme extends Site
     /**
      * Register all classes that implement Registrable.
      *
+     * After registration, appends any provider-level templates/ directories
+     * to Timber::$dirname so Twig includes resolve automatically.
+     *
      * @param array<class-string<Registrable>> $classes
      */
     protected function registerAll(array $classes): void
     {
+        $templatePaths = [];
+        $childRoot = get_stylesheet_directory() . '/';
+        $parentRoot = get_template_directory() . '/';
+
         foreach ($classes as $class) {
             $provider = $this->container->get($class);
             $provider->register();
+
+            $path = $provider->getTemplatePath();
+            if ($path !== null) {
+                $relative = str_starts_with($path, $childRoot)
+                    ? str_replace($childRoot, '', $path)
+                    : str_replace($parentRoot, '', $path);
+                $templatePaths[] = $relative;
+            }
+        }
+
+        if (!empty($templatePaths)) {
+            Timber::$dirname = array_merge(Timber::$dirname, $templatePaths);
         }
     }
 }

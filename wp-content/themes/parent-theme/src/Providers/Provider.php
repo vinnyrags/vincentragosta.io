@@ -69,6 +69,7 @@ abstract class Provider implements Registrable
     protected ?FeatureManager $featureManager = null;
     protected ?RestManager $restManager = null;
     protected string $configPath;
+    protected ?string $templatesPath = null;
     protected string $textDomain;
 
     public function __construct(
@@ -141,6 +142,10 @@ abstract class Provider implements Registrable
         $distUri = get_stylesheet_directory_uri() . '/dist';
 
         $this->configPath = $providerDir . '/config';
+
+        $templatesDir = $providerDir . '/templates';
+        $this->templatesPath = is_dir($templatesDir) ? $templatesDir : null;
+
         $this->textDomain = str_starts_with($providerDir, get_stylesheet_directory())
             ? (get_stylesheet() ?: 'theme')
             : (get_template() ?: 'theme');
@@ -483,6 +488,17 @@ abstract class Provider implements Registrable
     {
         $this->setup();
         return $this->blockManager->getBlocksUri();
+    }
+
+    /**
+     * Get the absolute path to this provider's templates directory.
+     *
+     * Returns null if the provider has no templates/ directory.
+     */
+    public function getTemplatePath(): ?string
+    {
+        $this->setup();
+        return $this->templatesPath;
     }
 
 }

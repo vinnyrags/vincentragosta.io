@@ -13,7 +13,7 @@
     </div>
     <div class="projects-archive alignfull">
         <div class="projects-sort">
-            {% include 'partials/dropdown.twig' with {
+            {% include 'dropdown.twig' with {
                 name: 'sort',
                 options: [
                     { value: 'date-desc', label: 'Latest' },
@@ -24,6 +24,6 @@
                 selected: 'date-desc'
             } only %}
         </div>
-        {% include 'partials/projects-grid.twig' with { projects: posts } %}
+        {% include 'projects-grid.twig' with { projects: posts } %}
     </div>
 {% endblock %}

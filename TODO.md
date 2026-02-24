@@ -32,3 +32,4 @@
 - do i need Config/container.php in my child theme?
 - i dont like the idea of referencing partials directory from a provider, the twig ttemplate code should live with the provider, same thing for dropdown.twig this should exist with the code (I am assuming is in theme provider?)
 - is there anything in theme provider that could maybe be its own provider?
+- the current setup for providers/blocks block directory doesnt quite make sense, we have frontend and templates, well templates is considered frontend-- i know what I was trying to do but i think I am outgrowing it, lets remove the directories and go back to all of the files dumped in the block directory (effectively removing frontend and templates directories within the block directory). lets build out an efficient and effective implementation plan to address this work.
