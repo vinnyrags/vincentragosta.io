@@ -107,7 +107,7 @@ class ProjectProviderTest extends BaseTestCase
         $this->assertArrayHasKey('supports', $args);
         $this->assertArrayHasKey('show_in_rest', $args);
         $this->assertTrue($args['public']);
-        $this->assertTrue($args['has_archive']);
+        $this->assertFalse($args['has_archive']);
         $this->assertTrue($args['show_in_rest']);
     }
 
@@ -132,7 +132,7 @@ class ProjectProviderTest extends BaseTestCase
 
         $this->assertNotNull($postType);
         $this->assertTrue($postType->public);
-        $this->assertTrue($postType->has_archive);
+        $this->assertFalse($postType->has_archive);
         $this->assertTrue($postType->show_in_rest);
         $this->assertEquals('dashicons-portfolio', $postType->menu_icon);
     }

@@ -16,6 +16,7 @@
     }
   },
   "textdomain": "child-theme",
+  "viewScript": "file:../../../../../dist/js/projects-view.js",
   "acf": {
     "mode": "preview",
     "renderTemplate": "render.php"

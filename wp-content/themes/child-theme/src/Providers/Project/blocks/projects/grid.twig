@@ -1,1 +1,15 @@
+{% if show_sort is defined and show_sort %}
+    <div class="projects-sort">
+        {% include 'dropdown.twig' with {
+            name: 'sort',
+            options: [
+                { value: 'date-desc', label: 'Latest' },
+                { value: 'date-asc', label: 'Earliest' },
+                { value: 'title-asc', label: 'A → Z' },
+                { value: 'title-desc', label: 'Z → A' },
+            ],
+            selected: 'date-desc'
+        } only %}
+    </div>
+{% endif %}
 {% include 'projects-grid.twig' with { projects: projects } only %}

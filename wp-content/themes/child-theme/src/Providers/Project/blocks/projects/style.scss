@@ -1,8 +1,6 @@
 @use 'common/breakpoints' as *;
 
-// Block wrapper and archive wrapper are the container
-.wp-block-child-theme-projects,
-.projects-archive {
+.wp-block-child-theme-projects {
   container: projects / inline-size;
   display: flex;
   flex-direction: column;
@@ -108,6 +106,32 @@
 }
 
 // ==========================================================================
+// Sort Dropdown
+// ==========================================================================
+
+.projects-sort {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+// ==========================================================================
+// Scroll Reveal
+// ==========================================================================
+
+.wp-block-child-theme-projects.has-scroll-reveal .project-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================================================
 // Reduced Motion
 // ==========================================================================
 
@@ -125,6 +149,12 @@
   }
 
   .project-card__title a::after {
+    transition: none;
+  }
+
+  .wp-block-child-theme-projects .project-card {
+    opacity: 1;
+    transform: none;
     transition: none;
   }
 }

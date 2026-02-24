@@ -10,21 +10,27 @@ $mode = get_field('display_mode') ?: 'latest';
 $selected_ids = get_field('selected_projects') ?: [];
 
 $args = [
-    'post_type'      => ProjectPost::POST_TYPE,
-    'posts_per_page' => 5,
-    'post_status'    => 'publish',
+    'post_type'   => ProjectPost::POST_TYPE,
+    'post_status' => 'publish',
 ];
 
-if ($mode === 'curated' && !empty($selected_ids)) {
+if ($mode === 'all') {
+    $args['posts_per_page'] = -1;
+    $args['orderby'] = 'date';
+    $args['order'] = 'DESC';
+} elseif ($mode === 'curated' && !empty($selected_ids)) {
+    $args['posts_per_page'] = 5;
     $args['post__in'] = $selected_ids;
     $args['orderby'] = 'post__in';
 } else {
+    $args['posts_per_page'] = 5;
     $args['orderby'] = 'date';
     $args['order'] = 'DESC';
 }
 
 $context = Timber::context();
 $context['projects'] = Timber::get_posts($args);
+$context['show_sort'] = ($mode === 'all');
 
 // Get block wrapper attributes (alignment comes from block supports).
 $wrapper_attributes = get_block_wrapper_attributes();

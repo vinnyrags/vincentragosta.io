@@ -14,7 +14,7 @@
       "not_found_in_trash": "No projects found in Trash"
     },
     "public": true,
-    "has_archive": true,
+    "has_archive": false,
     "rewrite": { "slug": "projects" },
     "supports": ["title", "editor", "thumbnail", "excerpt", "custom-fields"],
     "taxonomies": ["category"],

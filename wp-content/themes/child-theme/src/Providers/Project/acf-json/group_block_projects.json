@@ -11,7 +11,8 @@
             "required": 1,
             "choices": {
                 "latest": "Latest Projects",
-                "curated": "Curated Selection"
+                "curated": "Curated Selection",
+                "all": "All Projects"
             },
             "default_value": "latest",
             "return_format": "value",

@@ -27,23 +27,11 @@ class ProjectProvider extends Provider
     public function register(): void
     {
         add_action('init', [$this, 'registerPostType']);
-        add_action('pre_get_posts', [$this, 'loadAllArchiveProjects']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueArchiveAssets']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
 
         parent::register();
 
         $this->acfManager->registerSavePath();
-    }
-
-    /**
-     * Load all projects on the archive page (no pagination).
-     */
-    public function loadAllArchiveProjects(\WP_Query $query): void
-    {
-        if (!is_admin() && $query->is_main_query() && $query->is_post_type_archive(ProjectPost::POST_TYPE)) {
-            $query->set('posts_per_page', 100);
-        }
     }
 
     /**
@@ -56,21 +44,6 @@ class ProjectProvider extends Provider
         }
 
         $this->enqueueStyle('child-theme-project-single', 'project.css');
-    }
-
-    /**
-     * Enqueue block styles and scroll-reveal assets on the project archive page.
-     */
-    public function enqueueArchiveAssets(): void
-    {
-        if (!is_post_type_archive(ProjectPost::POST_TYPE)) {
-            return;
-        }
-
-        wp_enqueue_style('wp-block-cover');
-        $this->enqueueStyle('child-theme-projects-block', 'projects.css');
-        $this->enqueueStyle('child-theme-project-archive', 'project.css');
-        $this->enqueueScript('child-theme-project-archive', 'archive.js');
     }
 
     /**
