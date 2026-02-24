@@ -86,7 +86,7 @@
         {
           "name": "70",
           "slug": "70",
-          "size": "clamp(6rem, 15vw, 20rem)"
+          "size": "6rem"
         }
       ]
     },
@@ -161,27 +161,14 @@
           "slug": "70"
         }
       ],
-      "fontFamilies": [
-        {
-          "name": "Fira Code",
-          "slug": "fira-code",
-          "fontFamily": "'Fira Code', monospace"
-        }
-      ]
-    }
+      "fontFamilies": []
+}
   },
   "styles": {
     "spacing": {
-      "blockGap": "var:preset|spacing|40",
-      "padding": {
-        "top": "var:preset|spacing|50",
-        "right": "var:preset|spacing|40",
-        "bottom": "var:preset|spacing|50",
-        "left": "var:preset|spacing|40"
-      }
+      "blockGap": "var:preset|spacing|40"
     },
     "typography": {
-      "fontFamily": "var:preset|font-family|system-sans",
       "fontSize": "var:preset|font-size|40",
       "fontWeight": "400",
       "letterSpacing": "-0.3px",
@@ -191,7 +178,6 @@
       "core/button": {
         "typography": {
           "fontSize": "var:preset|font-size|20",
-          "fontWeight": "700",
           "textTransform": "uppercase"
         }
       },
@@ -214,8 +200,10 @@
         "spacing": {
           "blockGap": "var:preset|spacing|50",
           "padding": {
-            "left": "var:preset|spacing|40",
-            "right": "var:preset|spacing|40"
+            "top": "var:preset|spacing|60",
+            "right": "var:preset|spacing|40",
+            "bottom": "var:preset|spacing|60",
+            "left": "var:preset|spacing|40"
           }
         }
       },
@@ -232,9 +220,6 @@
     },
     "elements": {
       "button": {
-        "border": {
-          "radius": "9999px"
-        },
         "spacing": {
           "padding": {
             "top": "var:preset|spacing|30",
@@ -248,30 +233,17 @@
             "offset": "2px"
           }
         },
-        ":hover": {
-          "border": {
-            "color": "transparent"
-          }
-        },
         "typography": {
-          "fontSize": "var:preset|font-size|20",
-          "fontWeight": "700",
-          "textTransform": "uppercase"
+          "fontSize": "var:preset|font-size|20"
         }
       },
       "heading": {
         "typography": {
-          "fontWeight": "400",
           "lineHeight": "1",
           "fontSize": "var:preset|font-size|60"
         }
       },
       "link": {
-        ":hover": {
-          "typography": {
-            "textDecoration": "none"
-          }
-        }
       }
     }
   }

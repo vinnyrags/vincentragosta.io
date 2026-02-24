@@ -13,6 +13,15 @@
         "accent1Dark": "#3d8500"
       }
     },
+    "spacing": {
+      "spacingSizes": [
+        {
+          "name": "70",
+          "slug": "70",
+          "size": "clamp(6rem, 15vw, 20rem)"
+        }
+      ]
+    },
     "color": {
       "palette": [
         {
@@ -158,11 +167,6 @@
     }
   },
   "styles": {
-    "spacing": {
-      "padding": {
-        "top": "0"
-      }
-    },
     "color": {
       "background": "var:preset|color|contrast",
       "text": "var:preset|color|base"
@@ -171,12 +175,9 @@
       "fontFamily": "var:preset|font-family|roobert"
     },
     "blocks": {
-      "core/cover": {
-        "spacing": {
-          "padding": {
-            "top": "var:preset|spacing|60",
-            "bottom": "var:preset|spacing|60"
-          }
+      "core/button": {
+        "typography": {
+          "fontWeight": "700"
         }
       },
       "core/separator": {
@@ -187,6 +188,9 @@
     },
     "elements": {
       "button": {
+        "border": {
+          "radius": "9999px"
+        },
         "color": {
           "background": "var:preset|color|base",
           "text": "var:preset|color|contrast"
@@ -197,15 +201,23 @@
           }
         },
         ":hover": {
+          "border": {
+            "color": "transparent"
+          },
           "color": {
             "background": "var:preset|color|accent-1",
             "text": "var:preset|color|contrast"
           }
+        },
+        "typography": {
+          "fontWeight": "700",
+          "textTransform": "uppercase"
         }
       },
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue"
+          "fontFamily": "var:preset|font-family|reckless-neue",
+          "fontWeight": "400"
         },
         "color": {
           "text": "var:preset|color|base"
@@ -216,6 +228,9 @@
           "text": "currentColor"
         },
         ":hover": {
+          "typography": {
+            "textDecoration": "none"
+          },
           "color": {
             "text": "var:preset|color|accent-1"
           }
