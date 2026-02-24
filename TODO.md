@@ -10,5 +10,23 @@
 - if you were to fully evaluate my current build process against 2026 best wordpress build process, what would you recommend i change or update to become more in line with those standards?
 - audit codebase to ensure we have no stale code/artifacts, while the backend (everything in /src) definitely needs to be audited, lets look especially at the frontend assets in all of these providers in both the parent and child themes
 - update readmes, is it overkill with how many readmes we have? should we consolidate anywhere? should we have one big root directory read me that talks about everything? and let the code speak for itself with the directory readmes. I am leaning this way after building this entire project and littering the entire project with readmes, seems a bit tough to manage.
-- is there anything in the child theme that could go into the parent theme?
+
+
 - review theme.json in parent/child theme, make sure it makes sense (do this manually)
+- are there any colors in both theme.json color palettes that we are not using?
+- lets add generic spacing sizes in parent theme.json, and override in the child, looks like spacing 70 is the only offender
+- what is writingMode in typography in theme.json?
+- move fontfamilies out of parent theme.json
+- remove padding definition in styles.spacing in both parent and child theme.json
+- "fontFamily": "var:preset|font-family|system-sans", is this core to wordpress or something?
+- lets move styles.blocks.button font weight 700 from parent theme theme.json to child theme theme.json
+- lets move elements.button.border.radius to child theme.json and elements.button.:hover to the child theme as well and elements.button.typography.fontweight and textTransform to child theme theme.json as well
+- lets move elements.heading.typography.fontweight to the child theme theme.json
+- and move this entirely to the child theme.json: "link": {
+  ":hover": {
+  "typography": {
+  "textDecoration": "none"
+  }
+  }
+  }
+- from the child theme theme.json, styles.blocks.core/cover.spacing.paddingtop/bottom lets move these to the parent theme.json

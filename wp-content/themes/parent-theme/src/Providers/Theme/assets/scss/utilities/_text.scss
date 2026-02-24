@@ -1,6 +1,3 @@
-// Global underline styling
-// - <u> element
-// - WordPress inline style from Cmd+U shortcut (!important needed to override inline styles)
 u,
 [style*="text-decoration: underline"] {
   text-decoration-line: underline !important;

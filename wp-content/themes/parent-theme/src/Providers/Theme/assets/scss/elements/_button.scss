@@ -1,0 +1,13 @@
+@use '../common/accessibility' as *;
+
+.button {
+  cursor: pointer;
+}
+
+@include forced-colors {
+  .wp-block-button__link,
+  .wp-element-button,
+  .button {
+    border: 1px solid ButtonText;
+  }
+}

@@ -9,11 +9,6 @@
 // this file owns icon enhancements only.
 // ==========================================================================
 
-// Minimal .button additions (theme.json handles the rest via .wp-element-button)
-.button {
-  cursor: pointer;
-}
-
 // Flex layout for buttons with icons
 .wp-block-button.has-icon .wp-block-button__link,
 .button.has-icon {
@@ -112,12 +107,6 @@
 // ==========================================================================
 
 @include forced-colors {
-  .wp-block-button__link,
-  .wp-element-button,
-  .button {
-    border: 1px solid ButtonText;
-  }
-
   .wp-block-button__icon.arrow::before,
   .button__icon.arrow::before {
     forced-color-adjust: none;
