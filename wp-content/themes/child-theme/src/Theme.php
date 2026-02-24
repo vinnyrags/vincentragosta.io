@@ -25,14 +25,4 @@ class Theme extends BaseTheme
         ThemeProvider::class,
         ProjectProvider::class,
     ];
-
-    /**
-     * Container definition files for explicit DI bindings.
-     *
-     * @return string[]
-     */
-    protected function getContainerDefinitions(): array
-    {
-        return [__DIR__ . '/Config/container.php'];
-    }
 }
