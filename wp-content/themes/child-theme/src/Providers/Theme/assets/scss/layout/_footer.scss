@@ -44,7 +44,7 @@
 .footer__inner {
   display: flex;
   flex-direction: column;
-  gap: var(--wp--preset--spacing--40);
+  gap: var(--wp--preset--spacing--50);
   max-width: var(--wp--style--global--content-size, 1440px);
   margin-inline: auto;
 }
@@ -143,6 +143,7 @@
   flex-direction: column;
   gap: var(--wp--preset--spacing--20);
   font-size: var(--wp--preset--font-size--10);
+  line-height: 1;
 
   @include media(md) {
     flex-direction: row;

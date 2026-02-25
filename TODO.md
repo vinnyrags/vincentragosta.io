@@ -7,7 +7,6 @@
 ## LOW PRIORITY
 - consider dynamic search on project archive, search input bar to the left of the filters
 - if you were to fully evaluate my current build process against 2026 best wordpress build process, what would you recommend i change or update to become more in line with those standards?
-- bug with fade up in footer, doesnt show last row in footer 
 - consider making a cms paragraph block style variant to encapsulate the grey tint and smaller text on the project detail template.
 - add another section or page dedicated to the platform, and how it is built, need to come up with layout of this page (https://www.isiglobal.com/our-expertise/design/)
 

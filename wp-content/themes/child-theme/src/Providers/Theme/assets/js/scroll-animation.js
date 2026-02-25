@@ -56,4 +56,22 @@
             observer.observe(el);
         }
     });
+
+    // The -50px bottom rootMargin means elements at the very end of the
+    // document can never intersect — the user can't scroll them 50px above
+    // the viewport bottom. Reveal any remaining elements when we hit the
+    // bottom of the page.
+    const revealRemaining = () => {
+        const atBottom =
+            window.innerHeight + window.scrollY >=
+            document.documentElement.scrollHeight - 50;
+        if (atBottom) {
+            document.querySelectorAll('.fade-up:not(.is-visible)').forEach((el) => {
+                el.classList.add('is-visible');
+                observer.unobserve(el);
+            });
+            window.removeEventListener('scroll', revealRemaining);
+        }
+    };
+    window.addEventListener('scroll', revealRemaining, { passive: true });
 })();
