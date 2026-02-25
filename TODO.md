@@ -1,5 +1,4 @@
 ## HIGH PRIORITY
-- faqs? lets try to get at least 5 faqs-- do i make my own website designs? yes I do where applicable, and when I need to I will leverage AI tooling like (provide a few examples), or build from scratch in Figma. this is an example of one question, another example question could be, what is the average turnaround time for projects? and an answer for this could look like-- turnaround time varies depending on the scope of work, small projects are 20-60 hours, medium sized projects are anywhere from 60-200 hours, and some bigger sized projects can take the better part of a year if scoped as such. please help me think up others that would relate to the content on my website, I know you compacted the conversation but do you still have memory of the content you provided for me? otherwise I can provide for you the full markup of the homepage if youd like.
 - add another section or page dedicated to the platform, and how it is built, need to come up with layout design for this page, can I see the breakdown of what information we would want to display, I could then consider how to lay it out on the page.
 
 ## MEDIUM PRIORITY
