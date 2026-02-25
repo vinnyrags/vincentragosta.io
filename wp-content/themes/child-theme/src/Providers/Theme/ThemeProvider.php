@@ -9,6 +9,7 @@ use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\ParagraphBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
@@ -47,6 +48,7 @@ class ThemeProvider extends BaseThemeProvider
         ButtonIconEnhancer::class,
         ContainerBlockStyles::class,
         CoverBlockStyles::class,
+        ParagraphBlockStyles::class,
         SocialIconChoices::class,
     ];
 

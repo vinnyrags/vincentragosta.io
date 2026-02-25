@@ -1,0 +1,10 @@
+// ==========================================================================
+// core/paragraph Block Styles
+// ==========================================================================
+
+// Muted style — reduced visual prominence for secondary content.
+// Editors select this via the block toolbar's Styles panel.
+p.is-style-muted {
+    font-size: var(--wp--preset--font-size--30);
+    color: var(--color-text-muted);
+}

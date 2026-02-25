@@ -1,5 +1,6 @@
 ## HIGH PRIORITY
-- start working on content
+- faqs? lets try to get at least 5 faqs-- do i make my own website designs? yes I do where applicable, and when I need to I will leverage AI tooling like (provide a few examples), or build from scratch in Figma. this is an example of one question, another example question could be, what is the average turnaround time for projects? and an answer for this could look like-- turnaround time varies depending on the scope of work, small projects are 20-60 hours, medium sized projects are anywhere from 60-200 hours, and some bigger sized projects can take the better part of a year if scoped as such. please help me think up others that would relate to the content on my website, I know you compacted the conversation but do you still have memory of the content you provided for me? otherwise I can provide for you the full markup of the homepage if youd like.
+- add another section or page dedicated to the platform, and how it is built, need to come up with layout design for this page, can I see the breakdown of what information we would want to display, I could then consider how to lay it out on the page.
 
 ## MEDIUM PRIORITY
 - DO LAST full code audit, revisit core concepts, see if we hold true to everything we tried to put forth, is there room for any optimizations, lets look at all php code first and then perform a separate audit with a separate plan for the frontend files.
@@ -7,8 +8,6 @@
 ## LOW PRIORITY
 - consider dynamic search on project archive, search input bar to the left of the filters
 - if you were to fully evaluate my current build process against 2026 best wordpress build process, what would you recommend i change or update to become more in line with those standards?
-- consider making a cms paragraph block style variant to encapsulate the grey tint and smaller text on the project detail template.
-- add another section or page dedicated to the platform, and how it is built, need to come up with layout of this page (https://www.isiglobal.com/our-expertise/design/)
 
 i want to now move forward with updating the content on my website, let me tell you a little about myself and the tone i wish to portray. my name is vincent ragosta and i am a senior web     
 developer with 11 years of web development experience in web an agency environments. over the 11 years i worked for two agencies and one non-profit, situation interactive (9 years), King &   
