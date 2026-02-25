@@ -166,7 +166,13 @@
   },
   "styles": {
     "spacing": {
-      "blockGap": "var:preset|spacing|40"
+      "blockGap": "var:preset|spacing|40",
+      "padding": {
+        "top": "var:preset|spacing|50",
+        "right": "var:preset|spacing|40",
+        "bottom": "var:preset|spacing|50",
+        "left": "var:preset|spacing|40"
+      }
     },
     "typography": {
       "fontSize": "var:preset|font-size|40",
