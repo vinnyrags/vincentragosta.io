@@ -5,6 +5,7 @@
 - what would it take to change spacing|65 to spacing|70, and spacing|70 to spacing|80 (would need to provide full front page context)
 - what would it take to get group top/bottom spacing to work in the editor
 - are we blurring the responsibility line in layout and wp-block-container css
+- shutter-card description should either have a <p> tag inside or be a <p> tag itself, I lean towards the latter
 
 ## MEDIUM PRIORITY
 - get spacing|70 to work in editor experience
