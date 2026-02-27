@@ -36,6 +36,7 @@ start:
 # Snapshot database and stop DDEV environment
 stop:
 	@echo "Snapshotting database..."
+	@ddev snapshot --cleanup --yes 2>/dev/null; true
 	ddev snapshot --name=pre-stop
 	@echo "Stopping DDEV environment..."
 	ddev stop
