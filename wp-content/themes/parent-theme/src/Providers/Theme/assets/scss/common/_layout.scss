@@ -100,6 +100,14 @@ html {
   }
 }
 
+// Editor equivalent: section-level spacing in the block editor
+.is-root-container {
+  > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
+    margin-block-start: var(--wp--preset--spacing--70);
+  }
+}
+
 // Default padding for individual columns with backgrounds
 .wp-block-column.has-background {
   padding: var(--wp--preset--spacing--40);

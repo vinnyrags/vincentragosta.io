@@ -21,12 +21,17 @@ class ContainerBlockStyles implements Hook
      */
     public function registerStyles(): void
     {
-        $style = [
+        $darkStyle = [
             'name'  => 'dark',
             'label' => __('Dark', 'child-theme'),
         ];
 
-        register_block_style('core/group', $style);
-        register_block_style('core/column', $style);
+        register_block_style('core/group', $darkStyle);
+        register_block_style('core/column', $darkStyle);
+
+        register_block_style('core/group', [
+            'name'  => 'numbered-list',
+            'label' => __('Numbered List', 'child-theme'),
+        ]);
     }
 }

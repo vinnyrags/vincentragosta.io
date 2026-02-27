@@ -1,5 +1,18 @@
 @use 'common/breakpoints' as *;
 
+// Override WordPress default :where(.wp-block-group.has-background) padding
+// with theme spacing variables. :is() beats :where() in specificity.
+:is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+    padding-block: var(--wp--preset--spacing--50);
+    padding-inline: var(--wp--preset--spacing--40);
+}
+
+// Top-level container blocks with backgrounds get extra vertical spacing.
+// .site-main targets the frontend; .is-root-container targets the block editor.
+:is(.site-main, .is-root-container) > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+    padding-block: var(--wp--preset--spacing--70);
+}
+
 .is-style-dark {
     background-color: var(--color-surface);
     color: var(--color-surface-text);
@@ -10,5 +23,50 @@
 
     @include reduced-motion {
         transition: none;
+    }
+}
+
+// Numbered List style — vertical list with large faded counter numbers.
+// Editors select this via the block toolbar's Styles panel on a Group block.
+// Child Groups become numbered items; numbering is automatic via CSS counters.
+.is-style-numbered-list {
+    gap: var(--wp--preset--spacing--65);
+    counter-reset: numbered-item;
+
+    > .wp-block-group {
+        counter-increment: numbered-item;
+        position: relative;
+        border-top: 1px solid var(--color-border);
+
+        @include media(md) {
+            display: grid;
+            grid-template-columns: 40% 1fr;
+            column-gap: var(--wp--preset--spacing--40);
+        }
+
+        &::before {
+            content: counter(numbered-item, decimal-leading-zero);
+            font-size: clamp(4rem, 16vw, 20rem);
+            font-weight: 300;
+            line-height: 1;
+            color: var(--color-border);
+            display: block;
+            padding-top: var(--wp--preset--spacing--65);
+
+            @include media(md) {
+                justify-self: center;
+            }
+        }
+    }
+
+    // Content wrapper — the inner Group that holds heading + paragraph
+    > .wp-block-group > .wp-block-group {
+        display: flex;
+        flex-direction: column;
+        padding-top: var(--wp--preset--spacing--40);
+
+        @include media(md) {
+            padding-top: var(--wp--preset--spacing--65);
+        }
     }
 }

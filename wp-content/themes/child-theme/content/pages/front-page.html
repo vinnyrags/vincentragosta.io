@@ -61,7 +61,7 @@
         <!-- /wp:column --></div>
     <!-- /wp:columns -->
 
-    <!-- wp:child-theme/projects {"name":"child-theme/projects","data":{"display_mode":"latest","_display_mode":"field_block_projects_display_mode"},"mode":"preview"} /--></div>
+    <!-- wp:child-theme/projects {"name":"child-theme/projects","data":{"display_mode":"latest","_display_mode":"field_block_projects_display_mode"},"mode":"preview","style":{"spacing":{"margin":{"top":"var:preset|spacing|50"}}}} /--></div>
 <!-- /wp:group -->
 
 <!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
@@ -81,11 +81,9 @@
             <p>Proven solutions shaped by clear communication, modern tooling, and a focus on accessibility. I pair over a decade of hands-on agency experience with AI-driven co-development to move faster, reduce friction, and deliver results that last.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
-    <!-- /wp:columns --></div>
-<!-- /wp:group -->
+    <!-- /wp:columns -->
 
-<!-- wp:group {"style":{"spacing":{"margin":{"top":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group" style="margin-top:var(--wp--preset--spacing--60)"><!-- wp:child-theme/shutter-cards {"align":"full"} -->
+    <!-- wp:child-theme/shutter-cards {"align":"full","style":{"spacing":{"margin":{"top":"var:preset|spacing|65"}}}} -->
     <!-- wp:child-theme/shutter-card {"title":"Define","subtitle":"Clarity, scope \u0026amp; technical direction","description":"Every successful project starts with alignment. I work closely with clients to understand their goals, constraints, and the problems they're actually trying to solve — then translate that into a clear technical plan. From audits and discovery to architecture and timelines, this phase ensures the right solution is defined before any code is written.","cardIndex":"01"} /-->
 
     <!-- wp:child-theme/shutter-card {"title":"Design","subtitle":"Accessible, User-Centered Interfaces","description":"Good design is usable, inclusive, and intentional. I build clean interfaces that serve business goals while meeting WCAG accessibility standards — not as an afterthought, but as a baseline.\u003cbr\u003e\u003cbr\u003eWhether I'm working within an existing design system or shaping layouts from scratch, the aim is the same: remove friction and create experiences people trust.","cardIndex":"02"} /-->
@@ -96,6 +94,92 @@
 
     <!-- wp:child-theme/shutter-card {"title":"Deliver","subtitle":"Reliable Execution \u0026amp; Long-term Partnership","description":"I deliver with accountability and clear communication at every step. From launch support to ongoing improvements, I operate as a long-term partner — not a contractor who disappears after handoff. Clients get reliable deployments, clean documentation, and a direct line to someone who knows their codebase inside and out.","cardIndex":"05"} /-->
     <!-- /wp:child-theme/shutter-cards --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"className":"is-style-numbered-list","style":{"spacing":{"blockGap":"var:preset|spacing|65"}},"layout":{"type":"constrained"}} -->
+<div id="framework" class="wp-block-group is-style-numbered-list"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">The framework</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:paragraph -->
+            <p>Every project is powered by a custom WordPress platform&nbsp;—&nbsp;six years of architecture decisions refined into a reusable foundation that ships faster without compromising on code quality,&nbsp;accessibility,&nbsp;or long-term maintainability.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:buttons -->
+            <div class="wp-block-buttons"><!-- wp:button {"selectedIcon":"arrow"} -->
+                <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Learn more</a></div>
+                <!-- /wp:button --></div>
+            <!-- /wp:buttons --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns -->
+
+    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    <div class="wp-block-group"><!-- wp:group {"layout":{"type":"default"}} -->
+        <div class="wp-block-group"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Modular Architecture</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">A parent-child theme model built on the Provider pattern&nbsp;—&nbsp;self-contained domains that own their PHP,&nbsp;assets,&nbsp;blocks,&nbsp;and tests.&nbsp;Composition over inheritance.&nbsp;Autowiring-first dependency injection.&nbsp;No monolithic base classes,&nbsp;no tangled dependencies.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:group --></div>
+    <!-- /wp:group -->
+
+    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    <div class="wp-block-group"><!-- wp:group {"layout":{"type":"default"}} -->
+        <div class="wp-block-group"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Modern Stack</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">PHP 8.4+&nbsp;with strict types.&nbsp;Timber and Twig for templating.&nbsp;PHP-DI for dependency injection.&nbsp;esbuild and Sass for fast,&nbsp;parallel asset compilation.&nbsp;Custom Gutenberg blocks with React editor components and Twig server-side rendering.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:group --></div>
+    <!-- /wp:group -->
+
+    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    <div class="wp-block-group"><!-- wp:group {"layout":{"type":"default"}} -->
+        <div class="wp-block-group"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Three Layers of Testing</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">430+&nbsp;PHP tests with PHPUnit and WorDBless.&nbsp;JavaScript unit tests with Vitest and Testing Library covering DOM interactions,&nbsp;keyboard navigation,&nbsp;and focus management.&nbsp;End-to-end browser automation with Playwright&nbsp;—&nbsp;including automated WCAG 2.1 AA accessibility audits via axe-core on every page.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:group --></div>
+    <!-- /wp:group -->
+
+    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    <div class="wp-block-group"><!-- wp:group {"layout":{"type":"default"}} -->
+        <div class="wp-block-group"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Accessibility Built In</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">WCAG 2.1 AA compliance isn't a checklist item — it's enforced at every layer. Semantic markup and accessible patterns are the default in every template and block. Automated audits run on every page as part of the test suite, and keyboard navigation and focus management are tested explicitly — not assumed.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:group --></div>
+    <!-- /wp:group -->
+
+    <!-- wp:group {"layout":{"type":"constrained"}} -->
+    <div class="wp-block-group"><!-- wp:group {"layout":{"type":"default"}} -->
+        <div class="wp-block-group"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Convention Driven DX</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">One Makefile for every workflow.&nbsp;PSR-4 autoloading that mirrors directory structure.&nbsp;Auto-discovered assets and blocks&nbsp;—&nbsp;no manifests to update.&nbsp;Add a Feature class,&nbsp;drop it in the array,&nbsp;and the container handles the rest.&nbsp;Watch mode for real-time recompilation.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:group --></div>
+    <!-- /wp:group --></div>
 <!-- /wp:group -->
 
 <!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"bottom":"0"}}}} -->
@@ -157,7 +241,7 @@
                     <h3 class="wp-block-accordion-heading has-40-font-size"><button type="button" class="wp-block-accordion-heading__toggle"><span class="wp-block-accordion-heading__toggle-title">Who handles hosting?</span><span class="wp-block-accordion-heading__toggle-icon" aria-hidden="true">+</span></button></h3>
                     <!-- /wp:accordion-heading -->
 
-                    <!-- wp:accordion-panel {"isSelected":true} -->
+                    <!-- wp:accordion-panel -->
                     <div role="region" class="wp-block-accordion-panel"><!-- wp:paragraph {"fontSize":"30"} -->
                         <p class="has-30-font-size">Either of us — it depends on what makes sense for the project. Some clients prefer to own their hosting relationship directly, and I'm happy to recommend providers, help configure the environment, and hand off the keys. Others would rather not think about it at all, and in those cases I can manage hosting on their behalf — handling setup, SSL, DNS, backups, updates, and ongoing server maintenance so they can focus on running their business. There's no one-size-fits-all answer here. We'll figure out the arrangement that gives you the right balance of control and convenience, and I'll make sure the infrastructure is solid either way.</p>
                         <!-- /wp:paragraph --></div>

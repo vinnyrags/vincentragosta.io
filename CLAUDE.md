@@ -179,7 +179,7 @@ From the project root:
 | `make install` | Install composer + npm dependencies for both themes |
 | `make build` | Build child theme assets (runs parent build first) |
 | `make watch` | Start watch mode for development |
-| `make test` | Run PHPUnit test suite for both themes |
+| `make test` | Run PHPUnit test suites for both themes |
 | `make update` | Update composer dependencies (root + both themes) |
 | `make clean` | Remove vendor, node_modules, and dist from both themes |
 | `make autoload` | Regenerate composer autoloaders for both themes |
@@ -192,12 +192,22 @@ From a theme directory:
 | `composer dump-autoload` | Regenerate PSR-4 autoloader (after adding/moving classes) |
 | `npm run build` | Compile that theme's assets |
 | `npm run start` | Watch mode for that theme |
+| `npm run test:js` | Run JavaScript unit tests (Vitest) |
+| `npm run test:js:watch` | Vitest in watch mode |
+| `npm run test:js:coverage` | Vitest with coverage report (child theme) |
+| `npm run test:e2e` | Run Playwright E2E tests (child theme, requires DDEV) |
+| `npm run test:e2e:headed` | Playwright with visible browser |
+| `npm run test:e2e:report` | Open Playwright HTML report |
 
 ## Testing
 
-New PHP code should include tests where applicable. The codebase uses **PHPUnit 9** with **WorDBless** (a WordPress test harness that loads WordPress without a database). Tests run with `make test` from the project root or `composer test` from either theme directory.
+The codebase has three layers of automated testing: PHP unit/integration tests, JavaScript unit tests, and end-to-end browser tests with accessibility audits.
 
-### Structure
+### PHP Tests (PHPUnit 9 + WorDBless)
+
+New PHP code should include tests where applicable. **WorDBless** is a WordPress test harness that loads WordPress without a database for fast, isolated execution. Tests run with `make test` from the project root or `composer test` from either theme directory.
+
+#### Structure
 
 Tests are organized into two suites:
 
@@ -206,7 +216,7 @@ Tests are organized into two suites:
 
 Test directories mirror source structure. A class at `src/Providers/Support/Asset/AssetManager.php` has tests at `tests/Unit/Providers/Support/Asset/AssetManagerTest.php`.
 
-### Conventions
+#### Conventions
 
 - Test classes extend `WorDBless\BaseTestCase`
 - The `HasContainer` trait (`tests/Support/HasContainer.php`) provides `buildTestContainer()` for tests that need DI — it builds a real container with autowiring and optional definition overrides
@@ -214,14 +224,65 @@ Test directories mirror source structure. A class at `src/Providers/Support/Asse
 - When adding a new feature class, manager method, or provider behavior, include corresponding tests
 - Run `composer dump-autoload` in the theme directory if tests can't find new classes
 
+### JavaScript Tests (Vitest + Testing Library)
+
+Frontend JavaScript is tested with **Vitest** using a **jsdom** environment and **Testing Library** (`@testing-library/dom`, `@testing-library/jest-dom`) for accessible, user-centric assertions. Run with `npm run test:js` from either theme directory.
+
+#### Structure
+
+JS tests live at `tests/js/` and mirror the provider directory structure:
+
+```
+tests/js/Providers/
+├── Theme/
+│   ├── assets/js/
+│   │   ├── dropdown.test.js    # ARIA toggles, keyboard nav, focus management
+│   │   └── header.test.js      # Light/dark mode, overlay, focus trapping
+│   └── blocks/
+│       └── shutter-cards/
+│           └── view.test.js    # Card activation, keyboard, animation classes
+└── Project/
+    └── blocks/
+        └── projects/
+            └── view.test.js    # Sort by title/date, ascending/descending
+```
+
+#### Conventions
+
+- The parent theme provides a shared base config (`scripts/vitest.base.config.js`) and test setup file (`scripts/test-setup.js`) — the child theme inherits both
+- The setup file mocks browser APIs not available in jsdom: `window.matchMedia` and `IntersectionObserver` (with a `trigger()` helper for testing intersection behavior)
+- Cleanup runs after each test: DOM reset, localStorage clear, document class removal
+- Test files use inline fixture builders (e.g., `createDropdown()`, `createShutterCards(N)`) to construct DOM structures
+
+### End-to-End Tests (Playwright + axe-core)
+
+The child theme includes **Playwright** browser automation tests that run against the live DDEV local site. Run with `npm run test:e2e` from the child theme directory (requires DDEV to be running).
+
+#### Structure
+
+E2E tests live at `tests/e2e/`:
+
+- **`smoke.test.js`** — verifies every page loads with expected structure and zero console errors
+- **`header.test.js`** — dark/light mode persistence across reloads, mobile hamburger menu, overlay focus trapping, keyboard escape handling
+- **`accessibility.test.js`** — automated WCAG 2.1 AA audits on every page via `@axe-core/playwright`
+
+#### Conventions
+
+- Config at `playwright.config.js`: Chromium only, fully parallel, 2 retries on CI
+- Screenshots captured on failure, HTML reports generated in `tests/e2e/report/`
+- Accessibility tests assert zero violations against `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa` tags
+- Mobile viewport tests use 375x812 for responsive behavior
+
 ### When to Write Tests
 
 - New support classes (managers, services, utilities) — always
 - New feature classes — when they contain logic beyond simple hook registration
+- New frontend JavaScript with DOM manipulation or user interaction — Vitest + Testing Library
 - Bug fixes — a regression test that reproduces the bug before the fix
 - Refactors that change behavior boundaries — verify the new boundaries
+- New pages or major UI changes — add E2E smoke tests and accessibility audits
 
-Tests aren't expected for pure WordPress hook wiring (e.g., a feature that only calls `add_filter`), Twig templates, or SCSS/JS assets.
+Tests aren't expected for pure WordPress hook wiring (e.g., a feature that only calls `add_filter`), Twig templates, or SCSS/JS assets without interactive behavior.
 
 ## Naming Conventions
 

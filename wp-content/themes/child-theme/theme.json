@@ -16,6 +16,36 @@
     "spacing": {
       "spacingSizes": [
         {
+          "name": "20",
+          "slug": "20",
+          "size": "0.5rem"
+        },
+        {
+          "name": "30",
+          "slug": "30",
+          "size": "1rem"
+        },
+        {
+          "name": "40",
+          "slug": "40",
+          "size": "1.5rem"
+        },
+        {
+          "name": "50",
+          "slug": "50",
+          "size": "2.5rem"
+        },
+        {
+          "name": "60",
+          "slug": "60",
+          "size": "4rem"
+        },
+        {
+          "name": "65",
+          "slug": "65",
+          "size": "clamp(4rem, 15vw, 7rem)"
+        },
+        {
           "name": "70",
           "slug": "70",
           "size": "clamp(6rem, 15vw, 20rem)"
