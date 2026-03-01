@@ -69,7 +69,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     allowedFormats={['core/bold', 'core/italic']}
                 />
                 <RichText
-                    tagName="div"
+                    tagName="p"
                     className="shutter-card__description"
                     value={description}
                     onChange={(newDescription) => setAttributes({ description: newDescription })}

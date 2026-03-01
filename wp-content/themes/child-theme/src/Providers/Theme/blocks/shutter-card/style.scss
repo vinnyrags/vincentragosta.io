@@ -111,14 +111,6 @@
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease 0.2s, visibility 0s, max-height 0.4s ease;
-
-    p {
-      margin: 0;
-
-      + p {
-        margin-block-start: var(--wp--preset--spacing--30);
-      }
-    }
   }
 
   // Toggle button
