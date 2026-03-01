@@ -177,7 +177,6 @@
 
 .is-inactive:hover .shutter-card__toggle,
 .is-inactive .shutter-card__toggle:focus-visible {
-  transform: rotate(0);
   color: var(--shutter-card-toggle-hover-icon);
   background-color: var(--shutter-card-toggle-hover-bg);
   border-color: var(--shutter-card-toggle-hover-border);
