@@ -1,9 +1,67 @@
-<!-- wp:cover {"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-1.svg","id":52,"dimRatio":50,"isUserOverlayColor":true,"minHeight":100,"minHeightUnit":"vh","contentPosition":"bottom left","sizeSlug":"full","align":"full","className":"is-style-animated","layout":{"type":"constrained"}} -->
-<div class="wp-block-cover alignfull has-custom-content-position is-position-bottom-left is-style-animated" style="min-height:100vh"><img class="wp-block-cover__image-background wp-image-52 size-full" alt="" src="https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-1.svg" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-background-dim"></span><div class="wp-block-cover__inner-container"><!-- wp:heading {"fontSize":"70"} -->
-    <h2 class="wp-block-heading has-70-font-size"><strong>The framework</strong><br>behind the work</h2>
-    <!-- /wp:heading --></div></div>
+<!-- wp:cover {"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-1.svg","id":52,"hasParallax":true,"dimRatio":50,"isUserOverlayColor":true,"minHeight":100,"minHeightUnit":"vh","contentPosition":"bottom left","sizeSlug":"full","align":"full","className":"is-style-animated","layout":{"type":"default"}} -->
+<div class="wp-block-cover alignfull has-parallax has-custom-content-position is-position-bottom-left is-style-animated" style="min-height:100vh"><div class="wp-block-cover__image-background wp-image-52 size-full has-parallax" style="background-position:50% 50%;background-image:url(https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-1.svg)"></div><span aria-hidden="true" class="wp-block-cover__background has-background-dim"></span><div class="wp-block-cover__inner-container"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
+        <div class="wp-block-column" style="flex-basis:60%"><!-- wp:heading {"fontSize":"70"} -->
+            <h2 class="wp-block-heading has-70-font-size"><strong>The framework</strong><br>behind the work</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>There's a reason every project starts from the same foundation. Let's take a look at what's under the hood.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div></div>
 <!-- /wp:cover -->
 
 <!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
 <!-- /wp:separator -->
+
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div class="wp-block-group"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Modular by design</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:paragraph -->
+            <p>The platform is built on a parent-child theme model. The parent theme provides reusable infrastructure — base classes, support managers, contracts, and shared features. The child theme extends it with site-specific functionality. Every new project starts with the same battle-tested foundation.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">At the core is the <strong>Provider pattern</strong> — self-contained domains that own their PHP classes, assets, blocks, configuration, and tests. Similar to Laravel service providers, each provider is scoped to a feature and composes its own managers for assets, blocks, features, ACF fields, and REST endpoints. No deep inheritance chains, no tangled dependencies.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"className":"is-style-wide"} -->
+            <hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key Points</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>Parent-child theme model</strong> — Infrastructure in the parent, specifics in the child. Clean separation that scales across projects.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Provider pattern</strong> — Each provider is a self-contained domain owning its PHP, SCSS, JS, blocks, config, and tests.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Composition over inheritance</strong> — Providers compose managers as internal collaborators rather than inheriting from a monolithic base.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Autowiring-first DI</strong> — PHP-DI resolves dependencies automatically. Explicit definitions only where autowiring can't.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
