@@ -13,6 +13,7 @@ use ChildTheme\Providers\Theme\Hooks\ParagraphBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
+use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
 use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
 use ParentTheme\Services\IconServiceFactory;
@@ -34,6 +35,7 @@ class ThemeProvider extends BaseThemeProvider
      */
     protected array $features = [
         ScrollReveal::class,
+        WpFormsBlockDetection::class,
         WpFormsFloatingLabels::class,
     ];
 

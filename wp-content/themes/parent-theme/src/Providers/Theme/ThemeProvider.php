@@ -13,6 +13,7 @@ use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
+use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
 use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use ParentTheme\Services\IconServiceFactory;
 use Timber\Attachment;
@@ -46,6 +47,7 @@ class ThemeProvider extends Provider
         DisablePosts::class,
         EnableSvgUploads::class,
         ScrollReveal::class => false,
+        WpFormsBlockDetection::class => false,
         WpFormsFloatingLabels::class => false,
     ];
 
