@@ -24,12 +24,16 @@
 <div class="wp-block-group"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Modular by design</span></h2>
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Architecture Overview</span></h2>
             <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
         <!-- wp:column -->
-        <div class="wp-block-column"><!-- wp:paragraph -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Modular by design</strong>.</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
             <p>The platform is built on a parent-child theme model. The parent theme provides reusable infrastructure — base classes, support managers, contracts, and shared features. The child theme extends it with site-specific functionality. Every new project starts with the same battle-tested foundation.</p>
             <!-- /wp:paragraph -->
 
@@ -70,17 +74,49 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-bottom:0"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group"><!-- wp:columns -->
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-1-grey-1.svg","id":5,"source":"file","title":"squiggle-1-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Modern tooling</span></h2>
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Tech Stack</span></h2>
             <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
         <!-- wp:column -->
-        <div class="wp-block-column"><!-- wp:paragraph -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Modern tooling. No legacy baggage.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
             <p>Every dependency is chosen deliberately — nothing is included because "that's what WordPress projects use." The stack prioritizes type safety, fast builds, and developer confidence.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:table {"hasFixedLayout":false,"className":"is-style-regular","fontSize":"30"} -->
+            <figure class="wp-block-table is-style-regular has-30-font-size"><table><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody><tr><td>PHP 8.4+</td><td>Strict types throughout — every file declares <code>strict_types=1</code></td></tr><tr><td>Timber 2.x / Twig</td><td>Clean templating with separation of logic and presentation</td></tr><tr><td>PHP-DI 7.0</td><td>Autowiring-first dependency injection — no service locators</td></tr><tr><td>esbuild + Sass</td><td>Fast, parallel asset compilation with watch mode</td></tr><tr><td>WordPress Block Editor</td><td>Custom dynamic blocks with React editor components and Twig server-side rendering</td></tr><tr><td>Advanced Custom Fields Pro</td><td>Structured content with JSON-synced field groups</td></tr><tr><td>DDEV</td><td>Containerized local development with database snapshots</td></tr></tbody></table></figure>
+            <!-- /wp:table --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div class="wp-block-group"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Feature System</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Toggle-able by default. Additive when it matters.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Functionality is organized into two categories — <strong>Features</strong> and <strong>Hooks</strong> — each with distinct inheritance rules that prevent accidental breakage across projects.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
