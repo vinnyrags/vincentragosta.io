@@ -37,6 +37,11 @@ start:
 stop:
 	@echo "Snapshotting database..."
 	ddev snapshot --name=pre-stop-$$(date +%Y%m%d-%H%M%S)
+	@echo "Pruning old snapshots (keeping 3 most recent)..."
+	@cd .ddev/db_snapshots && ls -t *.gz 2>/dev/null | tail -n +4 | while read f; do \
+		echo "  Removed: $$f"; \
+		rm -f "$$f"; \
+	done
 	@echo "Stopping DDEV environment..."
 	ddev stop
 	@echo "✓ Database snapshotted and DDEV stopped"
