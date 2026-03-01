@@ -8,6 +8,7 @@
     const selectors = [
         'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
         '.site-main p',
+        '.site-main ul', '.site-main ol', '.site-main dl',
         '.site-main .wp-block-image',
         '.site-main .wp-block-button',
         '.site-main .wp-block-buttons',
