@@ -83,20 +83,26 @@ html {
     .is-position-bottom-left
   ) > .wp-block-cover__inner-container {
     box-sizing: border-box;
-    max-width: var(--wp--style--global--content-size);
+    max-width: var(--wp--style--global--content-size, 1440px);
     margin-inline: auto !important;
     width: 100%;
   }
 
   // Constrained content width (replaces is-layout-constrained)
   > *:not(.alignwide):not(.alignfull) {
-    max-width: var(--wp--style--global--content-size, 1280px);
+    max-width: var(--wp--style--global--content-size, 1440px);
     margin-inline: auto;
   }
 
   > .alignwide {
-    max-width: var(--wp--style--global--wide-size, 1440px);
+    max-width: var(--wp--style--global--wide-size, 1600px);
     margin-inline: auto;
+  }
+
+  // Strip redundant WordPress padding from constrained blocks that don't
+  // need it — .site-main already constrains width and provides inline padding.
+  .has-global-padding:not(.alignfull):not(.has-background) {
+    padding-inline: 0;
   }
 }
 
