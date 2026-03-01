@@ -7,9 +7,9 @@ namespace ChildTheme\Providers\Theme\Hooks;
 use ParentTheme\Providers\Contracts\Hook;
 
 /**
- * Registers custom block styles for core/paragraph.
+ * Registers custom block styles for text blocks (core/paragraph, core/list).
  */
-class ParagraphBlockStyles implements Hook
+class TextBlockStyles implements Hook
 {
     public function register(): void
     {
@@ -17,13 +17,16 @@ class ParagraphBlockStyles implements Hook
     }
 
     /**
-     * Register block styles for core/paragraph.
+     * Register block styles for text blocks.
      */
     public function registerStyles(): void
     {
-        register_block_style('core/paragraph', [
+        $mutedStyle = [
             'name'  => 'muted',
             'label' => __('Muted', 'child-theme'),
-        ]);
+        ];
+
+        register_block_style('core/paragraph', $mutedStyle);
+        register_block_style('core/list', $mutedStyle);
     }
 }

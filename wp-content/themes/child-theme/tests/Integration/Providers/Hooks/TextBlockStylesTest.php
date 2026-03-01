@@ -2,22 +2,22 @@
 
 namespace ChildTheme\Tests\Integration\Providers\Hooks;
 
-use ChildTheme\Providers\Theme\Hooks\ParagraphBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**
- * Integration tests for the ParagraphBlockStyles hook.
+ * Integration tests for the TextBlockStyles hook.
  */
-class ParagraphBlockStylesTest extends BaseTestCase
+class TextBlockStylesTest extends BaseTestCase
 {
-    private ParagraphBlockStyles $hook;
+    private TextBlockStyles $hook;
 
     public function set_up(): void
     {
         parent::set_up();
-        $this->hook = new ParagraphBlockStyles();
+        $this->hook = new TextBlockStyles();
     }
 
     public function testImplementsRegistrable(): void
@@ -40,17 +40,24 @@ class ParagraphBlockStylesTest extends BaseTestCase
         );
     }
 
-    public function testRegisterStylesMethodExists(): void
-    {
-        $this->assertTrue(method_exists($this->hook, 'registerStyles'));
-    }
-
-    public function testMutedStyleIsRegistered(): void
+    public function testMutedStyleIsRegisteredForParagraph(): void
     {
         $this->hook->registerStyles();
 
         $styles = \WP_Block_Styles_Registry::get_instance()
             ->get_registered_styles_for_block('core/paragraph');
+
+        $this->assertIsArray($styles);
+        $this->assertArrayHasKey('muted', $styles);
+        $this->assertEquals('Muted', $styles['muted']['label']);
+    }
+
+    public function testMutedStyleIsRegisteredForList(): void
+    {
+        $this->hook->registerStyles();
+
+        $styles = \WP_Block_Styles_Registry::get_instance()
+            ->get_registered_styles_for_block('core/list');
 
         $this->assertIsArray($styles);
         $this->assertArrayHasKey('muted', $styles);
