@@ -32,7 +32,7 @@ html {
     z-index: 998;
     display: none;
 
-    @include media(md) {
+    @include media(lg) {
         display: block;
     }
 
@@ -45,6 +45,7 @@ html {
 
     &__list {
         display: flex;
+        align-items: center;
         gap: var(--wp--preset--spacing--20);
         padding: var(--wp--preset--spacing--20);
         background: var(--color-surface);
@@ -55,6 +56,73 @@ html {
 
     &__pill {
         display: inline-block;
+        padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
+        border-radius: 9999px;
+        font-size: var(--wp--preset--font-size--10);
+        line-height: 1.4;
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        background: var(--section-nav-pill-bg);
+        color: var(--section-nav-pill-text);
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:hover,
+        &:focus {
+            background: var(--section-nav-pill-hover-bg);
+            color: var(--section-nav-pill-hover-text);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--wp--preset--color--accent-1);
+            outline-offset: 2px;
+        }
+
+        &.is-active {
+            background: var(--section-nav-pill-active-bg);
+            color: var(--section-nav-pill-active-text);
+        }
+    }
+
+    &__overflow {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    &__overflow-toggle {
+        border: none;
+        cursor: pointer;
+        letter-spacing: 0.15em;
+        font-family: inherit;
+    }
+
+    &__overflow-menu {
+        position: absolute;
+        inset-block-end: calc(100% + 0.5em);
+        inset-inline-end: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--wp--preset--spacing--20);
+        padding: var(--wp--preset--spacing--20);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--wp--preset--spacing--30);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(4px);
+        transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+
+        [aria-expanded='true'] + & {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    }
+
+    &__overflow-item {
+        display: block;
         padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
         border-radius: 9999px;
         font-size: var(--wp--preset--font-size--10);
@@ -97,6 +165,14 @@ html {
     .section-nav__pill {
         transition: none;
     }
+
+    .section-nav__overflow-menu {
+        transition: none;
+    }
+
+    .section-nav__overflow-item {
+        transition: none;
+    }
 }
 
 // ==========================================================================
@@ -105,6 +181,19 @@ html {
 
 @include forced-colors {
     .section-nav__pill {
+        border: 1px solid ButtonText;
+
+        &.is-active {
+            background: Highlight;
+            color: HighlightText;
+        }
+    }
+
+    .section-nav__overflow-menu {
+        border: 1px solid ButtonText;
+    }
+
+    .section-nav__overflow-item {
         border: 1px solid ButtonText;
 
         &.is-active {
