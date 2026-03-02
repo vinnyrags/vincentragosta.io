@@ -243,7 +243,7 @@ ScrollReveal::class,             // opted in from parent</code></pre>
 <!-- /wp:separator -->
 
 <!-- wp:group {"layout":{"type":"constrained"}} -->
-<div class="wp-block-group"><!-- wp:columns -->
+<div id="build-system" class="wp-block-group"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
             <h2 class="wp-block-heading"><span style="text-decoration: underline;">Build system</span></h2>
@@ -305,8 +305,8 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <h2 class="wp-block-heading has-40-font-size"><strong>Output mapping</strong></h2>
             <!-- /wp:heading -->
 
-            <!-- wp:table {"hasFixedLayout":false,"className":"is-style-regular","fontSize":"30"} -->
-            <figure class="wp-block-table is-style-regular has-30-font-size"><table><thead><tr><th>Source</th><th>Output</th></tr></thead><tbody><tr><td>Provider SCSS
+            <!-- wp:table {"hasFixedLayout":false,"className":"is-style-muted"} -->
+            <figure class="wp-block-table is-style-muted"><table><thead><tr><th>Source</th><th>Output</th></tr></thead><tbody><tr><td>Provider SCSS
                 (<code>assets/scss/index.scss</code>)</td><td><code>dist/css/{slug}.css</code></td></tr><tr><td>Provider JS
                 (<code>assets/js/*.js</code>)</td><td><code>dist/js/{slug}/*.js</code></td></tr><tr><td>Block editor JS
                 (<code>blocks/{name}/editor/index.js</code>)</td><td><code>dist/js/{name}.js</code></td></tr><tr><td>Block frontend style
@@ -322,13 +322,121 @@ ScrollReveal::class,             // opted in from parent</code></pre>
 <!-- /wp:separator -->
 
 <!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
+<div class="wp-block-group alignfull" id="testing" style="margin-top:0"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
-        <div class="wp-block-column" style="flex-basis:40%"></div>
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Testing</span></h2>
+            <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
         <!-- wp:column -->
-        <div class="wp-block-column"></div>
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Three layers. Full stack. Every commit.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Most WordPress projects ship with zero automated tests. This platform has 430+ PHP tests, JavaScript unit tests with DOM assertions, and end-to-end browser automation with automated accessibility audits.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>PHP — Unit &amp; Integration</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">PHPUnit 9 + WorDBless</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">WorDBless loads WordPress without a database — tests execute in milliseconds, not seconds. Two suites cover different concerns: **Unit** tests are fully isolated with no WordPress side effects, while **Integration** tests exercise hooks, filters, and the full registration lifecycle.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Test directories mirror source structure exactly. A class at <strong>src/Providers/Support/Asset/AssetManager.php</strong> has tests at <strong>tests/Unit/Providers/Support/Asset/AssetManagerTest.php</strong>. The `HasContainer` trait builds a real DI container with autowiring for realistic test scenarios — no mocking the container itself.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Javascript — Unit &amp; Integration</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Vitest + Testing Library</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Frontend JavaScript is tested in a jsdom environment using Vitest and Testing Library. Tests verify real DOM behavior: ARIA attribute toggling, keyboard navigation, focus management, animation class application, and data sorting.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">The parent theme provides a shared base config and test setup file — including custom mocks for browser APIs that jsdom doesn't implement (IntersectionObserver with a <strong>trigger()</strong> helper, <strong>window.matchMedia</strong>). The child theme inherits this infrastructure and adds its own test files mirroring the provider directory structure.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>An example of whats covered:</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>Dropdown component</strong> — ARIA toggles, keyboard navigation, focus wrapping, outside-click dismissal</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Header</strong> — light/dark mode toggle, localStorage persistence, overlay focus trapping</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Shutter cards block</strong> — card activation, keyboard interaction, animation class cycling</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Projects block</strong> — sort by title/date, ascending/descending direction</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>End-to-End — Browser Automation &amp; Accessibility</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Playwright + axe-core</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Playwright tests run against the live local development site in Chromium — real browser, real rendered HTML, real interactions.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>Smoke tests</strong> verify every page loads with expected structure and zero console errors.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Interaction tests</strong> cover dark/light mode persistence across page reloads, mobile hamburger menu behavior, overlay focus trapping, and keyboard escape handling at a 375px mobile viewport.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Accessibility audits</strong> run automated WCAG 2.1 AA checks on every page using axe-core. Any violation fails the build — accessibility isn't aspirational, it's enforced.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">HTML reports are generated for debugging failures, with screenshots captured automatically when a test fails.</p>
+            <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
 <!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
+<!-- /wp:separator -->

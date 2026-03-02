@@ -8,7 +8,7 @@
 - consider writing a script or instructing claude to scrape the pages of the website, pull out its content (within .site-main container) into a file, review it, store it to memory and make updates in this fashion. I would like to consider adding the concept of FSE hybrid (assuming this project adheres to that) in some of the langauge, I also want to talk about patterns and how we would integrate them into our system. i have a task on me to do this, if by the time this command is run that work is done, lets use that otherwise lets theorize instead on how we would do it within the confines of this project and add that bit to our content. i also want to talk about git push deployments, which we will have, and our environments, each project has a staging environment, when pushing to develop branch, the code on that environment automatically gets updated. same for git push master going to production.
 - for long section-navs, can we have it wrap after a certain width is hit, or perhaps you have a better idea on how to make the section-nav behave responsibly?
 - create style variant for 22px/30px font-size and bold font weight, think semantic name (core/heading)
-- consider having the section-nav not appear on page load, and isntead appear once the user starts scrolling, we need to be mindful of page scroll position too, meaning if the user enters a page and is already halfway down the page, in this scenario the section-nav should appear
+- consider having the section-nav not appear on page load, and instead appear once the user starts scrolling, we need to be mindful of page scroll position too, meaning if the user enters a page and is already halfway down the page, in this scenario the section-nav should appear
 
 ## MEDIUM PRIORITY
 
