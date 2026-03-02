@@ -343,7 +343,7 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>PHP — Unit &amp; Integration</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>PHP — unit &amp; integration</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -363,7 +363,7 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>Javascript — Unit &amp; Integration</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>Javascript — unit &amp; integration</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -405,7 +405,7 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>End-to-End — Browser Automation &amp; Accessibility</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>End-to-end — browser automation &amp; accessibility</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -440,3 +440,211 @@ ScrollReveal::class,             // opted in from parent</code></pre>
 <!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
 <!-- /wp:separator -->
+
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div id="design-system" class="wp-block-group"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Design System</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Tokens, not magic numbers.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>The visual layer is built on CSS custom properties and Sass utilities — a small, deliberate system that adapts across light mode, dark mode, and high-contrast environments without duplicating styles.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key points</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>CSS custom properties</strong> as the shared interface — color tokens, spacing scale, and typography variables defined once and consumed everywhere.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Light/dark mode</strong> via custom property swaps — one set of component styles, two visual modes.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Responsive breakpoints</strong> at 576px, 768px, 992px, and 1440px with Sass mixins (<strong>media()</strong>, <strong>media-down()</strong>, <strong>container()</strong> for container queries).</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Block style variants</strong> — Editorial choices registered as WordPress block styles (Muted paragraphs, Animated covers, styled containers) that editors select from the block toolbar.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"bottom":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-bottom:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-grey-1.svg","id":7,"source":"file","title":"squiggle-3-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" id="accessibility" style="margin-top:0"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Accessibility</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Built in. Not bolted on.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Accessibility is a structural concern, not a cleanup pass before launch. It's enforced at every layer — Sass utilities, template markup, JavaScript behavior, and automated testing.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"className":"is-style-wide"} -->
+            <hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key points</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>WCAG utility mixins</strong> — visually-hidden, forced-colors, high-contrast, reduced-motion — available to every SCSS file in the system.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Reduced motion support</strong> — Scroll reveal animations respect `prefers-reduced-motion`. Users who opt out of motion see no animation, not broken animation.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Windows High Contrast</strong> — Forced-colors media query support ensures interfaces remain usable in high-contrast environments.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Semantic markup</strong> — Twig templates use proper heading hierarchy, landmark elements (main, nav, article), and ARIA attributes where semantics alone aren't sufficient.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Icon accessibility</strong> — SVG icons are injected with <strong>aria-hidden="true"</strong> to prevent redundant screen reader announcements.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Automated audits</strong> — Playwright + axe-core runs WCAG 2.1 AA checks against every page as part of the E2E test suite. Violations fail the build.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" id="accessibility"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Security</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Hardened defaults. Not optional add-ons.</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Security decisions are made once in the parent theme and inherited by every project. They're not configuration options — they're the baseline.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key points</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>SVG sanitization</strong> — Every SVG upload is run through <strong>enshrined/svg-sanitize</strong>, stripping scripts, event handlers, and XSS vectors before the file reaches the media library. Admin-only upload restriction adds an additional gate.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Block allowlist</strong> — Only approved blocks are available in the editor. No embed blocks (XSS surface), no raw HTML block. The allowlist is managed as a Feature, so child themes can adjust it if needed.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Comments disabled</strong> — The entire comment subsystem is removed: admin UI, menu items, frontend output, and the edit-comments redirect. Not hidden — removed.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"bottom":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-bottom:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-1-grey-1.svg","id":5,"source":"file","title":"squiggle-1-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" id="developer-experience" style="margin-top:0"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Developer Experience</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading">Convention-driven. Minimal ceremony.</h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Adding functionality to the platform follows predictable patterns. There's no setup wizard, no boilerplate generator — just conventions that the build system and container understand automatically.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key points</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>Makefile commands</strong> — <strong>make start</strong>, <strong>make build</strong>, <strong>make test</strong>, <strong>make watch</strong>, <strong>make clean</strong>. One command for every workflow, from local environment setup to full test runs.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>PSR-4 autoloading</strong> — Namespace matches directory path exactly. Add a PHP class, run <strong>composer dump-autoload</strong>, and it's available everywhere.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Auto-discovered assets</strong> — Create a provider directory with an <strong>assets/scss/index.scss</strong> file, and the build system finds it on the next compile. No manifest to update, no config to edit.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Auto-discovered blocks</strong> — Add a <strong>blocks/{name}/</strong> directory with a <strong>block.json</strong>, and the BlockManager registers it. The build script compiles its styles and editor scripts automatically.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Feature in one line</strong> — Create a class implementing <strong>Feature</strong>, add it to the provider's <strong>$features</strong> array, and the container autowires its dependencies and registers it.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Watch mode</strong> — Real-time SCSS and JS recompilation during development. Change a file, see the result.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->

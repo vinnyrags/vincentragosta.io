@@ -185,7 +185,6 @@ The visual layer is built on CSS custom properties and Sass utilities — a smal
 - **CSS custom properties** as the shared interface — color tokens, spacing scale, and typography variables defined once and consumed everywhere.
 - **Light/dark mode** via custom property swaps — one set of component styles, two visual modes.
 - **Responsive breakpoints** at 576px, 768px, 992px, and 1440px with Sass mixins (`media()`, `media-down()`, `container()` for container queries).
-- **Typography** — Fira Code across weights 300–700.
 - **Block style variants** — Editorial choices registered as WordPress block styles (Muted paragraphs, Animated covers, styled containers) that editors select from the block toolbar.
 
 ---
