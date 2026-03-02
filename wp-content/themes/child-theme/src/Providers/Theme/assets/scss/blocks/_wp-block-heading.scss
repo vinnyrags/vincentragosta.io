@@ -1,0 +1,11 @@
+// ==========================================================================
+// Heading Block Styles (core/heading)
+// ==========================================================================
+
+// Subheading style — compact bold heading for secondary emphasis.
+// Editors select this via the block toolbar's Styles panel.
+.wp-block-heading.is-style-subheading {
+    font-family: var(--wp--preset--font-family--roobert);
+    font-size: var(--wp--preset--font-size--40);
+    font-weight: 700;
+}
