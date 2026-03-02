@@ -24,7 +24,7 @@
 <div id="architecture-overview" class="wp-block-group"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Architecture Overview</span></h2>
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Architecture overview</span></h2>
             <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
@@ -46,7 +46,7 @@
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>Key Points</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>Key points</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:list {"className":"is-style-muted"} -->
@@ -78,7 +78,7 @@
 <div class="wp-block-group alignfull" id="tech-stack" style="margin-top:0"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Tech Stack</span></h2>
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Tech stack</span></h2>
             <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
@@ -106,7 +106,7 @@
 <div id="feature-system" class="wp-block-group"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Feature System</span></h2>
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Feature system</span></h2>
             <!-- /wp:heading --></div>
         <!-- /wp:column -->
 
@@ -124,7 +124,7 @@
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>Features (Toggle-able)</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>Features (toggle-able)</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -142,7 +142,7 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>Hooks (Always-Active)</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>Hooks (always-active)</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -154,12 +154,181 @@ ScrollReveal::class,             // opted in from parent</code></pre>
             <!-- /wp:separator -->
 
             <!-- wp:heading {"fontSize":"40"} -->
-            <h2 class="wp-block-heading has-40-font-size"><strong>Runtime Validation</strong></h2>
+            <h2 class="wp-block-heading has-40-font-size"><strong>Runtime validation</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
             <p class="is-style-muted">Place a Feature in the hooks array or a Hook in the features array, and the system warns you at runtime and skips the class. Wrong marker interfaces are caught immediately — not silently ignored.</p>
             <!-- /wp:paragraph --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"bottom":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-bottom:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" id="block-architecture" style="margin-top:0"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Block architecture</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>Editor to frontend. One block, full stack.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>Custom blocks are built as WordPress dynamic blocks with the full editor-to-frontend pipeline: React/JSX components for the block editor, PHP + Twig for server-side rendering on the frontend, and scoped SCSS for styling in both contexts.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>How a block is built</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Each block lives inside its provider's <strong>blocks/</strong> directory with a predictable file structure:</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li><strong>block.json</strong> — Standard WordPress block metadata. Declares the block name, category, supports, and rendering entry point.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>editor/</strong> — React/JSX components for the block editor. WordPress package imports (<strong>@wordpress/blocks, @wordpress/element</strong>) map to globals at build time — no bundling of WordPress internals.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>render.php</strong> — Server-side entry point. Receives block attributes, builds a Timber context, and renders a Twig template.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>style.scss</strong> — Block styles applied on both the frontend and within the editor</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>{name}.twig</strong> — The Twig template consumed by the renderer.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>view.js</strong> — Optional frontend interactivity (vanilla JS, no framework).</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>ACF block support</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Some blocks use Advanced Custom Fields for structured content entry — giving editors a familiar field-based interface while the developer retains full control over rendering.</p>
+            <!-- /wp:paragraph --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"layout":{"type":"constrained"}} -->
+<div class="wp-block-group"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><span style="text-decoration: underline;">Build system</span></h2>
+            <!-- /wp:heading --></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"><!-- wp:heading -->
+            <h2 class="wp-block-heading"><strong>One script. Zero duplication.</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph -->
+            <p>A single canonical build script lives in the parent theme. It auto-discovers every provider's assets and blocks, compiles them in parallel, and outputs production-ready CSS and JavaScript. The child theme invokes the same script — no copies, no drift.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>How it works</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:list {"className":"is-style-muted"} -->
+            <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+                <li>The script uses <strong>process.cwd()</strong> as the theme root, so it works for any theme that calls it.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>Sass</strong> compiles provider and block SCSS with configurable load paths — child themes can resolve parent SCSS partials (like breakpoints) without duplication.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li><strong>esbuild</strong> bundles JavaScript with ES2020 targeting, minification in production, and sourcemaps in development.</li>
+                <!-- /wp:list-item -->
+
+                <!-- wp:list-item -->
+                <li>WordPress editor packages are externalized — block scripts reference <strong>wp.blocks</strong>, <strong>wp.element</strong>, etc. as globals instead of shipping them in the bundle.</li>
+                <!-- /wp:list-item --></ul>
+            <!-- /wp:list -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Watch mode</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Incremental recompilation during development. The script watches provider `assets/` and `blocks/` directories and rebuilds only what changed.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Output mapping</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:table {"hasFixedLayout":false,"className":"is-style-regular","fontSize":"30"} -->
+            <figure class="wp-block-table is-style-regular has-30-font-size"><table><thead><tr><th>Source</th><th>Output</th></tr></thead><tbody><tr><td>Provider SCSS
+                (<code>assets/scss/index.scss</code>)</td><td><code>dist/css/{slug}.css</code></td></tr><tr><td>Provider JS
+                (<code>assets/js/*.js</code>)</td><td><code>dist/js/{slug}/*.js</code></td></tr><tr><td>Block editor JS
+                (<code>blocks/{name}/editor/index.js</code>)</td><td><code>dist/js/{name}.js</code></td></tr><tr><td>Block frontend style
+                (<code>blocks/{name}/style.scss</code>)</td><td><code>dist/css/{name}.css</code></td></tr><tr><td>Block editor style
+                (<code>blocks/{name}/editor/editor.scss</code>)</td><td><code>dist/css/{name}-editor.css</code></td></tr></tbody></table></figure>
+            <!-- /wp:table --></div>
+        <!-- /wp:column --></div>
+    <!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"bottom":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-bottom:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
+    <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+        <div class="wp-block-column" style="flex-basis:40%"></div>
+        <!-- /wp:column -->
+
+        <!-- wp:column -->
+        <div class="wp-block-column"></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
 <!-- /wp:group -->
