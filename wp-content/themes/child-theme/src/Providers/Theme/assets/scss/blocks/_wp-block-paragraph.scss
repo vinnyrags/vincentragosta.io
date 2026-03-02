@@ -1,5 +1,5 @@
 // ==========================================================================
-// Text Block Styles (core/paragraph, core/list, core/code)
+// Text Block Styles (core/paragraph, core/list, core/code, core/table)
 // ==========================================================================
 
 // Muted style — reduced visual prominence for secondary content.
@@ -13,5 +13,12 @@ p.is-style-muted,
 .wp-block-code.is-style-muted,
 .wp-block-code.is-style-muted code {
     font-size: var(--wp--preset--font-size--10);
+    color: var(--color-text-muted);
+}
+
+.wp-block-table.is-style-muted,
+.wp-block-table.is-style-muted td,
+.wp-block-table.is-style-muted th {
+    font-size: var(--wp--preset--font-size--30);
     color: var(--color-text-muted);
 }
