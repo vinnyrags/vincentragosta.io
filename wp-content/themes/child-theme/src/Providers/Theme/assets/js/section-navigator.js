@@ -147,7 +147,19 @@
     }
 
     nav.appendChild(list);
+    nav.classList.add('is-hidden');
     document.body.appendChild(nav);
+
+    // Show/hide nav based on scroll position — hidden at top, visible when scrolled
+    let footerVisible = false;
+
+    function updateVisibility() {
+        const atTop = window.scrollY === 0;
+        nav.classList.toggle('is-hidden', atTop || footerVisible);
+    }
+
+    window.addEventListener('scroll', updateVisibility);
+    updateVisibility();
 
     // Track active section via IntersectionObserver
     const visibilityMap = new Map();
@@ -204,7 +216,8 @@
         const footerObserver = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
-                    nav.classList.toggle('is-hidden', entry.isIntersecting);
+                    footerVisible = entry.isIntersecting;
+                    updateVisibility();
                 });
             },
             { threshold: 0 }
