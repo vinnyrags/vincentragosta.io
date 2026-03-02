@@ -117,6 +117,48 @@
 
             <!-- wp:paragraph -->
             <p>Functionality is organized into two categories — <strong>Features</strong> and <strong>Hooks</strong> — each with distinct inheritance rules that prevent accidental breakage across projects.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Features (Toggle-able)</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Capabilities that child themes can opt in or out of with a single line. Disable comments, restrict block types, enable SVG uploads, activate scroll animations — all controlled declaratively. The DI container resolves each feature and autowires its dependencies automatically.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:code {"className":"is-style-muted"} -->
+            <pre class="wp-block-code is-style-muted"><code>DisableComments::class,          // enabled
+DisablePosts::class =&gt; false,    // opted out in child
+ScrollReveal::class,             // opted in from parent</code></pre>
+            <!-- /wp:code -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Hooks (Always-Active)</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Structural behavior that should never be accidentally disabled — icon enhancements, block style variants, social icon configurations. Inheritance is purely additive: parent and child hooks merge automatically with no opt-out syntax.</p>
+            <!-- /wp:paragraph -->
+
+            <!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+            <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+            <!-- /wp:separator -->
+
+            <!-- wp:heading {"fontSize":"40"} -->
+            <h2 class="wp-block-heading has-40-font-size"><strong>Runtime Validation</strong></h2>
+            <!-- /wp:heading -->
+
+            <!-- wp:paragraph {"className":"is-style-muted"} -->
+            <p class="is-style-muted">Place a Feature in the hooks array or a Hook in the features array, and the system warns you at runtime and skips the class. Wrong marker interfaces are caught immediately — not silently ignored.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
