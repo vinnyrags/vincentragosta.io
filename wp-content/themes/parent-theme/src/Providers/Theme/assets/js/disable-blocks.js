@@ -16,6 +16,7 @@
 	const config = window.themeDisabledBlocks || {
 		blockTypes: [],
 		embedVariations: [],
+		blockVariations: {},
 	};
 
 	domReady(function () {
@@ -31,8 +32,11 @@
 			unregisterBlockVariation('core/embed', variation);
 		});
 
-		// Unregister stretchy text variations
-		unregisterBlockVariation('core/heading', 'stretchy-heading');
-		unregisterBlockVariation('core/paragraph', 'stretchy-paragraph');
+		// Unregister block variations (keyed by parent block name)
+		Object.entries(config.blockVariations || {}).forEach(function ([blockName, variations]) {
+			variations.forEach(function (variation) {
+				unregisterBlockVariation(blockName, variation);
+			});
+		});
 	});
 })();

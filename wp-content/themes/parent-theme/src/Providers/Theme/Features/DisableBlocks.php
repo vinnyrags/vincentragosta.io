@@ -13,6 +13,7 @@ use WP_Block_Type_Registry;
  * Child themes can filter the disabled blocks using:
  * - 'theme/disabled_block_types' - Filter block types to disable
  * - 'theme/disabled_embed_variations' - Filter embed variations to disable
+ * - 'theme/disabled_block_variations' - Filter block variations to disable
  *
  * @example
  * // In child theme - remove a block from the disabled list (re-enable it)
@@ -151,6 +152,18 @@ class DisableBlocks implements Feature
         'instagram',
     ];
 
+    /**
+     * Default block variations to disable.
+     *
+     * Keys are the parent block name, values are variation names.
+     *
+     * @var array<string, array<string>>
+     */
+    protected array $defaultDisabledBlockVariations = [
+        'core/heading'   => ['stretchy-heading'],
+        'core/paragraph' => ['stretchy-paragraph'],
+    ];
+
     public function register(): void
     {
         add_action('init', [$this, 'unregisterBlocks'], 100);
@@ -176,6 +189,16 @@ class DisableBlocks implements Feature
     public function getDisabledEmbedVariations(): array
     {
         return apply_filters('theme/disabled_embed_variations', $this->defaultDisabledEmbedVariations);
+    }
+
+    /**
+     * Get the filtered list of disabled block variations.
+     *
+     * @return array<string, array<string>>
+     */
+    public function getDisabledBlockVariations(): array
+    {
+        return apply_filters('theme/disabled_block_variations', $this->defaultDisabledBlockVariations);
     }
 
     /**
@@ -234,6 +257,7 @@ class DisableBlocks implements Feature
         wp_localize_script('parent-theme-disable-blocks', 'themeDisabledBlocks', [
             'blockTypes' => array_values($this->getDisabledBlocks()),
             'embedVariations' => array_values($this->getDisabledEmbedVariations()),
+            'blockVariations' => $this->getDisabledBlockVariations(),
         ]);
     }
 }
