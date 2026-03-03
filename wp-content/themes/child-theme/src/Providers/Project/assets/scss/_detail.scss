@@ -1,13 +1,11 @@
 @use 'common/breakpoints' as *;
 @use 'common/bg-overlay' as *;
+@use 'common/content-container' as *;
 
 .project-detail {
 
     // Section-level spacing between container blocks (mirrors .site-main rules)
-    > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
-    > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
-        margin-block-start: var(--wp--preset--spacing--70);
-    }
+    @include content-container;
 
     // Default vertical padding for container blocks with backgrounds
     > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {

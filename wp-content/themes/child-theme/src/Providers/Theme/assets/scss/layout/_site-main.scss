@@ -1,5 +1,5 @@
 .site-main {
-  padding-block-start: var(--header-height, 72px);
+  // padding-block-start: var(--header-height, 72px); // TEMP: disabled for layout audit
 
   // Remove top margin from the first container block on a page
   > :first-child:is(

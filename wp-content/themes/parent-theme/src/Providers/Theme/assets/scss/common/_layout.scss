@@ -1,4 +1,5 @@
 @use 'breakpoints' as *;
+@use 'content-container' as *;
 
 html {
   scroll-behavior: smooth;
@@ -10,6 +11,14 @@ html {
   }
 }
 
+// .site-main is a Twig-rendered <main> element outside WordPress's block
+// rendering pipeline. It never receives the dynamic layout classes that
+// WordPress adds to block containers (is-layout-constrained, has-global-padding),
+// so this theme manually replicates the equivalent behavior: root padding,
+// content-width constraint, alignfull breakout, flow spacing, and section-level
+// spacing. useRootPaddingAwareAlignments is set to false in theme.json because
+// the classes it generates (.has-global-padding, .wp-site-blocks) target elements
+// that don't exist in the Twig templates.
 .site-main {
   // No header offset when first child is a full-bleed hero-type block
   // (cover blocks, or container blocks with backgrounds)
@@ -40,10 +49,7 @@ html {
   }
 
   // Section-level spacing around container blocks
-  > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
-  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
-    margin-block-start: var(--wp--preset--spacing--70);
-  }
+  @include content-container;
 
   // Deep-link scroll offset for sections without backgrounds — accounts for
   // the section-level margin so the scroll lands at the visual start, not the
@@ -73,10 +79,16 @@ html {
     margin-block-start: 0;
   }
 
-  // Constrain cover block inner content to narrow content width and center it.
-  // Scoped to default (no position) and left positions only — right and center
-  // positions retain WordPress core's width and alignment behavior.
-  > .wp-block-cover.alignfull:not(.has-custom-content-position) > .wp-block-cover__inner-container,
+  // Constrain cover block inner content to content width.
+  // Default (no position): centered. Left positions: left-aligned.
+  // Right and center positions retain WordPress core's behavior.
+  > .wp-block-cover.alignfull:not(.has-custom-content-position) > .wp-block-cover__inner-container {
+    box-sizing: border-box;
+    max-width: var(--wp--style--global--content-size, 1440px);
+    margin-inline: auto !important;
+    width: 100%;
+  }
+
   > .wp-block-cover.alignfull.has-custom-content-position:is(
     .is-position-top-left,
     .is-position-center-left,
@@ -84,7 +96,6 @@ html {
   ) > .wp-block-cover__inner-container {
     box-sizing: border-box;
     max-width: var(--wp--style--global--content-size, 1440px);
-    margin-inline: auto !important;
     width: 100%;
   }
 
@@ -99,19 +110,11 @@ html {
     margin-inline: auto;
   }
 
-  // Strip redundant WordPress padding from constrained blocks that don't
-  // need it — .site-main already constrains width and provides inline padding.
-  .has-global-padding:not(.alignfull):not(.has-background) {
-    padding-inline: 0;
-  }
 }
 
 // Editor equivalent: section-level spacing in the block editor
 .is-root-container {
-  > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
-  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
-    margin-block-start: var(--wp--preset--spacing--70);
-  }
+  @include content-container;
 }
 
 // Override WordPress core's hardcoded padding on background containers
