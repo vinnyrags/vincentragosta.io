@@ -30,5 +30,9 @@
 		config.embedVariations.forEach(function (variation) {
 			unregisterBlockVariation('core/embed', variation);
 		});
+
+		// Unregister stretchy text variations
+		unregisterBlockVariation('core/heading', 'stretchy-heading');
+		unregisterBlockVariation('core/paragraph', 'stretchy-paragraph');
 	});
 })();
