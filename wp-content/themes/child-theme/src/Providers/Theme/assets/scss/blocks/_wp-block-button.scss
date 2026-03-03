@@ -1,0 +1,37 @@
+// ==========================================================================
+// Button Block Styles (core/button)
+// ==========================================================================
+
+// Muted style — text-link appearance with accent underline.
+// Use for back links, secondary navigation, or de-emphasized actions.
+.wp-block-button.is-style-muted {
+    .wp-block-button__link {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--color-text-muted);
+        text-decoration-line: underline;
+        text-decoration-color: var(--wp--preset--color--accent-1);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 4px;
+        font-size: var(--wp--preset--font-size--20);
+        text-transform: none;
+        transition: color 0.2s ease;
+
+        &:hover,
+        &:focus {
+            background: none;
+            color: var(--wp--preset--color--accent-1);
+        }
+
+        .wp-block-button__icon {
+            color: var(--color-button-text);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wp-block-button.is-style-muted .wp-block-button__link {
+        transition: none;
+    }
+}

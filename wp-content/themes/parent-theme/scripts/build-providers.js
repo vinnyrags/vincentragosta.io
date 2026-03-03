@@ -62,6 +62,7 @@ const wpExternals = {
     '@wordpress/hooks': 'wp.hooks',
     '@wordpress/api-fetch': 'wp.apiFetch',
     '@wordpress/i18n': 'wp.i18n',
+    '@wordpress/server-side-render': 'wp.serverSideRender',
     'react': 'React',
     'react-dom': 'ReactDOM',
 };

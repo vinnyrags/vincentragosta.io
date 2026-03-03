@@ -45,43 +45,6 @@ class ProjectPost extends Post
     }
 
     /**
-     * Get technologies as a trimmed array.
-     *
-     * @return string[]
-     */
-    public function technologyList(): array
-    {
-        $tech = $this->technologies();
-
-        if ($tech === '') {
-            return [];
-        }
-
-        return array_map('trim', explode(',', $tech));
-    }
-
-    /**
-     * Whether any project detail field is populated.
-     */
-    public function hasProjectDetails(): bool
-    {
-        return $this->client() !== ''
-            || $this->year() !== ''
-            || $this->technologies() !== ''
-            || $this->externalUrl() !== '';
-    }
-
-    /**
-     * Whether any case study section is populated.
-     */
-    public function hasCaseStudy(): bool
-    {
-        return $this->background() !== ''
-            || $this->implementation() !== ''
-            || $this->results() !== '';
-    }
-
-    /**
      * Get related projects in the same category.
      *
      * @return ProjectPost[]

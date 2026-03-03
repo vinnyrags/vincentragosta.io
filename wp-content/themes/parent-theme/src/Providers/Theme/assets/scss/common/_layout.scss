@@ -114,6 +114,16 @@ html {
   }
 }
 
+// Override WordPress core's hardcoded padding on background containers
+// (core uses 1.25em 2.375em — replace with theme spacing variables)
+:where(.wp-block-group.has-background) {
+  padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+}
+
+:where(.wp-block-columns.has-background) {
+  padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+}
+
 // Default padding for individual columns with backgrounds
 .wp-block-column.has-background {
   padding: var(--wp--preset--spacing--40);

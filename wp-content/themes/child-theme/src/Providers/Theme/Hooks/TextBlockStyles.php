@@ -30,6 +30,7 @@ class TextBlockStyles implements Hook
         register_block_style('core/list', $mutedStyle);
         register_block_style('core/code', $mutedStyle);
         register_block_style('core/table', $mutedStyle);
+        register_block_style('core/button', $mutedStyle);
 
         register_block_style('core/heading', [
             'name'  => 'subheading',

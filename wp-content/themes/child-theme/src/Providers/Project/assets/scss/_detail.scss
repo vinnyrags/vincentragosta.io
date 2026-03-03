@@ -3,163 +3,20 @@
 
 .project-detail {
 
-    // Constrained inner wrapper (back-link through body)
-    &__inner {
-        max-width: var(--wp--custom--layout--narrow);
-        margin-inline: auto;
-        padding-inline: var(--wp--preset--spacing--40);
+    // Section-level spacing between container blocks (mirrors .site-main rules)
+    > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
+    > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
+        margin-block-start: var(--wp--preset--spacing--70);
+    }
+
+    // Default vertical padding for container blocks with backgrounds
+    > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+        padding-block: var(--wp--preset--spacing--70);
+    }
+
+    // First child top padding (after has-background so it wins)
+    > *:first-child:is(.wp-block-group, .wp-block-cover, .wp-block-columns) {
         padding-block-start: var(--wp--preset--spacing--50);
-    }
-
-    // Back navigation
-    &__back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5em;
-        color: var(--color-text-muted);
-        text-decoration-line: underline;
-        text-decoration-color: var(--wp--preset--color--accent-1);
-        text-decoration-thickness: 2px;
-        text-underline-offset: 4px;
-        font-size: var(--wp--preset--font-size--20);
-        transition: color 0.2s ease;
-    }
-
-    &__back-icon {
-        display: inline-flex;
-        transform: rotate(225deg);
-        color: var(--wp--preset--color--accent-1);
-
-        svg {
-            width: var(--wp--custom--icon-size--xs);
-            height: var(--wp--custom--icon-size--xs);
-        }
-    }
-
-    // Hero image (full width)
-    &__hero {
-        width: 100%;
-        overflow: hidden;
-        margin-block-start: var(--wp--preset--spacing--60);
-    }
-
-    &__hero-image {
-        width: 100%;
-        height: auto;
-        aspect-ratio: 16 / 9;
-        object-fit: cover;
-        display: block;
-    }
-
-    // Two-column body: meta left, content right
-    &__body {
-        display: flex;
-        flex-direction: column;
-        gap: var(--wp--preset--spacing--60);
-        margin-block-start: var(--wp--preset--spacing--50);
-
-        @include media(lg) {
-            flex-direction: row;
-            align-items: flex-start;
-        }
-    }
-
-    // Header
-    &__header {
-        display: flex;
-        flex-direction: column;
-        gap: var(--wp--preset--spacing--30);
-        margin-block-start: var(--wp--preset--spacing--50);
-    }
-
-    &__categories {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5em;
-    }
-
-    &__category-badge {
-        display: inline-block;
-        padding: 0.25em 1em;
-        border: 1px solid var(--wp--preset--color--accent-1);
-        border-radius: 9999px;
-        font-size: var(--wp--preset--font-size--10);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--wp--preset--color--accent-1);
-    }
-
-    // Metadata (left column)
-    &__meta {
-        display: flex;
-        flex-direction: column;
-        gap: var(--wp--preset--spacing--30);
-        font-size: var(--wp--preset--font-size--30);
-        border-block-start: 1px solid var(--color-border);
-        border-block-end: 1px solid var(--color-border);
-        padding-block: var(--wp--preset--spacing--30);
-        margin: 0;
-
-        @include media(lg) {
-            flex: 0 0 35%;
-        }
-    }
-
-    &__meta-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: baseline;
-        margin: 0;
-
-        & + & {
-            border-block-start: 1px solid var(--color-border);
-            padding-block-start: var(--wp--preset--spacing--30);
-        }
-    }
-
-    &__meta-label {
-        font-size: var(--wp--preset--font-size--10);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--color-text-muted);
-        font-weight: 700;
-        margin: 0;
-    }
-
-    &__meta-value {
-        margin: 0;
-        text-align: end;
-    }
-
-    &__tech-tag {
-        display: inline-block;
-        font-family: var(--wp--preset--font-family--fira-code);
-        font-size: var(--wp--preset--font-size--10);
-        background: var(--color-surface);
-        color: var(--color-surface-text);
-        padding: 0.2em 0.6em;
-    }
-
-    // Content (right column)
-    &__content {
-        flex: 1;
-        min-width: 0;
-    }
-
-    &__body-content {
-        p {
-            margin-block-end: 0;
-            margin-block-start: var(--wp--preset--spacing--30);
-
-            &:first-child {
-                margin-block-start: 0;
-            }
-
-            & + p {
-                font-size: var(--wp--preset--font-size--30);
-                color: var(--color-text-muted);
-            }
-        }
     }
 
     // Case study sections
@@ -176,6 +33,13 @@
 
         & + & {
             border-block-start: 1px solid var(--color-border);
+        }
+
+        // Block editor content within case study sections
+        > * {
+            max-width: var(--wp--custom--layout--narrow);
+            margin-inline: auto;
+            padding-inline: var(--wp--preset--spacing--40);
         }
 
         &--background {
@@ -276,12 +140,5 @@
         @include media(lg) {
             grid-template-columns: repeat(3, 1fr);
         }
-    }
-}
-
-@include reduced-motion {
-    .project-detail__back-link,
-    .project-detail__external-link {
-        transition: none;
     }
 }

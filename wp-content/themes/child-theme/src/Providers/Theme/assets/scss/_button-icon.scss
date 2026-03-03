@@ -17,9 +17,15 @@
   gap: var(--wp--preset--spacing--20);
 }
 
-// Icon position (block buttons only — PHP sets these classes)
-.wp-block-button.icon-pos-right .wp-block-button__link { flex-direction: row; }
-.wp-block-button.icon-pos-left .wp-block-button__link { flex-direction: row-reverse; }
+// Icon position (block buttons only — PHP sets these classes).
+// DOM order already matches: left = icon before text, right = icon after text.
+.wp-block-button.icon-pos-right .wp-block-button__link,
+.wp-block-button.icon-pos-left .wp-block-button__link { flex-direction: row; }
+
+// Rotate arrow to point left when icon is on the left
+.wp-block-button.icon-pos-left .wp-block-button__icon.arrow svg {
+  transform: rotate(225deg);
+}
 
 // --------------------------------------------------------------------------
 // Shared icon wrapper styles (placeholder extended by both button types)
@@ -84,6 +90,11 @@
 .wp-block-button__link:hover .wp-block-button__icon svg,
 .button:hover .button__icon svg {
   transform: rotate(45deg);
+}
+
+// Left-positioned arrow: hover rotates from 225deg base
+.wp-block-button.icon-pos-left .wp-block-button__link:hover .wp-block-button__icon.arrow svg {
+  transform: rotate(180deg);
 }
 
 // ==========================================================================

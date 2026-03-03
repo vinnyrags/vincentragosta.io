@@ -1,3 +1,12 @@
 .site-main {
   padding-block-start: var(--header-height, 72px);
+
+  // Remove top margin from the first container block on a page
+  > :first-child:is(
+    .wp-block-group,
+    .wp-block-columns,
+    .wp-block-cover
+  ) {
+    margin-block-start: 0;
+  }
 }

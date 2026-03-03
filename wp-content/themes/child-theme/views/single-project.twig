@@ -2,124 +2,7 @@
 
 {% block content %}
     <article class="project-detail alignfull">
-
-        <div class="project-detail__inner">
-            {# Back navigation #}
-            <a href="{{ function('get_post_type_archive_link', 'project') }}" class="project-detail__back-link">
-                <span class="project-detail__back-icon">{{ icon('arrow') | raw }}</span>
-                Back to Projects
-            </a>
-
-            {# Title #}
-            <header class="project-detail__header">
-                <h1 class="project-detail__title has-70-font-size">{{ post.title }}</h1>
-
-                {% set categories = post.categories() %}
-                {% if categories is not empty %}
-                    <div class="project-detail__categories">
-                        {% for category in categories %}
-                            <span class="project-detail__category-badge">{{ category.name }}</span>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </header>
-
-            {# Featured image #}
-            {% if post.thumbnail %}
-                <div class="project-detail__hero">
-                    <img
-                        class="project-detail__hero-image"
-                        src="{{ post.thumbnail.src | resize(1200) }}"
-                        alt="{{ post.thumbnail.alt }}"
-                        width="{{ post.thumbnail.width }}"
-                        height="{{ post.thumbnail.height }}"
-                    />
-                </div>
-            {% endif %}
-
-            {# Two-column: meta + content #}
-            <div class="project-detail__body">
-
-                {# Left column: metadata #}
-                {% if post.hasProjectDetails() %}
-                    <dl class="project-detail__meta">
-                        {% if post.client() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Client</dt>
-                                <dd class="project-detail__meta-value">{{ post.client() }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.year() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Year</dt>
-                                <dd class="project-detail__meta-value">{{ post.year() }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.technologyList() is not empty %}
-                            <div class="project-detail__meta-item project-detail__meta-item--technologies">
-                                <dt class="project-detail__meta-label">Technologies</dt>
-                                <dd class="project-detail__meta-value">{{ post.technologyList() | join(', ') }}</dd>
-                            </div>
-                        {% endif %}
-
-                        {% if post.externalUrl() %}
-                            <div class="project-detail__meta-item">
-                                <dt class="project-detail__meta-label">Website</dt>
-                                <dd class="project-detail__meta-value">
-                                    <a href="{{ post.externalUrl() }}" class="project-detail__external-link" target="_blank" rel="noopener noreferrer">
-                                        {{ post.externalUrl() | replace({'https://': '', 'http://': ''}) | trim('/') }}
-                                    </a>
-                                </dd>
-                            </div>
-                        {% endif %}
-                    </dl>
-                {% endif %}
-
-                {# Right column: excerpt + content #}
-                <div class="project-detail__content">
-                    {% if post.post_content %}
-                        <div class="project-detail__body-content">
-                            {{ post.content | raw }}
-                        </div>
-                    {% endif %}
-                </div>
-
-            </div>
-        </div>
-
-        {# Case Study #}
-        {% if post.hasCaseStudy() %}
-            <div class="project-detail__case-study">
-                {% if post.background() %}
-                    <section id="background" class="project-detail__section project-detail__section--background">
-                        <div class="project-detail__section-inner">
-                            <h2 class="project-detail__section-heading has-50-font-size"><u>Background</u></h2>
-                            <div class="project-detail__section-content">{{ post.background() | raw }}</div>
-                        </div>
-                    </section>
-                {% endif %}
-
-                {% if post.implementation() %}
-                    <section id="implementation" class="project-detail__section">
-                        <div class="project-detail__section-inner">
-                            <h2 class="project-detail__section-heading has-50-font-size"><u>Implementation</u></h2>
-                            <div class="project-detail__section-content">{{ post.implementation() | raw }}</div>
-                        </div>
-                    </section>
-                {% endif %}
-
-                {% if post.results() %}
-                    <section id="results" class="project-detail__section project-detail__section--results">
-                        <div class="project-detail__section-inner">
-                            <h2 class="project-detail__section-heading has-50-font-size"><u>Results</u></h2>
-                            <div class="project-detail__section-content">{{ post.results() | raw }}</div>
-                        </div>
-                    </section>
-                {% endif %}
-            </div>
-        {% endif %}
+        {{ post.content | raw }}
 
         {# Related projects #}
         {% set related = post.relatedProjects(3) %}
@@ -131,6 +14,5 @@
                 </div>
             </section>
         {% endif %}
-
     </article>
 {% endblock %}

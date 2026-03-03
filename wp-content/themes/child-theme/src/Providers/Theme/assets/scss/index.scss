@@ -25,10 +25,12 @@
 
 // Block styles
 @use 'blocks/wp-block-accordion';
+@use 'blocks/wp-block-button';
 @use 'blocks/wp-block-container';
 @use 'blocks/wp-block-cover';
 @use 'blocks/wp-block-heading';
 @use 'blocks/wp-block-paragraph';
+@use 'blocks/wp-block-post-terms';
 
 // Print
 @use 'print';

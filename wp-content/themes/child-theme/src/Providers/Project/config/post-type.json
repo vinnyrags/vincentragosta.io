@@ -1,6 +1,5 @@
 {
   "post_type": "project",
-  "classic_editor": true,
   "args": {
     "labels": {
       "name": "Projects",
@@ -16,7 +15,7 @@
     "public": true,
     "has_archive": false,
     "rewrite": { "slug": "projects" },
-    "supports": ["title", "editor", "thumbnail", "excerpt", "custom-fields"],
+    "supports": ["title", "editor", "thumbnail", "excerpt"],
     "taxonomies": ["category"],
     "menu_icon": "dashicons-portfolio",
     "show_in_rest": true

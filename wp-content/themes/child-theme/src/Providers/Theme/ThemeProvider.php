@@ -11,6 +11,7 @@ use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use DI\Container;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
 use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
@@ -52,6 +53,7 @@ class ThemeProvider extends BaseThemeProvider
         CoverBlockStyles::class,
         TextBlockStyles::class,
         SocialIconChoices::class,
+        TermsQuerySupports::class,
     ];
 
     /**
@@ -123,6 +125,11 @@ class ThemeProvider extends BaseThemeProvider
 
         // Timber context for ACF options data
         add_filter('timber/context', [$this, 'addOptionsToContext']);
+
+        // Re-enable post featured image block (disabled in parent)
+        add_filter('theme/disabled_block_types', static function (array $blocks): array {
+            return array_values(array_diff($blocks, ['core/post-featured-image', 'core/post-terms', 'core/post-title']));
+        });
 
         // Call parent to register theme supports, features, and blocks
         parent::register();

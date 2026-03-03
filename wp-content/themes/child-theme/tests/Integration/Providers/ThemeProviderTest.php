@@ -11,6 +11,7 @@ use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
@@ -106,7 +107,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(CoverBlockStyles::class, $hooks);
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
-        $this->assertCount(6, $hooks);
+        $this->assertContains(TermsQuerySupports::class, $hooks);
+        $this->assertCount(7, $hooks);
     }
 
     /**
