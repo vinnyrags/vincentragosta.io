@@ -120,14 +120,15 @@ export function toggleOverlay(toggle, overlay, isOpen) {
         }
     } else {
         overlay.classList.remove('is-open');
-        document.documentElement.classList.remove('nav-overlay-open');
 
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (prefersReducedMotion) {
+            document.documentElement.classList.remove('nav-overlay-open');
             overlay.setAttribute('hidden', '');
         } else {
             overlay.addEventListener('transitionend', function handler(e) {
                 if (e.propertyName === 'opacity') {
+                    document.documentElement.classList.remove('nav-overlay-open');
                     overlay.setAttribute('hidden', '');
                     overlay.removeEventListener('transitionend', handler);
                 }
