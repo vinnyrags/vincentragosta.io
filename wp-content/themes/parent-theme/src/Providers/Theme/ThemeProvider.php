@@ -15,6 +15,7 @@ use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
 use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
 use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
+use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
 use ParentTheme\Services\IconServiceFactory;
 use Timber\Attachment;
 use Twig\Environment;
@@ -35,6 +36,15 @@ class ThemeProvider extends Provider
      * @var string
      */
     protected string $handlePrefix = 'theme';
+
+    /**
+     * Hooks to register (always-active structural behavior).
+     *
+     * @var array<class-string>
+     */
+    protected array $hooks = [
+        FeaturedImageFocalPoint::class,
+    ];
 
     /**
      * Features to register with this provider.

@@ -108,7 +108,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
         $this->assertContains(TermsQuerySupports::class, $hooks);
-        $this->assertCount(7, $hooks);
+        $this->assertCount(8, $hooks);
     }
 
     /**
