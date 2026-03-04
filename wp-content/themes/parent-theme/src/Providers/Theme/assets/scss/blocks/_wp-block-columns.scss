@@ -1,0 +1,12 @@
+@use 'common/breakpoints' as *;
+
+// Hide empty columns on mobile in two-column layouts.
+// WordPress stacks columns vertically on mobile; an empty column
+// still generates gap whitespace. Hiding it avoids the gap entirely.
+// :nth-last-child(2):first-child targets the first of exactly two siblings.
+.wp-block-columns > .wp-block-column:nth-last-child(2):first-child ~ .wp-block-column:empty,
+.wp-block-columns > .wp-block-column:empty:first-child:nth-last-child(2) {
+  @include media-down(md) {
+    display: none;
+  }
+}

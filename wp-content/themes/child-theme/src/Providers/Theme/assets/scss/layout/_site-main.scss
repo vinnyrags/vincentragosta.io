@@ -1,8 +1,17 @@
+@use 'common/breakpoints' as *;
+
 .site-main {
   padding-block-start: var(--header-height, 72px);
+}
 
-  // Remove header offset when first child is a cover block (full-viewport hero)
-  &:has(> .site-content > .wp-block-cover:first-child) {
-    padding-block-start: 0;
-  }
+// Compensate for fixed header when the first block is set to full viewport height.
+// WP applies min-height: 100vh as an inline style; override it to subtract
+// the header so it doesn't extend behind/below the fixed header.
+.site-content > :first-child:is(
+  .wp-block-cover[style*="min-height:100vh"],
+  .wp-block-cover[style*="min-height: 100vh"],
+  .wp-block-group[style*="min-height:100vh"],
+  .wp-block-group[style*="min-height: 100vh"]
+) {
+  min-height: calc(100vh - var(--header-height, 72px)) !important;
 }
