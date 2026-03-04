@@ -6,9 +6,11 @@
 - consider making patterns for ease of future content editing on the site
 - double check that we are applying the same bg effect when in light mode to interior pages
 - hover to sun/moon toggle on light mode
+- revisit putting fixed header on top of content now that we are not going 100vh anymore
 
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY
 - consider a blog that ai can automate/schedule posts for
 - consider dynamic search on project archive, search input bar to the left of the sort, we also need filters for categories
+- get download icon

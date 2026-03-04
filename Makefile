@@ -4,13 +4,17 @@
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
-.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging
+.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production
 
 # Server config
 STAGING_HOST := root@174.138.70.29
 STAGING_DIR := /var/www/vincentragosta.dev
 STAGING_WP := $(STAGING_DIR)/wp
 STAGING_URL := https://staging.vincentragosta.io
+PRODUCTION_HOST := root@174.138.70.29
+PRODUCTION_DIR := /var/www/vincentragosta.io
+PRODUCTION_WP := $(PRODUCTION_DIR)/wp
+PRODUCTION_URL := https://vincentragosta.io
 LOCAL_URL := https://vincentragosta.io.ddev.site
 UPLOADS_DIR := $(CURDIR)/wp-content/uploads
 
@@ -26,8 +30,10 @@ help:
 	@echo "  make clean         - Remove all generated files"
 	@echo "  make update        - Update composer dependencies (root + both themes)"
 	@echo "  make autoload      - Regenerate composer autoloaders"
-	@echo "  make push-staging  - Push local DB + uploads to staging"
-	@echo "  make pull-staging  - Pull staging DB + uploads to local"
+	@echo "  make push-staging     - Push local DB + uploads to staging"
+	@echo "  make pull-staging     - Pull staging DB + uploads to local"
+	@echo "  make push-production  - Push local DB + uploads to production"
+	@echo "  make pull-production  - Pull production DB + uploads to local"
 
 # Start DDEV environment, install dependencies, and build assets
 start:
@@ -176,3 +182,47 @@ pull-staging:
 	rm -f /tmp/staging-export.sql
 	ssh $(STAGING_HOST) "rm -f /tmp/staging-export.sql"
 	@echo "Done — local synced from staging"
+
+# Push local DDEV database and uploads to production
+push-production:
+	@echo "Exporting local database..."
+	ddev export-db --gzip=false --file=/tmp/ddev-export.sql
+	@echo "Uploading database to production..."
+	scp /tmp/ddev-export.sql $(PRODUCTION_HOST):/tmp/ddev-export.sql
+	@echo "Importing database on production..."
+	ssh $(PRODUCTION_HOST) "wp db import /tmp/ddev-export.sql --path=$(PRODUCTION_WP) --allow-root"
+	@echo "Replacing URLs (siteurl)..."
+	ssh $(PRODUCTION_HOST) "wp search-replace '$(LOCAL_URL)/wp' '$(PRODUCTION_URL)/wp' --path=$(PRODUCTION_WP) --allow-root --precise --all-tables --quiet"
+	@echo "Replacing URLs (home)..."
+	ssh $(PRODUCTION_HOST) "wp search-replace '$(LOCAL_URL)' '$(PRODUCTION_URL)' --path=$(PRODUCTION_WP) --allow-root --precise --all-tables --quiet"
+	@echo "Flushing caches..."
+	ssh $(PRODUCTION_HOST) "wp cache flush --path=$(PRODUCTION_WP) --allow-root --quiet && wp rewrite flush --path=$(PRODUCTION_WP) --allow-root --quiet"
+	@echo "Syncing uploads..."
+	rsync -az --delete $(UPLOADS_DIR)/ $(PRODUCTION_HOST):$(PRODUCTION_DIR)/wp-content/uploads/
+	ssh $(PRODUCTION_HOST) "chown -R www-data:www-data $(PRODUCTION_DIR)/wp-content/uploads"
+	@echo "Cleaning up..."
+	rm -f /tmp/ddev-export.sql
+	ssh $(PRODUCTION_HOST) "rm -f /tmp/ddev-export.sql"
+	@echo "Done — production synced from local"
+
+# Pull production database and uploads to local DDEV
+pull-production:
+	@echo "Exporting production database..."
+	ssh $(PRODUCTION_HOST) "wp db export /tmp/production-export.sql --path=$(PRODUCTION_WP) --allow-root"
+	@echo "Downloading database..."
+	scp $(PRODUCTION_HOST):/tmp/production-export.sql /tmp/production-export.sql
+	@echo "Importing into DDEV..."
+	ddev import-db --file=/tmp/production-export.sql
+	@echo "Replacing URLs (siteurl)..."
+	ddev wp search-replace '$(PRODUCTION_URL)/wp' '$(LOCAL_URL)/wp' --precise --all-tables --quiet
+	@echo "Replacing URLs (home)..."
+	ddev wp search-replace '$(PRODUCTION_URL)' '$(LOCAL_URL)' --precise --all-tables --quiet
+	@echo "Flushing caches..."
+	ddev wp cache flush --quiet
+	ddev wp rewrite flush --quiet
+	@echo "Syncing uploads..."
+	rsync -az --delete $(PRODUCTION_HOST):$(PRODUCTION_DIR)/wp-content/uploads/ $(UPLOADS_DIR)/
+	@echo "Cleaning up..."
+	rm -f /tmp/production-export.sql
+	ssh $(PRODUCTION_HOST) "rm -f /tmp/production-export.sql"
+	@echo "Done — local synced from production"

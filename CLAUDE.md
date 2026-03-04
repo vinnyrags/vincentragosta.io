@@ -185,6 +185,8 @@ From the project root:
 | `make autoload` | Regenerate composer autoloaders for both themes |
 | `make push-staging` | Push local DDEV database + uploads to staging server |
 | `make pull-staging` | Pull staging database + uploads to local DDEV |
+| `make push-production` | Push local DDEV database + uploads to production server |
+| `make pull-production` | Pull production database + uploads to local DDEV |
 
 From a theme directory:
 
