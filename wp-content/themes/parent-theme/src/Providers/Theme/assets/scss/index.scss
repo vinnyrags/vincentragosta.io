@@ -19,5 +19,8 @@
 @use 'elements/paragraph';
 @use 'elements/separator';
 
+// Blocks
+@use 'blocks/wp-block-columns';
+
 // Vendor
 @use 'vendor/wpforms';
