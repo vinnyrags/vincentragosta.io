@@ -37,7 +37,7 @@
   margin-block-start: var(--wp--preset--spacing--70);
 }
 
-.site-main:has(> :last-child:is(.has-background, .wp-block-cover)) + .footer {
+.site-main:has(.site-content > :last-child:is(.has-background, .wp-block-cover)) + .footer {
   margin-block-start: 0;
 }
 
@@ -60,7 +60,6 @@
 
   @include media(lg) {
     flex-direction: row;
-    align-items: center;
     gap: var(--wp--preset--spacing--70);
   }
 }
@@ -95,6 +94,10 @@
 .footer__description {
   color: var(--footer-text-muted);
   margin: 0;
+
+  > p:first-child {
+    margin-block-start: 0;
+  }
 
   a {
     display: inline-flex;

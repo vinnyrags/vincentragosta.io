@@ -13,8 +13,12 @@
     {% endblock %}
 
     <main id="wp--skip-link--target" class="site-main">
-        {% block content %}
-            {{ post.content }}
+        {% block main %}
+            <div class="site-content">
+                {% block content %}
+                    {{ post.content }}
+                {% endblock %}
+            </div>
         {% endblock %}
     </main>
 

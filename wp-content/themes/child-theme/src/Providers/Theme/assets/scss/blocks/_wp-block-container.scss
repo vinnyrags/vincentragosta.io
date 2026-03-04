@@ -9,7 +9,7 @@
 
 // Top-level container blocks with backgrounds get extra vertical spacing.
 // .site-main targets the frontend; .is-root-container targets the block editor.
-:is(.site-main, .is-root-container) > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+:is(.site-content, .is-root-container) > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
     padding-block: var(--wp--preset--spacing--70);
 }
 

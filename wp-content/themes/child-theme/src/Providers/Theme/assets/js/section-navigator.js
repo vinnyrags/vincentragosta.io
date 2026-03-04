@@ -1,8 +1,8 @@
 (function () {
     const SELECTORS = [
-        '.site-main > .wp-block-cover[id]',
-        '.site-main > .wp-block-columns[id]',
-        '.site-main > .wp-block-group[id]',
+        '.site-content > .wp-block-cover[id]',
+        '.site-content > .wp-block-columns[id]',
+        '.site-content > .wp-block-group[id]',
         '.project-detail__section[id]',
     ].join(',');
 

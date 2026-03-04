@@ -1,13 +1,13 @@
 {% extends "base.twig" %}
 
-{% block content %}
-    <article class="project-detail alignfull">
+{% block main %}
+    <article class="site-content project-detail">
         {{ post.content | raw }}
 
         {# Related projects #}
         {% set related = post.relatedProjects(3) %}
         {% if related is not empty %}
-            <section class="project-detail__related">
+            <section class="project-detail__related alignfull">
                 <div class="project-detail__related-inner">
                     <h2 class="project-detail__related-heading has-50-font-size"><u>Related Projects</u></h2>
                     {% include 'projects-grid.twig' with { projects: related } only %}

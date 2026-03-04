@@ -1,12 +1,8 @@
 .site-main {
-  // padding-block-start: var(--header-height, 72px); // TEMP: disabled for layout audit
+  padding-block-start: var(--header-height, 72px);
 
-  // Remove top margin from the first container block on a page
-  > :first-child:is(
-    .wp-block-group,
-    .wp-block-columns,
-    .wp-block-cover
-  ) {
-    margin-block-start: 0;
+  // Remove header offset when first child is a cover block (full-viewport hero)
+  &:has(> .site-content > .wp-block-cover:first-child) {
+    padding-block-start: 0;
   }
 }

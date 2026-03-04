@@ -11,25 +11,18 @@ html {
   }
 }
 
-// .site-main is a Twig-rendered <main> element outside WordPress's block
-// rendering pipeline. It never receives the dynamic layout classes that
-// WordPress adds to block containers (is-layout-constrained, has-global-padding),
-// so this theme manually replicates the equivalent behavior: root padding,
-// content-width constraint, alignfull breakout, flow spacing, and section-level
-// spacing. useRootPaddingAwareAlignments is set to false in theme.json because
-// the classes it generates (.has-global-padding, .wp-site-blocks) target elements
+// Two-wrapper layout: .site-main is the outer <main> element (header offset
+// only in child themes). .site-content is the inner layout wrapper handling
+// root padding, content-width constraint, alignfull breakout, flow spacing,
+// and section-level spacing. Templates that need different semantics (e.g.
+// project detail's <article>) override {% block main %} to provide their own
+// element with the .site-content class — same layout rules, different HTML tag.
+//
+// useRootPaddingAwareAlignments is set to false in theme.json because the
+// classes it generates (.has-global-padding, .wp-site-blocks) target elements
 // that don't exist in the Twig templates.
-.site-main {
-  // No header offset when first child is a full-bleed hero-type block
-  // (cover blocks, or container blocks with backgrounds)
-  &:has(> :first-child:is(
-    .wp-block-cover,
-    .wp-block-columns.has-background,
-    .wp-block-group.has-background
-  )) {
-    padding-block-start: 0;
-  }
 
+.site-content {
   // No bottom padding when last child is a full-bleed background block
   &:has(> :last-child:is(
     .wp-block-cover,
@@ -68,6 +61,14 @@ html {
     margin-block-start: var(--wp--preset--spacing--50);
   }
 
+  > :first-child:is(
+    .wp-block-cover,
+    .wp-block-columns.has-background,
+    .wp-block-group.has-background
+  ) {
+    margin-block-start: 0;
+  }
+
   // Full-bleed blocks: negate horizontal padding
   > .alignfull {
     margin-inline: calc(-1 * var(--wp--preset--spacing--40));
@@ -75,28 +76,25 @@ html {
     width: calc(100% + (2 * var(--wp--preset--spacing--40)));
   }
 
+  // Restore inline padding for full-bleed container blocks so content
+  // doesn't run flush against viewport edges on narrow screens. Cover
+  // blocks are excluded — backgrounds should be edge-to-edge, and inner
+  // content is constrained separately.
+  > :is(.wp-block-group, .wp-block-columns).alignfull {
+    padding-inline: var(--wp--preset--spacing--40);
+  }
+
   > .alignfull:first-child {
     margin-block-start: 0;
   }
 
-  // Constrain cover block inner content to content width.
-  // Default (no position): centered. Left positions: left-aligned.
-  // Right and center positions retain WordPress core's behavior.
-  > .wp-block-cover.alignfull:not(.has-custom-content-position) > .wp-block-cover__inner-container {
+  // Constrain cover block inner content to content width so it aligns
+  // with the rest of the document.
+  > .wp-block-cover.alignfull > .wp-block-cover__inner-container {
     box-sizing: border-box;
     max-width: var(--wp--style--global--content-size, 1440px);
     margin-inline: auto !important;
-    width: 100%;
-  }
-
-  > .wp-block-cover.alignfull.has-custom-content-position:is(
-    .is-position-top-left,
-    .is-position-center-left,
-    .is-position-bottom-left
-  ) > .wp-block-cover__inner-container {
-    box-sizing: border-box;
-    max-width: var(--wp--style--global--content-size, 1440px);
-    width: 100%;
+    width: 100% !important;
   }
 
   // Constrained content width (replaces is-layout-constrained)
