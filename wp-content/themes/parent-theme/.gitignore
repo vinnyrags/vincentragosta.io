@@ -5,9 +5,6 @@ node_modules/
 # Compiled assets
 dist/
 
-# Lock files
-package-lock.json
-
 # Test cache
 .phpunit.result.cache
 coverage/
