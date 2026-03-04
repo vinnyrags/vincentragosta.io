@@ -161,22 +161,22 @@
     window.addEventListener('scroll', updateVisibility);
     updateVisibility();
 
-    // Track active section via IntersectionObserver
-    const visibilityMap = new Map();
+    // Track active section via scroll position
+    const sectionMargins = Array.from(sections).map(
+        (section) => parseFloat(getComputedStyle(section).marginTop) || 0
+    );
 
     function updateActive() {
-        let maxRatio = 0;
         let activeSection = null;
 
-        visibilityMap.forEach((ratio, section) => {
-            if (ratio > maxRatio) {
-                maxRatio = ratio;
-                activeSection = section;
+        for (let i = 0; i < sections.length; i++) {
+            if (sections[i].getBoundingClientRect().top - sectionMargins[i] <= window.innerHeight) {
+                activeSection = sections[i];
             }
-        });
+        }
 
         pills.forEach(({ link, section }) => {
-            const isActive = section === activeSection && maxRatio > 0;
+            const isActive = section === activeSection;
             link.classList.toggle('is-active', isActive);
             if (isActive) {
                 link.setAttribute('aria-current', 'true');
@@ -185,30 +185,19 @@
             }
         });
 
-        // Propagate active state to overflow
         if (overflowToggle) {
-            const overflowIsActive = activeSection && overflowSectionIds.has(activeSection.id) && maxRatio > 0;
+            const overflowIsActive = activeSection && overflowSectionIds.has(activeSection.id);
             overflowToggle.classList.toggle('is-active', overflowIsActive);
 
             overflowItems.forEach((item, i) => {
                 const itemSection = overflowPills[i].section;
-                const itemIsActive = itemSection === activeSection && maxRatio > 0;
-                item.classList.toggle('is-active', itemIsActive);
+                item.classList.toggle('is-active', itemSection === activeSection);
             });
         }
     }
 
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                visibilityMap.set(entry.target, entry.intersectionRatio);
-            });
-            updateActive();
-        },
-        { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] }
-    );
-
-    sections.forEach((section) => observer.observe(section));
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
 
     // Hide nav when footer enters viewport to prevent overlap
     const footer = document.querySelector('.footer');

@@ -4,14 +4,11 @@
 
 - clean up heading underline css, such that when the heading goes to two lines, the underline doesnt collide with the text
 - consider making patterns for ease of future content editing on the site
-- consider building project detail pages, use patterns to quickly construct pages
-- consider writing a script or instructing claude to scrape the pages of the website, pull out its content (within .site-main container) into a file, review it, store it to memory and make updates in this fashion. I would like to consider adding the concept of FSE hybrid (assuming this project adheres to that) in some of the langauge, I also want to talk about patterns and how we would integrate them into our system. i have a task on me to do this, if by the time this command is run that work is done, lets use that otherwise lets theorize instead on how we would do it within the confines of this project and add that bit to our content. i also want to talk about git push deployments, which we will have, and our environments, each project has a staging environment, when pushing to develop branch, the code on that environment automatically gets updated. same for git push master going to production.
 - double check that we are applying the same bg effect when in light mode to interior pages
-- what to do about tables on mobile
 - hover to sun/moon toggle on light mode
 
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY
 - consider a blog that ai can automate/schedule posts for
-- consider dynamic search on project archive, search input bar to the left of the filters
+- consider dynamic search on project archive, search input bar to the left of the sort, we also need filters for categories
