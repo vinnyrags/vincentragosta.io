@@ -183,6 +183,8 @@ From the project root:
 | `make update` | Update composer dependencies (root + both themes) |
 | `make clean` | Remove vendor, node_modules, and dist from both themes |
 | `make autoload` | Regenerate composer autoloaders for both themes |
+| `make push-staging` | Push local DDEV database + uploads to staging server |
+| `make pull-staging` | Pull staging database + uploads to local DDEV |
 
 From a theme directory:
 
