@@ -1,5 +1,6 @@
 .ddev
 auth.json
+wp-config-env.php
 TODO.md
 
 .idea

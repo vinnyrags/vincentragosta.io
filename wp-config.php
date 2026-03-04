@@ -29,39 +29,55 @@ define( 'NONCE_SALT', 'eAfjwChTCqqDWmBrbnerfVsIjGQELtXKgYHUWDYBmXEyJgZqVAmxSpvEZ
 $table_prefix = 'wp_';
 
 // =====================================================================
+// Environment-specific settings (loaded from wp-config-env.php if present)
+// =====================================================================
+$env_settings = __DIR__ . '/wp-config-env.php';
+if ( is_readable( $env_settings ) ) {
+    require_once $env_settings;
+}
+
+// =====================================================================
 // Custom Directory Structure Settings
 // =====================================================================
-define('WP_ENVIRONMENT_TYPE', 'development');
+if ( ! defined( 'WP_ENVIRONMENT_TYPE' ) ) {
+    define( 'WP_ENVIRONMENT_TYPE', 'development' );
+}
 
-// The public-facing URL of your site.
-define('WP_HOME', 'https://vincentragosta.io.ddev.site');
+if ( ! defined( 'WP_HOME' ) ) {
+    define( 'WP_HOME', 'https://vincentragosta.io.ddev.site' );
+}
 
-// The URL where the WordPress core files are located.
-define('WP_SITEURL', 'https://vincentragosta.io.ddev.site/wp');
+if ( ! defined( 'WP_SITEURL' ) ) {
+    define( 'WP_SITEURL', WP_HOME . '/wp' );
+}
 
 // The local path to the wp-content directory.
 define('WP_CONTENT_DIR', dirname(__FILE__) . '/wp-content');
 define('WP_CONTENT_URL', WP_HOME . '/wp-content');
 
 // =====================================================================
-// Debugging Settings
+// Debugging Settings (defaults for development, overridden per environment)
 // =====================================================================
-define( 'WP_DEBUG', true );
-define( 'WP_DEBUG_LOG', true );
-define( 'WP_DEBUG_DISPLAY', false );
+if ( ! defined( 'WP_DEBUG' ) ) {
+    define( 'WP_DEBUG', true );
+}
+if ( ! defined( 'WP_DEBUG_LOG' ) ) {
+    define( 'WP_DEBUG_LOG', true );
+}
+if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
+    define( 'WP_DEBUG_DISPLAY', false );
+}
 @ini_set( 'display_errors', 0 );
 
 
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
-// MODIFIED: This now points to the /wp/ subdirectory.
 if ( ! defined( 'ABSPATH' ) ) {
     define( 'ABSPATH', __DIR__ . '/wp/' );
 }
 
 // Include for settings managed by ddev.
-// PRESERVED: This block is essential for DDEV to connect to the database.
 $ddev_settings = __DIR__ . '/wp-config-ddev.php';
 if ( ! defined( 'DB_USER' ) && getenv( 'IS_DDEV_PROJECT' ) == 'true' && is_readable( $ddev_settings ) ) {
     require_once( $ddev_settings );
