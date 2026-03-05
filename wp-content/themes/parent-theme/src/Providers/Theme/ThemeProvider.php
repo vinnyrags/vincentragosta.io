@@ -10,6 +10,7 @@ use ParentTheme\Models\Post;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
+use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
@@ -54,6 +55,7 @@ class ThemeProvider extends Provider
     protected array $features = [
         DisableBlocks::class,
         DisableComments::class,
+        DisableDefaultPatterns::class,
         DisablePosts::class,
         EnableSvgUploads::class,
         ScrollReveal::class => false,
