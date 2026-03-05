@@ -36,7 +36,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">Experience Interaction</p>
+<p class="has-30-font-size">Client</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -50,7 +50,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, React</p>
+<p class="has-30-font-size">A, B, C</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -78,7 +78,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://wolfmoonbourbon.com">https://wolfmoonbourbon.com</a></p>
+<p class="has-30-font-size"><a href="#">https://#</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 

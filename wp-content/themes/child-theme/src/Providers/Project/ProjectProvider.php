@@ -28,6 +28,7 @@ class ProjectProvider extends Provider
     {
         add_action('init', [$this, 'registerPostType']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
+        add_filter('default_content', [$this, 'setDefaultContent'], 10, 2);
 
         parent::register();
 
@@ -60,5 +61,30 @@ class ProjectProvider extends Provider
     public function registerPostType(): void
     {
         $this->registerPostTypeFromConfig('post-type.json');
+    }
+
+    /**
+     * Pre-fill the editor with default block content for new projects.
+     *
+     * @param string $content Default post content.
+     * @param \WP_Post $post The post being created.
+     * @return string
+     */
+    public function setDefaultContent(string $content, \WP_Post $post): string
+    {
+        if ($post->post_type !== ProjectPost::POST_TYPE) {
+            return $content;
+        }
+
+        $this->setup();
+        $filepath = $this->configPath . '/default-content.html';
+
+        if (!file_exists($filepath)) {
+            return $content;
+        }
+
+        $template = file_get_contents($filepath);
+
+        return $template !== false ? $template : $content;
     }
 }
