@@ -131,6 +131,11 @@ class ThemeProvider extends BaseThemeProvider
             return array_values(array_diff($blocks, ['core/post-featured-image', 'core/post-terms', 'core/post-title']));
         });
 
+        // Register custom pattern category with branded label (before PatternManager auto-derives it)
+        register_block_pattern_category('vincentragosta', [
+            'label' => __('Vincent Ragosta', 'child-theme'),
+        ]);
+
         // Call parent to register theme supports, features, and blocks
         parent::register();
 

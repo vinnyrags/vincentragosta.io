@@ -4,7 +4,7 @@
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 
-.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production
+.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -34,6 +34,8 @@ help:
 	@echo "  make pull-staging     - Pull staging DB + uploads to local"
 	@echo "  make push-production  - Push local DB + uploads to production"
 	@echo "  make pull-production  - Pull production DB + uploads to local"
+	@echo "  make pull-patterns    - Export block patterns from production to PHP files"
+	@echo "  make pull-patterns-staging - Export block patterns from staging to PHP files"
 
 # Start DDEV environment, install dependencies, and build assets
 start:
@@ -226,3 +228,17 @@ pull-production:
 	rm -f /tmp/production-export.sql
 	ssh $(PRODUCTION_HOST) "rm -f /tmp/production-export.sql"
 	@echo "Done — local synced from production"
+
+# Export block patterns from production to PHP files
+pull-patterns:
+	@REMOTE_HOST="$(PRODUCTION_HOST)" \
+	REMOTE_WP="$(PRODUCTION_WP)" \
+	REMOTE_URL="$(PRODUCTION_URL)" \
+	$(CHILD_THEME_DIR)/scripts/export-patterns.sh
+
+# Export block patterns from staging to PHP files
+pull-patterns-staging:
+	@REMOTE_HOST="$(STAGING_HOST)" \
+	REMOTE_WP="$(STAGING_WP)" \
+	REMOTE_URL="$(STAGING_URL)" \
+	$(CHILD_THEME_DIR)/scripts/export-patterns.sh

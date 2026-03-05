@@ -50,6 +50,7 @@ functions.php → (new Theme())->bootstrap()
       → registerHooks()    // always-active structural behavior
       → registerFeatures() // toggleable features via FeatureManager
       → blockManager->initializeHooks()
+      → patternManager->initializeHooks()
 ```
 
 ### The Provider Pattern
@@ -66,13 +67,14 @@ Registrable (interface)
         └── ProjectProvider (child only) — projects CPT + block
 ```
 
-Each provider composes five managers (created in `setup()`):
+Each provider composes six managers (created in `setup()`):
 
 | Manager | Purpose |
 |---------|---------|
 | **AssetManager** | Enqueues CSS/JS from `dist/`, derives kebab-case slug from class name |
 | **BlockManager** | Registers dynamic blocks from the provider's `blocks/` directory |
 | **FeatureManager** | Resolves and registers toggleable `Feature` classes via the DI container |
+| **PatternManager** | Auto-discovers and registers block patterns from the provider's `patterns/` directory |
 | **AcfManager** | ACF JSON sync paths and options page auto-discovery |
 | **RestManager** | REST API endpoint registration with inheritance and opt-out |
 
@@ -95,7 +97,7 @@ parent-theme/
 │   ├── Models/              # Post, Image, CropDirection
 │   ├── Providers/
 │   │   ├── Contracts/       # Registrable, Feature, Hook, Routable
-│   │   ├── Support/         # AssetManager, BlockManager, FeatureManager, AcfManager, RestManager
+│   │   ├── Support/         # AssetManager, BlockManager, FeatureManager, PatternManager, AcfManager, RestManager
 │   │   ├── Theme/           # ThemeProvider + Features/ + Hooks/
 │   │   └── PostType/        # PostTypeProvider (JSON-based CPT registration)
 │   ├── Repositories/        # Repository base class + interface
@@ -139,6 +141,8 @@ src/Providers/{Name}/
 │           ├── index.js
 │           ├── edit.js
 │           └── editor.scss
+├── patterns/              # Block patterns (auto-discovered by PatternManager)
+│   └── {pattern-name}.php # Pattern file with WP headers (Title, Slug, Categories)
 ├── config/
 │   └── post-type.json     # JSON config loaded via loadConfig()
 └── acf-json/
@@ -206,6 +210,36 @@ ACF JSON sync and options page auto-discovery.
 | `registerOptionsPages()` | Discover and register `options-page-*.json` files |
 
 Options page JSON files use the same keys as `acf_add_options_page()`. Include `parent_slug` for sub-pages.
+
+### PatternManager
+
+Auto-discovers and registers block patterns from a provider's `patterns/` directory.
+
+| Method | Description |
+|--------|-------------|
+| `hasPatterns()` | Whether provider has a `patterns/` directory |
+| `getPatternsPath()` | Get the patterns directory path |
+| `initializeHooks()` | Hook `registerPatterns` to `init` if directory exists; silent no-op otherwise |
+| `registerPatterns()` | Discover files, parse headers, register via `register_block_pattern()` |
+
+Pattern files are self-describing via standard WordPress file headers — no explicit `$patterns` array on the provider is needed. If a `.php` file is in `patterns/`, it gets registered.
+
+#### Block Patterns Workflow
+
+Patterns are **authored in the CMS** (WordPress block editor) as synced patterns, then exported to PHP files. They are not created or edited locally.
+
+1. **Create or edit patterns** in the WordPress editor on production or staging
+2. **Export** with `make pull-patterns` (production) or `make pull-patterns-staging` (staging)
+3. **Review and commit** the generated PHP files
+
+The export script routes patterns to provider directories based on their CMS category:
+
+- A pattern with the `project` category → `src/Providers/Project/patterns/`
+- A pattern with the `theme` category → `src/Providers/Theme/patterns/`
+- Category slug is converted to PascalCase and matched against `src/Providers/{PascalCase}/`
+- Unmatched categories fall back to theme-root `patterns/` (WordPress auto-discovery)
+
+Hardcoded upload URLs are automatically replaced with dynamic `content_url()` calls so media references work across environments.
 
 ### RestManager
 

@@ -30,11 +30,12 @@ Registrable (interface)
         └── ProjectProvider (child only) — projects CPT + block
 ```
 
-Each provider composes three managers rather than inheriting them:
+Each provider composes managers rather than inheriting them:
 
 - **AssetManager** — enqueues CSS/JS from `dist/`, derives a kebab-case slug from the provider class name (e.g., `ThemeProvider` → `theme`, `PostTypeProvider` → `post-type`)
 - **BlockManager** — registers dynamic blocks from the provider's `blocks/` directory
 - **FeatureManager** — resolves and registers toggleable `Feature` classes via the DI container
+- **PatternManager** — auto-discovers and registers block patterns from the provider's `patterns/` directory
 
 Managers are instantiated in `Provider::setup()`, which runs lazily (idempotent, deferred until first access).
 
@@ -50,6 +51,7 @@ functions.php → (new Theme())->bootstrap()
       → registerHooks()    // always-active structural behavior
       → registerFeatures() // toggleable features via FeatureManager
       → blockManager->initializeHooks()
+      → patternManager->initializeHooks()
 ```
 
 ### Features vs Hooks
@@ -87,7 +89,7 @@ protected array $hooks = [
 
 ## Design Patterns
 
-**Composition over inheritance** — Providers compose AssetManager, BlockManager, and FeatureManager as internal collaborators. The managers are not part of any inheritance chain.
+**Composition over inheritance** — Providers compose AssetManager, BlockManager, FeatureManager, and PatternManager as internal collaborators. The managers are not part of any inheritance chain.
 
 **Constructors are for DI only** (injectables) — No initialization logic in constructors of container-managed classes (providers, services, features). Setup happens in `setup()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method. **Newables** — short-lived objects created via `new` with runtime parameters (e.g., `IconService` instances) — may do initialization work in their constructor, since the container doesn't create them.
 
@@ -129,6 +131,8 @@ src/Providers/{Name}/
 │           ├── index.js
 │           ├── edit.js
 │           └── editor.scss
+├── patterns/              # Block patterns (auto-discovered by PatternManager)
+│   └── {pattern-name}.php # Pattern file with WP header (Title, Slug, Categories)
 └── config/
     └── post-type.json     # JSON config loaded via loadConfig()
 ```
@@ -137,9 +141,9 @@ src/Providers/{Name}/
 
 - Assets live inside providers, never at the theme root
 - `dist/` is git-ignored and rebuilt via `npm run build`
-- Tests mirror source structure: `tests/Unit/Providers/Support/{Asset,Block,Feature}/`
+- Tests mirror source structure: `tests/Unit/Providers/Support/{Asset,Block,Feature,Pattern}/`
 - PSR-4 autoloading: namespace path matches directory path exactly
-- Support classes live at `src/Providers/Support/{Asset,Block,Feature}/` — each has a Manager class
+- Support classes live at `src/Providers/Support/{Asset,Block,Feature,Pattern}/` — each has a Manager class
 
 ## Block Architecture
 
@@ -152,6 +156,45 @@ Blocks are WordPress dynamic blocks with server-side rendering:
 5. **`{name}.twig`** — Twig template consumed by `render.php`
 
 Blocks are declared in the provider's `$blocks` array and live in the provider's `blocks/` subdirectory. The BlockManager handles registration and hook wiring.
+
+## Block Patterns
+
+Block patterns are **authored in the CMS** (WordPress block editor) as synced patterns (`wp_block` post type), then exported to PHP files via the `make pull-patterns` command. They are not created or edited locally.
+
+### Workflow
+
+1. **Create or edit patterns** in the WordPress editor on production or staging
+2. **Export** with `make pull-patterns` (production) or `make pull-patterns-staging` (staging)
+3. **Review and commit** the generated PHP files
+
+### Provider Routing
+
+The export script routes patterns to provider directories based on their CMS category:
+
+- A pattern with the `project` category → `src/Providers/Project/patterns/`
+- A pattern with the `theme` category → `src/Providers/Theme/patterns/`
+- The category slug is converted to PascalCase and matched against `src/Providers/{PascalCase}/`
+- **Unmatched categories** fall back to the theme-root `patterns/` directory, where WordPress auto-discovers them
+
+### Registration
+
+Each provider gets a **PatternManager** instance during `setup()`. If the provider has a `patterns/` directory, the manager hooks into `init` and registers all `.php` files found there. Pattern files are self-describing via standard WordPress file headers (`Title`, `Slug`, `Categories`, etc.) — no explicit `$patterns` array on the provider is needed.
+
+### Pattern File Format
+
+```php
+<?php
+/**
+ * Title: Hero Section
+ * Slug: child-theme/hero-section
+ * Categories: project
+ * Inserter: true
+ */
+?>
+<!-- Block markup here -->
+```
+
+The export script automatically replaces hardcoded upload URLs with dynamic `content_url()` calls so media references work across environments.
 
 ## Build System
 
@@ -187,6 +230,8 @@ From the project root:
 | `make pull-staging` | Pull staging database + uploads to local DDEV |
 | `make push-production` | Push local DDEV database + uploads to production server |
 | `make pull-production` | Pull production database + uploads to local DDEV |
+| `make pull-patterns` | Export block patterns from production to PHP files |
+| `make pull-patterns-staging` | Export block patterns from staging to PHP files |
 
 From a theme directory:
 

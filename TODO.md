@@ -7,6 +7,8 @@
 - double check that we are applying the same bg effect when in light mode to interior pages
 - hover to sun/moon toggle on light mode
 - revisit putting fixed header on top of content now that we are not going 100vh anymore
+- REMOVE NEXT PANEL OPENING IN shutter cards block when tabbing and clicking desktop and mobile.
+- remove templates directory inside of the provider (project for example)
 
 ## MEDIUM PRIORITY
 

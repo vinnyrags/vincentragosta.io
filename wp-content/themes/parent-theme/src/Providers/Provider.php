@@ -12,6 +12,7 @@ use ParentTheme\Providers\Support\Asset\AssetManager;
 use ParentTheme\Providers\Support\Block\BlockManager;
 use ParentTheme\Providers\Support\AbstractRegistry;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
+use ParentTheme\Providers\Support\Pattern\PatternManager;
 use ParentTheme\Providers\Support\Rest\RestManager;
 use ReflectionClass;
 use ReflectionMethod;
@@ -67,6 +68,7 @@ abstract class Provider implements Registrable
     protected ?AssetManager $assets = null;
     protected ?BlockManager $blockManager = null;
     protected ?FeatureManager $featureManager = null;
+    protected ?PatternManager $patternManager = null;
     protected ?RestManager $restManager = null;
     protected string $configPath;
     protected ?string $templatesPath = null;
@@ -89,6 +91,7 @@ abstract class Provider implements Registrable
         $this->registerFeatures();
         $this->acfManager->initializeHooks();
         $this->blockManager->initializeHooks($this);
+        $this->patternManager->initializeHooks();
         $this->maybeRegisterTwigFilter();
 
         if (!empty($this->restManager->getEnabled())) {
@@ -160,6 +163,7 @@ abstract class Provider implements Registrable
         $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
         $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
         $this->acfManager = new AcfManager($providerDir, $this->textDomain);
+        $this->patternManager = new PatternManager($providerDir . '/patterns', $this->textDomain);
 
         $routeNamespace = $this->routeNamespace ?: $slug;
         $this->restManager = new RestManager(
