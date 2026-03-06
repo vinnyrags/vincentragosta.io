@@ -7,8 +7,10 @@
  */
 
 ?>
-<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"<?php echo esc_url(content_url('uploads/')); ?>2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:buttons -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"<?php echo esc_url(content_url('uploads/')); ?>2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns {"verticalAlignment":null} -->
+<div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom"} -->
+<div class="wp-block-column is-vertically-aligned-bottom"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
 <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button">back to projects</a></div>
 <!-- /wp:button --></div>
@@ -16,9 +18,13 @@
 
 <!-- wp:post-title {"fontSize":"70"} /-->
 
-<!-- wp:post-terms {"term":"category","style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} /-->
+<!-- wp:post-terms {"term":"category","style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} /--></div>
+<!-- /wp:column -->
 
-<!-- wp:post-featured-image {"aspectRatio":"16/9","className":"is-style-focal-top"} /-->
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:post-featured-image {"aspectRatio":"1","className":"is-style-default"} /--></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->
 
 <!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
