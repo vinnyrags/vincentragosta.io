@@ -77,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: MJ The Musical
+- **PROJECT_NAME**: Platespinner Productions
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2022
-- **URL**: *(optional)* https://mjthemusical.com
-- **NOTABLES**: multisite network, complex design system, ticketing calendar 
+- **YEAR** 2020
+- **URL**: *(optional)* https://www.platespinnerproductions.com/
+- **NOTABLES**: Redesign
