@@ -80,7 +80,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Senior web developer at Situation Interactive, building under Situation's Hatch innovation program.</p>
+<p class="is-style-muted">Frontend development lead at Situation Interactive, building under Situation's Hatch innovation program.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

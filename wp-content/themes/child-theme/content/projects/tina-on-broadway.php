@@ -43,7 +43,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">WordPress Multisite, PHP, JavaScript, REST APIs</p>
+                <p class="has-30-font-size">WordPress, PHP, JavaScript</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">2022</p>
+                <p class="has-30-font-size">2019</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://broadwayacrossamerica.com">https://broadwayacrossamerica.com</a></p>
+                <p class="has-30-font-size"><a href="https://www.tinaonbroadway.com">https://tinaonbroadway.com</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development on the largest WordPress Multisite build of my career — 50+ market-specific sites for the preeminent presenter of touring Broadway in North America. A data-dense platform serving 4 million ticket buyers across the United States and Canada, with subscriber engagement lifecycles, show routing, and content management scaled to every market in the network.</p>
+            <p>Full-stack development for the official Broadway website of the 12-time Tony-nominated Tina Turner biographical musical. A content-heavy WordPress build with an integrated ticket calendar, media carousel, and the production photography and press infrastructure needed to support a record-breaking run at the Lunt-Fontanne Theatre.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>North America's largest touring Broadway presenter needed a platform that could operate at network scale.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A West End hit transferring to Broadway needed a digital platform built for the scale of the story it was telling.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>Broadway Across America — owned by the John Gore Organization and the leading presenter of touring Broadway shows in North America — operates across more than 50 regional markets, from Boston and Houston to Portland and Fort Lauderdale. Each market has its own venue partnerships, season subscription packages, show schedules, and local sponsorships. The existing digital infrastructure couldn't keep pace with that complexity: content updates required per-market coordination, the subscriber data layer was fragmented across systems, and the engagement lifecycle — from single ticket buyer to season subscriber to multi-year renewal — lacked the tooling to function at the scale the business demanded. BAA needed a unified platform that could serve every market in the network while preserving the local identity and operational independence each market required.</p>
+            <p>TINA — The Tina Turner Musical was transferring to Broadway after a sold-out premiere at London's Aldwych Theatre in 2018. The biographical musical — written by Katori Hall with Frank Ketelaar and Kees Prins, directed by Phyllida Lloyd — told the story of Tina Turner's rise from Nutbush, Tennessee to global icon, with Adrienne Warren starring in the title role. The show was one of the most anticipated Broadway openings of the 2019-20 season, with previews set to begin October 12, 2019 at the Lunt-Fontanne Theatre and an official opening on November 7. The production needed a digital platform that could carry the full weight of a major Broadway launch: ticketing, cast and creative bios, production photography, video content, press quotes, and the media assets that would drive the show's marketing cycle from first preview through awards season.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">With a database of 4 million ticket buyers and over 400,000 active subscribers, the data architecture alone was a project unto itself — before a single template was built.</p>
+            <p class="is-style-muted">Tina Turner herself was involved in the production — the site needed to honor the legacy while converting the enormous built-in audience into ticket buyers.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A WordPress Multisite network where 50+ markets share infrastructure but own their content.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A ticket calendar and media carousel that became the template for every Broadway build that followed.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The platform was built on WordPress Multisite — a single codebase powering 50+ individual market sites, each running on its own subdomain (boston.broadway.com, houston.broadway.com, fortlauderdale.broadway.com, and so on across the full network). The architecture separated shared infrastructure from market-specific content: global show data, touring schedules, and creative assets lived in a centralized data layer, while each market site maintained independent control over its season lineup, venue information, subscription packages, local sponsorships, and editorial content. The data system was the backbone of the build — show routing logic determined which productions appeared on which market sites and when, subscriber records tracked engagement across purchase types (single tickets, group sales, eClub memberships, and season subscriptions), and the renewal lifecycle automated the progression from first-time buyer to multi-season subscriber with pricing tiers, seat priority, and benefit escalation baked into the platform.</p>
+            <p>The site was built on WordPress with the content density a Broadway marketing cycle demands — cast and creative bios, production photography galleries, video embeds, press quotes, and ticketing all competing for attention in a compact, mobile-optimized layout. The ticket calendar was the conversion centerpiece: a dynamic performance grid surfacing available dates and ticket types that guided visitors from browsing to purchase with minimal friction. The media carousel — built to showcase production photography, video content, and press imagery in a responsive, swipeable format — was designed and engineered on this project as an original component. It handled high-resolution production stills, embedded video players, and captioned press assets in a single unified interface that performed consistently across devices. The carousel pattern proved durable enough that it became a standard component across subsequent Broadway show sites at Situation, reused and refined on builds that followed.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The content volume was staggering — every show touring in every market generated its own set of pages, media assets, ticketing links, and promotional content, all flowing through a structured data pipeline that kept 50+ sites in sync without manual duplication.</p>
+            <p class="is-style-muted">The media carousel was born on this project — what started as a solution for one show's content density became a reusable pattern across the agency's entire Broadway portfolio.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A unified network serving millions of ticket buyers — and a content engine that scales with every new season.</strong></h2>
+            <h2 class="wp-block-heading"><strong>Twelve Tony nominations, a box office record, and a component library that outlived the run.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The platform launched across the full Broadway Across America network, giving every market a consistent, performant digital presence while preserving the local autonomy each market's team needed to run its own season. The centralized data layer eliminated the content duplication that had plagued the previous system — when a new touring production was announced, show data propagated to every relevant market site automatically, with local teams adding only market-specific details like venue, dates, and subscription placement. The subscriber engagement lifecycle gave BAA visibility into buyer behavior at a scale that hadn't existed before: tracking the journey from single ticket purchase through eClub signup through season subscription through multi-year renewal, with each stage surfacing actionable data for marketing teams across the network. The platform continues to serve as BAA's digital infrastructure — the same system that launched in 2022 now powers every market site in the network, handling the full volume of North America's largest touring Broadway operation.</p>
+            <p>The site launched ahead of the October 2019 preview period and carried TINA through a three-year Broadway run at the Lunt-Fontanne Theatre — from opening night through the 2020 Tony Awards (12 nominations, including Best Musical, with Adrienne Warren winning Best Actress in a Leading Role in a Musical), through the pandemic shutdown and reopening, and through the show's final performance on August 14, 2022. Within weeks of opening, the production broke the Lunt-Fontanne's all-time box office record with a single-week gross of $1,834,339 — surpassing the previous record held by Motown since 2013. The platform handled sustained demand across 482 regular performances, with the marketing team managing all content updates — new press quotes, cast changes, award badges, and promotional campaigns — independently through the CMS. When the national tour launched in September 2022 at the Providence Performing Arts Center, the site expanded to support tour content alongside the Broadway archive.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The largest multisite build of my career — and the project that proved a single WordPress architecture could operate at genuine enterprise scale when the data system underneath it is built with that intent from the start.</p>
+            <p class="is-style-muted">The ticket calendar and media carousel built for TINA became foundational components at Situation — patterns that shipped on this project and were reused across every major Broadway build that followed.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>

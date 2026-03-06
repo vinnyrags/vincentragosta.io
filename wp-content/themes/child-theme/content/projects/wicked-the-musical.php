@@ -80,7 +80,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Senior developer at Situation Interactive, Broadway's leading digital agency.</p>
+<p class="is-style-muted">Development lead at Situation Interactive, Broadway's leading digital agency.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

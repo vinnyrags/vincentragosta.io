@@ -86,7 +86,7 @@
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Senior web developer at Situation Interactive.</p>
+            <p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>

@@ -80,7 +80,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Senior web developer at Situation Interactive, Roundabout's digital agency of record.</p>
+<p class="is-style-muted">Development lead at Situation Interactive, Roundabout's digital agency of record.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

@@ -77,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Platespinner Productions
+- **PROJECT_NAME**: Kimberly Akimbo
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2020
-- **URL**: *(optional)* https://www.platespinnerproductions.com/
-- **NOTABLES**: Redesign
+- **YEAR** 2022
+- **URL**: *(optional)* https://www.kimberlyakimbothemusical.com/
+- **NOTABLES**: ticket calendar
