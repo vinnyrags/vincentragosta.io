@@ -149,9 +149,7 @@ push-staging:
 	scp /tmp/ddev-export.sql $(STAGING_HOST):/tmp/ddev-export.sql
 	@echo "Importing database on staging..."
 	ssh $(STAGING_HOST) "wp db import /tmp/ddev-export.sql --path=$(STAGING_WP) --allow-root"
-	@echo "Replacing URLs (siteurl)..."
-	ssh $(STAGING_HOST) "wp search-replace '$(LOCAL_URL)/wp' '$(STAGING_URL)/wp' --path=$(STAGING_WP) --allow-root --precise --all-tables --quiet"
-	@echo "Replacing URLs (home)..."
+	@echo "Replacing URLs..."
 	ssh $(STAGING_HOST) "wp search-replace '$(LOCAL_URL)' '$(STAGING_URL)' --path=$(STAGING_WP) --allow-root --precise --all-tables --quiet"
 	@echo "Flushing caches..."
 	ssh $(STAGING_HOST) "wp cache flush --path=$(STAGING_WP) --allow-root --quiet && wp rewrite flush --path=$(STAGING_WP) --allow-root --quiet"
@@ -171,9 +169,7 @@ pull-staging:
 	scp $(STAGING_HOST):/tmp/staging-export.sql /tmp/staging-export.sql
 	@echo "Importing into DDEV..."
 	ddev import-db --file=/tmp/staging-export.sql
-	@echo "Replacing URLs (siteurl)..."
-	ddev wp search-replace '$(STAGING_URL)/wp' '$(LOCAL_URL)/wp' --precise --all-tables --quiet
-	@echo "Replacing URLs (home)..."
+	@echo "Replacing URLs..."
 	ddev wp search-replace '$(STAGING_URL)' '$(LOCAL_URL)' --precise --all-tables --quiet
 	@echo "Flushing caches..."
 	ddev wp cache flush --quiet
@@ -193,9 +189,7 @@ push-production:
 	scp /tmp/ddev-export.sql $(PRODUCTION_HOST):/tmp/ddev-export.sql
 	@echo "Importing database on production..."
 	ssh $(PRODUCTION_HOST) "wp db import /tmp/ddev-export.sql --path=$(PRODUCTION_WP) --allow-root"
-	@echo "Replacing URLs (siteurl)..."
-	ssh $(PRODUCTION_HOST) "wp search-replace '$(LOCAL_URL)/wp' '$(PRODUCTION_URL)/wp' --path=$(PRODUCTION_WP) --allow-root --precise --all-tables --quiet"
-	@echo "Replacing URLs (home)..."
+	@echo "Replacing URLs..."
 	ssh $(PRODUCTION_HOST) "wp search-replace '$(LOCAL_URL)' '$(PRODUCTION_URL)' --path=$(PRODUCTION_WP) --allow-root --precise --all-tables --quiet"
 	@echo "Flushing caches..."
 	ssh $(PRODUCTION_HOST) "wp cache flush --path=$(PRODUCTION_WP) --allow-root --quiet && wp rewrite flush --path=$(PRODUCTION_WP) --allow-root --quiet"
@@ -215,9 +209,7 @@ pull-production:
 	scp $(PRODUCTION_HOST):/tmp/production-export.sql /tmp/production-export.sql
 	@echo "Importing into DDEV..."
 	ddev import-db --file=/tmp/production-export.sql
-	@echo "Replacing URLs (siteurl)..."
-	ddev wp search-replace '$(PRODUCTION_URL)/wp' '$(LOCAL_URL)/wp' --precise --all-tables --quiet
-	@echo "Replacing URLs (home)..."
+	@echo "Replacing URLs..."
 	ddev wp search-replace '$(PRODUCTION_URL)' '$(LOCAL_URL)' --precise --all-tables --quiet
 	@echo "Flushing caches..."
 	ddev wp cache flush --quiet

@@ -16,11 +16,7 @@
 
 <!-- wp:post-title {"fontSize":"70"} /-->
 
-<!-- wp:terms-query {"layout":{"type":"default"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} -->
-<div style="margin-top:var(--wp--preset--spacing--30)" class="wp-block-terms-query"><!-- wp:term-template {"layout":{"type":"default"}} -->
-<!-- wp:term-name {"isLink":true} /-->
-<!-- /wp:term-template --></div>
-<!-- /wp:terms-query -->
+<!-- wp:post-terms {"term":"category","style":{"spacing":{"margin":{"top":"var:preset|spacing|30"}}}} /-->
 
 <!-- wp:post-featured-image {"aspectRatio":"16/9","className":"is-style-focal-top"} /-->
 

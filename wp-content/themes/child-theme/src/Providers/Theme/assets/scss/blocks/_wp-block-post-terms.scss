@@ -1,9 +1,44 @@
 // ==========================================================================
-// Post Terms / Terms Query Block Styles
+// Post Terms Block Styles
 // ==========================================================================
 
-// Pill-style category badges for post terms blocks.
-.wp-block-post-terms,
+// Shared pill styles for term links.
+%term-pill {
+    display: inline-block;
+    padding: 0.25em 1em;
+    border: 1px solid var(--wp--preset--color--accent-1);
+    border-radius: 9999px;
+    font-size: var(--wp--preset--font-size--10);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--wp--preset--color--accent-1);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover,
+    &:focus {
+        background-color: var(--wp--preset--color--accent-1);
+        color: var(--wp--preset--color--contrast);
+        text-decoration: none;
+    }
+}
+
+// core/post-terms direct output
+.wp-block-post-terms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--wp--preset--spacing--20);
+
+    .wp-block-post-terms__separator {
+        display: none;
+    }
+
+    a {
+        @extend %term-pill;
+    }
+}
+
+// core/terms-query block (legacy)
 .wp-block-terms-query {
 
     .wp-block-term-template {
@@ -27,28 +62,7 @@
         margin: 0;
 
         a {
-            display: inline-block;
-            padding: 0.25em 1em;
-            border: 1px solid var(--wp--preset--color--accent-1);
-            border-radius: 9999px;
-            font-size: var(--wp--preset--font-size--10);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--wp--preset--color--accent-1);
-            text-decoration: none;
+            @extend %term-pill;
         }
     }
-}
-
-// Also style core/post-terms direct output (comma-separated links)
-.wp-block-post-terms a {
-    display: inline-block;
-    padding: 0.25em 1em;
-    border: 1px solid var(--wp--preset--color--accent-1);
-    border-radius: 9999px;
-    font-size: var(--wp--preset--font-size--10);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--wp--preset--color--accent-1);
-    text-decoration: none;
 }
