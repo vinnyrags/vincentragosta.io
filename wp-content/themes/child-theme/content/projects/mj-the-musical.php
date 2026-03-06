@@ -29,7 +29,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">Experience Interaction</p>
+                <p class="has-30-font-size">Situation Interactive</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">WordPress, PHP, React</p>
+                <p class="has-30-font-size">WordPress Multisite, PHP, JavaScript, Ticketmaster API, Gravity Forms</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">2018</p>
+                <p class="has-30-font-size">2022</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://wolfmoonbourbon.com">https://wolfmoonbourbon.com</a></p>
+                <p class="has-30-font-size"><a href="https://mjthemusical.com">https://mjthemusical.com</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development for a celebrity bourbon brand launching nationally through Proximo Spirits. Custom WordPress theme, age-gated entry, and a content management layer designed for editorial independence from day one.</p>
+            <p>Full-stack development for the official digital platform of MJ the Musical — a four-time Tony Award-winning Broadway production. WordPress Multisite network powering Broadway, national tour, and international productions with a shared design system, custom ticketing calendar, and region-specific content management.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Development lead, working alongside Experience Interaction.</p>
+            <p class="is-style-muted">Development lead at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A national product launch needed a digital presence to match.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A Broadway production with global ambitions needed a digital platform built to scale.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>Wolf Moon Bourbon — a collaboration between Jason Aldean and Florida Georgia Line, distributed by Proximo Spirits — was preparing to go to market nationally. Working alongside Experience Interaction, the agency of record for several Proximo brands, I led development on the brand's digital platform. The goal was straightforward: deliver a production-ready site ahead of the retail rollout that could serve as the brand's primary digital touchpoint across press, social, and direct consumer engagement.</p>
+            <p>MJ the Musical — written by two-time Pulitzer Prize winner Lynn Nottage and directed and choreographed by Tony winner Christopher Wheeldon — opened on Broadway at the Neil Simon Theatre on February 1, 2022. The production centers on the making of Michael Jackson's 1992 Dangerous World Tour, bringing his catalog to the stage through narrative rather than revue. It arrived with 10 Tony Award nominations and won four, including Best Leading Actor in a Musical for Myles Frost. From the outset, the production was planned as a global franchise — Broadway first, then a North American national tour, London's West End, Hamburg, Sydney, Melbourne, and an Asian tour — each with its own regional ticketing, content, and marketing needs.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The timeline was fixed to the product's go-to-market window — the site needed to be live before bottles hit shelves.</p>
+            <p class="is-style-muted">The digital platform needed to launch alongside the Broadway opening and be architecturally ready to support every subsequent production without rebuilding from scratch.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Custom theme architecture with structured content and regulatory compliance built in.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A multisite network with a shared design system and custom ticketing calendar built for a global franchise.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site was built on WordPress using a custom theme platform with Advanced Custom Fields powering a structured content layer — product details, brand narrative sections, and media galleries all managed through dedicated field groups rather than freeform editing. An age verification gate handled TTB compliance for spirits marketing. The frontend delivered responsive layouts optimized for mobile-first consumption, with asset compression and lazy loading to keep page weight under 2MB across all viewports.</p>
+            <p>I led development on a WordPress Multisite network — a single codebase powering dedicated subsites for each production: Broadway, the national tour, London, Hamburg, and beyond. Each subsite runs the same custom theme with its own content, ticketing configuration, and regional settings, while sharing the underlying design system, component library, and plugin infrastructure. The design system itself was one of the most comprehensive I built at Situation — a full CSS custom property framework governing color tokens, a responsive spacing scale, fluid typography, and component-level layout rules, all enforced consistently across every production's site without duplication. The ticketing calendar was a custom-built interactive component integrated with the Ticketmaster API, rendering show dates, availability states, and matinee/evening performance slots into a visual calendar interface that drove users directly into the purchase flow with the correct show, date, and venue pre-selected.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The content architecture was designed so the marketing team could update copy, swap imagery, and manage promotions without developer involvement post-launch.</p>
+            <p class="is-style-muted">The multisite architecture meant spinning up a new international production — with its own subdomain, ticketing partner, language considerations, and regional newsletter signup — required zero theme duplication. New sites inherited the full design system and component library immediately.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Live ahead of schedule, fully operational at handoff.</strong></h2>
+            <h2 class="wp-block-heading"><strong>One platform, six productions, five million audience members and counting.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site launched ahead of Wolf Moon's retail distribution window, providing the brand with a digital presence that supported its press cycle, social campaigns, and direct consumer engagement from day one. The structured content layer performed as designed — the client's marketing team managed all post-launch content updates independently, with zero developer support required in the months following deployment.</p>
+            <p>The platform launched alongside MJ's Broadway opening in February 2022 and has since scaled to support productions across six markets — New York, the U.S. national tour, London's West End, Hamburg, Sydney, and Melbourne — with an Asian tour launching next. The multisite architecture delivered exactly what it was designed for: each new production went live on its own subdomain with full design system inheritance and regional ticketing integration, without rebuilding or forking the theme. The ticketing calendar became the primary conversion path across all productions, routing over 2.2 million Broadway ticket purchases through the platform. The show has grossed over $319 million on Broadway alone, and more than 5 million people have experienced the production worldwide.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">This project established the development workflow and quality benchmark that informed subsequent builds across Experience Interaction's spirits portfolio.</p>
+            <p class="is-style-muted">The architecture I built for MJ continues to power one of the most commercially successful musicals on Broadway — a platform designed once, deployed globally, and still running in production years later.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>

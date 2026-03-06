@@ -77,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Roundabout Theatre
+- **PROJECT_NAME**: MJ The Musical
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2026
-- **URL**: *(optional)* https://stage.roundabouttheatre.org
-- **NOTABLES**: new platform built on gutenberg and twig, this project birthed the new iteration of my current freelance project. learned a lot from this project with regards to Gutenberg. Hybrid FSE make optimal use of theme.json
+- **YEAR** 2022
+- **URL**: *(optional)* https://mjthemusical.com
+- **NOTABLES**: multisite network, complex design system, ticketing calendar 

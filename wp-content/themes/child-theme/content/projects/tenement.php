@@ -29,7 +29,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">Experience Interaction</p>
+                <p class="has-30-font-size">Situation Interactive</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">WordPress, PHP, React</p>
+                <p class="has-30-font-size">WordPress, PHP, JavaScript, Blackbaud Altru API</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">2018</p>
+                <p class="has-30-font-size">2024</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://wolfmoonbourbon.com">https://wolfmoonbourbon.com</a></p>
+                <p class="has-30-font-size"><a href="https://tenement.org">https://tenement.org</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development for a celebrity bourbon brand launching nationally through Proximo Spirits. Custom WordPress theme, age-gated entry, and a content management layer designed for editorial independence from day one.</p>
+            <p>Inherited codebase maintenance and targeted feature development for a National Historic Site serving 225,000+ annual visitors. Reservation system and membership data improvements delivered within a constrained budget — no rebuild, just disciplined work inside an existing WordPress platform.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Development lead, working alongside Experience Interaction.</p>
+            <p class="is-style-muted">Senior web developer at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A national product launch needed a digital presence to match.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A historic institution's website needed targeted improvements — not a blank check.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>Wolf Moon Bourbon — a collaboration between Jason Aldean and Florida Georgia Line, distributed by Proximo Spirits — was preparing to go to market nationally. Working alongside Experience Interaction, the agency of record for several Proximo brands, I led development on the brand's digital platform. The goal was straightforward: deliver a production-ready site ahead of the retail rollout that could serve as the brand's primary digital touchpoint across press, social, and direct consumer engagement.</p>
+            <p>The Lower East Side Tenement Museum — founded in 1988 and designated a National Historic Site — operates two tenement buildings at 97 and 103 Orchard Street that were home to an estimated 15,000 people from over 20 nations between 1863 and 2015. The museum welcomes over 225,000 visitors annually through guided tours of historically recreated immigrant apartments, walking tours of the Lower East Side, and virtual programs. The existing WordPress site had been built years earlier by another agency using a modular content system with 20+ flexible content modules, integrated with Blackbaud's Altru platform for ticketing, MailChimp for email marketing, ADP for job applications, and GiveLively for fundraising. There was no budget for a ground-up rebuild — the museum needed specific, high-impact improvements to its reservation system and membership data layer without disrupting the rest of a functioning platform.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The timeline was fixed to the product's go-to-market window — the site needed to be live before bottles hit shelves.</p>
+            <p class="is-style-muted">The challenge wasn't building something new — it was making meaningful progress inside a codebase I didn't author, with constraints that demanded precision over ambition.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Custom theme architecture with structured content and regulatory compliance built in.</strong></h2>
+            <h2 class="wp-block-heading"><strong>Surgical improvements to the reservation flow and membership data layer — no rebuild required.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site was built on WordPress using a custom theme platform with Advanced Custom Fields powering a structured content layer — product details, brand narrative sections, and media galleries all managed through dedicated field groups rather than freeform editing. An age verification gate handled TTB compliance for spirits marketing. The frontend delivered responsive layouts optimized for mobile-first consumption, with asset compression and lazy loading to keep page weight under 2MB across all viewports.</p>
+            <p>I inherited the full WordPress codebase and spent the first phase auditing the existing architecture — mapping the integration points with Blackbaud Altru, understanding the content module system, and identifying where the reservation and membership flows were failing visitors. The reservation system work focused on the Altru API integration: improving how tour availability synced with the frontend, tightening the booking flow to reduce abandonment, and ensuring member-specific pricing and benefits applied correctly at checkout without requiring manual intervention from staff. The membership data layer needed similar attention — account access, benefit verification, digital member cards, and event RSVPs all depended on clean data exchange between WordPress and Altru, and several of those handoffs had degraded over time. I traced the issues through the existing code, patched the integration logic, and improved the member-facing UX without refactoring the underlying architecture.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The content architecture was designed so the marketing team could update copy, swap imagery, and manage promotions without developer involvement post-launch.</p>
+            <p class="is-style-muted">Working within someone else's codebase is a different discipline than building from scratch — it requires reading more than writing, respecting decisions you didn't make, and knowing where to intervene without creating new debt.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Live ahead of schedule, fully operational at handoff.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A functioning platform stabilized, not replaced — and a museum that could keep selling tours.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site launched ahead of Wolf Moon's retail distribution window, providing the brand with a digital presence that supported its press cycle, social campaigns, and direct consumer engagement from day one. The structured content layer performed as designed — the client's marketing team managed all post-launch content updates independently, with zero developer support required in the months following deployment.</p>
+            <p>The reservation system improvements went live without disrupting the museum's daily tour operations — critical for an institution that sells the majority of its tickets in advance and regularly sells out. Members could access their accounts, verify benefits, and reserve tours through the website reliably for the first time in months. The membership data fixes eliminated the manual workarounds that staff had been using to compensate for broken integrations, freeing up operational time across the visitor services and development teams. The work was scoped, delivered, and deployed within the budget constraints the museum required — no scope creep, no upsell to a full rebuild.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">This project established the development workflow and quality benchmark that informed subsequent builds across Experience Interaction's spirits portfolio.</p>
+            <p class="is-style-muted">Not every project needs to be a ground-up build to be valuable. Sometimes the most impactful work is keeping a critical system running for an institution that can't afford downtime.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>

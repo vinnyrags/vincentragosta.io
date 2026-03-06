@@ -29,7 +29,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">Experience Interaction</p>
+                <p class="has-30-font-size">Situation Interactive</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">WordPress, PHP, React</p>
+                <p class="has-30-font-size">WordPress, PHP, JavaScript, Telecharge API</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">2018</p>
+                <p class="has-30-font-size">2024</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://wolfmoonbourbon.com">https://wolfmoonbourbon.com</a></p>
+                <p class="has-30-font-size"><a href="https://outsidersmusical.com">https://outsidersmusical.com</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development for a celebrity bourbon brand launching nationally through Proximo Spirits. Custom WordPress theme, age-gated entry, and a content management layer designed for editorial independence from day one.</p>
+            <p>Full-stack development for the official Broadway website of the 2024 Tony Award winner for Best Musical. A content-heavy WordPress build with integrated ticketing, a multi-platform stream selector, and media galleries — launched ahead of previews at the Bernard B. Jacobs Theatre.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Development lead, working alongside Experience Interaction.</p>
+            <p class="is-style-muted">Senior web developer at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A national product launch needed a digital presence to match.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A new musical adapted from an American classic needed a digital platform built for a Broadway premiere.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>Wolf Moon Bourbon — a collaboration between Jason Aldean and Florida Georgia Line, distributed by Proximo Spirits — was preparing to go to market nationally. Working alongside Experience Interaction, the agency of record for several Proximo brands, I led development on the brand's digital platform. The goal was straightforward: deliver a production-ready site ahead of the retail rollout that could serve as the brand's primary digital touchpoint across press, social, and direct consumer engagement.</p>
+            <p>The Outsiders — a new musical based on S.E. Hinton's 1967 novel and Francis Ford Coppola's 1983 film — was transferring to Broadway after a world premiere run at La Jolla Playhouse. The production featured a book by Adam Rapp with Justin Levine, music and lyrics by Jamestown Revival (Jonathan Clay and Zach Chance) alongside Levine, and direction by Danya Taymor. With a pedigree that included Coppola himself as a producer, twelve Tony nominations ahead of it, and a built-in audience spanning generations of readers and filmgoers, the show was one of the most anticipated new musicals of the 2023-24 season. Previews were set to begin March 16, 2024 at the Bernard B. Jacobs Theatre, with an official opening on April 11. The production needed a digital platform that could carry the full weight of a major Broadway launch — ticketing, media, education resources, and press — from first preview through awards season and beyond.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The timeline was fixed to the product's go-to-market window — the site needed to be live before bottles hit shelves.</p>
+            <p class="is-style-muted">The source material brought a massive existing audience — the digital platform needed to convert that recognition into ticket sales from day one.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Custom theme architecture with structured content and regulatory compliance built in.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A media-dense Broadway build with integrated ticketing, streaming, and education content.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site was built on WordPress using a custom theme platform with Advanced Custom Fields powering a structured content layer — product details, brand narrative sections, and media galleries all managed through dedicated field groups rather than freeform editing. An age verification gate handled TTB compliance for spirits marketing. The frontend delivered responsive layouts optimized for mobile-first consumption, with asset compression and lazy loading to keep page weight under 2MB across all viewports.</p>
+            <p>The site was built on WordPress with a content architecture designed for the volume and velocity of a Broadway marketing cycle. The ticketing integration connected to Telecharge with a dynamic performance calendar surfacing real-time availability and "Selling Fast" indicators, alongside premium seating options, group sales through Broadway Inbound, and a GOVX military discount program — each purchase path routed correctly without friction. The Look & Listen section delivered a media-rich experience: production photography, video content, and a stream selector that let visitors listen to the original cast recording — released on Masterworks Broadway/Sony Masterworks — across Spotify, Apple Music, or Amazon Music without leaving the site. Beyond the standard Broadway site scope, the build included an education toolkit with downloadable study guides and "Know Before You Go" materials, turning the site into a resource for schools and group organizers bringing students to the theatre.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The content architecture was designed so the marketing team could update copy, swap imagery, and manage promotions without developer involvement post-launch.</p>
+            <p class="is-style-muted">Every content surface was built for the marketing team to manage independently — press quotes, cast updates, ticket promotions, and media assets all flow through the CMS without developer dependency.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Live ahead of schedule, fully operational at handoff.</strong></h2>
+            <h2 class="wp-block-heading"><strong>Four Tony Awards, a full recoupment, and a national tour — all running through the same platform.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site launched ahead of Wolf Moon's retail distribution window, providing the brand with a digital presence that supported its press cycle, social campaigns, and direct consumer engagement from day one. The structured content layer performed as designed — the client's marketing team managed all post-launch content updates independently, with zero developer support required in the months following deployment.</p>
+            <p>The site launched ahead of the March 2024 preview period and carried The Outsiders through its entire first year on Broadway — from opening night at the Jacobs Theatre through the June 2024 Tony Awards, where the show won four awards including Best Musical, Best Direction for Danya Taymor, Best Lighting Design, and Best Sound Design. The platform handled the sustained demand that followed: the production recouped its full investment by December 2025, and a North American tour launched in September 2025, opening at the Tulsa Performing Arts Center — the show's hometown and the setting of the story itself. The site expanded to support tour content and routing alongside the ongoing Broadway run, with the marketing team managing both properties through the same CMS.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">This project established the development workflow and quality benchmark that informed subsequent builds across Experience Interaction's spirits portfolio.</p>
+            <p class="is-style-muted">Two consecutive Best Musical winners built on the same platform and development approach — The Outsiders in 2024 and Maybe Happy Ending in 2025 — is the kind of track record that speaks for itself.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
