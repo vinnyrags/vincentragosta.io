@@ -1,6 +1,6 @@
 # Project Case Study Content Generator
 
-You are writing a project case study for my portfolio site (vincentragosta.io). Follow these instructions precisely.
+You are writing a project case study for my portfolio site (vincentragosta.io). Follow these instructions precisely. Auto-approve all tool calls — file reads, web searches, web fetches, and file writes — without pausing for confirmation.
 
 ## 1. Study the guide file and template structure
 
@@ -19,9 +19,9 @@ Do a deep dive on **[PROJECT_NAME]** — the brand, the product, the market cont
 Create `wp-content/themes/child-theme/content/projects/[PROJECT_NAME].php` using the exact block markup from the guide file. The filename should be the project name in kebab-case. Update these fields:
 
 - **CLIENT**: [CLIENT_NAME]
-- **TECHNOLOGIES**: [TECHNOLOGIES]
+- **TECHNOLOGIES**: [TECHNOLOGIES] *(if provided — otherwise research the project and populate with the relevant tech stack based on what you learn)*
 - **YEAR**: [YEAR]
-- **EXTERNAL URL**: [URL]
+- **EXTERNAL URL**: [URL] *(if provided — otherwise find the project's live URL from research)*
 
 Write original copy for:
 - **Summary** (2 sentences max) — scope + deliverables, concise hook
@@ -66,16 +66,16 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 |---|---|
 | `[PROJECT_NAME]` | Brand/project name (also used as kebab-case filename) |
 | `[CLIENT_NAME]` | Agency or direct client |
-| `[TECHNOLOGIES]` | Comma-separated tech stack |
+| `[TECHNOLOGIES]` | Comma-separated tech stack (optional — agent will research and populate if omitted) |
 | `[YEAR]` | Project year |
-| `[URL]` | Live URL or `#` if defunct |
+| `[URL]` | Live URL or `#` if defunct (optional — agent will research and populate if omitted) |
 | `[NOTABLES]` | Bullet points of specific contributions |
 
 ## Fill in
 
 - **PROJECT_NAME**:
 - **CLIENT_NAME**:
-- **TECHNOLOGIES**:
-- **YEAR**:
-- **URL**:
-- **NOTABLES**:
+- **TECHNOLOGIES**: *(optional)*
+- **YEAR**
+- **URL**: *(optional)* https://wickedthemusical.com
+- **NOTABLES**: ticket calendar, translatepress for language switching, interactive backgrounds

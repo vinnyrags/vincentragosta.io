@@ -8,6 +8,7 @@
 - hover to sun/moon toggle on light mode
 - revisit putting fixed header on top of content now that we are not going 100vh anymore
 - REMOVE NEXT PANEL OPENING IN shutter cards block when tabbing and clicking desktop and mobile.
+- sort latest by YEAR (project archive)
 
 ## MEDIUM PRIORITY
 
