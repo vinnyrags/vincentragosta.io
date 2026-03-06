@@ -2,6 +2,10 @@
 
 You are writing a project case study for my portfolio site (vincentragosta.io). Follow these instructions precisely. Auto-approve all tool calls — file reads, web searches, web fetches, and file writes — without pausing for confirmation.
 
+## 0. Clear context
+
+Start fresh. Do not carry over assumptions, tone, or content from any prior conversation. Every detail in this case study must come from the steps below — the guide file, the page content, and your own research.
+
 ## 1. Study the guide file and template structure
 
 Read `wp-content/themes/child-theme/content/projects/wolf-moon-bourbon.php` — this is your structural and tonal reference. The new file must use the identical block markup structure. Do not deviate from the HTML/block pattern.
@@ -43,7 +47,7 @@ Write original copy for:
 
 ## 7. Recommend categories
 
-After writing the content, recommend which project categories this project should be assigned to. Choose from the following:
+After writing the content, recommend which project categories this project should be assigned to. Provide a brief explanation for each recommendation. Choose from the following:
 
 - **Broadway** — Broadway shows, musicals, theatrical productions
 - **Arts & Culture** — Museums, galleries, cultural institutions, non-profit arts organizations
@@ -73,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**:
-- **CLIENT_NAME**:
+- **PROJECT_NAME**: Roundabout Theatre
+- **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR**
-- **URL**: *(optional)* https://wickedthemusical.com
-- **NOTABLES**: ticket calendar, translatepress for language switching, interactive backgrounds
+- **YEAR** 2026
+- **URL**: *(optional)* https://stage.roundabouttheatre.org
+- **NOTABLES**: new platform built on gutenberg and twig, this project birthed the new iteration of my current freelance project. learned a lot from this project with regards to Gutenberg. Hybrid FSE make optimal use of theme.json
