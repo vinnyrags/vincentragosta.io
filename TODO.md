@@ -6,6 +6,8 @@
 - consider updating js frontend to use a more object oriented approach (with classes)
 - any other opportunities for Factory classes? similar to what we do for IconServiceFactory, is there anywhere in the code base that would warrant/benefit from a Factory pattern approach?
 - setup mx record so i can get emails at hello@vincentragosta.io
+- challenge current design system against accessibility driven css, are we targetting various accessible states or roles where applicable?
+- is double tabbing in the project card silly, both link to the same place, is this a violation? should we set tabindex -1 on the image maybe?
 
 ## MEDIUM PRIORITY
 

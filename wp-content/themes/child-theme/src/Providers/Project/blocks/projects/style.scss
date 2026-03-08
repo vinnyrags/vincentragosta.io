@@ -40,8 +40,13 @@
   flex-direction: column;
   transition: transform 0.3s ease;
 
-  &:hover {
+  &:hover,
+  &:has(:focus-visible) {
     transform: translateY(-5px);
+
+    .project-card__image-link::after {
+      opacity: 0;
+    }
 
     .project-card__image-link img {
       transform: scale(1.05);
