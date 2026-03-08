@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Rob Lake Ticket Calendar
+- **PROJECT_NAME**: Purpose
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
 - **YEAR** 2025
-- **URL**: *(optional)* https://calendar.roblake.com
-- **NOTABLES**: ticket calendar wordpress embed on an inherited wix site
+- **URL**: *(optional)* https://purposeonbroadway.com
+- **NOTABLES**: ticketing calendar, complex frontend design (interesting layout challenges)

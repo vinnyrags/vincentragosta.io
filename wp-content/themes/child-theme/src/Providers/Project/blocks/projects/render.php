@@ -16,7 +16,8 @@ $args = [
 
 if ($mode === 'all') {
     $args['posts_per_page'] = -1;
-    $args['orderby'] = 'date';
+    $args['meta_key'] = 'project_year';
+    $args['orderby'] = 'meta_value_num';
     $args['order'] = 'DESC';
 } elseif ($mode === 'curated' && !empty($selected_ids)) {
     $args['posts_per_page'] = 6;

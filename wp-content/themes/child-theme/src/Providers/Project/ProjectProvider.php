@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
+use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
 use ParentTheme\Providers\Provider;
 
 /**
@@ -19,6 +20,13 @@ class ProjectProvider extends Provider
      */
     protected array $blocks = [
         'projects',
+    ];
+
+    /**
+     * Always-active hooks.
+     */
+    protected array $hooks = [
+        ProjectYearExtractor::class,
     ];
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
+use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
 use ChildTheme\Theme;
 use ParentTheme\Models\Post;
 
@@ -15,6 +16,18 @@ use ParentTheme\Models\Post;
 class ProjectPost extends Post
 {
     public const POST_TYPE = 'project';
+
+    /**
+     * Get the year used for sorting.
+     *
+     * Returns project_year meta if available, falls back to publish year.
+     */
+    public function sortYear(): string
+    {
+        $meta = $this->getMeta(ProjectYearExtractor::META_KEY);
+
+        return !empty($meta) ? (string) $meta : $this->date('Y');
+    }
 
     /**
      * Get the project's categories.
