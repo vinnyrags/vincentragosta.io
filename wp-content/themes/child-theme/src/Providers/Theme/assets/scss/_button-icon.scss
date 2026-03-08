@@ -81,14 +81,14 @@
   transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out, border-color 0.4s ease-in-out;
 }
 
-// SVG hover rotation for both icon wrapper types
-.wp-block-button__icon svg,
-.button__icon svg {
+// SVG hover rotation for arrow icons only
+.wp-block-button__icon.arrow svg,
+.button__icon.arrow svg {
   transition: transform 0.25s ease-in-out;
 }
 
-.wp-block-button__link:hover .wp-block-button__icon svg,
-.button:hover .button__icon svg {
+.wp-block-button__link:hover .wp-block-button__icon.arrow svg,
+.button:hover .button__icon.arrow svg {
   transform: rotate(45deg);
 }
 
