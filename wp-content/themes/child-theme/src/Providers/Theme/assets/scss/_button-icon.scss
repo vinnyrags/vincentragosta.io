@@ -42,30 +42,23 @@
   height: var(--button-icon-size);
   flex-shrink: 0;
 
-  svg {
-    fill: currentColor;
-    width: var(--wp--custom--icon-size--sm);
-    height: var(--wp--custom--icon-size--sm);
-    display: inline-block;
-    vertical-align: middle;
+  // Circle background for all button icons
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-color: currentColor;
   }
 
-  // Circle background for arrow icons
-  &.arrow {
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 50%;
-      background-color: currentColor;
-    }
-
-    svg {
-      position: relative;
-      width: var(--wp--custom--icon-size--xs);
-      height: var(--wp--custom--icon-size--xs);
-      color: var(--color-button-bg);
-    }
+  svg {
+    position: relative;
+    fill: currentColor;
+    width: var(--wp--custom--icon-size--xs);
+    height: var(--wp--custom--icon-size--xs);
+    color: var(--color-button-bg);
+    display: inline-block;
+    vertical-align: middle;
   }
 }
 
@@ -118,8 +111,8 @@
 // ==========================================================================
 
 @include forced-colors {
-  .wp-block-button__icon.arrow::before,
-  .button__icon.arrow::before {
+  .wp-block-button__icon::before,
+  .button__icon::before {
     forced-color-adjust: none;
   }
 }

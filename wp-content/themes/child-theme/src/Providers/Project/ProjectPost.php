@@ -60,10 +60,12 @@ class ProjectPost extends Post
         $repository = Theme::container()->get(ProjectRepository::class);
         $related = $repository->inCategory($categories[0]->slug, $limit + 1);
 
-        // Exclude the current post
-        return array_values(array_filter(
+        // Exclude the current post and enforce limit
+        $filtered = array_values(array_filter(
             $related,
             fn (ProjectPost $project) => $project->ID !== $this->ID,
         ));
+
+        return array_slice($filtered, 0, $limit);
     }
 }

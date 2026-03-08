@@ -8,6 +8,8 @@
 - file architecture for assets, Hooks, Features within a provider still bothers me, and I could totally be wrong for feeling this way
 - consider changing Theme.php to something else (inside of src/), is sort of confusing with the theme provider infrastructure, i could also be persuaded against feeling this way if you felt passionate about keeping it as Theme.php, since it does make the most sense.
 - consider updating js frontend to use a more object oriented approach (with classes)
+- can the related projects functionality on the project detail/single template only show at most 3 related projects please
+- any other opportunities for Factory classes? similar to what we do for IconServiceFactory, is there anywhere in the code base that would warrant/benefit from a Factory pattern approach?
 
 ## MEDIUM PRIORITY
 
