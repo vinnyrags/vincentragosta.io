@@ -152,21 +152,22 @@ describe('initShutterCards', () => {
         expect(cards[0].classList.contains('is-inactive')).toBe(false);
     });
 
-    it('toggle button cycles to next card when active', () => {
+    it('toggle button collapses all cards when active', () => {
         createShutterCards();
 
         initShutterCards();
 
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
-        // cards[0] is active — click its toggle to cycle to next
+        // cards[0] is active — click its toggle to collapse all
         const toggle = cards[0].querySelector('.shutter-card__toggle');
         toggle.click();
 
         expect(cards[0].classList.contains('is-inactive')).toBe(true);
-        expect(cards[1].classList.contains('is-inactive')).toBe(false);
+        expect(cards[1].classList.contains('is-inactive')).toBe(true);
+        expect(cards[2].classList.contains('is-inactive')).toBe(true);
     });
 
-    it('toggle button wraps around from last to first', () => {
+    it('toggle button on last card collapses all cards', () => {
         createShutterCards();
 
         initShutterCards();
@@ -177,7 +178,8 @@ describe('initShutterCards', () => {
         const toggle = cards[2].querySelector('.shutter-card__toggle');
         toggle.click();
 
-        expect(cards[0].classList.contains('is-inactive')).toBe(false);
+        expect(cards[0].classList.contains('is-inactive')).toBe(true);
+        expect(cards[1].classList.contains('is-inactive')).toBe(true);
         expect(cards[2].classList.contains('is-inactive')).toBe(true);
     });
 

@@ -38,6 +38,30 @@ export function activateCard(cards, cardToActivate) {
 }
 
 /**
+ * Deactivate all cards (no card is active)
+ * @param {NodeList|HTMLElement[]} cards - All cards in the container
+ */
+export function deactivateAll(cards) {
+    cards.forEach((card) => {
+        const innerCard = card.querySelector('.shutter-card');
+
+        card.classList.add('is-inactive');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'button');
+
+        if (innerCard) {
+            innerCard.setAttribute('aria-expanded', 'false');
+        }
+
+        const toggle = innerCard?.querySelector('.shutter-card__toggle');
+        if (toggle) {
+            toggle.setAttribute('aria-label', 'Expand card');
+            toggle.setAttribute('aria-expanded', 'false');
+        }
+    });
+}
+
+/**
  * Initialize shutter cards for all containers on the page
  */
 export function initShutterCards() {
@@ -89,10 +113,8 @@ export function initShutterCards() {
                     const isActive = !card.classList.contains('is-inactive');
 
                     if (isActive) {
-                        const currentIndex = Array.from(cards).indexOf(card);
-                        const nextCard = cards[(currentIndex + 1) % cards.length];
-                        activateCard(cards, nextCard);
-                        nextCard.focus();
+                        deactivateAll(cards);
+                        card.focus();
                     } else {
                         handleActivation(card);
                     }
