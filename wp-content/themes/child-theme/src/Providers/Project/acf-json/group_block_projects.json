@@ -23,11 +23,11 @@
             "label": "Selected Projects",
             "name": "selected_projects",
             "type": "relationship",
-            "instructions": "Search and select up to 5 projects. Drag to reorder.",
+            "instructions": "Search and select up to 6 projects. Drag to reorder.",
             "required": 0,
             "post_type": ["project"],
             "filters": ["search"],
-            "max": 5,
+            "max": 6,
             "return_format": "id",
             "conditional_logic": [
                 [

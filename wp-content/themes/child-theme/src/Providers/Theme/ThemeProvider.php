@@ -132,9 +132,11 @@ class ThemeProvider extends BaseThemeProvider
         });
 
         // Register custom pattern category with branded label (before PatternManager auto-derives it)
-        register_block_pattern_category('vincentragosta', [
-            'label' => __('Vincent Ragosta', 'child-theme'),
-        ]);
+        add_action('init', static function (): void {
+            register_block_pattern_category('vincentragosta', [
+                'label' => __('Vincent Ragosta', 'child-theme'),
+            ]);
+        });
 
         // Call parent to register theme supports, features, and blocks
         parent::register();

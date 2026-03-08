@@ -36,6 +36,7 @@ Write original copy for:
 ## 5. Tone rules
 
 - Partner, not hired hand — "I led development," not "I was tasked with"
+- Role line positioning — the muted summary line should say something like "Development lead on this project at [CLIENT]" rather than "[Title] at [CLIENT]." Avoid job titles like "Senior web developer" or "Web developer." Frame the role as ownership, not employment.
 - Specifics over narrative — name technologies, quantities, compliance requirements
 - Confident and declarative — no hedging, no "helped to," no passive voice
 - Methodology-forward — the how matters as much as the what
@@ -77,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Kimberly Akimbo
+- **PROJECT_NAME**: Rob Lake Ticket Calendar
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2022
-- **URL**: *(optional)* https://www.kimberlyakimbothemusical.com/
-- **NOTABLES**: ticket calendar
+- **YEAR** 2025
+- **URL**: *(optional)* https://calendar.roblake.com
+- **NOTABLES**: ticket calendar wordpress embed on an inherited wix site

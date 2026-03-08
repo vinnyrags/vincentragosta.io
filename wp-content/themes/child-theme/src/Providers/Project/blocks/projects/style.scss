@@ -56,10 +56,25 @@
     display: block;
     overflow: hidden;
     aspect-ratio: 1 / 1;
+    position: relative;
 
     @include container(projects, lg) {
       aspect-ratio: unset;
       height: 28cqi;
+    }
+
+    // Darkening overlay with radial gradient to tone down vibrant images.
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0, 0, 0, 0.15) 0%,
+        rgba(0, 0, 0, 0.45) 100%
+      );
+      pointer-events: none;
+      transition: opacity 0.4s ease;
     }
 
     img {

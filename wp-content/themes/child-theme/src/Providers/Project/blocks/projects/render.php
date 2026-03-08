@@ -19,11 +19,11 @@ if ($mode === 'all') {
     $args['orderby'] = 'date';
     $args['order'] = 'DESC';
 } elseif ($mode === 'curated' && !empty($selected_ids)) {
-    $args['posts_per_page'] = 5;
+    $args['posts_per_page'] = 6;
     $args['post__in'] = $selected_ids;
     $args['orderby'] = 'post__in';
 } else {
-    $args['posts_per_page'] = 5;
+    $args['posts_per_page'] = 6;
     $args['orderby'] = 'date';
     $args['order'] = 'DESC';
 }
