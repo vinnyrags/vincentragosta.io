@@ -37,7 +37,8 @@
   margin-block-start: var(--wp--preset--spacing--70);
 }
 
-.site-main:has(.site-content > :last-child:is(.has-background, .wp-block-cover)) + .footer {
+.site-main:has(.site-content > :last-child:is(.has-background, .wp-block-cover)) + .footer,
+.site-main:has(.project-detail) + .footer {
   margin-block-start: 0;
 }
 

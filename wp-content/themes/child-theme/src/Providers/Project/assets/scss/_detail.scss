@@ -2,6 +2,7 @@
 @use 'common/bg-overlay' as *;
 
 .project-detail {
+    padding-block-end: 0;
 
     // First child top padding — project detail uses padding instead of margin
     // because the first section typically has a background
@@ -52,7 +53,8 @@
 
     .light-mode & {
         &__section--background::before,
-        &__section--results::before {
+        &__section--results::before,
+        &__related::before {
             background-color: rgba(255, 255, 255, 0.85);
         }
     }
@@ -105,7 +107,13 @@
     &__related {
         border-block-start: 1px solid var(--color-border);
         padding-block-start: var(--wp--preset--spacing--70);
+        padding-block-end: var(--wp--preset--spacing--70);
         margin-block-start: 0;
+        background-image: url('#{$squiggle-path}/squiggle-3-grey.svg');
+        background-size: cover;
+        background-attachment: fixed;
+
+        @include bg-pattern-overlay;
     }
 
     &__related-inner {
