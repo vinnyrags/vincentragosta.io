@@ -10,6 +10,7 @@
 - any other opportunities for Factory classes? similar to what we do for IconServiceFactory, is there anywhere in the code base that would warrant/benefit from a Factory pattern approach?
 - setup mx record so i can get emails at hello@vincentragosta.io
 - related projects needs a background, please pull an svg background template from one of our project files please, lets go with squiggle-3 for the background image
+- consider adjusting php convention where, whenever we are referencing a class, we should uppercase the first letter, for example the project repository, any reeference to that should be $Repo, instead of $repo, I can be swayed against this though if this violates any rules we are trying to abide too. please let me know your thoughts
 
 ## MEDIUM PRIORITY
 

@@ -77,4 +77,35 @@ class ProjectRepositoryTest extends TestCase
         $this->assertTrue($params[1]->isOptional());
         $this->assertEquals(-1, $params[1]->getDefaultValue());
     }
+
+    /**
+     * Test that allByYear method exists and has correct signature.
+     */
+    public function testAllByYearMethodSignature(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+        $method = $reflection->getMethod('allByYear');
+
+        $this->assertTrue($method->isPublic());
+        $this->assertEquals('array', (string) $method->getReturnType());
+        $this->assertCount(0, $method->getParameters());
+    }
+
+    /**
+     * Test that latestByYear method exists and has correct signature.
+     */
+    public function testLatestByYearMethodSignature(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+        $method = $reflection->getMethod('latestByYear');
+
+        $this->assertTrue($method->isPublic());
+        $this->assertEquals('array', (string) $method->getReturnType());
+
+        $params = $method->getParameters();
+        $this->assertCount(1, $params);
+        $this->assertEquals('limit', $params[0]->getName());
+        $this->assertTrue($params[0]->isOptional());
+        $this->assertEquals(6, $params[0]->getDefaultValue());
+    }
 }
