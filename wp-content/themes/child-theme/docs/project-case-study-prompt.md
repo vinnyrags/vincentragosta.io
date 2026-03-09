@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Anastasia The Musical
-- **CLIENT_NAME**: Situation Interactive
+- **PROJECT_NAME**: Holiday Afterpay
+- **CLIENT_NAME**: Block, Inc.
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2018
-- **URL**: *(optional)* https://anastasiathemusical.com
-- **NOTABLES**: ticketing calendar, inherited code base, closed in 2019 and has since not been maintained
+- **YEAR** 2021
+- **URL**: *(optional)* https://holiday.afterpay.com
+- **NOTABLES**: Fast moving holiday build, my most insane frontend build yet, it was a single page that was essentially a building with windows, and inside of those windows were products that you could click on, there were snow effects as well. definitely a challenge but came out on top at the end!

@@ -1,7 +1,8 @@
 - re-evaluate current content and look for optimizations, reduce duplication, clean up tone, too punchy
 
 ## HIGH PRIORITY
-- consider a blog that ai can automate/schedule posts for
+- consider creating a blog that ai can automate/schedule posts for
+- configure 
 - setup mx record so i can get emails at hello@vincentragosta.io
 - if i wanted to push my current local database to replace the staging environment (staging.vincentragosta.io), would make push-staging do this safely with all replacements and what not?
 - consider updating related projects logic to pull same year, same category first, the related posts are mainly all the same since they return the latest of that same category, i am curious to your thoughts on this first before we make any adjustments

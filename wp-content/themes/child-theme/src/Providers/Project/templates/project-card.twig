@@ -1,5 +1,5 @@
 <div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.sortYear }}" data-category="{{ project.categorySlugs }}">
-    <div class="project-card__image">
+    <a href="{{ project.link }}" class="project-card__image" tabindex="-1" aria-hidden="true">
         {% if project.thumbnail %}
             <img src="{{ project.thumbnail.src | resize(800) }}"
                  alt=""
@@ -7,9 +7,9 @@
                  height="{{ project.thumbnail.height }}"
                  loading="lazy" />
         {% else %}
-            <div class="project-card__no-image" aria-hidden="true"></div>
+            <div class="project-card__no-image"></div>
         {% endif %}
-    </div>
+    </a>
     <div class="project-card__content">
         <h3 class="project-card__title">
             <a href="{{ project.link }}">{{ project.title }}</a>

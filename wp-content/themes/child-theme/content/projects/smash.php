@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
         <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button">back to projects</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -29,7 +29,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">Experience Interaction</p>
+                <p class="has-30-font-size">Situation Interactive</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">WordPress, PHP, React</p>
+                <p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size">2018</p>
+                <p class="has-30-font-size">2025</p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://wolfmoonbourbon.com">https://wolfmoonbourbon.com</a></p>
+                <p class="has-30-font-size"><a href="https://smashbroadway.com">https://smashbroadway.com</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development for a celebrity bourbon brand launching nationally through Proximo Spirits. Custom WordPress theme, age-gated entry, and a content management layer designed for editorial independence from day one.</p>
+            <p>Full-stack development for the official website of Smash — the Broadway musical adapted from the NBC television series, produced by Steven Spielberg, Robert Greenblatt, and Neil Meron. Custom WordPress theme with a ticketing calendar, a hero layout built around embedded video and gradient backgrounds, and frontend architecture that matched the production's bold visual identity.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Development lead, working alongside Experience Interaction.</p>
+            <p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>A national product launch needed a digital presence to match.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A cult-favorite television series was finally becoming the Broadway musical it always pretended to be.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>Wolf Moon Bourbon — a collaboration between Jason Aldean and Florida Georgia Line, distributed by Proximo Spirits — was preparing to go to market nationally. Working alongside Experience Interaction, the agency of record for several Proximo brands, I led development on the brand's digital platform. The goal was straightforward: deliver a production-ready site ahead of the retail rollout that could serve as the brand's primary digital touchpoint across press, social, and direct consumer engagement.</p>
+            <p>Smash — the NBC series that ran for two seasons in 2012–2013, following the drama behind a fictional Broadway musical about Marilyn Monroe — had spent over a decade as one of the most passionate "what if" stories in musical theatre fandom. The show had never made it to an actual Broadway stage, but the IP retained a devoted audience and serious creative firepower behind it. Original series producers Steven Spielberg, Robert Greenblatt, and Neil Meron led the effort to bring a stage adaptation to Broadway, with five-time Tony winner Susan Stroman directing, a score by Emmy, Grammy, and Tony winners Marc Shaiman and Scott Wittman, a book by Bob Martin and Rick Elice, and choreography by Emmy winner Joshua Bergasse. The cast featured Robyn Hurder as Ivy Lynn, Brooks Ashmanskas, Krysta Rodriguez, Caroline Bowman, John Behlmann, and Kristine Nielsen. A production with that pedigree — backed by Spielberg and arriving at the Imperial Theatre with years of anticipation behind it — needed a digital platform that could convert fan enthusiasm and press coverage into ticket sales from the first preview forward.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The timeline was fixed to the product's go-to-market window — the site needed to be live before bottles hit shelves.</p>
+            <p class="is-style-muted">The site needed to launch ahead of Broadway previews in March 2025 and sustain the production through what was expected to be a marquee run at the Imperial Theatre.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Custom theme architecture with structured content and regulatory compliance built in.</strong></h2>
+            <h2 class="wp-block-heading"><strong>A custom WordPress build with a hero layout that demanded precision and a ticketing calendar driving every conversion.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site was built on WordPress using a custom theme platform with Advanced Custom Fields powering a structured content layer — product details, brand narrative sections, and media galleries all managed through dedicated field groups rather than freeform editing. An age verification gate handled TTB compliance for spirits marketing. The frontend delivered responsive layouts optimized for mobile-first consumption, with asset compression and lazy loading to keep page weight under 2MB across all viewports.</p>
+            <p>I led development on a custom WordPress theme where the frontend was the defining challenge — and the most enjoyable part of the build. The hero section was the centerpiece: an embedded video composition layered over a gradient background that needed to feel cinematic without sacrificing load performance or responsiveness. Getting the video, gradient, and typographic elements to hold together across breakpoints — maintaining visual impact on desktop while gracefully adapting on mobile where the composition fundamentally changes — required careful CSS architecture and an understanding of how each layer interacted with the others. The broader layout pushed well beyond standard Broadway site conventions, with bold compositional choices throughout that made the frontend work consistently engaging. The ticketing calendar was the primary conversion component — an interactive, date-driven interface rendering the full performance schedule at the Imperial Theatre with matinee and evening slots, availability states, and direct purchase links routing audiences into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: cast and creative team profiles with structured bios, a media section with video content and production photography, press acclaim aggregating reviews from the New York Times and Rolling Stone, a merchandise shop, a cast recording promotion section, and Gravity Forms powering newsletter signup and audience engagement.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">The content architecture was designed so the marketing team could update copy, swap imagery, and manage promotions without developer involvement post-launch.</p>
+            <p class="is-style-muted">The frontend work on this build was some of the most fun I have had on a project — the kind of layout challenges where the design is bold enough to push you but clean enough that the solutions feel satisfying when they land.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:heading -->
-            <h2 class="wp-block-heading"><strong>Live ahead of schedule, fully operational at handoff.</strong></h2>
+            <h2 class="wp-block-heading"><strong>Two Tony nominations, a Drama Desk win, and $12.6 million at the box office.</strong></h2>
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The site launched ahead of Wolf Moon's retail distribution window, providing the brand with a digital presence that supported its press cycle, social campaigns, and direct consumer engagement from day one. The structured content layer performed as designed — the client's marketing team managed all post-launch content updates independently, with zero developer support required in the months following deployment.</p>
+            <p>The site launched ahead of Smash's first Broadway preview on March 11, 2025, and served as the production's primary digital platform through its entire run at the Imperial Theatre. The show officially opened on April 10 and ran through June 22, 2025 — 32 previews and 83 performances grossing over $12.6 million at an average capacity of 82.50% and an average ticket price of $94.34. The production earned two Tony Award nominations — Best Featured Actor in a Musical for Brooks Ashmanskas and Best Choreography for Joshua Bergasse — along with a Drama Desk Award for Outstanding Featured Performance in a Musical (Ashmanskas) and a Chita Rivera Award for Outstanding Dancer in a Broadway Show (Robyn Hurder). The ticketing calendar drove conversions throughout the run, and the site now serves as an archival platform preserving the production's legacy, press coverage, and cast recording promotion.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">This project established the development workflow and quality benchmark that informed subsequent builds across Experience Interaction's spirits portfolio.</p>
+            <p class="is-style-muted">The platform I built for Smash carried the production from its first preview through closing night and continues to serve as the show's digital archive — a complete record of a production that finally brought a beloved television series to the Broadway stage it always belonged on.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
