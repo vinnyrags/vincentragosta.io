@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Life of Pi
+- **PROJECT_NAME**: Anastasia The Musical
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2023
-- **URL**: *(optional)* https://lifeofpi.com
-- **NOTABLES**: ticketing calendar
+- **YEAR** 2018
+- **URL**: *(optional)* https://anastasiathemusical.com
+- **NOTABLES**: ticketing calendar, inherited code base, closed in 2019 and has since not been maintained

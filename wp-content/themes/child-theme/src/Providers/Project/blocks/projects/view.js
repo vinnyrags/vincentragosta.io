@@ -75,8 +75,8 @@ export function filterByCategory(grid, category) {
     const cards = grid.querySelectorAll('.project-card');
 
     cards.forEach((card) => {
-        const cardCategory = card.dataset.category || '';
-        const match = category === 'all' || cardCategory === category;
+        const cardCategories = (card.dataset.category || '').split(/\s+/);
+        const match = category === 'all' || cardCategories.includes(category);
         card.toggleAttribute('data-category-hidden', !match);
         applyVisibility(card);
     });

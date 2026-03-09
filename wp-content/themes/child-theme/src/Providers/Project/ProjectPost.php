@@ -58,6 +58,17 @@ class ProjectPost extends Post
     }
 
     /**
+     * Get all category slugs as a space-separated string.
+     */
+    public function categorySlugs(): string
+    {
+        return implode(' ', array_map(
+            fn ($term) => $term->slug,
+            $this->categories(),
+        ));
+    }
+
+    /**
      * Get related projects in the same category.
      *
      * @return ProjectPost[]

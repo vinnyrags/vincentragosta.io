@@ -68,6 +68,18 @@ class ProjectPostTest extends TestCase
     }
 
     /**
+     * Test that categorySlugs method has correct return type.
+     */
+    public function testCategorySlugsMethodReturnsString(): void
+    {
+        $reflection = new \ReflectionClass(ProjectPost::class);
+        $method = $reflection->getMethod('categorySlugs');
+
+        $this->assertTrue($method->isPublic());
+        $this->assertEquals('string', (string) $method->getReturnType());
+    }
+
+    /**
      * Test that relatedProjects method has correct return type.
      */
     public function testRelatedProjectsMethodReturnsArray(): void

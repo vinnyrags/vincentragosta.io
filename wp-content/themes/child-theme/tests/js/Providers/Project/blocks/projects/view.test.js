@@ -274,6 +274,41 @@ describe('filterByCategory', () => {
         const visible = getVisibleCards(grid);
         expect(visible).toHaveLength(2);
     });
+
+    it('matches cards with multiple space-separated categories', () => {
+        const grid = createProjectsGrid([
+            { title: 'alpha', date: '2024-01-10', category: 'broadway ticketing' },
+            { title: 'bravo', date: '2024-02-20', category: 'branding' },
+            { title: 'charlie', date: '2024-03-15', category: 'broadway entertainment' },
+        ]);
+
+        filterByCategory(grid, 'ticketing');
+
+        const visible = getVisibleCards(grid);
+        expect(visible).toHaveLength(1);
+        expect(visible[0].dataset.title).toBe('alpha');
+    });
+
+    it('matches any category in a multi-category card', () => {
+        const grid = createProjectsGrid([
+            { title: 'alpha', date: '2024-01-10', category: 'broadway ticketing entertainment' },
+            { title: 'bravo', date: '2024-02-20', category: 'branding' },
+        ]);
+
+        filterByCategory(grid, 'broadway');
+        expect(getVisibleCards(grid)).toHaveLength(1);
+
+        filterByCategory(grid, 'ticketing');
+        expect(getVisibleCards(grid)).toHaveLength(1);
+
+        filterByCategory(grid, 'entertainment');
+        expect(getVisibleCards(grid)).toHaveLength(1);
+
+        filterByCategory(grid, 'branding');
+        const visible = getVisibleCards(grid);
+        expect(visible).toHaveLength(1);
+        expect(visible[0].dataset.title).toBe('bravo');
+    });
 });
 
 describe('filter composition', () => {

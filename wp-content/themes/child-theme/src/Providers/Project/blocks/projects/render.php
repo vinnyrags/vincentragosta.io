@@ -24,10 +24,10 @@ if ($mode === 'all') {
 $categories = [];
 if ($mode === 'all') {
     foreach ($projects as $project) {
-        $slug = $project->categorySlug();
-        $name = $project->categoryName();
-        if ($slug && !isset($categories[$slug])) {
-            $categories[$slug] = $name;
+        foreach ($project->categories() as $term) {
+            if (!isset($categories[$term->slug])) {
+                $categories[$term->slug] = $term->name;
+            }
         }
     }
     ksort($categories);
