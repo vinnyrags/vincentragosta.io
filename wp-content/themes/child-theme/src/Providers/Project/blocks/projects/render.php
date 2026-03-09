@@ -20,9 +20,23 @@ if ($mode === 'all') {
     $projects = $repository->latestByYear();
 }
 
+// Collect unique categories for the filter dropdown (only in "all" mode).
+$categories = [];
+if ($mode === 'all') {
+    foreach ($projects as $project) {
+        $slug = $project->categorySlug();
+        $name = $project->categoryName();
+        if ($slug && !isset($categories[$slug])) {
+            $categories[$slug] = $name;
+        }
+    }
+    ksort($categories);
+}
+
 $context = Timber::context();
 $context['projects'] = $projects;
 $context['show_sort'] = ($mode === 'all');
+$context['categories'] = $categories;
 
 // Get block wrapper attributes (alignment comes from block supports).
 $wrapper_attributes = get_block_wrapper_attributes();

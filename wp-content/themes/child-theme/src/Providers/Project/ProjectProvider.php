@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
+use ChildTheme\Providers\Project\Hooks\CategoryTermLinkRewrite;
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
 use ParentTheme\Providers\Provider;
 
@@ -26,6 +27,7 @@ class ProjectProvider extends Provider
      * Always-active hooks.
      */
     protected array $hooks = [
+        CategoryTermLinkRewrite::class,
         ProjectYearExtractor::class,
     ];
 

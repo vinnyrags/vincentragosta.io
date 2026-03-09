@@ -1,4 +1,4 @@
-<div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.sortYear }}">
+<div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.sortYear }}" data-category="{{ project.categorySlug }}">
     <a href="{{ project.link }}" class="project-card__image-link" aria-label="View project: {{ project.title }}">
         {% if project.thumbnail %}
             <img src="{{ project.thumbnail.src | resize(800) }}"

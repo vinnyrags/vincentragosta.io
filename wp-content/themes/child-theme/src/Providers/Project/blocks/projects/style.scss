@@ -22,10 +22,11 @@
 
     // Alternating 35%/65% layout that flips each row
     // Row 1: 4 cols / 6 cols, Row 2: 6 cols / 4 cols, etc.
-    > .project-card:nth-child(4n+1) { grid-column: span 4; }
-    > .project-card:nth-child(4n+2) { grid-column: span 6; }
-    > .project-card:nth-child(4n+3) { grid-column: span 6; }
-    > .project-card:nth-child(4n+4) { grid-column: span 4; }
+    // Uses `of .project-card:not(.is-hidden)` so filtered views recalculate layout.
+    > :nth-child(4n+1 of .project-card:not(.is-hidden)) { grid-column: span 4; }
+    > :nth-child(4n+2 of .project-card:not(.is-hidden)) { grid-column: span 6; }
+    > :nth-child(4n+3 of .project-card:not(.is-hidden)) { grid-column: span 6; }
+    > :nth-child(4n+4 of .project-card:not(.is-hidden)) { grid-column: span 4; }
   }
 }
 
@@ -127,14 +128,70 @@
 }
 
 // ==========================================================================
-// Sort Dropdown
+// Hidden State (search filtering)
 // ==========================================================================
+
+.project-card.is-hidden {
+  display: none;
+}
+
+// ==========================================================================
+// Toolbar (Search + Sort)
+// ==========================================================================
+
+.projects-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--30);
+  width: 100%;
+
+  @include container(projects, md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wp--preset--spacing--40);
+  }
+}
+
+.projects-search {
+  width: 100%;
+
+  @include container(projects, md) {
+    flex: 1;
+    max-width: 320px;
+  }
+}
+
+.projects-search__input {
+  width: 100%;
+  padding: var(--wp--preset--spacing--20);
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-block-end: 1px solid var(--wp--preset--color--accent-1);
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.projects-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--30);
+}
+
+.projects-filter {
+  display: flex;
+  align-items: center;
+}
 
 .projects-sort {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  width: 100%;
 }
 
 // ==========================================================================

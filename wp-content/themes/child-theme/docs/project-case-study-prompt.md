@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Purpose
+- **PROJECT_NAME**: Life of Pi
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2025
-- **URL**: *(optional)* https://purposeonbroadway.com
-- **NOTABLES**: ticketing calendar, complex frontend design (interesting layout challenges)
+- **YEAR** 2023
+- **URL**: *(optional)* https://lifeofpi.com
+- **NOTABLES**: ticketing calendar

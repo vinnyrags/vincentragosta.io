@@ -1,6 +1,6 @@
 /**
  * Projects block interactive behavior
- * Manages scroll reveal and sort controls.
+ * Manages scroll reveal, search, and sort controls.
  */
 
 /**
@@ -31,6 +31,76 @@ export function sortProjects(grid, field, order) {
         card.classList.remove('is-visible');
         grid.appendChild(card);
     });
+}
+
+/**
+ * Compute visibility from independent filter states.
+ * Each filter manages its own data-*-hidden attribute;
+ * this function derives the final is-hidden class.
+ * @param {HTMLElement} card
+ */
+function applyVisibility(card) {
+    const hidden =
+        card.hasAttribute('data-search-hidden') ||
+        card.hasAttribute('data-category-hidden');
+    card.classList.toggle('is-hidden', hidden);
+    if (hidden) {
+        card.classList.remove('is-visible');
+    }
+}
+
+/**
+ * Filter project cards by search query
+ * @param {HTMLElement} grid - The .projects-grid container
+ * @param {string} query - Search string to match against card titles
+ */
+export function filterProjects(grid, query) {
+    const cards = grid.querySelectorAll('.project-card');
+    const term = query.toLowerCase().trim();
+
+    cards.forEach((card) => {
+        const title = card.dataset.title || '';
+        const match = !term || title.includes(term);
+        card.toggleAttribute('data-search-hidden', !match);
+        applyVisibility(card);
+    });
+}
+
+/**
+ * Filter project cards by category
+ * @param {HTMLElement} grid - The .projects-grid container
+ * @param {string} category - Category slug to filter by, or 'all' to show all
+ */
+export function filterByCategory(grid, category) {
+    const cards = grid.querySelectorAll('.project-card');
+
+    cards.forEach((card) => {
+        const cardCategory = card.dataset.category || '';
+        const match = category === 'all' || cardCategory === category;
+        card.toggleAttribute('data-category-hidden', !match);
+        applyVisibility(card);
+    });
+}
+
+/**
+ * Pre-select a dropdown item without dispatching a change event.
+ * Replicates the minimal ARIA update logic from the dropdown component.
+ * @param {HTMLElement} dropdown - The .dropdown container
+ * @param {HTMLElement} item - The item to select
+ */
+function preselectDropdownItem(dropdown, item) {
+    const label = dropdown.querySelector('.dropdown__label');
+    const items = dropdown.querySelectorAll('.dropdown__item');
+
+    items.forEach((i) => {
+        const isSelected = i === item;
+        i.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+        i.setAttribute('aria-disabled', isSelected ? 'true' : 'false');
+    });
+
+    if (label) {
+        label.textContent = item.textContent.trim();
+    }
 }
 
 /**
@@ -72,6 +142,37 @@ export function initProjects() {
         }
 
         initScrollReveal();
+
+        // Search filter (only present in "all" mode)
+        const searchInput = block.querySelector('.projects-search__input');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                filterProjects(grid, searchInput.value);
+                requestAnimationFrame(() => initScrollReveal());
+            });
+        }
+
+        // Category filter (only present in "all" mode)
+        const categoryDropdown = block.querySelector('[data-dropdown="category"]');
+        if (categoryDropdown) {
+            categoryDropdown.addEventListener('change', (e) => {
+                filterByCategory(grid, e.detail.value);
+                requestAnimationFrame(() => initScrollReveal());
+            });
+
+            // Pre-select category from URL param (e.g., ?category=web-development)
+            const urlCategory = new URLSearchParams(window.location.search).get('category');
+            if (urlCategory) {
+                const matchingItem = categoryDropdown.querySelector(
+                    `[data-value="${CSS.escape(urlCategory)}"]`
+                );
+                if (matchingItem) {
+                    preselectDropdownItem(categoryDropdown, matchingItem);
+                    filterByCategory(grid, urlCategory);
+                    requestAnimationFrame(() => initScrollReveal());
+                }
+            }
+        }
 
         // Sort controls (only present in "all" mode)
         const dropdown = block.querySelector('[data-dropdown="sort"]');

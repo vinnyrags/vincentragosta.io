@@ -1,15 +1,40 @@
 {% if show_sort is defined and show_sort %}
-    <div class="projects-sort">
-        {% include 'dropdown.twig' with {
-            name: 'sort',
-            options: [
-                { value: 'date-desc', label: 'Latest' },
-                { value: 'date-asc', label: 'Earliest' },
-                { value: 'title-asc', label: 'A → Z' },
-                { value: 'title-desc', label: 'Z → A' },
-            ],
-            selected: 'date-desc'
-        } only %}
+    <div class="projects-toolbar">
+        <div class="projects-search">
+            <input
+                type="search"
+                class="projects-search__input"
+                placeholder="Search projects…"
+                aria-label="Search projects"
+            />
+        </div>
+        <div class="projects-toolbar__controls">
+            {% if categories is defined and categories|length > 0 %}
+                <div class="projects-filter">
+                    {% set category_options = [{ value: 'all', label: 'All Categories' }] %}
+                    {% for slug, name in categories %}
+                        {% set category_options = category_options|merge([{ value: slug, label: name }]) %}
+                    {% endfor %}
+                    {% include 'dropdown.twig' with {
+                        name: 'category',
+                        options: category_options,
+                        selected: 'all'
+                    } only %}
+                </div>
+            {% endif %}
+            <div class="projects-sort">
+                {% include 'dropdown.twig' with {
+                    name: 'sort',
+                    options: [
+                        { value: 'date-desc', label: 'Latest' },
+                        { value: 'date-asc', label: 'Earliest' },
+                        { value: 'title-asc', label: 'A → Z' },
+                        { value: 'title-desc', label: 'Z → A' },
+                    ],
+                    selected: 'date-desc'
+                } only %}
+            </div>
+        </div>
     </div>
 {% endif %}
 {% include 'projects-grid.twig' with { projects: projects } only %}
