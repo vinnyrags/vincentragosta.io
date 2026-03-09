@@ -69,7 +69,7 @@ class ProjectPost extends Post
     }
 
     /**
-     * Get related projects in the same category.
+     * Get related projects weighted by year proximity.
      *
      * @return ProjectPost[]
      */
@@ -82,14 +82,10 @@ class ProjectPost extends Post
         }
 
         $repository = Theme::container()->get(ProjectRepository::class);
-        $related = $repository->inCategory($categories[0]->slug, $limit + 1);
 
-        // Exclude the current post and enforce limit
-        $filtered = array_values(array_filter(
-            $related,
-            fn (ProjectPost $project) => $project->ID !== $this->ID,
-        ));
-
-        return array_slice($filtered, 0, $limit);
+        return $repository->relatedRandom(
+            $categories[0]->slug,
+            $limit,
+        );
     }
 }

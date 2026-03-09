@@ -108,4 +108,23 @@ class ProjectRepositoryTest extends TestCase
         $this->assertTrue($params[0]->isOptional());
         $this->assertEquals(6, $params[0]->getDefaultValue());
     }
+
+    /**
+     * Test that relatedRandom method exists and has correct signature.
+     */
+    public function testRelatedRandomMethodSignature(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+        $method = $reflection->getMethod('relatedRandom');
+
+        $this->assertTrue($method->isPublic());
+        $this->assertEquals('array', (string) $method->getReturnType());
+
+        $params = $method->getParameters();
+        $this->assertCount(2, $params);
+        $this->assertEquals('categorySlug', $params[0]->getName());
+        $this->assertEquals('limit', $params[1]->getName());
+        $this->assertTrue($params[1]->isOptional());
+        $this->assertEquals(3, $params[1]->getDefaultValue());
+    }
 }

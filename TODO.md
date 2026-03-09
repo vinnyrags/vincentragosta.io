@@ -2,10 +2,8 @@
 
 ## HIGH PRIORITY
 - consider creating a blog that ai can automate/schedule posts for
-- configure 
-- setup mx record so i can get emails at hello@vincentragosta.io
-- if i wanted to push my current local database to replace the staging environment (staging.vincentragosta.io), would make push-staging do this safely with all replacements and what not?
-- consider updating related projects logic to pull same year, same category first, the related posts are mainly all the same since they return the latest of that same category, i am curious to your thoughts on this first before we make any adjustments
+- configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
+- setup mx record so i can get emails at hello@vincentragosta.io, is it possible to have emails that go to that domain, go to my vincentpasqualeragosta@gmail.com email? lets work up an efficient and effective implementation plan to configure this for my production server please (lets do this in plan mode)
 
 ## MEDIUM PRIORITY
 
