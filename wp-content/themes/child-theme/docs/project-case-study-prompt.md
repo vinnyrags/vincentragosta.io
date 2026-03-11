@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Holiday Afterpay
-- **CLIENT_NAME**: Block, Inc.
+- **PROJECT_NAME**: Analytic Partners
+- **CLIENT_NAME**: Analytic Partners
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2021
-- **URL**: *(optional)* https://holiday.afterpay.com
-- **NOTABLES**: Fast moving holiday build, my most insane frontend build yet, it was a single page that was essentially a building with windows, and inside of those windows were products that you could click on, there were snow effects as well. definitely a challenge but came out on top at the end!
+- **YEAR** 2023
+- **URL**: *(optional)* https://analyticpartners.com
+- **NOTABLES**: full site redesign
