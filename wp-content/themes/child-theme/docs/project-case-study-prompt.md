@@ -8,7 +8,7 @@ Start fresh. Do not carry over assumptions, tone, or content from any prior conv
 
 ## 1. Study the guide file and template structure
 
-Read `wp-content/themes/child-theme/content/projects/wolf-moon-bourbon.php` — this is your structural and tonal reference. The new file must use the identical block markup structure. Do not deviate from the HTML/block pattern.
+Read `wp-content/themes/child-theme/content/projects/wolfmoon-bourbon.php` — this is your structural and tonal reference. The new file must use the identical block markup structure. Do not deviate from the HTML/block pattern.
 
 ## 2. Learn about me and my work
 
@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Analytic Partners
-- **CLIENT_NAME**: Analytic Partners
+- **PROJECT_NAME**: Mindplay
+- **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR** 2023
-- **URL**: *(optional)* https://analyticpartners.com
-- **NOTABLES**: full site redesign
+- **YEAR**: 2024
+- **URL**: *(optional)* https://mindplaynyc.com/
+- **NOTABLES**: design challenges, ticketing calendar

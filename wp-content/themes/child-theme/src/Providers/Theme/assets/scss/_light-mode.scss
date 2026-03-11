@@ -156,19 +156,26 @@
     background-color: rgba(255, 255, 255, 0.85);
   }
 
-  // WPForms labels — keep white in all states
+  // Dark panel — white background with dark border in light mode
+  .is-style-dark {
+    background-color: var(--wp--preset--color--base);
+    color: var(--color-text);
+    border-color: var(--wp--preset--color--contrast);
+  }
+
+  // WPForms labels — dark text on white surface in light mode
   .wpforms-field-label,
   .wpforms-field:focus-within .wpforms-field-label,
   .wpforms-field:has(input:not(:placeholder-shown)) .wpforms-field-label,
   .wpforms-field:has(textarea:not(:placeholder-shown)) .wpforms-field-label {
-    color: var(--wp--preset--color--base);
+    color: var(--color-text);
   }
 
-  // WPForms inputs — white text and lighter border on dark surface
+  // WPForms inputs — dark text and border on white surface
   .wpforms-form input,
   .wpforms-form textarea {
-    color: var(--wp--preset--color--base);
-    border-block-end-color: var(--wp--preset--color--grey-5);
+    color: var(--color-text);
+    border-block-end-color: var(--color-border);
   }
 }
 
