@@ -36,16 +36,18 @@ export function sortProjects(grid, field, order) {
 /**
  * Compute visibility from independent filter states.
  * Each filter manages its own data-*-hidden attribute;
- * this function derives the final is-hidden class.
+ * this function derives the final aria-hidden attribute.
  * @param {HTMLElement} card
  */
 function applyVisibility(card) {
     const hidden =
         card.hasAttribute('data-search-hidden') ||
         card.hasAttribute('data-category-hidden');
-    card.classList.toggle('is-hidden', hidden);
     if (hidden) {
+        card.setAttribute('aria-hidden', 'true');
         card.classList.remove('is-visible');
+    } else {
+        card.removeAttribute('aria-hidden');
     }
 }
 

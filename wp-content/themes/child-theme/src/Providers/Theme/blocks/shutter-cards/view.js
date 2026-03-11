@@ -13,8 +13,6 @@ export function activateCard(cards, cardToActivate) {
         const isActive = card === cardToActivate;
         const innerCard = card.querySelector('.shutter-card');
 
-        card.classList.toggle('is-inactive', !isActive);
-
         // Update ARIA attributes
         if (innerCard) {
             innerCard.setAttribute('aria-expanded', isActive ? 'true' : 'false');
@@ -45,7 +43,6 @@ export function deactivateAll(cards) {
     cards.forEach((card) => {
         const innerCard = card.querySelector('.shutter-card');
 
-        card.classList.add('is-inactive');
         card.setAttribute('tabindex', '0');
         card.setAttribute('role', 'button');
 
@@ -76,7 +73,7 @@ export function initShutterCards() {
          * Handle card activation
          */
         function handleActivation(card) {
-            if (card.classList.contains('is-inactive')) {
+            if (card.querySelector('.shutter-card')?.getAttribute('aria-expanded') === 'false') {
                 activateCard(cards, card);
             }
         }
@@ -91,14 +88,14 @@ export function initShutterCards() {
         cards.forEach((card) => {
             // Click handler for inactive cards
             card.addEventListener('click', function (e) {
-                if (!this.classList.contains('is-inactive')) return;
+                if (this.querySelector('.shutter-card')?.getAttribute('aria-expanded') !== 'false') return;
                 if (e.target.closest('.shutter-card__toggle')) return;
                 handleActivation(this);
             });
 
             // Keyboard handler for inactive cards
             card.addEventListener('keydown', function (e) {
-                if (!this.classList.contains('is-inactive')) return;
+                if (this.querySelector('.shutter-card')?.getAttribute('aria-expanded') !== 'false') return;
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
                     handleActivation(this);
@@ -110,7 +107,7 @@ export function initShutterCards() {
             if (toggle) {
                 toggle.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    const isActive = !card.classList.contains('is-inactive');
+                    const isActive = card.querySelector('.shutter-card')?.getAttribute('aria-expanded') === 'true';
 
                     if (isActive) {
                         deactivateAll(cards);

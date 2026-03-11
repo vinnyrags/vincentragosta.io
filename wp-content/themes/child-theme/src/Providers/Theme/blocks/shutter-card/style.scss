@@ -69,7 +69,7 @@
   transition: background-color 0.4s ease, color 0.4s ease;
 
   // Inactive visual state - applies on all screen sizes
-  .is-inactive & {
+  &[aria-expanded="false"] {
     cursor: pointer;
     background-color: var(--shutter-card-inactive-bg);
     color: var(--shutter-card-inactive-text);
@@ -144,7 +144,7 @@
 }
 
 // Mobile: collapse content for accordion
-.is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
+.shutter-card[aria-expanded="false"] :is(.shutter-card__subtitle, .shutter-card__description) {
   opacity: 0;
   visibility: hidden;
   max-height: 0;
@@ -154,21 +154,21 @@
 
 // Desktop: just fade, preserve space
 @include container(shutter-cards, lg) {
-  .is-inactive :is(.shutter-card__subtitle, .shutter-card__description) {
+  .shutter-card[aria-expanded="false"] :is(.shutter-card__subtitle, .shutter-card__description) {
     max-height: none;
     overflow: visible;
   }
 }
 
-.is-inactive .shutter-card__toggle {
+.shutter-card[aria-expanded="false"] .shutter-card__toggle {
   color: var(--shutter-card-toggle-inactive-icon);
   border-color: var(--shutter-card-toggle-inactive-border);
   background-color: transparent;
   transform: rotate(45deg);
 }
 
-.is-inactive:hover .shutter-card__toggle,
-.is-inactive .shutter-card__toggle:focus-visible {
+.wp-block-child-theme-shutter-card:hover .shutter-card[aria-expanded="false"] .shutter-card__toggle,
+.shutter-card[aria-expanded="false"] .shutter-card__toggle:focus-visible {
   color: var(--shutter-card-toggle-hover-icon);
   background-color: var(--shutter-card-toggle-hover-bg);
   border-color: var(--shutter-card-toggle-hover-border);

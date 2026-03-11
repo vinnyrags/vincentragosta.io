@@ -31,7 +31,7 @@ function getCardTitles(grid) {
 }
 
 function getVisibleCards(grid) {
-    return Array.from(grid.querySelectorAll('.project-card:not(.is-hidden)'));
+    return Array.from(grid.querySelectorAll('.project-card:not([aria-hidden="true"])'));
 }
 
 describe('sortProjects', () => {
@@ -181,7 +181,7 @@ describe('filterProjects', () => {
 
         filterProjects(grid, 'charlie');
 
-        const hidden = grid.querySelectorAll('.project-card.is-hidden');
+        const hidden = grid.querySelectorAll('.project-card[aria-hidden="true"]');
         hidden.forEach((card) => {
             expect(card.classList.contains('is-visible')).toBe(false);
         });
@@ -259,7 +259,7 @@ describe('filterByCategory', () => {
 
         filterByCategory(grid, 'branding');
 
-        const hidden = grid.querySelectorAll('.project-card.is-hidden');
+        const hidden = grid.querySelectorAll('.project-card[aria-hidden="true"]');
         hidden.forEach((card) => {
             expect(card.classList.contains('is-visible')).toBe(false);
         });

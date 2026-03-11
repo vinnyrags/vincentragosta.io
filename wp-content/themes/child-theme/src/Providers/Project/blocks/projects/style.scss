@@ -22,11 +22,11 @@
 
     // Alternating 35%/65% layout that flips each row
     // Row 1: 4 cols / 6 cols, Row 2: 6 cols / 4 cols, etc.
-    // Uses `of .project-card:not(.is-hidden)` so filtered views recalculate layout.
-    > :nth-child(4n+1 of .project-card:not(.is-hidden)) { grid-column: span 4; }
-    > :nth-child(4n+2 of .project-card:not(.is-hidden)) { grid-column: span 6; }
-    > :nth-child(4n+3 of .project-card:not(.is-hidden)) { grid-column: span 6; }
-    > :nth-child(4n+4 of .project-card:not(.is-hidden)) { grid-column: span 4; }
+    // Uses `of .project-card:not([aria-hidden="true"])` so filtered views recalculate layout.
+    > :nth-child(4n+1 of .project-card:not([aria-hidden="true"])) { grid-column: span 4; }
+    > :nth-child(4n+2 of .project-card:not([aria-hidden="true"])) { grid-column: span 6; }
+    > :nth-child(4n+3 of .project-card:not([aria-hidden="true"])) { grid-column: span 6; }
+    > :nth-child(4n+4 of .project-card:not([aria-hidden="true"])) { grid-column: span 4; }
   }
 }
 
@@ -133,7 +133,7 @@
 // Hidden State (search/category filtering)
 // ==========================================================================
 
-.project-card.is-hidden {
+.project-card[aria-hidden="true"] {
   display: none;
 }
 
@@ -144,7 +144,7 @@
 }
 
 // Show empty message when all project cards are hidden.
-.projects-grid:not(:has(.project-card:not(.is-hidden))) .projects-grid__empty {
+.projects-grid:not(:has(.project-card:not([aria-hidden="true"]))) .projects-grid__empty {
   display: block;
 }
 

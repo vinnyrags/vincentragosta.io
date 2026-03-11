@@ -70,6 +70,10 @@ html.nav-overlay-open {
         font-size: var(--wp--preset--font-size--70);
       }
 
+      &[aria-current="page"] {
+        color: var(--wp--preset--color--accent-1);
+      }
+
       &:hover {
         color: var(--wp--preset--color--accent-1);
       }

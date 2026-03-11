@@ -31,15 +31,22 @@ function createShutterCards(count = 3) {
     return { container, cards };
 }
 
+/**
+ * Check if a card is inactive by reading aria-expanded on the inner .shutter-card
+ */
+function isInactive(card) {
+    return card.querySelector('.shutter-card')?.getAttribute('aria-expanded') === 'false';
+}
+
 describe('activateCard', () => {
-    it('sets is-inactive on non-active cards', () => {
+    it('sets aria-expanded="false" on non-active cards', () => {
         const { cards } = createShutterCards();
 
         activateCard(cards, cards[1]);
 
-        expect(cards[0].classList.contains('is-inactive')).toBe(true);
-        expect(cards[1].classList.contains('is-inactive')).toBe(false);
-        expect(cards[2].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[0])).toBe(true);
+        expect(isInactive(cards[1])).toBe(false);
+        expect(isInactive(cards[2])).toBe(true);
     });
 
     it('sets aria-expanded on inner card', () => {
@@ -93,8 +100,8 @@ describe('initShutterCards', () => {
         initShutterCards();
 
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
-        expect(cards[0].classList.contains('is-inactive')).toBe(false);
-        expect(cards[1].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[0])).toBe(false);
+        expect(isInactive(cards[1])).toBe(true);
     });
 
     it('removes preload class from container', () => {
@@ -113,8 +120,8 @@ describe('initShutterCards', () => {
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
         cards[2].click(); // Click third card
 
-        expect(cards[2].classList.contains('is-inactive')).toBe(false);
-        expect(cards[0].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[2])).toBe(false);
+        expect(isInactive(cards[0])).toBe(true);
     });
 
     it('activates card on Enter key', () => {
@@ -125,8 +132,8 @@ describe('initShutterCards', () => {
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
         cards[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
 
-        expect(cards[1].classList.contains('is-inactive')).toBe(false);
-        expect(cards[0].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[1])).toBe(false);
+        expect(isInactive(cards[0])).toBe(true);
     });
 
     it('activates card on Space key', () => {
@@ -137,7 +144,7 @@ describe('initShutterCards', () => {
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
         cards[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
 
-        expect(cards[1].classList.contains('is-inactive')).toBe(false);
+        expect(isInactive(cards[1])).toBe(false);
     });
 
     it('does not activate already-active card on click', () => {
@@ -149,7 +156,7 @@ describe('initShutterCards', () => {
         // First card is already active, clicking it should not change state
         cards[0].click();
 
-        expect(cards[0].classList.contains('is-inactive')).toBe(false);
+        expect(isInactive(cards[0])).toBe(false);
     });
 
     it('toggle button collapses all cards when active', () => {
@@ -162,9 +169,9 @@ describe('initShutterCards', () => {
         const toggle = cards[0].querySelector('.shutter-card__toggle');
         toggle.click();
 
-        expect(cards[0].classList.contains('is-inactive')).toBe(true);
-        expect(cards[1].classList.contains('is-inactive')).toBe(true);
-        expect(cards[2].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[0])).toBe(true);
+        expect(isInactive(cards[1])).toBe(true);
+        expect(isInactive(cards[2])).toBe(true);
     });
 
     it('toggle button on last card collapses all cards', () => {
@@ -178,9 +185,9 @@ describe('initShutterCards', () => {
         const toggle = cards[2].querySelector('.shutter-card__toggle');
         toggle.click();
 
-        expect(cards[0].classList.contains('is-inactive')).toBe(true);
-        expect(cards[1].classList.contains('is-inactive')).toBe(true);
-        expect(cards[2].classList.contains('is-inactive')).toBe(true);
+        expect(isInactive(cards[0])).toBe(true);
+        expect(isInactive(cards[1])).toBe(true);
+        expect(isInactive(cards[2])).toBe(true);
     });
 
     it('skips containers with fewer than 2 cards', () => {
