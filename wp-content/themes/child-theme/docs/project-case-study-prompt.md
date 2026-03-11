@@ -78,9 +78,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 
 ## Fill in
 
-- **PROJECT_NAME**: Mindplay
+- **PROJECT_NAME**: Broadwway Groups
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR**: 2024
-- **URL**: *(optional)* https://mindplaynyc.com/
-- **NOTABLES**: design challenges, ticketing calendar
+- **YEAR**: 2020
+- **URL**: *(optional)* https://groups.broadway.com/
+- **NOTABLES**: complex inquiry form, complex data model, season lifecycle
