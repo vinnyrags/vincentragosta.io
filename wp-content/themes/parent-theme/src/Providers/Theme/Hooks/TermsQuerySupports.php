@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Theme\Hooks;
+namespace ParentTheme\Providers\Theme\Hooks;
 
 use ParentTheme\Providers\Contracts\Hook;
 

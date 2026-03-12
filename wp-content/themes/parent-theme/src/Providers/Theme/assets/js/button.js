@@ -29,7 +29,7 @@
             return iconDataCache;
         }
 
-        const data = window.childThemeButtonIconData || {};
+        const data = window.parentThemeButtonIconData || {};
         iconDataCache = {
             options: data.iconOptions || [],
             content: data.iconContentMap || {},

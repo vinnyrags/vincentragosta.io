@@ -1,9 +1,9 @@
 <?php
 
-namespace ChildTheme\Tests\Integration\Providers\Hooks;
+namespace ParentTheme\Tests\Integration\Providers\Hooks;
 
-use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
-use ChildTheme\Tests\Support\HasContainer;
+use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ParentTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Contracts\Hook;
 use ParentTheme\Providers\Contracts\Registrable;
 use WorDBless\BaseTestCase;

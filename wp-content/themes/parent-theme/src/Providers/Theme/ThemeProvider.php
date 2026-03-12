@@ -16,7 +16,10 @@ use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
 use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
 use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
+use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
+use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
+use ParentTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use ParentTheme\Services\IconServiceFactory;
 use Timber\Attachment;
 use Twig\Environment;
@@ -44,7 +47,10 @@ class ThemeProvider extends Provider
      * @var array<class-string>
      */
     protected array $hooks = [
+        AccordionIconEnhancer::class,
+        ButtonIconEnhancer::class,
         FeaturedImageFocalPoint::class,
+        TermsQuerySupports::class,
     ];
 
     /**
@@ -94,6 +100,10 @@ class ThemeProvider extends Provider
         add_action('wp_enqueue_scripts', [$this, 'enqueueFrontendAssets']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAssets']);
         add_action('enqueue_block_assets', [$this, 'enqueueBlockAssets']);
+
+        // Button icon editor assets and data localization
+        add_action('enqueue_block_editor_assets', [$this, 'enqueueButtonEditorAssets']);
+        add_action('enqueue_block_editor_assets', [$this, 'localizeButtonIconData'], 99);
 
         parent::register();
     }
@@ -274,5 +284,39 @@ class ThemeProvider extends Provider
         $allDeps = array_unique([...$defaultDeps, ...$deps]);
 
         wp_enqueue_script($handle, get_template_directory_uri() . '/dist/' . $path, $allDeps, filemtime($fullPath), true);
+    }
+
+    /**
+     * Enqueue button icon picker editor assets.
+     */
+    public function enqueueButtonEditorAssets(): void
+    {
+        $this->enqueueParentEditorScript('parent-theme-button-icon-js', 'js/theme/button.js');
+    }
+
+    /**
+     * Localize icon data for the button icon picker.
+     *
+     * Uses wp_add_inline_script with wp_json_encode for reliable data serialization,
+     * which handles special characters better than wp_localize_script.
+     * Skips localization if the button script hasn't been registered.
+     */
+    public function localizeButtonIconData(): void
+    {
+        $handle = 'parent-theme-button-icon-js';
+        if (!wp_script_is($handle, 'registered') && !wp_script_is($handle, 'enqueued')) {
+            return;
+        }
+
+        $data = [
+            'iconOptions' => $this->iconFactory->options('icon', __('— No Icon —', 'parent-theme')),
+            'iconContentMap' => $this->iconFactory->contentMap('icon'),
+        ];
+
+        wp_add_inline_script(
+            $handle,
+            'var parentThemeButtonIconData = ' . wp_json_encode($data) . ';',
+            'before'
+        );
     }
 }

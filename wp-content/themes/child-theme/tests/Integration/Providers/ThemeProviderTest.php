@@ -5,13 +5,14 @@ namespace ChildTheme\Tests\Integration\Providers;
 use ChildTheme\Providers\Project\ProjectPost;
 use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
-use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
-use ChildTheme\Providers\Theme\Hooks\TermsQuerySupports;
+use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
+use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
+use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
+use ParentTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Support\Feature\FeatureManager;
@@ -85,11 +86,11 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
         $this->assertCount(8, $enabled);
 
-        // Child hook classes should NOT be in features
+        // Hook classes should NOT be in features
+        $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
         $this->assertNotContains(ButtonIconEnhancer::class, $enabled);
         $this->assertNotContains(CoverBlockStyles::class, $enabled);
         $this->assertNotContains(SocialIconChoices::class, $enabled);
-        $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
     }
 
     /**
@@ -103,13 +104,17 @@ class ThemeProviderTest extends BaseTestCase
 
         $hooks = $method->invoke($this->provider);
 
+        // Parent hooks (inherited)
         $this->assertContains(AccordionIconEnhancer::class, $hooks);
         $this->assertContains(ButtonIconEnhancer::class, $hooks);
+        $this->assertContains(FeaturedImageFocalPoint::class, $hooks);
+        $this->assertContains(TermsQuerySupports::class, $hooks);
+
+        // Child hooks
         $this->assertContains(ContainerBlockStyles::class, $hooks);
         $this->assertContains(CoverBlockStyles::class, $hooks);
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
-        $this->assertContains(TermsQuerySupports::class, $hooks);
         $this->assertCount(8, $hooks);
     }
 
@@ -153,7 +158,7 @@ class ThemeProviderTest extends BaseTestCase
 
         $this->assertGreaterThan(
             0,
-            has_action('enqueue_block_editor_assets', [$this->provider, 'localizeEditorData'])
+            has_action('enqueue_block_editor_assets', [$this->provider, 'localizeButtonIconData'])
         );
 
         // Core asset hooks (inherited from parent ThemeProvider)

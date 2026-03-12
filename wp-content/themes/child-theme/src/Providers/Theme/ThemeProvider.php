@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ChildTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
-use ChildTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
-use ChildTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use DI\Container;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
 use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
@@ -23,8 +20,8 @@ use ParentTheme\Services\IconServiceFactory;
  * Handles core theme setup and configuration.
  *
  * Extends the parent theme's Theme Provider to add site-specific functionality.
- * Includes shutter-cards blocks for interactive card components, button icon
- * enhancements, and cover block styles.
+ * Includes shutter-cards blocks for interactive card components and
+ * site-specific block styles.
  */
 class ThemeProvider extends BaseThemeProvider
 {
@@ -47,13 +44,10 @@ class ThemeProvider extends BaseThemeProvider
      * No opt-out syntax. For toggleable capabilities, use $features instead.
      */
     protected array $hooks = [
-        AccordionIconEnhancer::class,
-        ButtonIconEnhancer::class,
         ContainerBlockStyles::class,
         CoverBlockStyles::class,
         TextBlockStyles::class,
         SocialIconChoices::class,
-        TermsQuerySupports::class,
     ];
 
     /**
@@ -120,10 +114,6 @@ class ThemeProvider extends BaseThemeProvider
         // Add site-specific hooks
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
         add_filter('wp_resource_hints', [$this, 'addResourceHints'], 10, 2);
-
-        // Block editor assets and data localization
-        add_action('enqueue_block_editor_assets', [$this, 'enqueueButtonEditorAssets']);
-        add_action('enqueue_block_editor_assets', [$this, 'localizeEditorData'], 99);
 
         // Timber context for ACF options data
         add_filter('timber/context', [$this, 'addOptionsToContext']);
@@ -233,60 +223,4 @@ class ThemeProvider extends BaseThemeProvider
         $this->enqueueEditorScript('child-theme-shutter-card-block-editor', 'shutter-card.js');
     }
 
-    /**
-     * Enqueue button icon picker editor assets.
-     */
-    public function enqueueButtonEditorAssets(): void
-    {
-        $this->enqueueScript('child-theme-block-service-js', 'button.js', [
-            'wp-blocks',
-            'wp-element',
-            'wp-block-editor',
-            'wp-components',
-            'wp-compose',
-            'wp-hooks',
-        ]);
-    }
-
-    /**
-     * Localize data for the block editor.
-     */
-    public function localizeEditorData(): void
-    {
-        $this->localizeButtonIconData();
-    }
-
-    /**
-     * Localize icon data for the button icon picker.
-     *
-     * Uses wp_add_inline_script with wp_json_encode for reliable data serialization,
-     * which handles special characters better than wp_localize_script.
-     * Skips localization if the button script hasn't been registered.
-     */
-    private function localizeButtonIconData(): void
-    {
-        $handle = 'child-theme-block-service-js';
-        if (!$this->isScriptActive($handle)) {
-            return;
-        }
-
-        $data = [
-            'iconOptions' => $this->iconFactory->options('icon', __('— No Icon —', 'child-theme')),
-            'iconContentMap' => $this->iconFactory->contentMap('icon'),
-        ];
-
-        wp_add_inline_script(
-            $handle,
-            'var childThemeButtonIconData = ' . wp_json_encode($data) . ';',
-            'before'
-        );
-    }
-
-    /**
-     * Check if a script is registered or enqueued.
-     */
-    private function isScriptActive(string $handle): bool
-    {
-        return wp_script_is($handle, 'registered') || wp_script_is($handle, 'enqueued');
-    }
 }

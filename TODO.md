@@ -3,8 +3,7 @@
 - configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
 - lets look at resume.md, we need to encapsulate any missing data from this document on my about page (content/pages/about.html), where appropriate please create new alternating core/groups to add the new content, we can discuss opportunity to create any new blocks where necessary, in particular we need to add group containing skills overview to about page, place where we will drop technical jargon, need to think of a clean way to display a lot of skills in a clean and efficient manner, I am open to suggestions on how to best represent this data, ideally we make use of existing core gutenberg blocks (even if we need to re-enable some), if we cant figure out a clean solution with existing blocks, we could potentially create something custom. lets enter plan mode and work up an effective and efficient implementation plan on this after doing a deep dive on some research on how to best approach this.
 - split repos, configure satis on production server, packages.vincentragosta.io
-- (after doing a db pull from prod) can we add to framework content/page (if we need to add a new alternating core/group, lets proceed to do so in framework.html), the make system we created, since it is relevant to quick movement throughout the system, or rather abstracted commands that help mitigate the platform
-- increase size of slider arrows to 60px instead of 40px
+- can we add to framework content/page (if we need to add a new alternating core/group, lets proceed to do so in framework.html), the make system we created, since it is relevant to quick movement throughout the system, or rather abstracted commands that help mitigate the platform
 
 ## MEDIUM PRIORITY
 
