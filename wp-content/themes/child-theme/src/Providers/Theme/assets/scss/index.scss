@@ -29,8 +29,11 @@
 @use 'blocks/wp-block-container';
 @use 'blocks/wp-block-cover';
 @use 'blocks/wp-block-heading';
+@use 'blocks/wp-block-code';
+@use 'blocks/wp-block-list';
 @use 'blocks/wp-block-paragraph';
 @use 'blocks/wp-block-post-terms';
+@use 'blocks/wp-block-table';
 @use 'blocks/wp-block-quote';
 @use 'blocks/wp-block-testimonials';
 

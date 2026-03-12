@@ -1,0 +1,29 @@
+// ==========================================================================
+// List Block Styles (core/list)
+// ==========================================================================
+
+// Muted style — reduced visual prominence for secondary content.
+.wp-block-list.is-style-muted {
+    font-size: var(--wp--preset--font-size--30);
+    color: var(--color-text-muted);
+}
+
+// Tags style — inline pill/chip layout for skill lists and similar taxonomies.
+.wp-block-list.is-style-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+
+    li {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: 2rem;
+        font-size: var(--wp--preset--font-size--20);
+        color: var(--color-text-muted);
+        white-space: nowrap;
+    }
+}

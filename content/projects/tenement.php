@@ -1,5 +1,4 @@
 
-Deprecated: WP_CLI\Runner::get_subcommand_suggestion(): Implicitly marking parameter $root_command as nullable is deprecated, the explicit nullable type must be used instead in phar:///usr/local/bin/wp-cli/vendor/wp-cli/wp-cli/php/WP_CLI/Runner.php on line 1958
 <!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
