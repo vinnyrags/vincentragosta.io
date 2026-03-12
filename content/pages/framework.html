@@ -597,7 +597,93 @@ ScrollReveal::class,             // opted in from parent</code></pre>
 <!-- /wp:separator -->
 
 <!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-1-grey-1.svg","id":5,"source":"file","title":"squiggle-1-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull" id="developer-experience" style="margin-top:0"><!-- wp:columns -->
+<div class="wp-block-group alignfull" id="operations" style="margin-top:0"><!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
+<div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
+<h2 class="wp-block-heading"><span style="text-decoration: underline;">Operations</span></h2>
+<!-- /wp:heading --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:heading -->
+<h2 class="wp-block-heading"><strong>One command for everything</strong>.</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The entire platform — local environment, builds, tests, deployments, database syncing, pattern exports — is operated through a single Makefile. No runbooks, no tribal knowledge. Every workflow is a <strong>make</strong> command.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"fontSize":"40"} -->
+<h2 class="wp-block-heading has-40-font-size"><strong>The Make system</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">The Makefile is the single interface to the platform. It abstracts DDEV, Composer, npm, WP-CLI, SSH, and rsync behind short, memorable commands — so the developer never needs to remember which tool does what or which flags to pass.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:table {"hasFixedLayout":false,"className":"is-style-muted"} -->
+<figure class="wp-block-table is-style-muted"><table><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><code>make start</code></td><td>Start DDEV, restore latest DB snapshot, install deps, build assets</td></tr><tr><td><code>make stop</code></td><td>Snapshot database, prune old snapshots, stop DDEV</td></tr><tr><td><code>make build</code></td><td>Compile both themes' assets (parent first, then child)</td></tr><tr><td><code>make test</code></td><td>Run PHP + JS test suites across both themes</td></tr><tr><td><code>make watch</code></td><td>Incremental recompilation during development</td></tr><tr><td><code>make push-production</code></td><td>Export local DB + uploads and sync to production</td></tr><tr><td><code>make pull-production</code></td><td>Pull production DB + uploads to local DDEV</td></tr><tr><td><code>make pull-patterns</code></td><td>Export CMS block patterns from production to PHP files</td></tr></tbody></table></figure>
+<!-- /wp:table -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">Staging equivalents exist for every push/pull command. The system handles URL replacement, cache flushing, file ownership, and cleanup automatically — nothing is left to manual steps.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"fontSize":"40"} -->
+<h2 class="wp-block-heading has-40-font-size"><strong>Git push deployments</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">Deployments are a <strong>git push</strong>. A bare repository on the server receives pushes and a post-receive hook handles the rest — checking out the code, restoring environment config, installing production dependencies, building assets, and fixing file ownership.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">Branch routing determines the target environment:</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"is-style-muted"} -->
+<ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
+<li><strong>main</strong> → production</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong>develop</strong> → staging</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">No CI/CD service in the middle, no container orchestration, no deploy queue. Push to the branch, the server builds and serves it. The entire deployment pipeline is a shell script — auditable, debuggable, and fast.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide"} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
+<!-- /wp:separator -->
+
+<!-- wp:heading {"fontSize":"40"} -->
+<h2 class="wp-block-heading has-40-font-size"><strong>Environment sync</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"className":"is-style-muted"} -->
+<p class="is-style-muted">Database and uploads move bidirectionally between local, staging, and production with a single command. Each sync exports the database, transfers it over SSH, imports it on the target, runs search-replace to swap URLs, flushes caches and rewrites, and rsyncs the uploads directory. Cleanup happens automatically — no temp files left behind on either end.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns --></div>
+<!-- /wp:group -->
+
+<!-- wp:separator {"align":"full","className":"is-style-wide","style":{"spacing":{"margin":{"top":"0"}}}} -->
+<hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide" style="margin-top:0"/>
+<!-- /wp:separator -->
+
+<!-- wp:group {"align":"full","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull" id="developer-experience"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
 <h2 class="wp-block-heading"><span style="text-decoration: underline;">Developer Experience</span></h2>
@@ -623,10 +709,6 @@ ScrollReveal::class,             // opted in from parent</code></pre>
 
 <!-- wp:list {"className":"is-style-muted"} -->
 <ul class="wp-block-list is-style-muted"><!-- wp:list-item -->
-<li><strong>Makefile commands</strong> — <strong>make start</strong>, <strong>make build</strong>, <strong>make test</strong>, <strong>make watch</strong>, <strong>make clean</strong>. One command for every workflow, from local environment setup to full test runs.</li>
-<!-- /wp:list-item -->
-
-<!-- wp:list-item -->
 <li><strong>PSR-4 autoloading</strong> — Namespace matches directory path exactly. Add a PHP class, run <strong>composer dump-autoload</strong>, and it's available everywhere.</li>
 <!-- /wp:list-item -->
 
