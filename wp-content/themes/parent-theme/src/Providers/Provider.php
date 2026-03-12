@@ -154,13 +154,10 @@ abstract class Provider implements Registrable
             : (get_template() ?: 'theme');
         $this->assets = new AssetManager($slug, $distPath, $distUri);
 
-        $blocksPath = $providerDir . '/blocks';
-        $themePath = get_stylesheet_directory();
-        $themeUri = get_stylesheet_directory_uri();
-        $relativePath = str_replace($themePath, '', $blocksPath);
-        $blocksUri = $themeUri . $relativePath;
+        $searchPaths = $this->getBlockSearchPaths();
+        $allBlocks = $this->collectBlocks();
 
-        $this->blockManager = new BlockManager($blocksPath, $blocksUri, $distPath, $distUri, $this->blocks);
+        $this->blockManager = new BlockManager($searchPaths, $distPath, $distUri, $allBlocks);
         $this->featureManager = new FeatureManager($this->collectFeatures(), $this->container);
         $this->acfManager = new AcfManager($providerDir, $this->textDomain);
         $this->patternManager = new PatternManager($providerDir . '/patterns', $this->textDomain);
@@ -246,6 +243,52 @@ abstract class Provider implements Registrable
     protected function collectRoutes(): array
     {
         return $this->collectItems('routes');
+    }
+
+    /**
+     * Collect and merge blocks from the class hierarchy (additive).
+     *
+     * Walks from the concrete class up toward Provider, merging and
+     * deduplicating block slugs. Child blocks take priority.
+     *
+     * @return string[]
+     */
+    protected function collectBlocks(): array
+    {
+        return $this->collectAdditive('blocks');
+    }
+
+    /**
+     * Build the list of block search paths from the class hierarchy.
+     *
+     * Walks from the concrete class upward, collecting each unique provider
+     * directory that contains a blocks/ subdirectory. Child paths come first
+     * so child blocks can override parent blocks of the same name.
+     *
+     * @return string[]
+     */
+    protected function getBlockSearchPaths(): array
+    {
+        $paths = [];
+        $seen = [];
+        $class = new ReflectionClass($this);
+
+        while ($class && $class->getName() !== self::class) {
+            $dir = dirname($class->getFileName());
+
+            if (!isset($seen[$dir])) {
+                $seen[$dir] = true;
+                $blocksPath = $dir . '/blocks';
+
+                if (is_dir($blocksPath)) {
+                    $paths[] = $blocksPath;
+                }
+            }
+
+            $class = $class->getParentClass();
+        }
+
+        return $paths;
     }
 
     /**
@@ -476,23 +519,6 @@ abstract class Provider implements Registrable
         return $this->blockManager->getBlocks();
     }
 
-    /**
-     * Get the base path for blocks.
-     */
-    public function getBlocksPath(): string
-    {
-        $this->setup();
-        return $this->blockManager->getBlocksPath();
-    }
-
-    /**
-     * Get the URI for the blocks directory.
-     */
-    public function getBlocksUri(): string
-    {
-        $this->setup();
-        return $this->blockManager->getBlocksUri();
-    }
 
     /**
      * Get the absolute path to this provider's templates directory.

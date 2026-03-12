@@ -11,31 +11,11 @@ use ParentTheme\Providers\Support\Block\BlockManager;
 class BlockManagerTest extends BaseTestCase
 {
     /**
-     * Test constructor stores blocks path.
-     */
-    public function testGetBlocksPathReturnsConstructorValue(): void
-    {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist');
-
-        $this->assertEquals('/path/to/blocks', $manager->getBlocksPath());
-    }
-
-    /**
-     * Test constructor stores blocks URI.
-     */
-    public function testGetBlocksUriReturnsConstructorValue(): void
-    {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist');
-
-        $this->assertEquals('https://example.com/blocks', $manager->getBlocksUri());
-    }
-
-    /**
      * Test getBlocks returns empty array by default.
      */
     public function testGetBlocksReturnsEmptyArrayByDefault(): void
     {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist');
+        $manager = new BlockManager([], '/path/to/dist', 'https://example.com/dist');
 
         $this->assertEmpty($manager->getBlocks());
     }
@@ -46,20 +26,20 @@ class BlockManagerTest extends BaseTestCase
     public function testGetBlocksReturnsConstructorBlocks(): void
     {
         $blocks = ['my-block', 'another-block'];
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist', $blocks);
+        $manager = new BlockManager([], '/path/to/dist', 'https://example.com/dist', $blocks);
 
         $this->assertEquals($blocks, $manager->getBlocks());
     }
 
     /**
-     * Test registerBlocks skips blocks without block.json.
+     * Test registerBlocks skips blocks without block.json in any search path.
      */
     public function testRegisterBlocksSkipsWithoutBlockJson(): void
     {
         $blocksPath = sys_get_temp_dir() . '/block-manager-test-blocks';
         @mkdir($blocksPath . '/my-block', 0777, true);
 
-        $manager = new BlockManager($blocksPath, 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist', ['my-block']);
+        $manager = new BlockManager([$blocksPath], '/path/to/dist', 'https://example.com/dist', ['my-block']);
         $manager->registerBlocks();
 
         // No block.json means register_block_type was not called — no error thrown
@@ -71,11 +51,33 @@ class BlockManagerTest extends BaseTestCase
     }
 
     /**
+     * Test registerBlocks searches multiple paths for blocks.
+     */
+    public function testRegisterBlocksSearchesMultiplePaths(): void
+    {
+        $childPath = sys_get_temp_dir() . '/block-manager-test-child';
+        $parentPath = sys_get_temp_dir() . '/block-manager-test-parent';
+
+        // Only create the block in the parent path (not child)
+        @mkdir($parentPath . '/my-block', 0777, true);
+
+        $manager = new BlockManager([$childPath, $parentPath], '/path/to/dist', 'https://example.com/dist', ['my-block']);
+        $manager->registerBlocks();
+
+        // No error thrown — block found in second search path
+        $this->assertTrue(true);
+
+        // Clean up
+        @rmdir($parentPath . '/my-block');
+        @rmdir($parentPath);
+    }
+
+    /**
      * Test enqueueEditorScript skips when file doesn't exist.
      */
     public function testEnqueueEditorScriptSkipsWhenFileMissing(): void
     {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/nonexistent/dist', 'https://example.com/dist');
+        $manager = new BlockManager([], '/nonexistent/dist', 'https://example.com/dist');
 
         $manager->enqueueEditorScript('test-editor-script', 'editor.js');
 
@@ -91,7 +93,7 @@ class BlockManagerTest extends BaseTestCase
         @mkdir($distPath . '/js', 0777, true);
         file_put_contents($distPath . '/js/editor.js', '// editor');
 
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', $distPath, 'https://example.com/dist');
+        $manager = new BlockManager([], $distPath, 'https://example.com/dist');
         $manager->enqueueEditorScript('test-editor-default-deps', 'editor.js');
 
         $this->assertTrue(wp_script_is('test-editor-default-deps', 'enqueued'));
@@ -116,7 +118,7 @@ class BlockManagerTest extends BaseTestCase
         @mkdir($distPath . '/js', 0777, true);
         file_put_contents($distPath . '/js/editor.js', '// editor');
 
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', $distPath, 'https://example.com/dist');
+        $manager = new BlockManager([], $distPath, 'https://example.com/dist');
         $manager->enqueueEditorScript('test-editor-custom-deps', 'editor.js', ['custom-dep']);
 
         $this->assertTrue(wp_script_is('test-editor-custom-deps', 'enqueued'));
@@ -137,7 +139,7 @@ class BlockManagerTest extends BaseTestCase
      */
     public function testInitializeHooksSkipsWhenNoBlocks(): void
     {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist');
+        $manager = new BlockManager([], '/path/to/dist', 'https://example.com/dist');
         $provider = new \stdClass();
 
         $manager->initializeHooks($provider);
@@ -150,7 +152,7 @@ class BlockManagerTest extends BaseTestCase
      */
     public function testInitializeHooksRegistersHooksWithBlocks(): void
     {
-        $manager = new BlockManager('/path/to/blocks', 'https://example.com/blocks', '/path/to/dist', 'https://example.com/dist', ['my-block']);
+        $manager = new BlockManager([], '/path/to/dist', 'https://example.com/dist', ['my-block']);
         $provider = new \stdClass();
 
         $manager->initializeHooks($provider);

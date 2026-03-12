@@ -13,12 +13,14 @@
         '.site-main .wp-block-image',
         '.site-main .wp-block-button',
         '.site-main .wp-block-buttons',
+        '.site-main cite',
         '.footer__contact-heading',
         '.footer__contact-body',
         '.footer__bar',
     ].join(',');
 
-    const elements = document.querySelectorAll(selectors);
+    const elements = [...document.querySelectorAll(selectors)]
+        .filter((el) => !el.closest('.splide'));
     if (!elements.length) return;
 
     const observer = new IntersectionObserver(

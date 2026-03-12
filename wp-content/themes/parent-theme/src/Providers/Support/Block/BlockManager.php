@@ -7,22 +7,28 @@ namespace ParentTheme\Providers\Support\Block;
 /**
  * Manages block registration and editor script enqueueing for service providers.
  *
- * Blocks are expected in a 'blocks' subdirectory relative to the provider class file.
- * Each block must contain a block.json file.
+ * Searches one or more directories for blocks, supporting parent/child theme
+ * inheritance. Search paths are derived automatically by the Provider from
+ * the class hierarchy — child paths come first so child blocks can override
+ * parent blocks of the same name.
  */
 class BlockManager
 {
+    /**
+     * @param string[] $searchPaths Directories to search for blocks (child-first order).
+     * @param string   $distPath    Absolute path to the active theme's dist/ directory.
+     * @param string   $distUri     URI to the active theme's dist/ directory.
+     * @param string[] $blocks      Block slugs to register.
+     */
     public function __construct(
-        private readonly string $blocksPath,
-        private readonly string $blocksUri,
+        private readonly array $searchPaths,
         private readonly string $distPath,
         private readonly string $distUri,
-        /** @var string[] */
         private readonly array $blocks = [],
     ) {}
 
     /**
-     * Get the blocks to register.
+     * Get the block slugs to register.
      *
      * @return string[]
      */
@@ -32,33 +38,21 @@ class BlockManager
     }
 
     /**
-     * Get the base path for blocks.
-     */
-    public function getBlocksPath(): string
-    {
-        return $this->blocksPath;
-    }
-
-    /**
-     * Get the URI for the blocks directory.
-     */
-    public function getBlocksUri(): string
-    {
-        return $this->blocksUri;
-    }
-
-    /**
      * Register all blocks.
      *
+     * Searches each path in order for each block's block.json.
      * Called on the 'init' action hook.
      */
     public function registerBlocks(): void
     {
         foreach ($this->blocks as $block) {
-            $blockDir = $this->blocksPath . '/' . $block;
+            foreach ($this->searchPaths as $searchPath) {
+                $blockDir = $searchPath . '/' . $block;
 
-            if (file_exists($blockDir . '/block.json')) {
-                register_block_type($blockDir);
+                if (file_exists($blockDir . '/block.json')) {
+                    register_block_type($blockDir);
+                    break;
+                }
             }
         }
     }

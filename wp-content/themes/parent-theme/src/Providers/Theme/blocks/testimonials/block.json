@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "parent-theme/testimonials",
+  "title": "Testimonials",
+  "category": "design",
+  "icon": "format-quote",
+  "description": "A carousel of testimonials using quote blocks.",
+  "keywords": ["testimonials", "quotes", "carousel", "slider"],
+  "supports": {
+    "html": false,
+    "align": ["wide", "full"],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
+  },
+  "textdomain": "parent-theme",
+  "viewScript": "file:../../../../../dist/js/testimonials-view.js",
+  "render": "file:./render.php"
+}

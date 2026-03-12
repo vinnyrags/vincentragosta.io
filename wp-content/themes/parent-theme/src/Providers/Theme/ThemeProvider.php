@@ -48,6 +48,15 @@ class ThemeProvider extends Provider
     ];
 
     /**
+     * Blocks to register.
+     *
+     * @var string[]
+     */
+    protected array $blocks = [
+        'testimonials',
+    ];
+
+    /**
      * Features to register with this provider.
      *
      * @var array<class-string>
@@ -168,6 +177,7 @@ class ThemeProvider extends Provider
     public function enqueueEditorAssets(): void
     {
         $this->enqueueManifestScript($this->handlePrefix . '-blocks-js', 'blocks/index.js');
+        $this->enqueueParentEditorScript('parent-theme-testimonials-block-editor', 'js/testimonials.js');
     }
 
     /**
@@ -177,12 +187,17 @@ class ThemeProvider extends Provider
     {
         $this->enqueueDistStyle($this->handlePrefix . '-blocks-style', 'blocks/style-index.css');
 
+        // Testimonials block CSS lives in parent theme dist/
+        $this->enqueueParentDistStyle('parent-theme-testimonials-block', 'css/testimonials.css');
+
         if (is_admin()) {
             $this->enqueueDistStyle(
                 $this->handlePrefix . '-blocks-editor-style',
                 'blocks/index.css',
                 ['wp-edit-blocks', $this->handlePrefix . '-blocks-style']
             );
+
+            $this->enqueueParentDistStyle('parent-theme-testimonials-block-editor', 'css/testimonials-editor.css');
 
             // Load parent compiled CSS in the editor so shared styles (form
             // resets, layout, etc.) apply. Uses get_template_directory()
@@ -212,5 +227,52 @@ class ThemeProvider extends Provider
         }));
 
         return $twig;
+    }
+
+    /**
+     * Enqueue a stylesheet from the parent theme's dist/ directory.
+     *
+     * Uses get_template_directory() so assets resolve from the parent theme
+     * even when a child theme is active (AssetManager resolves from child).
+     */
+    protected function enqueueParentDistStyle(string $handle, string $path, array $deps = []): void
+    {
+        $fullPath = get_template_directory() . '/dist/' . $path;
+
+        if (file_exists($fullPath)) {
+            wp_enqueue_style(
+                $handle,
+                get_template_directory_uri() . '/dist/' . $path,
+                $deps,
+                filemtime($fullPath)
+            );
+        }
+    }
+
+    /**
+     * Enqueue a block editor script from the parent theme's dist/ directory.
+     *
+     * Includes standard WordPress block editor dependencies.
+     */
+    protected function enqueueParentEditorScript(string $handle, string $path, array $deps = []): void
+    {
+        $fullPath = get_template_directory() . '/dist/' . $path;
+
+        if (!file_exists($fullPath)) {
+            return;
+        }
+
+        $defaultDeps = [
+            'wp-blocks',
+            'wp-element',
+            'wp-block-editor',
+            'wp-components',
+            'wp-i18n',
+            'wp-data',
+        ];
+
+        $allDeps = array_unique([...$defaultDeps, ...$deps]);
+
+        wp_enqueue_script($handle, get_template_directory_uri() . '/dist/' . $path, $allDeps, filemtime($fullPath), true);
     }
 }

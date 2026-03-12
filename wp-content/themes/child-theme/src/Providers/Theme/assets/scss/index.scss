@@ -31,6 +31,8 @@
 @use 'blocks/wp-block-heading';
 @use 'blocks/wp-block-paragraph';
 @use 'blocks/wp-block-post-terms';
+@use 'blocks/wp-block-quote';
+@use 'blocks/wp-block-testimonials';
 
 // Print
 @use 'print';

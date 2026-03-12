@@ -1,0 +1,46 @@
+// ==========================================================================
+// Quote & Pullquote Block Resets (core/quote, core/pullquote)
+// ==========================================================================
+// Structural resets only. Custom property values are set by child themes.
+// Scoped to .site-main to beat WordPress core per-block stylesheets.
+
+.site-main .wp-block-quote,
+.site-main .wp-block-pullquote {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--quote-bg, transparent);
+    padding: var(--quote-padding, 2rem);
+    border: var(--quote-border, none);
+    border-left: var(--quote-border-left, none);
+    margin: 0;
+    text-align: left;
+
+    p {
+        font-size: var(--quote-font-size, inherit);
+        line-height: var(--quote-line-height, inherit);
+        color: var(--quote-text, inherit);
+    }
+
+    cite {
+        display: block;
+        margin-top: var(--quote-cite-margin-top, 1rem);
+        font-size: var(--quote-cite-font-size, 0.875em);
+        font-style: normal;
+        text-transform: none;
+        color: var(--quote-accent, currentColor);
+
+        &::before {
+            content: '\2014\00a0';
+        }
+    }
+}
+
+// Pullquote inner blockquote reset — match quote appearance
+.site-main .wp-block-pullquote {
+    blockquote {
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+}

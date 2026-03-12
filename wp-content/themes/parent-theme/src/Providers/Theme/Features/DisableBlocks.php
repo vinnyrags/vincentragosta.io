@@ -108,6 +108,7 @@ class DisableBlocks implements Feature
         'core/verse',
         'core/details',
         'core/quote',
+        'core/pullquote',
         'core/freeform',
     ];
 

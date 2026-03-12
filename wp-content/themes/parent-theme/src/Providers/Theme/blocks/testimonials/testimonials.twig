@@ -1,0 +1,9 @@
+<div class="testimonials splide" aria-label="Testimonials">
+    <div class="splide__track">
+        <ul class="splide__list">
+            {% for inner_block in inner_blocks %}
+                <li class="splide__slide">{{ inner_block|raw }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

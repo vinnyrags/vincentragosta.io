@@ -58,6 +58,8 @@ class ThemeProvider extends BaseThemeProvider
 
     /**
      * Blocks to register.
+     *
+     * Inherits parent blocks (testimonials) automatically via collectBlocks().
      */
     protected array $blocks = [
         'shutter-cards',
@@ -128,7 +130,7 @@ class ThemeProvider extends BaseThemeProvider
 
         // Re-enable post featured image block (disabled in parent)
         add_filter('theme/disabled_block_types', static function (array $blocks): array {
-            return array_values(array_diff($blocks, ['core/post-featured-image', 'core/post-terms', 'core/post-title']));
+            return array_values(array_diff($blocks, ['core/post-featured-image', 'core/post-terms', 'core/post-title', 'core/quote', 'core/pullquote']));
         });
 
         // Register custom pattern category with branded label (before PatternManager auto-derives it)
