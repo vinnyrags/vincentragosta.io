@@ -18,13 +18,9 @@ export function activateCard(cards, cardToActivate) {
             innerCard.setAttribute('aria-expanded', isActive ? 'true' : 'false');
         }
 
-        // Update tabindex for keyboard navigation
-        card.setAttribute('tabindex', isActive ? '-1' : '0');
-        if (!isActive) {
-            card.setAttribute('role', 'button');
-        } else {
-            card.removeAttribute('role');
-        }
+        // Remove card wrapper from tab order — toggle button is the sole tab stop
+        card.removeAttribute('tabindex');
+        card.removeAttribute('role');
 
         // Update toggle button label
         const toggle = innerCard?.querySelector('.shutter-card__toggle');
@@ -43,8 +39,8 @@ export function deactivateAll(cards) {
     cards.forEach((card) => {
         const innerCard = card.querySelector('.shutter-card');
 
-        card.setAttribute('tabindex', '0');
-        card.setAttribute('role', 'button');
+        card.removeAttribute('tabindex');
+        card.removeAttribute('role');
 
         if (innerCard) {
             innerCard.setAttribute('aria-expanded', 'false');
@@ -93,14 +89,6 @@ export function initShutterCards() {
                 handleActivation(this);
             });
 
-            // Keyboard handler for inactive cards
-            card.addEventListener('keydown', function (e) {
-                if (this.querySelector('.shutter-card')?.getAttribute('aria-expanded') !== 'false') return;
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleActivation(this);
-                }
-            });
 
             // Toggle button handler
             const toggle = card.querySelector('.shutter-card__toggle');
@@ -111,7 +99,7 @@ export function initShutterCards() {
 
                     if (isActive) {
                         deactivateAll(cards);
-                        card.focus();
+                        toggle.focus();
                     } else {
                         handleActivation(card);
                     }

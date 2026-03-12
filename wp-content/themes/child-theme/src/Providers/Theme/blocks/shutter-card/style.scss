@@ -46,11 +46,6 @@
 .wp-block-child-theme-shutter-card {
   display: flex;
 
-  // Focus styles for keyboard navigation
-  &:focus-visible {
-    outline: 2px solid var(--wp--preset--color--accent-1);
-    outline-offset: 2px;
-  }
 }
 
 .shutter-card {

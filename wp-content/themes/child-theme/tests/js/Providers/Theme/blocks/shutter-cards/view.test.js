@@ -58,24 +58,15 @@ describe('activateCard', () => {
         expect(cards[1].querySelector('.shutter-card').getAttribute('aria-expanded')).toBe('false');
     });
 
-    it('sets tabindex=-1 on active card, tabindex=0 on inactive', () => {
+    it('removes tabindex and role from all cards — toggle button is sole tab stop', () => {
         const { cards } = createShutterCards();
 
         activateCard(cards, cards[0]);
 
-        expect(cards[0].getAttribute('tabindex')).toBe('-1');
-        expect(cards[1].getAttribute('tabindex')).toBe('0');
-        expect(cards[2].getAttribute('tabindex')).toBe('0');
-    });
-
-    it('sets role=button on inactive cards, removes from active', () => {
-        const { cards } = createShutterCards();
-
-        activateCard(cards, cards[1]);
-
-        expect(cards[0].getAttribute('role')).toBe('button');
-        expect(cards[1].hasAttribute('role')).toBe(false);
-        expect(cards[2].getAttribute('role')).toBe('button');
+        cards.forEach((card) => {
+            expect(card.hasAttribute('tabindex')).toBe(false);
+            expect(card.hasAttribute('role')).toBe(false);
+        });
     });
 
     it('updates toggle button aria-label and aria-expanded', () => {
@@ -124,27 +115,17 @@ describe('initShutterCards', () => {
         expect(isInactive(cards[0])).toBe(true);
     });
 
-    it('activates card on Enter key', () => {
+    it('activates card when toggle button is clicked on inactive card', () => {
         createShutterCards();
 
         initShutterCards();
 
         const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
-        cards[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+        const toggle = cards[1].querySelector('.shutter-card__toggle');
+        toggle.click();
 
         expect(isInactive(cards[1])).toBe(false);
         expect(isInactive(cards[0])).toBe(true);
-    });
-
-    it('activates card on Space key', () => {
-        createShutterCards();
-
-        initShutterCards();
-
-        const cards = document.querySelectorAll('.wp-block-child-theme-shutter-card');
-        cards[1].dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
-
-        expect(isInactive(cards[1])).toBe(false);
     });
 
     it('does not activate already-active card on click', () => {
