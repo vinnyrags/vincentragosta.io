@@ -4,7 +4,6 @@
 - configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
 - arrows on hover in light mode should go to accent-1
 - look into spam protection at the code level maybe for improvmx-- i would hate to blow through the 500 emails a day on spam.
-- pills should hover to accent-1 on about page skills section
 - add table to animations, should we at this point consider a more generic instead of opt-in, hmm actually I am second guessing that because thsta would be catastrophic, what do you think?
 - fix capitalization on framework page
 - consider wrapping code block in a container with background and border, and then OR even add code block to table further down on framework page

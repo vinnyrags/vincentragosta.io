@@ -49,7 +49,7 @@ class TextBlockStyles extends BlockStyles
             'core/paragraph' => [$mutedStyle],
             'core/list' => [
                 $mutedStyle,
-                ['name' => 'tags', 'label' => __('Tags', 'child-theme')],
+                ['name' => 'pills', 'label' => __('Pills', 'child-theme')],
             ],
             'core/code' => [$mutedStyle],
             'core/table' => [$mutedStyle],

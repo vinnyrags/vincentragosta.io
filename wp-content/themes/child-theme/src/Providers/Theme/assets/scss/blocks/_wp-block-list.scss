@@ -9,7 +9,7 @@
 }
 
 // Tags style — inline pill/chip layout for skill lists and similar taxonomies.
-.wp-block-list.is-style-tags {
+.wp-block-list.is-style-pills {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -25,17 +25,5 @@
         font-size: var(--wp--preset--font-size--20);
         color: var(--color-text-muted);
         white-space: nowrap;
-        transition: border-color 0.2s ease, color 0.2s ease;
-
-        &:hover {
-            border-color: var(--wp--preset--color--accent-1);
-            color: var(--wp--preset--color--accent-1);
-        }
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .wp-block-list.is-style-tags li {
-        transition: none;
     }
 }
