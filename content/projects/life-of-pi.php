@@ -170,9 +170,7 @@
 <p>The site launched ahead of Life of Pi's American premiere at the A.R.T. in December 2022 and served as the production's primary digital platform through its entire Broadway lifecycle. The show opened at the Gerald Schoenfeld Theatre on March 30, 2023, after 22 previews, and ran through July 23, 2023 — 133 performances grossing over $10 million at an average capacity of 84.34%. The production won three Tony Awards — Best Sound Design (Tim Lutkin and Hugh Sherwood), Best Lighting Design (Tim Lutkin), and Best Scenic Design (Tim Hatley and Andrzej Goulding) — along with four Drama Desk Awards and multiple Outer Critics Circle Awards. The ticketing calendar drove conversions throughout the run and then evolved to support the North American national tour, which launched in December 2024 and continues through October 2025 across cities including Los Angeles, Chicago, Seattle, Denver, and Washington D.C.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for Life of Pi served the production across every phase — from a sold-out A.R.T. premiere to a Tony-winning Broadway run to a national tour, all on the same architecture.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

@@ -167,7 +167,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched with the full product catalog loaded, categorized, and searchable — replacing manual ordering workflows with a self-service e-commerce experience. The dynamic filter system eliminated the friction of browsing a large, multi-category inventory, giving customers a direct path from discovery to cart regardless of whether they entered through search, a category page, or the main archive. The WooCommerce backend gave the client full independence to manage products, pricing, and inventory without developer involvement — adding new SKUs, updating stock, and adjusting categories through the WordPress admin.</p>
+<p>The site launched with the full product catalog loaded, categorized, and searchable — replacing manual ordering workflows with a self-service e-commerce experience. The dynamic filter system eliminated the friction of browsing a large, multi-category inventory, giving customers a direct path from discovery to cart regardless of whether they entered through search, a category page, or the main archive. The WooCommerce backend gave the client full independence to manage products, pricing, and inventory directly through the WordPress admin — adding new SKUs, updating stock, and adjusting categories through the WordPress admin.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->

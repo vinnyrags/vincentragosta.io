@@ -170,9 +170,7 @@
 <p>The site launched ahead of Smash's first Broadway preview on March 11, 2025, and served as the production's primary digital platform through its entire run at the Imperial Theatre. The show officially opened on April 10 and ran through June 22, 2025 — 32 previews and 83 performances grossing over $12.6 million at an average capacity of 82.50% and an average ticket price of $94.34. The production earned two Tony Award nominations — Best Featured Actor in a Musical for Brooks Ashmanskas and Best Choreography for Joshua Bergasse — along with a Drama Desk Award for Outstanding Featured Performance in a Musical (Ashmanskas) and a Chita Rivera Award for Outstanding Dancer in a Broadway Show (Robyn Hurder). The ticketing calendar drove conversions throughout the run, and the site now serves as an archival platform preserving the production's legacy, press coverage, and cast recording promotion.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for Smash carried the production from its first preview through closing night and continues to serve as the show's digital archive — a complete record of a production that finally brought a beloved television series to the Broadway stage it always belonged on.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

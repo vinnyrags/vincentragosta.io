@@ -143,7 +143,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The content architecture was designed so the marketing team could update copy, swap imagery, and manage promotions without developer involvement post-launch.</p>
+<p class="is-style-muted">The entire site was built, tested, and delivered ahead of schedule — live and fully operational at handoff.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

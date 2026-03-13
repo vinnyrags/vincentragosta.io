@@ -170,9 +170,7 @@
 <p>The site launched ahead of Magic Mike Live's August 2021 reopening at SAHARA Las Vegas, providing the production with a conversion-ready digital platform from the first night of the new run. The tiered ticketing architecture handled the full range of purchasing scenarios — individual tickets, premium VIP packages, and group bookings — through a single embedded flow that kept visitors on-site through checkout. The production has since surpassed 2,000 performances at SAHARA alone (celebrated in March 2026) and over 3,300 total Las Vegas performances since 2017. The show expanded to additional markets including New York and London, with the site architecture supporting multi-location content alongside the Las Vegas-specific experience.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform continues to serve one of the longest-running and most commercially successful live entertainment productions on the Las Vegas Strip.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

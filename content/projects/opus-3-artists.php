@@ -167,12 +167,10 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The redesigned opus3artists.com gave the agency a digital presence that matched the caliber of its roster for the first time. The dynamic search system transformed artist discovery from a static directory into an interactive browsing experience, letting presenters find the right artist across dozens of disciplines and categories in seconds. The contact routing system eliminated the guesswork that had previously required manual triage — inquiries now reach the correct agent automatically based on the artist and context of the request, reducing response times and internal overhead. The structured content layer gave the Opus 3 team complete editorial independence: adding artists, updating bios, publishing news, and managing agent relationships all happen through the WordPress admin without touching code.</p>
+<p>The redesigned opus3artists.com gave the agency a digital presence that matched the caliber of its roster for the first time. The dynamic search system transformed artist discovery from a static directory into an interactive browsing experience, letting presenters find the right artist across dozens of disciplines and categories in seconds. The contact routing system eliminated the guesswork that had previously required manual triage — inquiries now reach the correct agent automatically based on the artist and context of the request, reducing response times and internal overhead. The structured content layer gave the Opus 3 team complete editorial independence: adding artists, updating bios, publishing news, and managing agent relationships all happen directly through the WordPress admin.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform continues to serve an agency whose lineage stretches back to the 1920s — a digital home for one of the most respected names in performing arts management, built to scale as the roster and the industry evolve.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

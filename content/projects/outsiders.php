@@ -143,7 +143,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Every content surface was built for the marketing team to manage independently — press quotes, cast updates, ticket promotions, and media assets all flow through the CMS without developer dependency.</p>
+<p class="is-style-muted">The content layer was designed to support the production's evolving lifecycle — from pre-Broadway previews through a Tony-winning run and into national tour planning.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

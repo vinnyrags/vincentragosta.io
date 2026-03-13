@@ -170,9 +170,7 @@
 <p>The site launched ahead of Jagged Little Pill's world premiere at the American Repertory Theater in May 2018, where the production sold out all 79 performances and became the highest-grossing and longest-running musical in A.R.T. history, with more than 45,000 audience members across the 10-week run. The platform then supported the show's transfer to Broadway at the Broadhurst Theatre — 36 previews beginning November 3, 2019, an official opening on December 5, and a run that ultimately spanned 171 performances and grossed over $24.3 million at an average capacity of 93%. The show received 15 Tony Award nominations — the most of any production that season — and won two, including Best Book of a Musical for Diablo Cody and Best Featured Actress for Lauren Patten. The original cast recording won the Grammy Award for Best Musical Theater Album. The ticketing calendar evolved to support the North American national tour, which launched in September 2022 and ran through April 2024 across 474 performances in cities including Los Angeles, San Francisco, Chicago, Washington D.C., and Philadelphia.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for Jagged Little Pill served the production across every phase of its life — from a sold-out world premiere in Cambridge to a Tony-nominated Broadway run to a two-year national tour, all on the same architecture.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

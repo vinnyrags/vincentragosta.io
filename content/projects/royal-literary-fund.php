@@ -167,7 +167,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The redesigned rlf.org.uk drove a 270% increase in visitors to the homepage and grants pages — the two surfaces most critical to the Fund's mission of connecting writers with financial support. The fellows directory transformed from an opaque institutional listing into a functional discovery tool, giving students and university staff a direct path to finding writing support at their institution. The grants pathway reduced the administrative burden on both applicants and the RLF team, with structured intake forms replacing what had been a fragmented process. The design system gave the Fund's content team full independence to publish editorial features, update Fellow placements, manage grant cycles, and maintain historical archives without developer involvement.</p>
+<p>The redesigned rlf.org.uk drove a 270% increase in visitors to the homepage and grants pages — the two surfaces most critical to the Fund's mission of connecting writers with financial support. The fellows directory transformed from an opaque institutional listing into a functional discovery tool, giving students and university staff a direct path to finding writing support at their institution. The grants pathway reduced the administrative burden on both applicants and the RLF team, with structured intake forms replacing what had been a fragmented process. The design system gave the Fund's content team full independence to publish editorial features, update Fellow placements, manage grant cycles, and maintain historical archives directly through the CMS.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->

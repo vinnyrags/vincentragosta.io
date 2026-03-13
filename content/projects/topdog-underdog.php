@@ -4,7 +4,7 @@
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="http://Projects">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -170,9 +170,7 @@
 <p>The site launched ahead of previews on September 27, 2022, and served as the production's primary digital platform through its entire run at the John Golden Theatre. Topdog/Underdog officially opened on October 20 and ran through January 15, 2023 — 27 previews and 101 performances grossing $4,575,950 at an average ticket price of $71.45. The production won the 2023 Tony Award for Best Revival of a Play, with both Corey Hawkins and Yahya Abdul-Mateen II nominated for Best Actor in a Play. Abdul-Mateen II also took home the Theatre World Award for Outstanding Debut Performance, and the production won the Outer Critics Circle Award for Outstanding Revival of a Play. The ticketing calendar drove conversions throughout the run, the cast profiles supported press coverage and audience engagement around two of the highest-profile Broadway debuts in recent seasons, and the site continues to serve as an archival record of the revival at topdogunderdog.com.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built carried a Pulitzer Prize-winning play through a Tony Award-winning revival — and the site remains live as the definitive digital record of the production that brought Topdog/Underdog back to Broadway twenty years after its premiere.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

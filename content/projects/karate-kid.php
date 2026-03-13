@@ -170,9 +170,7 @@
 <p>The site launched ahead of the May 25, 2022, first preview and served as the production's primary digital platform through its entire world premiere engagement at Stages St. Louis, which played to sold-out houses and strong critical reception through June 26. The ticketing calendar drove conversions throughout the run, the cast and creative profiles supported press coverage around a production featuring Tony-winning designers and a book by the film's original screenwriter, and the content architecture performed exactly as designed — the production team managed all updates independently post-launch. The platform's scalable architecture proved its value as the production continued to develop beyond St. Louis, with a UK tour subsequently announced and the Broadway ambitions that motivated the original build still in motion. The site at karatekidthemusical.com continues to serve as the production's digital home, carrying one of the most recognizable entertainment brands in American culture from its first theatrical staging toward the Broadway run it was always built for.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for The Karate Kid was designed to travel with the production — and it has, serving as the digital foundation for a franchise that is still finding its way to Broadway.</p>
-<!-- /wp:paragraph --></div>
+</div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->

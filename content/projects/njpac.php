@@ -167,7 +167,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The redesigned njpac.org launched as the primary digital touchpoint for one of America's most visited performing arts centers, serving as the gateway between audiences and hundreds of annual performances, education programs, and community events. The Ticketmaster integration streamlined the path from event discovery to ticket purchase, reducing the friction that had previously cost conversions on mobile and desktop alike. The design system gave NJPAC's content team the tools to build and manage pages independently — new seasons, special programming, fundraising campaigns, and venue rental promotions all flow through the same component library without developer intervention.</p>
+<p>The redesigned njpac.org launched as the primary digital touchpoint for one of America's most visited performing arts centers, serving as the gateway between audiences and hundreds of annual performances, education programs, and community events. The Ticketmaster integration streamlined the path from event discovery to ticket purchase, reducing the friction that had previously cost conversions on mobile and desktop alike. The design system gave NJPAC's content team the tools to build and manage pages independently — new seasons, special programming, fundraising campaigns, and venue rental promotions all flow through the same component library independently.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->

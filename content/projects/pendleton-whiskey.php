@@ -143,7 +143,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Every content type — products, recipes, events, brand narrative — was managed through dedicated field groups, giving the marketing team full editorial control without developer dependency.</p>
+<p class="is-style-muted">The structured field architecture kept content organized across five distinct content types — critical for a heritage brand managing both legacy narrative and active product promotion during an acquisition.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

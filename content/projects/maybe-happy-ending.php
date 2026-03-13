@@ -143,7 +143,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Every content surface was built for the marketing team to update independently — new press quotes, cast announcements, video drops, and ticket promotions could all be managed through the CMS without developer involvement.</p>
+<p class="is-style-muted">The content architecture was purpose-built for a production with momentum — the kind of show where press quotes, award nominations, and tour announcements arrive in rapid succession.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
