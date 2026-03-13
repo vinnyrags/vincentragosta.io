@@ -10,6 +10,7 @@
         '.site-main p',
         '.site-main ul', '.site-main ol', '.site-main dl',
         '.site-main .wp-block-code',
+        '.site-main .wp-block-table',
         '.site-main .wp-block-image',
         '.site-main .wp-block-button',
         '.site-main .wp-block-buttons',
