@@ -275,7 +275,7 @@ class Repository implements RepositoryInterface
         $args = $this->buildArgs($args);
         $args = $this->maybeExcludeCurrentPost($args);
 
-        $result = Timber::get_posts($args, $this->model);
+        $result = Timber::get_posts($args);
 
         // Timber 2.x returns PostQuery, convert to array
         if ($result instanceof \Timber\PostQuery) {
