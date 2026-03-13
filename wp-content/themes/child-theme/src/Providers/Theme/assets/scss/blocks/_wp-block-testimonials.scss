@@ -3,11 +3,8 @@
 
 .wp-block-parent-theme-testimonials {
     --testimonials-accent: var(--wp--preset--color--accent-1);
-    --testimonials-arrow-bg: var(--wp--preset--color--base, #f5f5f5);
-    --testimonials-arrow-color: var(--wp--preset--color--contrast, #1a1a1a);
-}
-
-.light-mode .wp-block-parent-theme-testimonials {
-    --testimonials-arrow-bg: var(--wp--preset--color--contrast, #1a1a1a);
-    --testimonials-arrow-color: var(--wp--preset--color--base, #f5f5f5);
+    --testimonials-arrow-bg: var(--color-button-bg);
+    --testimonials-arrow-color: var(--color-button-text);
+    --testimonials-arrow-hover-bg: var(--color-button-hover-bg);
+    --testimonials-arrow-hover-color: var(--color-button-hover-text);
 }

@@ -11,6 +11,8 @@
     --testimonials-arrow-size: 3.125rem;
     --testimonials-arrow-bg: currentColor;
     --testimonials-arrow-color: #fff;
+    --testimonials-arrow-hover-bg: var(--testimonials-arrow-bg);
+    --testimonials-arrow-hover-color: var(--testimonials-arrow-color);
     --testimonials-accent: currentColor;
 }
 
@@ -61,19 +63,25 @@
         background: var(--testimonials-arrow-bg);
         width: var(--testimonials-arrow-size);
         height: var(--testimonials-arrow-size);
+        border: none;
         border-radius: 50%;
         opacity: 1;
         cursor: pointer;
-        transition: opacity 0.25s ease-in-out;
+        transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
 
         svg {
             fill: var(--testimonials-arrow-color);
             width: 1rem;
             height: 1rem;
+            transition: fill 0.25s ease-in-out;
         }
 
         &:hover {
-            opacity: 0.8;
+            background: var(--testimonials-arrow-hover-bg);
+
+            svg {
+                fill: var(--testimonials-arrow-hover-color);
+            }
         }
 
         &:focus-visible {
