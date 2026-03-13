@@ -61,7 +61,7 @@ export function initShutterCards() {
     const containers = document.querySelectorAll('.shutter-cards');
 
     containers.forEach((container) => {
-        const cards = container.querySelectorAll('.wp-block-child-theme-shutter-card');
+        const cards = container.querySelectorAll('.wp-block-parent-theme-shutter-card');
 
         if (cards.length < 2) return;
 

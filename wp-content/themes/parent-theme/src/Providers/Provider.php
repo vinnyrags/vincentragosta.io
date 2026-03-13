@@ -531,4 +531,37 @@ abstract class Provider implements Registrable
         return $this->templatesPath;
     }
 
+    /**
+     * Get template directories from the full class hierarchy.
+     *
+     * Walks from the concrete class up toward Provider, collecting
+     * templates/ directories at each level. Child paths come first
+     * so Twig resolves overrides before parent defaults.
+     *
+     * @return array<string> Absolute paths to templates directories.
+     */
+    public function getTemplateSearchPaths(): array
+    {
+        $paths = [];
+        $seen = [];
+        $class = new ReflectionClass($this);
+
+        while ($class && $class->getName() !== self::class) {
+            $dir = dirname($class->getFileName());
+
+            if (!isset($seen[$dir])) {
+                $seen[$dir] = true;
+                $templatesPath = $dir . '/templates';
+
+                if (is_dir($templatesPath)) {
+                    $paths[] = $templatesPath;
+                }
+            }
+
+            $class = $class->getParentClass();
+        }
+
+        return $paths;
+    }
+
 }

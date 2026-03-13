@@ -57,7 +57,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     className="shutter-card__title"
                     value={title}
                     onChange={(newTitle) => setAttributes({ title: newTitle })}
-                    placeholder={__('Enter title here...', 'child-theme')}
+                    placeholder={__('Enter title here...', 'parent-theme')}
                     allowedFormats={['core/bold', 'core/italic']}
                 />
                 <RichText
@@ -65,7 +65,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     className="shutter-card__subtitle"
                     value={subtitle}
                     onChange={(newSubtitle) => setAttributes({ subtitle: newSubtitle })}
-                    placeholder={__('Enter subtitle here...', 'child-theme')}
+                    placeholder={__('Enter subtitle here...', 'parent-theme')}
                     allowedFormats={['core/bold', 'core/italic']}
                 />
                 <RichText
@@ -73,7 +73,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                     className="shutter-card__description"
                     value={description}
                     onChange={(newDescription) => setAttributes({ description: newDescription })}
-                    placeholder={__('Enter description here...', 'child-theme')}
+                    placeholder={__('Enter description here...', 'parent-theme')}
                     allowedFormats={['core/bold', 'core/italic', 'core/link']}
                 />
                 <button type="button" className="shutter-card__toggle" aria-label="Toggle card" tabIndex={-1}>

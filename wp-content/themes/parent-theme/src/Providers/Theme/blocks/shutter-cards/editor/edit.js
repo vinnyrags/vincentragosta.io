@@ -2,8 +2,8 @@ import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect } from 'react';
 
-const ALLOWED_BLOCKS = ['child-theme/shutter-card'];
-const TEMPLATE = [['child-theme/shutter-card']];
+const ALLOWED_BLOCKS = ['parent-theme/shutter-card'];
+const TEMPLATE = [['parent-theme/shutter-card']];
 const MAX_CARDS = 5;
 
 export default function Edit({ clientId }) {

@@ -1,7 +1,7 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
-  "name": "child-theme/shutter-cards",
+  "name": "parent-theme/shutter-cards",
   "title": "Shutter Cards",
   "category": "design",
   "icon": "slides",
@@ -15,7 +15,6 @@
       "margin": true
     }
   },
-  "textdomain": "child-theme",
-  "viewScript": "file:../../../../../dist/js/shutter-cards-view.js",
+  "textdomain": "parent-theme",
   "render": "file:./render.php"
 }

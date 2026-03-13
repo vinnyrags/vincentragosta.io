@@ -60,6 +60,8 @@ class ThemeProvider extends Provider
      */
     protected array $blocks = [
         'testimonials',
+        'shutter-cards',
+        'shutter-card',
     ];
 
     /**
@@ -188,6 +190,8 @@ class ThemeProvider extends Provider
     {
         $this->enqueueManifestScript($this->handlePrefix . '-blocks-js', 'blocks/index.js');
         $this->enqueueParentEditorScript('parent-theme-testimonials-block-editor', 'js/testimonials.js');
+        $this->enqueueParentEditorScript('parent-theme-shutter-cards-block-editor', 'js/shutter-cards.js');
+        $this->enqueueParentEditorScript('parent-theme-shutter-card-block-editor', 'js/shutter-card.js');
     }
 
     /**
@@ -197,8 +201,16 @@ class ThemeProvider extends Provider
     {
         $this->enqueueDistStyle($this->handlePrefix . '-blocks-style', 'blocks/style-index.css');
 
-        // Testimonials block CSS lives in parent theme dist/
+        // Block CSS lives in parent theme dist/
         $this->enqueueParentDistStyle('parent-theme-testimonials-block', 'css/testimonials.css');
+        $this->enqueueParentDistStyle('parent-theme-shutter-cards-block', 'css/shutter-cards.css');
+        $this->enqueueParentDistStyle('parent-theme-shutter-card-block', 'css/shutter-card.css');
+
+        // Shutter cards frontend view script (enqueued here instead of block.json
+        // viewScript so it resolves from parent dist/ when child theme is active)
+        if (!is_admin()) {
+            $this->enqueueParentDistScript('parent-theme-shutter-cards-view', 'js/shutter-cards-view.js');
+        }
 
         if (is_admin()) {
             $this->enqueueDistStyle(
@@ -208,6 +220,7 @@ class ThemeProvider extends Provider
             );
 
             $this->enqueueParentDistStyle('parent-theme-testimonials-block-editor', 'css/testimonials-editor.css');
+            $this->enqueueParentDistStyle('parent-theme-shutter-cards-block-editor', 'css/shutter-cards-editor.css');
 
             // Load parent compiled CSS in the editor so shared styles (form
             // resets, layout, etc.) apply. Uses get_template_directory()
@@ -255,6 +268,24 @@ class ThemeProvider extends Provider
                 get_template_directory_uri() . '/dist/' . $path,
                 $deps,
                 filemtime($fullPath)
+            );
+        }
+    }
+
+    /**
+     * Enqueue a frontend script from the parent theme's dist/ directory.
+     */
+    protected function enqueueParentDistScript(string $handle, string $path, array $deps = []): void
+    {
+        $fullPath = get_template_directory() . '/dist/' . $path;
+
+        if (file_exists($fullPath)) {
+            wp_enqueue_script(
+                $handle,
+                get_template_directory_uri() . '/dist/' . $path,
+                $deps,
+                filemtime($fullPath),
+                true
             );
         }
     }

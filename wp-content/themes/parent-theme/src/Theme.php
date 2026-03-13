@@ -152,12 +152,13 @@ class Theme extends Site
             $provider = $this->container->get($class);
             $provider->register();
 
-            $path = $provider->getTemplatePath();
-            if ($path !== null) {
+            foreach ($provider->getTemplateSearchPaths() as $path) {
                 $relative = str_starts_with($path, $childRoot)
                     ? str_replace($childRoot, '', $path)
                     : str_replace($parentRoot, '', $path);
-                $templatePaths[] = $relative;
+                if (!in_array($relative, $templatePaths, true)) {
+                    $templatePaths[] = $relative;
+                }
             }
         }
 

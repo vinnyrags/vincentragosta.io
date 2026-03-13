@@ -39,119 +39,41 @@
 }
 
 // ==========================================================================
-// Component
+// Theming — layered on top of parent's structural styles
 // ==========================================================================
-
-// The WordPress wrapper is the grid item
-.wp-block-child-theme-shutter-card {
-  display: flex;
-
-}
 
 .shutter-card {
   --toggle-size: var(--wp--custom--icon-size--md);
 
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--wp--preset--spacing--40);
-  flex: 1;
   background-color: var(--shutter-card-bg);
   border: 1px solid var(--shutter-card-border);
   color: var(--shutter-card-text);
-  padding: var(--wp--preset--spacing--50);
-  overflow: hidden;
-  transition: background-color 0.4s ease, color 0.4s ease;
 
-  // Inactive visual state - applies on all screen sizes
   &[aria-expanded="false"] {
-    cursor: pointer;
     background-color: var(--shutter-card-inactive-bg);
     color: var(--shutter-card-inactive-text);
   }
 
   &__id {
-    font-size: var(--wp--preset--font-size--20);
-    font-weight: 400;
     color: var(--shutter-card-id);
   }
 
   &__title {
     font-size: var(--wp--preset--font-size--60);
     font-family: var(--wp--preset--font-family--reckless-neue);
-    font-weight: 400;
-    line-height: 1.2;
-    margin: 0;
     margin-block-start: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40));
   }
 
-  // Descendant selector (0,2,0) ensures color inheritance beats the
-  // light-mode heading override at (0,1,0) regardless of load order.
-  .shutter-card__title {
-    color: inherit;
-  }
-
-  &__subtitle {
-    font-size: var(--wp--preset--font-size--10);
-    font-weight: 700;
-    text-transform: uppercase;
-    margin: 0;
-    transition: opacity 0.3s ease, visibility 0s 0.3s, max-height 0.3s ease;
-  }
-
-  &__description {
-    font-size: var(--wp--preset--font-size--20);
-    line-height: 1.5rem;
-    margin: 0;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease 0.2s, visibility 0s, max-height 0.4s ease;
-  }
-
-  // Toggle button
   &__toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
     width: var(--toggle-size);
     height: var(--toggle-size);
-    margin-block-start: auto;
-    padding: 0;
-    border-radius: 50%;
-    border: 2px solid var(--shutter-card-toggle-border);
+    border-color: var(--shutter-card-toggle-border);
     color: var(--shutter-card-toggle-icon);
     background-color: var(--shutter-card-toggle-bg);
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
 
     &:focus-visible {
-      outline: 2px solid var(--wp--preset--color--accent-1);
-      outline-offset: 2px;
+      outline-color: var(--wp--preset--color--accent-1);
     }
-
-    .icon {
-      width: var(--wp--custom--icon-size--sm);
-      height: var(--wp--custom--icon-size--sm);
-      fill: currentColor;
-    }
-  }
-}
-
-// Mobile: collapse content for accordion
-.shutter-card[aria-expanded="false"] :is(.shutter-card__subtitle, .shutter-card__description) {
-  opacity: 0;
-  visibility: hidden;
-  max-height: 0;
-  overflow: hidden;
-  transition: opacity 0.3s ease, visibility 0s 0.3s, max-height 0.4s ease;
-}
-
-// Desktop: just fade, preserve space
-@include container(shutter-cards, lg) {
-  .shutter-card[aria-expanded="false"] :is(.shutter-card__subtitle, .shutter-card__description) {
-    max-height: none;
-    overflow: visible;
   }
 }
 
@@ -159,26 +81,11 @@
   color: var(--shutter-card-toggle-inactive-icon);
   border-color: var(--shutter-card-toggle-inactive-border);
   background-color: transparent;
-  transform: rotate(45deg);
 }
 
-.wp-block-child-theme-shutter-card:hover .shutter-card[aria-expanded="false"] .shutter-card__toggle,
+.wp-block-parent-theme-shutter-card:hover .shutter-card[aria-expanded="false"] .shutter-card__toggle,
 .shutter-card[aria-expanded="false"] .shutter-card__toggle:focus-visible {
   color: var(--shutter-card-toggle-hover-icon);
   background-color: var(--shutter-card-toggle-hover-bg);
   border-color: var(--shutter-card-toggle-hover-border);
-}
-
-// ==========================================================================
-// Reduced Motion
-// ==========================================================================
-
-@include reduced-motion {
-  .wp-block-child-theme-shutter-card,
-  .shutter-card,
-  .shutter-card__subtitle,
-  .shutter-card__description,
-  .shutter-card__toggle {
-    transition: none;
-  }
 }

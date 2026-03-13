@@ -20,8 +20,8 @@ use ParentTheme\Services\IconServiceFactory;
  * Handles core theme setup and configuration.
  *
  * Extends the parent theme's Theme Provider to add site-specific functionality.
- * Includes shutter-cards blocks for interactive card components and
- * site-specific block styles.
+ * Inherits shutter-cards and testimonials blocks from parent. Child's block
+ * directories override parent versions via getBlockSearchPaths().
  */
 class ThemeProvider extends BaseThemeProvider
 {
@@ -48,16 +48,6 @@ class ThemeProvider extends BaseThemeProvider
         CoverBlockStyles::class,
         TextBlockStyles::class,
         SocialIconChoices::class,
-    ];
-
-    /**
-     * Blocks to register.
-     *
-     * Inherits parent blocks (testimonials) automatically via collectBlocks().
-     */
-    protected array $blocks = [
-        'shutter-cards',
-        'shutter-card',
     ];
 
     /**
@@ -198,29 +188,5 @@ class ThemeProvider extends BaseThemeProvider
         return $context;
     }
 
-    /**
-     * Enqueue block assets for frontend and editor.
-     */
-    public function enqueueBlockAssets(): void
-    {
-        parent::enqueueBlockAssets();
-
-        $this->enqueueStyle('child-theme-shutter-cards-block', 'shutter-cards.css');
-        $this->enqueueStyle('child-theme-shutter-card-block', 'shutter-card.css');
-
-        // Editor-only styles (enqueued here for iframe compatibility)
-        if (is_admin()) {
-            $this->enqueueStyle('child-theme-shutter-cards-block-editor', 'shutter-cards-editor.css');
-        }
-    }
-
-    /**
-     * Enqueue block editor assets.
-     */
-    public function enqueueBlockEditorAssets(): void
-    {
-        $this->enqueueEditorScript('child-theme-shutter-cards-block-editor', 'shutter-cards.js');
-        $this->enqueueEditorScript('child-theme-shutter-card-block-editor', 'shutter-card.js');
-    }
 
 }

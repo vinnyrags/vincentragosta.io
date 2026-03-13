@@ -189,25 +189,25 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that shutter-cards block directory exists in child theme.
+     * Test that shutter-cards block directory exists in parent theme.
      */
-    public function testShutterCardsBlockDirectoryExists(): void
+    public function testShutterCardsBlockDirectoryExistsInParent(): void
     {
-        $childBlocksPath = dirname(__DIR__, 3) . '/src/Providers/Theme/blocks';
+        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../parent-theme') . '/src/Providers/Theme/blocks';
 
-        $this->assertDirectoryExists($childBlocksPath . '/shutter-cards');
-        $this->assertFileExists($childBlocksPath . '/shutter-cards/block.json');
+        $this->assertDirectoryExists($parentBlocksPath . '/shutter-cards');
+        $this->assertFileExists($parentBlocksPath . '/shutter-cards/block.json');
     }
 
     /**
-     * Test that shutter-card block directory exists in child theme.
+     * Test that shutter-card block directory exists in parent theme.
      */
-    public function testShutterCardBlockDirectoryExists(): void
+    public function testShutterCardBlockDirectoryExistsInParent(): void
     {
-        $childBlocksPath = dirname(__DIR__, 3) . '/src/Providers/Theme/blocks';
+        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../parent-theme') . '/src/Providers/Theme/blocks';
 
-        $this->assertDirectoryExists($childBlocksPath . '/shutter-card');
-        $this->assertFileExists($childBlocksPath . '/shutter-card/block.json');
+        $this->assertDirectoryExists($parentBlocksPath . '/shutter-card');
+        $this->assertFileExists($parentBlocksPath . '/shutter-card/block.json');
     }
 
     /**
