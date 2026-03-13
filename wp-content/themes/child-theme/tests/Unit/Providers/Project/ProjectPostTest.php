@@ -3,11 +3,11 @@
 namespace ChildTheme\Tests\Unit\Providers\Project;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ParentTheme\Models\Post;
+use ParentTheme\Providers\Project\ProjectPost as BaseProjectPost;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests for the ProjectPost model.
+ * Unit tests for the child ProjectPost model.
  */
 class ProjectPostTest extends TestCase
 {
@@ -20,60 +20,20 @@ class ProjectPostTest extends TestCase
     }
 
     /**
-     * Test that ProjectPost extends the base Post model.
+     * Test that ProjectPost extends the parent ProjectPost.
      */
-    public function testExtendsPost(): void
+    public function testExtendsParentProjectPost(): void
     {
-        $this->assertTrue(is_subclass_of(ProjectPost::class, Post::class));
+        $this->assertTrue(is_subclass_of(ProjectPost::class, BaseProjectPost::class));
     }
 
     /**
-     * Test that categories method is defined.
+     * Test that sortYear method exists and has correct signature.
      */
-    public function testCategoriesMethodReturnsArray(): void
+    public function testSortYearMethodSignature(): void
     {
         $reflection = new \ReflectionClass(ProjectPost::class);
-        $method = $reflection->getMethod('categories');
-
-        $this->assertTrue($method->isPublic());
-        $this->assertEquals('array', (string) $method->getReturnType());
-    }
-
-    /**
-     * Test that categoryName method has correct return type.
-     */
-    public function testCategoryNameMethodReturnsNullableString(): void
-    {
-        $reflection = new \ReflectionClass(ProjectPost::class);
-        $method = $reflection->getMethod('categoryName');
-
-        $this->assertTrue($method->isPublic());
-        $returnType = $method->getReturnType();
-        $this->assertEquals('string', $returnType->getName());
-        $this->assertTrue($returnType->allowsNull());
-    }
-
-    /**
-     * Test that categorySlug method has correct return type.
-     */
-    public function testCategorySlugMethodReturnsNullableString(): void
-    {
-        $reflection = new \ReflectionClass(ProjectPost::class);
-        $method = $reflection->getMethod('categorySlug');
-
-        $this->assertTrue($method->isPublic());
-        $returnType = $method->getReturnType();
-        $this->assertEquals('string', $returnType->getName());
-        $this->assertTrue($returnType->allowsNull());
-    }
-
-    /**
-     * Test that categorySlugs method has correct return type.
-     */
-    public function testCategorySlugsMethodReturnsString(): void
-    {
-        $reflection = new \ReflectionClass(ProjectPost::class);
-        $method = $reflection->getMethod('categorySlugs');
+        $method = $reflection->getMethod('sortYear');
 
         $this->assertTrue($method->isPublic());
         $this->assertEquals('string', (string) $method->getReturnType());

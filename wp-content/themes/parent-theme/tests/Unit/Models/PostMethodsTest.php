@@ -247,6 +247,110 @@ class PostMethodsTest extends TestCase
     }
 
     // ===================
+    // categories() tests
+    // ===================
+
+    /**
+     * Test categories() returns category terms.
+     */
+    public function testCategoriesReturnsTerms(): void
+    {
+        $term1 = (object) ['name' => 'Design', 'slug' => 'design'];
+        $term2 = (object) ['name' => 'Development', 'slug' => 'development'];
+
+        $post = MockPost::create();
+        $post->setMockTerms('category', [$term1, $term2]);
+
+        $categories = $post->categories();
+
+        $this->assertCount(2, $categories);
+        $this->assertEquals('Design', $categories[0]->name);
+        $this->assertEquals('development', $categories[1]->slug);
+    }
+
+    /**
+     * Test categories() returns empty array when no categories.
+     */
+    public function testCategoriesReturnsEmptyArray(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertEquals([], $post->categories());
+    }
+
+    /**
+     * Test categoryName() returns first category name.
+     */
+    public function testCategoryNameReturnsFirstName(): void
+    {
+        $term1 = (object) ['name' => 'Design', 'slug' => 'design'];
+        $term2 = (object) ['name' => 'Development', 'slug' => 'development'];
+
+        $post = MockPost::create();
+        $post->setMockTerms('category', [$term1, $term2]);
+
+        $this->assertEquals('Design', $post->categoryName());
+    }
+
+    /**
+     * Test categoryName() returns null when no categories.
+     */
+    public function testCategoryNameReturnsNullWhenEmpty(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertNull($post->categoryName());
+    }
+
+    /**
+     * Test categorySlug() returns first category slug.
+     */
+    public function testCategorySlugReturnsFirstSlug(): void
+    {
+        $term = (object) ['name' => 'Design', 'slug' => 'design'];
+
+        $post = MockPost::create();
+        $post->setMockTerms('category', [$term]);
+
+        $this->assertEquals('design', $post->categorySlug());
+    }
+
+    /**
+     * Test categorySlug() returns null when no categories.
+     */
+    public function testCategorySlugReturnsNullWhenEmpty(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertNull($post->categorySlug());
+    }
+
+    /**
+     * Test categorySlugs() returns space-separated slugs.
+     */
+    public function testCategorySlugsReturnsSpaceSeparatedString(): void
+    {
+        $term1 = (object) ['name' => 'Design', 'slug' => 'design'];
+        $term2 = (object) ['name' => 'Development', 'slug' => 'development'];
+        $term3 = (object) ['name' => 'Branding', 'slug' => 'branding'];
+
+        $post = MockPost::create();
+        $post->setMockTerms('category', [$term1, $term2, $term3]);
+
+        $this->assertEquals('design development branding', $post->categorySlugs());
+    }
+
+    /**
+     * Test categorySlugs() returns empty string when no categories.
+     */
+    public function testCategorySlugsReturnsEmptyStringWhenEmpty(): void
+    {
+        $post = MockPost::create();
+
+        $this->assertEquals('', $post->categorySlugs());
+    }
+
+    // ===================
     // getField() tests
     // ===================
 

@@ -6,23 +6,16 @@ namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\CategoryTermLinkRewrite;
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
-use ParentTheme\Providers\Provider;
+use ParentTheme\Providers\Project\ProjectProvider as BaseProjectProvider;
 
 /**
  * Project Provider.
  *
- * Self-contained provider for all project-related functionality.
- * Includes the projects block, post type, and configuration.
+ * Extends the parent ProjectProvider with site-specific functionality:
+ * hooks, default content, and child-themed block/single assets.
  */
-class ProjectProvider extends Provider
+class ProjectProvider extends BaseProjectProvider
 {
-    /**
-     * Blocks to register.
-     */
-    protected array $blocks = [
-        'projects',
-    ];
-
     /**
      * Always-active hooks.
      */
@@ -32,12 +25,10 @@ class ProjectProvider extends Provider
     ];
 
     /**
-     * Register the project post type and delegate to the parent for blocks and features.
+     * Register the project provider with site-specific additions.
      */
     public function register(): void
     {
-        add_action('init', [$this, 'registerPostType']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
         add_filter('default_content', [$this, 'setDefaultContent'], 10, 2);
 
         parent::register();
@@ -63,14 +54,6 @@ class ProjectProvider extends Provider
     public function enqueueBlockAssets(): void
     {
         $this->enqueueStyle('child-theme-projects-block', 'projects.css');
-    }
-
-    /**
-     * Register the project post type.
-     */
-    public function registerPostType(): void
-    {
-        $this->registerPostTypeFromConfig('post-type.json');
     }
 
     /**

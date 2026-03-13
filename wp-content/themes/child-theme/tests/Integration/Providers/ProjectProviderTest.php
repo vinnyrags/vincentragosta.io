@@ -4,6 +4,7 @@ namespace ChildTheme\Tests\Integration\Providers;
 
 use DI\Container;
 use ChildTheme\Providers\Project\ProjectProvider;
+use ParentTheme\Providers\Project\ProjectProvider as BaseProjectProvider;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
@@ -31,6 +32,14 @@ class ProjectProviderTest extends BaseTestCase
     public function testProviderCanBeInstantiated(): void
     {
         $this->assertInstanceOf(ProjectProvider::class, $this->provider);
+    }
+
+    /**
+     * Test that provider extends parent theme's ProjectProvider.
+     */
+    public function testProviderExtendsBaseProjectProvider(): void
+    {
+        $this->assertInstanceOf(BaseProjectProvider::class, $this->provider);
     }
 
     /**

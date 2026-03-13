@@ -4,12 +4,12 @@ namespace ChildTheme\Tests\Unit\Providers\Project;
 
 use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Project\ProjectRepository;
-use ParentTheme\Repositories\Repository;
+use ParentTheme\Providers\Project\ProjectRepository as BaseProjectRepository;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 
 /**
- * Unit tests for the ProjectRepository.
+ * Unit tests for the child ProjectRepository.
  */
 class ProjectRepositoryTest extends TestCase
 {
@@ -22,60 +22,23 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /**
-     * Test that ProjectRepository extends the base Repository.
+     * Test that ProjectRepository extends the parent ProjectRepository.
      */
-    public function testExtendsRepository(): void
+    public function testExtendsParentProjectRepository(): void
     {
-        $this->assertInstanceOf(Repository::class, $this->repository);
+        $this->assertInstanceOf(BaseProjectRepository::class, $this->repository);
     }
 
     /**
-     * Test that model is set to ProjectPost.
+     * Test that model is set to child ProjectPost.
      */
-    public function testModelIsProjectPost(): void
+    public function testModelIsChildProjectPost(): void
     {
         $reflection = new ReflectionClass($this->repository);
         $property = $reflection->getProperty('model');
         $property->setAccessible(true);
 
         $this->assertEquals(ProjectPost::class, $property->getValue($this->repository));
-    }
-
-    /**
-     * Test that featured method exists and has correct signature.
-     */
-    public function testFeaturedMethodSignature(): void
-    {
-        $reflection = new ReflectionClass($this->repository);
-        $method = $reflection->getMethod('featured');
-
-        $this->assertTrue($method->isPublic());
-        $this->assertEquals('array', (string) $method->getReturnType());
-
-        $params = $method->getParameters();
-        $this->assertCount(1, $params);
-        $this->assertEquals('limit', $params[0]->getName());
-        $this->assertTrue($params[0]->isOptional());
-        $this->assertEquals(5, $params[0]->getDefaultValue());
-    }
-
-    /**
-     * Test that inCategory method exists and has correct signature.
-     */
-    public function testInCategoryMethodSignature(): void
-    {
-        $reflection = new ReflectionClass($this->repository);
-        $method = $reflection->getMethod('inCategory');
-
-        $this->assertTrue($method->isPublic());
-        $this->assertEquals('array', (string) $method->getReturnType());
-
-        $params = $method->getParameters();
-        $this->assertCount(2, $params);
-        $this->assertEquals('category', $params[0]->getName());
-        $this->assertEquals('limit', $params[1]->getName());
-        $this->assertTrue($params[1]->isOptional());
-        $this->assertEquals(-1, $params[1]->getDefaultValue());
     }
 
     /**
@@ -110,21 +73,32 @@ class ProjectRepositoryTest extends TestCase
     }
 
     /**
-     * Test that relatedRandom method exists and has correct signature.
+     * Test that inherited featured method is accessible.
      */
-    public function testRelatedRandomMethodSignature(): void
+    public function testInheritedFeaturedMethodAccessible(): void
     {
         $reflection = new ReflectionClass($this->repository);
-        $method = $reflection->getMethod('relatedRandom');
+        $this->assertTrue($reflection->hasMethod('featured'));
+        $this->assertTrue($reflection->getMethod('featured')->isPublic());
+    }
 
-        $this->assertTrue($method->isPublic());
-        $this->assertEquals('array', (string) $method->getReturnType());
+    /**
+     * Test that inherited inCategory method is accessible.
+     */
+    public function testInheritedInCategoryMethodAccessible(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+        $this->assertTrue($reflection->hasMethod('inCategory'));
+        $this->assertTrue($reflection->getMethod('inCategory')->isPublic());
+    }
 
-        $params = $method->getParameters();
-        $this->assertCount(2, $params);
-        $this->assertEquals('categorySlug', $params[0]->getName());
-        $this->assertEquals('limit', $params[1]->getName());
-        $this->assertTrue($params[1]->isOptional());
-        $this->assertEquals(3, $params[1]->getDefaultValue());
+    /**
+     * Test that inherited relatedRandom method is accessible.
+     */
+    public function testInheritedRelatedRandomMethodAccessible(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+        $this->assertTrue($reflection->hasMethod('relatedRandom'));
+        $this->assertTrue($reflection->getMethod('relatedRandom')->isPublic());
     }
 }

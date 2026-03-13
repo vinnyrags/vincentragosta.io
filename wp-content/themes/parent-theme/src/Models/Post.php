@@ -114,6 +114,45 @@ class Post extends TimberPost
     }
 
     /**
+     * Get the post's categories.
+     *
+     * @return \Timber\Term[]
+     */
+    public function categories(): array
+    {
+        return $this->terms(['taxonomy' => 'category']);
+    }
+
+    /**
+     * Get the first category name.
+     */
+    public function categoryName(): ?string
+    {
+        $categories = $this->categories();
+        return $categories[0]->name ?? null;
+    }
+
+    /**
+     * Get the first category slug.
+     */
+    public function categorySlug(): ?string
+    {
+        $categories = $this->categories();
+        return $categories[0]->slug ?? null;
+    }
+
+    /**
+     * Get all category slugs as a space-separated string.
+     */
+    public function categorySlugs(): string
+    {
+        return implode(' ', array_map(
+            fn ($term) => $term->slug,
+            $this->categories(),
+        ));
+    }
+
+    /**
      * Check if post has a specific term.
      */
     public function hasTerm(string|int $term, string $taxonomy): bool
