@@ -6,6 +6,7 @@ namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
 use ParentTheme\Providers\Blog\BlogPost;
+use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
@@ -45,6 +46,7 @@ class ThemeProvider extends BaseThemeProvider
      * No opt-out syntax. For toggleable capabilities, use $features instead.
      */
     protected array $hooks = [
+        AccentHighlight::class,
         ContainerBlockStyles::class,
         CoverBlockStyles::class,
         TextBlockStyles::class,

@@ -5,6 +5,7 @@ namespace ChildTheme\Tests\Integration\Providers;
 use ChildTheme\Providers\Project\ProjectPost;
 use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
+use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
@@ -115,7 +116,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(CoverBlockStyles::class, $hooks);
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
-        $this->assertCount(8, $hooks);
+        $this->assertContains(AccentHighlight::class, $hooks);
+        $this->assertCount(9, $hooks);
     }
 
     /**
