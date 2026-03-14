@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block main %}
+    <article class="site-content blog-post">
+        {{ post.content | raw }}
+
+        {# Related posts #}
+        {% if related is defined and related is not empty %}
+            <section class="blog-post__related alignfull">
+                <div class="blog-post__related-inner">
+                    <h2 class="blog-post__related-heading has-50-font-size"><u>Related Posts</u></h2>
+                    {% include 'blog-grid.twig' with { posts: related } only %}
+                </div>
+            </section>
+        {% endif %}
+    </article>
+{% endblock %}

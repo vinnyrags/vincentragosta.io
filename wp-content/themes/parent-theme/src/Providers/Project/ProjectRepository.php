@@ -38,19 +38,4 @@ class ProjectRepository extends Repository
     {
         return $this->whereTerm('category', $category, $limit);
     }
-
-    /**
-     * Get random related projects from the same category.
-     *
-     * @param string $categorySlug Category to match.
-     * @param int $limit Maximum number of results.
-     * @return ProjectPost[]
-     */
-    public function relatedRandom(string $categorySlug, int $limit = 3): array
-    {
-        $projects = $this->inCategory($categorySlug);
-        shuffle($projects);
-
-        return array_slice($projects, 0, $limit);
-    }
 }

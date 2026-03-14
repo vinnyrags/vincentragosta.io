@@ -1,0 +1,79 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ParentTheme\Providers\Blog;
+
+use ParentTheme\Providers\Blog\Hooks\EnablePosts;
+use ParentTheme\Providers\Provider;
+
+/**
+ * Blog Provider.
+ *
+ * Opt-in provider for blog functionality using the built-in post type.
+ * Re-enables posts (counteracts DisablePosts from ThemeProvider) and
+ * registers the blog block for displaying post grids.
+ */
+class BlogProvider extends Provider
+{
+    /**
+     * Always-active hooks.
+     */
+    protected array $hooks = [
+        EnablePosts::class,
+    ];
+
+    /**
+     * Blocks to register.
+     */
+    protected array $blocks = [
+        'blog',
+    ];
+
+    /**
+     * Register the blog provider.
+     */
+    public function register(): void
+    {
+        add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
+
+        parent::register();
+    }
+
+    /**
+     * Enqueue styles on single post pages.
+     */
+    public function enqueueSingleAssets(): void
+    {
+        if (!is_singular(BlogPost::POST_TYPE)) {
+            return;
+        }
+
+        $this->enqueueParentDistStyle('parent-theme-blog-single', 'css/blog.css');
+    }
+
+    /**
+     * Enqueue block assets for frontend and editor.
+     */
+    public function enqueueBlockAssets(): void
+    {
+        $this->enqueueParentDistStyle('parent-theme-blog-block', 'css/blog.css');
+    }
+
+    /**
+     * Enqueue a stylesheet from the parent theme's dist/ directory.
+     */
+    protected function enqueueParentDistStyle(string $handle, string $path, array $deps = []): void
+    {
+        $fullPath = get_template_directory() . '/dist/' . $path;
+
+        if (file_exists($fullPath)) {
+            wp_enqueue_style(
+                $handle,
+                get_template_directory_uri() . '/dist/' . $path,
+                $deps,
+                filemtime($fullPath)
+            );
+        }
+    }
+}

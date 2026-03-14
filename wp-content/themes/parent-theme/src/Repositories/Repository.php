@@ -215,6 +215,19 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get random related posts from the same category.
+     *
+     * @return Post[]
+     */
+    public function relatedRandom(string $categorySlug, int $limit = 3): array
+    {
+        $posts = $this->whereTerm('category', $categorySlug);
+        shuffle($posts);
+
+        return array_slice($posts, 0, $limit);
+    }
+
+    /**
      * Count posts matching criteria.
      */
     public function count(array $args = []): int

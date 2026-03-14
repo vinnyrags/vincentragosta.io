@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
+use ParentTheme\Providers\Blog\BlogPost;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
@@ -88,6 +89,7 @@ class ThemeProvider extends BaseThemeProvider
     {
         $classMap = parent::registerClassMap($classMap);
         $classMap[ProjectPost::POST_TYPE] = ProjectPost::class;
+        $classMap[BlogPost::POST_TYPE] = BlogPost::class;
 
         return $classMap;
     }

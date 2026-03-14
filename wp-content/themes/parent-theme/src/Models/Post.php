@@ -160,6 +160,7 @@ class Post extends TimberPost
         return has_term($term, $taxonomy, $this->ID);
     }
 
+
     /**
      * Refresh the post data from the database.
      */

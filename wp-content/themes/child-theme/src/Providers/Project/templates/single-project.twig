@@ -5,8 +5,7 @@
         {{ post.content | raw }}
 
         {# Related projects #}
-        {% set related = post.relatedProjects(3) %}
-        {% if related is not empty %}
+        {% if related is defined and related is not empty %}
             <section class="project-detail__related alignfull">
                 <div class="project-detail__related-inner">
                     <h2 class="project-detail__related-heading has-50-font-size"><u>Related Projects</u></h2>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme;
 
+use ChildTheme\Providers\Blog\BlogProvider;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use ParentTheme\Theme as BaseTheme;
@@ -24,5 +25,6 @@ class Theme extends BaseTheme
     protected array $providers = [
         ThemeProvider::class,
         ProjectProvider::class,
+        BlogProvider::class,
     ];
 }

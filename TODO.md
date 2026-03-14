@@ -2,6 +2,7 @@
 - split repos, configure satis on production server, packages.vincentragosta.io
 - consider creating a blog that ai can automate/schedule posts for-- where we are upfront about the ai generated news, and how it will publish ai related/comsci related news daily)
 - configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
+- consider backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
 
 ## MEDIUM PRIORITY
 

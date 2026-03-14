@@ -39,15 +39,4 @@ class ProjectPostTest extends TestCase
         $this->assertEquals('string', (string) $method->getReturnType());
     }
 
-    /**
-     * Test that relatedProjects method has correct return type.
-     */
-    public function testRelatedProjectsMethodReturnsArray(): void
-    {
-        $reflection = new \ReflectionClass(ProjectPost::class);
-        $method = $reflection->getMethod('relatedProjects');
-
-        $this->assertTrue($method->isPublic());
-        $this->assertEquals('array', (string) $method->getReturnType());
-    }
 }

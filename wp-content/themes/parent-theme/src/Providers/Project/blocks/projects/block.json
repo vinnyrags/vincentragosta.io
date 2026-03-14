@@ -5,7 +5,7 @@
   "title": "Projects",
   "category": "design",
   "icon": "portfolio",
-  "description": "Displays a grid of projects.",
+  "description": "Displays a list of recent or curated projects.",
   "keywords": ["projects", "portfolio", "grid"],
   "supports": {
     "html": false,

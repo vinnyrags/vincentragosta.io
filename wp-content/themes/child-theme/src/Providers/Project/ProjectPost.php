@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
-use ChildTheme\Theme;
 use ParentTheme\Providers\Project\ProjectPost as BaseProjectPost;
 
 /**
@@ -25,26 +24,5 @@ class ProjectPost extends BaseProjectPost
         $meta = $this->getMeta(ProjectYearExtractor::META_KEY);
 
         return !empty($meta) ? (string) $meta : $this->date('Y');
-    }
-
-    /**
-     * Get related projects weighted by year proximity.
-     *
-     * @return ProjectPost[]
-     */
-    public function relatedProjects(int $limit = 3): array
-    {
-        $categories = $this->categories();
-
-        if (empty($categories)) {
-            return [];
-        }
-
-        $repository = Theme::container()->get(ProjectRepository::class);
-
-        return $repository->relatedRandom(
-            $categories[0]->slug,
-            $limit,
-        );
     }
 }

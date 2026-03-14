@@ -1,24 +1,3 @@
 {
-  "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 3,
-  "name": "child-theme/projects",
-  "title": "Projects",
-  "category": "design",
-  "icon": "portfolio",
-  "description": "Displays a list of recent or curated projects.",
-  "keywords": ["projects", "portfolio", "grid"],
-  "supports": {
-    "html": false,
-    "align": true,
-    "spacing": {
-      "margin": true,
-      "padding": true
-    }
-  },
-  "textdomain": "child-theme",
-  "viewScript": "file:../../../../../dist/js/projects-view.js",
-  "acf": {
-    "mode": "preview",
-    "renderTemplate": "render.php"
-  }
+  "viewScript": "file:../../../../../dist/js/projects-view.js"
 }
