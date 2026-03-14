@@ -1,4 +1,6 @@
 ## HIGH PRIORITY
+- when writing nous should have knowledge of all posts already in its network, and will sometimes reference its POV from that post (and link the post when it does this)
+- I want to add an "Interested in Nous?" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
 - need vertical scroll in header if height is not tall enough, right now it clips, the ability to scroll on the header should feel natural, that said we should reduce the gap spacing by half, that should get us out of the woods but the system should fail gracefully which in this case would be the vertical scroll
 - VR favicon in our accent green please, same font as current logo in header
 - teaser section on homepage for nous signal, should flicker when coming into view (pulse red), and have the red highlight text for underline etc. probably need a class to slap on the core/group block that will change accent color.
@@ -10,7 +12,6 @@
 - configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
 - remove content directory on server after git push, should exist in git but not on servers (both develop and main)
 
-
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY
@@ -20,3 +21,4 @@
 - re-evaluate the current build process, ensure we are being as optimal as we can be
 - update CMS to use patterns and not one-offs (rename to pattern names, offenders are the pages)
 - clean offending project images, only a handful, probably need custom work, similar to what we did for absupplies logo
+- can we do something cool where on page load it looks like each character on the page is being decoded before appearing, this may be something outlandish but I am curious what the lift for this would be?
