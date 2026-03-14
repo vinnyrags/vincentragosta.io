@@ -29,7 +29,6 @@
       "padding": true
     }
   },
-  "editorScript": "file:../../../../dist/js/blog.js",
   "textdomain": "parent-theme",
   "render": "file:./render.php"
 }

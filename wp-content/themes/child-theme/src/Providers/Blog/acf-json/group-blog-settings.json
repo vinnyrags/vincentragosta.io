@@ -1,0 +1,35 @@
+{
+    "key": "group_blog_settings",
+    "title": "Blog Settings",
+    "fields": [
+        {
+            "key": "field_blog_page",
+            "label": "Blog Page",
+            "name": "blog_page",
+            "type": "post_object",
+            "instructions": "Select the page used as the blog landing page. This determines where the Nous Signal accent color is applied.",
+            "required": 0,
+            "post_type": ["page"],
+            "post_status": ["publish"],
+            "return_format": "id",
+            "allow_null": 1,
+            "ui": 1,
+            "multiple": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "blog-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}

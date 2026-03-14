@@ -51,7 +51,7 @@ html {
         gap: var(--wp--preset--spacing--20);
         padding: var(--wp--preset--spacing--20);
         background: var(--color-surface);
-        border: 1px solid var(--color-border);
+        border: 2px solid var(--color-border);
         border-radius: 9999px;
         transition: background-color 0.3s ease;
     }
@@ -61,6 +61,7 @@ html {
         padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
         border-radius: 9999px;
         font-size: var(--wp--preset--font-size--10);
+        font-weight: 700;
         line-height: 1.4;
         text-decoration: none;
         text-transform: uppercase;

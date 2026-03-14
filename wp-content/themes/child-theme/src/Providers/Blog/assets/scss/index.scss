@@ -1,7 +1,7 @@
-// Blog provider styles
-// Extend and customize parent blog styles here once design is finalized.
-
-.post-card {
-  background-color: var(--wp--preset--color--base, #fff);
-  border: 1px solid var(--wp--preset--color--contrast, rgba(0, 0, 0, 0.1));
-}
+// Nous Signal — Blog provider styles
+@use 'accent';
+@use 'signal';
+@use 'grid';
+@use 'cards';
+@use 'effects';
+@use 'light-mode';

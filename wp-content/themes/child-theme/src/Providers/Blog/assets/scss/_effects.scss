@@ -1,0 +1,134 @@
+// Nous Signal — visual atmosphere effects
+
+// Glitch effect — apply via .nous-glitch class in CMS
+.nous-glitch {
+  position: relative;
+  display: inline-block;
+  animation: nous-glitch-skew 4s infinite linear alternate-reverse;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  &::before {
+    color: var(--wp--preset--color--nous-red);
+    clip-path: inset(0 0 60% 0);
+    animation: nous-glitch-top 2s infinite linear alternate-reverse;
+  }
+
+  &::after {
+    color: #00ffff;
+    clip-path: inset(60% 0 0 0);
+    animation: nous-glitch-bottom 3s infinite linear alternate-reverse;
+  }
+}
+
+// Scanline overlay — apply via .nous-scanlines class in CMS
+.nous-scanlines {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.08) 2px,
+      rgba(0, 0, 0, 0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// Blinking cursor — apply via .nous-cursor class in CMS
+.nous-cursor::after {
+  content: '_';
+  animation: nous-blink 1s step-end infinite;
+  color: var(--wp--preset--color--nous-red);
+}
+
+// CRT flicker — very subtle, apply via .nous-crt class on a wrapper
+.nous-crt {
+  animation: nous-crt-flicker 8s infinite;
+}
+
+// Light mode resistance overlay
+.nous-resistance-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--wp--preset--color--nous-red, #ff3333);
+
+  &.is-resisting {
+    animation: nous-resistance-flash 0.4s steps(4) forwards;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nous-resistance-overlay.is-resisting {
+    animation: none;
+  }
+}
+
+@keyframes nous-resistance-flash {
+  0% { opacity: 0; }
+  15% { opacity: 0.6; }
+  30% { opacity: 0; }
+  45% { opacity: 0.4; }
+  60% { opacity: 0; }
+  75% { opacity: 0.3; }
+  90% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes nous-glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-0.5deg); }
+  40% { transform: skew(0.5deg); }
+  60% { transform: skew(0deg); }
+  80% { transform: skew(0.3deg); }
+  100% { transform: skew(-0.3deg); }
+}
+
+@keyframes nous-glitch-top {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, 0); }
+  80% { transform: translate(1px, 1px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes nous-glitch-bottom {
+  0% { transform: translate(0); }
+  25% { transform: translate(1px, -1px); }
+  50% { transform: translate(-2px, 1px); }
+  75% { transform: translate(1px, 0); }
+  100% { transform: translate(0); }
+}
+
+@keyframes nous-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes nous-crt-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.97; }
+  94% { opacity: 1; }
+  96% { opacity: 0.98; }
+  97% { opacity: 1; }
+}

@@ -1,0 +1,8 @@
+{
+    "page_title": "Blog Settings",
+    "menu_title": "Settings",
+    "menu_slug": "blog-settings",
+    "capability": "edit_posts",
+    "parent_slug": "edit.php",
+    "redirect": false
+}

@@ -1,0 +1,13 @@
+// Nous Signal — blog grid and block wrapper
+
+.wp-block-parent-theme-blog {
+  background: var(--wp--preset--color--contrast, #151515);
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}

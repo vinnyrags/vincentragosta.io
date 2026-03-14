@@ -1,0 +1,18 @@
+// Nous Signal — light mode overrides (Nous's domain stays dark)
+
+.light-mode .nous-signal-card {
+  background-color: var(--wp--preset--color--grey-1, #1c1c1f);
+  border-color: var(--wp--preset--color--grey-4, #494950);
+
+  .post-card__title a {
+    color: var(--wp--preset--color--base, #fff);
+  }
+
+  .post-card__excerpt {
+    color: var(--wp--preset--color--grey-3, #afafb6);
+  }
+}
+
+.light-mode .wp-block-parent-theme-blog {
+  background: var(--wp--preset--color--contrast, #151515);
+}

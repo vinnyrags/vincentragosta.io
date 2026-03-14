@@ -97,6 +97,11 @@
           "color": "#95959d",
           "name": "Grey 5",
           "slug": "grey-5"
+        },
+        {
+          "color": "#ff3333",
+          "name": "Nous Red",
+          "slug": "nous-red"
         }
       ]
     },
@@ -262,9 +267,6 @@
           "text": "currentColor"
         },
         ":hover": {
-          "typography": {
-            "textDecoration": "none"
-          },
           "color": {
             "text": "var:preset|color|accent-1"
           }

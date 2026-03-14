@@ -1,0 +1,9 @@
+// Nous Signal — accent color override
+// Swap accent-1 (green) to nous-red on blog pages.
+// The .nous-signal-page body class is added by BlogProvider
+// based on the blog page configured in Site Settings > Blog.
+
+body.nous-signal-page {
+  --wp--preset--color--accent-1: var(--wp--preset--color--nous-red, #ff3333);
+  --wp--custom--color--accent-1-dark: #cc2929;
+}

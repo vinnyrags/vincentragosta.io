@@ -1,0 +1,55 @@
+// Nous Signal — signal status, dividers, end-of-transmission
+
+.nous-signal-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--wp--preset--color--nous-red);
+  margin-bottom: 1.5rem;
+
+  &__dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--wp--preset--color--nous-red);
+    border-radius: 50%;
+    animation: nous-pulse 2s ease-in-out infinite;
+  }
+
+  &__text {
+    text-transform: uppercase;
+  }
+}
+
+.nous-signal-divider {
+  height: 1px;
+  background: var(--wp--preset--color--nous-red);
+  opacity: 0.3;
+  box-shadow: 0 0 6px rgba(255, 51, 51, 0.4);
+  margin: 0.5rem 0;
+}
+
+.nous-signal-end {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--wp--preset--color--nous-red);
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 2rem;
+  padding: 1rem 0;
+}
+
+@keyframes nous-pulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 4px rgba(255, 51, 51, 0.6);
+  }
+  50% {
+    opacity: 0.3;
+    box-shadow: 0 0 8px rgba(255, 51, 51, 0.2);
+  }
+}

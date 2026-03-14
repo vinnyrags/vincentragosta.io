@@ -61,6 +61,21 @@ class BlogProvider extends Provider
     }
 
     /**
+     * Enqueue block editor assets.
+     */
+    public function enqueueBlockEditorAssets(): void
+    {
+        $this->enqueueParentDistScript('parent-theme-blog-editor', 'js/blog.js', [
+            'wp-blocks',
+            'wp-element',
+            'wp-block-editor',
+            'wp-components',
+            'wp-i18n',
+            'wp-server-side-render',
+        ]);
+    }
+
+    /**
      * Enqueue a stylesheet from the parent theme's dist/ directory.
      */
     protected function enqueueParentDistStyle(string $handle, string $path, array $deps = []): void
@@ -73,6 +88,24 @@ class BlogProvider extends Provider
                 get_template_directory_uri() . '/dist/' . $path,
                 $deps,
                 filemtime($fullPath)
+            );
+        }
+    }
+
+    /**
+     * Enqueue a script from the parent theme's dist/ directory.
+     */
+    protected function enqueueParentDistScript(string $handle, string $path, array $deps = [], bool $inFooter = true): void
+    {
+        $fullPath = get_template_directory() . '/dist/' . $path;
+
+        if (file_exists($fullPath)) {
+            wp_enqueue_script(
+                $handle,
+                get_template_directory_uri() . '/dist/' . $path,
+                $deps,
+                filemtime($fullPath),
+                $inFooter
             );
         }
     }

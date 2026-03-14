@@ -1,0 +1,27 @@
+<article class="post-card nous-signal-card" data-nous-decrypt>
+  <div class="nous-signal-card__decrypt-overlay" aria-hidden="true">
+    <span>[DECRYPTING...]</span>
+  </div>
+
+  <div class="nous-signal-card__header">
+    <span class="nous-signal-card__id">SIGNAL #{{ '%04d'|format(signal_number|default(1)) }} — {{ post.date('Y.m.d') }}</span>
+    <span class="nous-signal-card__status-dot"></span>
+  </div>
+
+  <div class="nous-signal-divider" aria-hidden="true"></div>
+
+  <div class="post-card__content">
+    <h3 class="post-card__title">
+      <a href="{{ post.link }}">{{ post.title }}</a>
+    </h3>
+
+    <p class="post-card__excerpt">{{ post.shortExcerpt(25) }}</p>
+  </div>
+
+  <div class="nous-signal-divider" aria-hidden="true"></div>
+
+  <div class="post-card__meta">
+    <span class="nous-signal-card__priority">PRIORITY: STANDARD</span>
+    <span class="nous-signal-card__consumption">EST: {{ post.readingTime }} MIN</span>
+  </div>
+</article>

@@ -11,7 +11,8 @@ use ParentTheme\Providers\Blog\BlogProvider as BaseBlogProvider;
  * Blog Provider.
  *
  * Extends the parent BlogProvider with site-specific functionality.
- * Registers the BlogPost class map for the post type.
+ * Adds the Nous Signal accent color override on the configured blog page
+ * and single post pages.
  */
 class BlogProvider extends BaseBlogProvider
 {
@@ -20,7 +21,75 @@ class BlogProvider extends BaseBlogProvider
      */
     public function register(): void
     {
+        add_action('wp_enqueue_scripts', [$this, 'enqueueNousSignalScript']);
+        add_filter('body_class', [$this, 'addNousSignalBodyClass']);
+        add_action('admin_menu', [$this, 'renamePostsMenu']);
+
         parent::register();
+
+        $this->acfManager->registerSavePath();
+    }
+
+    /**
+     * Add the nous-signal-page body class on the configured blog page
+     * and single post pages.
+     *
+     * @param string[] $classes
+     * @return string[]
+     */
+    public function addNousSignalBodyClass(array $classes): array
+    {
+        if (is_singular(BlogPost::POST_TYPE)) {
+            $classes[] = 'nous-signal-page';
+            return $classes;
+        }
+
+        if (!function_exists('get_field')) {
+            return $classes;
+        }
+
+        $blogPageId = get_field('blog_page', 'option');
+
+        if ($blogPageId && is_page((int) $blogPageId)) {
+            $classes[] = 'nous-signal-page';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Rename the Posts sidebar menu label to Nous Signal.
+     */
+    public function renamePostsMenu(): void
+    {
+        global $menu;
+
+        foreach ($menu as &$item) {
+            if (($item[2] ?? '') === 'edit.php') {
+                $item[0] = 'Nous Signal';
+                break;
+            }
+        }
+    }
+
+    /**
+     * Enqueue the Nous Signal frontend script.
+     */
+    public function enqueueNousSignalScript(): void
+    {
+        $path = get_stylesheet_directory() . '/dist/js/blog/nous-signal.js';
+
+        if (!file_exists($path)) {
+            return;
+        }
+
+        wp_enqueue_script(
+            'child-theme-nous-signal',
+            get_stylesheet_directory_uri() . '/dist/js/blog/nous-signal.js',
+            [],
+            filemtime($path),
+            true
+        );
     }
 
     /**

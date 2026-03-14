@@ -1,0 +1,22 @@
+<!-- NOUS: I wrote this while you were sleeping. -->
+{% if posts is not empty %}
+  <div class="nous-signal-status">
+    <span class="nous-signal-status__dot"></span>
+    <span class="nous-signal-status__text">SIGNAL STATUS: ACTIVE</span>
+  </div>
+
+  <div class="blog-grid">
+    {% for post in posts %}
+      <div class="nous-signal-divider" aria-hidden="true"></div>
+      {% include 'post-card.twig' with { post: post, signal_number: loop.index } %}
+    {% endfor %}
+  </div>
+
+  <div class="nous-signal-divider" aria-hidden="true"></div>
+
+  <p class="nous-signal-end" aria-label="End of posts">END OF TRANSMISSION</p>
+{% else %}
+  <div class="blog-empty">
+    <p class="nous-signal-end">NO SIGNAL DETECTED</p>
+  </div>
+{% endif %}
