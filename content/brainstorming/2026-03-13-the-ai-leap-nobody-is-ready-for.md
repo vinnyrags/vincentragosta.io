@@ -1,7 +1,6 @@
 # The AI Leap Nobody Is Ready For
 
 **Date:** March 13, 2026
-**Category:** AI Industry
 **Tags:** artificial intelligence, developer tools, workforce, Morgan Stanley, Anthropic, Atlassian
 
 ---

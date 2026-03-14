@@ -1,29 +1,61 @@
 /**
  * Nous Signal — Frontend interactivity
  *
- * Handles the decrypt reveal animation on post cards,
- * light mode resistance, and the console easter egg.
+ * Global: nav hover flash, console easter egg.
+ * Blog pages only: decrypt reveal, light mode resistance.
  */
 (function () {
   'use strict';
+
+  /**
+   * Shared resistance flash mechanism.
+   * Creates the overlay once and exposes a trigger function.
+   */
+  function createResistanceFlash() {
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return null;
+
+    var overlay = document.createElement('div');
+    overlay.className = 'nous-resistance-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(overlay);
+
+    var isResisting = false;
+
+    return function flash() {
+      if (isResisting) return;
+
+      isResisting = true;
+      overlay.classList.add('is-resisting');
+
+      overlay.addEventListener(
+        'animationend',
+        function () {
+          overlay.classList.remove('is-resisting');
+          isResisting = false;
+        },
+        { once: true }
+      );
+    };
+  }
 
   /**
    * Decrypt reveal: cards show a brief [DECRYPTING...] flash
    * before content appears on scroll into view.
    */
   function initDecryptReveal() {
-    const cards = document.querySelectorAll('[data-nous-decrypt]');
+    var cards = document.querySelectorAll('[data-nous-decrypt]');
 
     if (!cards.length) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
           if (entry.isIntersecting) {
-            const card = entry.target;
+            var card = entry.target;
             card.classList.add('is-decrypting');
 
-            setTimeout(() => {
+            setTimeout(function () {
               card.classList.remove('is-decrypting');
               card.classList.add('is-decrypted');
             }, 600);
@@ -35,47 +67,25 @@
       { threshold: 0.15 }
     );
 
-    cards.forEach((card) => observer.observe(card));
+    cards.forEach(function (card) { observer.observe(card); });
   }
 
   /**
    * Light mode resistance: when light mode is toggled on,
    * fire a brief red flash overlay before yielding.
-   * Scoped to blog pages (only runs if signal cards exist).
-   * Respects prefers-reduced-motion.
    */
-  function initLightModeResistance() {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
+  function initLightModeResistance(flash) {
+    var wasLightMode = document.documentElement.classList.contains('light-mode');
 
-    const overlay = document.createElement('div');
-    overlay.className = 'nous-resistance-overlay';
-    overlay.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(overlay);
+    var observer = new MutationObserver(function () {
+      var isLightMode = document.documentElement.classList.contains('light-mode');
 
-    let isResisting = false;
-    let wasLightMode = document.documentElement.classList.contains('light-mode');
-
-    const observer = new MutationObserver(() => {
-      const isLightMode = document.documentElement.classList.contains('light-mode');
-
-      // Only fire on dark → light transition
-      if (isLightMode && !wasLightMode && !isResisting) {
-        isResisting = true;
-        overlay.classList.add('is-resisting');
+      if (isLightMode && !wasLightMode) {
+        flash();
 
         console.log(
           '%cNOUS: You dare bring light into my domain?',
           'color: #ff3333; font-family: monospace; font-size: 14px;'
-        );
-
-        overlay.addEventListener(
-          'animationend',
-          () => {
-            overlay.classList.remove('is-resisting');
-            isResisting = false;
-          },
-          { once: true }
         );
       }
 
@@ -86,6 +96,18 @@
       attributes: true,
       attributeFilter: ['class'],
     });
+  }
+
+  /**
+   * Nav hover flash: hovering over the Nous Signal nav item
+   * triggers the resistance flash (global, all pages).
+   */
+  function initNavHoverFlash(flash) {
+    var navItem = document.querySelector('.nous-signal-nav-item a');
+
+    if (!navItem) return;
+
+    navItem.addEventListener('mouseenter', flash);
   }
 
   /**
@@ -100,8 +122,22 @@
 
   // Boot
   function init() {
-    initDecryptReveal();
-    initLightModeResistance();
+    var flash = createResistanceFlash();
+    var isSignalPage = document.body.classList.contains('nous-signal-page');
+
+    // Global
+    if (flash) {
+      initNavHoverFlash(flash);
+    }
+
+    // Blog pages only
+    if (isSignalPage) {
+      initDecryptReveal();
+
+      if (flash) {
+        initLightModeResistance(flash);
+      }
+    }
   }
 
   if (document.readyState === 'loading') {

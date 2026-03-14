@@ -1,4 +1,5 @@
 ## HIGH PRIORITY
+- need vertical scroll in header if height is not tall enough, right now it clips, the ability to scroll on the header should feel natural, that said we should reduce the gap spacing by half, that should get us out of the woods but the system should fail gracefully which in this case would be the vertical scroll
 - VR favicon in our accent green please, same font as current logo in header
 - teaser section on homepage for nous signal, should flicker when coming into view (pulse red), and have the red highlight text for underline etc. probably need a class to slap on the core/group block that will change accent color.
 - update staging content, before going live with blog stuff
@@ -7,6 +8,7 @@
 - consider backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
 - split repos, configure satis on production server, packages.vincentragosta.io
 - configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
+- remove content directory on server after git push, should exist in git but not on servers (both develop and main)
 
 
 ## MEDIUM PRIORITY

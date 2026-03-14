@@ -24,6 +24,9 @@ class BlogProvider extends BaseBlogProvider
         add_action('wp_enqueue_scripts', [$this, 'enqueueNousSignalScript']);
         add_filter('body_class', [$this, 'addNousSignalBodyClass']);
         add_action('admin_menu', [$this, 'renamePostsMenu']);
+        add_action('init', [$this, 'unregisterCategories']);
+        add_filter('nav_menu_css_class', [$this, 'addNousSignalNavClass'], 10, 2);
+        add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAccentOverride']);
 
         parent::register();
 
@@ -39,18 +42,7 @@ class BlogProvider extends BaseBlogProvider
      */
     public function addNousSignalBodyClass(array $classes): array
     {
-        if (is_singular(BlogPost::POST_TYPE)) {
-            $classes[] = 'nous-signal-page';
-            return $classes;
-        }
-
-        if (!function_exists('get_field')) {
-            return $classes;
-        }
-
-        $blogPageId = get_field('blog_page', 'option');
-
-        if ($blogPageId && is_page((int) $blogPageId)) {
+        if ($this->isNousSignalPage()) {
             $classes[] = 'nous-signal-page';
         }
 
@@ -70,6 +62,71 @@ class BlogProvider extends BaseBlogProvider
                 break;
             }
         }
+    }
+
+    /**
+     * Override accent-1 to nous-red in the block editor for posts.
+     */
+    public function enqueueEditorAccentOverride(): void
+    {
+        $screen = get_current_screen();
+
+        if (!$screen || $screen->post_type !== BlogPost::POST_TYPE) {
+            return;
+        }
+
+        wp_add_inline_style(
+            'wp-edit-blocks',
+            'body { --wp--preset--color--accent-1: var(--wp--preset--color--nous-red, #ff3333); --wp--custom--color--accent-1-dark: #cc2929; }'
+        );
+    }
+
+    /**
+     * Unregister the category taxonomy from the post type.
+     */
+    public function unregisterCategories(): void
+    {
+        unregister_taxonomy_for_object_type('category', BlogPost::POST_TYPE);
+    }
+
+    /**
+     * Add a CSS class to the nav menu item that links to the configured blog page.
+     *
+     * @param string[] $classes
+     * @param \WP_Post $menuItem
+     * @return string[]
+     */
+    public function addNousSignalNavClass(array $classes, $menuItem): array
+    {
+        if (!function_exists('get_field')) {
+            return $classes;
+        }
+
+        $blogPageId = get_field('blog_page', 'option');
+
+        if ($blogPageId && (int) $menuItem->object_id === (int) $blogPageId) {
+            $classes[] = 'nous-signal-nav-item';
+        }
+
+        return $classes;
+    }
+
+    /**
+     * Whether the current page is a Nous Signal page.
+     */
+    private function isNousSignalPage(): bool
+    {
+        if (is_singular(BlogPost::POST_TYPE)) {
+            return true;
+        }
+
+        if (!function_exists('get_field')) {
+            return false;
+        }
+
+        $blogPageId = get_field('blog_page', 'option');
+
+        return $blogPageId && is_page((int) $blogPageId);
     }
 
     /**
