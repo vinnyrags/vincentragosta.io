@@ -64,7 +64,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5rem 0.75rem;
+    padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
     background: var(--wp--preset--color--grey-2, #28282c);
     font-family: 'Fira Code', monospace;
   }
@@ -72,7 +72,7 @@
   // Signal ID stamp
   &__id {
     font-family: 'Fira Code', monospace;
-    font-size: 0.7rem;
+    font-size: var(--wp--preset--font-size--10);
     font-weight: 500;
     letter-spacing: 0.08em;
     color: var(--wp--preset--color--nous-red);
@@ -93,7 +93,7 @@
   &__priority,
   &__consumption {
     font-family: 'Fira Code', monospace;
-    font-size: 0.7rem;
+    font-size: var(--wp--preset--font-size--10);
     font-weight: 500;
     letter-spacing: 0.05em;
     opacity: 0.85;
@@ -107,9 +107,9 @@
 // Content area styling
 .post-card__content {
   flex: 1;
-  padding: 0.75rem;
+  padding: var(--wp--preset--spacing--30);
   border-left: 2px solid var(--wp--preset--color--nous-red, #ff3333);
-  margin: 0 0.75rem;
+  margin: 0 var(--wp--preset--spacing--30);
 }
 
 .post-card__title a {
@@ -130,7 +130,7 @@
 .post-card__meta {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0.75rem;
+  padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
 }
 
 // In-card dividers

@@ -1,5 +1,4 @@
 ## HIGH PRIORITY
-- update published date for all posts
 - lets use our spacing design system where we can, if for the cards we need super small values, then thats understandable, maybe we consider new additions to theme.json?
 - add a threshold to the flash, so people dont cause themselves harm
 - I want to add an "Interested in Nous?" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).

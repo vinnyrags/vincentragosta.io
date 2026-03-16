@@ -3,9 +3,9 @@
 .nous-signal-status {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--wp--preset--spacing--20);
   font-family: 'Fira Code', monospace;
-  font-size: 0.75rem;
+  font-size: var(--wp--preset--font-size--10);
   letter-spacing: 0.05em;
   color: var(--wp--preset--color--nous-red);
 
@@ -37,13 +37,13 @@
 
 .nous-signal-end {
   font-family: 'Fira Code', monospace;
-  font-size: 0.8rem;
+  font-size: var(--wp--preset--font-size--10);
   letter-spacing: 0.1em;
   color: var(--wp--preset--color--nous-red);
   opacity: 0.5;
-  text-align: center;
-  margin-top: 2rem;
-  padding: 1rem 0;
+  text-align: left;
+  margin-top: var(--wp--preset--spacing--40);
+  padding: 0;
 }
 
 @keyframes nous-pulse {
