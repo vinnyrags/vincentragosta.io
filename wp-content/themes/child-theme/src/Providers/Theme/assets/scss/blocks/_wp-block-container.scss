@@ -26,6 +26,15 @@
     }
 }
 
+// Nous Accent style — swaps the section accent color to nous-red.
+// Apply via the block toolbar's Styles panel on a Group block.
+// Overrides the accent-1 custom property so all children (buttons,
+// separators, links, pills, highlights) inherit the red automatically.
+.is-style-nous-accent {
+  --wp--preset--color--accent-1: var(--wp--preset--color--nous-red);
+  --wp--custom--color--accent-1-dark: var(--wp--preset--color--nous-red);
+}
+
 // Numbered List style — vertical list with large faded counter numbers.
 // Editors select this via the block toolbar's Styles panel on a Group block.
 // Child Groups become numbered items; numbering is automatic via CSS counters.

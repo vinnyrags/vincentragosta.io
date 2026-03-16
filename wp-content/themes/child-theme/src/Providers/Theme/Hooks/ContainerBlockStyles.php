@@ -22,6 +22,7 @@ class ContainerBlockStyles extends BlockStyles
             'core/group' => [
                 $darkStyle,
                 ['name' => 'numbered-list', 'label' => __('Numbered List', 'child-theme')],
+                ['name' => 'nous-accent', 'label' => __('Nous Accent', 'child-theme')],
             ],
             'core/column' => [
                 $darkStyle,

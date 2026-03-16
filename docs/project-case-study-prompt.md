@@ -77,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 | `[NOTABLES]` | Bullet points of specific contributions |
 
 ## Fill in
-- **PROJECT_NAME**: Broadwway Groups
+- **PROJECT_NAME**: Never Is Now
 - **CLIENT_NAME**: Situation Interactive
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR**: 2020
-- **URL**: *(optional)* https://groups.broadway.com/
-- **NOTABLES**: complex inquiry form, complex data model, season lifecycle
+- **YEAR**: 2023
+- **URL**: *(optional)* https://neverisnow.org/
+- **NOTABLES**: complex agenda infrastructure

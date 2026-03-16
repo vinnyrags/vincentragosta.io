@@ -1,6 +1,8 @@
 // Nous Signal — card base and signal metadata
 
 .post-card {
+  display: flex;
+  flex-direction: column;
   background-color: var(--wp--preset--color--grey-1, #1c1c1f);
   border: 1px solid var(--wp--preset--color--grey-4, #494950);
   border-radius: 4px;
@@ -104,6 +106,7 @@
 
 // Content area styling
 .post-card__content {
+  flex: 1;
   padding: 0.75rem;
   border-left: 2px solid var(--wp--preset--color--nous-red, #ff3333);
   margin: 0 0.75rem;

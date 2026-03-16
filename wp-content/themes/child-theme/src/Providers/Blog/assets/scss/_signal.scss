@@ -8,7 +8,6 @@
   font-size: 0.75rem;
   letter-spacing: 0.05em;
   color: var(--wp--preset--color--nous-red);
-  margin-bottom: 1.5rem;
 
   &__dot {
     display: inline-block;
@@ -29,7 +28,11 @@
   background: var(--wp--preset--color--nous-red);
   opacity: 0.3;
   box-shadow: 0 0 6px rgba(255, 51, 51, 0.4);
-  margin: 0.5rem 0;
+  margin: 0.5rem 0 0;
+
+  &--grid-end {
+    margin-top: var(--wp--preset--spacing--40);
+  }
 }
 
 .nous-signal-end {
