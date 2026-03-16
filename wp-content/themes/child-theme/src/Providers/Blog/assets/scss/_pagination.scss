@@ -1,0 +1,46 @@
+// Nous Signal — pagination controls
+
+.nous-signal-pagination {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--wp--preset--spacing--30);
+  margin-top: var(--wp--preset--spacing--50);
+  font-family: 'Fira Code', monospace;
+  font-size: var(--wp--preset--font-size--10);
+  letter-spacing: 0.05em;
+
+  .blog-pagination__pages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    list-style: none;
+    gap: var(--wp--preset--spacing--20);
+    margin: 0;
+    padding: 0;
+  }
+
+  .blog-pagination__link {
+    color: var(--wp--preset--color--grey-3, #afafb6);
+    padding: var(--wp--preset--spacing--10) var(--wp--preset--spacing--20);
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--wp--preset--color--nous-red, #ff3333);
+    }
+
+    &--current {
+      color: var(--wp--preset--color--nous-red, #ff3333);
+      font-weight: 700;
+    }
+  }
+
+  .blog-pagination__prev,
+  .blog-pagination__next {
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+}

@@ -123,7 +123,7 @@
 
 .post-card__excerpt {
   color: var(--wp--preset--color--grey-3, #afafb6);
-  font-size: 0.9rem;
+  font-size: var(--wp--preset--font-size--20);
   line-height: 1.5;
 }
 

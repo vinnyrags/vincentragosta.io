@@ -20,15 +20,15 @@ export default function Edit({ attributes, setAttributes }) {
 						]}
 						onChange={(value) => setAttributes({ displayMode: value })}
 					/>
-					{displayMode !== 'all' && (
-						<RangeControl
-							label={__('Posts Per Page', 'parent-theme')}
-							value={postsPerPage}
-							onChange={(value) => setAttributes({ postsPerPage: value })}
-							min={1}
-							max={24}
-						/>
-					)}
+					<RangeControl
+						label={__('Posts Per Page', 'parent-theme')}
+						value={postsPerPage}
+						onChange={(value) => setAttributes({ postsPerPage: value })}
+						min={1}
+						max={24}
+						help={!postsPerPage ? __('Using WordPress Reading setting.', 'parent-theme') : ''}
+						resetFallbackValue={undefined}
+					/>
 					{displayMode === 'category' && (
 						<TextControl
 							label={__('Category Slug', 'parent-theme')}

@@ -15,13 +15,17 @@
         '.site-main .wp-block-button',
         '.site-main .wp-block-buttons',
         '.site-main cite',
+        '.site-main .blog-pagination',
         '.footer__contact-heading',
         '.footer__contact-body',
         '.footer__bar',
     ].join(',');
 
+    // Ancestor selectors that should exclude matched elements
+    const excludeAncestors = ['.splide', '.blog-pagination'];
+
     const elements = [...document.querySelectorAll(selectors)]
-        .filter((el) => !el.closest('.splide'));
+        .filter((el) => !excludeAncestors.some((sel) => el.closest(sel)));
     if (!elements.length) return;
 
     const observer = new IntersectionObserver(

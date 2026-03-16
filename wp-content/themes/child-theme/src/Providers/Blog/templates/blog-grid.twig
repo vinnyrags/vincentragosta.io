@@ -7,9 +7,11 @@
 
   <div class="blog-grid">
     {% for post in posts %}
-      {% include 'post-card.twig' with { post: post, signal_number: loop.index } %}
+      {% include 'post-card.twig' with { post: post, signal_number: ((pagination.current_page - 1) * posts|length) + loop.index } %}
     {% endfor %}
   </div>
+
+  {% include 'pagination.twig' with { pagination: pagination } %}
 
   <p class="nous-signal-end" aria-label="End of posts">END OF TRANSMISSION</p>
 {% else %}

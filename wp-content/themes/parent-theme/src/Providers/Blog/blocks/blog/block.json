@@ -13,8 +13,7 @@
       "default": "latest"
     },
     "postsPerPage": {
-      "type": "number",
-      "default": 6
+      "type": "number"
     },
     "category": {
       "type": "string",

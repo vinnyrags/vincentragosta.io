@@ -1,0 +1,27 @@
+{% if pagination.total_pages > 1 %}
+  <nav class="blog-pagination nous-signal-pagination" aria-label="Signal navigation">
+    {% if pagination.current_page > 1 %}
+      <a href="{{ pagination.base_url ~ 'page/' ~ (pagination.current_page - 1) ~ '/' }}" class="blog-pagination__link blog-pagination__prev" aria-label="Previous page">
+        &larr; PREV
+      </a>
+    {% endif %}
+
+    <ol class="blog-pagination__pages">
+      {% for page in 1..pagination.total_pages %}
+        <li>
+          {% if page == pagination.current_page %}
+            <span class="blog-pagination__link blog-pagination__link--current" aria-current="page">[{{ '%02d'|format(page) }}]</span>
+          {% else %}
+            <a href="{{ pagination.base_url ~ 'page/' ~ page ~ '/' }}" class="blog-pagination__link">[{{ '%02d'|format(page) }}]</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+
+    {% if pagination.current_page < pagination.total_pages %}
+      <a href="{{ pagination.base_url ~ 'page/' ~ (pagination.current_page + 1) ~ '/' }}" class="blog-pagination__link blog-pagination__next" aria-label="Next page">
+        NEXT &rarr;
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}

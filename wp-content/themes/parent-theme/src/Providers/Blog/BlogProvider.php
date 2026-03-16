@@ -36,8 +36,44 @@ class BlogProvider extends Provider
     public function register(): void
     {
         add_action('wp_enqueue_scripts', [$this, 'enqueueSingleAssets']);
+        add_action('pre_get_posts', [$this, 'supportStaticPagePagination']);
+        add_filter('redirect_canonical', [$this, 'preventPaginationRedirect'], 10, 2);
 
         parent::register();
+    }
+
+    /**
+     * Allow /page/N/ on static pages that contain the blog block.
+     *
+     * WordPress ignores the 'paged' query var on static pages by default,
+     * which causes paginated URLs to 404. This sets the var explicitly.
+     */
+    public function supportStaticPagePagination(\WP_Query $query): void
+    {
+        if (!$query->is_main_query() || is_admin()) {
+            return;
+        }
+
+        $paged = $query->get('paged');
+
+        if (empty($paged) && $query->is_page()) {
+            $page = (int) $query->get('page');
+            if ($page > 1) {
+                $query->set('paged', $page);
+            }
+        }
+    }
+
+    /**
+     * Prevent WordPress from redirecting /page/2/ back to the base URL on static pages.
+     */
+    public function preventPaginationRedirect(string $redirectUrl, string $requestedUrl): string
+    {
+        if (is_page() && get_query_var('paged') > 1) {
+            return $requestedUrl;
+        }
+
+        return $redirectUrl;
     }
 
     /**
