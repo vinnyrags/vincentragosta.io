@@ -1,6 +1,6 @@
 @use 'common/breakpoints' as *;
 
-.wp-block-child-theme-projects {
+.wp-block-parent-theme-projects {
   container: projects / inline-size;
   display: flex;
   flex-direction: column;
@@ -211,7 +211,7 @@
 // Scroll Reveal
 // ==========================================================================
 
-.wp-block-child-theme-projects.has-scroll-reveal .project-card {
+.wp-block-parent-theme-projects.has-scroll-reveal .project-card {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -243,7 +243,7 @@
     transition: none;
   }
 
-  .wp-block-child-theme-projects .project-card {
+  .wp-block-parent-theme-projects .project-card {
     opacity: 1;
     transform: none;
     transition: none;
