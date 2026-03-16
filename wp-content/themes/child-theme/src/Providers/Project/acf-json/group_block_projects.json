@@ -45,7 +45,7 @@
             {
                 "param": "block",
                 "operator": "==",
-                "value": "child-theme/projects"
+                "value": "parent-theme/projects"
             }
         ]
     ],
