@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2018</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="#">Defunct</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development for the official website of The Band's Visit — the 10-time Tony Award-winning Broadway musical with music and lyrics by David Yazbek and book by Itamar Moses. Custom WordPress theme with a ticketing calendar, tour integration, cast and creative profiles, and a content architecture built for a production that became the most decorated musical of the 2017-2018 Broadway season.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A quiet, intimate musical was about to become the biggest story on Broadway — and its digital presence needed to be ready.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>The Band's Visit — adapted from Eran Kolirin's 2007 Israeli film about an Egyptian police orchestra stranded in a remote desert town — arrived on Broadway at the Ethel Barrymore Theatre on November 9, 2017, after a sold-out world premiere at the Atlantic Theater Company Off-Broadway in late 2016. Directed by David Cromer with music and lyrics by David Yazbek and a book by Itamar Moses, the production starred Tony Shalhoub as Tewfiq, Katrina Lenk as Dina, and Ari'el Stachel as Haled. The show was already generating extraordinary critical momentum heading into the 2018 Tony Awards season, and the production needed a digital platform that could convert that attention into ticket sales — while serving as the show's primary public-facing presence for press, audience engagement, and eventual tour promotion.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">I led development on the site at Situation Interactive, building the platform during the show's first year on Broadway as it moved from critical darling to historic Tony sweep.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A custom WordPress theme built to showcase a Tony-winning production and drive ticket sales across Broadway and a national tour.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>The site was built on WordPress with a custom theme architected around the production's content needs. The ticketing calendar was the primary conversion component — rendering the full performance schedule at the Ethel Barrymore Theatre with matinee and evening performance slots, real-time availability states, and direct purchase links that routed audiences into the checkout flow with the correct date and time pre-selected. Cast and creative sections presented structured profiles for the production's principal performers — Tony Shalhoub, Katrina Lenk, Ari'el Stachel, John Cariani, and the full ensemble — alongside the creative team led by director David Cromer, choreographer Patrick McCollum, and orchestrator Jamshied Sharifi. As the show prepared for its first national tour, I extended the platform with tour-specific infrastructure: city-by-city scheduling, venue information, and a restructured navigation that gave the tour its own section while preserving the Broadway production's content. The site also carried media content, press and reviews aggregation, a digital lottery integration, merchandise through the show's retail partners, and Gravity Forms powering newsletter signup and audience engagement throughout the run.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The platform was built to handle the full lifecycle of a Broadway production — from the initial run through awards season, cast replacements, and the transition to a touring show.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +162,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>10 Tony Awards, 589 performances, and a platform that carried the production from Broadway to a national tour.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The Band's Visit won 10 Tony Awards at the 72nd ceremony in June 2018 — including Best Musical, Best Original Score, Best Book, Best Direction, and both leading actor awards — making it one of only four musicals in Broadway history to win the "Big Six." The platform supported the production through 589 performances and 36 previews at the Ethel Barrymore Theatre, breaking the venue's all-time box office record twice before the Broadway run closed on April 7, 2019. The tour infrastructure I built carried the show into its first national tour, which launched at the Providence Performing Arts Center in June 2019 and played over 25 cities across North America — including the Kennedy Center, the Cadillac Palace Theatre in Chicago, the Golden Gate Theatre in San Francisco, and the Smith Center in Las Vegas — before the touring industry was suspended in March 2020 due to the pandemic. The tour resumed in October 2021 and continued through 2022.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The development patterns established on this project — ticketing calendar architecture, tour integration, and structured cast content — became reusable components across multiple Broadway productions at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

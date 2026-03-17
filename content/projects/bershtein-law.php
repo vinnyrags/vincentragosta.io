@@ -29,7 +29,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">Situation Interactive</p>
+<p class="has-30-font-size">Vincent Ragosta Inc.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, Contact Form 7, WPBakery, Google reCAPTCHA, CloudFront CDN</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2020</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://bershlaw.com">https://bershlaw.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack WordPress build for a New Jersey boutique law firm covering five practice areas across multiple office locations, anchored by a complex multi-step real estate inquiry form and a secure client portal integration.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Independent project for a direct client.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A lawyer friend needed a professional digital presence, fast.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Andrew Bershtein — a Brooklyn Law School graduate and rising attorney in the New Jersey legal market — was building a boutique practice spanning real estate, litigation, business consultation, trusts and estates, and tax and audit. He needed a website that could serve as the firm's primary client-facing platform across five office locations in northern New Jersey and New York, including Englewood, Fort Lee, Hackensack, Tribeca, and Brighton Beach. The timeline was tight: Andrew was a friend, he needed the site operational quickly, and the scope demanded more than a template could deliver.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">Legal websites occupy a unique space — they need to project authority and trustworthiness while remaining functionally accessible to people in stressful situations. The bar for intake workflows is high, and the consequences of a poorly designed contact flow are lost clients.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A multi-step intake form built to handle the complexity of real estate transactions.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>I built the site on WordPress using WPBakery for layout composition and a custom design system built on CSS custom properties to enforce visual consistency across all pages. The firm's five practice areas — real estate, litigation, business consultation, trusts and estates, and tax and audit — each received dedicated landing pages with structured content sections. Attorney profiles, office locations with embedded Google Maps for all five locations, and a secure client portal integration via TrackWithEase rounded out the core pages.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The centerpiece technical challenge was the multi-step real estate inquiry form. Built on Contact Form 7 with significant custom development, the form walks prospective clients through a wizard-style flow: client role selection (buyer or seller), representation status, client type classification (individual or business entity, with conditional guidance for estate matters), and detailed contact and case information — all with per-step validation that prevents progression until every required field is complete. Google reCAPTCHA integration and a mandatory legal disclaimer acknowledgment handle security and compliance. A separate general contact form routes non-real-estate inquiries through a simpler path, ensuring the intake process matches the complexity of the matter type.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">All static assets are served through a CloudFront CDN for fast delivery across the firm's client base in the New Jersey and New York metro area.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>A platform that grew with the practice.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site launched on schedule and became Bershtein Law's primary digital channel for client acquisition across all five practice areas. The multi-step inquiry form delivered what a standard contact page could not — structured, detailed intake data that gave the firm actionable information before the first phone call. The TrackWithEase portal integration gave existing clients encrypted, self-service access to their case documents, reducing administrative overhead on the firm's side.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The firm has since expanded from its original Englewood office to five locations across New Jersey and New York, grown its attorney roster, and earned Super Lawyers Rising Stars recognition for Andrew Bershtein from 2023 through 2025 — all while running on the same platform I delivered in 2020. The site continues to serve as the firm's primary client-facing presence six years later, a testament to the durability of the architecture and the independence of the content management layer.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

@@ -13,7 +13,7 @@
 <!-- /wp:column -->
 
 <!-- wp:column -->
-<div class="wp-block-column"><!-- wp:post-featured-image {"aspectRatio":"16/9","width":"","sizeSlug":"full","className":"is-style-focal-top"} /--></div>
+<div class="wp-block-column"><!-- wp:post-featured-image {"aspectRatio":"16/9","width":"","sizeSlug":"full","className":"is-style-default"} /--></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns -->
 
@@ -29,7 +29,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">Situation Interactive</p>
+<p class="has-30-font-size">Vincent Ragosta Inc.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, REST API, Stripe Connect, Video.js, AWS S3</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2021</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://10glo.com">https://10glo.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development of a video-centric social media platform for the performing arts community. Custom user profiles, video upload and playback infrastructure, a Stripe-powered tipping system, and community interaction tools — architected and built independently from the ground up.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Built independently through Vincent Ragosta Inc.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>The performing arts needed a digital stage with no gatekeepers.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>When COVID-19 shuttered Broadway and theaters worldwide, thousands of performers, composers, choreographers, and designers lost their primary venue for being seen. The traditional discovery pipeline — auditions, showcases, festivals costing $50,000 or more to produce — had always been expensive and geographically exclusive. The pandemic exposed just how fragile that system was. Daniel Kuney, a Broadway general manager behind shows like Rock of Ages, Puffs, and Heathers, envisioned a platform that could remove those barriers permanently: a social network built exclusively for theater artists, where anyone could share their work without an application process, a paywall, or a New York City zip code.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">The brief was ambitious — build a video-first social platform that combined the discoverability of YouTube with the professional networking of LinkedIn, purpose-built for an industry that had never had a dedicated digital home.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A video-first social platform built on WordPress with custom application logic at every layer.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>I architected and built 10glo on WordPress, extending it well beyond its typical CMS role into a full social media application. The user registration and profile system supported bios, headshots, external links, and categorized content feeds — giving performers, composers, and choreographers each a dedicated portfolio page. The video pipeline handled upload, transcoding, storage on AWS S3, and adaptive playback via Video.js, keeping the experience fast regardless of connection quality or device. A custom REST API powered frontend interactions including commenting, following, and content discovery without full page reloads.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The monetization layer used Stripe Connect to enable direct tipping — viewers could financially support any artist on the platform, with funds routed directly to the performer's connected Stripe account. Content moderation tools, role-based access controls, and a notification system rounded out the social infrastructure. The frontend was built responsive-first, optimized for mobile — critical for a user base that would be filming and uploading from phones backstage, in rehearsal studios, and at home.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,15 +162,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>A new digital home for theater artists — from Broadway casting directors to first-time performers.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>10glo launched as the first social network purpose-built for the performing arts, attracting artists across every discipline — actors, singers, composers, choreographers, and designers — from around the world. The platform eliminated the geographic, financial, and institutional barriers that had historically controlled who got seen. Broadway casting offices like Eisenberg/Beans Casting ran discovery challenges directly on the platform, giving emerging talent a direct line to industry decision-makers. Artists used 10glo to share works-in-progress, full productions, concert footage, and educational content — all without an approval process or paywall.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The platform demonstrated that a niche social network could be built on WordPress with the performance and feature depth of a custom application — video upload, real-time interaction, payment processing, and user-generated content at scale. The architecture and patterns developed for 10glo informed subsequent independent builds, proving that a single developer with the right technical foundation could ship a product that served an entire industry.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

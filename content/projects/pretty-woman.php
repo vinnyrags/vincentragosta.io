@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, SASS, Gravity Forms</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2018</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://prettywomanthemusical.com">https://prettywomanthemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development for the official website of Pretty Woman: The Musical — the Broadway adaptation of the 1990 film, with music and lyrics by Bryan Adams and Jim Vallance, book by Garry Marshall and J.F. Lawton, and direction and choreography by Jerry Mitchell. Custom WordPress multisite architecture supporting both the Broadway production and national tour, with a ticketing calendar, cast and creative profiles, and a content layer designed for multi-production management from a single platform.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A major film-to-stage adaptation needed a digital platform that could launch in Chicago and scale through Broadway and beyond.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Pretty Woman: The Musical — based on the iconic 1990 romantic comedy starring Julia Roberts and Richard Gere — arrived on stage with music and lyrics by Bryan Adams and Jim Vallance, a book by the film's original creators Garry Marshall and J.F. Lawton, and direction and choreography by two-time Tony Award winner Jerry Mitchell. The production featured scenic design by David Rockwell, costumes by Gregg Barnes, lighting by Kenneth Posner and Philip S. Rosenberg, and sound design by John Shivers. After a world premiere engagement at the Oriental Theatre in Chicago in March 2018, the show transferred to the Nederlander Theatre on Broadway with Samantha Barks making her Broadway debut as Vivian Ward opposite Andy Karl as Edward Lewis, joined by Orfeh as Kit De Luca, Jason Danieley as Philip Stuckey, and Eric Anderson as Mr. Thompson. The production needed a digital platform ready for the Chicago tryout that could grow into the full Broadway marketing engine — and eventually support a national tour — without requiring a rebuild at each phase.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">I led development on the site at Situation Interactive, building the platform from the ground up to support a production lifecycle that would span multiple venues, casts, and markets.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A WordPress multisite platform connecting Broadway and tour as separate but unified production sites.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>I built the platform on WordPress Multisite, architecting the Broadway production and the national tour as separate network sites sharing a common theme, plugin set, and content infrastructure. This gave each production its own editorial space — distinct cast pages, venue information, and ticketing endpoints — while maintaining visual consistency and eliminating duplicated code across sites. The Broadway site at prettywomanthemusical.com served as the primary hub, and the tour site operated on its own subdomain with city-by-city scheduling, local venue details, and tour-specific ticketing links. The ticketing calendar was the primary conversion driver across both sites — an interactive, date-based interface rendering the full performance schedule with matinee and evening slots, availability states, and direct purchase links that routed audiences into the ticketing provider's checkout flow with the correct performance pre-selected. On Broadway, this meant the full weekly schedule at the 1,232-seat Nederlander Theatre; on tour, it scaled to display dates across dozens of cities and venues with their respective local ticketing partners. Cast and creative sections carried structured biographical profiles for the full company — Barks, Karl, Orfeh, Danieley, Anderson, Ezra Knight as James Morse — and the complete creative team from Mitchell through Rockwell, Barnes, Posner, and Shivers. These sections used custom post types with Advanced Custom Fields, giving the production team the ability to swap cast members, update headshots, and manage bios independently as the company evolved. Gravity Forms powered newsletter signup, group sales inquiries, and audience engagement across both network sites. The frontend delivered responsive layouts built in SASS with mobile-first breakpoints, optimized asset delivery, and a design system that translated the show's signature red-and-black visual identity into a polished digital experience across all viewports.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The multisite architecture was the key decision — it kept the Broadway and tour platforms connected at the infrastructure level while giving each production the editorial independence it needed to operate on its own schedule.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +162,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>$51 million at the Broadway box office, 420 performances, three Audience Choice Awards, and a platform that scaled from Chicago to a global franchise.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The platform launched ahead of the Chicago tryout at the Oriental Theatre in March 2018 and carried the production through its transfer to Broadway, where Pretty Woman played 27 previews and 420 performances at the Nederlander Theatre, grossing over $51.1 million at an average capacity of 86% and an average ticket price of $112.69. The show broke the Nederlander Theatre's house record twice during its opening weeks, peaking at $1,266,873 in a single week. Andy Karl won the Audience Choice Award for Favorite Leading Actor in a Musical, and Orfeh took both Favorite Featured Actress and Favorite Diva Performance. The ticketing calendar drove conversions through the entire Broadway run, and the multisite architecture proved its value when the first North American tour launched in October 2021, scaling to support over 50 cities across the United States and Canada through multiple touring legs. The platform's lifecycle extended far beyond Broadway — Pretty Woman went on to open productions in Hamburg, London's West End (Savoy Theatre), Brazil, the Netherlands, and a UK and Ireland tour, becoming a genuine global theatrical franchise. The multisite infrastructure I built for the original Broadway and tour sites established the content architecture and editorial workflow that supported the production through every phase of its expansion.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">A platform built for a single Broadway opening scaled into a multi-production system that served the show across years, tours, and continents — the architecture outlasted the original engagement by a wide margin.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

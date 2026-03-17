@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, SASS</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2023</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="#">purlievictorious.com (defunct)</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development for the official website of Purlie Victorious on Broadway — the first revival of Ossie Davis' 1961 comedy, starring Leslie Odom Jr. and directed by Kenny Leon at the Music Box Theatre. Custom WordPress theme with a ticketing calendar, performance schedule integration, and a design system built to match the production's visual identity across digital and print.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A landmark Broadway revival needed a digital platform built from the ground up on a compressed timeline.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Purlie Victorious: A Non-Confederate Romp Through the Cotton Patch — Ossie Davis' 1961 comedy about a Black preacher's scheme to reclaim his inheritance from a plantation owner — was returning to Broadway for the first time in over 60 years. The production was directed by Tony Award winner Kenny Leon and starred Leslie Odom Jr. in his first Broadway role since Hamilton. The cast included Kara Young, Vanessa Bell Calloway, Billy Eugene Jones, Jay O. Sanders, and Heather Alicia Simms. The producer roster featured Samuel L. Jackson, Phylicia Rashad, Kerry Washington, and Alan Alda. Previews began September 7, 2023, at the Music Box Theatre, with an official opening night of September 27. The production needed a digital platform ready to support ticket sales, press coverage, and audience engagement before the first preview — and to sustain that momentum through a limited engagement that would eventually extend into February 2024.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">The weight of the production — its cultural significance, its star power, its high-profile producers — meant the digital presence had to be polished, performant, and launch-ready with zero margin for delay.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A custom WordPress theme with a ticketing calendar, performance schedule, and a design system that translated stage to screen.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>I led development on the site from initial build through launch and post-opening maintenance. The platform was built on WordPress with a custom theme architecture — structured content types for cast bios, creative team profiles, media galleries, and production information, all managed through dedicated editorial interfaces rather than freeform page builders. The ticketing calendar was the primary conversion surface: a custom-built component that rendered the full Music Box Theatre performance schedule with matinee and evening slots, availability indicators, and direct links routing audiences into the checkout flow with the correct date and time pre-selected. The calendar pulled data from the ticketing provider's API and rendered it in a responsive grid that worked cleanly across desktop, tablet, and mobile viewports. The design system translated the production's visual identity — its typography, color palette, and photographic treatment — into a cohesive digital language. Every component was built against the production's brand guidelines, ensuring consistency between the physical marketing materials (posters, Playbill, outdoor advertising) and the digital experience. The frontend was performance-optimized with responsive images, lazy loading, and compressed assets to keep load times under acceptable thresholds on mobile connections — critical for a show where a significant percentage of ticket traffic originated from social media campaigns on mobile devices.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The site launched ahead of the first preview and required no structural changes through the production's full run — a clean handoff that let the marketing team focus on selling tickets, not managing a platform.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +162,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>Six Tony nominations, a four-week extension, and a platform that carried the production from opening night to PBS.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site supported Purlie Victorious through 23 previews and 151 performances at the Music Box Theatre — from the September 7 first preview through the February 4, 2024, closing. The production extended its limited engagement by four weeks beyond the originally announced January 7 closing date, driven by strong box office performance and critical acclaim. The revival earned six 2024 Tony Award nominations: Best Revival of a Play, Best Leading Actor (Leslie Odom Jr.), Best Featured Actress (Kara Young, who won), Best Direction (Kenny Leon), Best Scenic Design (Derek McLane), and Best Costume Design (Emilio Sosa). The production was recorded live at the Music Box Theatre on January 24-26, 2024, and aired on PBS Great Performances on May 24, 2024 — extending the show's reach well beyond its theatrical run. The ticketing calendar and content management layer performed exactly as designed throughout: the marketing team managed all editorial updates, schedule changes, and extension announcements independently, with zero developer intervention required after launch.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The architecture and component patterns built for Purlie Victorious informed subsequent Broadway show builds across the agency's portfolio — a reusable foundation for ticketing calendars, cast management, and production-specific design systems.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

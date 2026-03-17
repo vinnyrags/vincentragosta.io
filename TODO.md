@@ -1,5 +1,5 @@
 ## HIGH PRIORITY
-- lets use our spacing design system where we can, if for the cards we need super small values, then thats understandable, maybe we consider new additions to theme.json?
+- lightmode remove black background on blog block
 - add a threshold to the flash, so people dont cause themselves harm
 - I want to add an "Interested in Nous?" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
 - need vertical scroll in header if height is not tall enough, right now it clips, the ability to scroll on the header should feel natural, that said we should reduce the gap spacing by half, that should get us out of the woods but the system should fail gracefully which in this case would be the vertical scroll

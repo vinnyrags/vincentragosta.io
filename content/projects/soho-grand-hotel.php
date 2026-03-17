@@ -29,7 +29,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">Situation Interactive</p>
+<p class="has-30-font-size">King &amp; Partners</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">Ruby on Rails, WordPress (Headless), REST API, JavaScript, SASS</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2022</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://www.sohogrand.com">https://www.sohogrand.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Frontend development for the flagship property of GrandLife Hotels, building on an existing Ruby on Rails and headless WordPress architecture to deliver a full-service hotel platform with room booking, dining, events, and editorial content across a landmark SoHo property.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Development lead on this project at King &amp; Partners.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>SoHo's original boutique hotel needed a digital platform that matched its cultural weight.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>The Soho Grand Hotel — opened in 1996 at 310 West Broadway by Leonard Stern's Hartz Mountain Industries — was the first hotel built in SoHo in over a century and effectively launched the neighborhood's boutique hospitality scene. As the flagship of GrandLife Hotels (which also operates the Roxy Hotel in Tribeca), the 353-room property carries a distinct identity: design-forward, culturally embedded, and deeply connected to downtown Manhattan's creative community. The timing was significant — the hotel had just completed a 25th anniversary gut renovation of all guest rooms and public spaces, and the refreshed physical property needed a digital platform to match. King &amp; Partners, the hotel group's long-standing agency partner for branding and digital, brought me on to lead frontend development on the Soho Grand's web platform — a site that needed to serve as both a booking engine and a brand statement for a property entering its next chapter.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">The platform had to unify room reservations, dining (including the Soho Diner and Club Room), event spaces, gallery content, and editorial storytelling under a single cohesive experience — all while maintaining the hotel's premium brand positioning.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>Extending an established headless architecture to serve a flagship hospitality brand.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>The platform ran on the decoupled architecture King &amp; Partners had established across their GrandLife Hotels portfolio: a Ruby on Rails frontend consuming content from a headless WordPress backend via REST API. I worked within and extended this existing infrastructure — inheriting the content modeling, API layer, and deployment patterns, then building out Soho Grand-specific templates, components, and integrations on top of that foundation. WordPress Multisite served as the CMS, sharing the underlying content infrastructure with the hotel group's other properties while maintaining a distinct editorial experience for each brand.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Rails frontend delivered responsive page templates for rooms, suites, dining venues, event spaces, and a gallery section — each with its own content structure and visual treatment. The design system was built in SASS with custom typography and a photography-forward layout that reflected the hotel's design heritage. Third-party integrations included booking engine widgets for room reservations, Resy for restaurant bookings, and event inquiry forms for the hotel's private event spaces. The content layer gave the client's team full editorial control over room details, seasonal promotions, dining menus, and cultural programming.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The Soho Grand site shared the same multisite infrastructure as the Roxy Hotel and Soho Diner properties — a common CMS backend with independent frontends tailored to each brand's identity.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>A unified digital presence for a property with 25+ years of cultural legacy.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The platform launched as a comprehensive digital hub for the Soho Grand, unifying room booking, dining, events, and editorial content into a single experience that reflected the hotel's premium positioning. The headless architecture delivered fast page loads despite heavy imagery and multiple third-party booking integrations. The WordPress editorial layer performed as designed — the hotel's marketing team managed all content updates independently, publishing seasonal promotions, event programming, and dining updates without developer involvement.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The shared multisite architecture established a scalable pattern across the GrandLife Hotels portfolio — each property maintained its own brand identity and frontend while drawing from the same content infrastructure, reducing operational overhead and enabling the client's team to manage multiple properties from a single CMS.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

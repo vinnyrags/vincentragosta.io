@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, SASS</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2018</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://autoshowny.com">https://autoshowny.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development on the digital platform for the New York International Auto Show — North America's oldest and largest-attended auto show, held annually at the Jacob K. Javits Convention Center. Custom WordPress theme with integrated ticketing, interactive exhibit and experience discovery, and a content architecture built to handle nearly 1,000 vehicles across four floors of exhibition space.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>The largest consumer auto show in North America needed a digital platform that matched its scale.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>The New York International Auto Show has run continuously since 1900, making it the first and longest-running automotive exhibition in North America. By 2018, the show had grown to nearly 1,000 vehicles displayed across four floors of the Javits Center, drawing over one million visitors annually and featuring world and North American debuts from every major manufacturer. Situation Interactive — the show's digital agency of record — brought me on to lead development on a platform rebuild ahead of the 2018 edition. The existing site could not keep pace with the show's expanding footprint of interactive exhibits, experiences, and ticketing demands. The goal was a WordPress-powered platform that could serve as the show's primary digital touchpoint for press, consumers, exhibitors, and industry attendees simultaneously.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">The timeline was fixed to the show's press preview days in late March — the site needed to be fully operational before a single journalist walked the floor.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>Ticketing integration, interactive experiences, and a content layer built for 60+ exhibitors.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>The site was built on WordPress with a custom theme architecture using Advanced Custom Fields for structured content management across vehicles, exhibitors, and event programming. The ticketing system was a central focus — I built a frontend integration layer that connected the WordPress site to the show's third-party ticketing provider, handling ticket type selection, group sales, promotional pricing, and date-specific availability without sending users off-site. The purchase flow stayed on autoshowny.com from discovery through confirmation, giving the show full control over the conversion experience and the data that came with it.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The experiences section showcased the show's interactive exhibits — ride-and-drive programs, manufacturer activations, test tracks, and hands-on technology demonstrations that had become a major draw beyond the static vehicle displays. I built a filterable discovery interface that let visitors browse experiences by type, manufacturer, and floor location, with detail pages that included scheduling, accessibility information, and wayfinding context. The frontend delivered responsive layouts optimized for mobile-first consumption, built with SASS and vanilla JavaScript to keep page weight low across all viewports. Performance mattered: visitors were planning their show day on phones while standing in line at the Javits Center.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">Every content type — vehicles, exhibitors, experiences, ticketing tiers — was modeled as structured data in ACF, giving the show's marketing team full editorial control without touching code.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>Live for press preview, processing tickets for over a million annual visitors.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The platform launched ahead of the 2018 press preview days and remained fully operational through the public show dates from March 30 through April 8. The ticketing integration processed the full volume of consumer ticket sales on-site, eliminating the friction of external redirects and giving the show's team direct visibility into conversion data for the first time. The experiences section drove meaningful engagement — visitors used it to plan their day around interactive exhibits rather than wandering the floor, which the show's organizers reported improved traffic flow across the Javits Center's four levels.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The structured content architecture proved durable beyond a single year. The show's marketing team managed all post-launch content updates independently, and the platform's content model — vehicles, exhibitors, experiences, ticketing — became the foundation that autoshowny.com continued to build on for subsequent editions of the show.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

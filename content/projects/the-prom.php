@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, CSS3 Animations, Gravity Forms</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2018</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="#">theprommusical.com (defunct)</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack development for the official website of The Prom — the Broadway musical with book by Bob Martin and Chad Beguelin, music by Matthew Sklar, and direction and choreography by Casey Nicholaw. Custom WordPress theme with interactive animated backgrounds, a ticketing calendar, tour integration, cast and creative sections, and a design system that translated the show's vibrant visual identity into a responsive digital platform.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A Broadway musical built on inclusivity needed a digital platform that radiated the same energy.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>The Prom — a new musical with book by Bob Martin and Chad Beguelin, music by Matthew Sklar, lyrics by Beguelin, and direction and choreography by Casey Nicholaw — opened at the Longacre Theatre on November 15, 2018, following 23 previews. Based on an original concept by Jack Viertel, the show told the story of four fading Broadway stars who descend on a small Indiana town to champion a lesbian student banned from bringing her girlfriend to prom. The production featured scenic design by Scott Pask, costumes by Matthew Pachtman and Ann Roth, and lighting by Natasha Katz. With a principal cast that included Brooks Ashmanskas, Beth Leavel, Caitlin Kinnunen, Isabelle McCalla, Christopher Sieber, and Michael Potts, the show arrived carrying six Tony nominations — including Best Musical — and a Drama Desk Award for Outstanding Musical. The production made national headlines when Kinnunen and McCalla shared the first LGBTQ kiss in the history of the Macy's Thanksgiving Day Parade during a live performance of "It's Time to Dance" on November 22, 2018. The show needed a digital platform that could match its bold, colorful visual identity while driving ticket sales and telling the story of a production that was already becoming a cultural moment.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">This was a production where the message and the marketing were inseparable — the digital platform had to carry the same spirit of joy and inclusivity that defined every performance at the Longacre.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A custom WordPress build with animated backgrounds, a ticketing calendar, tour integration, and one of the more demanding design translations I worked on.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>I led development on a custom WordPress theme that launched ahead of the show's first preview at the Longacre Theatre and evolved alongside the production through its Broadway run, tour announcement, and eventual Netflix adaptation. The design was one of the tougher translations in my Broadway portfolio — The Prom's visual identity leaned heavily on saturated purples, pinks, and aquas with a celebratory, high-energy aesthetic that demanded precision in CSS to land correctly across breakpoints without feeling overwrought. Interactive background elements used CSS3 animations and JavaScript-driven parallax effects to create depth and movement throughout the site, reinforcing the show's exuberant visual language without compromising page performance. The ticketing calendar served as the primary conversion driver — an interactive, date-based interface rendering the full performance schedule at the Longacre Theatre with matinee and evening slots, availability indicators, and direct purchase links that routed audiences into the ticketing provider's checkout flow with the correct performance pre-selected. When the national tour was announced in 2019, the platform expanded to include tour integration — a city-by-city schedule with venue details, local ticketing endpoints, and tour-specific content, all managed through a structured content layer that let the production team add dates and cities independently. Cast and creative sections carried the full depth of a Casey Nicholaw production: structured biographical profiles for the principal company — Ashmanskas, Leavel, Kinnunen, McCalla, Sieber, Potts, Angie Schworer, Josh Lamon — and the complete creative team from Nicholaw through Pask, Pachtman, Roth, and Katz. Gravity Forms powered newsletter signup and audience engagement, and the site served as the central hub for press materials, media assets, and social content surrounding the show's growing cultural footprint.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The animated background work on The Prom pushed the CSS into territory where every keyframe had to feel intentional — celebratory without being distracting, colorful without being garish.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +162,17 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>Six Tony nominations, a Drama Desk Award, 309 performances, a national tour, and a Netflix film starring Meryl Streep.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site launched ahead of The Prom's first preview on October 23, 2018, and served as the production's primary digital platform through its entire 309-performance Broadway run at the Longacre Theatre, closing on August 11, 2019. The show earned six Tony nominations including Best Musical, Best Direction (Nicholaw), Best Actress in a Musical (Leavel and Kinnunen), Best Actor in a Musical (Ashmanskas), and Best Original Score — and won the Drama Desk Award for Outstanding Musical. The production grossed over $25 million at the Broadway box office at an average capacity of 85%. The ticketing calendar drove conversions through the Broadway run, and the tour system scaled to support the national tour that launched in November 2021 at Playhouse Square in Cleveland, playing over 20 cities through October 2022. The platform's lifecycle extended beyond the stage when Ryan Murphy adapted the musical into a Netflix film released December 11, 2020, starring Meryl Streep, James Corden, Nicole Kidman, Kerry Washington, and Keegan-Michael Key — the site served as a digital bridge between the Broadway production and its second life on screen. The Prom's cultural footprint outlasted its Broadway run: a show that made history at the Macy's Thanksgiving Day Parade, won the Drama Desk, toured nationally, and became a major streaming film built on a digital platform designed to grow with every chapter.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The Prom is the kind of project where the platform's architecture proved its value over time — a site built for a Broadway opening that scaled cleanly into a tour system and a film marketing hub without requiring a rebuild.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

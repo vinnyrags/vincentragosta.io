@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms, Google Tag Manager</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2022</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://somelikeithotmusical.com">https://somelikeithotmusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack WordPress development for the official site of Some Like It Hot — the four-time Tony Award-winning musical at the Shubert Theatre. Complex design system, custom ticketing calendar, tour management infrastructure, and a cast &amp; creative content layer built for a production with 13 Tony nominations and a Grammy-winning cast album.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A major new musical needed a digital platform that matched its ambition.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Some Like It Hot — a new musical based on the 1959 Billy Wilder film, with a book by Matthew Lopez and Amber Ruffin, music by Marc Shaiman, lyrics by Scott Wittman and Shaiman, and direction and choreography by Casey Nicholaw — was heading to Broadway at the Shubert Theatre in the fall of 2022. The production carried serious commercial weight: a beloved film IP, a Tony-winning creative team, and a cast led by Christian Borle and J. Harrison Ghee. A pre-Broadway tryout planned for Chicago's Cadillac Palace Theatre had been cancelled due to COVID, which meant the show was going straight to Broadway with no out-of-town warmup.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">Situation Interactive managed the digital marketing campaign. I led development on the official site — the production's primary ticketing and marketing hub from first preview through a national tour.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A complex design system and ticketing infrastructure built to carry a show from opening night to national tour.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>The site was built on WordPress with a custom theme architecture anchored by a design system that matched the production's visual identity — deep royal blue and gold accents evoking jazz-age glamour, bold uppercase typography, and a layout language that carried across every page and content type. This was one of the more design-intensive builds in the portfolio: the creative direction demanded precision in color, spacing, and typographic hierarchy, and the system needed to hold together across a site that would grow significantly post-launch as awards, media, and tour content accumulated.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The core infrastructure included a custom ticketing calendar that gave visitors a date-driven interface to browse performances and purchase directly through the venue's box office, and a tour management system with structured content for cities, venues, dates, and regional ticket links — built to support 30+ tour stops across the national run. A dedicated cast and creative section managed individual bios, headshots, and role assignments through structured field groups, supporting both the Broadway and touring casts. Gravity Forms handled email capture for presale access and tour announcements. Google Tag Manager powered conversion tracking across the full ticket purchase funnel.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">One of my personal favorite scores — the kind of project where the creative quality of the show raised the bar for the digital work surrounding it.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,21 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>Four Tonys, a Grammy, $52 million at the box office, and a tour that recouped in its first year.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site launched ahead of the first preview on November 1, 2022 and served as the production's digital hub through 441 performances and a 13-month Broadway run at the Shubert Theatre. During that run, the show earned 13 Tony nominations and won four — including a historic Best Leading Actor win for J. Harrison Ghee, the first openly nonbinary performer to win in a leading acting category. The cast album won the Grammy for Best Musical Theater Album. The site's content architecture handled every phase of the awards cycle without structural changes — Tony badges, Grammy callouts, New York Times Critics' Pick designations, and review carousels all layered in through the existing CMS framework.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>When the national tour launched at Proctors Theatre in Schenectady in September 2024, the tour management system and ticketing calendar I built scaled directly — the marketing team managed 30+ cities and their venue-specific ticket links entirely through the CMS. The tour recouped its investment within the first year. The platform continues to serve as the show's official digital presence as it tours nationally.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The infrastructure built for a Broadway opening in 2022 has carried the production through a Tony sweep, a Grammy win, and a national tour — without a rebuild.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

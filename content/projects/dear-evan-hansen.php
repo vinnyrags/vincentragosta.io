@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, jQuery</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2018</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://dearevanhansen.com">https://dearevanhansen.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack WordPress development for the official site of Dear Evan Hansen — the six-time Tony Award-winning musical and cultural phenomenon at the Music Box Theatre. An incredibly complex design system, custom ticketing calendar, tour integration across 100+ cities, and a cast &amp; creative content layer built for Broadway's biggest hit of the decade.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>The biggest musical on Broadway needed a digital platform that could keep up.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Dear Evan Hansen — with music and lyrics by Benj Pasek and Justin Paul, a book by Steven Levenson, and direction by Michael Greif — had swept the 2017 Tony Awards with six wins including Best Musical, Best Score, Best Book, and Best Leading Actor for Ben Platt. By 2018, the show had recouped its $9.5 million investment in just eight and a half months, was grossing over $1 million weekly in the 984-seat Music Box Theatre, and held the record for highest gross ever at a Broadway venue seating under 1,000. The cast album won the Grammy. The "Fansen" community had built one of the most intense fan followings in Broadway history. A national tour was launching in September 2018 across 100+ cities. International productions were in development for Toronto and London.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">Situation Interactive handled the digital marketing. I led development on the official site at the peak of the show's commercial and cultural momentum — the digital platform had to match the scale of the phenomenon.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A design-intensive build that translated one of Broadway's most distinctive visual identities into a digital system.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>This was one of the most complex design implementations I worked on. The show's visual identity — the signature "Dear Evan Hansen Blue" (a custom Pantone color created exclusively for the production), handwritten typography evoking Evan's letters, and the iconic arm cast motif — demanded a frontend that translated theatrical branding into a precision-built digital system. Every typographic choice, color value, and layout decision referenced the production's brand guidelines. The design wasn't decorative — it was structural, carrying the show's emotional language across every page and content type.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The site was built on WordPress with a custom theme architecture designed for a production operating at multiple scales simultaneously. A ticketing calendar gave visitors a date-driven interface to browse Broadway performances and purchase directly. The tour integration system managed cities, venues, dates, and regional ticket links across 100+ stops on the national tour — all maintained by the marketing team through the CMS. A dedicated cast and creative section handled individual bios, headshots, and role assignments for both the Broadway and touring companies, with structured field groups supporting frequent cast rotations as new actors cycled through the lead role. Media galleries, review carousels, and partnership callouts rounded out a content layer that grew continuously throughout the run.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The site has since had a refresh, but the original build established the content architecture and ticketing patterns that carried the production through its peak years.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,21 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>Six Tonys, a Grammy, $270 million at the box office, and a platform that scaled from Broadway to the world.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site served as the production's primary digital hub during the peak of its commercial run — a period that saw the show gross approximately $270 million across 1,678 Broadway performances at the Music Box Theatre. The ticketing calendar and tour system supported every phase of the show's expansion: the national tour launch in Denver in September 2018, international openings in Toronto and London, cast rotations through multiple lead actors, a Grammy-winning cast album, and the announcement of the Universal Pictures film adaptation. The marketing team managed all of it — tour dates, cast updates, award badges, media additions — through the CMS without developer intervention.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The content architecture handled a production lifecycle that most Broadway shows never reach: from Tony sweep to national tour to West End transfer to film deal to licensing through Music Theatre International. Each expansion layered onto the existing structure rather than requiring a rebuild. The design system, ticketing infrastructure, and cast management patterns I built for this project directly informed the development approach for subsequent Broadway builds at Situation Interactive.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The platform I built for Broadway's biggest musical of the decade carried the production through six years, four continents, and a feature film — the patterns established here became the foundation for every theatrical build that followed.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

@@ -43,7 +43,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">WordPress, PHP, JavaScript, Gravity Forms</p>
+<p class="has-30-font-size">WordPress, PHP, JavaScript, jQuery</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -57,7 +57,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">2025</p>
+<p class="has-30-font-size">2021</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://purposeonbroadway.com">https://purposeonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="#">Defunct</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Purpose — the 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a design system built to match the gravity of a Steppenwolf-to-Broadway transfer directed by Phylicia Rashad.</p>
+<p>Full-stack WordPress development for the official site of Oklahoma! — the Tony Award-winning Broadway revival directed by Daniel Fish at Circle in the Square Theatre. Custom ticketing calendar, national tour integration across 25+ cities, and a cast &amp; creative content layer built for a production that radically reimagined a classic and made Broadway history.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Pulitzer Prize-winning play was transferring from Chicago to Broadway and needed a digital platform ready for opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A radical reimagining of the most canonical musical in American theater needed a digital platform built for its next chapter.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Purpose — written by Branden Jacobs-Jenkins, the Tony Award-winning playwright of Appropriate, and directed by two-time Tony winner Phylicia Rashad — premiered at Steppenwolf Theatre Company in Chicago during the 2023–2024 season. The production transferred to Broadway's Helen Hayes Theatre for the 2024–2025 season, beginning previews on February 25, 2025 and officially opening on March 17. The play is an epic family drama centered on the Jaspers — a powerful Black American family whose lineage includes civil rights leaders, pastors, and congressmen — and the reckoning that unfolds when the youngest son returns home with an uninvited guest. The production arrived on Broadway with a cast led by Harry Lennix, Jon Michael Hill, Glenn Davis, Kara Young, Alana Arenas, and LaTanya Richardson Jackson, produced by David Stone, Debra Martin Chase, Marc Platt, LaChanze, and Steppenwolf Theatre Company. A show of this pedigree needed a digital presence that could carry the weight of the production's critical momentum and convert that attention into ticket sales from the first preview forward.</p>
+<p>Director Daniel Fish's revival of Rodgers &amp; Hammerstein's Oklahoma! was not a revival in any traditional sense. Staged in the round at Circle in the Square Theatre with a stripped-down, seven-piece country-western band performing new orchestrations by Daniel Kluger, the production served chili and cornbread at intermission, bathed the audience in fluorescent light, and reframed one of the most-produced musicals in history as something dark, intimate, and contemporary. The show premiered at Bard College's Fisher Center, played a sold-out run at St. Ann's Warehouse in Brooklyn in the fall of 2018, and transferred to Broadway on April 7, 2019. It won the 2019 Tony Award for Best Revival of a Musical. Ali Stroker made history as the first performer who uses a wheelchair to win a Tony Award, taking Best Featured Actress in a Musical for her performance as Ado Annie — a moment that resonated far beyond Broadway. The original cast — Damon Daunno as Curly, Rebecca Naomi Jones as Laurey, Patrick Vaill as Jud Fry, Mary Testa as Aunt Eller, and James Davis as Will Parker — delivered 328 performances and grossed over $22.8 million before the Broadway run closed on January 19, 2020.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews and sustain the production through what would become a Tony- and Pulitzer-winning run at near-full capacity.</p>
+<p class="is-style-muted">The national tour was originally slated for fall 2020 but was delayed by the pandemic. When it finally launched in November 2021 at the Orpheum Theatre in Minneapolis, the production needed a refreshed digital platform to drive ticket sales across 25+ cities — I led development on that build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar and frontend layouts that pushed beyond the typical Broadway site.</strong></h2>
+<h2 class="wp-block-heading"><strong>A tour-first platform built to sell tickets across 25+ cities while honoring one of Broadway's most distinctive visual identities.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the primary challenge. The design called for layouts that broke from standard Broadway production site conventions — asymmetric grids, overlapping content sections, and typographic treatments that demanded precise CSS positioning across breakpoints. Every layout decision had to hold up on mobile without sacrificing the visual tension that made the desktop compositions compelling. The ticketing calendar was the core conversion component — an interactive, date-driven interface rendering the full performance schedule at the Helen Hayes Theatre with matinee and evening slots, availability states, and direct purchase links routing into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: hero video content with YouTube integration, cast and creative team profiles, press acclaim sections aggregating reviews from the New York Times, Washington Post, Vogue, and the New Yorker, and a newsletter signup powered by Gravity Forms. The design system used a restrained color palette — black, white, and warm grays — with a typographic hierarchy built on uppercase headings and generous spacing that reflected the production's dramatic weight without overwhelming the content.</p>
+<p>The site was built on WordPress with a custom theme architecture centered on the national tour rollout. The ticketing calendar was the primary conversion component — rendering performance schedules across multiple cities and venues with date-driven browsing, availability states, and deep links into third-party ticketing providers. The tour integration system managed the full routing: city-by-city scheduling, venue details, on-sale dates, and regional ticket links for stops spanning Minneapolis, Chicago, Los Angeles, San Francisco, Dallas, Washington D.C., Nashville, Oklahoma City, and more — all maintained by the marketing team through the CMS without developer involvement. A cast and creative section handled structured profiles for the touring company — led by Sasha Hutchings as Laurey and Sean Grandillo as Curly — alongside the creative team headed by director Daniel Fish, with field groups designed to support cast rotations as performers cycled through the run.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The frontend reflected the production's unconventional visual identity. This was not a traditional Broadway brand — the design language drew from the show's raw, deconstructed aesthetic, with typography and layout choices that matched the production's stripped-down sensibility. Media galleries, press and reviews aggregation, and newsletter integration rounded out a content layer built to grow as the tour expanded into new markets through 2022.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — the kind of design challenges where the comp looks simple but the CSS architecture behind it is anything but.</p>
+<p class="is-style-muted">The platform was architected using the same ticketing and tour patterns I had established on prior Broadway builds — adapted here for a production with a distinctive voice and a touring schedule that was rebounding from a pandemic-delayed launch.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -162,16 +166,21 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Tony Award for Best Play, Pulitzer Prize for Drama, $15 million at the box office.</strong></h2>
+<h2 class="wp-block-heading"><strong>A Tony-winning production, a historic first, and a platform that carried the tour from Minneapolis to Los Angeles.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Purpose's Broadway previews in February 2025 and served as the production's primary digital platform through its entire run. The show opened to overwhelming critical acclaim — the New York Times, Washington Post, Vogue, and the New Yorker all praised the production — and went on to win the 2025 Tony Award for Best Play, the Tony Award for Best Featured Actress in a Play (Kara Young), the 2025 Pulitzer Prize for Drama, the Drama Desk Award for Outstanding Play, and the New York Drama Critics' Circle Award for Best Play. The ticketing calendar drove conversions throughout a run that averaged 96.55% capacity across 192 performances and 22 previews at the Helen Hayes Theatre, grossing over $15.1 million at an average ticket price of $124.91. The production played its final performance on August 31, 2025, with the site transitioning to an archival state that preserves the show's legacy and signals future announcements.</p>
+<p>The site served as the production's primary digital hub throughout the national tour — a run that opened at the Orpheum Theatre in Minneapolis in November 2021 and played over 25 cities across North America including the Ahmanson Theatre in Los Angeles, the Golden Gate Theatre in San Francisco, the Kennedy Center in Washington D.C., the Cadillac Palace Theatre in Chicago, and the Civic Center Music Hall in Oklahoma City. The marketing team managed tour dates, cast updates, venue details, and promotional content entirely through the CMS. The ticketing calendar drove conversions across every market, routing audiences directly into the purchase flow for each city's presenter without friction.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The platform supported a production that carried real cultural weight — a show that won the Tony for Best Revival, made Broadway history with Ali Stroker's win, grossed over $22.8 million across 328 Broadway performances, and challenged audiences across the country with Daniel Fish's provocative reinterpretation of a classic. The tour infrastructure, ticketing calendar architecture, and cast content patterns built for this project reinforced the reusable development approach I applied across multiple Broadway productions at Situation Interactive.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform supported one of the most critically celebrated and commercially successful plays of the 2024–2025 Broadway season — a production that swept every major award and filled the Helen Hayes Theatre night after night.</p>
+<p class="is-style-muted">The patterns established here — tour-first architecture, structured cast management, and CMS-driven scheduling — continued to inform every subsequent theatrical build in the pipeline.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
+

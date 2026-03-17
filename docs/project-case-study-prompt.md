@@ -77,9 +77,9 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 | `[NOTABLES]` | Bullet points of specific contributions |
 
 ## Fill in
-- **PROJECT_NAME**: Never Is Now
-- **CLIENT_NAME**: Situation Interactive
+- **PROJECT_NAME**: The Django NYC
+- **CLIENT_NAME**: King & Partners
 - **TECHNOLOGIES**: *(optional)*
-- **YEAR**: 2023
-- **URL**: *(optional)* https://neverisnow.org/
-- **NOTABLES**: complex agenda infrastructure
+- **YEAR**: 2022
+- **URL**: *(optional)* https://www.thedjangonyc.com/
+- **NOTABLES**: ruby on rails frontend, headless wordpress backend, worked on already existing architecture
