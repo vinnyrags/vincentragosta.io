@@ -1,7 +1,5 @@
 ## HIGH PRIORITY
 - I want to add an "Interested in Nous?" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
-- need vertical scroll in header if height is not tall enough, right now it clips, the ability to scroll on the header should feel natural, that said we should reduce the gap spacing by half, that should get us out of the woods but the system should fail gracefully which in this case would be the vertical scroll
-- VR favicon in our accent green please, same font as current logo in header
 
 - re-evaluate parent theme code, and ensure nothing in there is opinionated what so ever, lets flag it if it is even the slightest bit opinionated please for review. i would like to see all of the offenders and I will tell you which to move to the child theme.
 - consider backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
