@@ -223,6 +223,30 @@
 }
 
 // ==========================================================================
+// Light Mode
+// ==========================================================================
+
+.light-mode .wp-block-parent-theme-projects {
+  .project-card {
+    color: var(--wp--preset--color--contrast);
+  }
+
+  .project-card__image::after {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+  }
+
+  .project-card__title a {
+    &::after {
+      background-color: var(--wp--preset--color--accent-1);
+    }
+  }
+}
+
+// ==========================================================================
 // Reduced Motion
 // ==========================================================================
 
