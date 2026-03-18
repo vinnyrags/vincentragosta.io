@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://njpac.org">https://njpac.org</a></p>
+<p class="has-30-font-size"><a href="https://njpac.org" target="_blank" rel="noopener">https://njpac.org</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for one of the largest performing arts centers in the United States. Custom WordPress theme with a comprehensive design system, Ticketmaster-integrated event discovery, and a bespoke hero slider that remains one of the most technically ambitious UI components I have built.</p>
+<p>NJPAC was the largest-scale performing arts build in my career — a full platform for an institution that runs hundreds of events per season across multiple venues, with arts education programs, donor pathways, group sales, and bilingual content all competing for attention. The custom WordPress theme included a comprehensive design system, deep Ticketmaster API integration, and a bespoke hero slider that remains one of the most technically ambitious UI components I have ever built. Where individual show sites like <a href="https://vincentragosta.io/projects/anastasia-the-musical/">Anastasia</a> or Beetlejuice focused on a single production, NJPAC demanded architecture that could hold an entire institution.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead at Situation Interactive.</p>
+<p class="is-style-muted">Ran development from concept through launch at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">This project remains one of my personal favorites — the intersection of ambitious design, deep technical complexity, and a mission-driven institution made it the kind of build that sharpens every skill at once. The platform continues to serve NJPAC in production today.</p>
+<p class="is-style-muted">NJPAC remains a personal favorite — the kind of build where ambitious design, deep integration work, and institutional scale all converge. The platform continues to serve NJPAC in production today.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

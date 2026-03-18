@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://better.roundabouttheatre.org">https://better.roundabouttheatre.org</a></p>
+<p class="has-30-font-size"><a href="https://better.roundabouttheatre.org" target="_blank" rel="noopener">https://better.roundabouttheatre.org</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Custom WordPress microsite for Roundabout Theatre Company's five-year equity, diversity, and inclusion initiative. A pillar-based design system with dynamic accent colors, structured data architecture around core values, and a content management layer built for transparency reporting across seasons.</p>
+<p>My first engagement with Roundabout Theatre Company — a standalone microsite for their five-year equity, diversity, and inclusion initiative. A pillar-based design system with dynamic accent colors, structured data architecture around core values, and a content management layer built for multi-season transparency reporting. The relationship that began here led to the full roundabouttheatre.org platform rebuild in 2026.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead at Situation Interactive, Roundabout's digital agency of record.</p>
+<p class="is-style-muted">Led the build at Situation Interactive, Roundabout's digital agency of record.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The design system and data architecture established for this build became a reference point for how Situation approached institutional transparency projects for other arts and nonprofit clients.</p>
+<p class="is-style-muted">This microsite proved the value of structured data architecture for institutional reporting — and the client relationship it cemented led directly to the full Roundabout Theatre platform rebuild that would become the most architecturally significant project of my agency career.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

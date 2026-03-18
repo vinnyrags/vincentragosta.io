@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://littleisland.org">https://littleisland.org</a></p>
+<p class="has-30-font-size"><a href="https://littleisland.org" target="_blank" rel="noopener">https://littleisland.org</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the digital platform of Little Island — the $260 million public park and performance venue on the Hudson River, funded by Barry Diller and Diane von Furstenberg. Custom WordPress theme with a full events calendar, date and weather API integrations, and a content architecture built to support year-round cultural programming from opening day.</p>
+<p>Little Island is unlike anything else in my portfolio. Not a theater, not a venue in the traditional sense — a $260 million public park rising from the Hudson River on 132 concrete tulip structures, with a full-season performance calendar, weather-dependent operations, and millions of annual visitors. I built the custom WordPress platform that powered it all: events calendar, weather and date API integrations, and a content architecture designed for the density of year-round cultural programming across multiple outdoor stages.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Development lead at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,11 +110,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Little Island — the 2.4-acre public park built on 132 concrete "tulip" structures rising from the Hudson River at Pier 55 — opened on May 21, 2021, after nearly a decade of development, a lawsuit that temporarily halted construction, and $260 million in funding from the Diller-von Furstenberg Foundation. Designed by Thomas Heatherwick's studio and featuring a 687-seat amphitheater, an intimate performance space called The Glade, and a maritime botanic garden with over 350 species of plants, the park was conceived as both a public green space and a year-round cultural venue. Four inaugural artists-in-residence — director Tina Landau, tap dancer and choreographer Ayodele Casel, Pig Pen Theater Company, and actor-singer Michael McElroy — were curating the opening season's programming across dance, theatre, music, and opera. The park needed a digital platform that could handle the complexity of a multi-venue performance calendar, serve as the primary visitor information resource for a brand-new public space, and support the kind of programming density that a $120 million, 20-year operational endowment was designed to sustain. The timeline was fixed to the park's opening — the site needed to be fully operational before the first visitor walked across the gangway.</p>
+<p>Little Island — the 2.4-acre public park built on 132 concrete "tulip" structures rising from the Hudson River at Pier 55 — opened on May 21, 2021, after nearly a decade of development, a lawsuit that temporarily halted construction, and $260 million in funding from the Diller-von Furstenberg Foundation. Designed by Thomas Heatherwick's studio and featuring a 687-seat amphitheater, an intimate performance space called The Glade, and a maritime botanic garden with over 350 species of plants, the park was conceived as both a public green space and a year-round cultural venue. Four inaugural artists-in-residence — director Tina Landau, tap dancer and choreographer Ayodele Casel, Pig Pen Theater Company, and actor-singer Michael McElroy — were curating the opening season's programming across dance, theatre, music, and opera. Unlike the traditional theater sites that made up most of my Situation work — <a href="https://vincentragosta.io/projects/njpac/">NJPAC</a>, <a href="https://vincentragosta.io/projects/roundabout-theatre/">Roundabout</a>, the Broadway show builds — Little Island was something genuinely new: a public park that happened to be a performance venue, where weather, botany, and accessibility logistics sat alongside the events calendar as first-class concerns. The timeline was fixed to the park's opening — the site needed to be fully operational before the first visitor walked across the gangway.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">This wasn't a marketing site for a venue — it was the operational backbone for a public park that would welcome millions of visitors and hundreds of performances every year.</p>
+<p class="is-style-muted">Most of my arts and culture builds served existing institutions with defined audiences. Little Island had no audience yet — just a park about to open its gates and a digital platform that needed to serve millions of strangers from day one.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Little Island remains one of the most ambitious projects in my career — a platform where the events calendar alone was more complex than most entire site builds, and where the work I delivered became the digital infrastructure for one of New York City's most celebrated new public spaces.</p>
+<p class="is-style-muted">The events calendar alone was more complex than most entire site builds. The broader platform became the digital infrastructure for one of New York City's most celebrated new public spaces — and a reminder that the most interesting projects are often the ones that don't fit neatly into a category.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

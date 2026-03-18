@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://tenement.org">https://tenement.org</a></p>
+<p class="has-30-font-size"><a href="https://tenement.org" target="_blank" rel="noopener">https://tenement.org</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Inherited codebase maintenance and targeted feature development for a National Historic Site serving 225,000+ annual visitors. Reservation system and membership data improvements delivered within a constrained budget — no rebuild, just disciplined work inside an existing WordPress platform.</p>
+<p>Not every project starts with a blank canvas. Like my work on <a href="https://vincentragosta.io/projects/anastasia-the-musical/">Anastasia</a> and <a href="https://vincentragosta.io/projects/broadway-across-america/">Broadway Across America</a>, Tenement Museum was an inherited codebase — built by another agency, maintained under tight budget constraints. The work was targeted: reservation system fixes, membership data improvements, and Blackbaud Altru API stabilization for a National Historic Site serving 225,000+ annual visitors. No rebuild, just precise intervention inside an existing WordPress platform.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Led inherited codebase work at Situation Interactive.</p>
+<p class="is-style-muted">Managed inherited codebase improvements at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->

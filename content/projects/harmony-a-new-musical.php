@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://harmonyanewmusical.com">https://harmonyanewmusical.com</a></p>
+<p class="has-30-font-size"><a href="https://harmonyanewmusical.com" target="_blank" rel="noopener">https://harmonyanewmusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress development for the official site of Harmony: A New Musical — Barry Manilow and Bruce Sussman's Broadway production at the Ethel Barrymore Theatre. Custom ticketing calendar, tour management system, and a marketing-driven frontend built for a 27-year-in-the-making Broadway debut.</p>
+<p>Barry Manilow and Bruce Sussman's original musical about the Comedian Harmonists — 27 years in development before reaching Broadway. One of several original musicals in this portfolio alongside <a href="https://vincentragosta.io/projects/suffs/">Suffs</a>, <a href="https://vincentragosta.io/projects/kimberly-akimbo/">Kimberly Akimbo</a>, and <a href="https://vincentragosta.io/projects/some-like-it-hot/">Some Like It Hot</a>, each with its own identity challenges distinct from revivals or adaptations with built-in name recognition.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Took point on all development at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,11 +110,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Harmony tells the true story of the Comedian Harmonists — six young men in 1920s Berlin who became international superstars before the Nazi regime tore them apart. Barry Manilow wrote the music, Bruce Sussman wrote the book and lyrics, and Warren Carlyle directed and choreographed. The show had been in development since the mid-1990s, passing through La Jolla Playhouse, the Alliance Theatre in Atlanta, and the Ahmanson Theatre in Los Angeles before a celebrated Off-Broadway run at the National Yiddish Theatre Folksbiene in 2022 earned eight Outer Critics Circle nominations and three Drama Desk nominations.</p>
+<p>Harmony tells the true story of the Comedian Harmonists — six young men in 1920s Berlin who became international superstars before the Nazi regime tore them apart. Barry Manilow wrote the music, Bruce Sussman wrote the book and lyrics, and Warren Carlyle directed and choreographed. The show had been in development since the mid-1990s, passing through La Jolla Playhouse, the Alliance Theatre in Atlanta, and the Ahmanson Theatre in Los Angeles before a celebrated Off-Broadway run at the National Yiddish Theatre Folksbiene in 2022 earned eight Outer Critics Circle nominations and three Drama Desk nominations. Original musicals without built-in IP carry a different kind of pressure than adaptations or revivals — there is no existing audience to activate, so the site has to establish the show's identity from scratch.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Situation Interactive handled the digital marketing. I led development on the official site ahead of previews at the Ethel Barrymore Theatre in October 2023.</p>
+<p class="is-style-muted">I led development on the official site ahead of previews at the Ethel Barrymore Theatre in October 2023.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,19 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Ticketing infrastructure and a tour-ready content system behind a rich visual frontend.</strong></h2>
+<h2 class="wp-block-heading"><strong>Established infrastructure with a frontend built around the production's period-specific visual identity.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a custom theme designed around the show's ticketing and marketing lifecycle. The core deliverable was a ticketing calendar — a date-driven interface that let visitors browse upcoming performances and link directly to purchase through the venue's box office system. Alongside the calendar, I built a custom tour management system with structured content for cities, venues, dates, and regional ticket links, designed so the marketing team could manage the show's geographic footprint entirely through the CMS.</p>
+<p>The ticketing calendar, tour system, and cast profile patterns were carried forward from prior builds — proven infrastructure deployed efficiently. Where this project diverged was in the frontend and in the content strategy for establishing an unknown show. The visual identity drew on 1920s Berlin — a dark palette with burgundy and gold accents, rich media sections featuring embedded performance clips, and review quotes from major publications positioned to build credibility for a title without built-in name recognition. Cast album integrations with Spotify, Apple Music, and Amazon Music gave visitors another entry point beyond tickets.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The frontend leaned into the production's visual identity — a dark palette with burgundy and gold accents, rich media sections featuring embedded performance clips, review quotes from major publications, and cast album integrations with Spotify, Apple Music, and Amazon Music. Gravity Forms powered email capture for presale notifications and licensing inquiries. Google Tag Manager handled conversion tracking across the ticket purchase funnel. The site also supported a cast and creative team section with individual bios — essential for a production with a deep creative pedigree spanning Manilow, Sussman, and Tony-winning collaborators.</p>
+<p>The cast and creative section was especially important here. With Manilow, Sussman, and Tony-winning collaborators Warren Carlyle and Derek McLane involved, the creative pedigree was a major selling point — the bios and profile architecture needed to communicate that depth clearly. Google Tag Manager handled conversion tracking across the purchase funnel.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Every content section was built as a managed field group — the marketing team never touched raw markup.</p>
+<p class="is-style-muted">Every content section was built as a managed field group — the marketing team operated the site independently from day one.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -170,15 +170,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of the first preview on October 18, 2023 and supported the full Broadway run of 96 performances at the Ethel Barrymore Theatre through closing night on February 4, 2024. Throughout the run, the marketing team managed all ticket updates, media additions, and content changes independently through the structured CMS — no developer intervention required for day-to-day operations.</p>
+<p>The site launched ahead of the first preview on October 18, 2023 and supported the full Broadway run of 96 performances at the Ethel Barrymore Theatre through closing night on February 4, 2024.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>After the Broadway run closed, the site transitioned seamlessly to support the show's licensing phase. The tour system and content architecture I built now powers the post-Broadway presence — licensing inquiries for professional, community, and educational productions, cast album promotion, and announcements for upcoming regional productions. The platform that launched a Broadway opening continues to serve as the show's official digital home.</p>
+<p>After the Broadway run closed, the site transitioned to support the show's licensing phase — inquiries for professional, community, and educational productions, cast album promotion, and announcements for upcoming regional stagings. The platform that launched a Broadway opening continues to serve as the show's official digital home, now powered by the same content architecture without any structural changes.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The same infrastructure built for a Broadway premiere now supports licensing, regional productions, and international expansion — no rebuild required.</p>
+<p class="is-style-muted">Like so many of these builds, the real test was what happened after the curtain came down — the platform outlasted the run and continues to serve the show's next chapter.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

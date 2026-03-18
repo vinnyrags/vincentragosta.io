@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://bershlaw.com">https://bershlaw.com</a></p>
+<p class="has-30-font-size"><a href="https://bershlaw.com" target="_blank" rel="noopener">https://bershlaw.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress build for a New Jersey boutique law firm covering five practice areas across multiple office locations, anchored by a complex multi-step real estate inquiry form and a secure client portal integration.</p>
+<p>Full-stack WordPress build for a New Jersey boutique law firm, anchored by the most technically demanding piece: a multi-step real estate inquiry form that walks prospective clients through a wizard-style intake flow with conditional logic, per-step validation, and legal disclaimer compliance. Five practice areas, five office locations, and a secure client portal integration.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,11 +106,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A lawyer friend needed a professional digital presence, fast.</strong></h2>
+<h2 class="wp-block-heading"><strong>A growing legal practice needed more than a template could deliver.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Andrew Bershtein — a Brooklyn Law School graduate and rising attorney in the New Jersey legal market — was building a boutique practice spanning real estate, litigation, business consultation, trusts and estates, and tax and audit. He needed a website that could serve as the firm's primary client-facing platform across five office locations in northern New Jersey and New York, including Englewood, Fort Lee, Hackensack, Tribeca, and Brighton Beach. The timeline was tight: Andrew was a friend, he needed the site operational quickly, and the scope demanded more than a template could deliver.</p>
+<p>Andrew Bershtein — a Brooklyn Law School graduate and rising attorney in the New Jersey legal market — was building a boutique practice spanning real estate, litigation, business consultation, trusts and estates, and tax and audit. He needed a website that could serve as the firm's primary client-facing platform across five office locations in northern New Jersey and New York, including Englewood, Fort Lee, Hackensack, Tribeca, and Brighton Beach. Andrew was a friend, and the scope was clear: a professional platform that could handle structured client intake for complex real estate transactions, not just a contact page with a phone number.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I built the site on WordPress using WPBakery for layout composition and a custom design system built on CSS custom properties to enforce visual consistency across all pages. The firm's five practice areas — real estate, litigation, business consultation, trusts and estates, and tax and audit — each received dedicated landing pages with structured content sections. Attorney profiles, office locations with embedded Google Maps for all five locations, and a secure client portal integration via TrackWithEase rounded out the core pages.</p>
+<p>The site ran on WordPress with WPBakery for layout composition and a custom design system built on CSS custom properties for visual consistency. Each of the firm's five practice areas received its own landing page with structured content sections. Attorney profiles, office locations with embedded Google Maps across all five offices, and a secure client portal via TrackWithEase rounded out the core pages.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The centerpiece technical challenge was the multi-step real estate inquiry form. Built on Contact Form 7 with significant custom development, the form walks prospective clients through a wizard-style flow: client role selection (buyer or seller), representation status, client type classification (individual or business entity, with conditional guidance for estate matters), and detailed contact and case information — all with per-step validation that prevents progression until every required field is complete. Google reCAPTCHA integration and a mandatory legal disclaimer acknowledgment handle security and compliance. A separate general contact form routes non-real-estate inquiries through a simpler path, ensuring the intake process matches the complexity of the matter type.</p>
+<p>The real technical work was the multi-step real estate inquiry form — the feature that separates this site from a standard law firm template. Built on Contact Form 7 with substantial custom development, the form guides prospective clients through a wizard-style flow: client role selection (buyer or seller), representation status, client type classification (individual or business entity, with conditional guidance for estate matters), and detailed contact and case information. Per-step validation prevents progression until every required field is complete. Google reCAPTCHA and a mandatory legal disclaimer acknowledgment handle security and compliance. A separate general contact form routes non-real-estate inquiries through a simpler path, so the intake process always matches the complexity of the matter.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->

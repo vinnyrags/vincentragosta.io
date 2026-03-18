@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://titaniquebroadway.com">https://titaniquebroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://titaniquebroadway.com" target="_blank" rel="noopener">https://titaniquebroadway.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of an Off-Broadway sensation that became a global theatrical phenomenon. A clean, media-rich WordPress build with integrated ticketing and a design system that scaled from a scrappy downtown premiere to an Olivier Award-winning international run.</p>
+<p>A Celine Dion jukebox parody that retells Titanic from Celine's fictional perspective. Tonally unlike anything else in my portfolio — built lean for an Off-Broadway budget, then scaled to eight cities worldwide, an Olivier Award, and a Broadway transfer to the St. James Theatre.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Led the full build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,11 +110,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Titanique — a jukebox musical that retells the story of Titanic entirely through the music of Celine Dion, from Dion's own fictional perspective — was preparing to open Off-Broadway at The Asylum Theatre in June 2022. Written by Tye Blue, Marla Mindelle, and Constantine Rousouli, with music supervision and arrangements by Nicholas James Connell, the show had the kind of premise that travels fast on social media: absurd, specific, and instantly shareable. The production needed a website that could convert that viral curiosity into ticket sales — a clean, focused digital presence that communicated the show's personality, surfaced performance availability, and handled the media content that was already generating press attention before opening night.</p>
+<p>Most of my Broadway portfolio operates in a register of prestige — Tony contenders, Pulitzer winners, Spielberg-produced adaptations. Titanique occupies a completely different corner of the theatrical world. Written by Tye Blue, Marla Mindelle, and Constantine Rousouli, with music supervision by Nicholas James Connell, the show had the kind of premise that travels fast on social media: absurd, specific, and instantly shareable. It was preparing to open Off-Broadway at The Asylum Theatre in June 2022 with the kind of grassroots buzz that no marketing budget can manufacture. The production needed a website that could convert viral curiosity into ticket sales — a clean, focused digital presence that let the show's personality do the talking.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The budget reflected an Off-Broadway production, not a Broadway blockbuster — the site needed to deliver maximum impact with a simple, purposeful design system.</p>
+<p class="is-style-muted">Off-Broadway budget, Off-Broadway timeline — but the audience it was about to find would dwarf most Broadway runs.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a deliberately lean design system — a navy blue primary palette, clean typography, and a modular content structure that could flex as the show's needs evolved. The ticketing calendar integrated directly with the box office, surfacing performance dates and availability in a format that minimized clicks between "I'm interested" and "I have a ticket." The media layer handled the content density that a show like Titanique generates: production photography, video embeds, press quotes from outlets like Newsweek, Vulture, and the New York Post, cast and creative bios, and a newsletter signup ("Join the Passenger List") powered by Gravity Forms. The design system was intentionally restrained — the show's personality was loud enough on its own, and the site's job was to get out of the way and convert interest into purchases.</p>
+<p>The build was deliberately lean — a navy blue primary palette, clean typography, and a modular content structure that could flex as the show's needs evolved. No cinematic hero layouts, no animated backgrounds, no multilingual architecture. The show's personality was loud enough on its own, and the site's job was to get out of the way and convert interest into purchases. The ticketing calendar integrated directly with the box office, surfacing performance dates and availability in a format that minimized clicks between curiosity and commitment. The media layer handled the content density that a show like Titanique generates: production photography, video embeds, press quotes from Newsweek, Vulture, and the New York Post, cast and creative bios, and "Join the Passenger List" newsletter signup. Compared to the multi-tier ticketing architecture of a show like Maybe Happy Ending or the global calendar complexity of <a href="https://vincentragosta.io/projects/wicked-the-musical/">Wicked</a>, this was deliberately simple — and that simplicity is exactly what let the platform scale to eight cities without a redesign.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The simplicity was the strategy — a clean, fast, mobile-optimized experience that let the show's reviews and word-of-mouth momentum do the selling.</p>
+<p class="is-style-muted">Not every build needs to be the most technically ambitious one in the portfolio — sometimes the smartest architecture is the one that stays out of the way.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Titanique's June 2022 premiere at The Asylum Theatre, and the platform carried the show through every phase of its extraordinary run. When the production transferred to the larger Daryl Roth Theatre in November 2022, the site scaled with it — updated venue information, expanded content, and a ticketing calendar that handled three years of extensions and sellouts through June 2025. The show won three Lucille Lortel Awards in 2023 including Outstanding Musical, followed by the Olivier Award for Best New Comedy when the production opened in London's West End at the Criterion Theatre. Titanique has now played eight cities worldwide — New York, London, Paris, Sydney, Montreal, and Toronto among them — and the site continues to serve as the show's digital home as it prepares for its Broadway debut at the St. James Theatre in March 2026, with Jim Parsons, Deborah Cox, and Melissa Barrera joining the cast.</p>
+<p>What started at a tiny downtown theatre became one of the most unlikely success stories in recent theatrical history. The production transferred to the larger Daryl Roth Theatre in November 2022, and the platform scaled with it — updated venue information, expanded content, and a ticketing calendar that handled three years of extensions and sellouts through June 2025. Three Lucille Lortel Awards in 2023 including Outstanding Musical. An Olivier Award for Best New Comedy when the production opened at London's Criterion Theatre. Eight cities worldwide — New York, London, Paris, Sydney, Montreal, and Toronto among them. The site continues to serve as the show's digital home as it prepares for its Broadway debut at the St. James Theatre in March 2026, with Jim Parsons, Deborah Cox, and Melissa Barrera joining the cast. A platform built for a scrappy Off-Broadway parody is now powering a Broadway launch — and has never been redesigned.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">A platform built for a downtown Off-Broadway opening that's still running four years later — now supporting a Broadway transfer with a cast that includes Emmy winners and Music Hall of Fame inductees.</p>
+<p class="is-style-muted">Four years, eight cities, zero redesigns. The lean architecture was not a compromise — it was the reason the platform survived every phase of the show's improbable trajectory.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

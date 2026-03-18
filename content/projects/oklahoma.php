@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress development for the official site of Oklahoma! — the Tony Award-winning Broadway revival directed by Daniel Fish at Circle in the Square Theatre. Custom ticketing calendar, national tour integration across 25+ cities, and a cast &amp; creative content layer built for a production that radically reimagined a classic and made Broadway history.</p>
+<p>Daniel Fish's Oklahoma! stripped away everything audiences expected from the most canonical musical in American theater — and the website had to match that energy. A tour-first WordPress build for a production that played Circle in the Square in the round, won the Tony for Best Revival, and made history with Ali Stroker's groundbreaking win.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">I led the build at Situation Interactive. Circle in the Square was also the venue for American Buffalo — two unconventional productions in the same intimate space.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A radical reimagining of the most canonical musical in American theater needed a digital platform built for its next chapter.</strong></h2>
+<h2 class="wp-block-heading"><strong>Chili at intermission, fluorescent lighting, and a Rodgers &amp; Hammerstein classic reimagined as something genuinely unsettling.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Director Daniel Fish's revival of Rodgers &amp; Hammerstein's Oklahoma! was not a revival in any traditional sense. Staged in the round at Circle in the Square Theatre with a stripped-down, seven-piece country-western band performing new orchestrations by Daniel Kluger, the production served chili and cornbread at intermission, bathed the audience in fluorescent light, and reframed one of the most-produced musicals in history as something dark, intimate, and contemporary. The show premiered at Bard College's Fisher Center, played a sold-out run at St. Ann's Warehouse in Brooklyn in the fall of 2018, and transferred to Broadway on April 7, 2019. It won the 2019 Tony Award for Best Revival of a Musical. Ali Stroker made history as the first performer who uses a wheelchair to win a Tony Award, taking Best Featured Actress in a Musical for her performance as Ado Annie — a moment that resonated far beyond Broadway. The original cast — Damon Daunno as Curly, Rebecca Naomi Jones as Laurey, Patrick Vaill as Jud Fry, Mary Testa as Aunt Eller, and James Davis as Will Parker — delivered 328 performances and grossed over $22.8 million before the Broadway run closed on January 19, 2020.</p>
+<p>Daniel Fish's Oklahoma! defied every expectation of what a Broadway revival should look like. Staged in the round at Circle in the Square Theatre — the same intimate thrust space where I later built the site for <a href="https://vincentragosta.io/projects/american-buffalo/">American Buffalo</a> — the production featured a stripped-down, seven-piece country-western band performing Daniel Kluger's new orchestrations. The audience sat at tables. There was chili and cornbread at intermission. Fluorescent lights stayed on. The show reframed one of the most-produced musicals in history as something dark, contemporary, and deliberately uncomfortable. After premiering at Bard College's Fisher Center and playing a sold-out run at St. Ann's Warehouse in Brooklyn, it transferred to Broadway on April 7, 2019, winning the Tony for Best Revival. Ali Stroker became the first performer who uses a wheelchair to win a Tony Award, taking Best Featured Actress for her Ado Annie — a moment that resonated far beyond the theater world. The original cast — Damon Daunno, Rebecca Naomi Jones, Patrick Vaill, Mary Testa, James Davis — delivered 328 performances grossing over $22.8 million before closing on January 19, 2020.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The national tour was originally slated for fall 2020 but was delayed by the pandemic. When it finally launched in November 2021 at the Orpheum Theatre in Minneapolis, the production needed a refreshed digital platform to drive ticket sales across 25+ cities — I led development on that build at Situation Interactive.</p>
+<p class="is-style-muted">The national tour was originally slated for fall 2020 but was delayed by the pandemic. When it finally launched in November 2021 at the Orpheum Theatre in Minneapolis, I led development on the refreshed platform at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,15 +138,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a custom theme architecture centered on the national tour rollout. The ticketing calendar was the primary conversion component — rendering performance schedules across multiple cities and venues with date-driven browsing, availability states, and deep links into third-party ticketing providers. The tour integration system managed the full routing: city-by-city scheduling, venue details, on-sale dates, and regional ticket links for stops spanning Minneapolis, Chicago, Los Angeles, San Francisco, Dallas, Washington D.C., Nashville, Oklahoma City, and more — all maintained by the marketing team through the CMS without developer involvement. A cast and creative section handled structured profiles for the touring company — led by Sasha Hutchings as Laurey and Sean Grandillo as Curly — alongside the creative team headed by director Daniel Fish, with field groups designed to support cast rotations as performers cycled through the run.</p>
+<p>The WordPress build was tour-first from the ground up. The ticketing calendar rendered performance schedules across 25+ cities with date browsing, availability states, and deep links into regional ticketing providers. The tour system managed city-by-city scheduling, venue details, on-sale dates, and local ticket links for stops spanning Minneapolis, Chicago, Los Angeles, San Francisco, Dallas, Washington D.C., Nashville, Oklahoma City, and beyond — all maintainable through the CMS by the marketing team. Cast profiles supported the touring company led by Sasha Hutchings as Laurey and Sean Grandillo as Curly, with field groups designed for cast rotations as performers cycled through the run.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The frontend reflected the production's unconventional visual identity. This was not a traditional Broadway brand — the design language drew from the show's raw, deconstructed aesthetic, with typography and layout choices that matched the production's stripped-down sensibility. Media galleries, press and reviews aggregation, and newsletter integration rounded out a content layer built to grow as the tour expanded into new markets through 2022.</p>
+<p>The frontend demanded a different approach than the polished Broadway brands I was used to building. Oklahoma!'s visual identity was raw and deconstructed — the design language pulled from the production's stripped-down aesthetic, with typography and layout choices that felt deliberately unfinished. Unconventional staging called for unconventional design. Media galleries, press aggregation, and newsletter integration rounded out a content layer built to scale as the tour expanded into new markets.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform was architected using the same ticketing and tour patterns I had established on prior Broadway builds — adapted here for a production with a distinctive voice and a touring schedule that was rebounding from a pandemic-delayed launch.</p>
+<p class="is-style-muted">The ticketing and tour infrastructure drew on patterns I had refined across builds like <a href="https://vincentragosta.io/projects/tina-on-broadway/">TINA</a> and <a href="https://vincentragosta.io/projects/mean-girls-on-broadway/">Mean Girls</a>, but the visual execution was entirely its own — nothing from those polished brands applied here.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -170,15 +170,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site served as the production's primary digital hub throughout the national tour — a run that opened at the Orpheum Theatre in Minneapolis in November 2021 and played over 25 cities across North America including the Ahmanson Theatre in Los Angeles, the Golden Gate Theatre in San Francisco, the Kennedy Center in Washington D.C., the Cadillac Palace Theatre in Chicago, and the Civic Center Music Hall in Oklahoma City. The marketing team managed tour dates, cast updates, venue details, and promotional content entirely through the CMS. The ticketing calendar drove conversions across every market, routing audiences directly into the purchase flow for each city's presenter without friction.</p>
+<p>The platform served as the production's digital hub throughout a national tour that opened at the Orpheum Theatre in Minneapolis in November 2021 and played over 25 cities — the Ahmanson in Los Angeles, the Golden Gate in San Francisco, the Kennedy Center in D.C., the Cadillac Palace in Chicago, and the Civic Center Music Hall in Oklahoma City among them. The ticketing calendar drove conversions across every market, routing audiences into the purchase flow for each city's presenter.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The platform supported a production that carried real cultural weight — a show that won the Tony for Best Revival, made Broadway history with Ali Stroker's win, grossed over $22.8 million across 328 Broadway performances, and challenged audiences across the country with Daniel Fish's provocative reinterpretation of a classic. The tour infrastructure, ticketing calendar architecture, and cast content patterns built for this project reinforced the reusable development approach I applied across multiple Broadway productions at Situation Interactive.</p>
+<p>The production carried real cultural weight beyond the box office. A Tony-winning revival, a historic first with Ali Stroker's win, $22.8 million across 328 Broadway performances, and a national tour that brought Daniel Fish's provocative reinterpretation to audiences who had never questioned what Oklahoma! was actually about. The platform supported all of it — from the pandemic-delayed launch through the final tour stop.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The patterns established here — tour-first architecture, structured cast management, and CMS-driven scheduling — continued to inform every subsequent theatrical build in the pipeline.</p>
+<p class="is-style-muted">Oklahoma! reinforced something I had been learning across every Broadway build: the tour infrastructure was becoming the most reusable part of the stack. The visual design was always bespoke, but the content architecture underneath kept proving itself.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

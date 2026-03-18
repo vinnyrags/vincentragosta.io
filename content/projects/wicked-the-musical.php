@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details Alt"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details Alt"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://wickedthemusical.com">https://wickedthemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://wickedthemusical.com" target="_blank" rel="noopener">https://wickedthemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Two generations of full-stack development for Broadway's second-highest-grossing musical. Custom ticket calendar, multilingual support via TranslatePress, and interactive animated backgrounds — built in 2018 for the show's 15th anniversary and redesigned in 2025 to align with a $700M+ film franchise.</p>
+<p>The biggest show in my portfolio, and the only one I have built twice. First in 2018 for Wicked's 15th anniversary, then a complete redesign in 2025 to unify the stage brand with a $700M+ film franchise. Custom ticket calendar spanning Broadway, touring, and international productions in six languages.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead at Situation Interactive, Broadway's leading digital agency.</p>
+<p class="is-style-muted">Drove the full development effort at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,7 +110,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Wicked opened at the Gershwin Theatre in 2003 and has since been seen by nearly 65 million people worldwide, grossing over $5 billion across Broadway, touring, and international productions in 16 countries and six languages. By 2018, the show was approaching its 15th anniversary — marked by an NBC primetime special featuring Idina Menzel, Kristin Chenoweth, and Ariana Grande — and the existing website no longer reflected the scale of the brand. Situation Interactive, Broadway's premier digital agency and Wicked's agency of record since the early 2000s, brought me on to rebuild the site from the ground up. Seven years later, Universal's two-part film adaptation grossed over $700 million at the global box office, and the site needed a second complete overhaul to unify the stage and screen brands under one digital roof.</p>
+<p>Every other project in my portfolio operates at a fraction of Wicked's scale. Seen by nearly 65 million people worldwide, grossing over $5 billion across Broadway, touring, and international productions in 16 countries and six languages, Wicked is not just a show — it is a global entertainment franchise. By 2018, the show was approaching its 15th anniversary — marked by an NBC primetime special featuring Idina Menzel, Kristin Chenoweth, and Ariana Grande — and the existing website no longer reflected the scale of the brand. Situation Interactive brought me on to rebuild the site from the ground up. Seven years later, Universal's two-part film adaptation grossed over $700 million at the global box office, creating a cultural moment that sent Broadway ticket demand to record-shattering levels. The site needed a second complete overhaul to unify the stage and screen brands under one digital roof.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The core technical challenge across both builds was the ticket calendar — a custom interactive component that aggregates performance schedules, pricing tiers, and purchase links across Broadway, multiple national touring companies, and international productions into a single unified interface. The calendar needed to handle timezone-aware date rendering, dynamic availability states, and deep links to third-party ticketing providers while remaining fast on mobile devices where the majority of ticket research happens. TranslatePress powered the multilingual layer, enabling front-end translation management across the site's content for international audiences without requiring separate site instances or duplicated content structures. The 2025 redesign introduced interactive animated backgrounds — canvas-driven visual elements that respond to scroll position and viewport size — bringing the immersive visual language of the film franchise into the browsing experience without compromising page performance or accessibility.</p>
+<p>The ticket calendar here is the most complex version of a component I have built many times across this portfolio. Where a show like <a href="https://vincentragosta.io/projects/outsiders/">The Outsiders</a> or Maybe Happy Ending needs a calendar for a single venue with one or two ticket tiers, Wicked's calendar aggregates performance schedules, pricing tiers, and purchase links across Broadway, multiple national touring companies, and international productions into a single unified interface — with timezone-aware date rendering, dynamic availability states, and deep links to different third-party ticketing providers per market. TranslatePress powered the multilingual layer, enabling front-end translation management for international audiences without requiring separate site instances or duplicated content structures. The 2025 redesign introduced interactive animated backgrounds — canvas-driven visual elements that respond to scroll position and viewport size — bringing the immersive visual language of the film franchise into the browsing experience. The film's release created the most intense traffic surge any of my platforms has handled: Wicked posted the first-ever $5 million single-week gross in Broadway history.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The 2018 build launched ahead of Wicked's 15th anniversary season and ran continuously for seven years — supporting cast changes, touring company updates, and marketing campaigns through the CMS without structural changes to the platform. When the film adaptation drove a surge in Broadway ticket demand in late 2024 — the show posted the first-ever $5 million single-week gross in Broadway history — the site handled the traffic without incident. The 2025 redesign shipped in coordination with the film franchise's visual rebrand, unifying stage and screen identities while preserving the operational workflows the marketing team had relied on for nearly a decade. The ticket calendar remains the primary conversion path for a show generating record-breaking weekly revenue.</p>
+<p>The 2018 build ran continuously for seven years without structural changes — supporting cast rotations, touring company updates, and marketing campaigns entirely through the CMS. When the film drove a surge in ticket demand in late 2024, the site handled the traffic without incident. The 2025 redesign shipped in coordination with the film franchise's visual rebrand, unifying stage and screen identities while preserving the operational workflows the marketing team had relied on for nearly a decade. Wicked is the anchor of my portfolio in a way no other project is — not just the biggest brand, but the longest client relationship and the clearest proof that the platforms I build are designed to last.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Wicked is one of the longest-running client relationships in my career — a platform I've owned across two major builds and continue to support as the franchise expands.</p>
+<p class="is-style-muted">Two builds, seven years of continuous operation, a $700M film launch absorbed without incident. The ticket calendar alone serves more markets and languages than most developers' entire portfolio.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://www.sohogrand.com">https://www.sohogrand.com</a></p>
+<p class="has-30-font-size"><a href="https://www.sohogrand.com" target="_blank" rel="noopener">https://www.sohogrand.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Frontend development for the flagship property of GrandLife Hotels, building on an existing Ruby on Rails and headless WordPress architecture to deliver a full-service hotel platform with room booking, dining, events, and editorial content across a landmark SoHo property.</p>
+<p>Frontend development for the flagship GrandLife Hotels property — the anchor of a multisite network that also included <a href="https://vincentragosta.io/projects/soho-diner/">Soho Diner</a> and <a href="https://vincentragosta.io/projects/the-django-nyc/">The Django</a>, all built on a shared Ruby on Rails and headless WordPress architecture. Full-service hotel platform with room booking, dining, events, and editorial content for a landmark SoHo property.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The platform ran on the decoupled architecture King &amp; Partners had established across their GrandLife Hotels portfolio: a Ruby on Rails frontend consuming content from a headless WordPress backend via REST API. I worked within and extended this existing infrastructure — inheriting the content modeling, API layer, and deployment patterns, then building out Soho Grand-specific templates, components, and integrations on top of that foundation. WordPress Multisite served as the CMS, sharing the underlying content infrastructure with the hotel group's other properties while maintaining a distinct editorial experience for each brand.</p>
+<p>King &amp; Partners had built a decoupled architecture for their GrandLife Hotels portfolio that separated concerns cleanly: a Ruby on Rails application handled routing, page rendering, and frontend presentation, while a headless WordPress backend managed all content through the REST API. WordPress Multisite unified the CMS layer across properties, giving each brand — Soho Grand, Soho Diner, The Django — its own editorial workspace while sharing the underlying content infrastructure. I worked within and extended this existing stack, inheriting the content modeling, API conventions, and deployment patterns, then building out Soho Grand-specific templates, components, and integrations on top of that foundation.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -146,7 +146,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The Soho Grand site shared the same multisite infrastructure as the Roxy Hotel and Soho Diner properties — a common CMS backend with independent frontends tailored to each brand's identity.</p>
+<p class="is-style-muted">As the flagship property, the Soho Grand site set the standard that informed the Soho Diner and Django builds — each running its own domain and frontend while drawing from the same multisite CMS backend.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -174,7 +174,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The shared multisite architecture established a scalable pattern across the GrandLife Hotels portfolio — each property maintained its own brand identity and frontend while drawing from the same content infrastructure, reducing operational overhead and enabling the client's team to manage multiple properties from a single CMS.</p>
+<p class="is-style-muted">The multisite architecture proved its value as I applied the same patterns to Soho Diner and The Django — each property maintaining its own brand identity and frontend while the client's team managed all three from a single CMS, reducing operational overhead across the portfolio.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

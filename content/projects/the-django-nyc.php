@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://www.thedjangonyc.com">https://www.thedjangonyc.com</a></p>
+<p class="has-30-font-size"><a href="https://www.thedjangonyc.com" target="_blank" rel="noopener">https://www.thedjangonyc.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Frontend development for a subterranean jazz club and restaurant in the Roxy Hotel, extending an existing Ruby on Rails and headless WordPress architecture to deliver a performance-driven platform with event scheduling, Resy reservations, photo galleries, and editorial content.</p>
+<p>Frontend development for a subterranean jazz club and restaurant in the Roxy Hotel — the third GrandLife property I built on the shared Rails and headless WordPress architecture, after the <a href="https://vincentragosta.io/projects/soho-grand-hotel/">Soho Grand</a> and <a href="https://vincentragosta.io/projects/soho-diner/">Soho Diner</a>. Performance-driven platform with nightly event scheduling, Resy reservations, panoramic venue views, and editorial content.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The platform ran on the same decoupled architecture King &amp; Partners had established across their hospitality portfolio: a Ruby on Rails frontend consuming content from a headless WordPress backend via REST API. I worked within and extended this existing infrastructure — inheriting the content modeling, API layer, and deployment patterns, then building out The Django-specific frontend templates, components, and integrations on top of that foundation. This was the same architectural pattern I built on for the Soho Diner project, also for King &amp; Partners, which meant I brought direct familiarity with the stack and its conventions from day one.</p>
+<p>By the time I started The Django, I had already shipped two properties on King &amp; Partners' decoupled stack — the Soho Grand flagship and Soho Diner. That familiarity with the Rails frontend, WordPress REST API layer, and multisite content infrastructure meant I could focus entirely on what made this venue different rather than re-learning the platform.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -146,7 +146,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The Django operated on its own domain and codebase, distinct from the Roxy Hotel property site, while sharing the underlying WordPress Multisite content infrastructure — the same separation pattern I implemented for Soho Diner within the same engagement.</p>
+<p class="is-style-muted">Like the Soho Grand and Soho Diner before it, The Django ran on its own domain and codebase while sharing the underlying WordPress Multisite content infrastructure — a separation pattern that gave each venue its own visual identity without duplicating the CMS layer.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -174,7 +174,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform continues to serve The Django years after launch — a durable foundation that has scaled with the venue as its programming and audience have grown. The architecture pattern validated across this project and Soho Diner became a repeatable model within King &amp; Partners' hospitality portfolio.</p>
+<p class="is-style-muted">The platform continues to serve The Django years after launch. Across all three GrandLife properties — Soho Grand, Soho Diner, and The Django — the shared architecture proved that a single decoupled stack could support venues with fundamentally different audiences and content needs, from hotel booking to nightly jazz programming.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

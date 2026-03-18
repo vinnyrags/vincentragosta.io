@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://villatel.com">https://villatel.com</a></p>
+<p class="has-30-font-size"><a href="https://villatel.com" target="_blank" rel="noopener">https://villatel.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development on a decoupled web platform for a luxury vacation rental brand, working across a Ruby on Rails frontend and a headless WordPress backend delivering content via REST API. Built through King & Partners, a luxury branding agency serving hospitality and lifestyle clients.</p>
+<p>Full-stack development on a decoupled web platform for a luxury vacation rental brand — my introduction to King & Partners and the Rails-based headless WordPress stack that I would later apply across three GrandLife Hotels properties. Working across a Ruby on Rails frontend and a headless WordPress backend delivering content via REST API.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -114,7 +114,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">King & Partners — a luxury branding agency with clients including Auberge Resorts, Four Seasons, and JP Morgan Chase — handled Villatel's brand identity and digital strategy. As the platform's development needs grew, King & Partners brought me on to work across the existing codebase: a Ruby on Rails frontend consuming a headless WordPress backend via REST API.</p>
+<p class="is-style-muted">King & Partners — a luxury branding agency with clients including Auberge Resorts, Four Seasons, and JP Morgan Chase — handled Villatel's brand identity and digital strategy. This was my first engagement with the agency, and the decoupled Rails-and-WordPress architecture I learned here became the foundation for every subsequent King & Partners build, including the <a href="https://vincentragosta.io/projects/soho-grand-hotel/">Soho Grand Hotel</a>, <a href="https://vincentragosta.io/projects/soho-diner/">Soho Diner</a>, and <a href="https://vincentragosta.io/projects/the-django-nyc/">The Django</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">This project reinforced a pattern that defines my approach to development: strong engineering fundamentals transfer across platforms and languages. Moving from deep PHP and WordPress specialization into a Ruby on Rails codebase — and shipping production work without a ramp-up period — demonstrated the kind of platform versatility that comes from understanding architecture, not just syntax. The decoupled patterns, API design principles, and content modeling discipline I applied here have informed every headless and API-driven project since.</p>
+<p class="is-style-muted">Villatel proved that strong engineering fundamentals transfer across platforms and languages. Moving from deep PHP and WordPress specialization into a Ruby on Rails codebase — and shipping production work without a ramp-up period — demonstrated the kind of versatility that comes from understanding architecture, not just syntax. The fluency I developed here paid dividends immediately: King & Partners brought me on for the GrandLife Hotels portfolio next, where I applied the same decoupled patterns across the Soho Grand, Soho Diner, and The Django.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

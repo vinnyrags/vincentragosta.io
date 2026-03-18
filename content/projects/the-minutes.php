@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Built the official website for The Minutes — the Tony-nominated Broadway play by Tracy Letts, directed by Anna D. Shapiro, produced by Steppenwolf Theatre Company at Studio 54. Custom WordPress theme with a ticketing calendar, responsive brochure layout, and a streamlined content architecture designed for a 90-minute, no-intermission production.</p>
+<p>A deliberately lean brochure site for Tracy Letts's Pulitzer-finalist play at Studio 54. Where <a href="https://vincentragosta.io/projects/american-buffalo/">American Buffalo</a> and <a href="https://vincentragosta.io/projects/for-colored-girls/">for colored girls</a> — launching the same week — demanded rich content systems and ensemble profiles, The Minutes called for discipline: ticketing calendar, production overview, reviews, and nothing else. Ninety minutes, no intermission, no feature bloat.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Delivered as development lead at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Steppenwolf hit was finally making it to Broadway — two years late.</strong></h2>
+<h2 class="wp-block-heading"><strong>A Steppenwolf transfer that got sixteen previews before the pandemic — and two years to think about what came next.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The Minutes — written by Pulitzer Prize finalist Tracy Letts and directed by Tony winner Anna D. Shapiro — premiered at Steppenwolf Theatre Company in Chicago in November 2017. A Broadway transfer was announced for the 2019-2020 season, and previews began at the Cort Theatre on February 25, 2020. Sixteen days later, the pandemic shut down every theater in New York. The production sat dormant for two years. When Broadway reopened, The Minutes found a new home at Studio 54, resumed previews on April 2, 2022, and officially opened on April 17. The show needed a digital platform that could drive ticket sales from day one — there was no soft launch window. Situation Interactive handled digital marketing for the production, and I led development on the website at theminutesbroadway.com.</p>
+<p>Tracy Letts's The Minutes premiered at Steppenwolf in Chicago in November 2017 and was announced for a Broadway transfer in the 2019-2020 season. Previews began at the Cort Theatre on February 25, 2020. Sixteen days later, every theater in New York went dark. When Broadway reopened, the production found a new home at Studio 54, resumed previews on April 2, 2022, and officially opened on April 17 — landing in the same two-week window as American Buffalo and for colored girls, all three of which I was building simultaneously. Unlike those productions, The Minutes was a focused brochure site from the start. A 90-minute play with no intermission, a single set, and a tight ensemble directed by Anna D. Shapiro did not need the content depth of a seven-woman choreopoem or a star vehicle with three A-list headshots. It needed a clean conversion path.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The production had already been nominated for a Pulitzer Prize for Drama and carried significant critical momentum — the website needed to match that caliber without overcomplicating a fundamentally lean show.</p>
+<p class="is-style-muted">The Pulitzer nomination for Drama gave the production critical credibility. The site's job was to channel that into tickets without overbuilding.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The Minutes was a 90-minute play with no intermission, a single set, and a tight ensemble cast — the website reflected that discipline. I built a custom WordPress theme structured as a clean brochure site: production overview, cast and creative team profiles, media gallery, and a reviews section aggregating the show's critical reception. The centerpiece was the ticketing calendar — a custom component rendering the full performance schedule at Studio 54, with date selection, availability indicators, and direct purchase links routing users into the ticketing flow with the correct performance pre-selected. The frontend was mobile-first and performance-optimized, with responsive layouts, compressed assets, and lazy-loaded media to keep page weight minimal. SASS handled the styling architecture, organized around the production's visual identity. The content layer was built so the production team could manage updates — schedule changes, cast replacements, press quotes — without developer intervention.</p>
+<p>Where American Buffalo had a star-driven content system and for colored girls demanded a seven-color visual identity, The Minutes called for restraint. The custom WordPress theme was structured as a clean brochure: production overview, cast and creative profiles, media gallery, reviews section, and the ticketing calendar. That calendar followed the same pattern as the other spring 2022 builds — date-driven schedule at Studio 54, availability states, direct purchase routing — but the surrounding content was lighter. Mobile-first layouts, compressed assets, and lazy-loaded media kept page weight minimal. The production team could rotate press quotes and handle schedule changes through the CMS without touching code.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site was intentionally lean — no feature bloat, no unnecessary complexity. A focused production deserved a focused platform.</p>
+<p class="is-style-muted">Knowing when not to build is as important as knowing what to build. This site did exactly what the production required and nothing more.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The website launched ahead of the resumed preview period and supported the production through its entire Broadway run — from April 2 through the final performance on July 24, 2022. The ticketing calendar drove direct conversions across 108 performances at Studio 54, contributing to a total gross of $5.86 million at an average ticket price of $84.28. The show earned a Tony Award nomination for Best Play, along with nominations from the Drama League and the Outer Critics Circle. The production team managed all content updates independently after launch — cast changes, schedule adjustments, and press quote rotations required zero developer support throughout the run.</p>
+<p>The site supported the full run from resumed previews on April 2 through the final performance on July 24, 2022. Across 108 performances at Studio 54, The Minutes grossed $5.86 million at an average ticket price of $84.28. The production earned a Tony nomination for Best Play alongside recognition from the Drama League and the Outer Critics Circle. Post-launch, the production team handled everything — schedule changes, press quote additions, cast updates — without developer involvement.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform delivered exactly what the production required: a conversion-focused digital presence that matched the precision of the show itself. The ticketing calendar pattern I built for productions like The Minutes became a reusable component across subsequent Situation Interactive projects.</p>
+<p class="is-style-muted">Building this alongside the more complex American Buffalo and for colored girls sites reinforced something useful: the same ticketing calendar pattern could scale down to a focused brochure or up to a full production platform without rearchitecting. That flexibility paid off on every build that followed.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://mjthemusical.com">https://mjthemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://mjthemusical.com" target="_blank" rel="noopener">https://mjthemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official digital platform of MJ the Musical — a four-time Tony Award-winning Broadway production. WordPress Multisite network powering Broadway, national tour, and international productions with a shared design system, custom ticketing calendar, and region-specific content management.</p>
+<p>The most architecturally ambitious build in my Broadway portfolio — a WordPress Multisite network powering six productions across four continents from a single codebase. Custom design system, Ticketmaster API integration, and region-specific content management for a franchise that has grossed over $319 million on Broadway alone.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead at Situation Interactive.</p>
+<p class="is-style-muted">Led development at Situation Interactive. The multisite approach evolved from the single-site tour patterns I had built on <a href="https://vincentragosta.io/projects/pretty-woman/">Pretty Woman</a> and refined across subsequent Broadway projects.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Broadway production with global ambitions needed a digital platform built to scale.</strong></h2>
+<h2 class="wp-block-heading"><strong>From the first conversation, this was never about one show — it was about building infrastructure for a global franchise.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>MJ the Musical — written by two-time Pulitzer Prize winner Lynn Nottage and directed and choreographed by Tony winner Christopher Wheeldon — opened on Broadway at the Neil Simon Theatre on February 1, 2022. The production centers on the making of Michael Jackson's 1992 Dangerous World Tour, bringing his catalog to the stage through narrative rather than revue. It arrived with 10 Tony Award nominations and won four, including Best Leading Actor in a Musical for Myles Frost. From the outset, the production was planned as a global franchise — Broadway first, then a North American national tour, London's West End, Hamburg, Sydney, Melbourne, and an Asian tour — each with its own regional ticketing, content, and marketing needs.</p>
+<p>MJ the Musical opened at the Neil Simon Theatre on February 1, 2022, but the ambition predated the first preview. Written by two-time Pulitzer winner Lynn Nottage, directed and choreographed by Tony winner Christopher Wheeldon, the production centers on the making of Michael Jackson's 1992 Dangerous World Tour — telling the story through narrative rather than revue. It earned 10 Tony nominations and won four, including Best Leading Actor for Myles Frost. What made this project different from any other Broadway build was the scope: New York was just the first market. A North American national tour, London's West End, Hamburg, Sydney, Melbourne, and an Asian tour were all in the pipeline from day one, each requiring its own regional ticketing, content, and marketing infrastructure.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The digital platform needed to launch alongside the Broadway opening and be architecturally ready to support every subsequent production without rebuilding from scratch.</p>
+<p class="is-style-muted">I had built multisite architectures before — Pretty Woman was the first — but MJ demanded a level of scalability and design system rigor that went well beyond anything in my prior work.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a WordPress Multisite network — a single codebase powering dedicated subsites for each production: Broadway, the national tour, London, Hamburg, and beyond. Each subsite runs the same custom theme with its own content, ticketing configuration, and regional settings, while sharing the underlying design system, component library, and plugin infrastructure. The design system itself was one of the most comprehensive I built at Situation — a full CSS custom property framework governing color tokens, a responsive spacing scale, fluid typography, and component-level layout rules, all enforced consistently across every production's site without duplication. The ticketing calendar was a custom-built interactive component integrated with the Ticketmaster API, rendering show dates, availability states, and matinee/evening performance slots into a visual calendar interface that drove users directly into the purchase flow with the correct show, date, and venue pre-selected.</p>
+<p>I led development on a WordPress Multisite network where a single codebase powers dedicated subsites for each production — Broadway, the national tour, London, Hamburg, and every market that followed. Each subsite runs the same custom theme with its own content, ticketing configuration, and regional settings while sharing the design system, component library, and plugin infrastructure. The design system was the most comprehensive I built at Situation: a CSS custom property framework governing color tokens, a responsive spacing scale, fluid typography, and component-level layout rules, all enforced without duplication across every production's site. The ticketing calendar integrated directly with the Ticketmaster API, rendering dates, availability states, and performance slots into a visual interface that routed users into the correct purchase flow for their region, venue, and showtime.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The multisite architecture meant spinning up a new international production — with its own subdomain, ticketing partner, language considerations, and regional newsletter signup — required zero theme duplication. New sites inherited the full design system and component library immediately.</p>
+<p class="is-style-muted">Spinning up a new international production — subdomain, ticketing partner, language considerations, regional newsletter — required zero theme duplication. The Pretty Woman multisite had proven the concept; MJ proved it could scale globally.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The architecture I built for MJ continues to power one of the most commercially successful musicals on Broadway — a platform designed once, deployed globally, and still running in production years later.</p>
+<p class="is-style-muted">MJ represents the culmination of every Broadway build that came before it — the ticketing patterns from <a href="https://vincentragosta.io/projects/tina-on-broadway/">TINA</a>, the tour architecture from <a href="https://vincentragosta.io/projects/oklahoma/">Oklahoma!</a> and <a href="https://vincentragosta.io/projects/mean-girls-on-broadway/">Mean Girls</a>, the design system thinking that only becomes possible after building enough sites to know what actually needs to be shared. Designed once, deployed globally, still running.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

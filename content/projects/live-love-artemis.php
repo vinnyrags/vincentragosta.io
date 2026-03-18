@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -29,7 +29,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size">Vincent Ragosta Inc.</p>
+<p class="has-30-font-size">Live Love Artemis</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://liveloveartemis.com">https://liveloveartemis.com</a></p>
+<p class="has-30-font-size"><a href="https://liveloveartemis.com" target="_blank" rel="noopener">https://liveloveartemis.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Custom WordPress website for a women-led real estate group operating across Philadelphia, South Jersey, and the surrounding suburbs. Full design and development — team profiles, brand storytelling, podcast integration, and a content management layer built for a fast-growing brokerage with national ambitions.</p>
+<p>Full design and development for a women-led real estate group operating across Philadelphia, South Jersey, and the surrounding suburbs. Unlike my agency work, this was an end-to-end engagement — brand interpretation, visual design, custom WordPress theme, team profiles, podcast integration, and a content layer built for a brokerage scaling fast.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -106,7 +106,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A newly formed real estate group needed a digital presence that matched its ambition.</strong></h2>
+<h2 class="wp-block-heading"><strong>Two top-producing agents launched a brand. It needed a website to match the momentum.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,11 +134,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A modern, sleek design with structured content architecture built for a growing team.</strong></h2>
+<h2 class="wp-block-heading"><strong>Design and development from scratch — no agency, no existing brand system.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I designed and built the site on WordPress with a custom theme, working under the creative direction of Nino Royalle, Artemis's Chief Operating Officer. The design language was modern and sleek — clean typography, generous whitespace, and a visual hierarchy that let the brand's lifestyle photography and team portraits carry the page. Team member profiles used a custom post type with structured fields for bios, credentials, service areas, and social links, making it simple for the operations team to add new agents as the group expanded. The site integrated the Live Love Artemis podcast feed, embedded property content, and included dedicated sections for the firm's core values, community involvement, and market coverage across Pennsylvania and New Jersey.</p>
+<p>Working under the creative direction of Nino Royalle, Artemis's Chief Operating Officer, I handled both the visual design and the WordPress build — a scope that my agency projects rarely offered. The design language was modern and clean: generous whitespace, a visual hierarchy that let lifestyle photography and team portraits carry the page, and typography chosen to project professionalism without feeling corporate. Team member profiles ran on a custom post type with structured fields for bios, credentials, service areas, and social links, so the operations team could onboard new agents without touching code. The site pulled in the Live Love Artemis podcast feed, embedded property content, and provided dedicated sections for the firm's core values, community involvement, and market coverage across Pennsylvania and New Jersey.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The content architecture and CMS patterns established on this project informed the approach I carried into subsequent direct-client builds through my independent practice.</p>
+<p class="is-style-muted">Projects like this — where I own the full stack from design through deployment — exercise a different set of muscles than agency engagements. The content architecture and CMS patterns established here informed the approach I carried into subsequent direct-client builds, including <a href="https://vincentragosta.io/projects/bershtein-law/">Bershtein Law</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

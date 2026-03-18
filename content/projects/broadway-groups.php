@@ -1,4 +1,4 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
         <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
@@ -71,7 +71,7 @@
                 <!-- /wp:paragraph -->
 
                 <!-- wp:paragraph {"fontSize":"30"} -->
-                <p class="has-30-font-size"><a href="https://groups.broadway.com">https://groups.broadway.com</a></p>
+                <p class="has-30-font-size"><a href="https://groups.broadway.com" target="_blank" rel="noopener">https://groups.broadway.com</a></p>
                 <!-- /wp:paragraph --></div>
             <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
         <!-- wp:column -->
         <div class="wp-block-column"><!-- wp:paragraph -->
-            <p>Full-stack development for Broadway Groups — the group ticket sales platform operated by Group Sales Box Office under the Broadway.com brand. Custom WordPress theme with a complex multi-step inquiry system, a structured data model spanning 40+ Broadway and Off-Broadway shows, and a season lifecycle architecture built for continuous operation across the industry's annual programming cycle.</p>
+            <p>The B2B side of Broadway ticketing. Where the individual show sites and the Criterion platform handled direct-to-consumer sales, Broadway Groups served a fundamentally different audience: tour operators, school administrators, corporate event planners, and social organizations booking blocks of 50+ seats across 40+ productions. Custom WordPress theme with a multi-step inquiry system, a deep show data model, and a season lifecycle architecture designed for the continuous churn of Broadway's programming calendar.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->
-            <p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+            <p class="is-style-muted">Led development at Situation Interactive.</p>
             <!-- /wp:paragraph --></div>
         <!-- /wp:column --></div>
     <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
     <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
         <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -166,7 +166,7 @@
             <!-- /wp:heading -->
 
             <!-- wp:paragraph -->
-            <p>The rebuilt platform launched in 2020 — a year that would test its architecture in ways no one anticipated. When Broadway shut down on March 12, 2020, closing 31 running productions overnight, the site became the primary digital touchpoint for group buyers navigating cancellations, rescheduling, and the eventual return of live theatre. The season lifecycle architecture proved its value immediately: as shows closed, paused, and reopened across an 18-month shutdown, the content team managed the entire catalog through the CMS without structural changes or developer intervention. When Broadway officially reopened at full capacity in September 2021 — with The Lion King, Hamilton, and Wicked leading the return — the platform was ready, onboarding returning and new productions through the same structured workflow. The inquiry system drove qualified group sales leads through the recovery period and into the seasons that followed, supporting the industry's climb from the pandemic low through the 2024–2025 season that set a new record at nearly $2 billion in grosses. The platform continues to operate at groups.broadway.com, serving as the digital foundation for an organization that brands itself as the #1 source for group tickets to Broadway — a claim backed by six decades of operation and a platform built to sustain it.</p>
+            <p>The rebuilt platform launched in 2020 — a year that would test its architecture in ways no one anticipated. When Broadway shut down on March 12, 2020, closing 31 running productions overnight, the site became the primary digital touchpoint for group buyers navigating cancellations, rescheduling, and the eventual return of live theatre. The season lifecycle architecture proved its value immediately: as shows closed, paused, and reopened across an 18-month shutdown, the content team managed the entire catalog through the CMS without structural changes or developer intervention. When Broadway officially reopened at full capacity in September 2021 — with The Lion King, Hamilton, and <a href="https://vincentragosta.io/projects/wicked-the-musical/">Wicked</a> leading the return — the platform was ready, onboarding returning and new productions through the same structured workflow. The inquiry system drove qualified group sales leads through the recovery period and into the seasons that followed, supporting the industry's climb from the pandemic low through the 2024–2025 season that set a new record at nearly $2 billion in grosses. The platform continues to operate at groups.broadway.com, serving as the digital foundation for an organization that brands itself as the #1 source for group tickets to Broadway — a claim backed by six decades of operation and a platform built to sustain it.</p>
             <!-- /wp:paragraph -->
 
             <!-- wp:paragraph {"className":"is-style-muted"} -->

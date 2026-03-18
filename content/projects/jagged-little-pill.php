@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://jaggedlittlepill.com">https://jaggedlittlepill.com</a></p>
+<p class="has-30-font-size"><a href="https://jaggedlittlepill.com" target="_blank" rel="noopener">https://jaggedlittlepill.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Jagged Little Pill — the Grammy-winning, Tony-nominated Broadway musical based on Alanis Morissette's landmark album. Custom WordPress theme with a ticketing calendar, complex frontend layout work, and a content architecture built to carry a production from world premiere through Broadway and a national tour.</p>
+<p>Some of the most ambitious frontend layout work I did at Situation — layered compositions and unconventional grids that pushed well beyond standard Broadway site conventions. Built on WordPress from the A.R.T. world premiere through Broadway and a national tour, with a content architecture designed to scale across a six-year production lifecycle.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">I led this build at Situation Interactive — part of a growing portfolio of jukebox and biographical musical builds alongside <a href="https://vincentragosta.io/projects/tina-on-broadway/">TINA</a> and <a href="https://vincentragosta.io/projects/mj-the-musical/">MJ the Musical</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>One of the most anticipated new musicals of the decade needed a digital platform before the first note played.</strong></h2>
+<h2 class="wp-block-heading"><strong>Not a bio-musical, not a jukebox revue — something harder to categorize, and harder to market.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Jagged Little Pill — a new musical with music by Alanis Morissette and Glen Ballard, lyrics by Morissette, book by Oscar winner Diablo Cody, and direction by Tony winner Diane Paulus — was preparing for its world premiere at the American Repertory Theater in Cambridge, Massachusetts, in May 2018. The show is not a bio-musical about Morissette — it tells an original story about the Healy family, weaving songs from the 33-million-copy-selling 1995 album into a narrative about pain, healing, and the systems that fail us. The production featured choreography by Sidi Larbi Cherkaoui (Beyoncé's Formation world tour), orchestrations by Pulitzer and Tony winner Tom Kitt, and a cast led by Elizabeth Stanley, Celia Rose Gooding, Derek Klena, Sean Allan Krill, Lauren Patten, and Kathryn Gallagher. A show with that creative pedigree — built on one of the best-selling albums of all time — needed a digital platform that could match the anticipation and convert it into ticket sales from the moment the premiere was announced.</p>
+<p>Jagged Little Pill stands apart from shows like TINA or MJ the Musical because it is not telling the artist's life story. The musical — with music by Alanis Morissette and Glen Ballard, lyrics by Morissette, book by Oscar winner Diablo Cody, and direction by Tony winner Diane Paulus — weaves songs from the 33-million-copy-selling 1995 album into an original narrative about the Healy family, exploring pain, healing, and systemic failure. It premiered at the American Repertory Theater in Cambridge, Massachusetts, in May 2018, with choreography by Sidi Larbi Cherkaoui (Beyoncé's Formation world tour), orchestrations by Pulitzer and Tony winner Tom Kitt, and a cast led by Elizabeth Stanley, Celia Rose Gooding, Derek Klena, Sean Allan Krill, Lauren Patten, and Kathryn Gallagher. That distinction — familiar music, unfamiliar story — shaped every decision about the digital platform. The site had to sell tickets on the strength of Morissette's catalog while making clear this was something audiences hadn't seen before.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of the A.R.T. world premiere and be architecturally ready to scale through what everyone involved expected would be a Broadway transfer.</p>
+<p class="is-style-muted">Everyone involved expected a Broadway transfer from the start — the site architecture had to be ready for that scale before the A.R.T. premiere curtain went up.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend demanded as much attention as the backend architecture. The design pushed well beyond standard Broadway production site conventions — layered compositions, unconventional grid structures, and bold typographic treatments that required precise CSS positioning to hold together across breakpoints without losing the visual energy that made the desktop layouts compelling. The ticketing calendar was the primary conversion component — an interactive, date-driven interface displaying performance availability at the A.R.T. (and later the Broadhurst Theatre on Broadway), with matinee and evening slots, sold-out states, and direct links routing users into the purchase flow with the correct show and date pre-selected. The site carried the full scope of a major Broadway production platform: cast and creative team profiles with structured bios, a press acclaim section aggregating reviews from major outlets, video content integration, a Grammy-winning cast album streaming section, newsletter signup for community engagement, and an official merchandise shop. The content architecture was built with the show's lifecycle in mind — structured content objects for cast members, tour dates, and venue information that could be updated independently as the production moved from its A.R.T. premiere to Broadway previews and beyond.</p>
+<p>I led development on a custom WordPress theme where the frontend was the main event. The designs pushed into territory I hadn't encountered on prior Broadway builds — layered compositions, unconventional grid structures, and bold typographic treatments that required precise CSS positioning to hold together across breakpoints. What looked effortless on a desktop comp became a series of responsive puzzles, each demanding its own solution. The ticketing calendar handled performance availability at the A.R.T. and later the Broadhurst Theatre on Broadway, with date browsing, sold-out states, and direct purchase links. Beyond ticketing, the site carried cast and creative profiles with structured bios, a press section aggregating reviews from major outlets, video integration, a streaming section for the Grammy-winning cast album, and an official merchandise shop. The content architecture anticipated the show's full lifecycle — structured objects for cast members, tour dates, and venue information that could be updated independently as the production moved from Cambridge to Broadway previews and eventually a national tour.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The frontend layout work on this build was some of the most interesting I have done — designs that looked effortless on screen but required careful CSS architecture to execute responsively without compromise.</p>
+<p class="is-style-muted">Where the TINA build taught me to handle content density, Jagged Little Pill taught me to handle visual ambition — designs that demanded CSS precision without a single compromise at any breakpoint.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,7 +166,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Jagged Little Pill's world premiere at the American Repertory Theater in May 2018, where the production sold out all 79 performances and became the highest-grossing and longest-running musical in A.R.T. history, with more than 45,000 audience members across the 10-week run. The platform then supported the show's transfer to Broadway at the Broadhurst Theatre — 36 previews beginning November 3, 2019, an official opening on December 5, and a run that ultimately spanned 171 performances and grossed over $24.3 million at an average capacity of 93%. The show received 15 Tony Award nominations — the most of any production that season — and won two, including Best Book of a Musical for Diablo Cody and Best Featured Actress for Lauren Patten. The original cast recording won the Grammy Award for Best Musical Theater Album. The ticketing calendar evolved to support the North American national tour, which launched in September 2022 and ran through April 2024 across 474 performances in cities including Los Angeles, San Francisco, Chicago, Washington D.C., and Philadelphia.</p>
+<p>The site launched ahead of the A.R.T. world premiere in May 2018, where the production sold out all 79 performances and became the highest-grossing and longest-running musical in A.R.T. history — more than 45,000 audience members across a 10-week run. The Broadway transfer followed at the Broadhurst Theatre: 36 previews beginning November 3, 2019, an official opening on December 5, and a run spanning 171 performances at 93% average capacity, grossing over $24.3 million. Jagged Little Pill earned 15 Tony nominations — the most of any production that season — winning Best Book (Diablo Cody) and Best Featured Actress (Lauren Patten). The cast recording won the Grammy for Best Musical Theater Album. The platform then scaled to support a North American national tour from September 2022 through April 2024 — 474 performances across Los Angeles, San Francisco, Chicago, Washington D.C., Philadelphia, and beyond. Six years from premiere to final tour performance, all running on the same WordPress build.</p>
 <!-- /wp:paragraph -->
 
 </div>

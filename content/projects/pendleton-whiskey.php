@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://pendletonwhisky.com">https://pendletonwhisky.com</a></p>
+<p class="has-30-font-size"><a href="https://pendletonwhisky.com" target="_blank" rel="noopener">https://pendletonwhisky.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for Pendleton Whisky's digital platform during a $205M acquisition by Proximo Spirits. Custom WordPress build with age-gated entry, structured content architecture, and event-driven campaign pages supporting a brand rooted in over a century of Western heritage.</p>
+<p>The second spirits brand I built for Experience Interaction — following the Wolf Moon Bourbon launch. Full-stack WordPress development for Pendleton Whisky during a $205M acquisition by Proximo Spirits, with structured content architecture, age-gated entry, and campaign-modular pages supporting a heritage brand going national.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -110,7 +110,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Pendleton Whisky — Oregon's flagship whisky brand, produced by Hood River Distillers since 2003 and synonymous with the Pendleton Round-Up rodeo — was in the middle of a $205 million acquisition by Becle (parent company of Jose Cuervo) through its U.S. subsidiary Proximo Spirits. The brand was moving 250,000+ nine-liter cases annually, primarily concentrated west of the Mississippi, and the new ownership intended to push national. Experience Interaction, Proximo's digital agency of record, brought me on to rebuild the brand's web presence ahead of the transition.</p>
+<p>Pendleton Whisky — Oregon's flagship whisky brand, produced by Hood River Distillers since 2003 and synonymous with the Pendleton Round-Up rodeo — was in the middle of a $205 million acquisition by Becle (parent company of Jose Cuervo) through its U.S. subsidiary Proximo Spirits. Moving 250,000+ nine-liter cases annually, primarily west of the Mississippi, the brand was about to go national under new ownership. Experience Interaction, already Proximo's digital agency of record, brought me back after the Wolf Moon Bourbon launch to rebuild Pendleton's web presence ahead of the ownership transition.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress using a custom theme platform with Advanced Custom Fields powering a structured content layer across product lines, brand history, cocktail recipes, and event sponsorship pages — including dedicated sections for the Pendleton Round-Up and regional rodeo partnerships. An age verification gate handled TTB compliance for spirits marketing. The content architecture was designed around campaign modularity: new product launches, seasonal promotions, and sponsorship activations could be spun up as self-contained landing pages without touching the core site structure. The frontend delivered responsive layouts with lazy-loaded media, optimized for the mobile-heavy traffic patterns typical of event-driven spirits audiences.</p>
+<p>Where Wolf Moon had been a clean product launch site, Pendleton demanded a deeper content architecture. The WordPress build used Advanced Custom Fields to structure content across product lines, brand history, cocktail recipes, and event sponsorship pages — including dedicated sections for the Pendleton Round-Up and regional rodeo partnerships. The same age verification gate handled TTB compliance. What set this build apart was its campaign modularity: new product launches, seasonal promotions, and sponsorship activations could each be spun up as self-contained landing pages without touching the core site. The frontend delivered responsive layouts with lazy-loaded media, tuned for the mobile-heavy traffic patterns typical of event-driven spirits audiences.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -170,7 +170,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform architecture established for Pendleton became the reference implementation for subsequent Proximo brand builds through Experience Interaction.</p>
+<p class="is-style-muted">Together with the Wolf Moon Bourbon site that preceded it, the Pendleton platform established a repeatable development model for Experience Interaction's spirits portfolio — consistent architecture, predictable timelines, and editorial independence from launch.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

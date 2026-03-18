@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://smashbroadway.com">https://smashbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://smashbroadway.com" target="_blank" rel="noopener">https://smashbroadway.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Smash — the Broadway musical adapted from the NBC television series, produced by Steven Spielberg, Robert Greenblatt, and Neil Meron. Custom WordPress theme with a ticketing calendar, a hero layout built around embedded video and gradient backgrounds, and frontend architecture that matched the production's bold visual identity.</p>
+<p>A TV-to-stage adaptation backed by Steven Spielberg, with the kind of bold visual identity that made the frontend work genuinely fun. Custom WordPress theme with a cinematic hero layout built around embedded video and gradient backgrounds — one of the most visually ambitious builds in my Broadway portfolio.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Drove the complete build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,11 +110,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Smash — the NBC series that ran for two seasons in 2012–2013, following the drama behind a fictional Broadway musical about Marilyn Monroe — had spent over a decade as one of the most passionate "what if" stories in musical theatre fandom. The show had never made it to an actual Broadway stage, but the IP retained a devoted audience and serious creative firepower behind it. Original series producers Steven Spielberg, Robert Greenblatt, and Neil Meron led the effort to bring a stage adaptation to Broadway, with five-time Tony winner Susan Stroman directing, a score by Emmy, Grammy, and Tony winners Marc Shaiman and Scott Wittman, a book by Bob Martin and Rick Elice, and choreography by Emmy winner Joshua Bergasse. The cast featured Robyn Hurder as Ivy Lynn, Brooks Ashmanskas, Krysta Rodriguez, Caroline Bowman, John Behlmann, and Kristine Nielsen. A production with that pedigree — backed by Spielberg and arriving at the Imperial Theatre with years of anticipation behind it — needed a digital platform that could convert fan enthusiasm and press coverage into ticket sales from the first preview forward.</p>
+<p>Smash — the NBC series that ran for two seasons in 2012-2013, following the drama behind a fictional Broadway musical about Marilyn Monroe — had spent over a decade as one of the most passionate "what if" stories in musical theatre fandom. The show about making a Broadway musical was finally becoming an actual Broadway musical. Original series producers Steven Spielberg, Robert Greenblatt, and Neil Meron led the effort, with five-time Tony winner Susan Stroman directing, a score by Emmy, Grammy, and Tony winners Marc Shaiman and Scott Wittman, a book by Bob Martin and Rick Elice, and choreography by Emmy winner Joshua Bergasse. The cast featured Robyn Hurder as Ivy Lynn, Brooks Ashmanskas, Krysta Rodriguez, Caroline Bowman, John Behlmann, and Kristine Nielsen. TV-to-stage is a particular kind of adaptation challenge — different from the novel adaptation of <a href="https://vincentragosta.io/projects/outsiders/">The Outsiders</a> or the film-to-stage journey of <a href="https://vincentragosta.io/projects/mean-girls-on-broadway/">Mean Girls</a> — because the existing audience already has specific visual and tonal expectations. The digital platform needed to honor that familiarity while establishing the stage production as its own thing.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of Broadway previews in March 2025 and sustain the production through what was expected to be a marquee run at the Imperial Theatre.</p>
+<p class="is-style-muted">The fan base was already there — the site's job was to channel a decade of anticipation into opening-week ticket sales at the Imperial Theatre.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme where the frontend was the defining challenge — and the most enjoyable part of the build. The hero section was the centerpiece: an embedded video composition layered over a gradient background that needed to feel cinematic without sacrificing load performance or responsiveness. Getting the video, gradient, and typographic elements to hold together across breakpoints — maintaining visual impact on desktop while gracefully adapting on mobile where the composition fundamentally changes — required careful CSS architecture and an understanding of how each layer interacted with the others. The broader layout pushed well beyond standard Broadway site conventions, with bold compositional choices throughout that made the frontend work consistently engaging. The ticketing calendar was the primary conversion component — an interactive, date-driven interface rendering the full performance schedule at the Imperial Theatre with matinee and evening slots, availability states, and direct purchase links routing audiences into the ticketing provider's checkout flow with the correct show and date pre-selected. The site carried the full scope of a Broadway production platform: cast and creative team profiles with structured bios, a media section with video content and production photography, press acclaim aggregating reviews from the New York Times and Rolling Stone, a merchandise shop, a cast recording promotion section, and Gravity Forms powering newsletter signup and audience engagement.</p>
+<p>The frontend was the defining challenge — and the most enjoyable part of the build. The hero section was the centerpiece: an embedded video composition layered over a gradient background that needed to feel cinematic without sacrificing load performance or responsiveness. Getting the video, gradient, and typographic elements to hold together across breakpoints — maintaining visual impact on desktop while gracefully adapting on mobile where the composition fundamentally changes — required careful CSS architecture and an understanding of how each layer interacted with the others. The broader layout pushed well beyond standard Broadway site conventions, with bold compositional choices throughout that made the frontend work consistently engaging. The ticketing infrastructure was mature by this point in my portfolio — the calendar, availability states, and deep-linking to checkout flows followed established patterns — so I could focus energy on the visual storytelling. The site rounded out with cast and creative team profiles, a media section with video content and production photography, press acclaim aggregating reviews from the New York Times and Rolling Stone, a merchandise shop, and a cast recording promotion section.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -166,7 +166,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Smash's first Broadway preview on March 11, 2025, and served as the production's primary digital platform through its entire run at the Imperial Theatre. The show officially opened on April 10 and ran through June 22, 2025 — 32 previews and 83 performances grossing over $12.6 million at an average capacity of 82.50% and an average ticket price of $94.34. The production earned two Tony Award nominations — Best Featured Actor in a Musical for Brooks Ashmanskas and Best Choreography for Joshua Bergasse — along with a Drama Desk Award for Outstanding Featured Performance in a Musical (Ashmanskas) and a Chita Rivera Award for Outstanding Dancer in a Broadway Show (Robyn Hurder). The ticketing calendar drove conversions throughout the run, and the site now serves as an archival platform preserving the production's legacy, press coverage, and cast recording promotion.</p>
+<p>Smash opened on April 10, 2025 and ran through June 22 — 32 previews and 83 performances grossing over $12.6 million at an average capacity of 82.50% and an average ticket price of $94.34. The production earned two Tony Award nominations — Best Featured Actor in a Musical for Brooks Ashmanskas and Best Choreography for Joshua Bergasse — along with a Drama Desk Award for Outstanding Featured Performance in a Musical (Ashmanskas) and a Chita Rivera Award for Outstanding Dancer in a Broadway Show (Robyn Hurder). The site now serves as an archival platform preserving the production's legacy, press coverage, and cast recording. Not every show runs for years — but the platform delivered exactly what it needed to during a concentrated, high-energy Broadway engagement.</p>
 <!-- /wp:paragraph -->
 
 </div>

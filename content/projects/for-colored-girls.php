@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://forcoloredgirlsbway.com">https://forcoloredgirlsbway.com</a></p>
+<p class="has-30-font-size"><a href="https://forcoloredgirlsbway.com" target="_blank" rel="noopener">https://forcoloredgirlsbway.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of the 2022 Broadway revival of Ntozake Shange's for colored girls who have considered suicide / when the rainbow is enuf. Custom WordPress theme with a ticketing calendar, cast and creative team profiles, and a visual system built around the production's vibrant, rainbow-inflected identity.</p>
+<p>The first Broadway revival of Ntozake Shange's choreopoem in over forty years — a production where Camille A. Brown became the first Black woman to direct and choreograph on Broadway in over six decades. Custom WordPress theme with a color system drawn from the work's rainbow identity, structured profiles for a seven-woman ensemble, and a ticketing calendar for the Booth Theatre run.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">I led development on this project at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A landmark American choreopoem was returning to Broadway for the first time in over forty years — with a historic creative team leading the revival.</strong></h2>
+<h2 class="wp-block-heading"><strong>A historic revival with a historic creative team — arriving in the same spring 2022 surge as American Buffalo and The Minutes.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Ntozake Shange's for colored girls who have considered suicide / when the rainbow is enuf — the groundbreaking choreopoem that first moved to Broadway in 1976 — was coming back to the Booth Theatre in a new production directed and choreographed by Camille A. Brown. Brown's involvement made history: she became the first Black woman to serve as both director and choreographer on Broadway in over 65 years, following Katherine Dunham. The seven-woman cast included Kenita R. Miller, Okwui Okpokwasili, Alexandria Wailes, Amara Granderson, Tendayi Kuumba, Stacey Sargeant, and D. Woods. Wailes, a Deaf performer and ASL director on the Oscar-winning film CODA, performed entirely in American Sign Language — making accessibility a defining element of the production rather than an accommodation. With seven Tony nominations ahead of it and significant press attention around Brown's directorial debut, the production needed a digital platform that could channel cultural momentum into ticket sales and serve as the definitive online presence for the revival.</p>
+<p>Ntozake Shange's for colored girls who have considered suicide / when the rainbow is enuf first reached Broadway in 1976. This revival at the Booth Theatre, directed and choreographed by Camille A. Brown, carried weight beyond the stage: Brown became the first Black woman to hold both roles on Broadway in over 65 years, following Katherine Dunham. The seven-woman cast — Kenita R. Miller, Okwui Okpokwasili, Alexandria Wailes, Amara Granderson, Tendayi Kuumba, Stacey Sargeant, and D. Woods — included Wailes performing entirely in American Sign Language, making accessibility a structural element of the production rather than an add-on. Previews began April 1, 2022, placing this launch in the same compressed two-week window as <a href="https://vincentragosta.io/projects/american-buffalo/">American Buffalo</a> and <a href="https://vincentragosta.io/projects/the-minutes/">The Minutes</a> — three simultaneous builds with very different identities and demands.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Previews began April 1, 2022 at the Booth Theatre. The site needed to be live and converting before the first audience walked in.</p>
+<p class="is-style-muted">The cultural momentum around Brown's directorial debut and the press attention on the ensemble meant the site had to be converting before the first audience walked in.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme that served as the production's complete digital platform at forcoloredgirlsbway.com. The ticketing calendar was the primary conversion surface — an interactive, date-based interface rendering the full performance schedule at the Booth Theatre with matinee and evening performance slots, real-time availability states, and direct purchase links routing audiences into the ticketing provider's checkout flow with the correct performance pre-selected. The cast and creative section featured structured biographical profiles for all seven performers — Miller, Okpokwasili, Wailes, Granderson, Kuumba, Sargeant, and Woods — alongside the full creative team: Brown, scenic designer Myung Hee Cho, costume designer Sarafina Bush, lighting designer Jiyoun Chang, sound designer Justin Ellington, and composers Martha Redbone and Aaron Whitby. Each profile was managed through a dedicated content architecture that the production team could update without developer involvement. The frontend translated the production's visual identity into code: a color system rooted in the rainbow spectrum that defines Shange's work — seven colors for seven women — with typography and layout choices that honored the intimacy and movement of a choreopoem performed without intermission. Gravity Forms powered newsletter signup and audience engagement, social integrations connected key platforms, and structured Schema.org data supported SEO and discovery.</p>
+<p>What set this build apart was the visual system. Shange's work assigns each of seven women a color — the rainbow is the work's organizing metaphor. The frontend translated that directly: a color palette drawn from the spectrum, with each performer's profile section reflecting her assigned color. Typography and layout honored the intimacy of a choreopoem staged without intermission. Where American Buffalo's site could be spare and direct with three actors, this build required seven distinct biographical treatments that carried equal visual weight.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The ticketing calendar followed the same pattern I had refined across prior builds — date-driven performance browsing at the Booth Theatre with matinee and evening slots, availability indicators, and direct purchase links pre-selecting the correct performance. The cast and creative section gave structured profiles to all seven performers alongside the full creative team: Brown, scenic designer Myung Hee Cho, costume designer Sarafina Bush, lighting designer Jiyoun Chang, sound designer Justin Ellington, and composers Martha Redbone and Aaron Whitby. Schema.org markup supported discovery, and social integrations connected the production's key platforms.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The cast profiles carried particular weight — with seven distinct performers each embodying a color and a story, the biographical sections needed to reflect the same individuality that defined the production onstage.</p>
+<p class="is-style-muted">Seven colors, seven women, seven profiles that needed to feel individual — the design challenge here was more demanding than any other cast section I had built to that point.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +170,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of previews on April 1, 2022, and served as the production's primary digital platform through its entire run at the Booth Theatre. for colored girls officially opened on April 20 and ran through June 5 — 23 previews and 51 performances grossing $2,067,206 at an average ticket price of $59.99. The production earned seven Tony Award nominations, including Best Revival of a Play and dual nominations for Camille A. Brown as both Best Director and Best Choreographer — making her the first Black woman to receive both nominations in the same year. Kenita R. Miller earned a nomination for Best Featured Actress in a Play, and the production received additional nods for Sarafina Bush's costume design and Jiyoun Chang's lighting design. The ticketing calendar drove conversions throughout the run, the cast profiles supported press coverage around a historic ensemble, and the structured content layer gave the production team full editorial independence from launch through closing.</p>
+<p>The site launched ahead of the April 1 preview and supported the production through its full Booth Theatre run — 23 previews and 51 performances, grossing $2,067,206 at an average ticket price of $59.99. for colored girls earned seven Tony nominations: Best Revival of a Play, dual nods for Camille A. Brown as both Best Director and Best Choreographer (the first Black woman to receive both in the same year), Best Featured Actress for Kenita R. Miller, plus recognition for Sarafina Bush's costume design and Jiyoun Chang's lighting design. The seven-color cast profile system held up throughout the run, and the content layer gave the production team full editorial control from first preview through closing night.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The development patterns and component architecture from this build carried forward into subsequent Broadway projects at Situation Interactive, including Topdog/Underdog later that same year.</p>
+<p class="is-style-muted">The ensemble profile architecture from this build directly informed <a href="https://vincentragosta.io/projects/topdog-underdog/">Topdog/Underdog</a> later that season — a very different two-person production, but one that benefited from the structured content patterns refined here.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

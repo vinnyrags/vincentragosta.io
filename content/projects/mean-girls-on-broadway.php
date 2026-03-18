@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://meangirlsmusical.com">https://meangirlsmusical.com</a></p>
+<p class="has-30-font-size"><a href="https://meangirlsmusical.com" target="_blank" rel="noopener">https://meangirlsmusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Mean Girls — the Broadway musical written by Tina Fey, produced by Lorne Michaels, and one of the biggest commercial hits in recent Broadway history. Custom WordPress theme with a ticketing calendar, a full national tour system, cast and creative profiles, and frontend design work that matched the production's bold, irreverent visual identity.</p>
+<p>One of the boldest visual identities on Broadway, translated into responsive web layouts that had to be as irreverent and precise as the brand itself. Custom WordPress theme powering ticketing, a full national tour system, cast and creative profiles, and the kind of CSS challenges that make frontend development genuinely fun.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Owned the build at Situation Interactive — another Casey Nicholaw production alongside <a href="https://vincentragosta.io/projects/the-prom/">The Prom</a> and <a href="https://vincentragosta.io/projects/some-like-it-hot/">Some Like It Hot</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,7 +110,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Mean Girls — Tina Fey's adaptation of her own 2004 film into a rock musical with music by Jeff Richmond, lyrics by Nell Benjamin, and direction and choreography by Casey Nicholaw — opened on Broadway at the August Wilson Theatre on April 8, 2018, after a sold-out pre-Broadway tryout at the National Theatre in Washington, D.C. The production was backed by Lorne Michaels and featured a creative team that included set designer Scott Pask, costume designer Gregg Barnes, lighting designer Kenneth Posner, sound designer Brian Ronan, and video designers Finn Ross and Adam Young. The show broke $1.3 million in its first full week and was playing to over 100% capacity within months. With 12 Tony Award nominations including Best Musical, a nationally recognized IP, and a first national tour already in planning, the production needed a digital platform that could sell tickets at Broadway scale, introduce the full company and creative team, and expand into a multi-city tour system — all while carrying the show's signature visual energy into every pixel.</p>
+<p>Mean Girls broke $1.3 million in its first full week on Broadway and was playing to over 100% capacity within months. Tina Fey adapted her own 2004 film into a rock musical with music by Jeff Richmond, lyrics by Nell Benjamin, and direction and choreography by Casey Nicholaw. It opened at the August Wilson Theatre on April 8, 2018, backed by Lorne Michaels, with a creative team that included Scott Pask (sets), Gregg Barnes (costumes), Kenneth Posner (lighting), Brian Ronan (sound), and Finn Ross and Adam Young (video design). The show earned 12 Tony nominations including Best Musical, with a first national tour already in planning. The challenge was building a digital platform that could sell at Broadway scale, spotlight a large company and creative team, and eventually expand into a multi-city tour system — all wrapped in the show's unmistakable hot-pink, in-your-face visual language.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme that grew from a Broadway launch platform into a multi-production digital ecosystem. The ticketing calendar was the primary conversion driver — an interactive, date-based interface rendering the full performance schedule at the August Wilson Theatre with matinee and evening slots, availability states, and direct purchase links routing audiences into the ticketing provider's checkout flow with the correct show and date pre-selected. When the first national tour launched in September 2019, the platform expanded to include a full tour system — a city-by-city schedule with venue information, local ticketing endpoints, and tour-specific cast profiles, all managed through a structured content layer that let the production team add cities and update dates without touching code. The cast and creative section carried the full depth of a Tina Fey / Lorne Michaels production: structured biographical profiles for the original Broadway cast — Erika Henningsen, Taylor Louderman, Ashley Park, Kate Rockwell, Barrett Wilbert Weed, Grey Henson, Kerry Butler — and the complete creative team from Nicholaw through every designer. The frontend was where this build stood apart. Mean Girls has one of the most distinctive visual identities on Broadway — hot pink, bold typography, irreverent graphic energy — and translating that into responsive web layouts was a series of design challenges that pushed the CSS work into genuinely fun territory. Every section had to feel like it belonged to the brand without sacrificing usability or performance. Gravity Forms powered newsletter signup and audience engagement, and the site served as the hub for media assets, press acclaim, and merchandise promotion.</p>
+<p>I led development on a custom WordPress theme that started as a Broadway launch site and grew into a multi-production ecosystem. The ticketing calendar drove conversions throughout — a date-driven interface with matinee and evening slots, availability states, and deep links into the purchase flow. When the first national tour launched in September 2019, the platform expanded with a city-by-city schedule, venue information, local ticketing endpoints, and tour-specific cast profiles, all managed through structured content that let the production team add new cities without developer support. Cast and creative profiles covered the full depth of the company — biographical profiles for the original Broadway cast including Erika Henningsen, Taylor Louderman, Ashley Park, Kate Rockwell, Barrett Wilbert Weed, Grey Henson, and Kerry Butler, plus the complete creative team. But the frontend was where this build stood apart. Mean Girls has one of the most distinctive visual identities on Broadway — hot pink, bold typography, irreverent graphic energy — and translating that into responsive layouts was a series of CSS challenges that pushed every section into genuinely fun territory. Nothing could feel generic. Every component had to carry the brand's personality without sacrificing usability or load performance. The site also served as the central hub for media assets, press acclaim, and merchandise promotion.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -166,7 +166,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Mean Girls' first Broadway preview on March 12, 2018, and served as the production's primary digital platform through its entire run at the August Wilson Theatre — 833 performances grossing over $124 million at an average capacity of 96%, with the production recouping its full capitalization by January 2020. The show earned 12 Tony Award nominations including Best Musical. The ticketing calendar drove conversions throughout the Broadway run, and the tour system scaled to support the first national tour across 30+ cities starting in September 2019, playing to sold-out audiences from Buffalo to Fort Lauderdale before the pandemic suspended performances in March 2020. The tour resumed and ran through May 2023. The platform I built carried Mean Girls from its Broadway premiere through the national tour and ultimately supported the marketing rollout for the 2024 Paramount film adaptation — Tina Fey's musical-to-movie adaptation that grossed $104.8 million worldwide. The site remains live at meangirlsmusical.com, serving as the enduring digital home for one of the most commercially successful Broadway musicals of the last decade.</p>
+<p>The site launched ahead of Mean Girls' first Broadway preview on March 12, 2018, and served as the production's primary digital platform through 833 performances at the August Wilson Theatre — grossing over $124 million at 96% average capacity, with the production recouping its full capitalization by January 2020. The tour system scaled to support 30+ cities starting in September 2019, playing to sold-out audiences from Buffalo to Fort Lauderdale before the pandemic suspended performances in March 2020. The tour resumed and ran through May 2023. The platform ultimately supported the marketing rollout for the 2024 Paramount film adaptation, which grossed $104.8 million worldwide — making Mean Girls a rare case where a single website carried a property from its Broadway premiere through a national tour and into a major feature film release. The site remains live at meangirlsmusical.com.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->

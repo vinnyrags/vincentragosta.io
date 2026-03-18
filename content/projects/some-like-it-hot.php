@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://somelikeithotmusical.com">https://somelikeithotmusical.com</a></p>
+<p class="has-30-font-size"><a href="https://somelikeithotmusical.com" target="_blank" rel="noopener">https://somelikeithotmusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress development for the official site of Some Like It Hot — the four-time Tony Award-winning musical at the Shubert Theatre. Complex design system, custom ticketing calendar, tour management infrastructure, and a cast &amp; creative content layer built for a production with 13 Tony nominations and a Grammy-winning cast album.</p>
+<p>The third Casey Nicholaw production I built at Situation Interactive, following <a href="https://vincentragosta.io/projects/mean-girls-on-broadway/">Mean Girls on Broadway</a> and <a href="https://vincentragosta.io/projects/the-prom/">The Prom</a>. WordPress platform with a design-intensive frontend, ticketing calendar, tour management across 30+ cities, and a content layer that carried the show from first preview through four Tony wins, a Grammy, and a national tour.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">My build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A major new musical needed a digital platform that matched its ambition.</strong></h2>
+<h2 class="wp-block-heading"><strong>A beloved film IP, a Tony-winning creative team, and no out-of-town tryout — straight to the Shubert.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Some Like It Hot — a new musical based on the 1959 Billy Wilder film, with a book by Matthew Lopez and Amber Ruffin, music by Marc Shaiman, lyrics by Scott Wittman and Shaiman, and direction and choreography by Casey Nicholaw — was heading to Broadway at the Shubert Theatre in the fall of 2022. The production carried serious commercial weight: a beloved film IP, a Tony-winning creative team, and a cast led by Christian Borle and J. Harrison Ghee. A pre-Broadway tryout planned for Chicago's Cadillac Palace Theatre had been cancelled due to COVID, which meant the show was going straight to Broadway with no out-of-town warmup.</p>
+<p>Some Like It Hot brought together a book by Matthew Lopez and Amber Ruffin, a Marc Shaiman and Scott Wittman score, and direction and choreography by Casey Nicholaw — whose earlier productions Mean Girls on Broadway and The Prom I had also built at Situation Interactive. That familiarity with Nicholaw's visual language and the scale of his productions gave me a head start on the creative direction. The cast was led by Christian Borle and J. Harrison Ghee, and the show carried commercial expectations to match: a beloved 1959 Billy Wilder film as source material, a pre-Broadway tryout in Chicago cancelled by COVID, and a decision to go straight to Broadway at the Shubert Theatre in fall 2022 with no warmup run.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Situation Interactive managed the digital marketing campaign. I led development on the official site — the production's primary ticketing and marketing hub from first preview through a national tour.</p>
+<p class="is-style-muted">Skipping the out-of-town tryout meant the site had to be fully operational for first preview — there was no phased rollout window.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a custom theme architecture anchored by a design system that matched the production's visual identity — deep royal blue and gold accents evoking jazz-age glamour, bold uppercase typography, and a layout language that carried across every page and content type. This was one of the more design-intensive builds in the portfolio: the creative direction demanded precision in color, spacing, and typographic hierarchy, and the system needed to hold together across a site that would grow significantly post-launch as awards, media, and tour content accumulated.</p>
+<p>The design system was one of the most exacting I had built. Deep royal blue with gold accents evoked jazz-age glamour, bold uppercase typography carried across every content type, and the layout language had to hold together as the site grew — awards content, media galleries, and eventually a full tour section would all layer in over a 13-month Broadway run. The creative direction left little room for approximation; color values, spacing, and typographic hierarchy all had to be precise.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The core infrastructure included a custom ticketing calendar that gave visitors a date-driven interface to browse performances and purchase directly through the venue's box office, and a tour management system with structured content for cities, venues, dates, and regional ticket links — built to support 30+ tour stops across the national run. A dedicated cast and creative section managed individual bios, headshots, and role assignments through structured field groups, supporting both the Broadway and touring casts. Gravity Forms handled email capture for presale access and tour announcements. Google Tag Manager powered conversion tracking across the full ticket purchase funnel.</p>
+<p>The ticketing calendar followed the infrastructure I had evolved through <a href="https://vincentragosta.io/projects/dear-evan-hansen/">Dear Evan Hansen</a> and the spring 2022 plays, but the tour management system represented a step forward. Structured content for 30+ cities — venues, dates, regional ticket links — gave the marketing team a self-service interface for the entire national run. Cast and creative profiles supported both Broadway and touring companies through structured field groups. Google Tag Manager instrumented the full purchase funnel from calendar browse through checkout completion.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -170,15 +170,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of the first preview on November 1, 2022 and served as the production's digital hub through 441 performances and a 13-month Broadway run at the Shubert Theatre. During that run, the show earned 13 Tony nominations and won four — including a historic Best Leading Actor win for J. Harrison Ghee, the first openly nonbinary performer to win in a leading acting category. The cast album won the Grammy for Best Musical Theater Album. The site's content architecture handled every phase of the awards cycle without structural changes — Tony badges, Grammy callouts, New York Times Critics' Pick designations, and review carousels all layered in through the existing CMS framework.</p>
+<p>The site launched ahead of first preview on November 1, 2022 and supported 441 performances across a 13-month Broadway run at the Shubert. Thirteen Tony nominations, four wins — including J. Harrison Ghee's historic Best Leading Actor win as the first openly nonbinary performer in a leading acting category — and a Grammy for Best Musical Theater Album. The content architecture absorbed every phase of the awards cycle without structural changes: Tony badges, Grammy callouts, Critics' Pick designations, and review carousels all layered in through the existing CMS framework.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>When the national tour launched at Proctors Theatre in Schenectady in September 2024, the tour management system and ticketing calendar I built scaled directly — the marketing team managed 30+ cities and their venue-specific ticket links entirely through the CMS. The tour recouped its investment within the first year. The platform continues to serve as the show's official digital presence as it tours nationally.</p>
+<p>The national tour launched at Proctors Theatre in Schenectady in September 2024, and the tour management system scaled directly — 30+ cities with venue-specific ticket links, all managed through the CMS by the marketing team. The tour recouped within its first year. The platform continues to serve as the show's official digital presence. From Mean Girls through The Prom and now Some Like It Hot, the Nicholaw builds kept getting bigger, and each one informed the next.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The infrastructure built for a Broadway opening in 2022 has carried the production through a Tony sweep, a Grammy win, and a national tour — without a rebuild.</p>
+<p class="is-style-muted">Infrastructure built for a November 2022 Broadway opening has carried the production through a Tony sweep, a Grammy, and a national tour — without a rebuild.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

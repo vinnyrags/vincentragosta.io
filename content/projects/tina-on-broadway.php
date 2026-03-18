@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://www.tinaonbroadway.com">https://tinaonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://www.tinaonbroadway.com" target="_blank" rel="noopener">https://tinaonbroadway.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official Broadway website of the 12-time Tony-nominated Tina Turner biographical musical. A content-heavy WordPress build with an integrated ticket calendar, media carousel, and the production photography and press infrastructure needed to support a record-breaking run at the Lunt-Fontanne Theatre.</p>
+<p>The project where I built the media carousel that became a standard component across Situation's entire Broadway portfolio. A content-dense WordPress platform for the Tina Turner biographical musical — ticketing, production photography, press infrastructure, and a component library designed to outlast the run at the Lunt-Fontanne Theatre.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Led development at Situation Interactive — one of several biographical and jukebox musical builds alongside <a href="https://vincentragosta.io/projects/jagged-little-pill/">Jagged Little Pill</a> and <a href="https://vincentragosta.io/projects/mj-the-musical/">MJ the Musical</a>.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A West End hit transferring to Broadway needed a digital platform built for the scale of the story it was telling.</strong></h2>
+<h2 class="wp-block-heading"><strong>A West End sensation crossing the Atlantic with a built-in global audience and a living legend's blessing.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>TINA — The Tina Turner Musical was transferring to Broadway after a sold-out premiere at London's Aldwych Theatre in 2018. The biographical musical — written by Katori Hall with Frank Ketelaar and Kees Prins, directed by Phyllida Lloyd — told the story of Tina Turner's rise from Nutbush, Tennessee to global icon, with Adrienne Warren starring in the title role. The show was one of the most anticipated Broadway openings of the 2019-20 season, with previews set to begin October 12, 2019 at the Lunt-Fontanne Theatre and an official opening on November 7. The production needed a digital platform that could carry the full weight of a major Broadway launch: ticketing, cast and creative bios, production photography, video content, press quotes, and the media assets that would drive the show's marketing cycle from first preview through awards season.</p>
+<p>After a sold-out premiere at London's Aldwych Theatre in 2018, TINA — The Tina Turner Musical was one of the most anticipated Broadway openings of the 2019-20 season. Written by Katori Hall with Frank Ketelaar and Kees Prins, directed by Phyllida Lloyd, the biographical musical traced Tina Turner's journey from Nutbush, Tennessee to global icon. Adrienne Warren starred in the title role. Previews were set for October 12, 2019 at the Lunt-Fontanne Theatre, with an official opening on November 7. Unlike a typical biographical show, this one had the subject's direct involvement — Tina Turner herself was a producer — which raised the stakes on everything from visual tone to how the story was framed. The digital platform needed to honor that legacy while converting an enormous built-in audience into ticket buyers across a marketing cycle that would stretch from first preview through awards season and beyond.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Tina Turner herself was involved in the production — the site needed to honor the legacy while converting the enormous built-in audience into ticket buyers.</p>
+<p class="is-style-muted">The content demands were heavy from day one — cast bios, production photography, video, press quotes, and media assets all competing for space in a layout that had to feel worthy of the story it was telling.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with the content density a Broadway marketing cycle demands — cast and creative bios, production photography galleries, video embeds, press quotes, and ticketing all competing for attention in a compact, mobile-optimized layout. The ticket calendar was the conversion centerpiece: a dynamic performance grid surfacing available dates and ticket types that guided visitors from browsing to purchase with minimal friction. The media carousel — built to showcase production photography, video content, and press imagery in a responsive, swipeable format — was designed and engineered on this project as an original component. It handled high-resolution production stills, embedded video players, and captioned press assets in a single unified interface that performed consistently across devices. The carousel pattern proved durable enough that it became a standard component across subsequent Broadway show sites at Situation, reused and refined on builds that followed.</p>
+<p>The WordPress build prioritized content density — every section had to earn its screen space in a mobile-first layout that packed cast bios, production photography galleries, video embeds, press quotes, and ticketing into a cohesive experience. The ticket calendar served as the conversion centerpiece: a performance grid with date browsing, ticket type filtering, and direct links into the purchase flow. But the component that defined this project was the media carousel. I designed and engineered it from scratch to handle the volume and variety of TINA's media assets — high-resolution production stills, embedded video players, and captioned press imagery all in a single responsive, swipeable interface. It needed to perform consistently across devices while handling assets of wildly different aspect ratios and media types. The carousel shipped on TINA and proved durable enough that it became a standard component at Situation, reused on MJ the Musical, Jagged Little Pill, and nearly every major Broadway build that followed.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The media carousel was born on this project — what started as a solution for one show's content density became a reusable pattern across the agency's entire Broadway portfolio.</p>
+<p class="is-style-muted">Building a reusable component wasn't the original goal — the goal was solving TINA's specific content problem. That the solution generalized so cleanly was a byproduct of getting the abstraction right.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of the October 2019 preview period and carried TINA through a three-year Broadway run at the Lunt-Fontanne Theatre — from opening night through the 2020 Tony Awards (12 nominations, including Best Musical, with Adrienne Warren winning Best Actress in a Leading Role in a Musical), through the pandemic shutdown and reopening, and through the show's final performance on August 14, 2022. Within weeks of opening, the production broke the Lunt-Fontanne's all-time box office record with a single-week gross of $1,834,339 — surpassing the previous record held by Motown since 2013. The platform handled sustained demand across 482 regular performances, with the marketing team managing all content updates — new press quotes, cast changes, award badges, and promotional campaigns — independently through the CMS. When the national tour launched in September 2022 at the Providence Performing Arts Center, the site expanded to support tour content alongside the Broadway archive.</p>
+<p>The site launched ahead of the October 2019 preview period and carried TINA through a three-year Broadway run at the Lunt-Fontanne Theatre. Within weeks of opening, the production broke the venue's all-time box office record with a single-week gross of $1,834,339 — surpassing the previous record held by Motown since 2013. The show earned 12 Tony nominations including Best Musical, with Adrienne Warren winning Best Actress in a Leading Role in a Musical. The platform sustained demand across 482 regular performances — through opening, the pandemic shutdown, reopening, and the show's final performance on August 14, 2022. When the national tour launched in September 2022 at the Providence Performing Arts Center, the site expanded to carry tour content alongside the Broadway archive.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The ticket calendar and media carousel built for TINA became foundational components at Situation — patterns that shipped on this project and were reused across every major Broadway build that followed.</p>
+<p class="is-style-muted">TINA was a turning point in how I approached Broadway builds — the media carousel and ticketing patterns born here became the foundation for projects like MJ the Musical and Jagged Little Pill.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

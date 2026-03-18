@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://maybehappyending.com">https://maybehappyending.com</a></p>
+<p class="has-30-font-size"><a href="https://maybehappyending.com" target="_blank" rel="noopener">https://maybehappyending.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official Broadway website of the 2025 Tony Award winner for Best Musical. A content-heavy WordPress build with integrated ticketing, a multi-platform stream selector, and media galleries — launched ahead of previews at the Belasco Theatre.</p>
+<p>The fifth Best Musical Tony winner in my portfolio — following <a href="https://vincentragosta.io/projects/dear-evan-hansen/">Dear Evan Hansen</a>, <a href="https://vincentragosta.io/projects/the-bands-visit/">The Band's Visit</a>, <a href="https://vincentragosta.io/projects/kimberly-akimbo/">Kimberly Akimbo</a>, and <a href="https://vincentragosta.io/projects/outsiders/">The Outsiders</a>. WordPress build with Telecharge ticketing integration, a custom stream selector for the cast recording, and the Club 2064 digital lottery at $20.64 per ticket woven directly into the site experience.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Owned the full-stack build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -110,11 +110,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Maybe Happy Ending — an original South Korean musical with music by Will Aronson, lyrics by Hue Park, and book by both — was making the jump from Seoul to Broadway with a production starring Darren Criss and Helen J Shen, directed by Tony winner Michael Arden. The show tells the story of two retired HelperBot robots who form an unexpected bond in a near-future Seoul apartment, and the production was generating significant advance buzz as one of the most anticipated new musicals of the 2024-25 season. The show was set to begin previews at the Belasco Theatre on October 16, 2024, with an official opening on November 12. The producers needed a digital presence that could handle the volume of a major Broadway launch — ticketing, media, press, and social — while showcasing the show's distinctive visual identity and building audience connection ahead of first curtain.</p>
+<p>Maybe Happy Ending — an original South Korean musical with music by Will Aronson, lyrics by Hue Park, and book by both — was making the jump from Seoul to Broadway with a production starring Darren Criss and Helen J Shen, directed by Tony winner Michael Arden. The show tells the story of two retired HelperBot robots who form an unexpected bond in a near-future Seoul apartment, and it was generating significant advance buzz as one of the most anticipated new musicals of the 2024-25 season. Previews were set to begin at the Belasco Theatre on October 16, 2024, with an official opening on November 12. Coming off The Outsiders — which had just won Best Musical six months earlier — the playbook for launching a major Broadway contender was well established. The differentiator here was the show's visual identity: warm, intimate, and stylistically unlike anything else in my portfolio.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The timeline tracked to Broadway's preview window — the site needed to be fully operational before the first audience entered the Belasco.</p>
+<p class="is-style-muted">The visual warmth of the production set the tone for the entire build — this was not a show that could live inside a generic Broadway template.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a content architecture designed around the density of a Broadway marketing cycle — production photos, video embeds, cast bios, press quotes, FAQs, and ticketing all competing for attention across a compact page structure. The ticketing integration connected directly to Telecharge, with a performance calendar surfacing availability, cast alternates by date, and multiple purchase paths: standard tickets, premium seating, the Club 2064 digital lottery at $20.64 per ticket, in-person rush at $49, and group sales through Broadway Inbound. The Look &amp; Listen section featured a tabbed media gallery — photos, videos, and music — with the music tab powered by a custom stream selector that dynamically loads embedded players from Spotify, Apple Music, or Amazon Music based on user selection, routing listeners to the original cast recording on their preferred platform without leaving the page.</p>
+<p>The Telecharge integration and performance calendar followed proven patterns — availability states, premium seating, group sales through Broadway Inbound — but the purchase pathways had more variety than most builds. Beyond standard tickets, the site surfaced the Club 2064 digital lottery at $20.64 per ticket, in-person rush at $49, and cast alternate scheduling by date, each requiring distinct routing logic within the calendar. The Look &amp; Listen section featured a tabbed media gallery — photos, videos, and music — with the music tab powered by a custom stream selector that dynamically loads embedded players from Spotify, Apple Music, or Amazon Music based on user selection, routing listeners to the original cast recording on their preferred platform without leaving the page. Where the ticketing was infrastructure I could stand up quickly, the content architecture demanded more attention — production photos, video embeds, cast bios, press quotes, and FAQs all competing for attention across a compact, carefully weighted page structure.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The content architecture was purpose-built for a production with momentum — the kind of show where press quotes, award nominations, and tour announcements arrive in rapid succession.</p>
+<p class="is-style-muted">The lottery and rush programs added complexity to the ticketing layer — most Broadway sites route to one purchase flow, but Maybe Happy Ending needed to present three distinct paths without overwhelming the visitor.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of previews and served as the primary digital hub through Maybe Happy Ending's entire Broadway arc — from the October 2024 preview period through the June 2025 Tony Awards, where the show won six awards including Best Musical, Best Book, Best Score, Best Leading Actor for Darren Criss, Best Direction for Michael Arden, and Best Scenic Design. The platform handled the full weight of a Tony-winning campaign: ticket demand surges on nomination and win nights, press coverage cascading across 20+ "Best of the Year" lists, and the announcement of a North American tour launching Fall 2026. The marketing team managed every content update — new press quotes, award badges, tour announcements, video embeds from The Tonight Show and CBS Sunday Morning — independently through the CMS.</p>
+<p>Maybe Happy Ending swept the 2025 Tony Awards with six wins — Best Musical, Best Book, Best Score, Best Leading Actor for Darren Criss, Best Direction for Michael Arden, and Best Scenic Design. That made it the fifth Best Musical winner I had built the digital home for, extending a run that started with Dear Evan Hansen and continued through The Band's Visit, Kimberly Akimbo, and The Outsiders. The platform handled the full weight of a Tony-winning campaign: ticket demand surges on nomination and win nights, press coverage cascading across 20+ "Best of the Year" lists, and the announcement of a North American tour launching Fall 2026. The marketing team managed every content update — award badges, tour announcements, video embeds from The Tonight Show and CBS Sunday Morning — independently through the CMS.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Building the digital home for a Best Musical winner is the kind of project that validates the work — the platform held up under the highest-profile spotlight Broadway has to offer.</p>
+<p class="is-style-muted">Five Best Musical winners is not a pattern — it is a body of work. Each one tested the platform under Broadway's highest-profile spotlight, and each one held.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

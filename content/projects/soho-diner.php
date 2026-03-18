@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://www.sohodinernyc.com">https://www.sohodinernyc.com</a></p>
+<p class="has-30-font-size"><a href="https://www.sohodinernyc.com" target="_blank" rel="noopener">https://www.sohodinernyc.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,7 +82,7 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Frontend development for a modern American diner attached to the Soho Grand Hotel, building on an existing Ruby on Rails and headless WordPress architecture to deliver a content-rich restaurant platform with integrated reservations, event booking, and editorial storytelling.</p>
+<p>Frontend development for a modern American diner on the ground floor of the <a href="https://vincentragosta.io/projects/soho-grand-hotel/">Soho Grand</a> Hotel — one of three GrandLife properties I built on the same decoupled Rails and headless WordPress stack, alongside the Soho Grand flagship site and <a href="https://vincentragosta.io/projects/the-django-nyc/">The Django</a> jazz club.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,7 +138,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The platform ran on a decoupled architecture that King &amp; Partners had already established across their hospitality portfolio: a Ruby on Rails frontend consuming content from a headless WordPress backend via REST API. I worked within and extended this existing infrastructure rather than building it from scratch — inheriting the content modeling, API layer, and deployment patterns, then building out the Soho Diner-specific frontend templates, components, and integrations on top of that foundation.</p>
+<p>The site ran on the same decoupled Rails-and-WordPress stack I was already working with on the Soho Grand flagship build. Rather than standing up new infrastructure, I extended the existing content modeling, API layer, and deployment patterns with Soho Diner-specific frontend templates, components, and integrations.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -146,7 +146,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The street-level entrance mattered to the brand — and the site architecture reflected that same independence. Soho Diner ran on its own domain and codebase, distinct from the Soho Grand property site, while sharing the underlying multisite content infrastructure.</p>
+<p class="is-style-muted">The street-level entrance mattered to the brand — and the site architecture reflected that same independence. Soho Diner ran on its own domain and codebase, distinct from the Soho Grand property site, while sharing the underlying multisite content infrastructure with both the hotel and The Django.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -174,7 +174,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform continues to serve the restaurant years after launch — a durable foundation that has scaled with the brand as Soho Diner has grown from a new opening into one of downtown Manhattan's recognized dining destinations.</p>
+<p class="is-style-muted">The platform continues to serve the restaurant years after launch. The same architectural approach proved equally durable on The Django, the third GrandLife property I built within this engagement.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

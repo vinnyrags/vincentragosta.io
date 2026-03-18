@@ -1,4 +1,4 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://www.kimberlyakimbothemusical.com/">https://kimberlyakimbothemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://www.kimberlyakimbothemusical.com/" target="_blank" rel="noopener">https://kimberlyakimbothemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of Kimberly Akimbo — the five-time Tony Award-winning Best Musical. Custom WordPress theme with a ticket calendar driving conversions from Broadway through the national tour, cast and creative team profiles, and a content management layer built for the full lifecycle of a hit production.</p>
+<p>The 2023 Tony Award winner for Best Musical — the same award <a href="https://vincentragosta.io/projects/outsiders/">The Outsiders</a> would claim the following year, on a site I also built. By the time Kimberly Akimbo came along, the Broadway site infrastructure was mature: ticketing calendars, tour systems, and cast management were proven patterns. The challenge here was longevity — building a platform durable enough to carry a hit from previews through 612 performances, five Tony wins, and a national tour.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead at Situation Interactive.</p>
+<p class="is-style-muted">Led all development at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A breakout Broadway musical needed a digital home before opening night.</strong></h2>
+<h2 class="wp-block-heading"><strong>A breakout musical transferring from off-Broadway with enormous critical momentum.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Kimberly Akimbo — with a Tony Award-winning book and lyrics by Pulitzer Prize winner David Lindsay-Abaire, a Tony Award-winning score by Jeanine Tesori, and direction by Tony-nominated Jessica Stone — premiered off-Broadway at the Atlantic Theater Company's Linda Gross Theater in late 2021. The production transferred to Broadway's Booth Theatre, beginning previews on October 12, 2022 and officially opening on November 10. The show tells the story of a bright, funny New Jersey teenager navigating family dysfunction and a rare genetic aging condition, and it arrived on Broadway with the kind of critical momentum that demanded a digital platform ready to convert attention into ticket sales from the first preview forward.</p>
+<p>Kimberly Akimbo — book and lyrics by Pulitzer Prize winner David Lindsay-Abaire, score by Jeanine Tesori, direction by Jessica Stone — premiered off-Broadway at the Atlantic Theater Company in late 2021 and transferred to Broadway's Booth Theatre with previews beginning October 12, 2022. The show tells the story of a bright, funny New Jersey teenager navigating family dysfunction and a rare genetic aging condition. It arrived with the kind of critical momentum that made the stakes clear: the site had to be live, polished, and converting before the first preview audience walked out onto 45th Street.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to launch ahead of the Broadway transfer — and be architecturally ready to support the production through awards season, a potential long run, and an eventual national tour.</p>
+<p class="is-style-muted">After dozens of prior Broadway builds, the tooling was reliable. The question for Kimberly Akimbo was whether the platform could sustain a production that might run for years.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Custom WordPress theme with a ticket calendar built to drive conversions across venues and dates.</strong></h2>
+<h2 class="wp-block-heading"><strong>Proven infrastructure applied to a production built for the long haul.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme designed around a single operational priority: getting audiences from discovery to ticket purchase as fast as possible. The ticket calendar was the centerpiece — an interactive, date-driven interface displaying show availability across the Broadway run and, later, national tour stops spanning 10+ venues. Each calendar entry linked directly to the appropriate ticketing provider for that venue, routing users into the purchase flow with the correct date, time, and theater pre-selected. The cast and creative team section was built as a structured content system with expandable profile cards, individual bios, and social media links — all manageable through the WordPress admin as cast changes occurred across the run. The site carried the full scope of a Broadway production site: hero imagery, video embeds, press acclaim sections, merchandise links, group sales pathways, and a comprehensive accessibility toolbar.</p>
+<p>The ticketing calendar, cast profiles, and tour system were all patterns refined across previous builds. What distinguished this project was the emphasis on lifecycle durability. The calendar expanded from a single-venue Broadway schedule to 10+ tour stops with different ticketing providers per city, each routing audiences into the correct purchase flow with date, time, and theater pre-selected. Cast profiles needed to accommodate turnover across a multi-year run — structured content with expandable cards, bios, and social links that the production team could update without developer involvement. The site also carried hero imagery, video embeds, press acclaim, merchandise links, group sales pathways, and an accessibility toolbar.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The content architecture was designed to evolve — from the initial Broadway launch through Tony season, the closing announcement, and the transition to a national tour site with its own venue calendar and rotating cast.</p>
+<p class="is-style-muted">The architecture was designed to evolve through every phase: Broadway launch, Tony season, closing announcement, and the transition to a national tour with its own venue calendar and rotating cast.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of Kimberly Akimbo's Broadway previews in October 2022 and served as the production's primary digital platform through its entire lifecycle. The show went on to win five Tony Awards in June 2023 — Best Musical, Best Book, Best Original Score, Best Leading Actress (Victoria Clark), and Best Featured Actress (Bonnie Milligan) — with the site handling the surge in traffic and ticket demand that followed the ceremony. The Broadway run continued through April 28, 2024, totaling 32 previews and 612 regular performances at the Booth Theatre. The platform then transitioned seamlessly to support the national tour, with the ticket calendar expanding to accommodate multiple venues, dates, and regional ticketing providers without any structural rebuild.</p>
+<p>The site launched ahead of Broadway previews in October 2022. Five Tony wins followed in June 2023 — Best Musical, Best Book, Best Original Score, Best Leading Actress (Victoria Clark), and Best Featured Actress (Bonnie Milligan) — and the platform absorbed the post-ceremony traffic surge without incident. The Broadway run totaled 32 previews and 612 performances at the Booth Theatre before closing April 28, 2024. The national tour launched on the same codebase, with the ticket calendar expanding to accommodate multiple venues and regional ticketing providers without any structural rebuild.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform continues to serve the production as Kimberly Akimbo tours nationally and prepares for its London debut — a single codebase that has supported every phase of a Tony-winning musical's life.</p>
+<p class="is-style-muted">A single codebase has supported every phase of this production's life — Broadway, Tony season, national tour, and preparations for a London debut. The following year, The Outsiders would take Best Musical on a platform I built the same way.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

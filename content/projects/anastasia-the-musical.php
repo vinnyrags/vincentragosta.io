@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://anastasiathemusical.com">https://anastasiathemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://anastasiathemusical.com" target="_blank" rel="noopener">https://anastasiathemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Inherited and maintained the official website of Anastasia — the Broadway musical based on the 1997 animated film, with music by Stephen Flaherty, lyrics by Lynn Ahrens, and book by Terrence McNally. Custom WordPress theme with a ticketing calendar, cast and creative profiles, and a content architecture that supported the production through its final Broadway season, closing, and transition to a national tour.</p>
+<p>An inherited codebase rather than a ground-up build — I took over the Anastasia platform from another developer and steered it through the show's final Broadway season, closing at the Broadhurst Theatre, and transition to a 30-city national tour. The site at anastasiathemusical.com still stands years later.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Maintained and extended at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A hit Broadway musical needed ongoing platform development — and the codebase needed a new set of hands.</strong></h2>
+<h2 class="wp-block-heading"><strong>Not every project starts with a blank editor — sometimes the harder job is understanding what someone else built.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Anastasia — the musical inspired by the 1997 animated film, with music by Stephen Flaherty, lyrics by Lynn Ahrens, and a new book by four-time Tony Award winner Terrence McNally — had been running at the Broadhurst Theatre since April 2017. Directed by Darko Tresnjak with choreography by Peggy Hickey, the production starred Christy Altomare as Anya, Derek Klena as Dmitry, Ramin Karimloo as Gleb, John Bolton as Vlad, Mary Beth Peil as the Dowager Empress, and Caroline O'Connor as Countess Lily. The show had arrived on Broadway after a world premiere at Hartford Stage in 2016, earned two Tony nominations — Best Featured Actress for Mary Beth Peil and Best Costume Design for Linda Cho — and was averaging over 91% capacity at the 1,143-seat Broadhurst. By 2018, the production's digital platform was well-established but needed continued development as the show moved through its second year on Broadway, approached its eventual closing, and prepared to launch a 30-city national tour.</p>
+<p>Anastasia — the musical inspired by the 1997 animated film, with music by Stephen Flaherty, lyrics by Lynn Ahrens, and a new book by Terrence McNally — had been running at the Broadhurst Theatre since April 2017. Directed by Darko Tresnjak with choreography by Peggy Hickey, the production starred Christy Altomare as Anya, Derek Klena as Dmitry, Ramin Karimloo as Gleb, John Bolton as Vlad, Mary Beth Peil as the Dowager Empress, and Caroline O'Connor as Countess Lily. The show earned two Tony nominations and was averaging over 91% capacity at the 1,143-seat Broadhurst. By 2018 the original developer had moved on, and the production needed someone to take ownership of a codebase they had never seen — maintaining it through the show's final Broadway stretch while simultaneously preparing it for a 30-city national tour.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">I inherited the existing WordPress codebase and took over as development lead — maintaining the platform through the show's final Broadway season and its transition to a touring production.</p>
+<p class="is-style-muted">I picked up the existing WordPress codebase and made it mine — learning its architecture, fixing what needed fixing, and extending it for a production entering its next phase.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,15 +134,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>An inherited codebase, a ticketing calendar to maintain, and a platform that needed to evolve with the production.</strong></h2>
+<h2 class="wp-block-heading"><strong>Understanding someone else's decisions before changing anything — then extending the platform for a national tour.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I took over an existing custom WordPress theme and made it my own. The codebase had been built by another developer, so the first priority was understanding the architecture — the custom post types, template hierarchy, and the way the ticketing calendar had been wired together — before making any changes. The ticketing calendar was the primary conversion component, rendering the full performance schedule at the Broadhurst Theatre with matinee and evening slots, availability states, and direct purchase links routing audiences into the checkout flow with the correct date and time pre-selected. Beyond the calendar, the site carried the full scope of a Broadway production platform: cast and creative team profiles with structured bios, a media section with video content and the cast album, a digital lottery integration for $42 tickets, press and reviews aggregation, merchandise through multiple retail partners, and Gravity Forms powering newsletter signup and audience engagement. As the production moved toward its closing and a national tour launch, I updated the platform to support tour-specific content — new venue information, city-by-city scheduling, and a restructured navigation that gave the tour its own section while preserving the Broadway production's legacy content.</p>
+<p>The first priority was reading the codebase: mapping out the custom post types, template hierarchy, and how the ticketing calendar had been assembled. The calendar was the core conversion tool, displaying the Broadhurst schedule with availability states and direct purchase routing. Once I understood the existing architecture, I could extend it without disrupting what the production team already relied on. The site carried the full scope of a Broadway platform — cast and creative profiles with structured bios, a media section with video content and the cast album, a $42 digital lottery integration, press aggregation, and merchandise links. As the show approached its closing, I built out tour-specific infrastructure: city-by-city scheduling, venue information, and a restructured navigation that gave the tour its own section while preserving the Broadway production's legacy pages. This was a different discipline than the ground-up builds I was doing simultaneously on <a href="https://vincentragosta.io/projects/dear-evan-hansen/">Dear Evan Hansen</a> and <a href="https://vincentragosta.io/projects/pretty-woman/">Pretty Woman</a> — the constraint was working within someone else's decisions and improving the platform incrementally.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Inheriting someone else's codebase is a different kind of challenge than building from scratch — the discipline is in understanding what's there, respecting the decisions that work, and improving what doesn't without breaking what the production team depends on.</p>
+<p class="is-style-muted">The real skill in an inherited codebase is knowing what to leave alone. The original architecture was sound — my job was to respect it, fill the gaps, and prepare it for the tour.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +166,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The platform supported Anastasia through the final stretch of its Broadway run at the Broadhurst Theatre — 808 performances and 34 previews that grossed over $93.4 million at an average capacity of 91.67% and an average ticket price of $105.25. The show played its final Broadway performance on March 31, 2019. The ticketing calendar and tour infrastructure I built then carried the production into its first national tour, which launched in October 2018 at Proctors Theatre in Schenectady and played 30 cities across the United States and Canada — including Dallas, Houston, Philadelphia, Los Angeles, Chicago, Boston, and Atlanta — before performances were suspended in March 2020 due to the pandemic. The site at anastasiathemusical.com continues to serve the production, though it has not been actively maintained since the Broadway closing and tour suspension.</p>
+<p>Anastasia closed on Broadway on March 31, 2019, after 808 performances and 34 previews that grossed over $93.4 million at 91.67% average capacity. The tour infrastructure I added carried the production into its first national tour, launching in October 2018 at Proctors Theatre in Schenectady and playing 30 cities — Dallas, Houston, Philadelphia, Los Angeles, Chicago, Boston, Atlanta, and more — before the pandemic suspended performances in March 2020. The site at anastasiathemusical.com still stands as the production's digital presence, years after the Broadway closing and tour suspension.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I maintained and extended for Anastasia served the production through its highest-grossing Broadway stretch, a seamless transition to a national tour, and continues to stand — years later — as the show's digital presence.</p>
+<p class="is-style-muted">Anastasia proved that inheriting a codebase can be just as valuable as building one — the platform I extended served through $93 million in box office revenue and a coast-to-coast tour, and it is still online today.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

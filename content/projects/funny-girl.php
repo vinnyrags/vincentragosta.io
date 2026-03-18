@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://funnygirlonbroadway.com">https://funnygirlonbroadway.com</a></p>
+<p class="has-30-font-size"><a href="https://funnygirlonbroadway.com" target="_blank" rel="noopener">https://funnygirlonbroadway.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Built and maintained the official website for the first Broadway revival of Funny Girl in nearly 60 years — a custom WordPress platform with a SeatGeek-powered ticketing calendar, tour integration across 30+ cities, and a content architecture that supported the production through two lead cast transitions, a full recoupment, and a national tour launch.</p>
+<p>The first Broadway revival of Funny Girl in nearly 60 years — and the production that tested every assumption about how flexible a site's content architecture actually needs to be. Three lead actresses in 18 months, a full $16.5 million recoupment, SeatGeek-powered ticketing, and a national tour across 30+ cities, all running on the same WordPress platform without a rebuild.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Delivered as development lead at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>Broadway's most anticipated — and most turbulent — revival needed a digital platform that could keep pace.</strong></h2>
+<h2 class="wp-block-heading"><strong>The cast transition that changed everything — and a platform that had to absorb it overnight.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Funny Girl returned to Broadway in April 2022 at the August Wilson Theatre — the first revival since Barbra Streisand originated the role of Fanny Brice in 1964. Directed by Michael Mayer with a revised book by Harvey Fierstein, the production opened with Beanie Feldstein in the lead, Ramin Karimloo as Nick Arnstein, Jane Lynch as Mrs. Brice, and Jared Grimes as Eddie Ryan. The show arrived with enormous anticipation, a $16.5 million capitalization, and immediate public scrutiny. When Feldstein departed in July 2022 and Lea Michele stepped into the role that September, the production became the most talked-about show on Broadway — and ticket demand surged overnight. Situation Interactive, as the show's digital agency, needed the website to absorb that momentum: updated cast content, restructured ticketing flows, and a platform flexible enough to pivot as the production's narrative shifted in real time.</p>
+<p>Funny Girl returned to Broadway in April 2022 at the August Wilson Theatre — the first revival since Barbra Streisand originated the role of Fanny Brice in 1964. Michael Mayer directed, Harvey Fierstein revised the book, and the production opened with Beanie Feldstein leading opposite Ramin Karimloo, Jane Lynch, and Jared Grimes. Anticipation was enormous, capitalization sat at $16.5 million, and public scrutiny arrived immediately. Then Feldstein departed in July 2022 and Lea Michele stepped into the role that September. Overnight, Funny Girl became the most talked-about show on Broadway. Ticket demand surged, press coverage exploded, and the site had to absorb all of it — new cast content, updated creative assets, restructured promotional hierarchies — without missing a beat. No other production I built required this kind of real-time content velocity.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The production would go on to recoup its full $16.5 million investment, close after 599 performances on September 3, 2023, and launch a national tour the following week.</p>
+<p class="is-style-muted">The production recouped its full $16.5 million, closed after 599 performances on September 3, 2023, and launched a national tour the following week.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -138,11 +138,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site ran on WordPress with a custom theme built to handle the full scope of a Broadway production platform. The ticketing calendar was the centerpiece — a SeatGeek-powered integration that rendered the complete performance schedule at the August Wilson Theatre with date selection, availability states, and direct purchase links that routed audiences into the checkout flow with the correct performance pre-selected. When the national tour launched in September 2023 at Providence Performing Arts Center, I extended the platform with dedicated tour infrastructure: a city-by-city schedule spanning 30+ venues, venue-specific ticketing links through SeatGeek's affiliate system, and a tour section with its own navigation and key art featuring Katerina McCrimmon and the touring cast. The content architecture used structured custom fields for cast and creative profiles, allowing the marketing team to swap headshots, bios, and role assignments without developer involvement — critical during a production that cycled through three lead actresses in 18 months. Gravity Forms handled newsletter signups with geographic segmentation by zip code, feeding audience data back to the marketing team for targeted tour-city campaigns. The frontend delivered responsive layouts with lazy-loaded media, Cloudflare caching, and Google Tag Manager instrumentation for conversion tracking across the ticketing funnel.</p>
+<p>The SeatGeek-powered ticketing calendar represented the most mature version of the ticketing infrastructure I had been refining since <a href="https://vincentragosta.io/projects/dear-evan-hansen/">Dear Evan Hansen</a> — date selection, availability states, and direct purchase routing, all rendering the full schedule at the August Wilson Theatre. But what distinguished this build was the content architecture's resilience under pressure. Structured custom fields for cast and creative profiles let the marketing team swap headshots, bios, and role assignments without developer involvement. When Feldstein left and Michele arrived, the transition on the site was seamless — new hero imagery, updated bios, restructured promotional content, all handled through the CMS within hours.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Tour infrastructure extended the platform after Broadway closing: a city-by-city schedule spanning 30+ venues, venue-specific ticketing through SeatGeek's affiliate system, and a dedicated tour section with its own navigation and key art featuring Katerina McCrimmon and the touring cast. Geographic segmentation on newsletter signups fed audience data back for targeted tour-city campaigns. Cloudflare caching and Google Tag Manager instrumentation completed the stack.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The ticketing calendar and tour integration were the highest-impact features — they connected audience intent directly to ticket purchases across both the Broadway run and 30+ tour cities.</p>
+<p class="is-style-muted">The cast transition was the real stress test. A content architecture built for stability proved it could handle the most public lead-actress swap in recent Broadway history without any structural changes.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,11 +170,11 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The platform supported Funny Girl through its entire Broadway lifecycle — from opening night through two major cast transitions, a full recoupment of the $16.5 million capitalization, and a closing performance on September 3, 2023. Under Lea Michele, the production set box office records at the August Wilson Theatre, including a single-week gross of $2.4 million during the 2022 holiday season. The new Broadway cast recording, released in November 2022, topped the Billboard Cast Albums Chart. The tour infrastructure launched seamlessly the week after Broadway closing, with Katerina McCrimmon leading the national company across 30+ cities from Providence to Houston through 2024 and beyond. The structured content layer performed exactly as designed — the marketing team managed all cast updates, tour city additions, and promotional content independently throughout the run. The site at funnygirlonbroadway.com continues to serve the production's touring presence.</p>
+<p>Under Lea Michele, the production set box office records at the August Wilson — including a $2.4 million single-week gross during the 2022 holiday season. The cast recording topped the Billboard Cast Albums Chart. Across 599 performances, the show recouped its full $16.5 million capitalization. The tour launched the week after Broadway closing, with Katerina McCrimmon leading the national company across 30+ cities from Providence through Houston and beyond. The marketing team managed every phase independently: cast swaps, tour city rollouts, promotional refreshes, awards content — all through the CMS. The site at funnygirlonbroadway.com continues to serve the touring production.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform architecture and ticketing patterns built for Funny Girl informed subsequent Broadway builds across Situation Interactive's client roster — proving a model for productions that need to move fast through cast changes, format transitions, and multi-city tour launches.</p>
+<p class="is-style-muted">No other project in the portfolio tested a platform's flexibility the way Funny Girl did. The ticketing infrastructure matured through Dear Evan Hansen and the 2022 plays; the tour system evolved alongside <a href="https://vincentragosta.io/projects/some-like-it-hot/">Some Like It Hot</a>. But only Funny Girl demanded all of it at once — cast volatility, format transition, and multi-city scale — on a timeline measured in hours, not weeks.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

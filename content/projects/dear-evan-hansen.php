@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://dearevanhansen.com">https://dearevanhansen.com</a></p>
+<p class="has-30-font-size"><a href="https://dearevanhansen.com" target="_blank" rel="noopener">https://dearevanhansen.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress development for the official site of Dear Evan Hansen — the six-time Tony Award-winning musical and cultural phenomenon at the Music Box Theatre. An incredibly complex design system, custom ticketing calendar, tour integration across 100+ cities, and a cast &amp; creative content layer built for Broadway's biggest hit of the decade.</p>
+<p>One of the most design-intensive Broadway builds I worked on — translating Dear Evan Hansen's iconic visual identity (custom Pantone blue, handwritten typography, arm cast motif) into a precision-built WordPress theme. Custom ticketing calendar, tour integration spanning 100+ cities, and a cast management system built for the show that defined a generation of Broadway.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">I led development on this project at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>The biggest musical on Broadway needed a digital platform that could keep up.</strong></h2>
+<h2 class="wp-block-heading"><strong>Broadway's cultural juggernaut was about to go global, and the website had to lead the charge.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Dear Evan Hansen — with music and lyrics by Benj Pasek and Justin Paul, a book by Steven Levenson, and direction by Michael Greif — had swept the 2017 Tony Awards with six wins including Best Musical, Best Score, Best Book, and Best Leading Actor for Ben Platt. By 2018, the show had recouped its $9.5 million investment in just eight and a half months, was grossing over $1 million weekly in the 984-seat Music Box Theatre, and held the record for highest gross ever at a Broadway venue seating under 1,000. The cast album won the Grammy. The "Fansen" community had built one of the most intense fan followings in Broadway history. A national tour was launching in September 2018 across 100+ cities. International productions were in development for Toronto and London.</p>
+<p>By the time I started building the Dear Evan Hansen site in 2018, the show had already swept six Tony Awards — including Best Musical, Best Score, Best Book, and Best Leading Actor for Ben Platt — recouped its $9.5 million investment in just eight and a half months, and held the record for highest gross ever at a Broadway venue seating under 1,000. The "Fansen" community rivaled anything in pop music for intensity. A national tour across 100+ cities was imminent, international productions were spinning up in Toronto and London, and Universal had optioned the film rights. The site I was building would be the primary digital hub for all of it — not just a Broadway marketing page, but the central platform for a franchise expanding across continents and media.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Situation Interactive handled the digital marketing. I led development on the official site at the peak of the show's commercial and cultural momentum — the digital platform had to match the scale of the phenomenon.</p>
+<p class="is-style-muted">Situation Interactive handled the digital marketing. This was among my earliest Broadway builds, and the scale of the production set the bar for everything that followed.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -170,15 +170,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site served as the production's primary digital hub during the peak of its commercial run — a period that saw the show gross approximately $270 million across 1,678 Broadway performances at the Music Box Theatre. The ticketing calendar and tour system supported every phase of the show's expansion: the national tour launch in Denver in September 2018, international openings in Toronto and London, cast rotations through multiple lead actors, a Grammy-winning cast album, and the announcement of the Universal Pictures film adaptation. The marketing team managed all of it — tour dates, cast updates, award badges, media additions — through the CMS without developer intervention.</p>
+<p>The site served as the production's primary digital hub during the peak of its commercial run — a period that saw the show gross approximately $270 million across 1,678 Broadway performances at the Music Box Theatre. The ticketing calendar and tour system supported every phase of the show's expansion: the national tour launch in Denver in September 2018, international openings in Toronto and London, cast rotations through multiple lead actors, a Grammy-winning cast album, and the announcement of the Universal Pictures film adaptation.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The content architecture handled a production lifecycle that most Broadway shows never reach: from Tony sweep to national tour to West End transfer to film deal to licensing through Music Theatre International. Each expansion layered onto the existing structure rather than requiring a rebuild. The design system, ticketing infrastructure, and cast management patterns I built for this project directly informed the development approach for subsequent Broadway builds at Situation Interactive.</p>
+<p>The content architecture handled a production lifecycle that most Broadway shows never reach: from Tony sweep to national tour to West End transfer to film deal to licensing through Music Theatre International. Each expansion layered onto the existing structure rather than requiring a rebuild. The ticketing calendar, tour management system, and cast content patterns I built here became the foundation for subsequent productions — <a href="https://vincentragosta.io/projects/the-bands-visit/">The Band's Visit</a>, <a href="https://vincentragosta.io/projects/pretty-woman/">Pretty Woman</a>, and <a href="https://vincentragosta.io/projects/the-prom/">The Prom</a> all drew directly on architecture I first developed for Dear Evan Hansen.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for Broadway's biggest musical of the decade carried the production through six years, four continents, and a feature film — the patterns established here became the foundation for every theatrical build that followed.</p>
+<p class="is-style-muted">This was the project that established my playbook for Broadway builds — six years, four continents, and a feature film later, the architecture I designed for that 984-seat theatre was still holding.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

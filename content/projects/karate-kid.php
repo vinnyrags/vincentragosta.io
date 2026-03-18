@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://karatekidthemusical.com">https://karatekidthemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://karatekidthemusical.com" target="_blank" rel="noopener">https://karatekidthemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack development for the official website of The Karate Kid — The Musical, the stage adaptation of the 1984 film launching with a pre-Broadway world premiere at Stages St. Louis. Custom WordPress theme with a ticketing calendar, cast and creative team profiles, and a digital platform built to scale from regional premiere to Broadway.</p>
+<p>A stage musical adaptation of the 1984 film, launching with a world premiere at Stages St. Louis. Another film-to-stage adaptation in a portfolio that includes <a href="https://vincentragosta.io/projects/pretty-woman/">Pretty Woman</a> and <a href="https://vincentragosta.io/projects/mean-girls-on-broadway/">Mean Girls</a> — though this one arrived pre-Broadway, with the site built to scale from a regional premiere to a full Broadway campaign without a rebuild.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Led the full technical build at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>One of the most iconic film franchises in American pop culture was becoming a stage musical — and the timing couldn't have been better.</strong></h2>
+<h2 class="wp-block-heading"><strong>Peak franchise relevance, a Tony-stacked creative team, and a pre-Broadway premiere designed to prove the concept.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The Karate Kid — the 1984 Columbia Pictures film that grossed over $130 million worldwide on an $8 million budget and launched an entire franchise — was getting a stage musical adaptation with a book by original screenwriter Robert Mark Kamen and music and lyrics by Drew Gasparini. The creative team was stacked with Tony winners: director Amon Miyamoto, scenic designer Derek McLane, lighting designer Bradley King, sound designer Kai Harada, and MTV VMA-nominated choreographers Keone and Mari Madrid. The world premiere was set for Stages St. Louis at the Ross Family Theatre at the Kirkwood Performing Arts Center, opening June 1, 2022, with an explicit eye toward a Broadway transfer. The timing was deliberate — Cobra Kai was in the middle of its run as one of Netflix's most-watched series, with its fifth season premiering in September 2022 and Ralph Macchio's memoir Waxing On hitting shelves that same year. The Karate Kid franchise hadn't been this culturally relevant since the original trilogy. Producers Kumiko Yoshii, John Gore, Kenny Wax, Michael Wolk, and Jack Lane needed a digital platform that could establish the musical as a legitimate theatrical property, drive ticket sales for the St. Louis premiere, and scale to support the Broadway campaign when the time came.</p>
+<p>The Karate Kid — the 1984 film that grossed over $130 million worldwide and launched an entire franchise — was getting a stage musical adaptation with a book by original screenwriter Robert Mark Kamen and music and lyrics by Drew Gasparini. The creative team included Tony winners Amon Miyamoto (director), Derek McLane (scenic design), and choreographers Keone and Mari Madrid. The world premiere was set for Stages St. Louis, opening June 1, 2022, with an explicit eye toward a Broadway transfer. The timing was deliberate — Cobra Kai was in the middle of its Netflix run and Ralph Macchio's memoir was hitting shelves. The franchise had not been this culturally relevant since the original trilogy. Having built Pretty Woman and Mean Girls — two other film-to-stage adaptations — I understood the particular challenge: audiences arrive with strong visual expectations from the source material, and the site has to feel like a natural extension of a brand they already know while establishing the stage production as its own thing.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to be live ahead of the May 25 first preview and serve as the production's primary digital presence through the sold-out St. Louis run and beyond.</p>
+<p class="is-style-muted">The site needed to be live ahead of the May 25 first preview and serve as the production's primary digital presence through a sold-out St. Louis run and beyond.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,15 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom WordPress build with a ticketing calendar, structured cast profiles, and a platform designed to grow from regional premiere to Broadway.</strong></h2>
+<h2 class="wp-block-heading"><strong>Proven patterns deployed for a pre-Broadway launch, with the architecture designed to travel.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>I led development on a custom WordPress theme that served as the production's complete digital platform from day one. The ticketing calendar was the primary conversion component — an interactive, date-driven interface rendering the full performance schedule with availability states and direct purchase links routing audiences into the ticketing provider's checkout flow with the correct show and date pre-selected. The cast and creative section featured structured biographical profiles for leads Jovanni Sy as Mr. Miyagi, John Cardoza as Daniel LaRusso, and two-time Tony nominee Kate Baldwin as Lucille LaRusso, along with the full ensemble and creative team — each managed through a dedicated content architecture that the production team could update as casting evolved across engagements. The site carried the full scope of a pre-Broadway production platform: media sections with production photography and first-look content, press coverage aggregation, social integrations, and Gravity Forms powering newsletter signup and audience engagement. The architecture was built with scalability in mind — the content layer, template structure, and ticketing integration were designed so the site could transition from the Stages St. Louis premiere to a Broadway campaign without a rebuild, simply updating venue details, cast information, and ticketing endpoints as the production moved forward.</p>
+<p>The ticketing calendar, cast profiles, and CMS patterns were established infrastructure by this point. The calendar rendered the Stages St. Louis performance schedule with availability states and direct purchase links. Cast profiles covered leads Jovanni Sy as Mr. Miyagi, John Cardoza as Daniel LaRusso, and two-time Tony nominee Kate Baldwin as Lucille LaRusso, along with the full ensemble and creative team — all structured so the production team could update casting as it evolved across engagements.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The distinguishing factor was the pre-Broadway context. Unlike shows that launch directly into a Broadway house, this site had to work for a regional premiere while being architecturally ready for a Broadway campaign — venue details, ticketing endpoints, and cast information all swappable through the CMS without a rebuild. Media sections, press coverage, and social integrations supported the early-stage marketing effort of establishing a new theatrical property.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform was built to outlast a single engagement — the same architecture that powered the St. Louis premiere was designed to carry the production through every subsequent stop on the path to Broadway.</p>
+<p class="is-style-muted">The same architecture that powered the St. Louis premiere was designed to carry the production through every subsequent engagement on the path to Broadway.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -166,7 +170,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of the May 25, 2022, first preview and served as the production's primary digital platform through its entire world premiere engagement at Stages St. Louis, which played to sold-out houses and strong critical reception through June 26. The ticketing calendar drove conversions throughout the run, the cast and creative profiles supported press coverage around a production featuring Tony-winning designers and a book by the film's original screenwriter, and the content architecture performed exactly as designed — the production team managed all updates independently post-launch. The platform's scalable architecture proved its value as the production continued to develop beyond St. Louis, with a UK tour subsequently announced and the Broadway ambitions that motivated the original build still in motion. The site at karatekidthemusical.com continues to serve as the production's digital home, carrying one of the most recognizable entertainment brands in American culture from its first theatrical staging toward the Broadway run it was always built for.</p>
+<p>The site launched ahead of the May 25, 2022, first preview and served as the production's primary digital platform through the world premiere at Stages St. Louis, which played to sold-out houses through June 26. The scalable architecture proved its value as the production continued to develop beyond St. Louis — a UK tour was subsequently announced, and the Broadway ambitions that motivated the original build remain in motion. The site at karatekidthemusical.com continues to serve as the production's digital home, carrying one of the most recognizable entertainment brands in American culture from its first theatrical staging toward the Broadway run it was always built for.</p>
 <!-- /wp:paragraph -->
 
 </div>

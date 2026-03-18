@@ -1,9 +1,9 @@
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/projects/">back to projects</a></div>
+<div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/projects/">back to projects</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
@@ -71,7 +71,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"fontSize":"30"} -->
-<p class="has-30-font-size"><a href="https://abeautifulnoisethemusical.com">https://abeautifulnoisethemusical.com</a></p>
+<p class="has-30-font-size"><a href="https://abeautifulnoisethemusical.com" target="_blank" rel="noopener">https://abeautifulnoisethemusical.com</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -82,11 +82,11 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
-<p>Full-stack WordPress development for the official site of A Beautiful Noise, the Neil Diamond biographical musical. Custom tour system, ticketing calendar integration, and a visually rich frontend built for a Broadway-scale marketing campaign.</p>
+<p>Neil Diamond's biographical jukebox musical — the third catalog-driven show I built after <a href="https://vincentragosta.io/projects/tina-on-broadway/">Tina</a> and <a href="https://vincentragosta.io/projects/jagged-little-pill/">Jagged Little Pill</a>. The genre was familiar, but the scope was bigger: a custom tour management system spanning 25+ cities, a distributed ticketing model with different providers per venue, and a frontend visual identity that became one of my favorite designs in the portfolio.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">Development lead on this project at Situation Interactive.</p>
+<p class="is-style-muted">Owned development end-to-end at Situation Interactive.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -106,15 +106,15 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A Broadway premiere needed a digital platform as bold as the show itself.</strong></h2>
+<h2 class="wp-block-heading"><strong>A catalog spanning five decades, a book by the writer of Bohemian Rhapsody, and a production built for national scale.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>A Beautiful Noise — the biographical musical celebrating Neil Diamond's life and catalog — was heading to Broadway at the Broadhurst Theatre following a sold-out pre-Broadway run at Boston's Emerson Colonial Theatre in the summer of 2022. With a book by Anthony McCarten (Bohemian Rhapsody), direction by Tony winner Michael Mayer, and a catalog of hits that spans five decades, the production carried significant commercial expectations. Situation Interactive, the agency of record for the show's digital marketing, brought me on to lead development of the official website.</p>
+<p>A Beautiful Noise — the biographical musical celebrating Neil Diamond's life and catalog — was heading to Broadway at the Broadhurst Theatre following a sold-out pre-Broadway run at Boston's Emerson Colonial Theatre. With a book by Anthony McCarten (Bohemian Rhapsody), direction by Tony winner Michael Mayer, and name recognition that few musicals can match, the commercial expectations were substantial. Having already built sites for Tina and Jagged Little Pill — two other jukebox musicals with loyal fanbases and national touring ambitions — I understood the genre's particular demands: audiences who arrive through the music first and need a clear, fast path to tickets.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The site needed to serve as the primary digital hub across a multi-phase rollout — pre-Broadway buzz, opening night press cycle, ongoing ticket sales, and an eventual national tour.</p>
+<p class="is-style-muted">The production needed a platform that could handle pre-Broadway buzz, the opening night press cycle, ongoing ticket sales, and an eventual national tour with 25+ cities.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -124,7 +124,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity is-style-wide"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["theme"],"patternName":"child-theme/two-column-featured-content-w-background","name":"Two Column Featured Content w/ Background"},"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="implementation" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"width":"40%"} -->
 <div class="wp-block-column" style="flex-basis:40%"><!-- wp:heading -->
@@ -134,19 +134,19 @@
 
 <!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading -->
-<h2 class="wp-block-heading"><strong>A custom tour system and ticketing calendar built for a show with national reach.</strong></h2>
+<h2 class="wp-block-heading"><strong>A distributed ticketing model and one of the strongest visual identities in the portfolio.</strong></h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site was built on WordPress with a custom theme architecture designed to handle the show's evolving lifecycle. The centerpiece was a custom tour management system — a structured content layer that let the marketing team manage cities, venues, dates, and ticket links for each tour stop independently. Each venue linked out to its own regional ticketing partner, so the system needed to accommodate a distributed ticketing model rather than a single centralized checkout. A ticketing calendar gave visitors a visual, date-driven interface to browse upcoming performances and jump directly to purchase.</p>
+<p>The distinguishing technical challenge was the tour system. Unlike single-venue Broadway shows, A Beautiful Noise needed a structured content layer where the marketing team could independently manage cities, venues, dates, and ticket links — each venue routing to its own regional ticketing partner rather than a centralized checkout. The ticketing calendar sat on top of this, giving visitors a date-driven interface to browse performances and jump directly to purchase. By this point in the portfolio, the calendar and cast profile patterns were well-established; the tour management system was the new ground.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The frontend leaned into the show's visual identity — bold typography using Hoefler &amp; Co.'s Knockout family, rich media sections with embedded video from rehearsals and performances, and a color system rooted in warm golds and deep blacks that echoed the production's stage design. Gravity Forms handled email capture for presale notifications and tour announcements. Google Tag Manager was wired throughout for conversion tracking and audience segmentation across the marketing funnel.</p>
+<p>The frontend was where this project stood apart visually. Bold typography using Hoefler &amp; Co.'s Knockout family, rich media sections with embedded rehearsal and performance footage, and a color system rooted in warm golds and deep blacks that echoed the production's stage design. Google Tag Manager handled conversion tracking across the marketing funnel.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The design was a standout — visually expressive, stage-inspired, and built to feel like an extension of the production itself.</p>
+<p class="is-style-muted">One of the most visually expressive builds in the portfolio — stage-inspired and designed to feel like an extension of the production itself.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
@@ -170,15 +170,15 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The site launched ahead of the Broadway opening at the Broadhurst Theatre in December 2022, supporting the full press cycle and initial ticket sales push. It served as the primary digital touchpoint through 657 performances on Broadway before the production closed in June 2024. When the national tour launched at the Providence Performing Arts Center in September 2024, the tour system and ticketing infrastructure I built scaled without modification — the marketing team managed 25+ tour cities and their associated venue links entirely through the CMS.</p>
+<p>The site launched ahead of the Broadway opening in December 2022 and served as the production's primary digital platform through 657 performances at the Broadhurst Theatre. When the national tour launched at the Providence Performing Arts Center in September 2024, the tour system scaled without modification — the marketing team managed 25+ cities and their associated venue links entirely through the CMS.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>The tour recouped its investment in just five months. The site continues to operate as the show's official platform, now supporting international expansion into Australia and licensing for regional and community theater productions.</p>
+<p>The tour recouped its investment in five months. The site continues to operate as the show's official platform, now supporting international expansion into Australia and licensing for regional and community theater productions.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"className":"is-style-muted"} -->
-<p class="is-style-muted">The platform I built for a Broadway opening in 2022 is still the production's digital foundation four years later — serving a national tour, international markets, and a licensing program without a rebuild.</p>
+<p class="is-style-muted">Still the production's digital foundation four years after launch — serving a national tour, international markets, and a licensing program on the same codebase.</p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
