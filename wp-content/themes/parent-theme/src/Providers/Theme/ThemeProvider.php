@@ -13,9 +13,6 @@ use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
-use ParentTheme\Providers\Theme\Features\ScrollReveal;
-use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
-use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
 use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
 use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
@@ -75,9 +72,6 @@ class ThemeProvider extends Provider
         DisableDefaultPatterns::class,
         DisablePosts::class,
         EnableSvgUploads::class,
-        ScrollReveal::class => false,
-        WpFormsBlockDetection::class => false,
-        WpFormsFloatingLabels::class => false,
     ];
 
     /**

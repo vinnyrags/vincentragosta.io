@@ -39,5 +39,8 @@
 @use 'blocks/wp-block-shutter-card';
 @use 'blocks/wp-block-testimonials';
 
+// Utilities
+@use 'utilities/text';
+
 // Print
 @use 'print';

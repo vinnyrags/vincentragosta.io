@@ -15,6 +15,12 @@
       "color": {
         "error": "#e74c3c",
         "accent1Dark": "#3d8500"
+      },
+      "iconSize": {
+        "xs": "10px",
+        "sm": "16px",
+        "md": "36px",
+        "lg": "48px"
       }
     },
     "spacing": {
@@ -106,6 +112,65 @@
       ]
     },
     "typography": {
+      "fontSizes": [
+        {
+          "fluid": false,
+          "name": "14px",
+          "size": "0.875rem",
+          "slug": "10"
+        },
+        {
+          "fluid": false,
+          "name": "16px",
+          "size": "1rem",
+          "slug": "20"
+        },
+        {
+          "fluid": {
+            "max": "1.375rem",
+            "min": "1.125rem"
+          },
+          "name": "18px / 22px",
+          "size": "1.375rem",
+          "slug": "30"
+        },
+        {
+          "fluid": {
+            "max": "1.875rem",
+            "min": "1.25rem"
+          },
+          "name": "20px / 30px",
+          "size": "1.875rem",
+          "slug": "40"
+        },
+        {
+          "fluid": {
+            "max": "2.25rem",
+            "min": "1.5rem"
+          },
+          "name": "24px / 36px",
+          "size": "2.25rem",
+          "slug": "50"
+        },
+        {
+          "fluid": {
+            "max": "2.75rem",
+            "min": "2rem"
+          },
+          "name": "32px / 44px",
+          "size": "2.75rem",
+          "slug": "60"
+        },
+        {
+          "fluid": {
+            "max": "4.5rem",
+            "min": "3.125rem"
+          },
+          "name": "50px / 72px",
+          "size": "3.125rem",
+          "slug": "70"
+        }
+      ],
       "fontFamilies": [
         {
           "name": "Fira Code",
@@ -210,16 +275,59 @@
       "background": "var:preset|color|contrast",
       "text": "var:preset|color|base"
     },
+    "spacing": {
+      "blockGap": "var:preset|spacing|40"
+    },
     "typography": {
-      "fontFamily": "var:preset|font-family|roobert"
+      "fontFamily": "var:preset|font-family|roobert",
+      "fontSize": "var:preset|font-size|40",
+      "fontWeight": "400",
+      "letterSpacing": "-0.3px",
+      "lineHeight": "1.5"
     },
     "blocks": {
       "core/button": {
         "typography": {
-          "fontWeight": "700"
+          "fontSize": "var:preset|font-size|20",
+          "fontWeight": "700",
+          "textTransform": "uppercase"
+        }
+      },
+      "core/columns": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|50"
+        }
+      },
+      "core/column": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|50"
+        }
+      },
+      "core/group": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|50"
+        }
+      },
+      "core/cover": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|50",
+          "padding": {
+            "top": "var:preset|spacing|50",
+            "right": "var:preset|spacing|40",
+            "bottom": "var:preset|spacing|50",
+            "left": "var:preset|spacing|40"
+          }
+        }
+      },
+      "core/buttons": {
+        "spacing": {
+          "blockGap": "var:preset|spacing|50"
         }
       },
       "core/separator": {
+        "border": {
+          "width": "1px"
+        },
         "color": {
           "text": "var:preset|color|grey-2"
         }
@@ -234,8 +342,17 @@
           "background": "var:preset|color|base",
           "text": "var:preset|color|contrast"
         },
+        "spacing": {
+          "padding": {
+            "top": "var:preset|spacing|30",
+            "right": "var:preset|spacing|40",
+            "bottom": "var:preset|spacing|30",
+            "left": "var:preset|spacing|40"
+          }
+        },
         ":focus": {
           "outline": {
+            "offset": "2px",
             "color": "var:preset|color|accent-1"
           }
         },
@@ -249,6 +366,7 @@
           }
         },
         "typography": {
+          "fontSize": "var:preset|font-size|20",
           "fontWeight": "700",
           "textTransform": "uppercase"
         }
@@ -256,7 +374,9 @@
       "heading": {
         "typography": {
           "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontWeight": "400"
+          "fontWeight": "400",
+          "lineHeight": "1",
+          "fontSize": "var:preset|font-size|60"
         },
         "color": {
           "text": "var:preset|color|base"

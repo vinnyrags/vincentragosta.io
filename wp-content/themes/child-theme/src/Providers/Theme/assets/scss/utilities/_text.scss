@@ -1,0 +1,21 @@
+// Accent underline for headings containing <u> or inline text-decoration.
+// Uses a background-image line instead of text-decoration to avoid
+// collision with the next line of text on multi-line wraps.
+h1, h2, h3, h4, h5, h6 {
+  &:has(u),
+  &:has([style*="text-decoration: underline"]) {
+    line-height: 1.25 !important;
+
+    u,
+    [style*="text-decoration: underline"] {
+      text-decoration: none !important;
+      padding-bottom: 0.15em;
+      background-image: linear-gradient(var(--wp--preset--color--accent-1), var(--wp--preset--color--accent-1));
+      background-repeat: no-repeat;
+      background-size: 100% 2px;
+      background-position: 0 100%;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+  }
+}
