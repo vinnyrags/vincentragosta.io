@@ -11,6 +11,7 @@ use ParentTheme\Providers\Provider;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;
+use ParentTheme\Providers\Theme\Features\DisablePluginUpdates;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
@@ -70,6 +71,7 @@ class ThemeProvider extends Provider
         DisableBlocks::class,
         DisableComments::class,
         DisableDefaultPatterns::class,
+        DisablePluginUpdates::class,
         DisablePosts::class,
         EnableSvgUploads::class,
     ];

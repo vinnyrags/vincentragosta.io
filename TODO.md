@@ -1,15 +1,17 @@
 ## HIGH PRIORITY
+- create more vertical space on search page
 - I want to add an "Interested in Nous?" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
+- consider updating the tone of the blog post excerpts, they could use a little nous touch
+- create project excerpts please (for use on search page)
 
-- re-evaluate parent theme code, and ensure nothing in there is opinionated what so ever, lets flag it if it is even the slightest bit opinionated please for review. i would like to see all of the offenders and I will tell you which to move to the child theme.
-- consider backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
+- backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
 - split repos, configure satis on production server, packages.vincentragosta.io
-- configure relevanssi, get search page working, create either integrated search results (between projects and blog), or have two separate sections
 - remove content directory on server after git push, should exist in git but not on servers (both develop and main)
 
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY
+- comb through the css in both child and parent theme and make sure we are not using hard coded values where a theme.json css variable would apply.
 - consider having each PostProvider create its own category taxonomy, right now I am in the situation wheree blog and project categories are meshing, ideally they would have their own subset of categories. we may need to consider a strategy to move categories currently assigned to posts to the new project category after we do this.
 - consider throwing detailed exceptions for core backend functionality especially but to the backend functionality as a whole, having a good error logging system should also be at the forefront when developing (at least in my platform/system), what are your thoughts on adding exception logs to the backend code? lets do a deep dive to see what this would take and write up an effective and efficient implementation plan in plan mode please.
 - consider wrapping code block in a container with background and border, and then OR even add code block to table further down on framework page

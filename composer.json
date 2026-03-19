@@ -19,7 +19,8 @@
     "wpengine/advanced-custom-fields-pro": "^6.0",
     "ext-dom": "*",
     "wpackagist-plugin/wpforms-lite": "^1.9",
-    "wpackagist-plugin/wordpress-seo": "^24.0"
+    "wpackagist-plugin/wordpress-seo": "^24.0",
+    "wpackagist-plugin/relevanssi": "^4.26"
   },
   "extra": {
     "wordpress-install-dir": "wp",

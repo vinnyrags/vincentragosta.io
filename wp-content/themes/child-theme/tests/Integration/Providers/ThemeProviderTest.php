@@ -9,6 +9,7 @@ use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
 use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
@@ -20,6 +21,7 @@ use ParentTheme\Providers\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;
+use ParentTheme\Providers\Theme\Features\DisablePluginUpdates;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
 use ParentTheme\Providers\Theme\Features\ScrollReveal;
@@ -77,15 +79,16 @@ class ThemeProviderTest extends BaseTestCase
         // Parent theme features (inherited)
         $this->assertContains(DisableBlocks::class, $enabled);
         $this->assertContains(DisableComments::class, $enabled);
+        $this->assertContains(DisableDefaultPatterns::class, $enabled);
+        $this->assertContains(DisablePluginUpdates::class, $enabled);
         $this->assertContains(DisablePosts::class, $enabled);
         $this->assertContains(EnableSvgUploads::class, $enabled);
 
         // Child theme opt-in features
-        $this->assertContains(DisableDefaultPatterns::class, $enabled);
         $this->assertContains(ScrollReveal::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(8, $enabled);
+        $this->assertCount(9, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
@@ -117,7 +120,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
         $this->assertContains(AccentHighlight::class, $hooks);
-        $this->assertCount(9, $hooks);
+        $this->assertContains(SearchSetup::class, $hooks);
+        $this->assertCount(10, $hooks);
     }
 
     /**

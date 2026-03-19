@@ -8,6 +8,7 @@ use ChildTheme\Providers\Project\ProjectPost;
 use ParentTheme\Providers\Blog\BlogPost;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
@@ -50,6 +51,7 @@ class ThemeProvider extends BaseThemeProvider
         ContainerBlockStyles::class,
         CoverBlockStyles::class,
         TextBlockStyles::class,
+        SearchSetup::class,
         SocialIconChoices::class,
     ];
 

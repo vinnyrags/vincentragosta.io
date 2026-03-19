@@ -1,0 +1,266 @@
+@use 'common/breakpoints' as *;
+@use 'common/pill' as *;
+
+// ==========================================================================
+// Search Results Page
+// ==========================================================================
+
+body.search .site-main {
+  background-image: url('/wp-content/uploads/2026/02/squiggle-4-grey-1.svg');
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.search-page {
+  max-width: var(--wp--custom--layout--wide, 1600px);
+  margin: var(--wp--preset--spacing--65) auto 0;
+}
+
+.search-page__header {
+  margin-block-end: var(--wp--preset--spacing--50);
+}
+
+.search-page__title {
+  font-family: var(--wp--preset--font-family--reckless-neue);
+  font-size: var(--wp--preset--font-size--60);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 var(--wp--preset--spacing--20);
+}
+
+.search-page__query {
+  color: var(--wp--preset--color--accent-1);
+}
+
+.search-page__count {
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--20);
+  margin: 0;
+}
+
+// ==========================================================================
+// Refine Search Input
+// ==========================================================================
+
+.search-page__form {
+  margin-block-end: var(--wp--preset--spacing--50);
+}
+
+.search-page__input {
+  width: 100%;
+  max-width: 480px;
+  padding: var(--wp--preset--spacing--20) 0;
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-block-end: 1px solid var(--wp--preset--color--accent-1);
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:focus {
+    border-block-end-width: 2px;
+  }
+}
+
+// ==========================================================================
+// Filter Tabs
+// ==========================================================================
+
+.search-filters {
+  margin-block-end: var(--wp--preset--spacing--50);
+}
+
+.search-filters__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wp--preset--spacing--20);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+  }
+}
+
+.search-filters__tab {
+  @extend %pill;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  font-family: inherit;
+  line-height: inherit;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--wp--preset--color--accent-1);
+    color: var(--wp--preset--color--accent-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+
+  &.is-active {
+    background-color: var(--wp--preset--color--accent-1);
+    border-color: var(--wp--preset--color--accent-1);
+    color: var(--color-on-accent);
+  }
+}
+
+// ==========================================================================
+// Search Cards
+// ==========================================================================
+
+.search-page__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--wp--preset--spacing--40);
+
+  @include media(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+%search-panel {
+  padding: var(--wp--preset--spacing--40);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--wp--custom--border-radius);
+}
+
+.search-card {
+  @extend %search-panel;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--wp--preset--color--accent-1);
+  }
+
+  &[data-post-type="post"]:hover {
+    border-color: var(--wp--preset--color--nous-red);
+  }
+
+  &[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+.search-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--20);
+  margin-block-end: var(--wp--preset--spacing--20);
+}
+
+.search-card__type-pill {
+  @extend %pill;
+
+  &--post {
+    border-color: var(--wp--preset--color--nous-red);
+    color: var(--wp--preset--color--nous-red);
+  }
+}
+
+.search-card__date {
+  display: block;
+  font-size: var(--wp--preset--font-size--10);
+  color: var(--color-text-muted);
+  margin-block-start: var(--wp--preset--spacing--20);
+}
+
+.search-card__title {
+  font-family: var(--wp--preset--font-family--reckless-neue);
+  font-size: var(--wp--preset--font-size--40);
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 var(--wp--preset--spacing--20);
+
+  a {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover {
+      color: var(--wp--preset--color--accent-1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: 4px;
+    }
+  }
+
+  [data-post-type="post"] & a {
+    &:hover {
+      color: var(--wp--preset--color--nous-red);
+    }
+
+    &:focus-visible {
+      outline-color: var(--wp--preset--color--nous-red);
+    }
+  }
+}
+
+.search-card__excerpt {
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--20);
+  line-height: 1.6;
+  margin-block-start: var(--wp--preset--spacing--20);
+}
+
+// ==========================================================================
+// Empty State
+// ==========================================================================
+
+.search-page__empty {
+  @extend %search-panel;
+  grid-column: 1 / -1;
+  text-align: center;
+
+  p:first-child {
+    margin-block-start: 0;
+  }
+}
+
+.search-page__empty-message {
+  font-size: var(--wp--preset--font-size--40);
+}
+
+.search-page__empty-suggestion {
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--20);
+  margin-block-start: var(--wp--preset--spacing--20);
+
+  a {
+    color: var(--wp--preset--color--accent-1);
+  }
+}
+
+// ==========================================================================
+// Light Mode
+// ==========================================================================
+
+.light-mode .search-filters__tab {
+  background-color: var(--color-bg);
+
+  &.is-active {
+    color: var(--wp--preset--color--contrast);
+  }
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .search-card,
+  .search-filters__tab {
+    transition: none;
+  }
+}

@@ -1,0 +1,80 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  <div class="search-page">
+    <header class="search-page__header">
+      <h1 class="search-page__title">
+        Search results for <span class="search-page__query">"{{ query }}"</span>
+      </h1>
+      <p class="search-page__count">
+        {{ found_posts }} result{{ found_posts != 1 ? 's' : '' }} found
+      </p>
+    </header>
+
+    <form class="search-page__form" role="search" action="{{ site.url }}" method="get">
+      <label for="search-input" class="screen-reader-text">Search</label>
+      <input
+        id="search-input"
+        class="search-page__input"
+        type="search"
+        name="s"
+        value="{{ query }}"
+        placeholder="Refine your search..."
+        aria-label="Search query"
+      />
+    </form>
+
+    {% if post_types|length > 1 %}
+      <nav class="search-filters" aria-label="Filter by content type">
+        <ul class="search-filters__list">
+          <li>
+            <button
+              class="search-filters__tab is-active"
+              data-filter=""
+              aria-pressed="true"
+            >All</button>
+          </li>
+          {% for slug, label in post_types %}
+            <li>
+              <button
+                class="search-filters__tab"
+                data-filter="{{ slug }}"
+                aria-pressed="false"
+              >{{ label }}</button>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+
+    <div class="search-page__list">
+      {% for post in posts %}
+        <article class="search-card" data-post-type="{{ post.post_type }}">
+          <div class="search-card__meta">
+            <span class="search-card__type-pill search-card__type-pill--{{ post.post_type }}">
+              {{ post_types[post.post_type] }}
+            </span>
+          </div>
+
+          <h2 class="search-card__title">
+            <a href="{{ post.link }}">{{ post.title }}</a>
+          </h2>
+
+          <time class="search-card__date" datetime="{{ post.date('c') }}">
+            {{ post.date('M j, Y') }}
+          </time>
+
+          {% set raw_excerpt = function('get_post_field', 'post_excerpt', post.id) %}
+          {% if raw_excerpt %}
+            <p class="search-card__excerpt">{{ raw_excerpt }}</p>
+          {% endif %}
+        </article>
+      {% else %}
+        <div class="search-page__empty">
+          <p class="search-page__empty-message">No results found for "{{ query }}".</p>
+          <p class="search-page__empty-suggestion">Try a different search term or browse our <a href="{{ site.url }}/projects/">projects</a>.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
