@@ -1,0 +1,24 @@
+Subject: WordPress Developer Application — Vincent Ragosta
+
+Hi iCubes team,
+
+I'm Vincent Ragosta — a senior WordPress developer with 11 years of professional experience. I came across your Backend WordPress Developer opening and wanted to reach out.
+
+The role is a strong match for what I do every day. I've spent my career building and maintaining WordPress platforms at scale — most recently at Situation Interactive, a digital agency in New York, where I was part of a 4-person full-stack team responsible for 75+ web properties serving millions of annual visitors. I'm used to working on complex, high-traffic projects where performance, stability, and clean code aren't optional.
+
+On the technical side, I work across PHP (modern OOP, strict types, PSR-4 autoloading), JavaScript (ES6, React), HTML, CSS/SCSS, and MySQL daily. I have deep experience with WordPress hooks, filters, and APIs — both consuming and building custom REST endpoints. I develop and extend themes and plugins regularly, build custom Gutenberg blocks with server-side rendering and React editor interfaces, and manage dependencies through Composer and npm. I'm comfortable with Git-based workflows, responsive design, cross-browser testing, and performance optimization at the architecture level.
+
+I've also been running my own independent practice since 2020, working with international clients across entertainment, e-commerce, hospitality, and nonprofit sectors. That means I'm used to working independently, managing my own workload, and communicating clearly with both technical and non-technical stakeholders — while still collaborating closely with designers and other engineers.
+
+I hold a B.S. in Computer Science from Brooklyn College.
+
+I'd love the opportunity to bring my experience to the iCubes team. Happy to share more about my background or walk through any of my recent work.
+
+GitHub: https://github.com/vinnyrags
+Portfolio: https://vincentragosta.io
+LinkedIn: https://www.linkedin.com/in/vincent-ragosta/
+
+Thanks for your time.
+
+Best,
+Vincent Ragosta

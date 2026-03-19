@@ -144,3 +144,17 @@
   80% { opacity: 0.8; }
   100% { opacity: 0; }
 }
+
+// Editor override — decrypt animation doesn't run in the block editor,
+// so force content visible and hide the overlay.
+.editor-styles-wrapper .nous-signal-card:not(.is-decrypted) {
+  .post-card__content,
+  .post-card__meta,
+  .nous-signal-card__header {
+    opacity: 1;
+  }
+
+  .nous-signal-card__decrypt-overlay {
+    display: none;
+  }
+}

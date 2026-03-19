@@ -1,0 +1,26 @@
+Hi Boldist team,
+
+Thanks for the quick reply — appreciate it.
+
+I'll be honest, fitting 11 years of WordPress experience into 500 characters was a fun challenge. Here's the longer version.
+
+I spent nearly nine years at Situation Interactive, a digital agency in New York, where I was part of a 4-person full-stack team building and maintaining 75+ web properties for clients across Broadway, performing arts, and cultural institutions — platforms serving millions of annual visitors with unpredictable traffic spikes around on-sale dates and opening nights. That's where I learned to work at agency pace across multiple projects simultaneously, context-switching between a quick content fix and a ground-up site build without dropping quality on either.
+
+I've also been running my own independent practice since 2020, working with clients across entertainment, e-commerce, hospitality, and nonprofit sectors. That means I'm used to owning the full technical direction — architecture, development, performance, deployment — not just closing tickets.
+
+Everything I build is hand-coded. No page builders. My current personal platform runs PHP 8.4 with strict types, dependency injection, and a custom provider-based architecture I designed. I develop custom Gutenberg blocks with server-side rendering and React editor interfaces, work with ACF daily, and have built WooCommerce solutions including e-commerce catalogs handling tens of thousands of products. I've integrated with third-party APIs and payment gateways (Ticketmaster, Stripe, Blackbaud, among others) and I'm comfortable building custom REST endpoints as well as consuming external services.
+
+Accessibility and performance are structural concerns for me, not cleanup passes. One of my current projects has 430+ automated tests across PHPUnit, Vitest, and Playwright with WCAG 2.1 AA enforcement baked into the E2E suite. I think about Core Web Vitals at the architecture level — query optimization, caching, asset compilation — and I convert Figma designs into clean, responsive, semantic code.
+
+On the AI front — I use it daily and deliberately. It's a powerful tool when the person driving it knows what good output looks like and when to override it. I'm genuinely curious about where this all goes, and I'd rather figure that out alongside a team that's leaning into it.
+
+Here are some links:
+
+Portfolio: https://vincentragosta.io
+GitHub: https://github.com/vinnyrags
+LinkedIn: https://www.linkedin.com/in/vincent-ragosta/
+
+Happy to walk through any of my work in more detail. Looking forward to hopefully connecting.
+
+Best,
+Vincent Ragosta

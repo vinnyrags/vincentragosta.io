@@ -1,0 +1,24 @@
+Hi Yoko Co team,
+
+I'm Vincent Ragosta — a senior WordPress developer with 11 years of professional experience. I'm writing to apply for the WordPress Support Engineer position.
+
+I want to be straightforward about something: most of my career has been building WordPress platforms from the ground up — custom themes, custom blocks, complex architectures. But the reason this role caught my attention isn't in spite of that background, it's because of it. When you've built these systems yourself, you develop an instinct for how they break and why. Debugging a plugin conflict, tracing unexpected behavior through a theme's hook chain, figuring out why an email integration went silent — that kind of investigative work is something I genuinely enjoy, and I think the depth of my build experience makes me unusually effective at it.
+
+At Situation Interactive, I spent nearly nine years on a small team maintaining 75+ client websites across Broadway, performing arts, and cultural institutions. That wasn't just greenfield development — a huge part of the job was keeping live, high-traffic sites running smoothly for clients who needed things fixed quickly and explained clearly. Plugin updates that broke layouts, hosting migrations, DNS changes, analytics discrepancies, third-party integrations going sideways — I've worked through all of it, often while communicating directly with non-technical stakeholders who just needed to know their site was in good hands.
+
+I've also run my own independent practice since 2020, which means I've been the entire support team for my clients. When something breaks at 9pm, there's no one to escalate to. That teaches you to be thorough, patient, and honest about what you're seeing — and to explain things in a way that leaves people feeling confident, not confused.
+
+On the technical side, I'm comfortable reading, debugging, and modifying PHP, JavaScript, HTML, and CSS within WordPress. I work with MySQL, REST APIs, hosting environments, Git workflows, and the full range of tooling that comes with managing WordPress sites in production. I've debugged plugin conflicts, resolved security issues, handled migrations between hosting providers, and supported clients through CMS questions large and small.
+
+What drew me to Yoko Co specifically is the mission-driven focus and the culture around it. I've worked for a national nonprofit (StoryCorps), I've worked at agencies, and I've worked independently — the most fulfilling work has always been when the thing you're building actually matters to someone beyond a conversion metric. The idea of supporting clients who are making a positive impact, within a team that genuinely respects each other and the work, is exactly the kind of environment I want to be part of.
+
+I'm a naturally curious problem-solver, I communicate clearly, and I don't find it frustrating when the answer isn't immediately obvious — I find it interesting. That's the part of the work I like most.
+
+GitHub: https://github.com/vinnyrags
+Portfolio: https://vincentragosta.io
+LinkedIn: https://www.linkedin.com/in/vincent-ragosta/
+
+Thanks for your time — I'd really welcome the chance to connect.
+
+Best,
+Vincent Ragosta

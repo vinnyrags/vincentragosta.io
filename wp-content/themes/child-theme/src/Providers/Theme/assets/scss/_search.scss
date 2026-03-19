@@ -5,15 +5,24 @@
 // Search Results Page
 // ==========================================================================
 
+body.search .footer {
+  margin-block-start: 0;
+}
+
+body.search .site-content {
+  padding-block: var(--wp--preset--spacing--70);
+}
+
 body.search .site-main {
   background-image: url('/wp-content/uploads/2026/02/squiggle-4-grey-1.svg');
   background-size: cover;
   background-attachment: fixed;
 }
 
-.search-page {
+.site-content > .search-page:first-child {
   max-width: var(--wp--custom--layout--wide, 1600px);
-  margin: var(--wp--preset--spacing--65) auto 0;
+  margin: 0 auto;
+  margin-block-start: 0;
 }
 
 .search-page__header {
@@ -238,6 +247,41 @@ body.search .site-main {
   margin-block-start: var(--wp--preset--spacing--20);
 
   a {
+    color: var(--wp--preset--color--accent-1);
+  }
+}
+
+// ==========================================================================
+// Pagination
+// ==========================================================================
+
+.search-pagination {
+  margin-block-start: var(--wp--preset--spacing--50);
+}
+
+.search-pagination__list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--wp--preset--spacing--20);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-pagination__link {
+  @extend %pill;
+  cursor: pointer;
+
+  &.is-current {
+    background-color: var(--wp--preset--color--accent-1);
+    border-color: var(--wp--preset--color--accent-1);
+    color: var(--color-on-accent);
+    cursor: default;
+  }
+
+  &:hover:not(.is-current) {
+    border-color: var(--wp--preset--color--accent-1);
     color: var(--wp--preset--color--accent-1);
   }
 }

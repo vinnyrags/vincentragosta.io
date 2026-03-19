@@ -76,5 +76,33 @@
         </div>
       {% endfor %}
     </div>
+
+    {% if posts.pagination and posts.pagination.pages|length > 1 %}
+      <nav class="search-pagination" aria-label="Search results pagination">
+        <ul class="search-pagination__list">
+          {% if posts.pagination.prev %}
+            <li>
+              <a href="{{ posts.pagination.prev.link }}" class="search-pagination__link" aria-label="Previous page">&larr; Prev</a>
+            </li>
+          {% endif %}
+
+          {% for page in posts.pagination.pages %}
+            <li>
+              {% if page.current %}
+                <span class="search-pagination__link is-current" aria-current="page">{{ page.title }}</span>
+              {% else %}
+                <a href="{{ page.link }}" class="search-pagination__link">{{ page.title }}</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+
+          {% if posts.pagination.next %}
+            <li>
+              <a href="{{ posts.pagination.next.link }}" class="search-pagination__link" aria-label="Next page">Next &rarr;</a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
   </div>
 {% endblock %}

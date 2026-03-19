@@ -1,0 +1,24 @@
+Subject: Web Developer Application — Vincent Ragosta
+
+Hi White Fox Media team,
+
+I'm Vincent Ragosta — a senior WordPress developer with 11 years of professional experience. I'm writing to apply for the Web Developer position.
+
+I've spent my career doing exactly what this role describes — designing, developing, and maintaining WordPress websites with a focus on performance, responsiveness, and clean user experience. At Situation Interactive, I was part of a 4-person full-stack team responsible for 75+ client websites across Broadway, performing arts, and cultural institutions, serving millions of annual visitors. I've also been running my own independent practice since 2020, working with clients across entertainment, e-commerce, hospitality, and nonprofit sectors.
+
+I build custom WordPress themes and plugins from scratch, develop custom Gutenberg blocks with server-side rendering and React editor interfaces, and regularly convert Figma designs into fully functional, responsive websites. I work across PHP, JavaScript (ES6, React), HTML5, CSS3, SCSS, and MySQL daily. I manage dependencies through Composer and npm, and Git is central to my workflow.
+
+I've integrated with a wide range of third-party APIs and tools — payment gateways (Stripe), CRMs (Salesforce, Blackbaud), ticketing platforms (Ticketmaster, Telecharge), and marketing tools — so I'm comfortable working with whatever external services a project requires.
+
+Performance optimization and SEO are part of how I build from the start. I think about query optimization, caching strategies, image handling, and Core Web Vitals at the architecture level. I also take security seriously — hardened defaults, input sanitization, and proactive maintenance are standard practice for me. I'm experienced managing hosting environments, handling deployments, backups, and updates across production sites.
+
+I'm comfortable collaborating with designers, content teams, and marketing — I've been doing that across agency and client relationships for over a decade.
+
+GitHub: https://github.com/vinnyrags
+Portfolio: https://vincentragosta.io
+LinkedIn: https://www.linkedin.com/in/vincent-ragosta/
+
+Thanks for your time — I'd welcome the chance to talk further.
+
+Best,
+Vincent Ragosta

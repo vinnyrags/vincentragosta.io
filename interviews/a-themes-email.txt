@@ -1,0 +1,26 @@
+Subject: WordPress Developer Application — Vincent Ragosta
+
+Hi A-Themes team,
+
+I'm Vincent Ragosta — a senior WordPress developer with 11 years of professional experience. I'm writing to apply for the WordPress Developer position.
+
+This role reads like a description of how I've been working for the last decade. Hand-coded custom themes, Gutenberg block development, ACF, WooCommerce, REST APIs, Figma-to-code, performance optimization, accessibility — that's the daily work, not the stretch goals. And the ownership mentality you're describing is how I've always operated. When something's broken, I dig in. When something could be better, I improve it. I don't wait for someone to tell me what to prioritize.
+
+I spent nearly nine years at Situation Interactive, a digital agency in New York, on a 4-person full-stack team maintaining 75+ client websites. That's agency pace — multiple projects running simultaneously, tight deadlines, and the expectation that you can context-switch between a quick content update and a full site build without dropping quality on either. I've also been running my own independent practice since 2020, which means I'm used to owning the full technical direction of a project from architecture through delivery.
+
+On the technical side: I build custom WordPress themes from scratch — no page builders. My current platform runs PHP 8.4 with strict types, dependency injection, and a provider-based architecture I designed. I develop custom Gutenberg blocks with server-side rendering and React editor interfaces, work with ACF daily, and have built WooCommerce solutions including e-commerce catalogs handling tens of thousands of products. I've integrated with a wide range of third-party APIs and payment gateways (Ticketmaster, Stripe, Blackbaud, among others), and I'm comfortable building custom REST endpoints as well as consuming external services.
+
+Accessibility and performance are baked into how I build, not treated as afterthoughts. One of my current projects has 430+ automated tests including WCAG 2.1 AA enforcement via Playwright and axe-core. I think about Core Web Vitals at the architecture level — query optimization, caching strategies, asset compilation via esbuild and Sass — not as a cleanup pass before launch.
+
+I work with Git daily, manage dependencies through Composer and npm, and I'm experienced converting Figma designs into clean, responsive, semantic code. I hold a B.S. in Computer Science from Brooklyn College.
+
+I'd welcome the chance to talk through my work in more detail. My portfolio is all custom-coded — happy to walk through any of it.
+
+GitHub: https://github.com/vinnyrags
+Portfolio: https://vincentragosta.io
+LinkedIn: https://www.linkedin.com/in/vincent-ragosta/
+
+Thanks for your time.
+
+Best,
+Vincent Ragosta
