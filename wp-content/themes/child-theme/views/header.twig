@@ -22,18 +22,49 @@
             <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
         </p>
 
-        <!-- Right: Hamburger -->
-        <button
-            class="header__menu-toggle"
-            type="button"
-            aria-label="Open menu"
-            aria-expanded="false"
-            aria-controls="nav-overlay"
-        >
-            <span class="header__menu-line" aria-hidden="true"></span>
-            <span class="header__menu-line" aria-hidden="true"></span>
-            <span class="header__menu-line" aria-hidden="true"></span>
-        </button>
+        <!-- Right: Search + Hamburger -->
+        <div class="header__actions">
+            <form
+                class="header__search"
+                role="search"
+                action="{{ site.url }}"
+                method="get"
+                aria-label="Site search"
+            >
+                <label for="header-search-input" class="screen-reader-text">Search</label>
+                <input
+                    id="header-search-input"
+                    class="header__search-input"
+                    type="search"
+                    name="s"
+                    placeholder="Search..."
+                    aria-label="Search query"
+                    tabindex="-1"
+                />
+                <button
+                    class="header__search-toggle"
+                    type="button"
+                    aria-label="Open search"
+                    aria-expanded="false"
+                >
+                    <span class="header__search-icon" aria-hidden="true">
+                        {{ icon('search') | raw }}
+                    </span>
+                </button>
+            </form>
+
+            <button
+                class="header__menu-toggle"
+                type="button"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="nav-overlay"
+            >
+                <span class="header__menu-line" aria-hidden="true"></span>
+                <span class="header__menu-line" aria-hidden="true"></span>
+                <span class="header__menu-line" aria-hidden="true"></span>
+            </button>
+        </div>
     </div>
 
     {# Full-screen navigation overlay #}

@@ -147,6 +147,12 @@ export function initMenuToggle() {
 
     menuToggle.addEventListener('click', () => {
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+
+        // Close search if open before opening nav
+        if (!isExpanded) {
+            closeSearch();
+        }
+
         toggleOverlay(menuToggle, overlay, !isExpanded);
     });
 
@@ -203,12 +209,86 @@ export function updateMenuToggleState(toggle, isOpen) {
 }
 
 /**
+ * Close the search bar if it is open.
+ * Module-scoped so other init functions (e.g. initMenuToggle) can call it.
+ */
+export function closeSearch() {
+    const form = document.querySelector('.header__search');
+    if (!form || !form.classList.contains('is-open')) return;
+
+    const toggle = form.querySelector('.header__search-toggle');
+    const input = form.querySelector('.header__search-input');
+
+    form.classList.remove('is-open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open search');
+    input.setAttribute('tabindex', '-1');
+    input.value = '';
+}
+
+/**
+ * Initialize expandable search bar
+ */
+export function initSearch() {
+    const form = document.querySelector('.header__search');
+    const toggle = form?.querySelector('.header__search-toggle');
+    const input = form?.querySelector('.header__search-input');
+    if (!form || !toggle || !input) return;
+
+    function openSearch() {
+        form.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+        toggle.setAttribute('aria-label', 'Close search');
+        input.setAttribute('tabindex', '0');
+        input.focus();
+    }
+
+    function isOpen() {
+        return form.classList.contains('is-open');
+    }
+
+    toggle.addEventListener('click', () => {
+        if (isOpen()) {
+            closeSearch();
+            toggle.focus();
+        } else {
+            openSearch();
+        }
+    });
+
+    // Submit on Enter when input has a value
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && input.value.trim()) {
+            form.submit();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+        }
+    });
+
+    // Close on Escape
+    form.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen()) {
+            closeSearch();
+            toggle.focus();
+        }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+        if (isOpen() && !form.contains(e.target)) {
+            closeSearch();
+        }
+    });
+}
+
+/**
  * Initialize all header functionality
  */
 export function initHeader() {
     initHeaderHeight();
     initModeToggle();
     initMenuToggle();
+    initSearch();
 }
 
 // Initialize when DOM is ready
