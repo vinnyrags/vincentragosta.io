@@ -1,7 +1,7 @@
 ## HIGH PRIORITY
 - consider updating the tone of the blog post excerpts, they could use a little nous touch
 - create project excerpts please (for use on search page)
-- need to create search icon, then add search button to header to the left of the hamburger nav separated by a gap of spacing|40
+- create make command to fetch ai info for the day and create a new post (in content dir). 
 
 - I want to add an "Interested in Nous? (or some flavor of this, i dont actually like what i just wrote all that much, hoping you can recommend something cool and enticing, and dark)" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
 - backend plugin to house backend functionality and lighten up the parent theme to just theme-related things

@@ -48,20 +48,27 @@
 
     if (!cards.length) return;
 
+    var STAGGER_DELAY = 150; // ms between each card
+    var DECRYPT_DURATION = 600;
+
     var observer = new IntersectionObserver(
       function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var card = entry.target;
+        var visible = entries.filter(function (e) { return e.isIntersecting; });
+
+        visible.forEach(function (entry, index) {
+          var card = entry.target;
+          var delay = index * STAGGER_DELAY;
+
+          setTimeout(function () {
             card.classList.add('is-decrypting');
 
             setTimeout(function () {
               card.classList.remove('is-decrypting');
               card.classList.add('is-decrypted');
-            }, 600);
+            }, DECRYPT_DURATION);
+          }, delay);
 
-            observer.unobserve(card);
-          }
+          observer.unobserve(card);
         });
       },
       { threshold: 0.15 }
