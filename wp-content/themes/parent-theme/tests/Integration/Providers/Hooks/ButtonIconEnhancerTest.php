@@ -4,8 +4,8 @@ namespace ParentTheme\Tests\Integration\Providers\Hooks;
 
 use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
 use ParentTheme\Tests\Support\HasContainer;
-use ParentTheme\Providers\Contracts\Hook;
-use ParentTheme\Providers\Contracts\Registrable;
+use Mythus\Contracts\Hook;
+use Mythus\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**

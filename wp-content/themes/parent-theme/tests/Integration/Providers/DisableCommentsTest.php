@@ -3,8 +3,8 @@
 namespace ParentTheme\Tests\Integration\Providers;
 
 use ParentTheme\Providers\Theme\Features\DisableComments;
-use ParentTheme\Providers\Contracts\Feature;
-use ParentTheme\Providers\Contracts\Registrable;
+use Mythus\Contracts\Feature;
+use Mythus\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**

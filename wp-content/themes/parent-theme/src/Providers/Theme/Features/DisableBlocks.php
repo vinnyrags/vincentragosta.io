@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Theme\Features;
 
-use ParentTheme\Providers\Contracts\Feature;
+use Mythus\Contracts\Feature;
 use WP_Block_Type_Registry;
 
 /**

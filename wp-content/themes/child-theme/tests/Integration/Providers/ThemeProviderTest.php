@@ -17,7 +17,7 @@ use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
 use ParentTheme\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
 use ParentTheme\Providers\Provider;
-use ParentTheme\Providers\Support\Feature\FeatureManager;
+use Mythus\Support\Feature\FeatureManager;
 use ParentTheme\Providers\Theme\Features\DisableBlocks;
 use ParentTheme\Providers\Theme\Features\DisableComments;
 use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;

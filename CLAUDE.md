@@ -4,10 +4,14 @@
 
 ## Project Overview
 
-This is a WordPress parent-child theme built on Timber 2.x and Twig for templating. The parent theme (`wp-content/themes/parent-theme`) provides reusable infrastructure — base classes, support managers, contracts, and shared features. The child theme (`wp-content/themes/child-theme`) is site-specific and extends the parent for the vincentragosta.io website.
+This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a **parent theme**, and a **child theme**, all built on Timber 2.x and Twig for templating.
+
+- **Mythus** (`wp-content/mu-plugins/mythus/`) — the platform framework. Owns the provider pattern, DI container (PHP-DI), contracts (`Registrable`, `Feature`, `Hook`, `Routable`), and all support managers (`AssetManager`, `BlockManager`, `FeatureManager`, `PatternManager`, `AcfManager`, `RestManager`). Theme-agnostic — no Timber/Twig coupling.
+- **Parent theme** (`wp-content/themes/parent-theme/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
+- **Child theme** (`wp-content/themes/child-theme/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
 - **PHP 8.4+** with strict types
-- **PHP-DI 7.0** for dependency injection (autowiring-first)
+- **PHP-DI 7.0** for dependency injection (autowiring-first, owned by Mythus)
 - **Timber 2.x / Twig** for templating
 - **DDEV** for local development
 - **esbuild + sass** for asset compilation
@@ -21,21 +25,29 @@ Providers are the primary organizational unit. Each provider is a self-contained
 The hierarchy:
 
 ```
-Registrable (interface)
-  ├── Feature (marker) — toggleable, $features array, opt-out via => false
-  ├── Hook (marker) — always-active, $hooks array, additive only
-  └── Provider (abstract base)
-        ├── ThemeProvider — core theme setup, supports, global assets
-        ├── PostTypeProvider — custom post types via JSON config
-        └── ProjectProvider (child only) — projects CPT + block
+Mythus\Contracts\Registrable (interface)
+  ├── Mythus\Contracts\Feature (marker) — toggleable, $features array, opt-out via => false
+  ├── Mythus\Contracts\Hook (marker) — always-active, $hooks array, additive only
+  └── Mythus\Provider (abstract base) — theme-agnostic framework
+        └── ParentTheme\Providers\Provider (bridge) — adds Timber/Twig support
+              ├── ThemeProvider — core theme setup, supports, global assets
+              ├── PostTypeProvider — custom post types via JSON config
+              └── ProjectProvider (child only) — projects CPT + block
 ```
+
+The parent theme's `Provider` bridge extends `Mythus\Provider` and adds:
+- Template directory resolution (`$templatesPath`, `getTemplatePath()`, `getTemplateSearchPaths()`)
+- Twig filter registration (`addTwigFunctions()`, `maybeRegisterTwigFilter()`)
+- Theme-aware path overrides (`getDistPath()`, `getDistUri()`, `resolveTextDomain()`)
 
 Each provider composes managers rather than inheriting them:
 
-- **AssetManager** — enqueues CSS/JS from `dist/`, derives a kebab-case slug from the provider class name (e.g., `ThemeProvider` → `theme`, `PostTypeProvider` → `post-type`)
-- **BlockManager** — registers dynamic blocks from the provider's `blocks/` directory
-- **FeatureManager** — resolves and registers toggleable `Feature` classes via the DI container
-- **PatternManager** — auto-discovers and registers block patterns from the provider's `patterns/` directory
+- **AssetManager** (`Mythus\Support\Asset`) — enqueues CSS/JS from `dist/`, derives a kebab-case slug from the provider class name (e.g., `ThemeProvider` → `theme`, `PostTypeProvider` → `post-type`)
+- **BlockManager** (`Mythus\Support\Block`) — registers dynamic blocks from the provider's `blocks/` directory
+- **FeatureManager** (`Mythus\Support\Feature`) — resolves and registers toggleable `Feature` classes via the DI container
+- **PatternManager** (`Mythus\Support\Pattern`) — auto-discovers and registers block patterns from the provider's `patterns/` directory
+- **AcfManager** (`Mythus\Support\Acf`) — registers ACF JSON load/save paths and auto-discovers options pages
+- **RestManager** (`Mythus\Support\Rest`) — registers REST API endpoints with toggleable enable/disable
 
 Managers are instantiated in `Provider::setup()`, which runs lazily (idempotent, deferred until first access).
 
@@ -89,19 +101,21 @@ protected array $hooks = [
 
 ## Design Patterns
 
-**Composition over inheritance** — Providers compose AssetManager, BlockManager, FeatureManager, and PatternManager as internal collaborators. The managers are not part of any inheritance chain.
+**Three-layer architecture** — Mythus owns framework infrastructure (contracts, managers, DI). The parent theme bridges Mythus to Timber/Twig. The child theme is site-specific. Mythus has no Timber/Twig dependency.
+
+**Composition over inheritance** — Providers compose AssetManager, BlockManager, FeatureManager, PatternManager, AcfManager, and RestManager as internal collaborators. The managers are not part of any inheritance chain.
 
 **Constructors are for DI only** (injectables) — No initialization logic in constructors of container-managed classes (providers, services, features). Setup happens in `setup()` (manager creation), `register()` (hook binding), or `bootstrap()` (Theme entry point). This is especially important because `Theme` extends `Timber\Site`, and calling `init()` on it would collide with Timber's method. **Newables** — short-lived objects created via `new` with runtime parameters (e.g., `IconService` instances) — may do initialization work in their constructor, since the container doesn't create them.
 
-**Features vs Hooks** — Features (in `$features` array, `Features/` directory) are toggleable — child providers can opt out via `ClassName::class => false`. They implement the `Feature` interface. Hooks (in `$hooks` array, `Hooks/` directory) are always-active structural behavior — inheritance is additive only, no opt-out. They implement the `Hook` interface. Both `Feature` and `Hook` extend `Registrable`. Placing a class in the wrong array triggers a runtime warning.
+**Features vs Hooks** — Features (in `$features` array, `Features/` directory) are toggleable — child providers can opt out via `ClassName::class => false`. They implement `Mythus\Contracts\Feature`. Hooks (in `$hooks` array, `Hooks/` directory) are always-active structural behavior — inheritance is additive only, no opt-out. They implement `Mythus\Contracts\Hook`. Both extend `Mythus\Contracts\Registrable`. Placing a class in the wrong array triggers a runtime warning.
 
-**Autowiring-first** — PHP-DI's autowiring resolves everything by default. To add explicit definitions when autowiring can't figure it out, override `getContainerDefinitions()` in Theme.php and create a `src/Config/container.php` file that returns an array of definitions.
+**Autowiring-first** — PHP-DI (owned by Mythus) resolves everything by default. To add explicit definitions when autowiring can't figure it out, override `getContainerDefinitions()` in Theme.php and create a `src/Config/container.php` file that returns an array of definitions.
 
 **Lazy initialization** — `Provider::setup()` is idempotent and defers manager setup until actually needed. Multiple calls are safe.
 
 **Silent asset failures** — If a CSS or JS file doesn't exist in `dist/`, the enqueue call silently skips it. This prevents errors when a provider has PHP logic but no compiled assets.
 
-**Infrastructure in parent, specifics in child** — The parent theme contains no site-specific code. All website functionality lives in the child theme.
+**Infrastructure in Mythus, bridge in parent, specifics in child** — Mythus contains no theme-specific code. The parent theme adds Timber/Twig integration. All website functionality lives in the child theme.
 
 ## Directory Structure
 
@@ -137,13 +151,46 @@ src/Providers/{Name}/
     └── post-type.json     # JSON config loaded via loadConfig()
 ```
 
+### Mythus Layout
+
+```
+wp-content/mu-plugins/
+├── mythus-loader.php            # Root loader (fail-fast if vendor missing)
+└── mythus/
+    ├── mythus.php               # Plugin header, constants
+    ├── composer.json             # Owns php-di/php-di ^7.0
+    ├── phpunit.xml
+    ├── src/
+    │   ├── Provider.php          # Abstract base (theme-agnostic)
+    │   ├── Contracts/
+    │   │   ├── Registrable.php
+    │   │   ├── Feature.php
+    │   │   ├── Hook.php
+    │   │   └── Routable.php
+    │   ├── Support/
+    │   │   ├── AbstractRegistry.php
+    │   │   ├── Acf/AcfManager.php
+    │   │   ├── Asset/AssetManager.php
+    │   │   ├── Block/BlockManager.php
+    │   │   ├── Feature/FeatureManager.php
+    │   │   ├── Pattern/PatternManager.php
+    │   │   └── Rest/{RestManager,Endpoint}.php
+    │   └── Hooks/
+    │       └── BlockStyles.php   # Abstract declarative block style registration
+    └── tests/
+        ├── bootstrap.php
+        ├── Support/              # HasContainer trait, ACF mocks
+        └── Unit/Support/         # Manager + contract tests
+```
+
 ### Key Conventions
 
 - Assets live inside providers, never at the theme root
 - `dist/` is git-ignored and rebuilt via `npm run build`
-- Tests mirror source structure: `tests/Unit/Providers/Support/{Asset,Block,Feature,Pattern}/`
+- Mythus tests mirror source: `tests/Unit/Support/{Acf,Asset,Block,Feature,Pattern,Rest}/`
+- Theme tests mirror providers: `tests/Unit/Providers/`, `tests/Integration/Providers/`
 - PSR-4 autoloading: namespace path matches directory path exactly
-- Support classes live at `src/Providers/Support/{Asset,Block,Feature,Pattern}/` — each has a Manager class
+- Contracts and support managers live in Mythus (`Mythus\Contracts\*`, `Mythus\Support\*`), not in the themes
 
 ## Block Architecture
 
@@ -219,13 +266,13 @@ From the project root:
 |---------|-------------|
 | `make start` | Start DDEV, restore latest DB snapshot, install deps, build assets |
 | `make stop` | Snapshot database and stop DDEV |
-| `make install` | Install composer + npm dependencies for both themes |
+| `make install` | Install composer + npm dependencies for Mythus and both themes |
 | `make build` | Build child theme assets (runs parent build first) |
 | `make watch` | Start watch mode for development |
-| `make test` | Run PHPUnit test suites for both themes |
-| `make update` | Update composer dependencies (root + both themes) |
-| `make clean` | Remove vendor, node_modules, and dist from both themes |
-| `make autoload` | Regenerate composer autoloaders for both themes |
+| `make test` | Run PHPUnit test suites for Mythus and both themes, plus JS tests |
+| `make update` | Update composer dependencies (root + Mythus + both themes) |
+| `make clean` | Remove vendor, node_modules, and dist from Mythus and both themes |
+| `make autoload` | Regenerate composer autoloaders for Mythus and both themes |
 | `make push-staging` | Push local DDEV database + uploads to staging server |
 | `make pull-staging` | Pull staging database + uploads to local DDEV |
 | `make push-production` | Push local DDEV database + uploads to production server |
@@ -254,24 +301,26 @@ The codebase has three layers of automated testing: PHP unit/integration tests, 
 
 ### PHP Tests (PHPUnit 9 + WorDBless)
 
-New PHP code should include tests where applicable. **WorDBless** is a WordPress test harness that loads WordPress without a database for fast, isolated execution. Tests run with `make test` from the project root or `composer test` from either theme directory.
+New PHP code should include tests where applicable. **WorDBless** is a WordPress test harness that loads WordPress without a database for fast, isolated execution. Tests run with `make test` from the project root or `composer test` from the Mythus directory or either theme directory.
 
 #### Structure
 
-Tests are organized into two suites:
+There are three PHP test suites, each with Unit and Integration directories:
 
-- **Unit** (`tests/Unit/`) — isolated tests with no WordPress side effects. Most manager and utility tests live here.
-- **Integration** (`tests/Integration/`) — tests that exercise WordPress hooks, filters, or the registration lifecycle.
+- **Mythus** (`mu-plugins/mythus/tests/`) — tests for contracts, support managers (Asset, Block, Feature, Pattern, Acf, Rest), and abstract base classes. These test the framework in isolation from any theme.
+- **Parent theme** (`themes/parent-theme/tests/`) — tests for the Provider bridge, theme-level features, hooks, and integration tests for the registration lifecycle.
+- **Child theme** (`themes/child-theme/tests/`) — tests for site-specific providers, custom post types, and child-specific behavior.
 
-Test directories mirror source structure. A class at `src/Providers/Support/Asset/AssetManager.php` has tests at `tests/Unit/Providers/Support/Asset/AssetManagerTest.php`.
+Test directories mirror source structure. A class at `Mythus\Support\Asset\AssetManager` has tests at `mythus/tests/Unit/Support/Asset/AssetManagerTest.php`. A class at `ParentTheme\Providers\Theme\ThemeProvider` has tests at `parent-theme/tests/Unit/Providers/Theme/ThemeProviderTest.php`.
 
 #### Conventions
 
 - Test classes extend `WorDBless\BaseTestCase`
-- The `HasContainer` trait (`tests/Support/HasContainer.php`) provides `buildTestContainer()` for tests that need DI — it builds a real container with autowiring and optional definition overrides
+- Both Mythus and the parent theme have a `HasContainer` trait (`tests/Support/HasContainer.php`) that provides `buildTestContainer()` for tests needing DI
 - Tests are method-per-behavior, named `test{Behavior}` (e.g., `testSlugifyRemovesProviderSuffix`)
-- When adding a new feature class, manager method, or provider behavior, include corresponding tests
-- Run `composer dump-autoload` in the theme directory if tests can't find new classes
+- New support managers or contracts go in Mythus with corresponding Mythus tests
+- New theme features/hooks go in the appropriate theme with corresponding theme tests
+- Run `composer dump-autoload` in the relevant directory if tests can't find new classes
 
 ### JavaScript Tests (Vitest + Testing Library)
 
@@ -324,7 +373,7 @@ E2E tests live at `tests/e2e/`:
 
 ### When to Write Tests
 
-- New support classes (managers, services, utilities) — always
+- New Mythus support classes (managers, contracts, abstract bases) — always, in Mythus test suite
 - New feature classes — when they contain logic beyond simple hook registration
 - New frontend JavaScript with DOM manipulation or user interaction — Vitest + Testing Library
 - Bug fixes — a regression test that reproduces the bug before the fix
@@ -354,4 +403,8 @@ These are patterns the codebase has evolved away from. Avoid reintroducing them:
 - **Calling `init()` on Theme** — The entry point is `bootstrap()`. Using `init()` conflicts with `Timber\Site::init()`
 - **`new` for feature classes** — Features are resolved through the container via `FeatureManager`. This enables autowiring of their dependencies
 - **Hooks in `$features`** — Always-active behavioral classes (icon enhancers, block styles) belong in `$hooks`, not `$features`. `FeatureManager` validates this at runtime and skips non-`Feature` classes with a warning
-- **Wrong marker interface** — Feature classes implement `Feature`, hook classes implement `Hook`. Both extend `Registrable`. Placing a `Feature` in `$hooks` or a `Hook` in `$features` triggers a runtime warning and the class is skipped
+- **Wrong marker interface** — Feature classes implement `Mythus\Contracts\Feature`, hook classes implement `Mythus\Contracts\Hook`. Both extend `Mythus\Contracts\Registrable`. Placing a `Feature` in `$hooks` or a `Hook` in `$features` triggers a runtime warning and the class is skipped
+- **Contracts or managers in the parent theme** — All contracts (`Registrable`, `Feature`, `Hook`, `Routable`) and support managers (`AssetManager`, `BlockManager`, etc.) live in Mythus, not in the parent theme. The parent theme only has the `Provider` bridge class
+- **PHP-DI in theme composer.json** — PHP-DI is owned by Mythus. Don't add `php-di/php-di` to either theme's `composer.json`
+- **Timber/Twig in Mythus** — Mythus is theme-agnostic. Don't add Timber, Twig, or template-related code to Mythus. That belongs in the parent theme's Provider bridge
+- **Missing Mythus vendor** — The `mythus-loader.php` will `wp_die()` with instructions if `composer install` hasn't been run in the Mythus directory. Run `make install` to install all dependencies

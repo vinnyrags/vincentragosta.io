@@ -7,6 +7,19 @@ REPO_ROOT=$(git rev-parse --show-toplevel)
 STAGED_PHP=$(git diff --cached --name-only --diff-filter=ACM | grep '\.php$' || true)
 
 if [ -n "$STAGED_PHP" ]; then
+    # Check if Mythus PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/mu-plugins/mythus/"; then
+        echo "Running Mythus PHP tests..."
+        cd "$REPO_ROOT/wp-content/mu-plugins/mythus" && composer test
+        if [ $? -ne 0 ]; then
+            echo ""
+            echo "Mythus tests failed. Commit aborted."
+            echo "Fix the failing tests or use --no-verify to bypass."
+            exit 1
+        fi
+        echo "Mythus tests passed."
+    fi
+
     # Check if child-theme PHP files are staged
     if echo "$STAGED_PHP" | grep -q "wp-content/themes/child-theme/"; then
         echo "Running child-theme PHP tests..."

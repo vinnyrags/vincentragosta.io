@@ -18,6 +18,12 @@ if (file_exists($parent_autoloader)) {
     require_once $parent_autoloader;
 }
 
+// Load Mythus autoloader for framework classes.
+$mythus_autoloader = dirname(dirname(dirname(__DIR__))) . '/mu-plugins/mythus/vendor/autoload.php';
+if (file_exists($mythus_autoloader)) {
+    require_once $mythus_autoloader;
+}
+
 // Set up test WordPress directory inside tests/.wp-test/
 $wp_test_dir = __DIR__ . '/.wp-test';
 if (!file_exists($wp_test_dir)) {

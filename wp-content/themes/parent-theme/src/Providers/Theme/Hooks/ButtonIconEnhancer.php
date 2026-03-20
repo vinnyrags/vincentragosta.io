@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ParentTheme\Providers\Theme\Hooks;
 
 use ParentTheme\Services\IconServiceFactory;
-use ParentTheme\Providers\Contracts\Hook;
+use Mythus\Contracts\Hook;
 use DOMDocument;
 use DOMXPath;
 

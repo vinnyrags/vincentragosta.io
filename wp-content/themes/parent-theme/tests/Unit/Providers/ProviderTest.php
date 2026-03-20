@@ -3,7 +3,7 @@
 namespace ParentTheme\Tests\Unit\Providers;
 
 use DI\Container;
-use ParentTheme\Providers\Contracts\Registrable;
+use Mythus\Contracts\Registrable;
 use ParentTheme\Providers\Provider;
 use ParentTheme\Tests\Support\HasContainer;
 use ReflectionMethod;

@@ -10,6 +10,12 @@ use WorDBless\Load;
 // Load Composer autoloader.
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
+// Load Mythus autoloader for framework classes.
+$mythus_autoloader = dirname(dirname(dirname(__DIR__))) . '/mu-plugins/mythus/vendor/autoload.php';
+if (file_exists($mythus_autoloader)) {
+    require_once $mythus_autoloader;
+}
+
 // Define ABSPATH to point to wordpress-no-content before loading WorDBless.
 if (!defined('ABSPATH')) {
     define('ABSPATH', dirname(__DIR__) . '/vendor/roots/wordpress-no-content/');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme\Hooks;
 
-use ParentTheme\Providers\Hooks\BlockStyles;
+use Mythus\Hooks\BlockStyles;
 
 /**
  * Registers custom block styles for container blocks (core/group, core/column).

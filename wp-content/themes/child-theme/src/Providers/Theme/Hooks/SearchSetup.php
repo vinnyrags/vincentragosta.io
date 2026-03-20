@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme\Hooks;
 
-use ParentTheme\Providers\Contracts\Hook;
+use Mythus\Contracts\Hook;
 
 class SearchSetup implements Hook
 {

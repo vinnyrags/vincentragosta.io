@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Tests\Unit\Providers\Project\Hooks;
 
 use ChildTheme\Providers\Project\Hooks\CategoryTermLinkRewrite;
-use ParentTheme\Providers\Contracts\Hook;
+use Mythus\Contracts\Hook;
 use PHPUnit\Framework\TestCase;
 
 /**

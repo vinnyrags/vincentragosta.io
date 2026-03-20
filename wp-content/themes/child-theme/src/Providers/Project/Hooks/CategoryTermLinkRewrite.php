@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Project\Hooks;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ParentTheme\Providers\Contracts\Hook;
+use Mythus\Contracts\Hook;
 
 /**
  * Rewrites category term links to point to the projects archive

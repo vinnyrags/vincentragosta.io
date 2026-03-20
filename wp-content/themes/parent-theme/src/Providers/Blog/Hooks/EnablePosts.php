@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ParentTheme\Providers\Blog\Hooks;
 
-use ParentTheme\Providers\Contracts\Hook;
+use Mythus\Contracts\Hook;
 use ParentTheme\Providers\Theme\Features\DisablePosts;
 
 /**

@@ -4,12 +4,12 @@ namespace ParentTheme\Tests\Integration\Providers;
 
 use DI\Container;
 use ParentTheme\Providers\Provider;
-use ParentTheme\Providers\Contracts\Feature;
-use ParentTheme\Providers\Contracts\Hook;
-use ParentTheme\Providers\Contracts\Registrable;
-use ParentTheme\Providers\Support\Feature\FeatureManager;
-use ParentTheme\Providers\Support\Rest\Endpoint;
-use ParentTheme\Providers\Support\Rest\RestManager;
+use Mythus\Contracts\Feature;
+use Mythus\Contracts\Hook;
+use Mythus\Contracts\Registrable;
+use Mythus\Support\Feature\FeatureManager;
+use Mythus\Support\Rest\Endpoint;
+use Mythus\Support\Rest\RestManager;
 use ParentTheme\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 use ReflectionClass;

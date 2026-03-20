@@ -3,6 +3,7 @@
 
 PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
+MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
 .PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging
 
@@ -65,8 +66,12 @@ stop:
 	@echo "✓ Database snapshotted and DDEV stopped"
 
 # Install all dependencies
-install: install-parent install-child
+install: install-mythus install-parent install-child
 	@echo "✓ All dependencies installed"
+
+install-mythus:
+	@echo "Installing Mythus dependencies..."
+	cd $(MYTHUS_DIR) && composer install --no-interaction
 
 install-parent:
 	@echo "Installing parent theme dependencies..."
@@ -92,6 +97,7 @@ watch:
 # Clean generated files
 clean:
 	@echo "Cleaning generated files..."
+	rm -rf $(MYTHUS_DIR)/vendor
 	rm -rf $(PARENT_THEME_DIR)/vendor
 	rm -rf $(PARENT_THEME_DIR)/node_modules
 	rm -rf $(PARENT_THEME_DIR)/dist
@@ -105,6 +111,9 @@ update:
 	@echo "Updating root dependencies..."
 	composer update --no-interaction
 	@echo ""
+	@echo "Updating Mythus dependencies..."
+	cd $(MYTHUS_DIR) && composer update --no-interaction
+	@echo ""
 	@echo "Updating parent theme dependencies..."
 	cd $(PARENT_THEME_DIR) && composer update --no-interaction
 	@echo ""
@@ -113,15 +122,19 @@ update:
 	@echo ""
 	@echo "✓ All dependencies updated"
 
-# Composer dump-autoload for both themes
+# Composer dump-autoload for Mythus and both themes
 autoload:
 	@echo "Regenerating autoloaders..."
+	cd $(MYTHUS_DIR) && composer dump-autoload
 	cd $(PARENT_THEME_DIR) && composer dump-autoload
 	cd $(CHILD_THEME_DIR) && composer dump-autoload
 	@echo "✓ Autoloaders regenerated"
 
-# Run test suite for both themes
+# Run test suite for Mythus and both themes
 test:
+	@echo "Running Mythus tests..."
+	cd $(MYTHUS_DIR) && composer test
+	@echo ""
 	@echo "Running parent theme tests..."
 	cd $(PARENT_THEME_DIR) && composer test
 	@echo ""

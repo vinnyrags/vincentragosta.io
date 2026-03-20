@@ -3,8 +3,8 @@
 namespace ChildTheme\Tests\Integration\Providers\Hooks;
 
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
-use ParentTheme\Providers\Contracts\Hook;
-use ParentTheme\Providers\Contracts\Registrable;
+use Mythus\Contracts\Hook;
+use Mythus\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**

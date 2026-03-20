@@ -6,7 +6,7 @@ namespace ParentTheme;
 
 use DI\Container;
 use DI\ContainerBuilder;
-use ParentTheme\Providers\Contracts\Registrable;
+use Mythus\Contracts\Registrable;
 use Timber\Site;
 use Timber\Timber;
 
