@@ -8,7 +8,7 @@
   justify-content: flex-start;
   gap: var(--wp--preset--spacing--30);
   margin-top: var(--wp--preset--spacing--50);
-  font-family: 'Fira Code', monospace;
+  font-family: var(--wp--preset--font-family--fira-code);
   font-size: var(--wp--preset--font-size--10);
   letter-spacing: 0.05em;
 
@@ -23,17 +23,17 @@
   }
 
   .blog-pagination__link {
-    color: var(--wp--preset--color--grey-3, #afafb6);
+    color: var(--wp--preset--color--grey-3);
     padding: var(--wp--preset--spacing--10) var(--wp--preset--spacing--20);
     text-decoration: none;
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--wp--preset--color--nous-red, #ff3333);
+      color: var(--wp--preset--color--nous-red);
     }
 
     &--current {
-      color: var(--wp--preset--color--nous-red, #ff3333);
+      color: var(--wp--preset--color--nous-red);
       font-weight: 700;
     }
   }

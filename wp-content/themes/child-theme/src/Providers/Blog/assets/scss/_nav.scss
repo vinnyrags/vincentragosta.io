@@ -1,14 +1,14 @@
 // Nous Signal — nav menu item (always red, site-wide)
 
 li.nous-signal-nav-item a {
-  color: var(--wp--preset--color--nous-red, #ff3333);
+  color: var(--wp--preset--color--nous-red);
 
   &:hover,
   &[aria-current="page"] {
-    color: var(--wp--preset--color--nous-red, #ff3333);
+    color: var(--wp--preset--color--nous-red);
   }
 
   &:focus-visible {
-    outline-color: var(--wp--preset--color--nous-red, #ff3333);
+    outline-color: var(--wp--preset--color--nous-red);
   }
 }

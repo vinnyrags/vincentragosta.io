@@ -10,7 +10,7 @@
 .wp-block-parent-theme-testimonials {
     --testimonials-arrow-size: 3.125rem;
     --testimonials-arrow-bg: currentColor;
-    --testimonials-arrow-color: #fff;
+    --testimonials-arrow-color: var(--wp--preset--color--base);
     --testimonials-arrow-hover-bg: var(--testimonials-arrow-bg);
     --testimonials-arrow-hover-color: var(--testimonials-arrow-color);
     --testimonials-accent: currentColor;

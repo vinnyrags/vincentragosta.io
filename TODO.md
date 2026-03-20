@@ -1,6 +1,4 @@
 ## HIGH PRIORITY
-- update the tags on posts to have a max of 10, also re-evaluate where we are applying the nous-accent in the post title, it should be on the darkest connotated word in the heading.
-- I want to add an "Interested in Nous? (or some flavor of this, i dont actually like what i just wrote all that much, hoping you can recommend something cool and enticing, and dark)" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
 - backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
 - split repos, configure satis on production server, packages.vincentragosta.io
 - consider removing content directory on server after git push, I mainly use the content directory for my interaction with claude, and that is not present on the server-- should exist in git but not on servers (both develop and main)
@@ -16,4 +14,6 @@
 - update CMS to use patterns and not one-offs (rename to pattern names, offenders are the pages)
 - clean offending project images, only a handful, probably need custom work, similar to what we did for absupplies logo
 - can we do something cool where on page load it looks like each character on the page is being decoded before appearing, this may be something outlandish but I am curious what the lift for this would be?
-- abstract footer margin-block-start to CMS control at the page level (acf on the page)
+- abstract footer margin-block-start to CMS control at the page level (acf on the page), or perhaps even leverage the spacer/divider block
+- I want to add an "Interested in Nous? (or some flavor of this, i dont actually like what i just wrote all that much, hoping you can recommend something cool and enticing, and dark)" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
+- update the tags on posts to have a max of 10, also re-evaluate where we are applying the nous-accent in the post title, it should be on the darkest connotated word in the heading.

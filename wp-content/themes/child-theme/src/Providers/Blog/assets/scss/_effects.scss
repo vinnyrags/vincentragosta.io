@@ -69,7 +69,7 @@
   z-index: 9999;
   pointer-events: none;
   opacity: 0;
-  background: var(--wp--preset--color--nous-red, #ff3333);
+  background: var(--wp--preset--color--nous-red);
 
   &.is-resisting {
     animation: nous-resistance-flash 0.4s steps(4) forwards;
