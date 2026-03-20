@@ -304,3 +304,108 @@ certbot --nginx -d staging.vincentragosta.io --redirect
 - `http://vincentragosta.io` → 301 → `https://vincentragosta.io`
 - `http://staging.vincentragosta.io` → 301 → `https://staging.vincentragosta.io`
 - Certs expire every 90 days, auto-renewed by Certbot timer
+
+---
+
+## Stage 5: Satis Private Composer Repository — COMPLETED
+
+A private Composer repository at `packages.vincentragosta.io` powered by [Satis](https://composer.github.io/satis/). Satis generates static JSON + zip archives that Composer understands — no PHP runtime at request time, just Nginx serving static files.
+
+### 5.1 DNS
+
+| Record | Value |
+|--------|-------|
+| A `packages` → 174.138.70.29 | packages.vincentragosta.io |
+
+### 5.2 Satis Installation
+
+```bash
+composer create-project composer/satis /var/satis --stability=dev --no-interaction
+```
+
+### 5.3 Configuration
+
+`/var/satis/satis.json` defines which repositories to index:
+
+```json
+{
+    "name": "vinnyrags/packages",
+    "homepage": "https://packages.vincentragosta.io",
+    "output-dir": "/var/www/packages.vincentragosta.io",
+    "repositories": [],
+    "require-all": true,
+    "archive": {
+        "directory": "dist",
+        "format": "zip",
+        "skip-dev": true
+    }
+}
+```
+
+- `require-all: true` — indexes all tags/branches of every listed repo
+- `archive` — downloads zip archives so consumers pull from this server, not GitHub
+- `skip-dev: true` — dev branches get metadata but not zip archives (saves disk)
+
+### 5.4 GitHub Authentication
+
+A fine-grained GitHub PAT (`satis-packages-server`) is stored in Composer's global auth:
+
+```bash
+composer config --global github-oauth.github.com THE_TOKEN
+```
+
+Stored at `/root/.config/composer/auth.json`. Satis picks it up automatically when cloning private repos.
+
+### 5.5 Nginx
+
+Static file server at `/etc/nginx/sites-available/packages.vincentragosta.io`. No PHP processing. SSL via Certbot (auto-configured). Zip archives served with 30-day cache headers.
+
+### 5.6 Automated Rebuilds
+
+A cron job runs every 6 hours via `/var/satis/rebuild.sh`:
+
+```bash
+#!/bin/bash
+export HOME=/root
+COMPOSER_ALLOW_SUPERUSER=1 /var/satis/bin/satis build /var/satis/satis.json /var/www/packages.vincentragosta.io --no-interaction 2>&1 | logger -t satis
+chown -R www-data:www-data /var/www/packages.vincentragosta.io
+```
+
+Manual rebuild anytime: `/var/satis/rebuild.sh`
+
+### Adding a Repository
+
+SSH into the server, edit `/var/satis/satis.json`, add to the `repositories` array:
+
+```json
+{
+    "type": "vcs",
+    "url": "https://github.com/vinnyrags/your-repo.git"
+}
+```
+
+Then run `/var/satis/rebuild.sh`. The repo must have a `composer.json` with a `name` field. Semantic version tags (e.g., `v1.0.0`) become installable versions.
+
+### Consuming Packages
+
+Add to any project's `composer.json` `repositories` key:
+
+```json
+{
+    "type": "composer",
+    "url": "https://packages.vincentragosta.io"
+}
+```
+
+No auth needed — the repository is public.
+
+### Key Files
+
+| Path | Purpose |
+|------|---------|
+| `/var/satis/` | Satis installation |
+| `/var/satis/satis.json` | Repository configuration |
+| `/var/satis/rebuild.sh` | Cron rebuild script |
+| `/var/www/packages.vincentragosta.io/` | Nginx web root (built output) |
+| `/etc/nginx/sites-available/packages.vincentragosta.io` | Nginx config |
+| `/root/.config/composer/auth.json` | GitHub token |

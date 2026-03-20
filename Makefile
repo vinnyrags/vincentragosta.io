@@ -5,7 +5,7 @@ PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging
+.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -37,6 +37,9 @@ help:
 	@echo "  make pull-production  - Pull production DB + uploads to local"
 	@echo "  make pull-patterns    - Export block patterns from production to PHP files"
 	@echo "  make pull-patterns-staging - Export block patterns from staging to PHP files"
+	@echo "  make satis-refresh    - Rebuild Satis package repository on server"
+	@echo "  make satis-add URL=...       - Add a repository to Satis (rebuilds by default)"
+	@echo "  make satis-remove URL=...    - Remove a repository from Satis and rebuild"
 
 # Start DDEV environment, install dependencies, and build assets
 start:
@@ -247,3 +250,32 @@ pull-patterns-staging:
 	REMOTE_WP="$(STAGING_WP)" \
 	REMOTE_URL="$(STAGING_URL)" \
 	$(CHILD_THEME_DIR)/scripts/export-patterns.sh
+
+# Rebuild Satis package repository on server
+satis-refresh:
+	@echo "Rebuilding Satis repository..."
+	ssh $(PRODUCTION_HOST) "/var/satis/rebuild.sh"
+	@echo "Done — packages.vincentragosta.io updated"
+
+# Add a repository to Satis (URL required, REBUILD=true by default)
+REBUILD ?= true
+satis-add:
+ifndef URL
+	$(error Usage: make satis-add URL=https://github.com/vinnyrags/repo.git)
+endif
+	@echo "Adding $(URL) to Satis..."
+	@ssh $(PRODUCTION_HOST) "jq '.repositories += [{\"type\": \"vcs\", \"url\": \"$(URL)\"}] | .repositories |= unique_by(.url)' /var/satis/satis.json > /tmp/satis.json && mv /tmp/satis.json /var/satis/satis.json"
+	@echo "Repository added."
+ifeq ($(REBUILD),true)
+	@$(MAKE) satis-refresh
+endif
+
+# Remove a repository from Satis and rebuild
+satis-remove:
+ifndef URL
+	$(error Usage: make satis-remove URL=https://github.com/vinnyrags/repo.git)
+endif
+	@echo "Removing $(URL) from Satis..."
+	@ssh $(PRODUCTION_HOST) "jq '.repositories |= map(select(.url != \"$(URL)\"))' /var/satis/satis.json > /tmp/satis.json && mv /tmp/satis.json /var/satis/satis.json"
+	@echo "Repository removed."
+	@$(MAKE) satis-refresh

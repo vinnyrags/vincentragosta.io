@@ -5,6 +5,7 @@ TODO.md
 
 .idea
 .DS_Store
+.phpunit.result.cache
 
 vendor
 !wp-content/themes/*/src/Providers/*/assets/**/vendor
