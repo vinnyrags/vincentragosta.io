@@ -1,6 +1,5 @@
 ## HIGH PRIORITY
-- excerpts for pages in DB, no need to reflect the nous tone/voice/identity, just casual yet professional and confident language.
-- update the tags on posts to have a max of 10, also re-evaluate where we are aplying the nous-accent in the post title, it should be on the darkest connotated word in the heading.
+- update the tags on posts to have a max of 10, also re-evaluate where we are applying the nous-accent in the post title, it should be on the darkest connotated word in the heading.
 - I want to add an "Interested in Nous? (or some flavor of this, i dont actually like what i just wrote all that much, hoping you can recommend something cool and enticing, and dark)" to the blog page somewhere, perhaps on a new page, either way I want some descriptive text for Nous, not terribly long, maybe 2-3 paragraphs max (try for 2, 4-5 sentences each paragraph).
 - backend plugin to house backend functionality and lighten up the parent theme to just theme-related things
 - split repos, configure satis on production server, packages.vincentragosta.io

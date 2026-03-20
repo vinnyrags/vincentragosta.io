@@ -65,6 +65,9 @@
           </time>
 
           {% set raw_excerpt = function('get_post_field', 'post_excerpt', post.id) %}
+          {% if not raw_excerpt %}
+            {% set raw_excerpt = post.meta('_yoast_wpseo_metadesc') %}
+          {% endif %}
           {% if raw_excerpt %}
             <p class="search-card__excerpt">{{ raw_excerpt }}</p>
           {% endif %}
