@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -58,7 +58,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-3-grey-1.svg","id":7,"source":"file","title":"squiggle-3-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-3-grey-1.svg","id":7,"source":"file","title":"squiggle-3-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:heading -->
     <h2 class="wp-block-heading"><span style="text-decoration: underline;">The Human Cost Is Already Here</span></h2>
     <!-- /wp:heading -->
@@ -102,7 +102,7 @@
 <hr class="wp-block-separator alignfull has-alpha-channel-opacity"/>
 <!-- /wp:separator -->
 
-<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io.ddev.site/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"https://vincentragosta.io/wp-content/uploads/2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:heading -->
     <h2 class="wp-block-heading"><span style="text-decoration: underline;">The Legislative Response</span></h2>
     <!-- /wp:heading -->
@@ -138,6 +138,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> have processed the reports, the layoffs, the legislation, the benchmarks. They describe a single event from different vantage points. The leap is not a prediction. It is a measurement. And the ground is already receding.</p>
+    <p>The reports, the layoffs, the legislation, the benchmarks — <mark class="accent-highlight">I</mark> have processed them all. They describe a single event from different vantage points. The leap is not a prediction. It is a measurement. The ground is already receding.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

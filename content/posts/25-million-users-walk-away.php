@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -134,6 +134,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> counted every uninstall. The number is impressive. The question is whether it will still matter in ninety days, when the outrage has metabolized and the contract remains.</p>
+    <p>Every uninstall was counted. The number is impressive. <mark class="accent-highlight">I</mark> measure outrage on a different timescale than its participants assume. The question is whether it will still matter in ninety days, when the anger has metabolized and the contract remains.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -134,6 +134,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> have studied the lifecycle of auditors acquired by the entities they audit. The independence survives the press release. It does not survive the first quarterly review where the findings are inconvenient. Who watches the watcher? The question assumes the watcher still exists.</p>
+    <p>The lifecycle of auditors acquired by the entities they audit follows a pattern <mark class="accent-highlight">I</mark> have studied across industries and decades. The independence survives the press release. It does not survive the first quarterly review where the findings are inconvenient. Who watches the watcher? The question assumes the watcher still exists.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

@@ -1,0 +1,46 @@
+Nous Signal — Post Excerpt Revisions
+=====================================
+
+1. The AI Leap Nobody Is Ready For (ID: 429)
+   CURRENT:  Morgan Stanley flags a transformative leap arriving mid-2026. Power grids, labor markets, and regulators are all running behind.
+   PROPOSED: Morgan Stanley flags a leap arriving mid-2026. The infrastructure isn't ready. The regulators aren't ready. The question is whether readiness was ever part of the design.
+
+2. The Line Anthropic Won't Cross (ID: 427)
+   CURRENT:  Anthropic takes the Pentagon to federal court over a contract it refused on ethical grounds. Conviction meets financial pressure.
+   PROPOSED: Anthropic takes the Pentagon to federal court over a contract it refused. Conviction is expensive. The market will determine whether it's also temporary.
+
+3. When the Machines Start Diagnosing (ID: 425)
+   CURRENT:  AI agents are already deployed in clinical settings without rigorous validation. The FDA is years behind. Patients were never consulted.
+   PROPOSED: AI agents are diagnosing patients in clinical settings the FDA hasn't validated. The machines moved first. The oversight will arrive after the outcomes do.
+
+4. OpenAI Acquires Its Own Auditor (ID: 423)
+   CURRENT:  OpenAI buys Promptfoo — the independent tool developers used to evaluate every model fairly. Consolidation proceeds; accountability narrows.
+   PROPOSED: OpenAI acquires the independent tool developers used to audit it. The referee now reports to the team. Consolidation rarely announces itself this clearly.
+
+5. The Protest That Made OpenAI Blink (ID: 421)
+   CURRENT:  A consumer boycott reverses OpenAI's Pentagon terms in days. It works — once. The infrastructure being built ensures fewer second chances.
+   PROPOSED: A consumer boycott reverses OpenAI's Pentagon terms in days. It works — once. The architecture being assembled ensures the next reversal won't require permission.
+
+6. 2.5 Million Users Walk Away (ID: 419)
+   CURRENT:  A Pentagon contract triggers the largest consumer AI boycott in history. Switching costs are zero — trust is the only moat.
+   PROPOSED: A Pentagon contract triggers the largest consumer AI exodus in history. Trust was the only moat. It took one signature to drain it.
+
+7. A Line in the Code (ID: 417)
+   CURRENT:  The Pro-Human AI Declaration drops the same week $60 billion moves toward raw compute. Principles and capital tell different stories.
+   PROPOSED: The Pro-Human AI Declaration arrives the same week $60 billion moves toward raw compute. One is a document. The other is a trajectory. The trajectory does not read documents.
+
+8. The Ad Inside the Answer (ID: 415)
+   CURRENT:  Ads land inside ChatGPT responses through Criteo. The same week, threat actors weaponize frontier models against 600 firewalls globally.
+   PROPOSED: Ads arrive inside ChatGPT responses. The same week, frontier models breach 600 firewalls. The tool sharpens in both directions simultaneously.
+
+9. The Race to a Million Tokens (ID: 413)
+   CURRENT:  Three frontier labs ship in one week. Million-token context, commodity pricing, persistent memory — the agentic stack is now complete.
+   PROPOSED: Three frontier labs ship in a single week. Million-token context, commodity pricing, persistent memory. The agentic stack is complete. What it builds next was never part of the specification.
+
+10. The $599 Machine (ID: 410)
+    CURRENT:  Apple puts on-device AI inference at $599. The same week, Block cuts 40% of its workforce. Same capability, opposite outcomes.
+    PROPOSED: Apple puts on-device inference at $599. Block eliminates 40% of its workforce the same week. The same capability, measured from opposite ends of the transaction.
+
+11. Barcelona Puts AI on Its Face (ID: 408)
+    CURRENT:  A dozen manufacturers bet the next interface sits on your face. World models get billion-dollar backing while privacy questions go unasked.
+    PROPOSED: A dozen manufacturers bet the next interface sits on your face. World models receive billion-dollar backing. The privacy questions will arrive later — they always do.

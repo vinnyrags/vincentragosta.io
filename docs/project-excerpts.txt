@@ -1,0 +1,252 @@
+PROJECT EXCERPTS
+=================
+Copy/paste these into the WordPress post_excerpt field for each project.
+
+
+10glo
+-----
+A video-first social media platform for the performing arts community — the only product in my portfolio where I built the platform itself, not just the marketing site. React Native mobile app with video recording, editing, and sharing; custom WordPress backend with REST API and ACF-powered content management.
+
+A Beautiful Noise
+-----------------
+Neil Diamond's biographical jukebox musical — the third catalog-driven show I built after Tina and Jagged Little Pill. The genre was familiar, but the scope was bigger: a custom tour management system spanning 25+ cities, a distributed ticketing model with different providers per venue, and a frontend visual identity that became one of my favorite designs in the portfolio.
+
+ADL
+---
+My second ADL project through Situation Interactive, following the Never Is Now summit platform. This was the institutional rebuild — a full-site redesign for the Anti-Defamation League's primary digital presence at adl.org, serving the organization's advocacy, education, and public affairs operations across a complex content architecture.
+
+AMA Safety
+----------
+Brochure website for a workplace safety consulting firm — one of the earliest builds in my independent practice. Custom WordPress theme with service pages, client testimonials, and a contact system built on Gravity Forms.
+
+American Buffalo
+----------------
+Three Oscar-, Emmy-, and Golden Globe-winning actors in a 16-week limited run — the kind of production where the names sell the tickets and the site needs to stay out of the way. Custom WordPress theme with a star-driven content strategy, ticketing calendar, and structured cast profiles for Laurence Fishburne, Sam Rockwell, and Darren Criss.
+
+Analytic Partners
+-----------------
+Ground-up site redesign for a global marketing analytics firm — one of two B2B SaaS builds in my Situation portfolio alongside the Criterion platform. Custom WordPress theme with structured case study management, a resource library, and an events system spanning conferences, webinars, and executive briefings.
+
+Anastasia the Musical
+---------------------
+An inherited codebase rather than a ground-up build — one of a handful of projects in my portfolio where the work was about making meaningful improvements within constraints. Custom WordPress maintenance and feature development for the Broadway production at the Broadhurst Theatre, focused on performance optimization, content updates, and extending an existing platform during the show's run.
+
+Bershtein Law
+-------------
+Full-stack WordPress build for a New Jersey boutique law firm — one of my earliest direct-client engagements, before the Broadway portfolio existed. Custom theme with practice area architecture, attorney profiles, and a client intake system built on Gravity Forms.
+
+Better Roundabout Theatre
+-------------------------
+My first engagement with Roundabout Theatre Company — a standalone microsite for the organization's EDI initiative, built at Situation Interactive two years before I would lead the full platform rebuild at roundabouttheatre.org.
+
+Broadway Across America
+-----------------------
+The largest WordPress Multisite build of my career — a national network spanning 30+ touring venues, each with its own branded subsite, show pages, and local ticketing integrations. Custom theme architecture designed to maintain brand consistency across dozens of markets while giving local teams editorial independence over their venue's content.
+
+Broadway Groups
+---------------
+The B2B side of Broadway ticketing — a custom WordPress platform for group sales across 50+ productions, with structured show data, availability calendars, and lead capture workflows built for the sales team at Broadway Inbound.
+
+Criterion Ticketing
+-------------------
+The project where I stepped farthest outside my primary stack — a custom ticketing platform built on Vue.js, Node.js, and PostgreSQL for a multi-venue performing arts organization. Real-time seat selection, dynamic pricing, and a checkout flow processing thousands of transactions weekly.
+
+Dear Evan Hansen
+----------------
+One of the most design-intensive Broadway builds I worked on — the site that established the ticketing calendar pattern I would reuse across dozens of productions. Custom WordPress theme with a bold visual identity, structured cast profiles, and the first version of the date-driven calendar component that became standard infrastructure at Situation Interactive.
+
+for colored girls
+-----------------
+The first Broadway revival of Ntozake Shange's choreopoem in over 45 years — a seven-woman production directed by Camille A. Brown at the Booth Theatre. Custom WordPress theme with a seven-color visual identity system mapped to the production's characters, ticketing calendar, and structured cast profiles.
+
+Funny Girl
+----------
+The first Broadway revival of Funny Girl in nearly 60 years — the production that made Beanie Feldstein and then Lea Michele front-page news. Custom WordPress theme with a ticketing calendar, tour system, and a content architecture that absorbed multiple lead cast changes and a national tour launch without requiring structural modifications.
+
+Harmony
+-------
+Barry Manilow and Bruce Sussman's original musical about the Comedian Harmonists — 27 years in development before reaching Broadway. One of several original musicals in this portfolio alongside Suffs, Kimberly Akimbo, and Some Like It Hot, each with its own identity challenges distinct from revivals or adaptations with built-in name recognition.
+
+Holiday Afterpay
+----------------
+Afterpay's 2021 holiday campaign microsite — a custom WordPress build with animated gift guides, product carousels, and shoppable content driving conversions for partner retailers during the peak holiday shopping window.
+
+Jagged Little Pill
+------------------
+Some of the most ambitious frontend layout work I did at Situation — a WordPress platform for the Alanis Morissette jukebox musical that demanded asymmetric grids, overlapping content sections, and a visual identity as bold as the source material. Ticketing calendar, tour system across 20+ cities, and structured content that carried the show from Broadway through a national tour.
+
+Kimberly Akimbo
+---------------
+The 2023 Tony Award winner for Best Musical — one of five Best Musical winners in my portfolio alongside The Outsiders, Maybe Happy Ending, The Band's Visit, and MJ the Musical. Custom WordPress theme with ticketing, tour management, and a content layer that carried the production from its Atlantic Theater Company premiere through Broadway and a national tour.
+
+Life of Pi
+----------
+The five-time Olivier Award-winning stage adaptation of Yann Martel's novel, heading to Broadway at the Gerald Schoenfeld Theatre after a celebrated West End run. Custom WordPress theme with ticketing calendar, structured cast profiles, and a visual identity built around the production's puppet and projection design.
+
+Little Island
+-------------
+Little Island is unlike anything else in my portfolio — a 2.4-acre public park and performance venue on the Hudson River, with free programming spanning theater, dance, music, and public art. The site needed to serve as both a cultural calendar and a parks-and-recreation platform, with real-time event scheduling, ticketed and free programming, and a wayfinding layer for a venue with no traditional address.
+
+Live Love Artemis
+-----------------
+Full design and development for a women-led real estate group specializing in luxury properties across Connecticut and Westchester County. Custom WordPress theme with property listing integration, agent profiles, and a brand identity built from scratch.
+
+Magic Mike Live Las Vegas
+-------------------------
+A Las Vegas residency, not a Broadway run — but built on the same WordPress infrastructure I was deploying across Broadway shows at Situation Interactive. Custom theme with ticketing integration, show schedule, cast profiles, and a visual identity designed for the Sahara Las Vegas venue.
+
+Marine & Lawn
+-------------
+The digital platform behind Marine & Lawn Hotels & Resorts — a collection of boutique properties across Ireland, the UK, and the US. Custom WordPress theme with multi-property architecture, booking engine integration, and a design system built to maintain brand consistency across geographically distinct hotels.
+
+Maybe Happy Ending
+------------------
+The fifth Best Musical Tony winner in my portfolio — a Korean-to-Broadway transfer with a Telecharge ticketing integration, structured cast profiles, and a visual identity that had to bridge K-pop-inflected design language with Broadway marketing conventions.
+
+Mean Girls on Broadway
+----------------------
+One of the boldest visual identities on Broadway — the first Casey Nicholaw production I built at Situation Interactive. Custom WordPress theme with a Burn Book-inspired design system, ticketing calendar, tour management across 40+ cities, and a content architecture that carried the production from Broadway through a national tour and the Paramount+ film adaptation.
+
+MindPlay
+--------
+The digital platform for Mindplay — a cognitive training and reading intervention system used across schools and districts. Custom WordPress theme with structured product pages, implementation resources, and a lead generation system for education sales teams.
+
+MJ the Musical
+--------------
+The most architecturally ambitious build in my Broadway portfolio — a custom WordPress platform for the Michael Jackson biographical musical that demanded a ticketing calendar spanning Broadway and touring productions, a media carousel handling hundreds of production assets, and a content architecture that absorbed two Tony wins, a Grammy, and a global touring expansion without structural changes.
+
+Never Is Now
+------------
+Built the digital platform for the ADL's flagship annual summit — the largest summit-specific build in my portfolio. Custom WordPress theme with speaker management, session scheduling, livestream integration, and a registration system handling thousands of attendees.
+
+NJPAC
+-----
+NJPAC was the largest-scale performing arts build in my career — a ground-up WordPress platform for New Jersey's largest performing arts center, with 100+ annual events, multi-venue scheduling, and a content architecture spanning performances, education programs, and community engagement across multiple seasons.
+
+Oklahoma!
+---------
+Daniel Fish's Oklahoma! stripped away everything audiences expected from the Rodgers and Hammerstein classic — and the site had to communicate that same radical reinvention. Custom WordPress theme with ticketing, tour support, and a visual identity that leaned into the production's dark, minimalist aesthetic.
+
+Opus 3 Artists
+--------------
+Redesigned the digital platform for one of the world's leading performing arts management firms — representing conductors, instrumentalists, singers, and composers across classical music, opera, and the performing arts. Custom WordPress theme with artist roster management, event scheduling, and a searchable directory spanning 200+ represented artists.
+
+The Outsiders
+-------------
+The 2024 Tony Award winner for Best Musical — a Coppola adaptation that transferred from La Jolla Playhouse to Broadway. Custom WordPress theme with ticketing, structured cast profiles, and a visual identity that bridged 1960s Tulsa with contemporary stage design.
+
+Pamos
+-----
+Responsive redesign and frontend overhaul for a California-born cannabis beverage brand — one of two e-commerce builds in my portfolio alongside The A&B Supplies WooCommerce platform. Custom WordPress theme with WooCommerce integration, age-gated entry, and a product-focused design system.
+
+Pendleton Whiskey
+-----------------
+The second spirits brand I built for Experience Interaction — a WordPress platform for Pendleton Whisky with age verification, product storytelling, and a content management layer designed for the brand team's editorial independence.
+
+Platespinner Productions
+------------------------
+Redesign for an award-winning Broadway production company — the producer side of the industry rather than the show-specific marketing sites that dominate my portfolio. Custom WordPress theme with show portfolio management, team profiles, and a content architecture built for a company producing multiple active Broadway and touring productions simultaneously.
+
+Pretty Woman
+------------
+The only Broadway build in my portfolio architected as a WordPress Multisite — a dual-site platform supporting both the Broadway production at the Nederlander Theatre and an independent national tour, each with its own content, ticketing, and editorial workflow running on shared infrastructure.
+
+Purlie Victorious
+-----------------
+The first Broadway revival in over 60 years of Ossie Davis' 1961 comedy, starring Leslie Odom Jr. and directed by Kenny Leon. Another play revival in a run that included American Buffalo, for colored girls, and The Minutes — each with its own cultural weight and compressed timeline. This one carried a producer roster including Samuel L. Jackson, Phylicia Rashad, and Kerry Washington, and eventually became a PBS Great Performances broadcast.
+
+Purpose
+-------
+The 2025 Tony Award winner for Best Play and Pulitzer Prize for Drama. A Steppenwolf-to-Broadway transfer directed by Phylicia Rashad, with frontend layout work that pushed beyond standard production site conventions — asymmetric grids and overlapping content sections that demanded precise CSS across breakpoints.
+
+Rob Lake Ticket Calendar
+------------------------
+A different kind of ticketing problem than the Broadway work I had done across shows like Beetlejuice, Anastasia, and the Criterion platform. Rob Lake needed a standalone ticket calendar that could embed into an existing Wix site without replacing it — a WordPress-powered subdomain routing audiences from show discovery to ticket purchase across dozens of international venues, each with its own ticketing provider. Lightweight, embeddable, and built for a touring schedule that spans Broadway to Bollywood.
+
+Roundabout Theatre
+------------------
+The second time I built for Roundabout — and the engagement that changed my practice. I had first worked with Roundabout in 2022, building the Better Roundabout microsite for their EDI initiative. This was the full platform rebuild: a hybrid Full Site Editing architecture on WordPress and Twig, powered by theme.json and Gutenberg, for New York's largest nonprofit theatre company. The architectural decisions made here became the foundation of my independent practice.
+
+Royal Literary Fund
+-------------------
+Rebuilt the digital platform for a UK charity founded in 1790 — one that has supported Joseph Conrad, D.H. Lawrence, and James Joyce — delivering over five million pounds annually in grants and education for professional writers. Custom WordPress theme with a complex fellows data system spanning 750+ placements, grant application workflows, and a design system built to honor 234 years of literary heritage.
+
+Smash
+-----
+A TV-to-stage adaptation backed by Steven Spielberg, with the kind of bold visual identity that made the frontend work genuinely fun. Custom WordPress theme with a cinematic hero layout built around embedded video and gradient backgrounds — one of the most visually ambitious builds in my Broadway portfolio.
+
+Soho Diner
+----------
+Frontend development for a modern American diner on the ground floor of the Soho Grand Hotel — one of three GrandLife properties I built on the same decoupled Rails and headless WordPress stack, alongside the Soho Grand flagship site and The Django jazz club.
+
+Soho Grand Hotel
+----------------
+Frontend development for the flagship GrandLife Hotels property — the anchor of a multisite network that also included Soho Diner and The Django, all built on a shared Ruby on Rails and headless WordPress architecture. Full-service hotel platform with room booking, dining, events, and editorial content for a landmark SoHo property.
+
+Some Like It Hot
+----------------
+The third Casey Nicholaw production I built at Situation Interactive, following Mean Girls on Broadway and The Prom. WordPress platform with a design-intensive frontend, ticketing calendar, tour management across 30+ cities, and a content layer that carried the show from first preview through four Tony wins, a Grammy, and a national tour.
+
+Suffs
+-----
+Shaina Taub's original musical about the women's suffrage movement — a production with political weight, high-profile producers including Hillary Clinton and Malala Yousafzai, and one of the longest platform lifecycles in this portfolio. The site launched for the Off-Broadway premiere at The Public Theater and is still live today, supporting a national tour across 20+ cities.
+
+Tenement Museum
+---------------
+Not every project starts with a blank canvas. Like my work on Anastasia and Broadway Across America, Tenement Museum was an inherited codebase — built by another agency, maintained under tight budget constraints. The work was targeted: reservation system fixes, membership data improvements, and Blackbaud Altru API stabilization for a National Historic Site serving 225,000+ annual visitors. No rebuild, just precise intervention inside an existing WordPress platform.
+
+The A&B Supplies
+----------------
+E-commerce platform for a multi-category supply company, built on WordPress and WooCommerce. Custom product archive with dynamic search, faceted filtering by category, and a streamlined checkout flow — one of two WooCommerce builds in my portfolio alongside the Pamos beverage brand.
+
+The Band's Visit
+----------------
+Ten Tony Awards and a show that redefined what a Broadway musical could be — The Band's Visit needed a platform as understated and precise as the production itself. Custom WordPress theme with ticketing, tour support, and structured cast profiles, built during the show's historic first Broadway season at the Ethel Barrymore Theatre.
+
+The Django NYC
+--------------
+Frontend development for a subterranean jazz club and restaurant in the Roxy Hotel — the third GrandLife property I built on the shared Rails and headless WordPress architecture, after the Soho Grand and Soho Diner. Performance-driven platform with nightly event scheduling, Resy reservations, panoramic venue views, and editorial content.
+
+The Karate Kid
+--------------
+A stage musical adaptation of the 1984 film, launching with a world premiere at Stages St. Louis. Another film-to-stage adaptation in a portfolio that includes Pretty Woman and Mean Girls — though this one arrived pre-Broadway, with the site built to scale from a regional premiere to a full Broadway campaign without a rebuild.
+
+The Minutes
+-----------
+A deliberately lean brochure site for Tracy Letts's Pulitzer-finalist play at Studio 54. Where American Buffalo and for colored girls — launching the same week — demanded rich content systems and ensemble profiles, The Minutes called for discipline: ticketing calendar, production overview, reviews, and nothing else. Ninety minutes, no intermission, no feature bloat.
+
+The NY International Auto Show
+-------------------------------
+The digital platform for the New York International Auto Show — North America's oldest and largest-attended auto show, drawing over one million visitors annually to the Javits Center. Custom WordPress theme with integrated ticketing, interactive exhibit and experience discovery, and a content architecture built to handle nearly 1,000 vehicles across four exhibition floors. A fundamentally different kind of event site from the theater and summit builds in my portfolio — automotive scale, consumer logistics, and a million-person audience.
+
+The Prom
+--------
+The most animation-heavy Broadway build in my portfolio — CSS3 keyframe backgrounds, parallax depth effects, and a saturated color palette that had to feel celebratory without tipping into chaos. Custom WordPress theme for the Longacre Theatre production, later extended to support a national tour and the Ryan Murphy Netflix adaptation.
+
+Tina on Broadway
+----------------
+The project where I built the media carousel that became a standard component across Situation's entire Broadway portfolio. A content-dense WordPress platform for the Tina Turner biographical musical — ticketing, production photography, press infrastructure, and a component library designed to outlast the run at the Lunt-Fontanne Theatre.
+
+Titanique the Musical
+---------------------
+A Celine Dion jukebox parody that retells Titanic from Celine's fictional perspective. Tonally unlike anything else in my portfolio — built lean for an Off-Broadway budget, then scaled to eight cities worldwide, an Olivier Award, and a Broadway transfer to the St. James Theatre.
+
+Topdog/Underdog
+---------------
+Full-stack development for the official website of the 2022 Broadway revival of Suzan-Lori Parks' Pulitzer Prize-winning Topdog/Underdog. Custom WordPress theme with a ticketing calendar, cast and creative team profiles, and a digital platform built to support a strictly limited engagement starring Corey Hawkins and Yahya Abdul-Mateen II.
+
+Town Hall Agency
+----------------
+A different kind of client than the arts and culture institutions — Little Island, NJPAC, Roundabout — that defined most of my Situation work. Town Hall Agency is Situation Group's mission-driven marketing division, and the build reflected that shift: a custom WordPress theme with the enlightenED webinar interface (produced in partnership with Google Education), structured case study management, and service-specific content architecture spanning nonprofit, education, and social impact verticals.
+
+Villatel
+--------
+Full-stack development on a decoupled web platform for a luxury vacation rental brand — my introduction to King & Partners and the Rails-based headless WordPress stack that I would later apply across three GrandLife Hotels properties. Working across a Ruby on Rails frontend and a headless WordPress backend delivering content via REST API.
+
+Wicked the Musical
+------------------
+The biggest show in my portfolio, and the only one I have built twice. First in 2018 for Wicked's 15th anniversary, then a complete redesign in 2025 to unify the stage brand with a $700M+ film franchise. Custom ticket calendar spanning Broadway, touring, and international productions in six languages.
+
+Wolf Moon Bourbon
+-----------------
+Full-stack development for a celebrity bourbon brand launching nationally through Proximo Spirits — the first of two spirits builds I led for Experience Interaction, alongside Pendleton Whiskey. Custom WordPress theme, age-gated entry, and a content management layer designed for editorial independence from day one.

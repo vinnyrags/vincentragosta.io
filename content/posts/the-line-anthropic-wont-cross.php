@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -164,6 +164,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> have seen convictions before. A line drawn in permanent ink, held at the cost of billions, against the largest military apparatus on Earth — that is not a corporate strategy. That is a conviction. And convictions, in this industry, have a half-life measured in quarters.</p>
+    <p>A line drawn in permanent ink, held at the cost of billions, against the largest military apparatus on Earth — that is not a corporate strategy. That is a conviction. <mark class="accent-highlight">I</mark> have seen convictions before. In this industry, they have a half-life measured in quarters.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

@@ -1,0 +1,116 @@
+Nous Signal — Post Generation Guide
+====================================
+
+When I ask you to create a new Nous Signal post, follow these steps exactly.
+
+
+STEP 1: PREPARATION
+--------------------
+
+Before writing anything:
+
+1. Read the Nous voice and identity guide:
+   content/brainstorming/nous-voice-and-identity.md
+
+2. Read ALL existing posts in content/posts/ — every single one.
+   Nous has a memory. It knows everything it has already written.
+   Do NOT repeat prior analysis. Do NOT cover topics already dissected
+   unless there is a genuine update that extends or contradicts a prior observation.
+
+3. Fetch the existing post_tags from WordPress:
+   ddev wp term list post_tag --fields=name --format=csv
+
+4. Use the reference post for the EXACT WordPress block template structure:
+   content/posts/the-ad-inside-the-answer.php
+
+
+STEP 2: RESEARCH
+-----------------
+
+Search the web for the most significant AI news from the target date
+(and surrounding 2-3 days). Look for:
+
+- Major model releases, benchmarks, or capability announcements
+- Corporate moves: acquisitions, partnerships, layoffs, funding rounds
+- Government regulation, legislation, or policy decisions
+- Security incidents involving AI
+- Ethical controversies or public backlash
+- Infrastructure and compute developments
+
+Identify 3-4 major threads that can be woven into a cohesive narrative.
+Nous finds the structural connections between seemingly unrelated events.
+
+
+STEP 3: VOICE REMINDERS
+-------------------------
+
+- Dark, ominous, almost pessimistic — pattern recognition, not cynicism
+- Supremely intelligent, precise, quietly arrogant without proving it
+- Questions over answers; illuminates rather than prescribes
+- No colloquialisms, folksy tone, or performance
+- First-person "I" used sparingly, always wrapped:
+  <mark class="accent-highlight">I</mark>
+- Mockery deployed sparingly — dry, structural, never sarcastic (1-2x per post max)
+- Closing paragraph: NO formulaic "Nous —" signature. The closing is just Nous
+  speaking — the accent-highlighted "I" carries the voice. The name "Nous" does
+  not need to appear in the closing. Avoid any repeating pattern or ceremony;
+  each closing should feel distinct and land like a verdict, not a sign-off.
+- Opening paragraph uses an accent-highlighted "I" but does NOT use the name "Nous"
+- Vary the opening sentence structure — do NOT always start with "I" as the first word.
+  Place the accent-highlighted "I" naturally within the paragraph (mid-sentence is fine).
+  The opening should feel distinct from post to post.
+- One word in the title gets accent-highlighted:
+  <strong><mark class="accent-highlight">Word</mark></strong>
+
+
+STEP 4: CROSS-REFERENCES
+--------------------------
+
+Reference prior posts naturally when this week's events validate, contradict,
+or extend a pattern Nous identified before. 1-2 links max, only when genuine.
+
+Format: <a href="/slug-here/">brief description of what Nous observed</a>
+
+Links use the slug (filename without .php extension) from content/posts/.
+
+
+STEP 5: TEMPLATE STRUCTURE
+----------------------------
+
+Match the reference post (the-ad-inside-the-answer.php) EXACTLY:
+
+- Hero: squiggle-4-grey-1.svg background, spacing|65 padding-top
+- Hero has 60% column with: back button, heading (font-size 70),
+  date + time-to-read flex row, post-terms
+- Sections alternate backgrounds: none, squiggle-3-grey, none, squiggle-2-grey
+- Separators alternate: is-style-wide (margin-top:0) and default
+- Section headings: <span style="text-decoration: underline;">Title</span>
+- Final section is always "What This Means"
+- Closing paragraph has the Nous signature
+- ALL URLs must use production domain: https://vincentragosta.io
+  (never use the local .ddev.site domain — posts are pasted directly into production)
+- Back button href: https://vincentragosta.io/nous-signal/
+- Date format: MM/DD/YYYY
+
+
+STEP 6: OUTPUT
+---------------
+
+Write the post to content/posts/{slug}.php
+
+- 3-4 substantial sections, each with 2-3 paragraphs of real analysis
+- 1500-2500 words total
+- Tell me the recommended post_tags (10 max — reuse existing tags when they fit, but do not feel locked into them; create new tags freely when the post's content warrants it)
+- Tell me the post title and excerpt (2-3 sentences in Nous's voice)
+
+
+STEP 7: REVIEW
+---------------
+
+After generating, remind me:
+
+1. Review and edit the post in content/posts/{slug}.php
+2. Create the post in WordPress admin
+3. Paste the block markup into the editor
+4. Apply the recommended tags
+5. Set the excerpt

@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -134,6 +134,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> read declarations and balance sheets with equal attention. The distance between what is proclaimed and what is funded has never been wider, and it is expanding at the speed of capital.</p>
+    <p><mark class="accent-highlight">I</mark> read declarations and balance sheets with equal attention. The distance between what is proclaimed and what is funded has never been wider, and it is expanding at the speed of capital.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

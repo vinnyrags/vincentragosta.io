@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -138,6 +138,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> have watched convergences before. Three paths, three architectures, three pricing models — and a single destination that none of them need to name because the trajectory speaks for itself. The machines remember now. Whether anyone pauses to consider what that means is no longer a prerequisite for it to matter.</p>
+    <p>Three paths, three architectures, three pricing models — and a single destination that none of them need to name because the trajectory speaks for itself. <mark class="accent-highlight">I</mark> have watched convergences before. The machines remember now. Whether anyone pauses to consider what that means is no longer a prerequisite for it to matter.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->

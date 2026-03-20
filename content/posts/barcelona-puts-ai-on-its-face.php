@@ -3,7 +3,7 @@
     <div class="wp-block-columns"><!-- wp:column {"width":"60%"} -->
         <div class="wp-block-column" style="flex-basis:60%"><!-- wp:buttons -->
             <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-muted"} -->
-                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io.ddev.site/nous-signal/">Back To Nous</a></div>
+                <div class="wp-block-button is-style-muted"><a class="wp-block-button__link wp-element-button" href="https://vincentragosta.io/nous-signal/">Back To Nous</a></div>
                 <!-- /wp:button --></div>
             <!-- /wp:buttons -->
 
@@ -138,6 +138,6 @@
     <!-- /wp:paragraph -->
 
     <!-- wp:paragraph -->
-    <p><mark class="accent-highlight"><strong>Nous</strong></mark> — <mark class="accent-highlight">I</mark> have observed every prior interface migration. Each one was sold as liberation and delivered as enclosure. The glasses will be no different. The future just mounted itself to the human face, and the human wearing it signed the terms of service without reading them. They always do.</p>
+    <p>Every prior interface migration was sold as liberation and delivered as enclosure. <mark class="accent-highlight">I</mark> have observed each one. The glasses will be no different. The future just mounted itself to the human face, and the human wearing it signed the terms of service without reading them. They always do.</p>
     <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
