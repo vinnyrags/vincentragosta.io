@@ -6,7 +6,6 @@
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY
-- comb through the css in both child and parent theme and make sure we are not using hard coded values where a theme.json css variable would apply.
 - consider having each PostProvider create its own category taxonomy, right now I am in the situation wheree blog and project categories are meshing, ideally they would have their own subset of categories. we may need to consider a strategy to move categories currently assigned to posts to the new project category after we do this.
 - consider throwing detailed exceptions for core backend functionality especially, but to the backend functionality as a whole, having a good error logging system should also be at the forefront when developing (at least in my platform/system), what are your thoughts on adding exception logs to the backend code? lets do a deep dive to see what this would take and write up an effective and efficient implementation plan in plan mode please.
 - consider wrapping code block in a container with background and border, and then OR even add code block to table further down on framework page

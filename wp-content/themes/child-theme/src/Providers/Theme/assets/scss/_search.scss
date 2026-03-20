@@ -1,3 +1,4 @@
+@use 'common/bg-overlay' as *;
 @use 'common/breakpoints' as *;
 @use 'common/pill' as *;
 
@@ -14,6 +15,7 @@ body.search .site-content {
 }
 
 body.search .site-main {
+  @include bg-pattern-overlay;
   background-image: url('/wp-content/uploads/2026/02/squiggle-4-grey-1.svg');
   background-size: cover;
   background-attachment: fixed;
@@ -289,6 +291,10 @@ body.search .site-main {
 // ==========================================================================
 // Light Mode
 // ==========================================================================
+
+.light-mode body.search .site-main::before {
+  background-color: rgba(255, 255, 255, 0.85);
+}
 
 .light-mode .search-filters__tab {
   background-color: var(--color-bg);
