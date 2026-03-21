@@ -32,6 +32,7 @@ wp-signup.php
 wp-trackback.php
 xmlrpc.php
 wp-content/mu-plugins/mythus
+wp-content/themes/ix
 wp-content/plugins
 wp-content/uploads
 wp-content/debug.log

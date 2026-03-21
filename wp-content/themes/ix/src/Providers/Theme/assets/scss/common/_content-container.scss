@@ -1,6 +1,0 @@
-@mixin content-container {
-    > * + :is(.wp-block-group, .wp-block-cover, .wp-block-columns),
-    > :is(.wp-block-group, .wp-block-cover, .wp-block-columns) + * {
-        margin-block-start: var(--wp--preset--spacing--70);
-    }
-}
