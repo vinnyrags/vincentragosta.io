@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-parent install-child build watch clean autoload test test-js update push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -24,22 +24,25 @@ help:
 	@echo "Available targets:"
 	@echo "  make start         - Start DDEV, restore DB snapshot, install deps, and build"
 	@echo "  make stop          - Snapshot database and stop DDEV"
-	@echo "  make install       - Install all dependencies (both themes)"
-	@echo "  make build         - Build child theme assets"
-	@echo "  make test          - Run test suite (both themes)"
-	@echo "  make watch         - Start watch mode for development"
-	@echo "  make clean         - Remove all generated files"
-	@echo "  make update        - Update composer dependencies (root + both themes)"
-	@echo "  make autoload      - Regenerate composer autoloaders"
-	@echo "  make push-staging     - Push local DB + uploads to staging"
-	@echo "  make pull-staging     - Pull staging DB + uploads to local"
-	@echo "  make push-production  - Push local DB + uploads to production"
-	@echo "  make pull-production  - Pull production DB + uploads to local"
-	@echo "  make pull-patterns    - Export block patterns from production to PHP files"
+	@echo "  make install            - Install all dependencies (root, Mythus, IX, child)"
+	@echo "  make build              - Build child theme assets"
+	@echo "  make test               - Run test suite (Mythus + both themes)"
+	@echo "  make watch              - Start watch mode for development"
+	@echo "  make clean              - Remove all generated files"
+	@echo "  make update             - Update composer dependencies (root + all packages)"
+	@echo "  make autoload           - Regenerate composer autoloaders"
+	@echo "  make deploy-staging     - Deploy develop branch to staging"
+	@echo "  make deploy-production  - Merge develop into main and deploy to production"
+	@echo "  make release            - Merge develop into main and push both to origin"
+	@echo "  make push-staging       - Push local DB + uploads to staging"
+	@echo "  make pull-staging       - Pull staging DB + uploads to local"
+	@echo "  make push-production    - Push local DB + uploads to production"
+	@echo "  make pull-production    - Pull production DB + uploads to local"
+	@echo "  make pull-patterns      - Export block patterns from production to PHP files"
 	@echo "  make pull-patterns-staging - Export block patterns from staging to PHP files"
-	@echo "  make satis-refresh    - Rebuild Satis package repository on server"
-	@echo "  make satis-add URL=...       - Add a repository to Satis (rebuilds by default)"
-	@echo "  make satis-remove URL=...    - Remove a repository from Satis and rebuild"
+	@echo "  make satis-refresh      - Rebuild Satis package repository on server"
+	@echo "  make satis-add URL=...  - Add a repository to Satis (rebuilds by default)"
+	@echo "  make satis-remove URL=... - Remove a repository from Satis and rebuild"
 
 # Start DDEV environment, install dependencies, and build assets
 start:
@@ -69,14 +72,18 @@ stop:
 	@echo "✓ Database snapshotted and DDEV stopped"
 
 # Install all dependencies
-install: install-mythus install-parent install-child
+install: install-root install-mythus install-ix install-child
 	@echo "✓ All dependencies installed"
+
+install-root:
+	@echo "Installing root dependencies (WordPress, plugins, Mythus, IX)..."
+	composer install --no-interaction
 
 install-mythus:
 	@echo "Installing Mythus dependencies..."
 	cd $(MYTHUS_DIR) && composer install --no-interaction
 
-install-parent:
+install-ix:
 	@echo "Installing IX dependencies..."
 	cd $(IX_DIR) && composer install --no-interaction
 	cd $(IX_DIR) && npm install
@@ -96,6 +103,33 @@ build:
 watch:
 	@echo "Starting watch mode..."
 	cd $(CHILD_THEME_DIR) && npm run start
+
+# Deploy develop branch to staging
+deploy-staging:
+	@echo "Deploying develop to staging..."
+	git push production develop
+	@echo "✓ Staging deployed — verify at $(STAGING_URL)"
+
+# Merge develop into main and deploy to production
+deploy-production:
+	@echo "Merging develop into main..."
+	git checkout main
+	git merge develop --ff-only
+	@echo "Deploying main to production..."
+	git push production main
+	git checkout develop
+	@echo "✓ Production deployed — verify at $(PRODUCTION_URL)"
+
+# Merge develop into main and push both branches to origin
+release:
+	@echo "Merging develop into main..."
+	git checkout main
+	git merge develop --ff-only
+	@echo "Pushing both branches to origin..."
+	git push origin main
+	git push origin develop
+	git checkout develop
+	@echo "✓ Both branches pushed to origin"
 
 # Clean generated files
 clean:
