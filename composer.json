@@ -5,6 +5,10 @@
   "repositories": [
     {
       "type": "composer",
+      "url": "https://packages.vincentragosta.io"
+    },
+    {
+      "type": "composer",
       "url": "https://wpackagist.org"
     },
     {
@@ -20,7 +24,8 @@
     "ext-dom": "*",
     "wpackagist-plugin/wpforms-lite": "^1.9",
     "wpackagist-plugin/wordpress-seo": "^24.0",
-    "wpackagist-plugin/relevanssi": "^4.26"
+    "wpackagist-plugin/relevanssi": "^4.26",
+    "vincentragosta/mythus": "dev-main"
   },
   "extra": {
     "wordpress-install-dir": "wp",
