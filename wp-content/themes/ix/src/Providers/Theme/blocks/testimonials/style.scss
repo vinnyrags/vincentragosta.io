@@ -1,0 +1,103 @@
+@use 'common/breakpoints' as *;
+@use '@splidejs/splide/dist/css/splide-core.min';
+
+// ==========================================================================
+// Testimonials Carousel
+// ==========================================================================
+// All visual properties use CSS custom properties so child themes can
+// override colors, sizing, and spacing without touching this file.
+
+.wp-block-ix-testimonials {
+    --testimonials-arrow-size: 3.125rem;
+    --testimonials-arrow-bg: currentColor;
+    --testimonials-arrow-color: var(--wp--preset--color--base);
+    --testimonials-arrow-hover-bg: var(--testimonials-arrow-bg);
+    --testimonials-arrow-hover-color: var(--testimonials-arrow-color);
+    --testimonials-accent: currentColor;
+}
+
+.testimonials {
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+
+    // Splide slide layout — stretch slides to equal height
+    .splide__slide {
+        display: flex;
+        align-items: stretch;
+
+        .wp-block-quote,
+        .wp-block-pullquote {
+            width: 100%;
+        }
+    }
+
+    // Splide arrows container — below the slides via order, side by side
+    .splide__arrows {
+        display: flex;
+        justify-content: flex-start;
+        gap: var(--wp--preset--spacing--20);
+        order: 2;
+        position: static;
+        margin-top: var(--wp--style--block-gap, var(--wp--preset--spacing--40));
+    }
+
+    .splide__track {
+        order: 1;
+    }
+
+    // Splide arrows — circular with inverted colors (matches button icon pattern)
+    .splide__arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: static;
+
+        &--prev {
+            transform: scaleX(-1);
+        }
+
+        &--next {
+            transform: none;
+        }
+        background: var(--testimonials-arrow-bg);
+        width: var(--testimonials-arrow-size);
+        height: var(--testimonials-arrow-size);
+        border: none;
+        border-radius: 50%;
+        opacity: 1;
+        cursor: pointer;
+        transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out;
+
+        svg {
+            fill: var(--testimonials-arrow-color);
+            width: 1rem;
+            height: 1rem;
+            transition: fill 0.25s ease-in-out;
+        }
+
+        &:hover {
+            background: var(--testimonials-arrow-hover-bg);
+
+            svg {
+                fill: var(--testimonials-arrow-hover-color);
+            }
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--testimonials-accent);
+            outline-offset: 2px;
+        }
+    }
+
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+    .testimonials .splide__slide {
+        transition: none;
+    }
+}

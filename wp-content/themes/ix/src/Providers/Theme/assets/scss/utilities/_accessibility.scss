@@ -1,0 +1,12 @@
+@use '../common/accessibility' as *;
+
+// ==========================================================================
+// Accessibility Utility Classes
+// ==========================================================================
+
+// WordPress core and plugins expect `.screen-reader-text`.
+// `.visually-hidden` is the modern alias for custom markup.
+.screen-reader-text,
+.visually-hidden {
+  @include visually-hidden;
+}

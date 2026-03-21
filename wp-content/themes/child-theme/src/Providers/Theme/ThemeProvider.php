@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ParentTheme\Providers\Blog\BlogPost;
+use IX\Providers\Blog\BlogPost;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
@@ -13,11 +13,11 @@ use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use DI\Container;
-use ParentTheme\Providers\Theme\Features\ScrollReveal;
-use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
-use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
-use ParentTheme\Providers\Theme\ThemeProvider as BaseThemeProvider;
-use ParentTheme\Services\IconServiceFactory;
+use IX\Providers\Theme\Features\ScrollReveal;
+use IX\Providers\Theme\Features\WpFormsBlockDetection;
+use IX\Providers\Theme\Features\WpFormsFloatingLabels;
+use IX\Providers\Theme\ThemeProvider as BaseThemeProvider;
+use IX\Services\IconServiceFactory;
 
 /**
  * Handles core theme setup and configuration.

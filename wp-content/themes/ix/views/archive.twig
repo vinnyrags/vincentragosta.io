@@ -1,0 +1,17 @@
+{% extends "base.twig" %}
+
+{% block content %}
+    <header class="archive__header">
+        <h1 class="archive__title">{{ title }}</h1>
+    </header>
+
+    <div class="posts">
+        {% for post in posts %}
+            {% include 'tease.twig' %}
+        {% else %}
+            <p>No posts found.</p>
+        {% endfor %}
+    </div>
+
+    {% include 'partial/pagination.twig' %}
+{% endblock %}

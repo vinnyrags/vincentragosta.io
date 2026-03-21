@@ -12,8 +12,8 @@ use WorDBless\Load;
 // Load Composer autoloaders.
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
-// Load parent theme autoloader for ParentTheme namespace.
-$parent_autoloader = dirname(dirname(__DIR__)) . '/parent-theme/vendor/autoload.php';
+// Load parent theme autoloader for IX namespace.
+$parent_autoloader = dirname(dirname(__DIR__)) . '/ix/vendor/autoload.php';
 if (file_exists($parent_autoloader)) {
     require_once $parent_autoloader;
 }
@@ -75,7 +75,7 @@ if (is_dir($theme_src) && !file_exists($theme_dest)) {
 }
 
 // Symlink parent theme as well.
-$parent_theme_name = 'parent-theme';
+$parent_theme_name = 'ix';
 $parent_theme_src = dirname(dirname(__DIR__)) . '/' . $parent_theme_name;
 $parent_theme_dest = $wp_content_dir . '/themes/' . $parent_theme_name;
 if (is_dir($parent_theme_src) && !file_exists($parent_theme_dest)) {

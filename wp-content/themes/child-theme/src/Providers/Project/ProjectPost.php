@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
-use ParentTheme\Providers\Project\ProjectPost as BaseProjectPost;
+use IX\Providers\Project\ProjectPost as BaseProjectPost;
 
 /**
  * Project post model.

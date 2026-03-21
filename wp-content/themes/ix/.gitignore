@@ -1,0 +1,10 @@
+vendor/
+!src/Providers/*/assets/**/vendor/
+node_modules/
+
+# Compiled assets
+dist/
+
+# Test cache
+.phpunit.result.cache
+coverage/

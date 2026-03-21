@@ -1,0 +1,599 @@
+<?php
+
+namespace IX\Tests\Integration\Providers;
+
+use DI\Container;
+use IX\Providers\Provider;
+use Mythus\Contracts\Feature;
+use Mythus\Contracts\Hook;
+use Mythus\Contracts\Registrable;
+use Mythus\Support\Feature\FeatureManager;
+use Mythus\Support\Rest\Endpoint;
+use Mythus\Support\Rest\RestManager;
+use IX\Tests\Support\HasContainer;
+use WorDBless\BaseTestCase;
+use ReflectionClass;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+
+// Test feature stubs for collectFeatures tests.
+class StubFeatureOne implements Feature
+{
+    public function register(): void
+    {
+    }
+}
+
+class StubFeatureTwo implements Feature
+{
+    public function register(): void
+    {
+    }
+}
+
+class StubFeatureThree implements Feature
+{
+    public function register(): void
+    {
+    }
+}
+
+// Test hook stubs for collectHooks tests.
+class StubHookAlpha implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+class StubHookBeta implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+class StubHookGamma implements Hook
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+// Stub that implements Registrable but NOT Hook — should be skipped by registerHooks.
+class StubNonHookRegistrable implements Registrable
+{
+    public static bool $registered = false;
+
+    public function register(): void
+    {
+        self::$registered = true;
+    }
+}
+
+// Provider that puts a non-Hook class in $hooks for testing validation.
+class StubInvalidHookProvider extends Provider
+{
+    protected array $hooks = [
+        StubNonHookRegistrable::class,
+        StubHookAlpha::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a parent provider with hooks.
+class StubHookParentProvider extends Provider
+{
+    protected array $hooks = [
+        StubHookAlpha::class,
+        StubHookBeta::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a child provider that adds its own hooks.
+class StubHookChildProvider extends StubHookParentProvider
+{
+    protected array $hooks = [
+        StubHookGamma::class,
+    ];
+}
+
+// Simulates a parent-level provider with features.
+class StubParentProvider extends Provider
+{
+    protected array $features = [
+        StubFeatureOne::class,
+        StubFeatureTwo::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Simulates a child provider that adds its own feature and disables a parent one.
+class StubChildProvider extends StubParentProvider
+{
+    protected array $features = [
+        StubFeatureThree::class,
+        StubFeatureTwo::class => false,
+    ];
+}
+
+// Simulates a child provider that inherits all parent features without changes.
+class StubChildNoOverrideProvider extends StubParentProvider
+{
+    protected array $features = [
+        StubFeatureThree::class,
+    ];
+}
+
+// Stub REST endpoints for route tests.
+class StubEndpointAlpha extends Endpoint
+{
+    public function getRoute(): string
+    {
+        return '/alpha';
+    }
+
+    public function getMethods(): string|array
+    {
+        return 'GET';
+    }
+
+    public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error|array
+    {
+        return ['endpoint' => 'alpha'];
+    }
+
+    public function getPermission(WP_REST_Request $request): bool|WP_Error
+    {
+        return true;
+    }
+}
+
+class StubEndpointBeta extends Endpoint
+{
+    public function getRoute(): string
+    {
+        return '/beta';
+    }
+
+    public function getMethods(): string|array
+    {
+        return 'POST';
+    }
+
+    public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error|array
+    {
+        return ['endpoint' => 'beta'];
+    }
+
+    public function getPermission(WP_REST_Request $request): bool|WP_Error
+    {
+        return true;
+    }
+}
+
+class StubEndpointGamma extends Endpoint
+{
+    public function getRoute(): string
+    {
+        return '/gamma';
+    }
+
+    public function getMethods(): string|array
+    {
+        return 'GET';
+    }
+
+    public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error|array
+    {
+        return ['endpoint' => 'gamma'];
+    }
+
+    public function getPermission(WP_REST_Request $request): bool|WP_Error
+    {
+        return true;
+    }
+}
+
+// Provider with routes for testing.
+class StubRouteParentProvider extends Provider
+{
+    protected array $routes = [
+        StubEndpointAlpha::class,
+        StubEndpointBeta::class,
+    ];
+
+    public function register(): void
+    {
+        parent::register();
+    }
+}
+
+// Child provider that adds a route and opts out of a parent route.
+class StubRouteChildProvider extends StubRouteParentProvider
+{
+    protected array $routes = [
+        StubEndpointGamma::class,
+        StubEndpointBeta::class => false,
+    ];
+}
+
+// Child provider that inherits all parent routes.
+class StubRouteChildNoOverrideProvider extends StubRouteParentProvider
+{
+    protected array $routes = [
+        StubEndpointGamma::class,
+    ];
+}
+
+/**
+ * Integration tests for the abstract Provider class.
+ */
+class ProviderTest extends BaseTestCase
+{
+    use HasContainer;
+
+    private Container $container;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->container = $this->buildTestContainer();
+        StubHookAlpha::$registered = false;
+        StubHookBeta::$registered = false;
+        StubHookGamma::$registered = false;
+        StubNonHookRegistrable::$registered = false;
+    }
+
+    /**
+     * Create a concrete implementation of the abstract Provider.
+     */
+    private function createConcreteProvider(): Provider
+    {
+        return new class($this->container) extends Provider {
+            public function register(): void
+            {
+                parent::register();
+            }
+        };
+    }
+
+    /**
+     * Test that Provider implements Registrable.
+     */
+    public function testImplementsRegistrable(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $this->assertInstanceOf(Registrable::class, $provider);
+    }
+
+    /**
+     * Test that register method calls registerFeatures.
+     */
+    public function testRegisterCallsRegisterFeatures(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $provider->register();
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Test that init creates a FeatureManager instance.
+     */
+    public function testBootCreatesFeatureManager(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $provider->register();
+
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('featureManager');
+        $property->setAccessible(true);
+
+        $this->assertInstanceOf(FeatureManager::class, $property->getValue($provider));
+    }
+
+    /**
+     * Test that collectFeatures returns empty for base provider with no features.
+     */
+    public function testCollectFeaturesReturnsEmptyForBaseProvider(): void
+    {
+        $provider = $this->createConcreteProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $this->assertSame([], $method->invoke($provider));
+    }
+
+    /**
+     * Test that collectFeatures merges parent features into a child provider.
+     */
+    public function testCollectFeaturesMergesParentAndChild(): void
+    {
+        $provider = new StubChildNoOverrideProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features, $this->container);
+        $enabled = $manager->getEnabled();
+
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureTwo::class, $enabled);
+        $this->assertContains(StubFeatureThree::class, $enabled);
+        $this->assertCount(3, $enabled);
+    }
+
+    /**
+     * Test that a child provider can opt out of a parent feature.
+     */
+    public function testCollectFeaturesChildOptOutDisablesParentFeature(): void
+    {
+        $provider = new StubChildProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features, $this->container);
+
+        // StubFeatureTwo was disabled by child
+        $this->assertFalse($manager->isEnabled(StubFeatureTwo::class));
+        $this->assertContains(StubFeatureTwo::class, $manager->getDisabled());
+
+        // Other features remain enabled
+        $this->assertTrue($manager->isEnabled(StubFeatureOne::class));
+        $this->assertTrue($manager->isEnabled(StubFeatureThree::class));
+
+        $enabled = $manager->getEnabled();
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureThree::class, $enabled);
+        $this->assertNotContains(StubFeatureTwo::class, $enabled);
+        $this->assertCount(2, $enabled);
+    }
+
+    /**
+     * Test that a parent provider's features are collected without a child.
+     */
+    public function testCollectFeaturesParentOnly(): void
+    {
+        $provider = new StubParentProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectFeatures');
+        $method->setAccessible(true);
+
+        $features = $method->invoke($provider);
+        $manager = new FeatureManager($features, $this->container);
+        $enabled = $manager->getEnabled();
+
+        $this->assertContains(StubFeatureOne::class, $enabled);
+        $this->assertContains(StubFeatureTwo::class, $enabled);
+        $this->assertCount(2, $enabled);
+    }
+
+    /**
+     * Test that default addTwigFunctions returns the Environment unchanged.
+     */
+    public function testAddTwigFunctionsReturnsEnvironmentUnchanged(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $loader = new \Twig\Loader\ArrayLoader([]);
+        $twig = new \Twig\Environment($loader);
+
+        $result = $provider->addTwigFunctions($twig);
+
+        $this->assertSame($twig, $result);
+    }
+
+    /**
+     * Test that collectRoutes returns empty for base provider with no routes.
+     */
+    public function testCollectRoutesReturnsEmptyForBaseProvider(): void
+    {
+        $provider = $this->createConcreteProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectRoutes');
+        $method->setAccessible(true);
+
+        $this->assertSame([], $method->invoke($provider));
+    }
+
+    /**
+     * Test that collectRoutes merges parent and child routes.
+     */
+    public function testCollectRoutesMergesParentAndChild(): void
+    {
+        $provider = new StubRouteChildNoOverrideProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectRoutes');
+        $method->setAccessible(true);
+
+        $routes = $method->invoke($provider);
+        $manager = new RestManager($routes, $this->container, 'test/v1');
+        $enabled = $manager->getEnabled();
+
+        $this->assertContains(StubEndpointAlpha::class, $enabled);
+        $this->assertContains(StubEndpointBeta::class, $enabled);
+        $this->assertContains(StubEndpointGamma::class, $enabled);
+        $this->assertCount(3, $enabled);
+    }
+
+    /**
+     * Test that a child provider can opt out of a parent route.
+     */
+    public function testCollectRoutesChildOptOutDisablesParentRoute(): void
+    {
+        $provider = new StubRouteChildProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectRoutes');
+        $method->setAccessible(true);
+
+        $routes = $method->invoke($provider);
+        $manager = new RestManager($routes, $this->container, 'test/v1');
+
+        $this->assertFalse($manager->isEnabled(StubEndpointBeta::class));
+        $this->assertContains(StubEndpointBeta::class, $manager->getDisabled());
+
+        $this->assertTrue($manager->isEnabled(StubEndpointAlpha::class));
+        $this->assertTrue($manager->isEnabled(StubEndpointGamma::class));
+
+        $enabled = $manager->getEnabled();
+        $this->assertContains(StubEndpointAlpha::class, $enabled);
+        $this->assertContains(StubEndpointGamma::class, $enabled);
+        $this->assertNotContains(StubEndpointBeta::class, $enabled);
+        $this->assertCount(2, $enabled);
+    }
+
+    /**
+     * Test that register hooks rest_api_init when routes exist.
+     */
+    public function testRegisterHooksRestApiInitWhenRoutesExist(): void
+    {
+        $provider = new StubRouteParentProvider($this->container);
+        $provider->register();
+
+        $this->assertIsInt(has_action('rest_api_init', [$provider, 'registerRoutes']));
+    }
+
+    /**
+     * Test that register skips rest_api_init when no routes exist.
+     */
+    public function testRegisterSkipsRestApiInitWhenNoRoutes(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $provider->register();
+
+        $this->assertFalse(has_action('rest_api_init', [$provider, 'registerRoutes']));
+    }
+
+    /**
+     * Test that init creates a RestManager instance.
+     */
+    public function testBootCreatesRestManager(): void
+    {
+        $provider = $this->createConcreteProvider();
+        $provider->register();
+
+        $reflection = new ReflectionClass($provider);
+        $property = $reflection->getProperty('restManager');
+        $property->setAccessible(true);
+
+        $this->assertInstanceOf(RestManager::class, $property->getValue($provider));
+    }
+
+    /**
+     * Test that collectHooks returns empty for base provider with no hooks.
+     */
+    public function testCollectHooksReturnsEmptyForBaseProvider(): void
+    {
+        $provider = $this->createConcreteProvider();
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $this->assertSame([], $method->invoke($provider));
+    }
+
+    /**
+     * Test that collectHooks merges parent and child hooks.
+     */
+    public function testCollectHooksMergesParentAndChild(): void
+    {
+        $provider = new StubHookChildProvider($this->container);
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $hooks = $method->invoke($provider);
+
+        $this->assertContains(StubHookAlpha::class, $hooks);
+        $this->assertContains(StubHookBeta::class, $hooks);
+        $this->assertContains(StubHookGamma::class, $hooks);
+        $this->assertCount(3, $hooks);
+    }
+
+    /**
+     * Test that collectHooks deduplicates entries.
+     */
+    public function testCollectHooksDeduplicates(): void
+    {
+        // Create a child that re-declares a parent hook
+        $provider = new class($this->container) extends StubHookParentProvider {
+            protected array $hooks = [
+                StubHookAlpha::class, // already in parent
+                StubHookGamma::class,
+            ];
+        };
+
+        $reflection = new ReflectionClass($provider);
+        $method = $reflection->getMethod('collectHooks');
+        $method->setAccessible(true);
+
+        $hooks = $method->invoke($provider);
+
+        $this->assertCount(3, $hooks);
+        $this->assertContains(StubHookAlpha::class, $hooks);
+        $this->assertContains(StubHookBeta::class, $hooks);
+        $this->assertContains(StubHookGamma::class, $hooks);
+    }
+
+    /**
+     * Test that register calls registerHooks.
+     */
+    public function testRegisterCallsRegisterHooks(): void
+    {
+        $provider = new StubHookParentProvider($this->container);
+        $provider->register();
+
+        $this->assertTrue(StubHookAlpha::$registered);
+        $this->assertTrue(StubHookBeta::$registered);
+    }
+
+    /**
+     * Test that registerHooks skips classes that don't implement Hook.
+     */
+    public function testRegisterHooksSkipsNonHookRegistrable(): void
+    {
+        $provider = new StubInvalidHookProvider($this->container);
+        $provider->register();
+
+        // Non-Hook class should be skipped
+        $this->assertFalse(StubNonHookRegistrable::$registered);
+
+        // Hook class should still register
+        $this->assertTrue(StubHookAlpha::$registered);
+    }
+}

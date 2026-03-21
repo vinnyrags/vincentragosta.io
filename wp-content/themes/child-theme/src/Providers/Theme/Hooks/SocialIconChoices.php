@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme\Hooks;
 
 use Mythus\Contracts\Hook;
-use ParentTheme\Services\IconServiceFactory;
+use IX\Services\IconServiceFactory;
 
 /**
  * Populates the ACF social icon field with choices from the filesystem.

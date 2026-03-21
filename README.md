@@ -2,7 +2,7 @@
 
 WordPress parent-child theme built on Timber 2.x / Twig with a provider-based architecture, PHP-DI for dependency injection, and esbuild + Sass for asset compilation.
 
-The **parent theme** (`wp-content/themes/parent-theme`) provides reusable infrastructure — base classes, support managers, contracts, and shared features. The **child theme** (`wp-content/themes/child-theme`) is site-specific and extends the parent for the vincentragosta.io website.
+The **parent theme** (`wp-content/themes/ix`) provides reusable infrastructure — base classes, support managers, contracts, and shared features. The **child theme** (`wp-content/themes/child-theme`) is site-specific and extends the parent for the vincentragosta.io website.
 
 ## Prerequisites
 
@@ -92,7 +92,7 @@ PHP-DI 7.0 with autowiring-first. The container is built in `Theme::__construct(
 ### Directory Structure
 
 ```
-parent-theme/
+ix/
 ├── src/
 │   ├── Models/              # Post, Image, CropDirection
 │   ├── Providers/
@@ -458,7 +458,7 @@ Design tokens defined in `theme.json`, available as CSS custom properties:
 
 ## Build System
 
-Single canonical `build-providers.js` in `parent-theme/scripts/`. Auto-discovers providers with assets or blocks. Child theme runs the same script (`node ../parent-theme/scripts/build-providers.js`); script uses `process.cwd()` as theme root.
+Single canonical `build-providers.js` in `ix/scripts/`. Auto-discovers providers with assets or blocks. Child theme runs the same script (`node ../ix/scripts/build-providers.js`); script uses `process.cwd()` as theme root.
 
 **Output mapping:**
 

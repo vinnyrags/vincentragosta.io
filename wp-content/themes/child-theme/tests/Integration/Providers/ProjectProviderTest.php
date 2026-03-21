@@ -4,9 +4,9 @@ namespace ChildTheme\Tests\Integration\Providers;
 
 use DI\Container;
 use ChildTheme\Providers\Project\ProjectProvider;
-use ParentTheme\Providers\Project\ProjectProvider as BaseProjectProvider;
-use ParentTheme\Providers\Provider;
-use ParentTheme\Tests\Support\HasContainer;
+use IX\Providers\Project\ProjectProvider as BaseProjectProvider;
+use IX\Providers\Provider;
+use IX\Tests\Support\HasContainer;
 use WorDBless\BaseTestCase;
 
 /**

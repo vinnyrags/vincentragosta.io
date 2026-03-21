@@ -1,0 +1,18 @@
+<div class="project-card" data-title="{{ project.title | lower }}" data-category="{{ project.categorySlugs }}">
+    <a href="{{ project.link }}" class="project-card__image" tabindex="-1" aria-hidden="true">
+        {% if project.thumbnail %}
+            <img src="{{ project.thumbnail.src | resize(800) }}"
+                 alt=""
+                 width="{{ project.thumbnail.width }}"
+                 height="{{ project.thumbnail.height }}"
+                 loading="lazy" />
+        {% else %}
+            <div class="project-card__no-image"></div>
+        {% endif %}
+    </a>
+    <div class="project-card__content">
+        <h3 class="project-card__title">
+            <a href="{{ project.link }}">{{ project.title }}</a>
+        </h3>
+    </div>
+</div>

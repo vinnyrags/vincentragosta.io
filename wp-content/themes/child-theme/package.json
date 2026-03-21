@@ -7,11 +7,11 @@
     "test": "tests"
   },
   "scripts": {
-    "build-parent": "npm --prefix ../parent-theme run build",
-    "build-providers": "node ../parent-theme/scripts/build-providers.js",
-    "watch-providers": "node ../parent-theme/scripts/build-providers.js --watch",
+    "build-parent": "npm --prefix ../ix run build",
+    "build-providers": "node ../ix/scripts/build-providers.js",
+    "watch-providers": "node ../ix/scripts/build-providers.js --watch",
     "build": "npm run build-parent && npm run build-providers",
-    "watch-parent": "npm --prefix ../parent-theme run start",
+    "watch-parent": "npm --prefix ../ix run start",
     "start": "npm-run-all --parallel watch-parent watch-providers",
     "prepare": "cd ../../.. && husky wp-content/themes/child-theme/.husky",
     "test:js": "vitest run",
@@ -21,7 +21,7 @@
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:report": "playwright show-report tests/e2e/report",
     "test:php": "composer test",
-    "test:php:parent": "composer --working-dir=../parent-theme test",
+    "test:php:parent": "composer --working-dir=../ix test",
     "test:php:mythus": "composer --working-dir=../../mu-plugins/mythus test",
     "test:php:all": "npm run test:php:mythus && npm run test:php && npm run test:php:parent"
   },

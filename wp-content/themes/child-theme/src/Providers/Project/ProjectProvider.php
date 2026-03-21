@@ -6,7 +6,7 @@ namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\CategoryTermLinkRewrite;
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
-use ParentTheme\Providers\Project\ProjectProvider as BaseProjectProvider;
+use IX\Providers\Project\ProjectProvider as BaseProjectProvider;
 
 /**
  * Project Provider.

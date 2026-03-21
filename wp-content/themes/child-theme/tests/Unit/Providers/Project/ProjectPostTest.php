@@ -3,7 +3,7 @@
 namespace ChildTheme\Tests\Unit\Providers\Project;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ParentTheme\Providers\Project\ProjectPost as BaseProjectPost;
+use IX\Providers\Project\ProjectPost as BaseProjectPost;
 use PHPUnit\Framework\TestCase;
 
 /**

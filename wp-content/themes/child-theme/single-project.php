@@ -6,7 +6,7 @@
  */
 
 use ChildTheme\Theme;
-use ParentTheme\Providers\Project\ProjectRepository;
+use IX\Providers\Project\ProjectRepository;
 use Timber\Timber;
 
 $context     = Timber::context();

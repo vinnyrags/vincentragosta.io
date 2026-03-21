@@ -1,0 +1,131 @@
+@use 'breakpoints' as *;
+@use 'content-container' as *;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@include reduced-motion {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+// Two-wrapper layout: .site-main is the outer <main> element (header offset
+// only in child themes). .site-content is the inner layout wrapper handling
+// root padding, content-width constraint, alignfull breakout, flow spacing,
+// and section-level spacing. Templates that need different semantics (e.g.
+// project detail's <article>) override {% block main %} to provide their own
+// element with the .site-content class — same layout rules, different HTML tag.
+//
+// useRootPaddingAwareAlignments is set to false in theme.json because the
+// classes it generates (.has-global-padding, .wp-site-blocks) target elements
+// that don't exist in the Twig templates.
+
+.site-content {
+  // No bottom padding when last child is a full-bleed background block
+  &:has(> :last-child:is(
+    .wp-block-cover,
+    .wp-block-columns.has-background,
+    .wp-block-group.has-background
+  )) {
+    padding-block-end: 0;
+  }
+
+  // Root padding (replaces has-global-padding)
+  padding-inline: var(--wp--preset--spacing--40);
+  padding-block-end: var(--wp--preset--spacing--50);
+
+  // Block gap (vertical spacing between direct children)
+  > * + * {
+    margin-block-start: var(--wp--style--block-gap, var(--wp--preset--spacing--40));
+  }
+
+  // Section-level spacing around container blocks
+  @include content-container;
+
+  // Deep-link scroll offset for sections without backgrounds — accounts for
+  // the section-level margin so the scroll lands at the visual start, not the
+  // content edge. Sections with backgrounds go full-bleed and don't need this.
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns)[id]:not(.has-background) {
+    scroll-margin-block-start: var(--wp--preset--spacing--70);
+  }
+
+  // Default vertical padding for container blocks with backgrounds
+  > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
+    padding-block: var(--wp--preset--spacing--70);
+  }
+
+  // First child spacing
+  > *:first-child {
+    margin-block-start: var(--wp--preset--spacing--50);
+  }
+
+  > :first-child:is(
+    .wp-block-cover,
+    .wp-block-columns.has-background,
+    .wp-block-group.has-background
+  ) {
+    margin-block-start: 0;
+  }
+
+  // Full-bleed blocks: negate horizontal padding
+  > .alignfull {
+    margin-inline: calc(-1 * var(--wp--preset--spacing--40));
+    max-width: none;
+    width: calc(100% + (2 * var(--wp--preset--spacing--40)));
+  }
+
+  // Restore inline padding for full-bleed container blocks so content
+  // doesn't run flush against viewport edges on narrow screens. Cover
+  // blocks are excluded — backgrounds should be edge-to-edge, and inner
+  // content is constrained separately.
+  > :is(.wp-block-group, .wp-block-columns).alignfull {
+    padding-inline: var(--wp--preset--spacing--40);
+  }
+
+  > .alignfull:first-child {
+    margin-block-start: 0;
+  }
+
+  // Constrain cover block inner content to content width so it aligns
+  // with the rest of the document.
+  > .wp-block-cover.alignfull > .wp-block-cover__inner-container {
+    box-sizing: border-box;
+    max-width: var(--wp--style--global--content-size, 1440px);
+    margin-inline: auto !important;
+    width: 100% !important;
+  }
+
+  // Constrained content width (replaces is-layout-constrained)
+  > *:not(.alignwide):not(.alignfull) {
+    max-width: var(--wp--style--global--content-size, 1440px);
+    margin-inline: auto;
+  }
+
+  > .alignwide {
+    max-width: var(--wp--style--global--wide-size, 1600px);
+    margin-inline: auto;
+  }
+
+}
+
+// Editor equivalent: section-level spacing in the block editor
+.is-root-container {
+  @include content-container;
+}
+
+// Override WordPress core's hardcoded padding on background containers
+// (core uses 1.25em 2.375em — replace with theme spacing variables)
+:where(.wp-block-group.has-background) {
+  padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+}
+
+:where(.wp-block-columns.has-background) {
+  padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+}
+
+// Default padding for individual columns with backgrounds
+.wp-block-column.has-background {
+  padding: var(--wp--preset--spacing--40);
+}

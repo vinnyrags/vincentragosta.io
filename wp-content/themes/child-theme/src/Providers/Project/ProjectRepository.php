@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
-use ParentTheme\Providers\Project\ProjectRepository as BaseProjectRepository;
+use IX\Providers\Project\ProjectRepository as BaseProjectRepository;
 
 /**
  * Project repository.

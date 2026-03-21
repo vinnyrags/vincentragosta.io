@@ -4,7 +4,7 @@ namespace ChildTheme\Tests\Unit\Providers\Project;
 
 use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Project\ProjectRepository;
-use ParentTheme\Providers\Project\ProjectRepository as BaseProjectRepository;
+use IX\Providers\Project\ProjectRepository as BaseProjectRepository;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

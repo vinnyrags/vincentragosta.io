@@ -33,19 +33,19 @@ if [ -n "$STAGED_PHP" ]; then
         echo "Child-theme tests passed."
     fi
 
-    # Check if parent-theme PHP files are staged
-    if echo "$STAGED_PHP" | grep -q "wp-content/themes/parent-theme/"; then
-        # Only run if parent-theme has tests configured
-        if [ -f "$REPO_ROOT/wp-content/themes/parent-theme/phpunit.xml" ]; then
-            echo "Running parent-theme PHP tests..."
-            cd "$REPO_ROOT/wp-content/themes/parent-theme" && composer test
+    # Check if ix PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/themes/ix/"; then
+        # Only run if ix has tests configured
+        if [ -f "$REPO_ROOT/wp-content/themes/ix/phpunit.xml" ]; then
+            echo "Running ix PHP tests..."
+            cd "$REPO_ROOT/wp-content/themes/ix" && composer test
             if [ $? -ne 0 ]; then
                 echo ""
-                echo "Parent-theme tests failed. Commit aborted."
+                echo "IX tests failed. Commit aborted."
                 echo "Fix the failing tests or use --no-verify to bypass."
                 exit 1
             fi
-            echo "Parent-theme tests passed."
+            echo "IX tests passed."
         fi
     fi
 fi

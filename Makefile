@@ -1,7 +1,7 @@
 # Vincent Ragosta Theme - Build System
 # Usage: make [target]
 
-PARENT_THEME_DIR := $(CURDIR)/wp-content/themes/parent-theme
+IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
@@ -77,9 +77,9 @@ install-mythus:
 	cd $(MYTHUS_DIR) && composer install --no-interaction
 
 install-parent:
-	@echo "Installing parent theme dependencies..."
-	cd $(PARENT_THEME_DIR) && composer install --no-interaction
-	cd $(PARENT_THEME_DIR) && npm install
+	@echo "Installing IX dependencies..."
+	cd $(IX_DIR) && composer install --no-interaction
+	cd $(IX_DIR) && npm install
 
 install-child:
 	@echo "Installing child theme dependencies..."
@@ -101,9 +101,9 @@ watch:
 clean:
 	@echo "Cleaning generated files..."
 	rm -rf $(MYTHUS_DIR)/vendor
-	rm -rf $(PARENT_THEME_DIR)/vendor
-	rm -rf $(PARENT_THEME_DIR)/node_modules
-	rm -rf $(PARENT_THEME_DIR)/dist
+	rm -rf $(IX_DIR)/vendor
+	rm -rf $(IX_DIR)/node_modules
+	rm -rf $(IX_DIR)/dist
 	rm -rf $(CHILD_THEME_DIR)/vendor
 	rm -rf $(CHILD_THEME_DIR)/node_modules
 	rm -rf $(CHILD_THEME_DIR)/dist
@@ -117,8 +117,8 @@ update:
 	@echo "Updating Mythus dependencies..."
 	cd $(MYTHUS_DIR) && composer update --no-interaction
 	@echo ""
-	@echo "Updating parent theme dependencies..."
-	cd $(PARENT_THEME_DIR) && composer update --no-interaction
+	@echo "Updating IX dependencies..."
+	cd $(IX_DIR) && composer update --no-interaction
 	@echo ""
 	@echo "Updating child theme dependencies..."
 	cd $(CHILD_THEME_DIR) && composer update --no-interaction
@@ -129,7 +129,7 @@ update:
 autoload:
 	@echo "Regenerating autoloaders..."
 	cd $(MYTHUS_DIR) && composer dump-autoload
-	cd $(PARENT_THEME_DIR) && composer dump-autoload
+	cd $(IX_DIR) && composer dump-autoload
 	cd $(CHILD_THEME_DIR) && composer dump-autoload
 	@echo "✓ Autoloaders regenerated"
 
@@ -138,14 +138,14 @@ test:
 	@echo "Running Mythus tests..."
 	cd $(MYTHUS_DIR) && composer test
 	@echo ""
-	@echo "Running parent theme tests..."
-	cd $(PARENT_THEME_DIR) && composer test
+	@echo "Running IX tests..."
+	cd $(IX_DIR) && composer test
 	@echo ""
 	@echo "Running child theme tests..."
 	cd $(CHILD_THEME_DIR) && composer test
 	@echo ""
-	@echo "Running parent theme JS tests..."
-	cd $(PARENT_THEME_DIR) && npm run test:js
+	@echo "Running IX JS tests..."
+	cd $(IX_DIR) && npm run test:js
 	@echo ""
 	@echo "Running child theme JS tests..."
 	cd $(CHILD_THEME_DIR) && npm run test:js
@@ -154,7 +154,7 @@ test:
 
 # Run JS tests only
 test-js:
-	cd $(PARENT_THEME_DIR) && npm run test:js
+	cd $(IX_DIR) && npm run test:js
 	cd $(CHILD_THEME_DIR) && npm run test:js
 
 # Push local DDEV database and uploads to staging

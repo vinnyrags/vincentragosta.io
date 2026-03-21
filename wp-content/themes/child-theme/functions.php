@@ -5,7 +5,7 @@
 
 use ChildTheme\Theme;
 
-// Load parent theme's autoloader first (for ParentTheme namespace).
+// Load parent theme's autoloader first (for IX namespace).
 $parent_autoloader = get_template_directory() . '/vendor/autoload.php';
 if (file_exists($parent_autoloader)) {
     require_once $parent_autoloader;

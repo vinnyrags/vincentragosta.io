@@ -1,6 +1,6 @@
 {
   "name": "developer/child-theme",
-  "description": "Child theme extending parent-theme",
+  "description": "Child theme extending IX",
   "type": "wordpress-theme",
   "license": "MIT",
   "authors": [

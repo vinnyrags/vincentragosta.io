@@ -1,5 +1,5 @@
 const path = require('path');
-const parentScss = path.resolve(__dirname, '..', '..', 'parent-theme', 'src', 'Providers', 'Theme', 'assets', 'scss');
+const parentScss = path.resolve(__dirname, '..', '..', 'ix', 'src', 'Providers', 'Theme', 'assets', 'scss');
 const childScss = path.resolve(__dirname, '..', 'src', 'Providers', 'Theme', 'assets', 'scss');
 
 module.exports = {

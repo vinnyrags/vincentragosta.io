@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Blog;
 
-use ParentTheme\Providers\Blog\BlogPost;
-use ParentTheme\Providers\Blog\BlogProvider as BaseBlogProvider;
+use IX\Providers\Blog\BlogPost;
+use IX\Providers\Blog\BlogProvider as BaseBlogProvider;
 
 /**
  * Blog Provider.

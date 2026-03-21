@@ -1,0 +1,10 @@
+// Editor styles for testimonials block
+// Shows stacked preview — no carousel in editor
+
+.wp-block-ix-testimonials {
+    .block-editor-block-list__layout {
+        display: flex;
+        flex-direction: column;
+        gap: var(--wp--preset--spacing--20);
+    }
+}

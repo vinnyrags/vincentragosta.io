@@ -1,0 +1,15 @@
+{% if posts.pagination.pages|length > 1 %}
+    <nav class="pagination" aria-label="Posts navigation">
+        {% if posts.pagination.prev %}
+            <a href="{{ posts.pagination.prev.link }}" class="pagination__prev">Previous</a>
+        {% endif %}
+
+        <span class="pagination__pages">
+            Page {{ posts.pagination.current }} of {{ posts.pagination.total }}
+        </span>
+
+        {% if posts.pagination.next %}
+            <a href="{{ posts.pagination.next.link }}" class="pagination__next">Next</a>
+        {% endif %}
+    </nav>
+{% endif %}

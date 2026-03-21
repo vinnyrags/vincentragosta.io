@@ -7,7 +7,7 @@ namespace ChildTheme;
 use ChildTheme\Providers\Blog\BlogProvider;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ParentTheme\Theme as BaseTheme;
+use IX\Theme as BaseTheme;
 
 /**
  * Main theme class.

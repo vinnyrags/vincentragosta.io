@@ -6,7 +6,7 @@
  */
 
 use ChildTheme\Theme;
-use ParentTheme\Providers\Blog\BlogRepository;
+use IX\Providers\Blog\BlogRepository;
 use Timber\Timber;
 
 $context     = Timber::context();

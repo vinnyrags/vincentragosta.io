@@ -7,7 +7,7 @@
 This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a **parent theme**, and a **child theme**, all built on Timber 2.x and Twig for templating.
 
 - **Mythus** (`wp-content/mu-plugins/mythus/`) — the platform framework. Owns the provider pattern, DI container (PHP-DI), contracts (`Registrable`, `Feature`, `Hook`, `Routable`), and all support managers (`AssetManager`, `BlockManager`, `FeatureManager`, `PatternManager`, `AcfManager`, `RestManager`). Theme-agnostic — no Timber/Twig coupling.
-- **Parent theme** (`wp-content/themes/parent-theme/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
+- **Parent theme** (`wp-content/themes/ix/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
 - **Child theme** (`wp-content/themes/child-theme/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
 - **PHP 8.4+** with strict types
@@ -29,7 +29,7 @@ Mythus\Contracts\Registrable (interface)
   ├── Mythus\Contracts\Feature (marker) — toggleable, $features array, opt-out via => false
   ├── Mythus\Contracts\Hook (marker) — always-active, $hooks array, additive only
   └── Mythus\Provider (abstract base) — theme-agnostic framework
-        └── ParentTheme\Providers\Provider (bridge) — adds Timber/Twig support
+        └── IX\Providers\Provider (bridge) — adds Timber/Twig support
               ├── ThemeProvider — core theme setup, supports, global assets
               ├── PostTypeProvider — custom post types via JSON config
               └── ProjectProvider (child only) — projects CPT + block
@@ -245,9 +245,9 @@ The export script automatically replaces hardcoded upload URLs with dynamic `con
 
 ## Build System
 
-A single `build-providers.js` script lives in `parent-theme/scripts/`. It auto-discovers all providers with assets or blocks and compiles them.
+A single `build-providers.js` script lives in `ix/scripts/`. It auto-discovers all providers with assets or blocks and compiles them.
 
-The child theme runs the same script: `node ../parent-theme/scripts/build-providers.js`. The script uses `process.cwd()` as the theme root, so it works for any theme that invokes it.
+The child theme runs the same script: `node ../ix/scripts/build-providers.js`. The script uses `process.cwd()` as the theme root, so it works for any theme that invokes it.
 
 **Output mapping:**
 - Provider SCSS: `src/Providers/{Name}/assets/scss/index.scss` → `dist/css/{slug}.css`
@@ -308,10 +308,10 @@ New PHP code should include tests where applicable. **WorDBless** is a WordPress
 There are three PHP test suites, each with Unit and Integration directories:
 
 - **Mythus** (`mu-plugins/mythus/tests/`) — tests for contracts, support managers (Asset, Block, Feature, Pattern, Acf, Rest), and abstract base classes. These test the framework in isolation from any theme.
-- **Parent theme** (`themes/parent-theme/tests/`) — tests for the Provider bridge, theme-level features, hooks, and integration tests for the registration lifecycle.
+- **Parent theme** (`themes/ix/tests/`) — tests for the Provider bridge, theme-level features, hooks, and integration tests for the registration lifecycle.
 - **Child theme** (`themes/child-theme/tests/`) — tests for site-specific providers, custom post types, and child-specific behavior.
 
-Test directories mirror source structure. A class at `Mythus\Support\Asset\AssetManager` has tests at `mythus/tests/Unit/Support/Asset/AssetManagerTest.php`. A class at `ParentTheme\Providers\Theme\ThemeProvider` has tests at `parent-theme/tests/Unit/Providers/Theme/ThemeProviderTest.php`.
+Test directories mirror source structure. A class at `Mythus\Support\Asset\AssetManager` has tests at `mythus/tests/Unit/Support/Asset/AssetManagerTest.php`. A class at `IX\Providers\Theme\ThemeProvider` has tests at `ix/tests/Unit/Providers/Theme/ThemeProviderTest.php`.
 
 #### Conventions
 

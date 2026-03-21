@@ -1,0 +1,26 @@
+// Common utilities
+@use 'common/breakpoints';
+@use 'common/function';
+@use 'common/animation';
+@use 'common/layout';
+@use 'common/form-fields';
+
+// Utilities
+@use 'utilities/accessibility';
+@use 'utilities/display';
+@use 'utilities/print';
+
+// Elements
+@use 'elements/block-text';
+@use 'elements/button';
+@use 'elements/focus';
+@use 'elements/headings';
+@use 'elements/paragraph';
+@use 'elements/separator';
+
+// Blocks
+@use 'blocks/wp-block-columns';
+@use 'blocks/wp-block-quote';
+
+// Vendor
+@use 'vendor/wpforms';

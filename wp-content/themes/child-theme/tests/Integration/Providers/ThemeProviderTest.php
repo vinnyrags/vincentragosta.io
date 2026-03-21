@@ -11,22 +11,22 @@ use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
-use ParentTheme\Providers\Theme\Hooks\AccordionIconEnhancer;
-use ParentTheme\Providers\Theme\Hooks\ButtonIconEnhancer;
-use ParentTheme\Providers\Theme\Hooks\FeaturedImageFocalPoint;
-use ParentTheme\Providers\Theme\Hooks\TermsQuerySupports;
+use IX\Providers\Theme\Hooks\AccordionIconEnhancer;
+use IX\Providers\Theme\Hooks\ButtonIconEnhancer;
+use IX\Providers\Theme\Hooks\FeaturedImageFocalPoint;
+use IX\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
-use ParentTheme\Providers\Provider;
+use IX\Providers\Provider;
 use Mythus\Support\Feature\FeatureManager;
-use ParentTheme\Providers\Theme\Features\DisableBlocks;
-use ParentTheme\Providers\Theme\Features\DisableComments;
-use ParentTheme\Providers\Theme\Features\DisableDefaultPatterns;
-use ParentTheme\Providers\Theme\Features\DisablePluginUpdates;
-use ParentTheme\Providers\Theme\Features\DisablePosts;
-use ParentTheme\Providers\Theme\Features\EnableSvgUploads;
-use ParentTheme\Providers\Theme\Features\ScrollReveal;
-use ParentTheme\Providers\Theme\Features\WpFormsBlockDetection;
-use ParentTheme\Providers\Theme\Features\WpFormsFloatingLabels;
+use IX\Providers\Theme\Features\DisableBlocks;
+use IX\Providers\Theme\Features\DisableComments;
+use IX\Providers\Theme\Features\DisableDefaultPatterns;
+use IX\Providers\Theme\Features\DisablePluginUpdates;
+use IX\Providers\Theme\Features\DisablePosts;
+use IX\Providers\Theme\Features\EnableSvgUploads;
+use IX\Providers\Theme\Features\ScrollReveal;
+use IX\Providers\Theme\Features\WpFormsBlockDetection;
+use IX\Providers\Theme\Features\WpFormsFloatingLabels;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -199,7 +199,7 @@ class ThemeProviderTest extends BaseTestCase
      */
     public function testShutterCardsBlockDirectoryExistsInParent(): void
     {
-        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../parent-theme') . '/src/Providers/Theme/blocks';
+        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
 
         $this->assertDirectoryExists($parentBlocksPath . '/shutter-cards');
         $this->assertFileExists($parentBlocksPath . '/shutter-cards/block.json');
@@ -210,7 +210,7 @@ class ThemeProviderTest extends BaseTestCase
      */
     public function testShutterCardBlockDirectoryExistsInParent(): void
     {
-        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../parent-theme') . '/src/Providers/Theme/blocks';
+        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
 
         $this->assertDirectoryExists($parentBlocksPath . '/shutter-card');
         $this->assertFileExists($parentBlocksPath . '/shutter-card/block.json');
@@ -221,7 +221,7 @@ class ThemeProviderTest extends BaseTestCase
      */
     public function testTestimonialsBlockDirectoryExistsInParent(): void
     {
-        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../parent-theme') . '/src/Providers/Theme/blocks';
+        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
 
         $this->assertDirectoryExists($parentBlocksPath . '/testimonials');
         $this->assertFileExists($parentBlocksPath . '/testimonials/block.json');

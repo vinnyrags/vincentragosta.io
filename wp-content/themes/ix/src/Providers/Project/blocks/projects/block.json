@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "ix/projects",
+  "title": "Projects",
+  "category": "design",
+  "icon": "portfolio",
+  "description": "Displays a list of recent or curated projects.",
+  "keywords": ["projects", "portfolio", "grid"],
+  "supports": {
+    "html": false,
+    "align": true,
+    "spacing": {
+      "margin": true,
+      "padding": true
+    }
+  },
+  "textdomain": "ix",
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "render.php"
+  }
+}

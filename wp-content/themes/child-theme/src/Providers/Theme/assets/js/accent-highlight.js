@@ -12,7 +12,7 @@
     const { RichTextToolbarButton } = wp.blockEditor;
     const { createElement } = wp.element;
 
-    const FORMAT_NAME = 'parent-theme/accent-highlight';
+    const FORMAT_NAME = 'ix/accent-highlight';
 
     registerFormatType(FORMAT_NAME, {
         title: 'Accent',

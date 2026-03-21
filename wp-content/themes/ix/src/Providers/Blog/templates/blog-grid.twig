@@ -1,0 +1,13 @@
+{% if posts is not empty %}
+  <div class="blog-grid">
+    {% for post in posts %}
+      {% include 'post-card.twig' with { post: post } %}
+    {% endfor %}
+  </div>
+
+  {% include 'pagination.twig' with { pagination: pagination } %}
+{% else %}
+  <div class="blog-empty">
+    <p>No posts found.</p>
+  </div>
+{% endif %}

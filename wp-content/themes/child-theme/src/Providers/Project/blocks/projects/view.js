@@ -109,7 +109,7 @@ function preselectDropdownItem(dropdown, item) {
  * Initialize projects block functionality
  */
 export function initProjects() {
-    const blocks = document.querySelectorAll('.wp-block-parent-theme-projects');
+    const blocks = document.querySelectorAll('.wp-block-ix-projects');
     if (!blocks.length) return;
 
     blocks.forEach((block) => {

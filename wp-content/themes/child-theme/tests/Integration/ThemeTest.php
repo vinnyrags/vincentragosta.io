@@ -5,7 +5,7 @@ namespace ChildTheme\Tests\Integration;
 use ChildTheme\Theme;
 use ChildTheme\Providers\Project\ProjectProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
-use ParentTheme\Theme as BaseTheme;
+use IX\Theme as BaseTheme;
 use WorDBless\BaseTestCase;
 use ReflectionClass;
 
@@ -75,8 +75,8 @@ class ThemeTest extends BaseTestCase
     /**
      * Test that Theme extends the parent theme's base class.
      */
-    public function testThemeExtendsParentTheme(): void
+    public function testThemeExtendsIX(): void
     {
-        $this->assertInstanceOf(\ParentTheme\Theme::class, $this->theme);
+        $this->assertInstanceOf(\IX\Theme::class, $this->theme);
     }
 }

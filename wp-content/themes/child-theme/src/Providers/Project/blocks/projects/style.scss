@@ -1,6 +1,6 @@
 @use 'common/breakpoints' as *;
 
-.wp-block-parent-theme-projects {
+.wp-block-ix-projects {
   container: projects / inline-size;
   display: flex;
   flex-direction: column;
@@ -211,7 +211,7 @@
 // Scroll Reveal
 // ==========================================================================
 
-.wp-block-parent-theme-projects.has-scroll-reveal .project-card {
+.wp-block-ix-projects.has-scroll-reveal .project-card {
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -226,7 +226,7 @@
 // Light Mode
 // ==========================================================================
 
-.light-mode .wp-block-parent-theme-projects {
+.light-mode .wp-block-ix-projects {
   .project-card {
     color: var(--wp--preset--color--contrast);
   }
@@ -267,7 +267,7 @@
     transition: none;
   }
 
-  .wp-block-parent-theme-projects .project-card {
+  .wp-block-ix-projects .project-card {
     opacity: 1;
     transform: none;
     transition: none;
