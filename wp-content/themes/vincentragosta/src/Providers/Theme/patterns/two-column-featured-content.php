@@ -1,7 +1,7 @@
 <?php
 /**
  * Title: Two Column Featured Content
- * Slug: child-theme/two-column-featured-content
+ * Slug: vincentragosta/two-column-featured-content
  * Categories: theme
  * Inserter: true
  */

@@ -8,7 +8,7 @@ This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a 
 
 - **Mythus** (`wp-content/mu-plugins/mythus/`) — the platform framework. Owns the provider pattern, DI container (PHP-DI), contracts (`Registrable`, `Feature`, `Hook`, `Routable`), and all support managers (`AssetManager`, `BlockManager`, `FeatureManager`, `PatternManager`, `AcfManager`, `RestManager`). Theme-agnostic — no Timber/Twig coupling.
 - **Parent theme** (`wp-content/themes/ix/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
-- **Child theme** (`wp-content/themes/child-theme/`) — site-specific. Extends parent providers for the vincentragosta.io website.
+- **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
 - **PHP 8.4+** with strict types
 - **PHP-DI 7.0** for dependency injection (autowiring-first, owned by Mythus)
@@ -233,7 +233,7 @@ Each provider gets a **PatternManager** instance during `setup()`. If the provid
 <?php
 /**
  * Title: Hero Section
- * Slug: child-theme/hero-section
+ * Slug: vincentragosta/hero-section
  * Categories: project
  * Inserter: true
  */
@@ -309,7 +309,7 @@ There are three PHP test suites, each with Unit and Integration directories:
 
 - **Mythus** (`mu-plugins/mythus/tests/`) — tests for contracts, support managers (Asset, Block, Feature, Pattern, Acf, Rest), and abstract base classes. These test the framework in isolation from any theme.
 - **Parent theme** (`themes/ix/tests/`) — tests for the Provider bridge, theme-level features, hooks, and integration tests for the registration lifecycle.
-- **Child theme** (`themes/child-theme/tests/`) — tests for site-specific providers, custom post types, and child-specific behavior.
+- **Child theme** (`themes/vincentragosta/tests/`) — tests for site-specific providers, custom post types, and child-specific behavior.
 
 Test directories mirror source structure. A class at `Mythus\Support\Asset\AssetManager` has tests at `mythus/tests/Unit/Support/Asset/AssetManagerTest.php`. A class at `IX\Providers\Theme\ThemeProvider` has tests at `ix/tests/Unit/Providers/Theme/ThemeProviderTest.php`.
 

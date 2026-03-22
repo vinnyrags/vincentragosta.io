@@ -2,7 +2,7 @@
 # Usage: make [target]
 
 IX_DIR := $(CURDIR)/wp-content/themes/ix
-CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/child-theme
+CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
 .PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging satis-refresh satis-add satis-remove

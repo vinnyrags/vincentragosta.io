@@ -33,7 +33,7 @@ class SearchSetup implements Hook
 
         if (file_exists($jsPath)) {
             wp_enqueue_script(
-                'child-theme-search-filters',
+                'vincentragosta-search-filters',
                 get_stylesheet_directory_uri() . '/dist/js/theme/search-filters.js',
                 [],
                 filemtime($jsPath),

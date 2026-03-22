@@ -15,14 +15,14 @@ class ContainerBlockStyles extends BlockStyles
     {
         $darkStyle = [
             'name'  => 'dark',
-            'label' => __('Dark', 'child-theme'),
+            'label' => __('Dark', 'vincentragosta'),
         ];
 
         return [
             'core/group' => [
                 $darkStyle,
-                ['name' => 'numbered-list', 'label' => __('Numbered List', 'child-theme')],
-                ['name' => 'nous-accent', 'label' => __('Nous Accent', 'child-theme')],
+                ['name' => 'numbered-list', 'label' => __('Numbered List', 'vincentragosta')],
+                ['name' => 'nous-accent', 'label' => __('Nous Accent', 'vincentragosta')],
             ],
             'core/column' => [
                 $darkStyle,

@@ -20,10 +20,10 @@ if [ -n "$STAGED_PHP" ]; then
         echo "Mythus tests passed."
     fi
 
-    # Check if child-theme PHP files are staged
-    if echo "$STAGED_PHP" | grep -q "wp-content/themes/child-theme/"; then
-        echo "Running child-theme PHP tests..."
-        cd "$REPO_ROOT/wp-content/themes/child-theme" && composer test
+    # Check if vincentragosta PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/themes/vincentragosta/"; then
+        echo "Running vincentragosta PHP tests..."
+        cd "$REPO_ROOT/wp-content/themes/vincentragosta" && composer test
         if [ $? -ne 0 ]; then
             echo ""
             echo "Child-theme tests failed. Commit aborted."
@@ -50,12 +50,12 @@ if [ -n "$STAGED_PHP" ]; then
     fi
 fi
 
-# Get list of staged JS files in child-theme source (use || true to prevent grep from failing)
-STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep 'wp-content/themes/child-theme/src/.*\.js$' || true)
+# Get list of staged JS files in vincentragosta source (use || true to prevent grep from failing)
+STAGED_JS=$(git diff --cached --name-only --diff-filter=ACM | grep 'wp-content/themes/vincentragosta/src/.*\.js$' || true)
 
 if [ -n "$STAGED_JS" ]; then
-    echo "Running child-theme JS tests..."
-    cd "$REPO_ROOT/wp-content/themes/child-theme" && npm run test:js
+    echo "Running vincentragosta JS tests..."
+    cd "$REPO_ROOT/wp-content/themes/vincentragosta" && npm run test:js
     if [ $? -ne 0 ]; then
         echo ""
         echo "Child-theme JS tests failed. Commit aborted."

@@ -133,7 +133,7 @@ node -e "
             '<?php',
             '/**',
             ' * Title: ' + title,
-            ' * Slug: child-theme/' + slug,
+            ' * Slug: vincentragosta/' + slug,
             ' * Categories: ' + categoryList,
             ' * Inserter: true',
             ' */',

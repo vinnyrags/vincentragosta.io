@@ -1,13 +1,13 @@
 <?php
 /**
  * Title: Project Details Alt
- * Slug: child-theme/project-details-alt
+ * Slug: vincentragosta/project-details-alt
  * Categories: project
  * Inserter: true
  */
 
 ?>
-<!-- wp:group {"metadata":{"categories":["project"],"patternName":"child-theme/project-details-alt","name":"Project Details Alt"},"align":"full","style":{"background":{"backgroundImage":{"url":"<?php echo esc_url(content_url('uploads/')); ?>2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
+<!-- wp:group {"metadata":{"categories":["project"],"patternName":"vincentragosta/project-details-alt","name":"Project Details Alt"},"align":"full","style":{"background":{"backgroundImage":{"url":"<?php echo esc_url(content_url('uploads/')); ?>2026/02/squiggle-4-grey-1.svg","id":8,"source":"file","title":"squiggle-4-grey"},"backgroundSize":"cover","backgroundAttachment":"fixed"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="margin-top:0"><!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"bottom","width":"40%"} -->
 <div class="wp-block-column is-vertically-aligned-bottom" style="flex-basis:40%"><!-- wp:buttons -->

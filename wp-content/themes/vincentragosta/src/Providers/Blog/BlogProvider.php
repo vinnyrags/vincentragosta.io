@@ -141,7 +141,7 @@ class BlogProvider extends BaseBlogProvider
         }
 
         wp_enqueue_script(
-            'child-theme-nous-signal',
+            'vincentragosta-nous-signal',
             get_stylesheet_directory_uri() . '/dist/js/blog/nous-signal.js',
             [],
             filemtime($path),
@@ -158,7 +158,7 @@ class BlogProvider extends BaseBlogProvider
             return;
         }
 
-        $this->enqueueStyle('child-theme-blog-single', 'blog.css');
+        $this->enqueueStyle('vincentragosta-blog-single', 'blog.css');
     }
 
     /**
@@ -166,6 +166,6 @@ class BlogProvider extends BaseBlogProvider
      */
     public function enqueueBlockAssets(): void
     {
-        $this->enqueueStyle('child-theme-blog-block', 'blog.css');
+        $this->enqueueStyle('vincentragosta-blog-block', 'blog.css');
     }
 }

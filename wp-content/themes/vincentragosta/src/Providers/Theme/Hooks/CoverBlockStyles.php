@@ -15,7 +15,7 @@ class CoverBlockStyles extends BlockStyles
     {
         return [
             'core/cover' => [
-                ['name' => 'animated', 'label' => __('Animated Background', 'child-theme')],
+                ['name' => 'animated', 'label' => __('Animated Background', 'vincentragosta')],
             ],
         ];
     }

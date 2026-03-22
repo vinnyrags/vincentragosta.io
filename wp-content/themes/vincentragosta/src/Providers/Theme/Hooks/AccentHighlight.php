@@ -31,7 +31,7 @@ class AccentHighlight implements Hook
         }
 
         wp_enqueue_script(
-            'child-theme-accent-highlight',
+            'vincentragosta-accent-highlight',
             get_stylesheet_directory_uri() . '/dist/js/theme/accent-highlight.js',
             ['wp-rich-text', 'wp-block-editor', 'wp-element'],
             filemtime($path),

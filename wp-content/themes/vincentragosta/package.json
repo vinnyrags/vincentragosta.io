@@ -1,5 +1,5 @@
 {
-  "name": "child-theme",
+  "name": "vincentragosta",
   "version": "1.0.0",
   "description": "[![Build Status](https://travis-ci.com/timber/starter-theme.svg?branch=master)](https://travis-ci.com/github/timber/starter-theme) [![Packagist Version](https://img.shields.io/packagist/v/upstatement/timber-starter-theme?include_prereleases)](https://packagist.org/packages/upstatement/timber-starter-theme)",
   "main": "index.js",
@@ -13,7 +13,7 @@
     "build": "npm run build-parent && npm run build-providers",
     "watch-parent": "npm --prefix ../ix run start",
     "start": "npm-run-all --parallel watch-parent watch-providers",
-    "prepare": "cd ../../.. && husky wp-content/themes/child-theme/.husky",
+    "prepare": "cd ../../.. && husky wp-content/themes/vincentragosta/.husky",
     "test:js": "vitest run",
     "test:js:watch": "vitest",
     "test:js:coverage": "vitest run --coverage",

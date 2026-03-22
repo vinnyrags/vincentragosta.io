@@ -76,8 +76,8 @@ class ThemeProvider extends BaseThemeProvider
         parent::addThemeSupports();
 
         register_nav_menus([
-            'primary' => __('Primary Navigation', 'child-theme'),
-            'footer'  => __('Footer Navigation', 'child-theme'),
+            'primary' => __('Primary Navigation', 'vincentragosta'),
+            'footer'  => __('Footer Navigation', 'vincentragosta'),
         ]);
 
         add_editor_style('dist/css/theme.css');
@@ -122,7 +122,7 @@ class ThemeProvider extends BaseThemeProvider
         // Register custom pattern category with branded label (before PatternManager auto-derives it)
         add_action('init', static function (): void {
             register_block_pattern_category('vincentragosta', [
-                'label' => __('Vincent Ragosta', 'child-theme'),
+                'label' => __('Vincent Ragosta', 'vincentragosta'),
             ]);
         });
 
@@ -146,7 +146,7 @@ class ThemeProvider extends BaseThemeProvider
             null
         );
 
-        $this->enqueueStyle('child-theme-theme', 'theme.css');
+        $this->enqueueStyle('vincentragosta-theme', 'theme.css');
     }
 
     /**

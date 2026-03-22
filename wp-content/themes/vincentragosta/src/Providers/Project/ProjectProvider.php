@@ -45,7 +45,7 @@ class ProjectProvider extends BaseProjectProvider
             return;
         }
 
-        $this->enqueueStyle('child-theme-project-single', 'project.css');
+        $this->enqueueStyle('vincentragosta-project-single', 'project.css');
     }
 
     /**
@@ -53,7 +53,7 @@ class ProjectProvider extends BaseProjectProvider
      */
     public function enqueueBlockAssets(): void
     {
-        $this->enqueueStyle('child-theme-projects-block', 'projects.css');
+        $this->enqueueStyle('vincentragosta-projects-block', 'projects.css');
     }
 
     /**

@@ -42,20 +42,20 @@ class TextBlockStyles extends BlockStyles
     {
         $mutedStyle = [
             'name'  => 'muted',
-            'label' => __('Muted', 'child-theme'),
+            'label' => __('Muted', 'vincentragosta'),
         ];
 
         return [
             'core/paragraph' => [$mutedStyle],
             'core/list' => [
                 $mutedStyle,
-                ['name' => 'pills', 'label' => __('Pills', 'child-theme')],
+                ['name' => 'pills', 'label' => __('Pills', 'vincentragosta')],
             ],
             'core/code' => [$mutedStyle],
             'core/table' => [$mutedStyle],
             'core/button' => [$mutedStyle],
             'core/heading' => [
-                ['name' => 'subheading', 'label' => __('Subheading', 'child-theme')],
+                ['name' => 'subheading', 'label' => __('Subheading', 'vincentragosta')],
             ],
         ];
     }
