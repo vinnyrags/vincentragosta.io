@@ -11,7 +11,7 @@ class SearchSetup implements Hook
     public function register(): void
     {
         add_action('pre_get_posts', [$this, 'setSearchPostsPerPage']);
-        add_action('wp_enqueue_scripts', [$this, 'enqueueSearchAssets']);
+        add_filter('relevanssi_post_types', [$this, 'filterPostTypes']);
     }
 
     public function setSearchPostsPerPage(\WP_Query $query): void
@@ -23,22 +23,18 @@ class SearchSetup implements Hook
         $query->set('posts_per_page', 20);
     }
 
-    public function enqueueSearchAssets(): void
+    /**
+     * @param array<string> $types
+     * @return array<string>
+     */
+    public function filterPostTypes(array $types): array
     {
-        if (!is_search()) {
-            return;
+        $postType = sanitize_key($_GET['post_type'] ?? '');
+
+        if ($postType && post_type_exists($postType)) {
+            return [$postType];
         }
 
-        $jsPath = get_stylesheet_directory() . '/dist/js/theme/search-filters.js';
-
-        if (file_exists($jsPath)) {
-            wp_enqueue_script(
-                'vincentragosta-search-filters',
-                get_stylesheet_directory_uri() . '/dist/js/theme/search-filters.js',
-                [],
-                filemtime($jsPath),
-                true
-            );
-        }
+        return $types;
     }
 }

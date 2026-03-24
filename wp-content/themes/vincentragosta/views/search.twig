@@ -24,28 +24,26 @@
       />
     </form>
 
-    {% if post_types|length > 1 %}
-      <nav class="search-filters" aria-label="Filter by content type">
-        <ul class="search-filters__list">
+    <nav class="search-filters" aria-label="Filter by content type">
+      <ul class="search-filters__list">
+        <li>
+          <a
+            href="{{ site.url }}?s={{ query|url_encode }}"
+            class="search-filters__tab{{ not active_post_type ? ' is-active' : '' }}"
+            {{ not active_post_type ? 'aria-current="page"' }}
+          >All</a>
+        </li>
+        {% for slug, label in post_types %}
           <li>
-            <button
-              class="search-filters__tab is-active"
-              data-filter=""
-              aria-pressed="true"
-            >All</button>
+            <a
+              href="{{ site.url }}?s={{ query|url_encode }}&post_type={{ slug }}"
+              class="search-filters__tab{{ active_post_type == slug ? ' is-active' : '' }}"
+              {{ active_post_type == slug ? 'aria-current="page"' }}
+            >{{ label }}</a>
           </li>
-          {% for slug, label in post_types %}
-            <li>
-              <button
-                class="search-filters__tab"
-                data-filter="{{ slug }}"
-                aria-pressed="false"
-              >{{ label }}</button>
-            </li>
-          {% endfor %}
-        </ul>
-      </nav>
-    {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
 
     <div class="search-page__list">
       {% for post in posts %}
@@ -85,7 +83,7 @@
         <ul class="search-pagination__list">
           {% if posts.pagination.prev %}
             <li>
-              <a href="{{ posts.pagination.prev.link }}" class="search-pagination__link" aria-label="Previous page">&larr; Prev</a>
+              <a href="{{ posts.pagination.prev.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link" aria-label="Previous page">&larr; Prev</a>
             </li>
           {% endif %}
 
@@ -94,14 +92,14 @@
               {% if page.current %}
                 <span class="search-pagination__link is-current" aria-current="page">{{ page.title }}</span>
               {% else %}
-                <a href="{{ page.link }}" class="search-pagination__link">{{ page.title }}</a>
+                <a href="{{ page.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link">{{ page.title }}</a>
               {% endif %}
             </li>
           {% endfor %}
 
           {% if posts.pagination.next %}
             <li>
-              <a href="{{ posts.pagination.next.link }}" class="search-pagination__link" aria-label="Next page">Next &rarr;</a>
+              <a href="{{ posts.pagination.next.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link" aria-label="Next page">Next &rarr;</a>
             </li>
           {% endif %}
         </ul>

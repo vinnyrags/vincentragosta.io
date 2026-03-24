@@ -8,16 +8,13 @@ $context = Timber::context();
 $context['query'] = get_search_query();
 $context['posts'] = Timber::get_posts();
 $context['found_posts'] = $GLOBALS['wp_query']->found_posts;
+$context['active_post_type'] = sanitize_key($_GET['post_type'] ?? '');
 
-// Extract unique post type labels from results for filter tabs.
-$postTypes = [];
-foreach ($context['posts'] as $post) {
-    $type = $post->post_type;
-    if (!isset($postTypes[$type])) {
-        $obj = get_post_type_object($type);
-        $postTypes[$type] = $obj ? $obj->labels->singular_name : ucfirst($type);
-    }
-}
-$context['post_types'] = $postTypes;
+// Static list of searchable post types for filter tabs.
+$context['post_types'] = [
+    'page'    => 'Page',
+    'post'    => 'Post',
+    'project' => 'Project',
+];
 
 Timber::render('search.twig', $context);
