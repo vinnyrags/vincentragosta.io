@@ -1,4 +1,4 @@
-<article class="post-card nous-signal-card" data-nous-decrypt>
+<article class="post-card nous-signal-card" data-nous-decrypt data-title="{{ post.title | lower }}" data-date="{{ post.date('Y-m-d') }}" data-tags="{{ post.tagSlugs }}">
   <div class="nous-signal-card__decrypt-overlay" aria-hidden="true">
     <span>[DECRYPTING...]</span>
   </div>

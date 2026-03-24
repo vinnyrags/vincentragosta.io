@@ -1,0 +1,107 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Blog Toolbar (Search + Tag Filter + Sort) — "all" mode only
+// ==========================================================================
+
+.blog-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--30);
+  width: 100%;
+
+  @include media(md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wp--preset--spacing--40);
+  }
+}
+
+.blog-search {
+  width: 100%;
+
+  @include media(md) {
+    flex: 1;
+    max-width: 320px;
+  }
+}
+
+.blog-search__input {
+  width: 100%;
+  padding: var(--wp--preset--spacing--20);
+  font-size: inherit;
+  font-family: var(--wp--preset--font-family--fira-code);
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-block-end: 1px solid var(--wp--preset--color--nous-red);
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.blog-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--30);
+}
+
+.blog-filter {
+  display: flex;
+  align-items: center;
+}
+
+.blog-sort {
+  display: flex;
+  align-items: center;
+}
+
+// ==========================================================================
+// Hidden State (search/tag filtering)
+// ==========================================================================
+
+.post-card[aria-hidden="true"] {
+  display: none;
+}
+
+.blog-grid__empty {
+  display: none;
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--30);
+  font-family: var(--wp--preset--font-family--fira-code);
+}
+
+// Show empty message when all cards are hidden.
+.blog-grid:not(:has(.post-card:not([aria-hidden="true"]))) .blog-grid__empty {
+  display: block;
+}
+
+// ==========================================================================
+// Scroll Reveal
+// ==========================================================================
+
+.wp-block-ix-blog.has-scroll-reveal .post-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .wp-block-ix-blog .post-card {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,5 +1,4 @@
 ## HIGH PRIORITY
-- turn off nous signal posts category links or consider doing what we did for the projects block with the filter and sort dropdowns and search
 - light mode url search bar on mobile issue when toggling, remains red
 - nous signal flash issue on mobile (menu item when in light mode)
 - active state in light mode filter pills should have background filled

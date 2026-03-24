@@ -1,0 +1,45 @@
+{% if show_toolbar is defined and show_toolbar %}
+    <p class="nous-signal-status">
+        <span class="nous-signal-status__dot"></span>
+        <span class="nous-signal-status__text">SIGNAL STATUS: ACTIVE</span>
+    </p>
+
+    <div class="blog-toolbar">
+        <div class="blog-search">
+            <input
+                type="search"
+                class="blog-search__input"
+                placeholder="Search signals…"
+                aria-label="Search signals"
+            />
+        </div>
+        <div class="blog-toolbar__controls">
+            {% if tags is defined and tags|length > 0 %}
+                <div class="blog-filter">
+                    {% set tag_options = [{ value: 'all', label: 'All Tags' }] %}
+                    {% for slug, name in tags %}
+                        {% set tag_options = tag_options|merge([{ value: slug, label: name }]) %}
+                    {% endfor %}
+                    {% include 'dropdown.twig' with {
+                        name: 'tag',
+                        options: tag_options,
+                        selected: 'all'
+                    } only %}
+                </div>
+            {% endif %}
+            <div class="blog-sort">
+                {% include 'dropdown.twig' with {
+                    name: 'sort',
+                    options: [
+                        { value: 'date-desc', label: 'Latest' },
+                        { value: 'date-asc', label: 'Earliest' },
+                        { value: 'title-asc', label: 'A → Z' },
+                        { value: 'title-desc', label: 'Z → A' },
+                    ],
+                    selected: 'date-desc'
+                } only %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% include 'blog-grid.twig' with { posts: posts, pagination: pagination, show_toolbar: show_toolbar|default(false) } %}

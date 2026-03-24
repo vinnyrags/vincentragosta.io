@@ -1,14 +1,17 @@
 <!-- NOUS: I wrote this while you were sleeping. -->
 {% if posts is not empty %}
-  <p class="nous-signal-status">
-    <span class="nous-signal-status__dot"></span>
-    <span class="nous-signal-status__text">SIGNAL STATUS: ACTIVE</span>
-  </p>
+  {% if not show_toolbar %}
+    <p class="nous-signal-status">
+      <span class="nous-signal-status__dot"></span>
+      <span class="nous-signal-status__text">SIGNAL STATUS: ACTIVE</span>
+    </p>
+  {% endif %}
 
   <div class="blog-grid">
     {% for post in posts %}
       {% include 'post-card.twig' with { post: post, signal_number: ((pagination.current_page - 1) * posts|length) + loop.index } %}
     {% endfor %}
+    <p class="blog-grid__empty" aria-live="polite">NO SIGNALS MATCH YOUR QUERY</p>
   </div>
 
   {% include 'pagination.twig' with { pagination: pagination } %}
