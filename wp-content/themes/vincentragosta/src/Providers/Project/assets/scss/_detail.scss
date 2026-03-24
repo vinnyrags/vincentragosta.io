@@ -4,6 +4,25 @@
 .project-detail {
     padding-block-end: 0;
 
+    // Metadata rows (client, technologies, year, external URL):
+    // Stack label above value on mobile, side-by-side on desktop
+    .is-content-justification-space-between {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--wp--preset--spacing--10);
+
+        @include media(md) {
+            flex-direction: row;
+            align-items: center;
+            column-gap: var(--wp--preset--spacing--30);
+        }
+
+        p {
+            overflow-wrap: break-word;
+            min-width: 0;
+        }
+    }
+
     // First child top padding — project detail uses padding instead of margin
     // because the first section typically has a background
     > *:first-child:is(.wp-block-group, .wp-block-cover, .wp-block-columns) {
