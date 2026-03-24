@@ -27,13 +27,16 @@
     content: counter(accordion-index, decimal-leading-zero);
     font-weight: 400;
     color: var(--color-text-muted);
-    min-width: var(--accordion-number-width);
-    margin-inline-end: var(--accordion-number-gap);
+
   }
 
   &:hover .wp-block-accordion-heading__toggle-title {
     text-decoration: none;
   }
+}
+
+.wp-block-accordion-heading__toggle-title {
+  padding-inline: var(--accordion-number-gap);
 }
 
 .wp-block-accordion-heading__toggle-icon {

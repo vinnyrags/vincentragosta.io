@@ -93,8 +93,10 @@ install-child:
 	cd $(CHILD_THEME_DIR) && composer install --no-interaction
 	cd $(CHILD_THEME_DIR) && npm install
 
-# Build assets (child theme only - parent is PHP infrastructure)
+# Build assets (IX parent theme first, then child theme)
 build:
+	@echo "Building IX parent theme assets..."
+	cd $(IX_DIR) && npm run build
 	@echo "Building child theme assets..."
 	cd $(CHILD_THEME_DIR) && npm run build
 	@echo "✓ Build complete"
