@@ -16,9 +16,26 @@
   .wpforms-field-label { color: var(--wp--custom--color--error); }
 }
 
-label.wpforms-error {
+.wpforms-confirmation-container.wpforms-confirmation-scroll p:first-of-type {
+  margin-block-start: 0;
+}
+
+// Hide the brief disabled flash and transient error container
+// that appears during anti-spam token refresh on submit
+.wpforms-submit:disabled {
+  opacity: 1;
+  pointer-events: none;
+}
+
+// "Submit button is disabled during form submission" — WPForms injects this
+// with .wpforms-hidden but theme styles may inadvertently override its display
+[id$="-submit-btn-disabled"].wpforms-hidden {
+  display: none !important;
+}
+
+em.wpforms-error {
   display: block;
   margin-block-start: var(--wp--preset--spacing--20);
-  font-size: var(--wp--preset--font-size--10);
+  font-size: var(--wp--preset--font-size--20);
   color: var(--wp--custom--color--error);
 }
