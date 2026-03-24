@@ -25,7 +25,7 @@ Create `content/projects/[PROJECT_NAME].php` using the exact block markup from t
 - **CLIENT**: [CLIENT_NAME]
 - **TECHNOLOGIES**: [TECHNOLOGIES] *(if provided — otherwise research the project and populate with the relevant tech stack based on what you learn)*
 - **YEAR**: [YEAR]
-- **EXTERNAL URL**: [URL] *(if provided — otherwise find the project's live URL from research)*
+- **EXTERNAL URL**: [URL] *(if provided — otherwise find the project's live URL from research. If no live URL exists, use plain text `N/A` with no link)*
 
 Write original copy for:
 - **Summary** (2 sentences max) — scope + deliverables, concise hook
@@ -73,7 +73,7 @@ Search for the project's logo or brand mark. Provide 2-3 image URLs for consider
 | `[CLIENT_NAME]` | Agency or direct client |
 | `[TECHNOLOGIES]` | Comma-separated tech stack (optional — agent will research and populate if omitted) |
 | `[YEAR]` | Project year |
-| `[URL]` | Live URL or `#` if defunct (optional — agent will research and populate if omitted) |
+| `[URL]` | Live URL or `N/A` if no live URL exists (optional — agent will research and populate if omitted) |
 | `[NOTABLES]` | Bullet points of specific contributions |
 
 ## Fill in

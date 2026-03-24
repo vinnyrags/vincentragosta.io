@@ -4,6 +4,14 @@
   padding-block-start: var(--header-height, 72px);
 }
 
+.error404 .site-content > .error-404 {
+  margin-block-start: var(--wp--preset--spacing--70);
+}
+
+.error404 .site-content {
+  padding-block-end: 0;
+}
+
 // Compensate for fixed header when the first block is set to full viewport height.
 // WP applies min-height: 100vh as an inline style; override it to subtract
 // the header so it doesn't extend behind/below the fixed header.
