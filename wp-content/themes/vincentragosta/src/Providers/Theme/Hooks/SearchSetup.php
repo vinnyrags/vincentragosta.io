@@ -21,6 +21,12 @@ class SearchSetup implements Hook
         }
 
         $query->set('posts_per_page', 20);
+
+        $postType = sanitize_key($_GET['post_type'] ?? '');
+
+        if ($postType && post_type_exists($postType)) {
+            $query->set('post_type', $postType);
+        }
     }
 
     /**

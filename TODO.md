@@ -1,6 +1,7 @@
 ## HIGH PRIORITY
-- active state in light mode filter pills should have background filled
+- active state in light mode search filter pills should have background filled, I know this is a shared css feature, lets make the change to all, I will review and decide if it needs to be a search only css adjustment
 - change X icon to Github in footer
+- instagram feed on about page (last section on the page)
 
 - create me repo, add leads, interviews, content to it, add to satis and install in project-- determine if this is a good place to house claude stuff, like what claude knows about me, my gut says no and that claude content should live in a higher folder so that it would get pulled into all projects, but that also has me thinking about where to put this me repo as well, perhaps in a similar file architecture outside of this repo, and claude would just know about it through all project context-- let me know what you think about this
 - create starter repo that has project root plus child theme, rework claude.md to ensure no specific references to vincentragosta.io project, it will more than likely not have any information on me either, i.e, access to the content directory, docs directory or interviews directory, so if there are references to how I think or want claude to think/behave, then we should port that information over to claude.md.
