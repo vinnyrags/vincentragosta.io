@@ -127,23 +127,38 @@
     );
   }
 
+  /**
+   * Desktop-only check — flash effects are disabled on mobile.
+   */
+  function isDesktop() {
+    return window.matchMedia('(min-width: 992px)').matches;
+  }
+
   // Boot
   function init() {
-    var flash = createResistanceFlash();
     var isSignalPage = document.body.classList.contains('nous-signal-page');
 
-    // Global
-    if (flash) {
-      initNavHoverFlash(flash);
-    }
+    if (isDesktop()) {
+      var flash = createResistanceFlash();
 
-    // Blog pages only
-    if (isSignalPage) {
-      initDecryptReveal();
-
+      // Global
       if (flash) {
-        initLightModeResistance(flash);
+        initNavHoverFlash(flash);
       }
+
+      // Blog pages only
+      if (isSignalPage) {
+        initDecryptReveal();
+
+        if (flash) {
+          initLightModeResistance(flash);
+        }
+      }
+    } else if (isSignalPage) {
+      // On mobile, skip decrypt animation — show cards immediately
+      document.querySelectorAll('[data-nous-decrypt]').forEach(function (card) {
+        card.classList.add('is-decrypted');
+      });
     }
   }
 

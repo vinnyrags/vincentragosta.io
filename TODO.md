@@ -1,6 +1,4 @@
 ## HIGH PRIORITY
-- light mode url search bar on mobile issue when toggling, remains red
-- nous signal flash issue on mobile (menu item when in light mode)
 - active state in light mode filter pills should have background filled
 - change X icon to Github in footer
 

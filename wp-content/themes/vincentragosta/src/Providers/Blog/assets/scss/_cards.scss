@@ -50,8 +50,11 @@
     transition: opacity 0.3s ease-out;
   }
 
-  &.is-decrypting .nous-signal-card__decrypt-overlay {
-    animation: nous-decrypt-flash 0.6s ease-in-out forwards;
+  // Decrypt flash is desktop only
+  @media (min-width: 992px) {
+    &.is-decrypting .nous-signal-card__decrypt-overlay {
+      animation: nous-decrypt-flash 0.6s ease-in-out forwards;
+    }
   }
 
   &.is-decrypted .nous-signal-card__decrypt-overlay {

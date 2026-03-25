@@ -1026,12 +1026,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "8a8b3581c1417bc288bb7a2316e1f54f1824d4d8"
+                "reference": "51b041ac81456bb253e05f48f50d002ed0bfa753"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/8a8b3581c1417bc288bb7a2316e1f54f1824d4d8",
-                "reference": "8a8b3581c1417bc288bb7a2316e1f54f1824d4d8",
+                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/51b041ac81456bb253e05f48f50d002ed0bfa753",
+                "reference": "51b041ac81456bb253e05f48f50d002ed0bfa753",
                 "shasum": ""
             },
             "require": {
@@ -1073,7 +1073,7 @@
                 "source": "https://github.com/vinnyrags/IX/tree/main",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-03-21T04:51:27+00:00"
+            "time": "2026-03-24T22:37:07+00:00"
         },
         {
             "name": "vincentragosta/mythus",

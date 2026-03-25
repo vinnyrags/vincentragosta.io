@@ -62,7 +62,7 @@
   animation: nous-crt-flicker 8s infinite;
 }
 
-// Light mode resistance overlay
+// Light mode resistance overlay (desktop only)
 .nous-resistance-overlay {
   position: fixed;
   inset: 0;
@@ -71,8 +71,10 @@
   opacity: 0;
   background: var(--wp--preset--color--nous-red);
 
-  &.is-resisting {
-    animation: nous-resistance-flash 0.4s steps(4) forwards;
+  @media (min-width: 992px) {
+    &.is-resisting {
+      animation: nous-resistance-flash 0.4s steps(4) forwards;
+    }
   }
 }
 
