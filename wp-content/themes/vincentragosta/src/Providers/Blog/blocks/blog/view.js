@@ -8,6 +8,7 @@ import {
     filterBySearch,
     filterByTaxonomy,
     createScrollReveal,
+    preselectDropdownItem,
 } from '../../../Theme/assets/js/grid-toolkit';
 
 const CARD = '.post-card';
@@ -42,6 +43,19 @@ function initBlog() {
                 filterByTaxonomy(grid, CARD, 'tags', 'data-tag-hidden', e.detail.value, HIDDEN_ATTRS);
                 reveal.reinit();
             });
+
+            // Pre-select tag from URL param
+            const urlTag = new URLSearchParams(window.location.search).get('tag');
+            if (urlTag) {
+                const matchingItem = tagDropdown.querySelector(
+                    `[data-value="${CSS.escape(urlTag)}"]`
+                );
+                if (matchingItem) {
+                    preselectDropdownItem(tagDropdown, matchingItem);
+                    filterByTaxonomy(grid, CARD, 'tags', 'data-tag-hidden', urlTag, HIDDEN_ATTRS);
+                    reveal.reinit();
+                }
+            }
         }
 
         // Sort controls

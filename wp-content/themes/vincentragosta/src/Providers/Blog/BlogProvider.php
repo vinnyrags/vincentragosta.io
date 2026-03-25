@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Blog;
 
+use ChildTheme\Providers\Blog\Hooks\TagTermLinkRewrite;
 use IX\Providers\Blog\BlogPost;
 use IX\Providers\Blog\BlogProvider as BaseBlogProvider;
 
@@ -16,6 +17,13 @@ use IX\Providers\Blog\BlogProvider as BaseBlogProvider;
  */
 class BlogProvider extends BaseBlogProvider
 {
+    /**
+     * Always-active hooks.
+     */
+    protected array $hooks = [
+        TagTermLinkRewrite::class,
+    ];
+
     /**
      * Register the blog provider with site-specific additions.
      */
