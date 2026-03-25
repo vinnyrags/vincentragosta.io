@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36205bc06649b6cf8a31c431fb9b24c8",
+    "content-hash": "638868dc7ade9f3cb665babb288d75d9",
     "packages": [
         {
             "name": "composer/installers",
@@ -1129,6 +1129,24 @@
                 "issues": "https://github.com/vinnyrags/mythus/issues"
             },
             "time": "2026-03-21T04:03:25+00:00"
+        },
+        {
+            "name": "wpackagist-plugin/instagram-feed",
+            "version": "6.10.1",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/instagram-feed/",
+                "reference": "tags/6.10.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/instagram-feed.6.10.1.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/instagram-feed/"
         },
         {
             "name": "wpackagist-plugin/relevanssi",
