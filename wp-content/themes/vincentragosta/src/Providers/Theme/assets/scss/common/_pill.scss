@@ -17,4 +17,15 @@
     color: var(--wp--preset--color--accent-1);
     background: transparent;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+
+    .light-mode & {
+        background-color: var(--color-bg);
+    }
+}
+
+// Filled active state — use via `@extend %pill-active;`
+%pill-active {
+    background-color: var(--wp--preset--color--accent-1);
+    border-color: var(--wp--preset--color--accent-1);
+    color: var(--color-on-accent);
 }

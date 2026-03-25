@@ -110,8 +110,7 @@ body.search .site-main {
 
   &:hover,
   &:focus-visible {
-    border-color: var(--wp--preset--color--accent-1);
-    color: var(--wp--preset--color--accent-1);
+    @extend %pill-active;
   }
 
   &:focus-visible {
@@ -120,9 +119,7 @@ body.search .site-main {
   }
 
   &.is-active {
-    background-color: var(--wp--preset--color--accent-1);
-    border-color: var(--wp--preset--color--accent-1);
-    color: var(--color-on-accent);
+    @extend %pill-active;
   }
 }
 
@@ -274,9 +271,7 @@ body.search .site-main {
   cursor: pointer;
 
   &.is-current {
-    background-color: var(--wp--preset--color--accent-1);
-    border-color: var(--wp--preset--color--accent-1);
-    color: var(--color-on-accent);
+    @extend %pill-active;
     cursor: default;
   }
 
@@ -294,12 +289,8 @@ body.search .site-main {
   background-color: rgba(255, 255, 255, 0.85);
 }
 
-.light-mode .search-filters__tab {
-  background-color: var(--color-bg);
-
-  &.is-active {
-    color: var(--wp--preset--color--contrast);
-  }
+.light-mode .search-filters__tab.is-active {
+  color: var(--color-on-accent);
 }
 
 // ==========================================================================

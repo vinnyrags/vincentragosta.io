@@ -1,5 +1,4 @@
 ## HIGH PRIORITY
-- active state in light mode search filter pills should have background filled, I know this is a shared css feature, lets make the change to all, I will review and decide if it needs to be a search only css adjustment
 - change X icon to Github in footer
 - instagram feed on about page (last section on the page)
 
