@@ -4,7 +4,7 @@
 h1, h2, h3, h4, h5, h6 {
   &:has(u),
   &:has([style*="text-decoration: underline"]) {
-    line-height: 1.25 !important;
+    line-height: 1.35 !important;
 
     u,
     [style*="text-decoration: underline"] {
