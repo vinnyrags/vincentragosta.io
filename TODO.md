@@ -1,5 +1,4 @@
 ## HIGH PRIORITY
-- change X icon to Github in footer
 - instagram feed on about page (last section on the page)
 
 - create me repo, add leads, interviews, content to it, add to satis and install in project-- determine if this is a good place to house claude stuff, like what claude knows about me, my gut says no and that claude content should live in a higher folder so that it would get pulled into all projects, but that also has me thinking about where to put this me repo as well, perhaps in a similar file architecture outside of this repo, and claude would just know about it through all project context-- let me know what you think about this
