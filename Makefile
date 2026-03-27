@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -40,6 +40,8 @@ help:
 	@echo "  make pull-production    - Pull production DB + uploads to local"
 	@echo "  make pull-patterns      - Export block patterns from production to PHP files"
 	@echo "  make pull-patterns-staging - Export block patterns from staging to PHP files"
+	@echo "  make pull-products      - Sync Stripe products to local WordPress (as drafts)"
+	@echo "  make pull-products-publish - Sync Stripe products to local WordPress (auto-publish)"
 	@echo "  make satis-refresh      - Rebuild Satis package repository on server"
 	@echo "  make satis-add URL=...  - Add a repository to Satis (rebuilds by default)"
 	@echo "  make satis-remove URL=... - Remove a repository from Satis and rebuild"
@@ -286,6 +288,16 @@ pull-patterns-staging:
 	REMOTE_WP="$(STAGING_WP)" \
 	REMOTE_URL="$(STAGING_URL)" \
 	$(CHILD_THEME_DIR)/scripts/export-patterns.sh
+
+# Sync Stripe products to local WordPress (as drafts)
+pull-products:
+	@echo "Syncing Stripe products to WordPress..."
+	ddev wp eval-file scripts/pull-products.php
+
+# Sync Stripe products to local WordPress (auto-publish)
+pull-products-publish:
+	@echo "Syncing Stripe products to WordPress (auto-publish)..."
+	ddev wp eval-file scripts/pull-products.php -- --publish
 
 # Rebuild Satis package repository on server
 satis-refresh:

@@ -25,9 +25,6 @@
             {% if product.price %}
                 <span class="product-card__price">{{ product.price }}</span>
             {% endif %}
-            {% if product.condition %}
-                <span class="product-card__condition">{{ product.condition }}</span>
-            {% endif %}
         </div>
         {% if product.isInStock %}
             <button class="product-card__add-to-cart"

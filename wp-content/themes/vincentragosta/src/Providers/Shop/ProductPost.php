@@ -24,6 +24,14 @@ class ProductPost extends Post
     }
 
     /**
+     * Get the Stripe Product ID.
+     */
+    public function stripeProductId(): string
+    {
+        return (string) $this->getField('stripe_product_id');
+    }
+
+    /**
      * Get the display price (e.g., "$24.99").
      */
     public function price(): string
@@ -32,11 +40,11 @@ class ProductPost extends Post
     }
 
     /**
-     * Get the card condition.
+     * Get the SKU.
      */
-    public function condition(): string
+    public function sku(): string
     {
-        return (string) $this->getField('condition');
+        return (string) $this->getField('sku');
     }
 
     /**

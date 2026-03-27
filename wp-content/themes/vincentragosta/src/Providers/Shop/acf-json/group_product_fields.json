@@ -7,45 +7,45 @@
             "label": "Stripe Price ID",
             "name": "stripe_price_id",
             "type": "text",
-            "instructions": "The Price ID from the Stripe Dashboard (starts with price_).",
+            "instructions": "The Price ID from the Stripe Dashboard (starts with price_). Auto-populated by the pull-products sync command.",
             "required": 1,
             "placeholder": "price_..."
+        },
+        {
+            "key": "field_product_stripe_product_id",
+            "label": "Stripe Product ID",
+            "name": "stripe_product_id",
+            "type": "text",
+            "instructions": "The Product ID from Stripe (starts with prod_). Auto-populated by the pull-products sync command.",
+            "required": 0,
+            "placeholder": "prod_..."
         },
         {
             "key": "field_product_price",
             "label": "Display Price",
             "name": "price",
             "type": "text",
-            "instructions": "Display price shown on the storefront. Stripe is the source of truth for the actual charge.",
+            "instructions": "Display price shown on the storefront. Stripe is the source of truth for the actual charge. Auto-populated by sync.",
             "required": 0,
             "placeholder": "$24.99"
         },
         {
-            "key": "field_product_condition",
-            "label": "Condition",
-            "name": "condition",
-            "type": "select",
-            "instructions": "Card condition grade.",
+            "key": "field_product_sku",
+            "label": "SKU",
+            "name": "sku",
+            "type": "text",
+            "instructions": "Optional stock-keeping unit for internal tracking.",
             "required": 0,
-            "choices": {
-                "near-mint": "Near Mint",
-                "lightly-played": "Lightly Played",
-                "moderately-played": "Moderately Played",
-                "heavily-played": "Heavily Played",
-                "damaged": "Damaged"
-            },
-            "default_value": "near-mint",
-            "return_format": "label",
-            "allow_null": 0
+            "placeholder": "PKM-BB-001"
         },
         {
             "key": "field_product_stock_quantity",
             "label": "Stock Quantity",
             "name": "stock_quantity",
             "type": "number",
-            "instructions": "Number of units available. Set to 0 when sold out.",
+            "instructions": "Number of units available. Decremented automatically on successful payment.",
             "required": 0,
-            "default_value": 1,
+            "default_value": 10,
             "min": 0
         },
         {
@@ -53,7 +53,7 @@
             "label": "Gallery Images",
             "name": "gallery_images",
             "type": "gallery",
-            "instructions": "Additional card images (front, back, close-up).",
+            "instructions": "Additional product images.",
             "required": 0,
             "return_format": "array",
             "library": "all",
