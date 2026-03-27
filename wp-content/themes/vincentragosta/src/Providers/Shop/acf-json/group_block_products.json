@@ -1,0 +1,58 @@
+{
+    "key": "group_block_products",
+    "title": "Products Block",
+    "fields": [
+        {
+            "key": "field_block_products_display_mode",
+            "label": "Display Mode",
+            "name": "display_mode",
+            "type": "select",
+            "instructions": "Choose how products are selected.",
+            "required": 1,
+            "choices": {
+                "latest": "Latest Products",
+                "curated": "Curated Selection",
+                "all": "All Products"
+            },
+            "default_value": "latest",
+            "return_format": "value",
+            "allow_null": 0
+        },
+        {
+            "key": "field_block_products_selected_products",
+            "label": "Selected Products",
+            "name": "selected_products",
+            "type": "relationship",
+            "instructions": "Search and select products. Drag to reorder.",
+            "required": 0,
+            "post_type": ["product"],
+            "filters": ["search"],
+            "max": 12,
+            "return_format": "id",
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_block_products_display_mode",
+                        "operator": "==",
+                        "value": "curated"
+                    }
+                ]
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "vincentragosta/products"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}

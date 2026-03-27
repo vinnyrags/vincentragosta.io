@@ -1,0 +1,80 @@
+{
+    "key": "group_product_fields",
+    "title": "Product Fields",
+    "fields": [
+        {
+            "key": "field_product_stripe_price_id",
+            "label": "Stripe Price ID",
+            "name": "stripe_price_id",
+            "type": "text",
+            "instructions": "The Price ID from the Stripe Dashboard (starts with price_).",
+            "required": 1,
+            "placeholder": "price_..."
+        },
+        {
+            "key": "field_product_price",
+            "label": "Display Price",
+            "name": "price",
+            "type": "text",
+            "instructions": "Display price shown on the storefront. Stripe is the source of truth for the actual charge.",
+            "required": 0,
+            "placeholder": "$24.99"
+        },
+        {
+            "key": "field_product_condition",
+            "label": "Condition",
+            "name": "condition",
+            "type": "select",
+            "instructions": "Card condition grade.",
+            "required": 0,
+            "choices": {
+                "near-mint": "Near Mint",
+                "lightly-played": "Lightly Played",
+                "moderately-played": "Moderately Played",
+                "heavily-played": "Heavily Played",
+                "damaged": "Damaged"
+            },
+            "default_value": "near-mint",
+            "return_format": "label",
+            "allow_null": 0
+        },
+        {
+            "key": "field_product_stock_quantity",
+            "label": "Stock Quantity",
+            "name": "stock_quantity",
+            "type": "number",
+            "instructions": "Number of units available. Set to 0 when sold out.",
+            "required": 0,
+            "default_value": 1,
+            "min": 0
+        },
+        {
+            "key": "field_product_gallery_images",
+            "label": "Gallery Images",
+            "name": "gallery_images",
+            "type": "gallery",
+            "instructions": "Additional card images (front, back, close-up).",
+            "required": 0,
+            "return_format": "array",
+            "library": "all",
+            "min": 0,
+            "max": 10,
+            "preview_size": "medium"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "product"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0
+}
