@@ -1,0 +1,135 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ChildTheme\Providers\Shop\Endpoints;
+
+use ChildTheme\Providers\Shop\ProductRepository;
+use ChildTheme\Providers\Shop\Services\StripeService;
+use Mythus\Support\Rest\Endpoint;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Response;
+
+/**
+ * Creates a Stripe Checkout Session from cart contents.
+ *
+ * Receives an array of cart items (priceId + quantity), validates them
+ * against real WordPress products, and returns a Stripe Checkout URL.
+ */
+class CreateCheckoutEndpoint extends Endpoint
+{
+    public function __construct(
+        private readonly StripeService $stripe,
+        private readonly ProductRepository $repository,
+    ) {}
+
+    public function getRoute(): string
+    {
+        return '/checkout';
+    }
+
+    public function getMethods(): string
+    {
+        return 'POST';
+    }
+
+    public function getPermission(WP_REST_Request $request): bool
+    {
+        return true;
+    }
+
+    public function getArgs(): array
+    {
+        return [
+            'items' => [
+                'required' => true,
+                'type'     => 'array',
+            ],
+        ];
+    }
+
+    public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error
+    {
+        $items = $request->get_param('items');
+
+        if (!is_array($items) || empty($items)) {
+            return new WP_Error(
+                'invalid_cart',
+                'Cart is empty.',
+                ['status' => 400]
+            );
+        }
+
+        $lineItems = [];
+        $productIds = [];
+
+        foreach ($items as $item) {
+            $priceId = sanitize_text_field($item['priceId'] ?? '');
+            $quantity = (int) ($item['quantity'] ?? 0);
+
+            if (!$priceId || $quantity < 1) {
+                return new WP_Error(
+                    'invalid_item',
+                    'Each item must have a priceId and quantity.',
+                    ['status' => 400]
+                );
+            }
+
+            $product = $this->repository->findByPriceId($priceId);
+
+            if (!$product) {
+                return new WP_Error(
+                    'product_not_found',
+                    sprintf('No product found for price ID: %s', $priceId),
+                    ['status' => 404]
+                );
+            }
+
+            if (!$product->isInStock()) {
+                return new WP_Error(
+                    'out_of_stock',
+                    sprintf('%s is sold out.', $product->title()),
+                    ['status' => 409]
+                );
+            }
+
+            if ($quantity > $product->stockQuantity()) {
+                return new WP_Error(
+                    'insufficient_stock',
+                    sprintf('Only %d of %s available.', $product->stockQuantity(), $product->title()),
+                    ['status' => 409]
+                );
+            }
+
+            $lineItems[] = [
+                'price'    => $priceId,
+                'quantity' => $quantity,
+            ];
+
+            $productIds[] = $product->id . ':' . $quantity;
+        }
+
+        $successUrl = home_url('/shop/thank-you/?session_id={CHECKOUT_SESSION_ID}');
+        $cancelUrl = home_url('/shop/');
+
+        try {
+            $session = $this->stripe->createCheckoutSession(
+                $lineItems,
+                $successUrl,
+                $cancelUrl,
+                ['product_ids' => implode(',', $productIds)],
+            );
+
+            return new WP_REST_Response([
+                'url' => $session->url,
+            ]);
+        } catch (\Throwable $e) {
+            return new WP_Error(
+                'checkout_failed',
+                'Failed to create checkout session.',
+                ['status' => 500]
+            );
+        }
+    }
+}

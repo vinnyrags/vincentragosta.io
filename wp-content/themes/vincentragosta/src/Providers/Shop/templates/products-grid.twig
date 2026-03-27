@@ -1,0 +1,8 @@
+<div class="products-grid">
+    {% for product in products %}
+        {% include 'product-card.twig' with { product: product } only %}
+    {% else %}
+        <p>No products to display.</p>
+    {% endfor %}
+    <p class="products-grid__empty" aria-live="polite">No products match your current filters.</p>
+</div>

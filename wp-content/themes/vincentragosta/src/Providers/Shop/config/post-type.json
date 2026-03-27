@@ -1,0 +1,23 @@
+{
+  "post_type": "product",
+  "args": {
+    "labels": {
+      "name": "Products",
+      "singular_name": "Product",
+      "add_new_item": "Add New Product",
+      "edit_item": "Edit Product",
+      "new_item": "New Product",
+      "view_item": "View Product",
+      "search_items": "Search Products",
+      "not_found": "No products found",
+      "not_found_in_trash": "No products found in Trash"
+    },
+    "public": true,
+    "has_archive": false,
+    "rewrite": { "slug": "shop/product" },
+    "supports": ["title", "editor", "thumbnail"],
+    "taxonomies": ["category"],
+    "menu_icon": "dashicons-cart",
+    "show_in_rest": true
+  }
+}

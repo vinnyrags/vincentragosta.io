@@ -1,0 +1,44 @@
+{% if show_toolbar is defined and show_toolbar %}
+    <div class="shop-toolbar">
+        <div class="shop-search">
+            <input
+                type="search"
+                class="shop-search__input"
+                placeholder="Search products…"
+                aria-label="Search products"
+            />
+        </div>
+        <div class="shop-toolbar__controls">
+            {% if categories is defined and categories|length > 0 %}
+                <div class="shop-filter">
+                    {% set category_options = [{ value: 'all', label: 'All Types' }] %}
+                    {% for slug, name in categories %}
+                        {% set category_options = category_options|merge([{ value: slug, label: name }]) %}
+                    {% endfor %}
+                    {% include 'dropdown.twig' with {
+                        name: 'category',
+                        options: category_options,
+                        selected: 'all'
+                    } only %}
+                </div>
+            {% endif %}
+            <div class="shop-sort">
+                {% include 'dropdown.twig' with {
+                    name: 'sort',
+                    options: [
+                        { value: 'date-desc', label: 'Newest' },
+                        { value: 'date-asc', label: 'Oldest' },
+                        { value: 'title-asc', label: 'A → Z' },
+                        { value: 'title-desc', label: 'Z → A' },
+                    ],
+                    selected: 'date-desc'
+                } only %}
+            </div>
+            <button class="shop-cart-toggle" aria-label="View cart" data-cart-toggle>
+                <span class="shop-cart-toggle__icon" aria-hidden="true">🛒</span>
+                <span class="shop-cart-toggle__count" data-cart-count>0</span>
+            </button>
+        </div>
+    </div>
+{% endif %}
+{% include 'products-grid.twig' with { products: products } only %}

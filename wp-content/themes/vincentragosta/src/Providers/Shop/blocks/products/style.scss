@@ -1,0 +1,271 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Products Grid
+// ==========================================================================
+
+.products-grid {
+  display: grid;
+  gap: var(--wp--preset--spacing--40);
+  grid-template-columns: repeat(2, 1fr);
+
+  @include media(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include media(lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.products-grid__empty {
+  display: none;
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+// Show empty message when all cards are hidden
+.products-grid:not(:has(.product-card:not([aria-hidden="true"]))) .products-grid__empty {
+  display: block;
+}
+
+// ==========================================================================
+// Product Card
+// ==========================================================================
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover:not(.is-sold) {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.is-sold {
+    opacity: 0.6;
+  }
+}
+
+.product-card__image {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: var(--wp--preset--color--grey-1);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .product-card:hover:not(.is-sold) & img {
+    transform: scale(1.05);
+  }
+}
+
+.product-card__no-image {
+  width: 100%;
+  height: 100%;
+  background: var(--wp--preset--color--grey-2);
+}
+
+.product-card__sold-badge {
+  position: absolute;
+  top: var(--wp--preset--spacing--20);
+  right: var(--wp--preset--spacing--20);
+  padding: 0.2em 0.8em;
+  background: var(--wp--preset--color--contrast);
+  color: var(--wp--preset--color--base);
+  font-size: var(--wp--preset--font-size--10);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 2px;
+}
+
+.product-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--10);
+  padding: var(--wp--preset--spacing--30);
+  flex: 1;
+}
+
+.product-card__title {
+  font-size: var(--wp--preset--font-size--20);
+  margin: 0;
+}
+
+.product-card__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--20);
+  font-size: var(--wp--preset--font-size--10);
+}
+
+.product-card__price {
+  font-weight: 700;
+  color: var(--wp--preset--color--accent-1);
+}
+
+.product-card__condition {
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.product-card__add-to-cart {
+  margin-top: auto;
+  padding: 0.5em 1em;
+  background: var(--wp--preset--color--accent-1);
+  color: var(--color-on-accent);
+  border: none;
+  border-radius: 4px;
+  font-size: var(--wp--preset--font-size--10);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.product-card__sold {
+  margin-top: auto;
+  font-size: var(--wp--preset--font-size--10);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+// ==========================================================================
+// Toolbar
+// ==========================================================================
+
+.shop-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--wp--preset--spacing--30);
+  margin-block-end: var(--wp--preset--spacing--50);
+}
+
+.shop-search {
+  flex: 1;
+  min-width: 200px;
+}
+
+.shop-search__input {
+  width: 100%;
+  padding: 0.5em 1em;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--wp--preset--font-size--20);
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  &:focus {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+}
+
+.shop-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--20);
+}
+
+.shop-cart-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--wp--preset--font-size--20);
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--wp--preset--color--accent-1);
+  }
+}
+
+.shop-cart-toggle__count {
+  font-weight: 700;
+  font-size: var(--wp--preset--font-size--10);
+}
+
+// ==========================================================================
+// Scroll Reveal
+// ==========================================================================
+
+.has-scroll-reveal .product-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &.is-sold.is-visible {
+    opacity: 0.6;
+  }
+
+  &[aria-hidden="true"] {
+    display: none;
+  }
+}
+
+// ==========================================================================
+// Light Mode
+// ==========================================================================
+
+.light-mode .product-card {
+  background: var(--color-bg);
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .product-card,
+  .product-card__image img {
+    transition: none;
+  }
+
+  .has-scroll-reveal .product-card {
+    opacity: 1;
+    transform: none;
+  }
+
+  .has-scroll-reveal .product-card.is-sold {
+    opacity: 0.6;
+  }
+}

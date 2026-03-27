@@ -1,0 +1,119 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ChildTheme\Providers\Shop;
+
+use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
+use IX\Providers\Provider;
+
+/**
+ * Shop Provider.
+ *
+ * Registers the product post type, products block, cart assets,
+ * and Stripe checkout/webhook REST endpoints.
+ */
+class ShopProvider extends Provider
+{
+    /**
+     * Always-active hooks.
+     */
+    protected array $hooks = [
+        StockStatusBadge::class,
+    ];
+
+    /**
+     * Blocks to register.
+     */
+    protected array $blocks = [
+        'products',
+    ];
+
+    /**
+     * REST API endpoints.
+     */
+    protected array $routes = [
+        CreateCheckoutEndpoint::class,
+        StripeWebhookEndpoint::class,
+    ];
+
+    /**
+     * REST namespace.
+     */
+    protected string $routeNamespace = 'shop';
+
+    /**
+     * Register the shop provider.
+     */
+    public function register(): void
+    {
+        add_action('init', [$this, 'registerPostType']);
+        add_action('wp_enqueue_scripts', [$this, 'enqueueCartAssets']);
+
+        parent::register();
+
+        $this->acfManager->registerSavePath();
+    }
+
+    /**
+     * Register the product post type.
+     */
+    public function registerPostType(): void
+    {
+        $this->registerPostTypeFromConfig('post-type.json');
+    }
+
+    /**
+     * Enqueue cart assets on shop pages only.
+     */
+    public function enqueueCartAssets(): void
+    {
+        if (!$this->isShopPage() && !is_singular(ProductPost::POST_TYPE)) {
+            return;
+        }
+
+        $path = get_stylesheet_directory() . '/dist/js/shop/cart.js';
+
+        if (!file_exists($path)) {
+            return;
+        }
+
+        wp_enqueue_script(
+            'vincentragosta-shop-cart',
+            get_stylesheet_directory_uri() . '/dist/js/shop/cart.js',
+            [],
+            filemtime($path),
+            true
+        );
+
+        wp_localize_script('vincentragosta-shop-cart', 'shopConfig', [
+            'stripeKey' => defined('STRIPE_PUBLISHABLE_KEY') ? STRIPE_PUBLISHABLE_KEY : '',
+            'restUrl'   => rest_url('shop/v1/'),
+            'nonce'     => wp_create_nonce('wp_rest'),
+        ]);
+    }
+
+    /**
+     * Enqueue block assets for frontend and editor.
+     */
+    public function enqueueBlockAssets(): void
+    {
+        $this->enqueueStyle('vincentragosta-shop-block', 'shop.css');
+    }
+
+    /**
+     * Whether the current page is the configured shop page.
+     */
+    private function isShopPage(): bool
+    {
+        if (!function_exists('get_field')) {
+            return false;
+        }
+
+        $shopPageId = get_field('shop_page', 'option');
+
+        return $shopPageId && is_page((int) $shopPageId);
+    }
+}

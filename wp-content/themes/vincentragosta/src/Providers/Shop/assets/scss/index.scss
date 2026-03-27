@@ -1,0 +1,203 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Cart Drawer
+// ==========================================================================
+
+.shop-cart-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+
+  &.is-open {
+    pointer-events: auto;
+  }
+}
+
+.shop-cart-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  .shop-cart-drawer.is-open & {
+    opacity: 1;
+  }
+}
+
+.shop-cart-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  max-width: 90vw;
+  background: var(--wp--preset--color--grey-1);
+  border-left: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  .shop-cart-drawer.is-open & {
+    transform: translateX(0);
+  }
+}
+
+.shop-cart-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--wp--preset--spacing--30);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.shop-cart-drawer__title {
+  font-size: var(--wp--preset--font-size--30);
+  margin: 0;
+}
+
+.shop-cart-drawer__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 0.25em;
+  line-height: 1;
+}
+
+.shop-cart-drawer__items {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--wp--preset--spacing--30);
+}
+
+.shop-cart-drawer__empty {
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--wp--preset--spacing--50);
+}
+
+.shop-cart-drawer__footer {
+  padding: var(--wp--preset--spacing--30);
+  border-top: 1px solid var(--color-border);
+}
+
+.shop-cart-drawer__checkout {
+  width: 100%;
+  padding: 0.75em;
+  background: var(--wp--preset--color--accent-1);
+  color: var(--color-on-accent);
+  border: none;
+  border-radius: 4px;
+  font-size: var(--wp--preset--font-size--20);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover:not(:disabled) {
+    opacity: 0.85;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+// ==========================================================================
+// Cart Item
+// ==========================================================================
+
+.shop-cart-item {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--20);
+  padding: var(--wp--preset--spacing--20) 0;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.shop-cart-item__image {
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.shop-cart-item__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+
+.shop-cart-item__title {
+  font-size: var(--wp--preset--font-size--20);
+  font-weight: 600;
+}
+
+.shop-cart-item__price {
+  font-size: var(--wp--preset--font-size--10);
+  color: var(--wp--preset--color--accent-1);
+  font-weight: 700;
+}
+
+.shop-cart-item__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--10);
+  flex-shrink: 0;
+}
+
+.shop-cart-item__quantity {
+  width: 50px;
+  padding: 0.2em;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--wp--preset--font-size--10);
+}
+
+.shop-cart-item__remove {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.2em;
+  line-height: 1;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}
+
+// ==========================================================================
+// Light Mode
+// ==========================================================================
+
+.light-mode .shop-cart-drawer__panel {
+  background: var(--color-bg);
+}
+
+// ==========================================================================
+// Reduced Motion
+// ==========================================================================
+
+@include reduced-motion {
+  .shop-cart-drawer__backdrop,
+  .shop-cart-drawer__panel {
+    transition: none;
+  }
+}

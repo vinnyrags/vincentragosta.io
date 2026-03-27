@@ -1,0 +1,46 @@
+<div class="product-card{{ not product.isInStock ? ' is-sold' : '' }}"
+     data-title="{{ product.title | lower }}"
+     data-date="{{ product.date('Y-m-d') }}"
+     data-category="{{ product.cardTypeSlugs }}"
+     data-price-id="{{ product.stripePriceId }}"
+     data-product-id="{{ product.ID }}"
+     data-stock="{{ product.stockQuantity }}">
+    <div class="product-card__image">
+        {% if product.thumbnail %}
+            <img src="{{ product.thumbnail.src | resize(400) }}"
+                 alt="{{ product.title }}"
+                 width="{{ product.thumbnail.width }}"
+                 height="{{ product.thumbnail.height }}"
+                 loading="lazy" />
+        {% else %}
+            <div class="product-card__no-image"></div>
+        {% endif %}
+        {% if not product.isInStock %}
+            <span class="product-card__sold-badge">Sold</span>
+        {% endif %}
+    </div>
+    <div class="product-card__content">
+        <h3 class="product-card__title">{{ product.title }}</h3>
+        <div class="product-card__meta">
+            {% if product.price %}
+                <span class="product-card__price">{{ product.price }}</span>
+            {% endif %}
+            {% if product.condition %}
+                <span class="product-card__condition">{{ product.condition }}</span>
+            {% endif %}
+        </div>
+        {% if product.isInStock %}
+            <button class="product-card__add-to-cart"
+                    data-add-to-cart
+                    data-price-id="{{ product.stripePriceId }}"
+                    data-product-id="{{ product.ID }}"
+                    data-title="{{ product.title }}"
+                    data-price="{{ product.price }}"
+                    data-image="{{ product.thumbnail ? product.thumbnail.src | resize(100) : '' }}">
+                Add to Cart
+            </button>
+        {% else %}
+            <span class="product-card__sold">Sold Out</span>
+        {% endif %}
+    </div>
+</div>
