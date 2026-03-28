@@ -61,6 +61,8 @@ while ($hasMore) {
         $description = $stripeProduct->description ?? '';
         $images = $stripeProduct->images ?? [];
         $defaultPrice = $stripeProduct->default_price;
+        $metadata = $stripeProduct->metadata ? (array) $stripeProduct->metadata : [];
+        $category = $metadata['category'] ?? '';
 
         // Get price info
         $priceId = '';
@@ -106,7 +108,12 @@ while ($hasMore) {
                 maybeUpdateFeaturedImage($postId, $images[0], $name);
             }
 
-            echo "  Updated: {$name} (ID {$postId})\n";
+            // Sync category from Stripe metadata
+            if ($category) {
+                maybeSyncCategory($postId, $category);
+            }
+
+            echo "  Updated: {$name} (ID {$postId})" . ($category ? " [{$category}]" : '') . "\n";
             $updated++;
         } else {
             // Create new product as draft (or publish if flag set)
@@ -132,8 +139,13 @@ while ($hasMore) {
                 maybeUpdateFeaturedImage($postId, $images[0], $name);
             }
 
+            // Sync category from Stripe metadata
+            if ($category) {
+                maybeSyncCategory($postId, $category);
+            }
+
             $status = $publish ? 'published' : 'draft';
-            echo "  Created ({$status}): {$name} (ID {$postId})\n";
+            echo "  Created ({$status}): {$name} (ID {$postId})" . ($category ? " [{$category}]" : '') . "\n";
             $created++;
         }
 
@@ -176,4 +188,28 @@ function maybeUpdateFeaturedImage(int $postId, string $imageUrl, string $title):
 
     set_post_thumbnail($postId, $attachmentId);
     update_post_meta($attachmentId, '_stripe_source_url', $imageUrl);
+}
+
+/**
+ * Assign a WordPress category to a product based on Stripe metadata.
+ * Creates the category if it doesn't exist.
+ */
+function maybeSyncCategory(int $postId, string $categorySlug): void
+{
+    $slug = sanitize_title($categorySlug);
+    $term = get_term_by('slug', $slug, 'category');
+
+    if (!$term) {
+        // Create the category with a capitalized name
+        $result = wp_insert_term(ucfirst($categorySlug), 'category', ['slug' => $slug]);
+        if (is_wp_error($result)) {
+            echo "    Warning: Could not create category '{$categorySlug}': {$result->get_error_message()}\n";
+            return;
+        }
+        $termId = $result['term_id'];
+    } else {
+        $termId = $term->term_id;
+    }
+
+    wp_set_object_terms($postId, [$termId], 'category');
 }
