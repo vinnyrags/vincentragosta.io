@@ -1,0 +1,52 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Shared Toolbar Placeholder
+// ==========================================================================
+// Base styles for block toolbars (search input + filter/sort controls).
+// Extend with `@extend %toolbar;` etc. and override accents as needed.
+
+%toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--30);
+  width: 100%;
+
+  @include media(md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wp--preset--spacing--40);
+  }
+}
+
+%toolbar-search {
+  width: 100%;
+
+  @include media(md) {
+    flex: 1;
+    max-width: 320px;
+  }
+}
+
+%toolbar-search-input {
+  width: 100%;
+  padding: var(--wp--preset--spacing--20);
+  font-size: inherit;
+  font-family: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-block-end: 1px solid var(--wp--preset--color--accent-1);
+  outline: none;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+%toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--wp--preset--spacing--30);
+}

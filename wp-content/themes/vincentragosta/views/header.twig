@@ -22,7 +22,7 @@
             <a href="{{ site.url }}" rel="home">{{ site.name }}</a>
         </p>
 
-        <!-- Right: Search + Hamburger -->
+        <!-- Right: Search + Cart (shop only) + Hamburger -->
         <div class="header__actions">
             <form
                 class="header__search"
@@ -52,6 +52,8 @@
                     </span>
                 </button>
             </form>
+
+            {{ function('do_action', 'vincentragosta_header_actions') }}
 
             <button
                 class="header__menu-toggle"

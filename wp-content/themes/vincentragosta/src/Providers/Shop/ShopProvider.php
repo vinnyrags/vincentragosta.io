@@ -51,6 +51,7 @@ class ShopProvider extends Provider
     {
         add_action('init', [$this, 'registerPostType']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueCartAssets']);
+        add_action('vincentragosta_header_actions', [$this, 'renderHeaderCartButton']);
 
         parent::register();
 
@@ -104,6 +105,21 @@ class ShopProvider extends Provider
             'ageGateMessage'      => $ageGateMessage,
             'matureCategorySlug'  => $matureCategorySlug,
         ]);
+    }
+
+    /**
+     * Render the cart button in the header on shop pages.
+     */
+    public function renderHeaderCartButton(): void
+    {
+        if (!$this->isShopContext()) {
+            return;
+        }
+
+        echo '<button class="header__cart-toggle" type="button" aria-label="Open cart" data-cart-toggle>'
+            . '<span class="header__cart-icon" aria-hidden="true">&#x1F6D2;</span>'
+            . '<span class="header__cart-count" data-cart-count>0</span>'
+            . '</button>';
     }
 
     /**

@@ -1,4 +1,5 @@
 @use 'common/breakpoints' as *;
+@use 'common/toolbar' as *;
 
 // ==========================================================================
 // Products Grid
@@ -153,64 +154,20 @@
 // ==========================================================================
 
 .shop-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--wp--preset--spacing--30);
+  @extend %toolbar;
   margin-block-end: var(--wp--preset--spacing--50);
 }
 
 .shop-search {
-  flex: 1;
-  min-width: 200px;
+  @extend %toolbar-search;
 }
 
 .shop-search__input {
-  width: 100%;
-  padding: 0.5em 1em;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--color-text);
-  font-size: var(--wp--preset--font-size--20);
-
-  &::placeholder {
-    color: var(--color-text-muted);
-  }
-
-  &:focus {
-    outline: 2px solid var(--wp--preset--color--accent-1);
-    outline-offset: 2px;
-  }
+  @extend %toolbar-search-input;
 }
 
 .shop-toolbar__controls {
-  display: flex;
-  align-items: center;
-  gap: var(--wp--preset--spacing--20);
-}
-
-.shop-cart-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.3em;
-  padding: 0.4em 0.8em;
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  background: transparent;
-  color: var(--color-text);
-  cursor: pointer;
-  font-size: var(--wp--preset--font-size--20);
-  transition: border-color 0.2s ease;
-
-  &:hover {
-    border-color: var(--wp--preset--color--accent-1);
-  }
-}
-
-.shop-cart-toggle__count {
-  font-weight: 700;
-  font-size: var(--wp--preset--font-size--10);
+  @extend %toolbar-controls;
 }
 
 // ==========================================================================
