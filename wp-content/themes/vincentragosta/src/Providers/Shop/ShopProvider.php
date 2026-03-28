@@ -108,7 +108,7 @@ class ShopProvider extends Provider
      */
     private function isShopContext(): bool
     {
-        if (is_page(['cart', 'thank-you'])) {
+        if (is_page('thank-you')) {
             return true;
         }
 
