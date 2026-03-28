@@ -25,6 +25,9 @@
             {% if product.price %}
                 <span class="product-card__price">{{ product.price }}</span>
             {% endif %}
+            {% if product.isInStock %}
+                <span class="product-card__stock">{{ product.stockQuantity }} in stock</span>
+            {% endif %}
         </div>
         {% if product.isInStock %}
             <button class="product-card__add-to-cart"

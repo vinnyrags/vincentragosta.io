@@ -63,6 +63,7 @@ while ($hasMore) {
         $defaultPrice = $stripeProduct->default_price;
         $metadata = $stripeProduct->metadata ? $stripeProduct->metadata->toArray() : [];
         $category = $metadata['category'] ?? '';
+        $stock = $metadata['stock'] ?? '';
 
         // Get price info
         $priceId = '';
@@ -113,7 +114,13 @@ while ($hasMore) {
                 maybeSyncCategory($postId, $category);
             }
 
-            echo "  Updated: {$name} (ID {$postId})" . ($category ? " [{$category}]" : '') . "\n";
+            // Sync stock from Stripe metadata
+            if ($stock !== '') {
+                update_field('stock_quantity', (int) $stock, $postId);
+            }
+
+            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '']);
+            echo "  Updated: {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";
             $updated++;
         } else {
             // Create new product as draft (or publish if flag set)
@@ -132,7 +139,7 @@ while ($hasMore) {
             update_field('stripe_product_id', $productId, $postId);
             update_field('stripe_price_id', $priceId, $postId);
             update_field('price', $displayPrice, $postId);
-            update_field('stock_quantity', 10, $postId);
+            update_field('stock_quantity', $stock !== '' ? (int) $stock : 10, $postId);
 
             // Download and set featured image
             if (!empty($images)) {
@@ -145,7 +152,8 @@ while ($hasMore) {
             }
 
             $status = $publish ? 'published' : 'draft';
-            echo "  Created ({$status}): {$name} (ID {$postId})" . ($category ? " [{$category}]" : '') . "\n";
+            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '']);
+            echo "  Created ({$status}): {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";
             $created++;
         }
 
