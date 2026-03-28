@@ -6,6 +6,129 @@
  */
 
 const STORAGE_KEY = 'vincentragosta_cart';
+const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
+
+// ==========================================================================
+// AgeGate — modal that fires before mature content is visible
+// ==========================================================================
+
+const AgeGate = {
+    isVerified() {
+        return localStorage.getItem(AGE_VERIFIED_KEY) === 'true';
+    },
+
+    verify() {
+        localStorage.setItem(AGE_VERIFIED_KEY, 'true');
+    },
+
+    /**
+     * Check if the age gate should fire. Returns true if mature content
+     * is present and the user hasn't verified yet.
+     */
+    shouldBlock() {
+        const config = window.shopConfig || {};
+        if (!config.ageGateEnabled) return false;
+        if (this.isVerified()) return false;
+
+        // Check if we're filtering to mature category via URL
+        const urlCategory = new URLSearchParams(window.location.search).get('category');
+        if (urlCategory === (config.matureCategorySlug || 'mature')) return true;
+
+        // Check if any mature products exist in the grid
+        const matureSlug = config.matureCategorySlug || 'mature';
+        const matureCards = document.querySelectorAll(
+            `.product-card[data-category~="${matureSlug}"]`
+        );
+        return matureCards.length > 0;
+    },
+
+    /**
+     * Show the age gate modal. Returns a promise that resolves
+     * to true (verified) or false (declined).
+     */
+    show() {
+        return new Promise((resolve) => {
+            const config = window.shopConfig || {};
+            const message = config.ageGateMessage || 'You must be 18 or older to view this content.';
+
+            const overlay = document.createElement('div');
+            overlay.className = 'shop-age-gate';
+            overlay.setAttribute('role', 'dialog');
+            overlay.setAttribute('aria-modal', 'true');
+            overlay.setAttribute('aria-label', 'Age verification');
+            overlay.innerHTML = `
+                <div class="shop-age-gate__panel">
+                    <h2 class="shop-age-gate__title">Age Verification Required</h2>
+                    <p class="shop-age-gate__message">${message}</p>
+                    <div class="shop-age-gate__actions">
+                        <button class="shop-age-gate__confirm" data-age-confirm>I am 18 or older</button>
+                        <button class="shop-age-gate__decline" data-age-decline>Take me back</button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(overlay);
+
+            // Focus the confirm button
+            const confirmBtn = overlay.querySelector('[data-age-confirm]');
+            confirmBtn.focus();
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target.closest('[data-age-confirm]')) {
+                    AgeGate.verify();
+                    overlay.remove();
+                    resolve(true);
+                }
+                if (e.target.closest('[data-age-decline]')) {
+                    overlay.remove();
+                    // Redirect to shop without the mature filter
+                    window.location.href = '/shop/';
+                    resolve(false);
+                }
+            });
+
+            // Trap focus inside the modal
+            overlay.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    const focusable = overlay.querySelectorAll('button');
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+
+                    if (e.shiftKey && document.activeElement === first) {
+                        e.preventDefault();
+                        last.focus();
+                    } else if (!e.shiftKey && document.activeElement === last) {
+                        e.preventDefault();
+                        first.focus();
+                    }
+                }
+            });
+        });
+    },
+
+    /**
+     * Hide mature products in the DOM until verified.
+     */
+    hideMatureProducts() {
+        const matureSlug = (window.shopConfig || {}).matureCategorySlug || 'mature';
+        document.querySelectorAll(`.product-card[data-category~="${matureSlug}"]`).forEach((card) => {
+            card.setAttribute('data-mature-hidden', '');
+            card.setAttribute('aria-hidden', 'true');
+            card.style.display = 'none';
+        });
+    },
+
+    /**
+     * Reveal mature products after verification.
+     */
+    showMatureProducts() {
+        document.querySelectorAll('[data-mature-hidden]').forEach((card) => {
+            card.removeAttribute('data-mature-hidden');
+            card.removeAttribute('aria-hidden');
+            card.style.display = '';
+        });
+    },
+};
 
 // ==========================================================================
 // CartStore — localStorage CRUD
@@ -270,7 +393,16 @@ const ThankYouPage = {
 // Init
 // ==========================================================================
 
-function initCart() {
+async function initCart() {
+    // Age gate — hide mature products and prompt if needed
+    if (AgeGate.shouldBlock()) {
+        AgeGate.hideMatureProducts();
+        const verified = await AgeGate.show();
+        if (verified) {
+            AgeGate.showMatureProducts();
+        }
+    }
+
     // Listen for add-to-cart events from the products block
     document.addEventListener('shop:add-to-cart', (e) => {
         CartStore.addItem(e.detail);

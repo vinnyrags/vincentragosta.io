@@ -88,10 +88,21 @@ class ShopProvider extends Provider
             true
         );
 
+        $ageGateEnabled = function_exists('get_field') && get_field('age_verification_enabled', 'option');
+        $ageGateMessage = function_exists('get_field')
+            ? (get_field('age_verification_message', 'option') ?: 'Some products in this category contain mature content. You must be 18 or older to view them.')
+            : '';
+        $matureCategorySlug = function_exists('get_field')
+            ? (get_field('mature_category_slug', 'option') ?: 'mature')
+            : 'mature';
+
         wp_localize_script('vincentragosta-shop-cart', 'shopConfig', [
-            'stripeKey' => defined('STRIPE_PUBLISHABLE_KEY') ? STRIPE_PUBLISHABLE_KEY : '',
-            'restUrl'   => rest_url('shop/v1/'),
-            'nonce'     => wp_create_nonce('wp_rest'),
+            'stripeKey'           => defined('STRIPE_PUBLISHABLE_KEY') ? STRIPE_PUBLISHABLE_KEY : '',
+            'restUrl'             => rest_url('shop/v1/'),
+            'nonce'               => wp_create_nonce('wp_rest'),
+            'ageGateEnabled'      => (bool) $ageGateEnabled,
+            'ageGateMessage'      => $ageGateMessage,
+            'matureCategorySlug'  => $matureCategorySlug,
         ]);
     }
 

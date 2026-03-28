@@ -184,6 +184,91 @@
 }
 
 // ==========================================================================
+// Age Gate
+// ==========================================================================
+
+.shop-age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.shop-age-gate__panel {
+  max-width: 420px;
+  width: 90vw;
+  padding: var(--wp--preset--spacing--50);
+  background: var(--wp--preset--color--grey-1);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.shop-age-gate__title {
+  font-size: var(--wp--preset--font-size--40);
+  margin: 0 0 var(--wp--preset--spacing--20);
+}
+
+.shop-age-gate__message {
+  color: var(--color-text-muted);
+  margin-block-end: var(--wp--preset--spacing--40);
+  line-height: 1.5;
+}
+
+.shop-age-gate__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--20);
+}
+
+.shop-age-gate__confirm {
+  padding: 0.75em;
+  background: var(--wp--preset--color--accent-1);
+  color: var(--color-on-accent);
+  border: none;
+  border-radius: 4px;
+  font-size: var(--wp--preset--font-size--20);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+}
+
+.shop-age-gate__decline {
+  padding: 0.75em;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: var(--wp--preset--font-size--20);
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-text);
+    color: var(--color-text);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+}
+
+// ==========================================================================
 // Thank You Page
 // ==========================================================================
 
