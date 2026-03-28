@@ -61,7 +61,7 @@ while ($hasMore) {
         $description = $stripeProduct->description ?? '';
         $images = $stripeProduct->images ?? [];
         $defaultPrice = $stripeProduct->default_price;
-        $metadata = $stripeProduct->metadata ? (array) $stripeProduct->metadata : [];
+        $metadata = $stripeProduct->metadata ? $stripeProduct->metadata->toArray() : [];
         $category = $metadata['category'] ?? '';
 
         // Get price info

@@ -11,22 +11,30 @@
   justify-content: center;
   width: var(--header-btn-size);
   height: var(--header-btn-size);
-  color: var(--header-text);
+  color: var(--wp--preset--color--base);
   background: transparent;
   border: 1px solid var(--wp--preset--color--grey-4);
   border-radius: 50%;
   cursor: pointer;
   transition: border-color 0.3s ease;
-  font-size: 1rem;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
 
   &:hover {
-    border-color: var(--header-text);
+    border-color: var(--wp--preset--color--base);
   }
 
   &:focus-visible {
     outline: 2px solid var(--wp--preset--color--accent-1);
     outline-offset: 2px;
   }
+}
+
+.header__cart-icon {
+  display: inline-flex;
 }
 
 .header__cart-count {
@@ -346,6 +354,14 @@
 // ==========================================================================
 // Light Mode
 // ==========================================================================
+
+.light-mode .header__cart-toggle {
+  color: var(--wp--preset--color--contrast);
+
+  &:hover {
+    border-color: var(--wp--preset--color--contrast);
+  }
+}
 
 .light-mode .shop-cart-drawer__panel {
   background: var(--color-bg);

@@ -116,8 +116,10 @@ class ShopProvider extends Provider
             return;
         }
 
+        $factory = new \IX\Services\IconServiceFactory();
+        $icon = $factory->create('cart')->render();
         echo '<button class="header__cart-toggle" type="button" aria-label="Open cart" data-cart-toggle>'
-            . '<span class="header__cart-icon" aria-hidden="true">&#x1F6D2;</span>'
+            . '<span class="header__cart-icon" aria-hidden="true">' . $icon . '</span>'
             . '<span class="header__cart-count" data-cart-count>0</span>'
             . '</button>';
     }
