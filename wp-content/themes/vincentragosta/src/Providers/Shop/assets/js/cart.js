@@ -88,6 +88,7 @@ const CartDrawer = {
                 </div>
                 <div class="shop-cart-drawer__items"></div>
                 <div class="shop-cart-drawer__footer">
+                    <a href="/shop/cart/" class="shop-cart-drawer__view-cart">View Cart</a>
                     <button class="shop-cart-drawer__checkout" data-cart-checkout disabled>Checkout</button>
                 </div>
             </div>
@@ -249,6 +250,110 @@ const CartCheckout = {
 };
 
 // ==========================================================================
+// CartPage — full cart view rendered into [data-cart-page] container
+// ==========================================================================
+
+const CartPage = {
+    el: null,
+
+    init() {
+        this.el = document.querySelector('[data-cart-page]');
+        if (!this.el) return;
+
+        this.render();
+        this.bindEvents();
+
+        document.addEventListener('shop:cart-updated', () => this.render());
+    },
+
+    render() {
+        if (!this.el) return;
+
+        const items = CartStore.getItems();
+
+        if (!items.length) {
+            this.el.innerHTML = `
+                <p class="shop-cart-page__empty">Your cart is empty.</p>
+                <a href="/shop/" class="shop-cart-page__continue">Continue Shopping</a>
+            `;
+            return;
+        }
+
+        this.el.innerHTML = `
+            <div class="shop-cart-page__items">
+                ${items.map((item) => `
+                    <div class="shop-cart-page__item" data-price-id="${item.priceId}">
+                        <div class="shop-cart-page__item-image">
+                            ${item.image ? `<img src="${item.image}" alt="" width="80" height="107" />` : '<div class="shop-cart-page__item-no-image"></div>'}
+                        </div>
+                        <div class="shop-cart-page__item-details">
+                            <h3 class="shop-cart-page__item-title">${item.title}</h3>
+                            <span class="shop-cart-page__item-price">${item.price}</span>
+                        </div>
+                        <div class="shop-cart-page__item-quantity">
+                            <label class="screen-reader-text" for="qty-${item.priceId}">Quantity</label>
+                            <select id="qty-${item.priceId}" data-quantity-select>
+                                ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) =>
+                                    `<option value="${n}" ${n === item.quantity ? 'selected' : ''}>${n}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <button class="shop-cart-page__item-remove" data-remove-item aria-label="Remove ${item.title}">&times;</button>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="shop-cart-page__summary">
+                <a href="/shop/" class="shop-cart-page__continue">Continue Shopping</a>
+                <button class="shop-cart-page__checkout" data-cart-checkout>Checkout</button>
+            </div>
+        `;
+    },
+
+    bindEvents() {
+        if (!this.el) return;
+
+        this.el.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('[data-remove-item]');
+            if (removeBtn) {
+                const item = removeBtn.closest('[data-price-id]');
+                if (item) CartStore.removeItem(item.dataset.priceId);
+            }
+
+            if (e.target.closest('[data-cart-checkout]')) {
+                CartCheckout.submit();
+            }
+        });
+
+        this.el.addEventListener('change', (e) => {
+            const select = e.target.closest('[data-quantity-select]');
+            if (!select) return;
+            const item = select.closest('[data-price-id]');
+            if (item) {
+                CartStore.updateQuantity(item.dataset.priceId, parseInt(select.value, 10));
+            }
+        });
+    },
+};
+
+// ==========================================================================
+// ThankYouPage — clear cart and show confirmation
+// ==========================================================================
+
+const ThankYouPage = {
+    init() {
+        const el = document.querySelector('[data-thank-you]');
+        if (!el) return;
+
+        CartStore.clear();
+        el.innerHTML = `
+            <h2 class="shop-thank-you__title">Thank you for your order!</h2>
+            <p class="shop-thank-you__message">Your payment was successful. You'll receive a confirmation email from Stripe shortly.</p>
+            <a href="/shop/" class="shop-thank-you__continue">Back to Shop</a>
+        `;
+    },
+};
+
+// ==========================================================================
 // Init
 // ==========================================================================
 
@@ -278,10 +383,9 @@ function initCart() {
         el.textContent = CartStore.getCount();
     });
 
-    // Clear cart on thank-you page
-    if (window.location.pathname.includes('/thank-you')) {
-        CartStore.clear();
-    }
+    // Page-specific initializations
+    CartPage.init();
+    ThankYouPage.init();
 }
 
 if (document.readyState === 'loading') {

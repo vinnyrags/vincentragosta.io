@@ -7,7 +7,10 @@
  * Downloads Stripe product images and sets them as featured images.
  *
  * Usage: ddev wp eval-file scripts/pull-products.php
- *        ddev wp eval-file scripts/pull-products.php -- --publish
+ *        PUBLISH=1 ddev wp eval-file scripts/pull-products.php
+ *
+ * Remote: wp eval-file scripts/pull-products.php --path=/var/www/site/wp --allow-root
+ *         PUBLISH=1 wp eval-file scripts/pull-products.php --path=/var/www/site/wp --allow-root
  */
 
 if (!defined('ABSPATH')) {
@@ -20,8 +23,8 @@ if (!defined('STRIPE_SECRET_KEY') || STRIPE_SECRET_KEY === '') {
     exit(1);
 }
 
-// Check for --publish flag
-$publish = in_array('--publish', $GLOBALS['argv'] ?? [], true);
+// Check for PUBLISH=1 environment variable
+$publish = !empty(getenv('PUBLISH'));
 
 // Load Stripe SDK from child theme vendor
 $stripeAutoload = get_stylesheet_directory() . '/vendor/autoload.php';

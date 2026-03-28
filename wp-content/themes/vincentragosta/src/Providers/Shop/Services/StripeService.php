@@ -46,13 +46,25 @@ class StripeService
         array $metadata = [],
     ): Session {
         return $this->client->checkout->sessions->create([
-            'mode'                       => 'payment',
-            'line_items'                 => $lineItems,
-            'success_url'                => $successUrl,
-            'cancel_url'                 => $cancelUrl,
-            'metadata'                   => $metadata,
+            'mode'                        => 'payment',
+            'line_items'                  => $lineItems,
+            'success_url'                 => $successUrl,
+            'cancel_url'                  => $cancelUrl,
+            'metadata'                    => $metadata,
             'shipping_address_collection' => [
                 'allowed_countries' => ['US'],
+            ],
+            'shipping_options' => [
+                [
+                    'shipping_rate_data' => [
+                        'type'         => 'fixed_amount',
+                        'fixed_amount' => [
+                            'amount'   => 1000,
+                            'currency' => 'usd',
+                        ],
+                        'display_name' => 'Standard Shipping',
+                    ],
+                ],
             ],
         ]);
     }

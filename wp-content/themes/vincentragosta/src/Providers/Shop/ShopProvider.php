@@ -70,7 +70,7 @@ class ShopProvider extends Provider
      */
     public function enqueueCartAssets(): void
     {
-        if (!$this->isShopPage() && !is_singular(ProductPost::POST_TYPE)) {
+        if (!$this->isShopContext()) {
             return;
         }
 
@@ -104,10 +104,14 @@ class ShopProvider extends Provider
     }
 
     /**
-     * Whether the current page is the configured shop page.
+     * Whether the current page is a shop context (shop page, cart, or thank you).
      */
-    private function isShopPage(): bool
+    private function isShopContext(): bool
     {
+        if (is_page(['cart', 'thank-you'])) {
+            return true;
+        }
+
         if (!function_exists('get_field')) {
             return false;
         }

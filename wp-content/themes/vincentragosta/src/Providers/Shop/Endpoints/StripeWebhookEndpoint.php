@@ -71,7 +71,7 @@ class StripeWebhookEndpoint extends Endpoint
     }
 
     /**
-     * Handle a completed checkout session by decrementing stock.
+     * Handle a completed checkout session by decrementing stock and notifying the owner.
      */
     private function handleCheckoutCompleted(object $session): void
     {
@@ -83,6 +83,7 @@ class StripeWebhookEndpoint extends Endpoint
 
         // Format: "123:2,456:1" (product_id:quantity pairs)
         $pairs = explode(',', $productData);
+        $orderLines = [];
 
         foreach ($pairs as $pair) {
             [$postId, $quantity] = explode(':', $pair);
@@ -97,6 +98,50 @@ class StripeWebhookEndpoint extends Endpoint
             $newStock = max(0, $currentStock - $quantity);
 
             update_field('stock_quantity', $newStock, $postId);
+
+            $title = get_the_title($postId);
+            $price = get_field('price', $postId);
+            $orderLines[] = "{$quantity}x {$title} ({$price}) — {$newStock} remaining";
         }
+
+        $this->sendOwnerNotification($session, $orderLines);
+    }
+
+    /**
+     * Send an email notification to the shop owner with order details.
+     *
+     * @param object $session The Stripe Checkout Session object.
+     * @param string[] $orderLines Formatted line items for the email body.
+     */
+    private function sendOwnerNotification(object $session, array $orderLines): void
+    {
+        $to = get_option('admin_email');
+        $customerEmail = $session->customer_details->email ?? 'Unknown';
+        $customerName = $session->customer_details->name ?? 'Unknown';
+        $total = number_format(($session->amount_total ?? 0) / 100, 2);
+
+        $shipping = $session->shipping_details->address ?? null;
+        $shippingAddress = $shipping
+            ? implode(', ', array_filter([
+                $shipping->line1 ?? '',
+                $shipping->line2 ?? '',
+                $shipping->city ?? '',
+                $shipping->state ?? '',
+                $shipping->postal_code ?? '',
+                $shipping->country ?? '',
+            ]))
+            : 'Not provided';
+
+        $subject = "New Shop Order — \${$total}";
+
+        $body = "New order received!\n\n";
+        $body .= "Customer: {$customerName} ({$customerEmail})\n";
+        $body .= "Ship to: {$shippingAddress}\n";
+        $body .= "Total: \${$total}\n\n";
+        $body .= "Items:\n";
+        $body .= implode("\n", $orderLines);
+        $body .= "\n\nStripe Session: {$session->id}";
+
+        wp_mail($to, $subject, $body);
     }
 }

@@ -13,8 +13,8 @@
       "not_found_in_trash": "No products found in Trash"
     },
     "public": true,
+    "publicly_queryable": false,
     "has_archive": false,
-    "rewrite": { "slug": "shop/product" },
     "supports": ["title", "editor", "thumbnail"],
     "taxonomies": ["category"],
     "menu_icon": "dashicons-cart",

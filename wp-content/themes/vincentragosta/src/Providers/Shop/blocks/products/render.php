@@ -13,11 +13,11 @@ $selected_ids = get_field('selected_products') ?: [];
 $repository = Theme::container()->get(ProductRepository::class);
 
 if ($mode === 'all') {
-    $products = $repository->all();
+    $products = $repository->inStock();
 } elseif ($mode === 'curated' && !empty($selected_ids)) {
     $products = $repository->findMany($selected_ids);
 } else {
-    $products = $repository->latest(12);
+    $products = $repository->inStock(12);
 }
 
 // Collect unique categories for the filter dropdown (only in "all" mode).
