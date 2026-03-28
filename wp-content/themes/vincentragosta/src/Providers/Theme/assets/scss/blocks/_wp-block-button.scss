@@ -30,8 +30,20 @@
     }
 }
 
+// Outline style — fill on hover (dark mode default).
+// Light mode override lives in _light-mode.scss.
+.wp-block-button.is-style-outline .wp-block-button__link {
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+        background-color: var(--color-text);
+        color: var(--color-bg);
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .wp-block-button.is-style-muted .wp-block-button__link {
+    .wp-block-button.is-style-muted .wp-block-button__link,
+    .wp-block-button.is-style-outline .wp-block-button__link {
         transition: none;
     }
 }

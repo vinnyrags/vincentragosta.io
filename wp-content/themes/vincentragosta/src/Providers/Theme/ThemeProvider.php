@@ -13,6 +13,7 @@ use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use DI\Container;
 use IX\Providers\Theme\Features\ScrollReveal;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
@@ -54,6 +55,7 @@ class ThemeProvider extends BaseThemeProvider
         TextBlockStyles::class,
         SearchSetup::class,
         SocialIconChoices::class,
+        SocialIconOverride::class,
     ];
 
     /**

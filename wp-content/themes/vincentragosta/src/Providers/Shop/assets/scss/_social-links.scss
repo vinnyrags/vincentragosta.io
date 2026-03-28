@@ -1,0 +1,39 @@
+@use 'common/pill' as *;
+
+// ==========================================================================
+// Social Links — Pill Style with Brand Colors
+// ==========================================================================
+
+.is-style-outline-brand {
+  .wp-social-link {
+    @extend %pill;
+    font-size: inherit;
+    color: var(--color-text);
+    border-color: var(--color-border);
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4em;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    &:hover {
+      border-color: var(--color-text);
+    }
+  }
+
+  // Brand colors — must beat WP core's
+  // `.wp-block-social-links .wp-block-social-link.wp-social-link .wp-block-social-link-anchor svg`
+  .wp-block-social-link.wp-social-link-twitch .wp-block-social-link-anchor svg { color: var(--wp--custom--color--brand-twitch); }
+  .wp-block-social-link.wp-social-link-youtube .wp-block-social-link-anchor svg { color: var(--wp--custom--color--brand-youtube); }
+  .wp-block-social-link.wp-social-link-tiktok .wp-block-social-link-anchor svg { color: var(--wp--custom--color--brand-tiktok); }
+  .wp-block-social-link.wp-social-link-instagram .wp-block-social-link-anchor svg { color: var(--wp--custom--color--brand-instagram); }
+  .wp-block-social-link.wp-social-link-discord .wp-block-social-link-anchor svg { color: var(--wp--custom--color--brand-discord); }
+
+  .wp-block-social-link-label {
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+}

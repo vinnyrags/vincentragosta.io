@@ -14,7 +14,12 @@
       "borderRadius": "10px",
       "color": {
         "error": "#e74c3c",
-        "accent1Dark": "#3d8500"
+        "accent1Dark": "#3d8500",
+        "brandTwitch": "#9146ff",
+        "brandYoutube": "#ff0000",
+        "brandTiktok": "#00f2ea",
+        "brandInstagram": "#e4405f",
+        "brandDiscord": "#5865f2"
       },
       "iconSize": {
         "xs": "10px",
