@@ -20,5 +20,6 @@
     "mode": "preview",
     "renderTemplate": "render.php"
   },
-  "viewScript": "file:../../../../../dist/js/products-view.js"
+  "viewScript": "file:../../../../../dist/js/products-view.js",
+  "style": "file:../../../../../dist/css/products.css"
 }

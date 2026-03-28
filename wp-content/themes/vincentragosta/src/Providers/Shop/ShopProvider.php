@@ -111,7 +111,8 @@ class ShopProvider extends Provider
      */
     public function enqueueBlockAssets(): void
     {
-        $this->enqueueStyle('vincentragosta-shop-block', 'shop.css');
+        $this->enqueueStyle('vincentragosta-shop', 'shop.css');
+        $this->enqueueStyle('vincentragosta-shop-products', 'products.css');
     }
 
     /**
