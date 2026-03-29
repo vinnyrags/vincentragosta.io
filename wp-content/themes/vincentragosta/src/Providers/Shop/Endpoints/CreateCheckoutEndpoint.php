@@ -110,6 +110,19 @@ class CreateCheckoutEndpoint extends Endpoint
             $productIds[] = $product->id . ':' . $quantity;
         }
 
+        // Optimistic stock decrement — reserve stock now, restore on abandoned checkout.
+        foreach ($items as $item) {
+            $priceId = sanitize_text_field($item['priceId'] ?? '');
+            $quantity = (int) ($item['quantity'] ?? 0);
+            $product = $this->repository->findByPriceId($priceId);
+
+            if ($product) {
+                $currentStock = (int) get_field('stock_quantity', $product->id);
+                $newStock = max(0, $currentStock - $quantity);
+                update_field('stock_quantity', $newStock, $product->id);
+            }
+        }
+
         $successUrl = home_url('/shop/thank-you/?session_id={CHECKOUT_SESSION_ID}');
         $cancelUrl = home_url('/shop/');
 
@@ -125,11 +138,35 @@ class CreateCheckoutEndpoint extends Endpoint
                 'url' => $session->url,
             ]);
         } catch (\Throwable $e) {
+            // Restore stock if session creation failed
+            $this->restoreStock($productIds);
+
             return new WP_Error(
                 'checkout_failed',
                 'Failed to create checkout session.',
                 ['status' => 500]
             );
+        }
+    }
+
+    /**
+     * Restore stock quantities from a product_ids string array.
+     *
+     * @param string[] $productIds Format: ["123:2", "456:1"]
+     */
+    private function restoreStock(array $productIds): void
+    {
+        foreach ($productIds as $pair) {
+            [$postId, $quantity] = explode(':', $pair);
+            $postId = (int) $postId;
+            $quantity = (int) $quantity;
+
+            if ($postId < 1 || $quantity < 1) {
+                continue;
+            }
+
+            $currentStock = (int) get_field('stock_quantity', $postId);
+            update_field('stock_quantity', $currentStock + $quantity, $postId);
         }
     }
 }

@@ -14,8 +14,10 @@ use WP_REST_Response;
 /**
  * Receives Stripe webhook events.
  *
- * Verifies the webhook signature and handles checkout.session.completed
- * events to decrement stock quantities.
+ * Stock is decremented optimistically at checkout time (CreateCheckoutEndpoint).
+ * This webhook handles:
+ * - checkout.session.completed: sends owner notification (stock already decremented)
+ * - checkout.session.expired: restores stock for abandoned checkouts
  */
 class StripeWebhookEndpoint extends Endpoint
 {
@@ -65,13 +67,18 @@ class StripeWebhookEndpoint extends Endpoint
 
         if ($event->type === 'checkout.session.completed') {
             $this->handleCheckoutCompleted($event->data->object);
+        } elseif ($event->type === 'checkout.session.expired') {
+            $this->handleCheckoutExpired($event->data->object);
         }
 
         return new WP_REST_Response(['received' => true]);
     }
 
     /**
-     * Handle a completed checkout session by decrementing stock and notifying the owner.
+     * Handle a completed checkout session.
+     *
+     * Stock was already decremented optimistically by CreateCheckoutEndpoint.
+     * This just sends the owner notification.
      */
     private function handleCheckoutCompleted(object $session): void
     {
@@ -81,7 +88,6 @@ class StripeWebhookEndpoint extends Endpoint
             return;
         }
 
-        // Format: "123:2,456:1" (product_id:quantity pairs)
         $pairs = explode(',', $productData);
         $orderLines = [];
 
@@ -94,17 +100,43 @@ class StripeWebhookEndpoint extends Endpoint
                 continue;
             }
 
-            $currentStock = (int) get_field('stock_quantity', $postId);
-            $newStock = max(0, $currentStock - $quantity);
-
-            update_field('stock_quantity', $newStock, $postId);
-
             $title = get_the_title($postId);
             $price = get_field('price', $postId);
-            $orderLines[] = "{$quantity}x {$title} ({$price}) — {$newStock} remaining";
+            $currentStock = (int) get_field('stock_quantity', $postId);
+            $orderLines[] = "{$quantity}x {$title} ({$price}) — {$currentStock} remaining";
         }
 
         $this->sendOwnerNotification($session, $orderLines);
+    }
+
+    /**
+     * Handle an expired/abandoned checkout session by restoring stock.
+     *
+     * Stock was decremented optimistically at checkout time.
+     * If the session expires without payment, restore the quantities.
+     */
+    private function handleCheckoutExpired(object $session): void
+    {
+        $productData = $session->metadata->product_ids ?? '';
+
+        if (!$productData) {
+            return;
+        }
+
+        $pairs = explode(',', $productData);
+
+        foreach ($pairs as $pair) {
+            [$postId, $quantity] = explode(':', $pair);
+            $postId = (int) $postId;
+            $quantity = (int) $quantity;
+
+            if ($postId < 1 || $quantity < 1) {
+                continue;
+            }
+
+            $currentStock = (int) get_field('stock_quantity', $postId);
+            update_field('stock_quantity', $currentStock + $quantity, $postId);
+        }
     }
 
     /**
