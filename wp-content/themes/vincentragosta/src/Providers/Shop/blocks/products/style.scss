@@ -78,18 +78,27 @@
   background: var(--wp--preset--color--grey-2);
 }
 
-.product-card__sold-badge {
+.product-card__sold-badge,
+.product-card__sale-badge {
   position: absolute;
   top: var(--wp--preset--spacing--20);
   right: var(--wp--preset--spacing--20);
   padding: 0.2em 0.8em;
-  background: var(--wp--preset--color--contrast);
-  color: var(--wp--preset--color--base);
   font-size: var(--wp--preset--font-size--10);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-radius: 2px;
+}
+
+.product-card__sold-badge {
+  background: var(--wp--preset--color--contrast);
+  color: var(--wp--preset--color--base);
+}
+
+.product-card__sale-badge {
+  background: var(--wp--preset--color--accent-1);
+  color: var(--color-on-accent);
 }
 
 .product-card__content {
@@ -115,6 +124,16 @@
 .product-card__price {
   font-weight: 700;
   color: var(--wp--preset--color--accent-1);
+
+  &--original {
+    text-decoration: line-through;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  &--sale {
+    color: var(--wp--preset--color--accent-1);
+  }
 }
 
 .product-card__stock {

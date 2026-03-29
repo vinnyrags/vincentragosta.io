@@ -30,6 +30,24 @@
             "placeholder": "$24.99"
         },
         {
+            "key": "field_product_sale_price",
+            "label": "Sale Price",
+            "name": "sale_price",
+            "type": "text",
+            "instructions": "Display sale price (e.g., $99.99). Auto-populated by sync when sale_price_id is set in Stripe metadata.",
+            "required": 0,
+            "placeholder": "$99.99"
+        },
+        {
+            "key": "field_product_sale_price_id",
+            "label": "Sale Stripe Price ID",
+            "name": "sale_price_id",
+            "type": "text",
+            "instructions": "The Stripe Price ID for the sale price. When present, product is on sale. Auto-populated by sync.",
+            "required": 0,
+            "placeholder": "price_..."
+        },
+        {
             "key": "field_product_sku",
             "label": "SKU",
             "name": "sku",

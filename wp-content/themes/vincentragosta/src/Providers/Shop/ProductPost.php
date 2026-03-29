@@ -40,6 +40,39 @@ class ProductPost extends Post
     }
 
     /**
+     * Whether the product is currently on sale.
+     * Derived from the presence of a sale_price_id.
+     */
+    public function isOnSale(): bool
+    {
+        return (string) $this->getField('sale_price_id') !== '';
+    }
+
+    /**
+     * Get the sale display price.
+     */
+    public function salePrice(): string
+    {
+        return (string) $this->getField('sale_price');
+    }
+
+    /**
+     * Get the Stripe Price ID to use for checkout.
+     * Returns sale price ID if on sale, otherwise the regular price ID.
+     */
+    public function checkoutPriceId(): string
+    {
+        if ($this->isOnSale()) {
+            $salePriceId = (string) $this->getField('sale_price_id');
+            if ($salePriceId) {
+                return $salePriceId;
+            }
+        }
+
+        return $this->stripePriceId();
+    }
+
+    /**
      * Get the SKU.
      */
     public function sku(): string

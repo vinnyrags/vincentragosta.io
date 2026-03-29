@@ -62,14 +62,20 @@ class ProductRepository extends Repository
 
     /**
      * Find a product by its Stripe Price ID.
+     * Checks both the regular price and sale price fields.
      */
     public function findByPriceId(string $priceId): ?ProductPost
     {
         $results = $this->query([
             'posts_per_page' => 1,
             'meta_query'     => [
+                'relation' => 'OR',
                 [
                     'key'   => 'stripe_price_id',
+                    'value' => $priceId,
+                ],
+                [
+                    'key'   => 'sale_price_id',
                     'value' => $priceId,
                 ],
             ],

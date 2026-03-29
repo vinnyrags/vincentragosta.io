@@ -64,6 +64,8 @@ while ($hasMore) {
         $metadata = $stripeProduct->metadata ? $stripeProduct->metadata->toArray() : [];
         $category = $metadata['category'] ?? '';
         $stock = $metadata['stock'] ?? '';
+        $salePriceId = $metadata['sale_price_id'] ?? '';
+        $onSale = $salePriceId !== '';
 
         // Get price info
         $priceId = '';
@@ -85,6 +87,23 @@ while ($hasMore) {
             continue;
         }
 
+        // Resolve sale price display amount from Stripe
+        $saleDisplayPrice = '';
+        if ($onSale && $salePriceId) {
+            try {
+                $salePriceObj = $stripe->prices->retrieve($salePriceId);
+                $saleAmount = $salePriceObj->unit_amount;
+                $saleCurrency = strtoupper($salePriceObj->currency);
+                if ($saleCurrency === 'USD') {
+                    $saleDisplayPrice = '$' . number_format($saleAmount / 100, 2);
+                } else {
+                    $saleDisplayPrice = number_format($saleAmount / 100, 2) . ' ' . $saleCurrency;
+                }
+            } catch (\Throwable $e) {
+                echo "    Warning: Could not resolve sale price for {$name}: {$e->getMessage()}\n";
+            }
+        }
+
         // Check if product already exists in WordPress (by stripe_product_id)
         $existing = new WP_Query([
             'post_type'      => 'product',
@@ -103,6 +122,8 @@ while ($hasMore) {
             $postId = $existing->posts[0]->ID;
             update_field('stripe_price_id', $priceId, $postId);
             update_field('price', $displayPrice, $postId);
+            update_field('sale_price', $saleDisplayPrice, $postId);
+            update_field('sale_price_id', $salePriceId, $postId);
 
             // Update image if changed
             if (!empty($images)) {
@@ -119,7 +140,7 @@ while ($hasMore) {
                 update_field('stock_quantity', (int) $stock, $postId);
             }
 
-            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '']);
+            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '', $onSale ? "SALE:{$saleDisplayPrice}" : '']);
             echo "  Updated: {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";
             $updated++;
         } else {
@@ -140,6 +161,8 @@ while ($hasMore) {
             update_field('stripe_price_id', $priceId, $postId);
             update_field('price', $displayPrice, $postId);
             update_field('stock_quantity', $stock !== '' ? (int) $stock : 10, $postId);
+            update_field('sale_price', $saleDisplayPrice, $postId);
+            update_field('sale_price_id', $salePriceId, $postId);
 
             // Download and set featured image
             if (!empty($images)) {
