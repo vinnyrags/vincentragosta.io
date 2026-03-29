@@ -382,9 +382,13 @@ const ThankYouPage = {
 
         CartStore.clear();
         el.innerHTML = `
-            <h2 class="shop-thank-you__title">Thank you for your order!</h2>
-            <p class="shop-thank-you__message">Your payment was successful. You'll receive a confirmation email from Stripe shortly.</p>
-            <a href="/shop/" class="shop-thank-you__continue">Back to Shop</a>
+            <h2>Thank you for your order!</h2>
+            <p class="is-style-muted">Your payment was successful. You'll receive a confirmation email from Stripe shortly.</p>
+            <div class="wp-block-buttons">
+                <div class="wp-block-button">
+                    <a class="wp-block-button__link wp-element-button" href="/shop/">Back to Shop</a>
+                </div>
+            </div>
         `;
     },
 };

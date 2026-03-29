@@ -1,6 +1,7 @@
 ## HIGH PRIORITY
+- consider removing that site-wide spacing|70 to all core/groups with background, or rather at the very elast have it be overrideable from the CMS, maybe test this one more timne before executing with claude
+- build more generic modal system for age gate, that any provider, block or template can hook into and display their own messaging (trigger their own modal), can be on page load or via a trigger. please do a deep dive on how to best solve for this, and work up an effective and efficient implementation plan in plan mode and ultimately circle back and update the age gate code to reference the new modal system.
 - should we add a bit anywhere on the site about our current server setup?
-- consider removing content directory on server after git push, I mainly use the content directory for my interaction with claude, and that is not present on the server-- should exist in git but not on servers (both develop and main)
 - create starter repo that has project root plus child theme, rework claude.md to ensure no specific references to vincentragosta.io project, it will more than likely not have any information on me either, i.e, access to the content directory, docs directory or interviews directory, so if there are references to how I think or want claude to think/behave, then we should port that information over to claude.md.
 
 ## MEDIUM PRIORITY
