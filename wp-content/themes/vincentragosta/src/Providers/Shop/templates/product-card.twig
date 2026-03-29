@@ -14,7 +14,11 @@
                  height="{{ product.thumbnail.height }}"
                  loading="lazy" />
         {% else %}
-            <div class="product-card__no-image"></div>
+            <div class="product-card__no-image">
+                <img src="/wp-content/themes/vincentragosta/src/Providers/Theme/assets/images/svg/squiggle/squiggle-1-grey.svg"
+                     alt=""
+                     loading="lazy" />
+            </div>
         {% endif %}
         {% if not product.isInStock %}
             <span class="product-card__sold-badge">Sold</span>
