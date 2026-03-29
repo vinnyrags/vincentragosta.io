@@ -23,8 +23,8 @@ if (!defined('STRIPE_SECRET_KEY') || STRIPE_SECRET_KEY === '') {
     exit(1);
 }
 
-// Check for PUBLISH=1 environment variable
-$publish = !empty(getenv('PUBLISH'));
+// Check for publish flag via env var or marker file
+$publish = !empty(getenv('PUBLISH')) || file_exists(__DIR__ . '/.publish');
 
 // Load Stripe SDK from child theme vendor
 $stripeAutoload = get_stylesheet_directory() . '/vendor/autoload.php';

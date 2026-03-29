@@ -305,7 +305,8 @@ pull-products:
 # Sync Stripe products to local WordPress (auto-publish)
 pull-products-publish:
 	@echo "Syncing Stripe products to WordPress (auto-publish)..."
-	PUBLISH=1 ddev wp eval-file scripts/pull-products.php
+	@touch scripts/.publish
+	@ddev wp eval-file scripts/pull-products.php; rm -f scripts/.publish
 
 # Full sync: Google Sheets → Stripe → WordPress
 sync-products:

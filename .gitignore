@@ -3,6 +3,7 @@ auth.json
 wp-config-env.php
 TODO.md
 scripts/shop/node_modules
+scripts/.publish
 
 .idea
 .DS_Store
