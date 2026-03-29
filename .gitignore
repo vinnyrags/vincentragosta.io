@@ -2,6 +2,7 @@
 auth.json
 wp-config-env.php
 TODO.md
+scripts/shop/node_modules
 
 .idea
 .DS_Store
