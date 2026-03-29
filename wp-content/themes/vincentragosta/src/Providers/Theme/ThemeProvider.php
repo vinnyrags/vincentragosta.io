@@ -198,5 +198,4 @@ class ThemeProvider extends BaseThemeProvider
         return $context;
     }
 
-
 }
