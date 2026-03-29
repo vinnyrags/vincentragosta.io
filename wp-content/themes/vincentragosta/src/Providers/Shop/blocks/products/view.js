@@ -15,6 +15,31 @@ const CARD = '.product-card';
 const HIDDEN_ATTRS = ['data-search-hidden', 'data-category-hidden'];
 
 /**
+ * Sort products by sale first, then by date descending within each group.
+ */
+function sortBySaleThenDate(grid) {
+    const cards = Array.from(grid.querySelectorAll(CARD));
+
+    cards.sort((a, b) => {
+        const saleA = parseInt(a.dataset.sale || '0', 10);
+        const saleB = parseInt(b.dataset.sale || '0', 10);
+
+        // Sale items first
+        if (saleB !== saleA) return saleB - saleA;
+
+        // Then newest first within each group
+        const dateA = a.dataset.date || '';
+        const dateB = b.dataset.date || '';
+        return dateB.localeCompare(dateA);
+    });
+
+    cards.forEach((card) => {
+        card.classList.remove('is-visible');
+        grid.appendChild(card);
+    });
+}
+
+/**
  * Initialize products block functionality.
  */
 function initProducts() {
@@ -62,11 +87,19 @@ function initProducts() {
         const sortDropdown = block.querySelector('[data-dropdown="sort"]');
         if (sortDropdown) {
             sortDropdown.addEventListener('change', (e) => {
-                const [field, order] = e.detail.value.split('-');
-                sortCards(grid, CARD, field, order);
+                if (e.detail.value === 'sale-desc') {
+                    sortBySaleThenDate(grid);
+                } else {
+                    const [field, order] = e.detail.value.split('-');
+                    sortCards(grid, CARD, field, order);
+                }
                 reveal.reinit();
             });
         }
+
+        // Default sort: sale items first, then newest
+        sortBySaleThenDate(grid);
+        reveal.reinit();
 
         // Add to cart buttons
         grid.addEventListener('click', (e) => {
