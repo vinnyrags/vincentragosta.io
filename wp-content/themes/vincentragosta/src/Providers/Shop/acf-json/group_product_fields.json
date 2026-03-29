@@ -57,6 +57,15 @@
             "placeholder": "PKM-BB-001"
         },
         {
+            "key": "field_product_cost",
+            "label": "Cost Per Unit",
+            "name": "cost",
+            "type": "text",
+            "instructions": "Per-unit cost from supplier. Auto-populated by sync from Stripe cost metadata. Used for margin calculation.",
+            "required": 0,
+            "placeholder": "$130.00"
+        },
+        {
             "key": "field_product_stock_quantity",
             "label": "Stock Quantity",
             "name": "stock_quantity",

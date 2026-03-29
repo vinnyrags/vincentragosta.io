@@ -73,6 +73,14 @@ class ProductPost extends Post
     }
 
     /**
+     * Get the per-unit cost.
+     */
+    public function cost(): string
+    {
+        return (string) $this->getField('cost');
+    }
+
+    /**
      * Get the SKU.
      */
     public function sku(): string

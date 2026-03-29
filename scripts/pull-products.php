@@ -66,6 +66,7 @@ while ($hasMore) {
         $stock = $metadata['stock'] ?? '';
         $salePriceId = $metadata['sale_price_id'] ?? '';
         $onSale = $salePriceId !== '';
+        $cost = $metadata['cost'] ?? '';
 
         // Get price info
         $priceId = '';
@@ -124,6 +125,9 @@ while ($hasMore) {
             update_field('price', $displayPrice, $postId);
             update_field('sale_price', $saleDisplayPrice, $postId);
             update_field('sale_price_id', $salePriceId, $postId);
+            if ($cost !== '') {
+                update_field('cost', '$' . number_format((float) $cost, 2), $postId);
+            }
 
             // Update image if changed
             if (!empty($images)) {
@@ -163,6 +167,9 @@ while ($hasMore) {
             update_field('stock_quantity', $stock !== '' ? (int) $stock : 10, $postId);
             update_field('sale_price', $saleDisplayPrice, $postId);
             update_field('sale_price_id', $salePriceId, $postId);
+            if ($cost !== '') {
+                update_field('cost', '$' . number_format((float) $cost, 2), $postId);
+            }
 
             // Download and set featured image
             if (!empty($images)) {
