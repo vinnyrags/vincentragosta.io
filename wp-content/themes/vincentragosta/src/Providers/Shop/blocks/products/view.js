@@ -81,6 +81,7 @@ function initProducts() {
                 title: button.dataset.title,
                 price: button.dataset.price,
                 image: button.dataset.image,
+                stock: parseInt(button.dataset.stock, 10) || 1,
                 quantity: 1,
             };
 

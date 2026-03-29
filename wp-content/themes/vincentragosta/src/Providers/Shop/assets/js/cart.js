@@ -155,7 +155,7 @@ const CartStore = {
         const existing = items.find((i) => i.priceId === item.priceId);
 
         if (existing) {
-            existing.quantity += item.quantity;
+            existing.quantity = Math.min(existing.quantity + item.quantity, item.stock || 10);
         } else {
             items.push({ ...item });
         }
@@ -173,7 +173,7 @@ const CartStore = {
         const item = items.find((i) => i.priceId === priceId);
 
         if (item) {
-            item.quantity = Math.max(1, quantity);
+            item.quantity = Math.min(Math.max(1, quantity), item.stock || 10);
             this.save(items);
         }
     },
@@ -256,11 +256,13 @@ const CartDrawer = {
                     <span class="shop-cart-item__price">${item.price}</span>
                 </div>
                 <div class="shop-cart-item__actions">
-                    <select class="shop-cart-item__quantity" aria-label="Quantity" data-quantity-select>
-                        ${[1, 2, 3, 4, 5].map((n) =>
-                            `<option value="${n}" ${n === item.quantity ? 'selected' : ''}>${n}</option>`
-                        ).join('')}
-                    </select>
+                    ${item.stock > 1 ? `
+                        <select class="shop-cart-item__quantity" aria-label="Quantity" data-quantity-select>
+                            ${Array.from({ length: Math.min(item.stock, 10) }, (_, i) => i + 1).map((n) =>
+                                `<option value="${n}" ${n === item.quantity ? 'selected' : ''}>${n}</option>`
+                            ).join('')}
+                        </select>
+                    ` : ''}
                     <button class="shop-cart-item__remove" data-remove-item aria-label="Remove ${item.title}">&times;</button>
                 </div>
             </div>

@@ -41,7 +41,8 @@
                     data-product-id="{{ product.ID }}"
                     data-title="{{ product.title }}"
                     data-price="{{ product.isOnSale and product.salePrice ? product.salePrice : product.price }}"
-                    data-image="{{ product.thumbnail ? product.thumbnail.src | resize(100) : '' }}">
+                    data-image="{{ product.thumbnail ? product.thumbnail.src | resize(100) : '' }}"
+                    data-stock="{{ product.stockQuantity }}">
                 Add to Cart
             </button>
         {% else %}
