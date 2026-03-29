@@ -4,7 +4,8 @@
      data-category="{{ product.cardTypeSlugs }}"
      data-price-id="{{ product.checkoutPriceId }}"
      data-product-id="{{ product.ID }}"
-     data-stock="{{ product.stockQuantity }}">
+     data-stock="{{ product.stockQuantity }}"
+     data-sale="{{ product.isOnSale ? '1' : '0' }}">
     <div class="product-card__image">
         {% if product.thumbnail %}
             <img src="{{ product.thumbnail.src | resize(400) }}"
