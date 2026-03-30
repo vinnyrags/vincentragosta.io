@@ -14,8 +14,17 @@ const { getMember, hasRole, addRole } = require('../discord');
 
 /**
  * Handle !verify command.
+ *
+ * !verify — start age verification for yourself
+ * !verify @user — check a user's role status (mods only)
  */
 async function handleVerify(message) {
+    // Check mode: !verify @user
+    const mentioned = message.mentions.users.first();
+    if (mentioned) {
+        return handleVerifyCheck(message, mentioned);
+    }
+
     const member = message.member;
 
     if (hasRole(member, config.ROLES.ENA)) {
@@ -60,6 +69,40 @@ async function handleVerify(message) {
         // User may have DMs disabled
         await message.reply('I couldn\'t send you a DM. Please enable DMs from server members and try again.');
     }
+}
+
+/**
+ * Check a user's role status — !verify @user
+ */
+async function handleVerifyCheck(message, user) {
+    const member = await getMember(user.id);
+    if (!member) {
+        return message.reply(`Could not find <@${user.id}> in the server.`);
+    }
+
+    const roleChecks = [
+        { id: config.ROLES.AKIVILI, name: 'Akivili', emoji: '👑' },
+        { id: config.ROLES.NANOOK, name: 'Nanook', emoji: '🔴' },
+        { id: config.ROLES.NOUS, name: 'Nous', emoji: '🔵' },
+        { id: config.ROLES.AHA, name: 'Aha', emoji: '🩷' },
+        { id: config.ROLES.XIPE, name: 'Xipe', emoji: '🟢' },
+        { id: config.ROLES.YAOSHI, name: 'Yaoshi', emoji: '🟣' },
+        { id: config.ROLES.IX, name: 'IX', emoji: '⬛' },
+        { id: config.ROLES.ENA, name: 'Ena', emoji: '🔞' },
+    ];
+
+    const lines = roleChecks.map((r) => {
+        const has = hasRole(member, r.id);
+        return `${has ? '✅' : '❌'} ${r.emoji} **${r.name}**`;
+    });
+
+    const embed = new EmbedBuilder()
+        .setTitle(`Role Status — ${member.displayName}`)
+        .setDescription(lines.join('\n'))
+        .setColor(0x3498db)
+        .setThumbnail(member.user.displayAvatarURL());
+
+    await message.channel.send({ embeds: [embed] });
 }
 
 module.exports = { handleVerify };
