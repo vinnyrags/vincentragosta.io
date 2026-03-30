@@ -67,6 +67,13 @@ class SocialIconOverride implements Hook
             );
         }
 
+        // Open social links in a new tab
+        $blockContent = str_replace(
+            'class="wp-block-social-link-anchor"',
+            'class="wp-block-social-link-anchor" target="_blank" rel="noreferrer noopener"',
+            $blockContent
+        );
+
         return $blockContent;
     }
 }
