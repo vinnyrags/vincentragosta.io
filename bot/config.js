@@ -1,0 +1,83 @@
+/**
+ * Configuration — reads from environment variables or wp-config-env.php.
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+function readPhpDefine(name) {
+    const configPath = path.resolve(__dirname, '../wp-config-env.php');
+    try {
+        const contents = fs.readFileSync(configPath, 'utf8');
+        const match = contents.match(
+            new RegExp(`define\\(\\s*'${name}'\\s*,\\s*'([^']*)'\\s*\\)`)
+        );
+        return match ? match[1] : null;
+    } catch {
+        return null;
+    }
+}
+
+function required(name) {
+    const value = process.env[name] || readPhpDefine(name);
+    if (!value) {
+        console.error(`Missing required config: ${name}`);
+        process.exit(1);
+    }
+    return value;
+}
+
+function optional(name, fallback = null) {
+    return process.env[name] || readPhpDefine(name) || fallback;
+}
+
+module.exports = {
+    // Discord
+    DISCORD_BOT_TOKEN: required('DISCORD_BOT_TOKEN'),
+    GUILD_ID: '862139045974638612',
+
+    // Stripe
+    STRIPE_SECRET_KEY: required('STRIPE_SECRET_KEY'),
+    STRIPE_WEBHOOK_SECRET: optional('STRIPE_BOT_WEBHOOK_SECRET'),
+
+    // Twitch
+    TWITCH_CLIENT_ID: optional('TWITCH_CLIENT_ID'),
+    TWITCH_CLIENT_SECRET: optional('TWITCH_CLIENT_SECRET'),
+    TWITCH_WEBHOOK_SECRET: optional('TWITCH_WEBHOOK_SECRET'),
+    TWITCH_BROADCASTER_ID: optional('TWITCH_BROADCASTER_ID'),
+
+    // Server
+    PORT: parseInt(process.env.BOT_PORT || '3100', 10),
+
+    // Channel IDs
+    CHANNELS: {
+        ANNOUNCEMENTS: '862806276639293510',
+        ORDER_FEED: '1488041099816734760',
+        DEALS: '1488041098751381524',
+        PACK_BATTLES: '1488041101326811158',
+        POKEMON: '1488041103348465757',
+        ANIME: '866726650526957598',
+        MATURE_DROPS: '1488041112038805717',
+        PACK_OPENINGS: '1488041105332371606',
+        WELCOME: '898715514086498324',
+        MOD_LOG: '862800551476854825',
+    },
+
+    // Role IDs
+    ROLES: {
+        AKIVILI: '1488046525065072670',
+        NANOOK: '1488046525899739148',
+        NOUS: '1488046526940053607',
+        AHA: '1488046527627919451',
+        XIPE: '898717442803642429',
+        LAN: '1488046529049661470',
+        YAOSHI: '1488046530295496824',
+        IX: '1488046531000008710',
+        ENA: '1488046532358967297',
+    },
+
+    // Thresholds
+    LOW_STOCK_THRESHOLD: 3,
+    NOUS_PURCHASE_THRESHOLD: 5,
+    XIPE_PURCHASE_THRESHOLD: 1,
+};

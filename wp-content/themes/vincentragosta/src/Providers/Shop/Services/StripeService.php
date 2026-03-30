@@ -66,6 +66,14 @@ class StripeService
                     ],
                 ],
             ],
+            'custom_fields' => [
+                [
+                    'key'      => 'discord_username',
+                    'label'    => ['type' => 'custom', 'custom' => 'Discord username for role upgrades (optional)'],
+                    'type'     => 'text',
+                    'optional' => true,
+                ],
+            ],
         ]);
     }
 
