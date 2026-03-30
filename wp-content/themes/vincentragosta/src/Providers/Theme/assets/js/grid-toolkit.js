@@ -18,9 +18,9 @@ export function sortCards(grid, cardSelector, field, order) {
     cards.sort((a, b) => {
         const valA = a.dataset[field] || '';
         const valB = b.dataset[field] || '';
-        const numA = parseFloat(valA);
-        const numB = parseFloat(valB);
-        const isNumeric = !isNaN(numA) && !isNaN(numB);
+        const numA = Number(valA);
+        const numB = Number(valB);
+        const isNumeric = valA !== '' && valB !== '' && !isNaN(numA) && !isNaN(numB);
 
         if (isNumeric) {
             return order === 'asc' ? numA - numB : numB - numA;
