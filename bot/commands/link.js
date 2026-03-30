@@ -20,6 +20,14 @@ async function handleLink(message, args) {
     // Delete the command message immediately (contains email)
     try { await message.delete(); } catch { /* may not have perms */ }
 
+    // Check if user is already linked
+    const existing = purchases.getEmailByDiscordId.get(message.author.id);
+    if (existing) {
+        return message.channel.send(
+            `<@${message.author.id}> Your account is already linked. To update your email, contact a mod.`
+        );
+    }
+
     // Validate email exists in Stripe
     try {
         const stripe = require('stripe')(config.STRIPE_SECRET_KEY);

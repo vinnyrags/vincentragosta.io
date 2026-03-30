@@ -94,6 +94,10 @@ const stmts = {
         SELECT discord_user_id FROM discord_links WHERE customer_email = ?
     `),
 
+    getEmailByDiscordId: db.prepare(`
+        SELECT customer_email FROM discord_links WHERE discord_user_id = ?
+    `),
+
     linkDiscord: db.prepare(`
         INSERT OR REPLACE INTO discord_links (discord_user_id, customer_email) VALUES (?, ?)
     `),
