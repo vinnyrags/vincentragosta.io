@@ -5,6 +5,7 @@
  *   POST /webhooks/stripe    — Stripe checkout events
  *   POST /webhooks/twitch    — Twitch EventSub events
  *   POST /alerts/products    — New product alerts (from sync scripts)
+ *   GET  /battle/checkout/:id — Direct checkout for pack battle product
  *   GET  /health             — Health check
  */
 
@@ -88,6 +89,56 @@ app.post('/alerts/products', express.json(), async (req, res) => {
     } catch (e) {
         console.error('Product alert error:', e.message);
         res.status(500).json({ error: e.message });
+    }
+});
+
+// =========================================================================
+// Pack battle direct checkout — creates a Stripe session and redirects
+// =========================================================================
+
+app.get('/battle/checkout/:id', async (req, res) => {
+    const { battles } = require('./db');
+    const battle = battles.getActiveBattle.get();
+
+    if (!battle || !battle.stripe_price_id) {
+        return res.status(404).send('No active battle or no product linked.');
+    }
+
+    try {
+        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const session = await stripe.checkout.sessions.create({
+            mode: 'payment',
+            line_items: [{ price: battle.stripe_price_id, quantity: 1 }],
+            success_url: `${config.SHOP_URL}?thanks=1`,
+            cancel_url: config.SHOP_URL,
+            metadata: {
+                battle_id: String(battle.id),
+                source: 'pack-battle',
+            },
+            custom_fields: [
+                {
+                    key: 'discord_username',
+                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
+                    type: 'text',
+                    optional: true,
+                },
+            ],
+            shipping_address_collection: { allowed_countries: ['US'] },
+            shipping_options: [
+                {
+                    shipping_rate_data: {
+                        type: 'fixed_amount',
+                        fixed_amount: { amount: 1000, currency: 'usd' },
+                        display_name: 'Standard Shipping',
+                    },
+                },
+            ],
+        });
+
+        res.redirect(303, session.url);
+    } catch (e) {
+        console.error('Battle checkout error:', e.message);
+        res.status(500).send('Checkout failed. Try again or purchase from the shop directly.');
     }
 });
 

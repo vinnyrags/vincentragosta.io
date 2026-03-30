@@ -89,6 +89,35 @@ async function handleBattle(message, args) {
     }
 }
 
+/**
+ * Look up a Stripe price ID by searching for a product by name.
+ */
+async function findStripePriceId(productName) {
+    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+    const products = await stripe.products.search({
+        query: `name~"${productName.replace(/"/g, '\\"')}"`,
+        limit: 1,
+    });
+
+    if (!products.data.length) return null;
+
+    const product = products.data[0];
+    // Use the default price, or fetch the first active price
+    if (product.default_price) {
+        return typeof product.default_price === 'string'
+            ? product.default_price
+            : product.default_price.id;
+    }
+
+    const prices = await stripe.prices.list({
+        product: product.id,
+        active: true,
+        limit: 1,
+    });
+
+    return prices.data.length ? prices.data[0].id : null;
+}
+
 async function startBattle(message, args) {
     const active = battles.getActiveBattle.get();
     if (active) {
@@ -96,7 +125,7 @@ async function startBattle(message, args) {
     }
 
     if (!args.length) {
-        return message.reply('Usage: `!battle start <product-name> [max-entries]`');
+        return message.reply('Usage: `!battle start <product-name> [max-entries]`\n\nExample: `!battle start Prismatic Evolutions 10`');
     }
 
     const maxEntries = parseInt(args[args.length - 1], 10);
@@ -105,18 +134,31 @@ async function startBattle(message, args) {
     const productSlug = productName.toLowerCase().replace(/\s+/g, '-');
     const max = hasMaxArg ? Math.min(maxEntries, 50) : 20;
 
-    const result = battles.createBattle.run(productSlug, productName, max, null);
+    if (!productName) {
+        return message.reply('Usage: `!battle start <product-name> [max-entries]`');
+    }
+
+    // Look up the Stripe price ID from the product name
+    await message.channel.send(`🔍 Looking up **${productName}** in Stripe...`);
+    const priceId = await findStripePriceId(productName);
+
+    if (!priceId) {
+        return message.reply(`Could not find a product matching **${productName}** in Stripe. Check the product name and try again.`);
+    }
+
+    const result = battles.createBattle.run(productSlug, productName, priceId, max, null);
     const battleId = result.lastInsertRowid;
 
+    const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battleId}`;
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
-        .setDescription('🟢 OPEN — React ✅ to join!')
+        .setDescription(`🟢 OPEN — React ✅ to join!\n\n🛒 **[Buy your pack here](${checkoutUrl})** to confirm your entry.`)
         .setColor(0x2ecc71)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
             { name: 'Confirmed Payments', value: '0/0', inline: true },
         )
-        .setFooter({ text: `Battle #${battleId} • Purchase your pack from the shop to confirm your entry` });
+        .setFooter({ text: `Battle #${battleId} • Your entry is confirmed once payment is received` });
 
     const msg = await message.channel.send({ embeds: [embed] });
     await msg.react('✅');
@@ -126,7 +168,7 @@ async function startBattle(message, args) {
     // Also announce in #announcements
     await sendEmbed('ANNOUNCEMENTS', {
         title: '⚔️ Pack Battle Starting!',
-        description: `**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}> and react to join!\n\nMax entries: ${max}`,
+        description: `**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}> and react to join!\n\n🛒 **[Buy your pack](${checkoutUrl})** • Max entries: ${max}`,
         color: 0x2ecc71,
     });
 }

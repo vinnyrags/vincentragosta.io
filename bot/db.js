@@ -35,6 +35,7 @@ db.exec(`
         channel_message_id TEXT,
         product_slug TEXT NOT NULL,
         product_name TEXT NOT NULL,
+        stripe_price_id TEXT,
         max_entries INTEGER DEFAULT 20,
         status TEXT DEFAULT 'open',
         created_at TEXT DEFAULT (datetime('now')),
@@ -104,8 +105,8 @@ const stmts = {
 
 const battleStmts = {
     createBattle: db.prepare(`
-        INSERT INTO battles (product_slug, product_name, max_entries, channel_message_id)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO battles (product_slug, product_name, stripe_price_id, max_entries, channel_message_id)
+        VALUES (?, ?, ?, ?, ?)
     `),
 
     getActiveBattle: db.prepare(`

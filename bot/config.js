@@ -48,6 +48,7 @@ module.exports = {
 
     // Server
     PORT: parseInt(process.env.BOT_PORT || '3100', 10),
+    SHOP_URL: 'https://vincentragosta.io/shop',
 
     // Channel IDs
     CHANNELS: {
@@ -70,7 +71,6 @@ module.exports = {
         NOUS: '1488046526940053607',
         AHA: '1488046527627919451',
         XIPE: '898717442803642429',
-        LAN: '1488046529049661470',
         YAOSHI: '1488046530295496824',
         IX: '1488046531000008710',
         ENA: '1488046532358967297',
