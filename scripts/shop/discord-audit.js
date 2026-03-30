@@ -5,9 +5,28 @@
  */
 
 const { Client, GatewayIntentBits } = require('discord.js');
+const fs = require('fs');
+const path = require('path');
 
-const TOKEN = process.env.DISCORD_BOT_TOKEN;
-if (!TOKEN) { console.error('Set DISCORD_BOT_TOKEN env var.'); process.exit(1); }
+/**
+ * Read a PHP define() value from wp-config-env.php as a fallback
+ * when the environment variable isn't set.
+ */
+function getConfigToken() {
+    if (process.env.DISCORD_BOT_TOKEN) return process.env.DISCORD_BOT_TOKEN;
+
+    const configPath = path.resolve(__dirname, '../../wp-config-env.php');
+    try {
+        const contents = fs.readFileSync(configPath, 'utf8');
+        const match = contents.match(/define\(\s*'DISCORD_BOT_TOKEN'\s*,\s*'([^']*)'\s*\)/);
+        if (match && match[1]) return match[1];
+    } catch { /* file not found */ }
+
+    return null;
+}
+
+const TOKEN = getConfigToken();
+if (!TOKEN) { console.error('Set DISCORD_BOT_TOKEN in wp-config-env.php or as an env var.'); process.exit(1); }
 
 const client = new Client({
     intents: [
