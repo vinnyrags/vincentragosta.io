@@ -48,7 +48,7 @@ module.exports = {
 
     // Server
     PORT: parseInt(process.env.BOT_PORT || '3100', 10),
-    SHOP_URL: 'https://vincentragosta.io/shop',
+    SHOP_URL: optional('SHOP_URL', 'https://vincentragosta.io/shop'),
 
     // Channel IDs
     CHANNELS: {
