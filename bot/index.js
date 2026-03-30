@@ -6,7 +6,8 @@
  *  - Low-stock alerts (Stripe → #deals)
  *  - Going-live / stream-ended (Twitch → #announcements)
  *  - Pack battle system (!battle commands + Stripe payment verification)
- *  - Duck race entry tracking (Stripe → purchase mapping)
+ *  - Queue system (!queue open/close + auto-entries from Stripe purchases)
+ *  - Duck race (!duckrace — one entry per unique buyer in queue)
  *  - Account linking (!link → email mapping for role promotion)
  *  - Role promotion (Xipe at 1+ purchases, Nous at 5+)
  *  - New product alerts (POST /alerts/products)
@@ -21,6 +22,7 @@ const config = require('./config');
 const { client } = require('./discord');
 const { startServer } = require('./server');
 const { handleBattle, handleBattleReaction } = require('./commands/battle');
+const { handleQueue, handleDuckRace } = require('./commands/queue');
 const { handleLink } = require('./commands/link');
 const PREFIX = '!';
 
@@ -43,6 +45,12 @@ client.on('messageCreate', async (message) => {
         switch (command) {
             case 'battle':
                 await handleBattle(message, args);
+                break;
+            case 'queue':
+                await handleQueue(message, args);
+                break;
+            case 'duckrace':
+                await handleDuckRace(message, args);
                 break;
             case 'link':
                 await handleLink(message, args);

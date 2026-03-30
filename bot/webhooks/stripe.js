@@ -5,13 +5,14 @@
  * - Order notifications → #order-feed
  * - Low-stock alerts → #deals
  * - Pack battle payment verification
- * - Role promotion (Lan → Xipe → Nous)
- * - Duck race entry tracking
+ * - Queue auto-entries (card products → active queue)
+ * - Role promotion (Xipe at 1+, Nous at 5+)
  */
 
 const config = require('../config');
 const { purchases, battles } = require('../db');
 const { sendEmbed, getMember, addRole, hasRole } = require('../discord');
+const { addToQueue } = require('../commands/queue');
 
 /**
  * Process a completed checkout session.
@@ -75,6 +76,16 @@ async function handleCheckoutCompleted(session) {
                 description: `**${productName}** is now sold out!`,
                 color: 0x95a5a6,
             });
+        }
+    }
+
+    // Add card product purchases to the active queue
+    for (const item of lineItems) {
+        const productName = item.name || 'Unknown Product';
+        const quantity = item.quantity || 1;
+        const added = addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
+        if (added) {
+            console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
         }
     }
 

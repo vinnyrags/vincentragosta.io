@@ -63,6 +63,26 @@ db.exec(`
         UNIQUE(race_id, discord_user_id)
     );
 
+    CREATE TABLE IF NOT EXISTS queues (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        status TEXT DEFAULT 'open',
+        created_at TEXT DEFAULT (datetime('now')),
+        closed_at TEXT,
+        duck_race_winner_id TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS queue_entries (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        queue_id INTEGER NOT NULL,
+        discord_user_id TEXT,
+        customer_email TEXT,
+        product_name TEXT,
+        quantity INTEGER DEFAULT 1,
+        stripe_session_id TEXT,
+        created_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (queue_id) REFERENCES queues(id)
+    );
+
     CREATE TABLE IF NOT EXISTS discord_links (
         discord_user_id TEXT PRIMARY KEY,
         customer_email TEXT NOT NULL,
@@ -177,9 +197,57 @@ const duckStmts = {
     `),
 };
 
+// =========================================================================
+// Queues
+// =========================================================================
+
+const queueStmts = {
+    createQueue: db.prepare(`
+        INSERT INTO queues (status) VALUES ('open')
+    `),
+
+    getActiveQueue: db.prepare(`
+        SELECT * FROM queues WHERE status = 'open' ORDER BY created_at DESC LIMIT 1
+    `),
+
+    getQueueById: db.prepare(`
+        SELECT * FROM queues WHERE id = ?
+    `),
+
+    closeQueue: db.prepare(`
+        UPDATE queues SET status = 'closed', closed_at = datetime('now') WHERE id = ?
+    `),
+
+    setDuckRaceWinner: db.prepare(`
+        UPDATE queues SET status = 'complete', duck_race_winner_id = ? WHERE id = ?
+    `),
+
+    addEntry: db.prepare(`
+        INSERT INTO queue_entries (queue_id, discord_user_id, customer_email, product_name, quantity, stripe_session_id)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `),
+
+    getEntries: db.prepare(`
+        SELECT * FROM queue_entries WHERE queue_id = ? ORDER BY created_at ASC
+    `),
+
+    getUniqueBuyers: db.prepare(`
+        SELECT DISTINCT discord_user_id FROM queue_entries WHERE queue_id = ? AND discord_user_id IS NOT NULL
+    `),
+
+    getEntryCount: db.prepare(`
+        SELECT COUNT(*) as count FROM queue_entries WHERE queue_id = ?
+    `),
+
+    getRecentQueues: db.prepare(`
+        SELECT * FROM queues WHERE status IN ('closed', 'complete') ORDER BY created_at DESC LIMIT ?
+    `),
+};
+
 module.exports = {
     db,
     purchases: stmts,
     battles: battleStmts,
     ducks: duckStmts,
+    queues: queueStmts,
 };
