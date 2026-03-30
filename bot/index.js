@@ -7,9 +7,8 @@
  *  - Going-live / stream-ended (Twitch → #announcements)
  *  - Pack battle system (!battle commands + Stripe payment verification)
  *  - Duck race entry tracking (Stripe → purchase mapping)
- *  - Age verification (!verify → DM → Ena role)
  *  - Account linking (!link → email mapping for role promotion)
- *  - Role promotion (Lan → Xipe → Nous based on purchase count)
+ *  - Role promotion (Xipe at 1+ purchases, Nous at 5+)
  *  - New product alerts (POST /alerts/products)
  *  - Pack battle results cross-posted to #pack-openings
  *
@@ -22,7 +21,6 @@ const config = require('./config');
 const { client } = require('./discord');
 const { startServer } = require('./server');
 const { handleBattle, handleBattleReaction } = require('./commands/battle');
-const { handleVerify } = require('./commands/verify');
 const { handleLink } = require('./commands/link');
 const PREFIX = '!';
 
@@ -45,9 +43,6 @@ client.on('messageCreate', async (message) => {
         switch (command) {
             case 'battle':
                 await handleBattle(message, args);
-                break;
-            case 'verify':
-                await handleVerify(message);
                 break;
             case 'link':
                 await handleLink(message, args);
