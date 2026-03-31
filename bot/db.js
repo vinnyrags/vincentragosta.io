@@ -32,6 +32,7 @@ db.exec(`
 
     CREATE TABLE IF NOT EXISTS battles (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        battle_number INTEGER,
         channel_message_id TEXT,
         product_slug TEXT NOT NULL,
         product_name TEXT NOT NULL,
@@ -146,9 +147,17 @@ const stmts = {
 // =========================================================================
 
 const battleStmts = {
+    getNextBattleNumber: db.prepare(`
+        SELECT COALESCE(MAX(battle_number), 0) + 1 as next FROM battles WHERE battle_number IS NOT NULL
+    `),
+
     createBattle: db.prepare(`
         INSERT INTO battles (product_slug, product_name, stripe_price_id, max_entries, channel_message_id)
         VALUES (?, ?, ?, ?, ?)
+    `),
+
+    setBattleNumber: db.prepare(`
+        UPDATE battles SET battle_number = ? WHERE id = ?
     `),
 
     getActiveBattle: db.prepare(`

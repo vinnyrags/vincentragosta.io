@@ -155,7 +155,7 @@ async function startBattle(message, args) {
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
         )
-        .setFooter({ text: `Battle #${battleId} • Purchase = entry. No other action needed.` });
+        .setFooter({ text: 'Purchase = entry. No other action needed.' });
 
     const msg = await message.channel.send({ embeds: [embed] });
     battles.setBattleMessage.run(msg.id, battleId);
@@ -183,10 +183,14 @@ async function closeBattle(message) {
         return;
     }
 
+    // Assign sequential battle number only for battles with entries
+    const { next } = battles.getNextBattleNumber.get();
+    battles.setBattleNumber.run(next, battle.id);
     battles.closeBattle.run(battle.id);
 
-    const embed = buildBattleEmbed({ ...battle, status: 'closed' }, entries, paidEntries);
-    embed.setFooter({ text: `Battle #${battle.id} • ${paidEntries.length} entries • Opening packs now!` });
+    const numberedBattle = { ...battle, battle_number: next, status: 'closed' };
+    const embed = buildBattleEmbed(numberedBattle, entries, paidEntries);
+    embed.setFooter({ text: `Battle #${next} • ${paidEntries.length} entries • Opening packs now!` });
 
     await message.channel.send({ embeds: [embed] });
 }
@@ -246,16 +250,18 @@ async function declareBattleWinner(message, args) {
     // Post in pack-battles
     await message.channel.send({ embeds: [embed] });
 
+    const num = battle.battle_number || '?';
+
     // Cross-post to announcements
     await sendEmbed('ANNOUNCEMENTS', {
-        title: '🏆 Pack Battle Winner!',
+        title: `🏆 Pack Battle #${num} Winner!`,
         description: `<@${mentioned.id}> won the **${battle.product_name}** pack battle and takes home ALL the cards!`,
         color: 0xffd700,
     });
 
     // Cross-post to pack-openings
     await sendEmbed('PACK_OPENINGS', {
-        title: '⚔️ Pack Battle Results',
+        title: `⚔️ Pack Battle #${num} Results`,
         description: `**${battle.product_name}** — ${paidEntries.length} entries\n🏆 Winner: <@${mentioned.id}>`,
         color: 0xffd700,
     });
