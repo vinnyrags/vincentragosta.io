@@ -155,10 +155,10 @@ app.get('/battle/shipping/:battleId', async (req, res) => {
                     price_data: {
                         currency: 'usd',
                         product_data: {
-                            name: `Pack Battle #${battle.id} Winner — ${battle.product_name}`,
-                            description: 'Shipping for your pack battle winnings. No charge.',
+                            name: `Pack Battle #${battle.id} Winner Shipping — ${battle.product_name}`,
+                            description: 'Shipping for your pack battle winnings.',
                         },
-                        unit_amount: 0,
+                        unit_amount: 1000, // $10 shipping
                     },
                     quantity: 1,
                 },
@@ -171,15 +171,6 @@ app.get('/battle/shipping/:battleId', async (req, res) => {
                 winner_id: battle.winner_id,
             },
             shipping_address_collection: { allowed_countries: ['US'] },
-            shipping_options: [
-                {
-                    shipping_rate_data: {
-                        type: 'fixed_amount',
-                        fixed_amount: { amount: 0, currency: 'usd' },
-                        display_name: 'Free — Winner Shipping',
-                    },
-                },
-            ],
         });
 
         res.redirect(303, session.url);

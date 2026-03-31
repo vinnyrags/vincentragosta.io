@@ -271,11 +271,11 @@ async function declareBattleWinner(message, args) {
             .setTitle('🏆 You Won the Pack Battle!')
             .setDescription(
                 `Congrats on winning the **${battle.product_name}** pack battle!\n\n` +
-                `All the cards are yours. Click below to enter your shipping address so we can send them out.\n\n` +
-                `📦 **[Enter Shipping Address](${shippingUrl})**`
+                `All the cards are yours. Click below to pay shipping ($10) and enter your address so we can send them out.\n\n` +
+                `📦 **[Pay Shipping & Enter Address](${shippingUrl})**`
             )
             .setColor(0xffd700)
-            .setFooter({ text: 'No charge — just need your address to ship your winnings.' });
+            .setFooter({ text: '$10 flat rate shipping — same as regular shop orders.' });
         await dm.send({ embeds: [shippingEmbed] });
         await message.channel.send(`📦 Shipping link sent to <@${mentioned.id}> via DM.`);
     } catch {
