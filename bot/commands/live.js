@@ -28,19 +28,17 @@ async function handleLive(message) {
         return message.reply('Already live! Use `!offline` to end the current session first.');
     }
 
-    // Close the pre-order queue if one is open
+    // Post pre-order summary if queue has entries (but keep it open)
     const activeQueue = queues.getActiveQueue.get();
     if (activeQueue) {
-        queues.closeQueue.run(activeQueue.id);
         const entries = queues.getEntries.all(activeQueue.id);
         const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
 
         if (entries.length > 0) {
-            await sendEmbed('PACK_OPENINGS', {
-                title: `📋 Queue #${activeQueue.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
-                description: `Pre-order queue closed for tonight's stream.`,
-                color: 0x95a5a6,
-                footer: `Opened: ${activeQueue.created_at}`,
+            await sendEmbed('ANNOUNCEMENTS', {
+                title: `📋 ${entries.length} Pre-Orders Tonight!`,
+                description: `${uniqueBuyers.length} buyer(s) already in the queue. Let's go!`,
+                color: 0x2ecc71,
             });
         }
     }
@@ -66,7 +64,7 @@ async function handleLive(message) {
     // Confirm in current channel
     await message.channel.send(
         `🔴 **Live session #${sessionId} started.**\n` +
-        `• Pre-order queue closed${activeQueue ? ` (#${activeQueue.id})` : ''}\n` +
+        `• Queue${activeQueue ? ` #${activeQueue.id}` : ''} stays open — orders continue adding\n` +
         `• Shop link with \`?live=1\`: ${shopLink}\n` +
         `• Livestream purchases are shipping-free — collected after \`!offline\``
     );
@@ -132,6 +130,25 @@ async function handleOffline(message) {
         shippingsSent++;
     }
 
+    // Close the current queue and archive it
+    const activeQueue = queues.getActiveQueue.get();
+    let closedQueueId = null;
+    if (activeQueue) {
+        queues.closeQueue.run(activeQueue.id);
+        closedQueueId = activeQueue.id;
+        const entries = queues.getEntries.all(activeQueue.id);
+        const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
+
+        if (entries.length > 0) {
+            await sendEmbed('PACK_OPENINGS', {
+                title: `📋 Queue #${activeQueue.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
+                description: 'Tonight\'s queue archived.',
+                color: 0x95a5a6,
+                footer: `Opened: ${activeQueue.created_at}`,
+            });
+        }
+    }
+
     // Open next queue for pre-orders
     const queueResult = queues.createQueue.run();
     const newQueueId = queueResult.lastInsertRowid;
@@ -146,6 +163,7 @@ async function handleOffline(message) {
     // Confirm in current channel
     await message.channel.send(
         `📴 **Live session #${session.id} ended.**\n` +
+        `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to #pack-openings\n` +
         `• Shipping DMs sent to ${shippingsSent} buyer(s)\n` +
         `• New pre-order queue opened (#${newQueueId})\n` +
         `• Stream-ended message posted to #announcements`
