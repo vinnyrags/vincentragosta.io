@@ -64,7 +64,7 @@ const AgeGate = {
                     <p class="shop-age-gate__message">${message}</p>
                     <div class="shop-age-gate__actions">
                         <button class="shop-age-gate__confirm" data-age-confirm>I am 18 or older</button>
-                        <button class="shop-age-gate__decline" data-age-decline>Take me back</button>
+                        <button class="shop-age-gate__decline" data-age-decline>Continue without mature content</button>
                     </div>
                 </div>
             `;
