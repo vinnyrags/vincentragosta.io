@@ -78,11 +78,13 @@ async function handleBattle(message, args) {
             return cancelBattle(message);
         case 'winner':
             return declareBattleWinner(message, args.slice(1));
+        case 'join':
+            return ownerJoinBattle(message);
         case 'status':
             return battleStatus(message);
         default:
             return message.reply(
-                'Usage: `!battle start <product-name> [max-entries]`, `!battle close`, `!battle cancel`, `!battle winner @user`, `!battle status`'
+                'Usage: `!battle start/close/cancel/join/status`, `!battle winner @user`'
             );
     }
 }
@@ -277,6 +279,88 @@ async function declareBattleWinner(message, args) {
     }
 
     await message.channel.send(`📦 <@${mentioned.id}>'s shipping will be collected when the stream ends (\`!offline\`).`);
+}
+
+async function ownerJoinBattle(message) {
+    // Only Akivili (server owner) can use this
+    if (!message.member.roles.cache.has(config.ROLES.AKIVILI)) {
+        return message.reply('Only the server owner can use `!battle join`.');
+    }
+
+    const battle = battles.getActiveBattle.get();
+    if (!battle) {
+        return message.reply('No active battle to join.');
+    }
+
+    // Check if already entered
+    const existingEntries = battles.getEntries.all(battle.id);
+    if (existingEntries.some((e) => e.discord_user_id === message.author.id)) {
+        return message.reply('You\'re already in this battle.');
+    }
+
+    // Check if battle is full
+    const entryCount = battles.getEntryCount.get(battle.id).count;
+    if (entryCount >= battle.max_entries) {
+        return message.reply('Battle is full.');
+    }
+
+    // Add entry as paid (no Stripe session)
+    battles.addEntry.run(battle.id, message.author.id);
+    battles.confirmPayment.run(`owner-${battle.id}`, battle.id, message.author.id);
+
+    // Decrement stock in WordPress
+    if (battle.stripe_price_id) {
+        try {
+            const url = `${config.SITE_URL}/wp-json/shop/v1/decrement-stock`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    price_id: battle.stripe_price_id,
+                    quantity: 1,
+                    secret: config.LIVESTREAM_SECRET,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                console.log(`Stock decremented: ${data.product} (${data.old_stock} → ${data.new_stock})`);
+            } else {
+                console.error('Stock decrement failed:', data.message);
+            }
+        } catch (e) {
+            console.error('Could not decrement stock:', e.message);
+        }
+    }
+
+    // Update the battle embed
+    const paidEntries = battles.getPaidEntries.all(battle.id);
+    const { client } = require('../discord');
+    try {
+        const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
+        if (channel && battle.channel_message_id) {
+            const msg = await channel.messages.fetch(battle.channel_message_id);
+            const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
+            const embed = new EmbedBuilder()
+                .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
+                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
+                .setColor(0x2ecc71)
+                .addFields(
+                    { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
+                );
+
+            if (paidEntries.length > 0) {
+                const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}>`).join('\n');
+                embed.addFields({ name: 'Roster', value: roster });
+            }
+
+            embed.setFooter({ text: 'Purchase = entry. No other action needed.' });
+            await msg.edit({ embeds: [embed] });
+        }
+    } catch (e) {
+        console.error('Failed to update battle embed:', e.message);
+    }
+
+    await message.channel.send(`⚔️ <@${message.author.id}> is in! (owner entry — stock decremented)`);
 }
 
 async function battleStatus(message) {
