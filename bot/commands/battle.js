@@ -174,14 +174,16 @@ async function closeBattle(message) {
         return message.reply('No active battle to close.');
     }
 
-    battles.closeBattle.run(battle.id);
     const entries = battles.getEntries.all(battle.id);
     const paidEntries = battles.getPaidEntries.all(battle.id);
 
     if (paidEntries.length === 0) {
-        await message.channel.send(`❌ Pack battle **${battle.product_name}** closed with no entries.`);
+        battles.deleteBattle.run(battle.id);
+        await message.channel.send(`❌ Pack battle **${battle.product_name}** closed with no entries — not counted.`);
         return;
     }
+
+    battles.closeBattle.run(battle.id);
 
     const embed = buildBattleEmbed({ ...battle, status: 'closed' }, entries, paidEntries);
     embed.setFooter({ text: `Battle #${battle.id} • ${paidEntries.length} entries • Opening packs now!` });
@@ -195,12 +197,14 @@ async function cancelBattle(message) {
         return message.reply('No active battle to cancel.');
     }
 
-    battles.cancelBattle.run(battle.id);
     const entries = battles.getEntries.all(battle.id);
 
-    await message.channel.send(`❌ Pack battle **${battle.product_name}** has been cancelled.`);
-
-    if (entries.length > 0) {
+    if (entries.length === 0) {
+        battles.deleteBattle.run(battle.id);
+        await message.channel.send(`❌ Pack battle **${battle.product_name}** cancelled — not counted.`);
+    } else {
+        battles.cancelBattle.run(battle.id);
+        await message.channel.send(`❌ Pack battle **${battle.product_name}** has been cancelled.`);
         const entrants = entries.map((e) => `<@${e.discord_user_id}>`).join(', ');
         await message.channel.send(`Notifying entrants: ${entrants} — battle cancelled, refunds if applicable.`);
     }

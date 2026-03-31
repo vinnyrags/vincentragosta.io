@@ -163,6 +163,10 @@ const battleStmts = {
         UPDATE battles SET status = 'closed', closed_at = datetime('now') WHERE id = ?
     `),
 
+    deleteBattle: db.prepare(`
+        DELETE FROM battles WHERE id = ?
+    `),
+
     cancelBattle: db.prepare(`
         UPDATE battles SET status = 'cancelled', closed_at = datetime('now') WHERE id = ?
     `),
