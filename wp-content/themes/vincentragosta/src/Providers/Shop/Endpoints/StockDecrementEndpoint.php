@@ -88,6 +88,19 @@ class StockDecrementEndpoint extends Endpoint
         $newStock = max(0, $currentStock - $quantity);
         update_field('stock_quantity', $newStock, $product->id);
 
+        // Keep Stripe metadata in sync
+        $stripeProductId = $product->stripeProductId();
+        if ($stripeProductId && defined('STRIPE_SECRET_KEY') && STRIPE_SECRET_KEY !== '') {
+            try {
+                $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+                $stripe->products->update($stripeProductId, [
+                    'metadata' => ['stock' => (string) $newStock],
+                ]);
+            } catch (\Throwable $e) {
+                error_log("Failed to sync stock to Stripe: {$e->getMessage()}");
+            }
+        }
+
         return new WP_REST_Response([
             'product'   => $product->title(),
             'old_stock' => $currentStock,

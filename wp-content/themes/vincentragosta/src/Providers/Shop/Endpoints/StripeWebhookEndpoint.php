@@ -140,7 +140,14 @@ class StripeWebhookEndpoint extends Endpoint
             }
 
             $currentStock = (int) get_field('stock_quantity', $postId);
-            update_field('stock_quantity', $currentStock + $quantity, $postId);
+            $newStock = $currentStock + $quantity;
+            update_field('stock_quantity', $newStock, $postId);
+
+            // Keep Stripe metadata in sync
+            $stripeProductId = get_field('stripe_product_id', $postId);
+            if ($stripeProductId) {
+                $this->stripe->syncStockToStripe($stripeProductId, $newStock);
+            }
         }
     }
 

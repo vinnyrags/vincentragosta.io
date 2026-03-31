@@ -139,10 +139,8 @@ while ($hasMore) {
                 maybeSyncCategory($postId, $category);
             }
 
-            // Sync stock from Stripe metadata
-            if ($stock !== '') {
-                update_field('stock_quantity', (int) $stock, $postId);
-            }
+            // Do NOT overwrite stock for existing products — WordPress is the live source of truth.
+            // Stock is only set from Stripe metadata on new product creation.
 
             $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '', $onSale ? "SALE:{$saleDisplayPrice}" : '']);
             echo "  Updated: {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";

@@ -128,6 +128,12 @@ class CreateCheckoutEndpoint extends Endpoint
                 $currentStock = (int) get_field('stock_quantity', $product->id);
                 $newStock = max(0, $currentStock - $quantity);
                 update_field('stock_quantity', $newStock, $product->id);
+
+                // Keep Stripe metadata in sync
+                $stripeProductId = $product->stripeProductId();
+                if ($stripeProductId) {
+                    $this->stripe->syncStockToStripe($stripeProductId, $newStock);
+                }
             }
         }
 

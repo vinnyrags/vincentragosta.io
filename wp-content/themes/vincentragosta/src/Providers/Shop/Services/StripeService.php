@@ -86,6 +86,23 @@ class StripeService
     }
 
     /**
+     * Sync a product's stock count to Stripe metadata.
+     *
+     * Keeps Stripe metadata in sync with WordPress so pull-products
+     * and any external tools see accurate stock numbers.
+     */
+    public function syncStockToStripe(string $stripeProductId, int $stock): void
+    {
+        try {
+            $this->client->products->update($stripeProductId, [
+                'metadata' => ['stock' => (string) $stock],
+            ]);
+        } catch (\Throwable $e) {
+            error_log("Failed to sync stock to Stripe for {$stripeProductId}: {$e->getMessage()}");
+        }
+    }
+
+    /**
      * Construct and verify a webhook event from a raw payload.
      *
      * @throws SignatureVerificationException If the signature is invalid.

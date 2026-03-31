@@ -95,7 +95,21 @@ class CancelCheckoutEndpoint extends Endpoint
             }
 
             $currentStock = (int) get_field('stock_quantity', $postId);
-            update_field('stock_quantity', $currentStock + $quantity, $postId);
+            $newStock = $currentStock + $quantity;
+            update_field('stock_quantity', $newStock, $postId);
+
+            // Keep Stripe metadata in sync
+            $stripeProductId = get_field('stripe_product_id', $postId);
+            if ($stripeProductId && defined('STRIPE_SECRET_KEY') && STRIPE_SECRET_KEY !== '') {
+                try {
+                    $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+                    $stripe->products->update($stripeProductId, [
+                        'metadata' => ['stock' => (string) $newStock],
+                    ]);
+                } catch (\Throwable $e) {
+                    error_log("Failed to sync stock to Stripe: {$e->getMessage()}");
+                }
+            }
         }
 
         // Mark as restored so the expired webhook doesn't double-restore
