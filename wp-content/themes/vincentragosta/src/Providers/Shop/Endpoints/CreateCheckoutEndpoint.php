@@ -124,7 +124,13 @@ class CreateCheckoutEndpoint extends Endpoint
         }
 
         $successUrl = home_url('/shop/thank-you/?session_id={CHECKOUT_SESSION_ID}');
-        $cancelUrl = home_url('/shop/');
+
+        // Build a cancel token so the cancel endpoint can restore stock immediately
+        $cancelToken = base64_encode(json_encode([
+            'product_ids' => implode(',', $productIds),
+            'timestamp'   => time(),
+        ]));
+        $cancelUrl = rest_url('shop/v1/cancel-checkout?token=' . urlencode($cancelToken));
 
         try {
             $session = $this->stripe->createCheckoutSession(

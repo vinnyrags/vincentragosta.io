@@ -123,6 +123,11 @@ class StripeWebhookEndpoint extends Endpoint
             return;
         }
 
+        // Skip if stock was already restored by the cancel endpoint
+        if (get_transient('stock_restored_session_' . $productData)) {
+            return;
+        }
+
         $pairs = explode(',', $productData);
 
         foreach ($pairs as $pair) {

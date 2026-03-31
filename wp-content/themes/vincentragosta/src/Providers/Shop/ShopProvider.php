@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop;
 
+use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
@@ -35,6 +36,7 @@ class ShopProvider extends Provider
      * REST API endpoints.
      */
     protected array $routes = [
+        CancelCheckoutEndpoint::class,
         CreateCheckoutEndpoint::class,
         StripeWebhookEndpoint::class,
     ];

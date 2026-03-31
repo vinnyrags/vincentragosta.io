@@ -47,6 +47,7 @@ class StripeService
     ): Session {
         return $this->client->checkout->sessions->create([
             'mode'                        => 'payment',
+            'expires_at'                  => time() + 1800, // 30 minutes
             'line_items'                  => $lineItems,
             'success_url'                 => $successUrl,
             'cancel_url'                  => $cancelUrl,
