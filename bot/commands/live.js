@@ -10,6 +10,29 @@ const config = require('../config');
 const { livestream, queues } = require('../db');
 const { sendEmbed, sendToChannel, getMember } = require('../discord');
 
+/**
+ * Toggle the server-side livestream transient via WordPress REST API.
+ * This ensures ?live=1 only works when actually live.
+ */
+async function toggleLivestreamMode(active) {
+    const url = `${config.SITE_URL}/wp-json/shop/v1/livestream`;
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                active,
+                secret: config.LIVESTREAM_SECRET,
+            }),
+        });
+        if (!response.ok) {
+            console.error(`Failed to toggle livestream mode: ${response.status}`);
+        }
+    } catch (e) {
+        console.error('Could not reach WordPress to toggle livestream mode:', e.message);
+    }
+}
+
 // =========================================================================
 // !live
 // =========================================================================
@@ -27,6 +50,9 @@ async function handleLive(message) {
     if (active) {
         return message.reply('Already live! Use `!offline` to end the current session first.');
     }
+
+    // Enable shipping-free mode on the WordPress side
+    await toggleLivestreamMode(true);
 
     // Post pre-order summary if queue has entries (but keep it open)
     const activeQueue = queues.getActiveQueue.get();
@@ -89,6 +115,9 @@ async function handleOffline(message) {
 
     // End the session
     livestream.endSession.run(session.id);
+
+    // Disable shipping-free mode on the WordPress side
+    await toggleLivestreamMode(false);
 
     // Get unique buyers who need shipping
     const buyers = livestream.getBuyers.all(session.id);

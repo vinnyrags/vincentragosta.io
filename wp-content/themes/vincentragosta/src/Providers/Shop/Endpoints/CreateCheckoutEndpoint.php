@@ -57,7 +57,9 @@ class CreateCheckoutEndpoint extends Endpoint
     public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $items = $request->get_param('items');
-        $isLive = (bool) $request->get_param('live');
+
+        // Only honor live=true if the server-side livestream transient is active
+        $isLive = (bool) $request->get_param('live') && (bool) get_transient('itzenzo_livestream_active');
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
