@@ -6,6 +6,8 @@
  */
 
 const STORAGE_KEY = 'vincentragosta_cart';
+const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
+const CART_TTL = 24 * 60 * 60 * 1000; // 24 hours in ms
 const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
 
 // ==========================================================================
@@ -137,6 +139,11 @@ const AgeGate = {
 const CartStore = {
     getItems() {
         try {
+            const lastUpdated = parseInt(localStorage.getItem(CART_TIMESTAMP_KEY) || '0', 10);
+            if (lastUpdated && Date.now() - lastUpdated > CART_TTL) {
+                this.clear();
+                return [];
+            }
             return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         } catch {
             return [];
@@ -145,6 +152,7 @@ const CartStore = {
 
     save(items) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        localStorage.setItem(CART_TIMESTAMP_KEY, String(Date.now()));
         document.dispatchEvent(new CustomEvent('shop:cart-updated', {
             detail: { items, count: this.getCount(items) },
         }));
@@ -180,6 +188,7 @@ const CartStore = {
 
     clear() {
         localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(CART_TIMESTAMP_KEY);
         document.dispatchEvent(new CustomEvent('shop:cart-updated', {
             detail: { items: [], count: 0 },
         }));
