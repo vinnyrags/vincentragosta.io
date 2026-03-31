@@ -13,6 +13,7 @@ const config = require('../config');
 const { purchases, battles } = require('../db');
 const { sendEmbed, getMember, addRole, hasRole } = require('../discord');
 const { addToQueue } = require('../commands/queue');
+const { addLivestreamBuyer } = require('../commands/live');
 
 /**
  * Process a completed checkout session.
@@ -86,6 +87,14 @@ async function handleCheckoutCompleted(session) {
         const added = addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
         if (added) {
             console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
+        }
+    }
+
+    // Track livestream buyers (purchases with live=1 metadata)
+    if (session.metadata?.live === '1' && customerEmail) {
+        const tracked = addLivestreamBuyer(discordUserId, customerEmail);
+        if (tracked) {
+            console.log(`Livestream buyer tracked: ${discordUserId || customerEmail}`);
         }
     }
 

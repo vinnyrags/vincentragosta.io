@@ -1,0 +1,171 @@
+/**
+ * Livestream Master Commands
+ *
+ * !live    — Go live: close pre-order queue, start livestream session, post shop link
+ * !offline — End stream: end livestream session, send shipping DMs, open next queue
+ */
+
+const { EmbedBuilder } = require('discord.js');
+const config = require('../config');
+const { livestream, queues } = require('../db');
+const { sendEmbed, sendToChannel, getMember } = require('../discord');
+
+// =========================================================================
+// !live
+// =========================================================================
+
+async function handleLive(message) {
+    const isAdmin = message.member.roles.cache.has(config.ROLES.NANOOK)
+        || message.member.roles.cache.has(config.ROLES.AKIVILI);
+
+    if (!isAdmin) {
+        return message.reply('Only moderators can use this command.');
+    }
+
+    // Check if already live
+    const active = livestream.getActiveSession.get();
+    if (active) {
+        return message.reply('Already live! Use `!offline` to end the current session first.');
+    }
+
+    // Close the pre-order queue if one is open
+    const activeQueue = queues.getActiveQueue.get();
+    if (activeQueue) {
+        queues.closeQueue.run(activeQueue.id);
+        const entries = queues.getEntries.all(activeQueue.id);
+        const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
+
+        if (entries.length > 0) {
+            await sendEmbed('PACK_OPENINGS', {
+                title: `📋 Queue #${activeQueue.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
+                description: `Pre-order queue closed for tonight's stream.`,
+                color: 0x95a5a6,
+                footer: `Opened: ${activeQueue.created_at}`,
+            });
+        }
+    }
+
+    // Start livestream session
+    const result = livestream.startSession.run();
+    const sessionId = result.lastInsertRowid;
+
+    const shopLink = `${config.SHOP_URL}?live=1`;
+
+    // Post going-live announcement
+    const embed = new EmbedBuilder()
+        .setTitle('🔴 We\'re Live!')
+        .setDescription(
+            `Card night is starting! Come hang.\n\n` +
+            `🛒 **[Shop Now](${shopLink})** — shipping is collected once at the end of the stream.\n\n` +
+            `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV)`
+        )
+        .setColor(0x9146ff);
+
+    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
+
+    // Confirm in current channel
+    await message.channel.send(
+        `🔴 **Live session #${sessionId} started.**\n` +
+        `• Pre-order queue closed${activeQueue ? ` (#${activeQueue.id})` : ''}\n` +
+        `• Shop link with \`?live=1\`: ${shopLink}\n` +
+        `• Livestream purchases are shipping-free — collected after \`!offline\``
+    );
+}
+
+// =========================================================================
+// !offline
+// =========================================================================
+
+async function handleOffline(message) {
+    const isAdmin = message.member.roles.cache.has(config.ROLES.NANOOK)
+        || message.member.roles.cache.has(config.ROLES.AKIVILI);
+
+    if (!isAdmin) {
+        return message.reply('Only moderators can use this command.');
+    }
+
+    const session = livestream.getActiveSession.get();
+    if (!session) {
+        return message.reply('No active livestream session. Use `!live` to start one.');
+    }
+
+    // End the session
+    livestream.endSession.run(session.id);
+
+    // Get unique buyers who need shipping
+    const buyers = livestream.getBuyers.all(session.id);
+
+    // Send shipping DMs to each unique buyer
+    let shippingsSent = 0;
+    const shippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/livestream/shipping/${session.id}`;
+
+    for (const buyer of buyers) {
+        const shippingEmbed = new EmbedBuilder()
+            .setTitle('📦 Shipping for Tonight\'s Orders')
+            .setDescription(
+                `Thanks for buying during tonight's stream!\n\n` +
+                `Click below to pay shipping ($10 flat rate) and enter your address.\n\n` +
+                `📦 **[Pay Shipping & Enter Address](${shippingUrl}?email=${encodeURIComponent(buyer.customer_email)})**`
+            )
+            .setColor(0x2ecc71)
+            .setFooter({ text: '$10 flat rate — covers all items from tonight.' });
+
+        if (buyer.discord_user_id) {
+            try {
+                const member = await getMember(buyer.discord_user_id);
+                if (member) {
+                    const dm = await member.createDM();
+                    await dm.send({ embeds: [shippingEmbed] });
+                    shippingsSent++;
+                    continue;
+                }
+            } catch { /* DMs disabled — fall through */ }
+        }
+
+        // Fallback: post in announcements if we can't DM
+        await sendToChannel('ANNOUNCEMENTS', {
+            content: buyer.discord_user_id ? `<@${buyer.discord_user_id}>` : buyer.customer_email,
+            embeds: [shippingEmbed],
+        });
+        shippingsSent++;
+    }
+
+    // Open next queue for pre-orders
+    const queueResult = queues.createQueue.run();
+    const newQueueId = queueResult.lastInsertRowid;
+
+    // Post stream-ended recap
+    await sendEmbed('ANNOUNCEMENTS', {
+        title: '📴 Stream\'s Over!',
+        description: 'Thanks for hanging out! Clips and highlights coming soon.\n\nPre-order queue is open for next stream.',
+        color: 0x95a5a6,
+    });
+
+    // Confirm in current channel
+    await message.channel.send(
+        `📴 **Live session #${session.id} ended.**\n` +
+        `• Shipping DMs sent to ${shippingsSent} buyer(s)\n` +
+        `• New pre-order queue opened (#${newQueueId})\n` +
+        `• Stream-ended message posted to #announcements`
+    );
+}
+
+/**
+ * Track a livestream buyer (called from Stripe webhook when metadata.live === '1').
+ */
+function addLivestreamBuyer(discordUserId, customerEmail) {
+    const session = livestream.getActiveSession.get();
+    if (!session) return false;
+
+    livestream.addBuyer.run(session.id, discordUserId, customerEmail);
+    return true;
+}
+
+/**
+ * Check if there's an active livestream session.
+ */
+function isLive() {
+    return !!livestream.getActiveSession.get();
+}
+
+module.exports = { handleLive, handleOffline, addLivestreamBuyer, isLive };

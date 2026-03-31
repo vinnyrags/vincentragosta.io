@@ -5,6 +5,7 @@
  *  - Order notifications (Stripe → #order-feed)
  *  - Low-stock alerts (Stripe → #deals)
  *  - Going-live / stream-ended (Twitch → #announcements)
+ *  - Livestream mode (!live / !offline — master switches for stream sessions)
  *  - Pack battle system (!battle commands + Stripe payment verification)
  *  - Queue system (!queue open/close + auto-entries from Stripe purchases)
  *  - Duck race (!duckrace — one entry per unique buyer in queue)
@@ -21,6 +22,7 @@
 const config = require('./config');
 const { client } = require('./discord');
 const { startServer } = require('./server');
+const { handleLive, handleOffline } = require('./commands/live');
 const { handleBattle, handleBattleReaction } = require('./commands/battle');
 const { handleQueue, handleDuckRace } = require('./commands/queue');
 const { handleLink } = require('./commands/link');
@@ -43,6 +45,12 @@ client.on('messageCreate', async (message) => {
 
     try {
         switch (command) {
+            case 'live':
+                await handleLive(message);
+                break;
+            case 'offline':
+                await handleOffline(message);
+                break;
             case 'battle':
                 await handleBattle(message, args);
                 break;

@@ -83,6 +83,24 @@ db.exec(`
         FOREIGN KEY (queue_id) REFERENCES queues(id)
     );
 
+    CREATE TABLE IF NOT EXISTS livestream_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        status TEXT DEFAULT 'active',
+        created_at TEXT DEFAULT (datetime('now')),
+        ended_at TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS livestream_buyers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        session_id INTEGER NOT NULL,
+        discord_user_id TEXT,
+        customer_email TEXT NOT NULL,
+        shipping_paid INTEGER DEFAULT 0,
+        created_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (session_id) REFERENCES livestream_sessions(id),
+        UNIQUE(session_id, customer_email)
+    );
+
     CREATE TABLE IF NOT EXISTS discord_links (
         discord_user_id TEXT PRIMARY KEY,
         customer_email TEXT NOT NULL,
@@ -244,10 +262,42 @@ const queueStmts = {
     `),
 };
 
+// =========================================================================
+// Livestream Sessions
+// =========================================================================
+
+const livestreamStmts = {
+    startSession: db.prepare(`
+        INSERT INTO livestream_sessions (status) VALUES ('active')
+    `),
+
+    getActiveSession: db.prepare(`
+        SELECT * FROM livestream_sessions WHERE status = 'active' ORDER BY created_at DESC LIMIT 1
+    `),
+
+    endSession: db.prepare(`
+        UPDATE livestream_sessions SET status = 'ended', ended_at = datetime('now') WHERE id = ?
+    `),
+
+    addBuyer: db.prepare(`
+        INSERT OR IGNORE INTO livestream_buyers (session_id, discord_user_id, customer_email)
+        VALUES (?, ?, ?)
+    `),
+
+    getBuyers: db.prepare(`
+        SELECT * FROM livestream_buyers WHERE session_id = ? AND shipping_paid = 0
+    `),
+
+    markShippingPaid: db.prepare(`
+        UPDATE livestream_buyers SET shipping_paid = 1 WHERE session_id = ? AND customer_email = ?
+    `),
+};
+
 module.exports = {
     db,
     purchases: stmts,
     battles: battleStmts,
     ducks: duckStmts,
     queues: queueStmts,
+    livestream: livestreamStmts,
 };

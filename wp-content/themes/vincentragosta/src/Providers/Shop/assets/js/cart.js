@@ -7,8 +7,17 @@
 
 const STORAGE_KEY = 'vincentragosta_cart';
 const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
+const LIVE_MODE_KEY = 'vincentragosta_live_mode';
 const CART_TTL = 24 * 60 * 60 * 1000; // 24 hours in ms
 const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
+
+// Detect ?live=1 in URL and persist to sessionStorage
+(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('live') === '1') {
+        sessionStorage.setItem(LIVE_MODE_KEY, '1');
+    }
+})();
 
 // ==========================================================================
 // AgeGate — modal that fires before mature content is visible
@@ -354,6 +363,7 @@ const CartCheckout = {
                         priceId: i.priceId,
                         quantity: i.quantity,
                     })),
+                    live: sessionStorage.getItem(LIVE_MODE_KEY) === '1',
                 }),
             });
 

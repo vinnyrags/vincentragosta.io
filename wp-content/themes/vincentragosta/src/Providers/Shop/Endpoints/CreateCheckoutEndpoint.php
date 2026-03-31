@@ -46,12 +46,18 @@ class CreateCheckoutEndpoint extends Endpoint
                 'required' => true,
                 'type'     => 'array',
             ],
+            'live' => [
+                'required' => false,
+                'type'     => 'boolean',
+                'default'  => false,
+            ],
         ];
     }
 
     public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $items = $request->get_param('items');
+        $isLive = (bool) $request->get_param('live');
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
@@ -133,11 +139,20 @@ class CreateCheckoutEndpoint extends Endpoint
         $cancelUrl = rest_url('shop/v1/cancel-checkout?token=' . urlencode($cancelToken));
 
         try {
+            $metadata = [
+                'product_ids' => implode(',', $productIds),
+            ];
+
+            if ($isLive) {
+                $metadata['live'] = '1';
+            }
+
             $session = $this->stripe->createCheckoutSession(
                 $lineItems,
                 $successUrl,
                 $cancelUrl,
-                ['product_ids' => implode(',', $productIds)],
+                $metadata,
+                $isLive,
             );
 
             return new WP_REST_Response([

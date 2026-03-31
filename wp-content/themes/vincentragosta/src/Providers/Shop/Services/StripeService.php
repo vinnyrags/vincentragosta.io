@@ -38,24 +38,37 @@ class StripeService
      * @param string $successUrl URL to redirect to after successful payment.
      * @param string $cancelUrl URL to redirect to if checkout is cancelled.
      * @param array<string, string> $metadata Metadata to attach to the session.
+     * @param bool $skipShipping If true, no shipping is collected (livestream mode).
      */
     public function createCheckoutSession(
         array $lineItems,
         string $successUrl,
         string $cancelUrl,
         array $metadata = [],
+        bool $skipShipping = false,
     ): Session {
-        return $this->client->checkout->sessions->create([
-            'mode'                        => 'payment',
-            'expires_at'                  => time() + 1800, // 30 minutes
-            'line_items'                  => $lineItems,
-            'success_url'                 => $successUrl,
-            'cancel_url'                  => $cancelUrl,
-            'metadata'                    => $metadata,
-            'shipping_address_collection' => [
-                'allowed_countries' => ['US'],
+        $params = [
+            'mode'       => 'payment',
+            'expires_at' => time() + 1800, // 30 minutes
+            'line_items' => $lineItems,
+            'success_url' => $successUrl,
+            'cancel_url'  => $cancelUrl,
+            'metadata'    => $metadata,
+            'custom_fields' => [
+                [
+                    'key'      => 'discord_username',
+                    'label'    => ['type' => 'custom', 'custom' => 'Discord username for role upgrades (optional)'],
+                    'type'     => 'text',
+                    'optional' => true,
+                ],
             ],
-            'shipping_options' => [
+        ];
+
+        if (!$skipShipping) {
+            $params['shipping_address_collection'] = [
+                'allowed_countries' => ['US'],
+            ];
+            $params['shipping_options'] = [
                 [
                     'shipping_rate_data' => [
                         'type'         => 'fixed_amount',
@@ -66,16 +79,10 @@ class StripeService
                         'display_name' => 'Standard Shipping',
                     ],
                 ],
-            ],
-            'custom_fields' => [
-                [
-                    'key'      => 'discord_username',
-                    'label'    => ['type' => 'custom', 'custom' => 'Discord username for role upgrades (optional)'],
-                    'type'     => 'text',
-                    'optional' => true,
-                ],
-            ],
-        ]);
+            ];
+        }
+
+        return $this->client->checkout->sessions->create($params);
     }
 
     /**
