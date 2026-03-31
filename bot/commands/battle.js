@@ -178,16 +178,15 @@ async function closeBattle(message) {
     const entries = battles.getEntries.all(battle.id);
     const paidEntries = battles.getPaidEntries.all(battle.id);
 
+    if (paidEntries.length === 0) {
+        await message.channel.send(`❌ Pack battle **${battle.product_name}** closed with no entries.`);
+        return;
+    }
+
     const embed = buildBattleEmbed({ ...battle, status: 'closed' }, entries, paidEntries);
-    embed.setFooter({ text: `Battle #${battle.id} • Entries closed • ${paidEntries.length} confirmed` });
+    embed.setFooter({ text: `Battle #${battle.id} • ${paidEntries.length} entries • Opening packs now!` });
 
     await message.channel.send({ embeds: [embed] });
-
-    if (paidEntries.length < entries.length) {
-        const unpaid = entries.filter((e) => !e.paid);
-        const unpaidList = unpaid.map((e) => `<@${e.discord_user_id}>`).join(', ');
-        await message.channel.send(`⚠️ Unpaid entries: ${unpaidList} — these will not be included.`);
-    }
 }
 
 async function cancelBattle(message) {
