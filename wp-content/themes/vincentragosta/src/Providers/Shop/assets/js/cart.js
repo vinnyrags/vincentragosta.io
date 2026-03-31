@@ -360,8 +360,7 @@ const CartCheckout = {
                 return;
             }
 
-            // Clear cart and redirect to Stripe
-            CartStore.clear();
+            // Redirect to Stripe — cart is cleared on the thank-you page after successful payment
             window.location.href = data.url;
         } catch {
             alert('Something went wrong. Please try again.');
