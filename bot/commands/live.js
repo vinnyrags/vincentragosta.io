@@ -100,15 +100,17 @@ async function handleOffline(message) {
     const shippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/livestream/shipping/${session.id}`;
 
     for (const buyer of buyers) {
+        const isPlaceholder = buyer.customer_email.includes('@placeholder');
+        const emailParam = isPlaceholder ? '' : `?email=${encodeURIComponent(buyer.customer_email)}`;
         const shippingEmbed = new EmbedBuilder()
             .setTitle('📦 Shipping for Tonight\'s Orders')
             .setDescription(
-                `Thanks for buying during tonight's stream!\n\n` +
-                `Click below to pay shipping ($10 flat rate) and enter your address.\n\n` +
-                `📦 **[Pay Shipping & Enter Address](${shippingUrl}?email=${encodeURIComponent(buyer.customer_email)})**`
+                `Thanks for being part of tonight's stream!\n\n` +
+                `Click below to pay shipping ($10 flat rate) and enter your address. This covers everything from tonight.\n\n` +
+                `📦 **[Pay Shipping & Enter Address](${shippingUrl}${emailParam})**`
             )
             .setColor(0x2ecc71)
-            .setFooter({ text: '$10 flat rate — covers all items from tonight.' });
+            .setFooter({ text: '$10 flat rate — covers all items and winnings from tonight.' });
 
         if (buyer.discord_user_id) {
             try {

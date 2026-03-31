@@ -5,9 +5,8 @@
  *   POST /webhooks/stripe    — Stripe checkout events
  *   POST /webhooks/twitch    — Twitch EventSub events
  *   POST /alerts/products    — New product alerts (from sync scripts)
- *   GET  /battle/checkout/:id  — Direct checkout for pack battle buy-in (no shipping)
- *   GET  /battle/shipping/:id    — $10 checkout to collect winner's shipping address
- *   GET  /livestream/shipping/:id — $10 shipping for livestream buyers
+ *   GET  /battle/checkout/:id     — Direct checkout for pack battle buy-in (no shipping)
+ *   GET  /livestream/shipping/:id — $10 shipping for all livestream buyers (including battle winners)
  *   GET  /health                  — Health check
  */
 
@@ -138,62 +137,15 @@ app.get('/battle/checkout/:id', async (req, res) => {
 // =========================================================================
 // Battle winner shipping — $0 checkout to collect winner's address
 // =========================================================================
-
-app.get('/battle/shipping/:battleId', async (req, res) => {
-    const { battles } = require('./db');
-    const battle = battles.getBattleById.get(parseInt(req.params.battleId, 10));
-
-    if (!battle || !battle.winner_id) {
-        return res.status(404).send('No battle winner found.');
-    }
-
-    try {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
-        const session = await stripe.checkout.sessions.create({
-            mode: 'payment',
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: `Pack Battle #${battle.id} Winner Shipping — ${battle.product_name}`,
-                            description: 'Shipping for your pack battle winnings.',
-                        },
-                        unit_amount: 1000, // $10 shipping
-                    },
-                    quantity: 1,
-                },
-            ],
-            success_url: `${config.SHOP_URL}?battle_shipped=1`,
-            cancel_url: config.SHOP_URL,
-            metadata: {
-                battle_id: String(battle.id),
-                source: 'battle-shipping',
-                winner_id: battle.winner_id,
-            },
-            shipping_address_collection: { allowed_countries: ['US'] },
-        });
-
-        res.redirect(303, session.url);
-    } catch (e) {
-        console.error('Battle shipping checkout error:', e.message);
-        res.status(500).send('Could not create shipping form. Contact a mod.');
-    }
-});
-
-// =========================================================================
 // Livestream shipping — $10 flat rate for all items from tonight's stream
 // =========================================================================
 
 app.get('/livestream/shipping/:sessionId', async (req, res) => {
     const email = req.query.email;
-    if (!email) {
-        return res.status(400).send('Missing email parameter.');
-    }
 
     try {
         const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
-        const session = await stripe.checkout.sessions.create({
+        const params = {
             mode: 'payment',
             line_items: [
                 {
@@ -201,7 +153,7 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
                         currency: 'usd',
                         product_data: {
                             name: 'Livestream Shipping',
-                            description: 'Flat rate shipping for all items purchased during tonight\'s stream.',
+                            description: 'Flat rate shipping for all items and winnings from tonight\'s stream.',
                         },
                         unit_amount: 1000, // $10
                     },
@@ -210,15 +162,20 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
             ],
             success_url: `${config.SHOP_URL}?shipping_paid=1`,
             cancel_url: config.SHOP_URL,
-            customer_email: email,
             metadata: {
                 livestream_session_id: req.params.sessionId,
                 source: 'livestream-shipping',
-                customer_email: email,
             },
             shipping_address_collection: { allowed_countries: ['US'] },
-        });
+        };
 
+        // Prefill email if available
+        if (email) {
+            params.customer_email = email;
+            params.metadata.customer_email = email;
+        }
+
+        const session = await stripe.checkout.sessions.create(params);
         res.redirect(303, session.url);
     } catch (e) {
         console.error('Livestream shipping checkout error:', e.message);
