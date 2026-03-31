@@ -23,7 +23,7 @@ const config = require('./config');
 const { client } = require('./discord');
 const { startServer } = require('./server');
 const { handleLive, handleOffline } = require('./commands/live');
-const { handleBattle, handleBattleReaction } = require('./commands/battle');
+const { handleBattle } = require('./commands/battle');
 const { handleQueue, handleDuckRace } = require('./commands/queue');
 const { handleLink } = require('./commands/link');
 const PREFIX = '!';
@@ -72,26 +72,6 @@ client.on('messageCreate', async (message) => {
         try {
             await message.reply('Something went wrong. Try again or ping a mod.');
         } catch { /* can't reply */ }
-    }
-});
-
-// =========================================================================
-// Reaction handler — pack battle joins
-// =========================================================================
-
-client.on('messageReactionAdd', async (reaction, user) => {
-    // Fetch partial reactions
-    if (reaction.partial) {
-        try { await reaction.fetch(); } catch { return; }
-    }
-    if (reaction.message.partial) {
-        try { await reaction.message.fetch(); } catch { return; }
-    }
-
-    try {
-        await handleBattleReaction(reaction, user);
-    } catch (e) {
-        console.error('Error handling reaction:', e.message);
     }
 });
 

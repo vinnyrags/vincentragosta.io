@@ -19,12 +19,11 @@ const { sendToChannel, sendEmbed, getMember, addRole } = require('../discord');
 
 /**
  * Build the battle status embed.
+ * Every entry is a paid entry — purchase is the only way to join.
  */
 function buildBattleEmbed(battle, entries, paidEntries) {
-    const totalEntries = entries.length;
-    const paidCount = paidEntries.length;
     const statusText = battle.status === 'open'
-        ? '🟢 OPEN — React ✅ to join!'
+        ? '🟢 OPEN — Buy your pack to enter!'
         : battle.status === 'closed'
             ? '🔴 CLOSED — No more entries'
             : battle.status === 'complete'
@@ -36,12 +35,11 @@ function buildBattleEmbed(battle, entries, paidEntries) {
         .setDescription(statusText)
         .setColor(battle.status === 'open' ? 0x2ecc71 : battle.status === 'complete' ? 0xffd700 : 0xe74c3c)
         .addFields(
-            { name: 'Entries', value: `${totalEntries}/${battle.max_entries}`, inline: true },
-            { name: 'Confirmed Payments', value: `${paidCount}/${totalEntries}`, inline: true },
+            { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
         );
 
     if (paidEntries.length > 0) {
-        const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}> ✅`).join('\n');
+        const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}>`).join('\n');
         embed.addFields({ name: 'Roster', value: roster });
     }
 
@@ -152,23 +150,20 @@ async function startBattle(message, args) {
     const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battleId}`;
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
-        .setDescription(`🟢 OPEN — React ✅ to join!\n\n🛒 **[Buy your pack here](${checkoutUrl})** to confirm your entry.`)
+        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
         .setColor(0x2ecc71)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
-            { name: 'Confirmed Payments', value: '0/0', inline: true },
         )
-        .setFooter({ text: `Battle #${battleId} • Your entry is confirmed once payment is received` });
+        .setFooter({ text: `Battle #${battleId} • Purchase = entry. No other action needed.` });
 
     const msg = await message.channel.send({ embeds: [embed] });
-    await msg.react('✅');
-
     battles.setBattleMessage.run(msg.id, battleId);
 
     // Also announce in #announcements
     await sendEmbed('ANNOUNCEMENTS', {
         title: '⚔️ Pack Battle Starting!',
-        description: `**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}> and react to join!\n\n🛒 **[Buy your pack](${checkoutUrl})** • Max entries: ${max}`,
+        description: `**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}>!\n\n🛒 **[Buy your pack to enter](${checkoutUrl})** • Max entries: ${max}`,
         color: 0x2ecc71,
     });
 }
@@ -288,38 +283,4 @@ async function battleStatus(message) {
     await message.channel.send({ embeds: [embed] });
 }
 
-/**
- * Handle reaction-based joins on battle messages.
- */
-async function handleBattleReaction(reaction, user) {
-    if (user.bot) return;
-    if (reaction.emoji.name !== '✅') return;
-
-    const battle = battles.getActiveBattle.get();
-    if (!battle || battle.channel_message_id !== reaction.message.id) return;
-
-    const entryCount = battles.getEntryCount.get(battle.id).count;
-    if (entryCount >= battle.max_entries) {
-        await reaction.users.remove(user.id);
-        const dm = await user.createDM();
-        await dm.send(`Sorry, the pack battle for **${battle.product_name}** is full (${battle.max_entries} max).`);
-        return;
-    }
-
-    battles.addEntry.run(battle.id, user.id);
-
-    const newCount = battles.getEntryCount.get(battle.id).count;
-    const paidCount = battles.getPaidEntryCount.get(battle.id).count;
-
-    // Update the battle message embed
-    const channel = reaction.message.channel;
-    const embed = buildBattleEmbed(battle, battles.getEntries.all(battle.id), battles.getPaidEntries.all(battle.id));
-    embed.setFooter({ text: `Battle #${battle.id} • Purchase your pack from the shop to confirm your entry` });
-
-    try {
-        const msg = await channel.messages.fetch(battle.channel_message_id);
-        await msg.edit({ embeds: [embed] });
-    } catch { /* message may not be editable */ }
-}
-
-module.exports = { handleBattle, handleBattleReaction };
+module.exports = { handleBattle };

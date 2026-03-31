@@ -174,50 +174,53 @@ async function checkRolePromotion(discordUserId) {
 }
 
 /**
- * Check if a payment corresponds to an active pack battle entry.
+ * Check if a payment is a pack battle purchase and auto-enter the buyer.
+ * Purchase = entry. No reaction needed.
  */
 async function checkBattlePayment(session, discordUserId) {
-    if (!discordUserId) return;
+    // Only process pack-battle purchases
+    if (session.metadata?.source !== 'pack-battle') return;
 
     const battle = battles.getActiveBattle.get();
     if (!battle) return;
 
-    // Check if user has an unpaid entry
-    const entries = battles.getEntries.all(battle.id);
-    const userEntry = entries.find((e) => e.discord_user_id === discordUserId && !e.paid);
-    if (!userEntry) return;
+    // Check if battle is full
+    const entryCount = battles.getEntryCount.get(battle.id).count;
+    if (entryCount >= battle.max_entries) {
+        console.log(`Battle #${battle.id} is full — payment from ${discordUserId || 'unknown'} not added`);
+        return;
+    }
 
-    // Confirm payment
-    battles.confirmPayment.run(session.id, battle.id, discordUserId);
+    // Add entry and mark as paid in one step
+    const odiscordUserId = discordUserId || `unknown-${session.id}`;
+    battles.addEntry.run(battle.id, odiscordUserId);
+    battles.confirmPayment.run(session.id, battle.id, odiscordUserId);
 
-    const paidCount = battles.getPaidEntryCount.get(battle.id).count;
-    const totalEntries = battles.getEntryCount.get(battle.id).count;
+    const paidEntries = battles.getPaidEntries.all(battle.id);
 
-    // Update the battle message
+    // Update the battle message embed
     const { client } = require('../discord');
     try {
         const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
         if (channel && battle.channel_message_id) {
             const msg = await channel.messages.fetch(battle.channel_message_id);
-            const allEntries = battles.getEntries.all(battle.id);
-            const paidEntries = battles.getPaidEntries.all(battle.id);
+            const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
 
             const { EmbedBuilder } = require('discord.js');
             const embed = new EmbedBuilder()
                 .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
-                .setDescription('🟢 OPEN — React ✅ to join!')
+                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
                 .setColor(0x2ecc71)
                 .addFields(
-                    { name: 'Entries', value: `${totalEntries}/${battle.max_entries}`, inline: true },
-                    { name: 'Confirmed Payments', value: `${paidCount}/${totalEntries}`, inline: true },
+                    { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
                 );
 
             if (paidEntries.length > 0) {
-                const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}> ✅`).join('\n');
+                const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}>`).join('\n');
                 embed.addFields({ name: 'Roster', value: roster });
             }
 
-            embed.setFooter({ text: `Battle #${battle.id} • Purchase your pack from the shop to confirm your entry` });
+            embed.setFooter({ text: `Battle #${battle.id} • Purchase = entry. No other action needed.` });
             await msg.edit({ embeds: [embed] });
         }
     } catch (e) {
@@ -226,7 +229,7 @@ async function checkBattlePayment(session, discordUserId) {
 
     // Notify in channel
     const { sendToChannel } = require('../discord');
-    await sendToChannel('PACK_BATTLES', `✅ <@${discordUserId}> payment confirmed! (${paidCount}/${totalEntries} paid)`);
+    await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries})`);
 }
 
 module.exports = { handleCheckoutCompleted };
