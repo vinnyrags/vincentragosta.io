@@ -54,6 +54,9 @@ async function handleLive(message) {
     // Enable shipping-free mode on the WordPress side
     await toggleLivestreamMode(true);
 
+    // Start 4-hour reminder
+    startReminder();
+
     // Post pre-order summary if queue has entries (but keep it open)
     const activeQueue = queues.getActiveQueue.get();
     if (activeQueue) {
@@ -118,6 +121,9 @@ async function handleOffline(message) {
 
     // Disable shipping-free mode on the WordPress side
     await toggleLivestreamMode(false);
+
+    // Cancel the reminder
+    cancelReminder();
 
     // Get unique buyers who need shipping
     const buyers = livestream.getBuyers.all(session.id);
@@ -197,6 +203,44 @@ async function handleOffline(message) {
         `• New pre-order queue opened (#${newQueueId})\n` +
         `• Stream-ended message posted to #announcements`
     );
+}
+
+// =========================================================================
+// Reminder timer — DMs you after 4 hours if !offline hasn't been run
+// =========================================================================
+
+let reminderTimer = null;
+const REMINDER_MS = 4 * 60 * 60 * 1000; // 4 hours
+
+function startReminder() {
+    cancelReminder();
+    reminderTimer = setTimeout(async () => {
+        const session = livestream.getActiveSession.get();
+        if (!session) return;
+
+        try {
+            const guild = require('../discord').getGuild();
+            if (!guild) return;
+            const owner = await guild.members.fetch(guild.ownerId);
+            if (owner) {
+                const dm = await owner.createDM();
+                await dm.send(
+                    `⏰ **Reminder:** Your livestream session (#${session.id}) has been active for 4+ hours. ` +
+                    `Don't forget to run \`!offline\` when you're done — shipping DMs won't go out until you do.`
+                );
+                console.log('Sent 4-hour livestream reminder to owner');
+            }
+        } catch (e) {
+            console.error('Failed to send livestream reminder:', e.message);
+        }
+    }, REMINDER_MS);
+}
+
+function cancelReminder() {
+    if (reminderTimer) {
+        clearTimeout(reminderTimer);
+        reminderTimer = null;
+    }
 }
 
 /**
