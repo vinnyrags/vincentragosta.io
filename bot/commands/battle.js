@@ -261,6 +261,27 @@ async function declareBattleWinner(message, args) {
         description: `**${battle.product_name}** — ${paidEntries.length} entries\n🏆 Winner: <@${mentioned.id}>`,
         color: 0xffd700,
     });
+
+    // DM the winner with a shipping link
+    const shippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/shipping/${battle.id}`;
+    try {
+        const dm = await mentioned.createDM();
+        const { EmbedBuilder } = require('discord.js');
+        const shippingEmbed = new EmbedBuilder()
+            .setTitle('🏆 You Won the Pack Battle!')
+            .setDescription(
+                `Congrats on winning the **${battle.product_name}** pack battle!\n\n` +
+                `All the cards are yours. Click below to enter your shipping address so we can send them out.\n\n` +
+                `📦 **[Enter Shipping Address](${shippingUrl})**`
+            )
+            .setColor(0xffd700)
+            .setFooter({ text: 'No charge — just need your address to ship your winnings.' });
+        await dm.send({ embeds: [shippingEmbed] });
+        await message.channel.send(`📦 Shipping link sent to <@${mentioned.id}> via DM.`);
+    } catch {
+        // DMs may be disabled — post the link in the channel
+        await message.channel.send(`📦 <@${mentioned.id}> — enter your shipping address here: ${shippingUrl}`);
+    }
 }
 
 async function battleStatus(message) {

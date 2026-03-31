@@ -5,8 +5,9 @@
  *   POST /webhooks/stripe    — Stripe checkout events
  *   POST /webhooks/twitch    — Twitch EventSub events
  *   POST /alerts/products    — New product alerts (from sync scripts)
- *   GET  /battle/checkout/:id — Direct checkout for pack battle product
- *   GET  /health             — Health check
+ *   GET  /battle/checkout/:id  — Direct checkout for pack battle buy-in (no shipping)
+ *   GET  /battle/shipping/:id — $0 checkout to collect winner's shipping address
+ *   GET  /health              — Health check
  */
 
 const express = require('express');
@@ -123,13 +124,59 @@ app.get('/battle/checkout/:id', async (req, res) => {
                     optional: true,
                 },
             ],
+            // No shipping — only the winner receives cards
+        });
+
+        res.redirect(303, session.url);
+    } catch (e) {
+        console.error('Battle checkout error:', e.message);
+        res.status(500).send('Checkout failed. Try again or purchase from the shop directly.');
+    }
+});
+
+// =========================================================================
+// Battle winner shipping — $0 checkout to collect winner's address
+// =========================================================================
+
+app.get('/battle/shipping/:battleId', async (req, res) => {
+    const { battles } = require('./db');
+    const battle = battles.getBattleById.get(parseInt(req.params.battleId, 10));
+
+    if (!battle || !battle.winner_id) {
+        return res.status(404).send('No battle winner found.');
+    }
+
+    try {
+        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const session = await stripe.checkout.sessions.create({
+            mode: 'payment',
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: `Pack Battle #${battle.id} Winner — ${battle.product_name}`,
+                            description: 'Shipping for your pack battle winnings. No charge.',
+                        },
+                        unit_amount: 0,
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `${config.SHOP_URL}?battle_shipped=1`,
+            cancel_url: config.SHOP_URL,
+            metadata: {
+                battle_id: String(battle.id),
+                source: 'battle-shipping',
+                winner_id: battle.winner_id,
+            },
             shipping_address_collection: { allowed_countries: ['US'] },
             shipping_options: [
                 {
                     shipping_rate_data: {
                         type: 'fixed_amount',
-                        fixed_amount: { amount: 1000, currency: 'usd' },
-                        display_name: 'Standard Shipping',
+                        fixed_amount: { amount: 0, currency: 'usd' },
+                        display_name: 'Free — Winner Shipping',
                     },
                 },
             ],
@@ -137,8 +184,8 @@ app.get('/battle/checkout/:id', async (req, res) => {
 
         res.redirect(303, session.url);
     } catch (e) {
-        console.error('Battle checkout error:', e.message);
-        res.status(500).send('Checkout failed. Try again or purchase from the shop directly.');
+        console.error('Battle shipping checkout error:', e.message);
+        res.status(500).send('Could not create shipping form. Contact a mod.');
     }
 });
 
