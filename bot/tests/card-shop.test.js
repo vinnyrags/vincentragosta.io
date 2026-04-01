@@ -9,7 +9,7 @@ import { createMockMessage, createMockMention } from './mocks.js';
 let db, stmts;
 
 const ROLE_AKIVILI = '1488046525065072670';
-const CARD_SHOP_CHANNEL = 'PLACEHOLDER_CHANNEL_ID';
+const CARD_SHOP_CHANNEL = '1488977861237801231';
 
 // Build a mock discord object
 function buildMockDiscord() {
@@ -47,7 +47,7 @@ vi.mock('../discord.js', () => ({
         channels: {
             cache: {
                 get: vi.fn().mockReturnValue({
-                    id: 'PLACEHOLDER_CHANNEL_ID',
+                    id: '1488977861237801231',
                     send: vi.fn().mockResolvedValue({ id: 'embed_msg_1', edit: vi.fn() }),
                     messages: { fetch: vi.fn().mockResolvedValue({ edit: vi.fn() }) },
                 }),
