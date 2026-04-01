@@ -172,7 +172,7 @@ const CartStore = {
         const existing = items.find((i) => i.priceId === item.priceId);
 
         if (existing) {
-            existing.quantity = Math.min(existing.quantity + item.quantity, item.stock || 10);
+            existing.quantity = Math.min(existing.quantity + item.quantity, item.stock || Infinity);
         } else {
             items.push({ ...item });
         }
@@ -190,7 +190,7 @@ const CartStore = {
         const item = items.find((i) => i.priceId === priceId);
 
         if (item) {
-            item.quantity = Math.min(Math.max(1, quantity), item.stock || 10);
+            item.quantity = Math.min(Math.max(1, quantity), item.stock || Infinity);
             this.save(items);
         }
     },
@@ -275,11 +275,8 @@ const CartDrawer = {
                 </div>
                 <div class="shop-cart-item__actions">
                     ${item.stock > 1 ? `
-                        <select class="shop-cart-item__quantity" aria-label="Quantity" data-quantity-select>
-                            ${Array.from({ length: Math.min(item.stock, 10) }, (_, i) => i + 1).map((n) =>
-                                `<option value="${n}" ${n === item.quantity ? 'selected' : ''}>${n}</option>`
-                            ).join('')}
-                        </select>
+                        <input type="number" class="shop-cart-item__quantity" aria-label="Quantity"
+                            data-quantity-input min="1" max="${item.stock}" value="${item.quantity}" />
                     ` : ''}
                     <button class="shop-cart-item__remove" data-remove-item aria-label="Remove ${item.title}">&times;</button>
                 </div>
@@ -312,11 +309,12 @@ const CartDrawer = {
 
         // Quantity change
         this.el.addEventListener('change', (e) => {
-            const select = e.target.closest('[data-quantity-select]');
-            if (!select) return;
-            const item = select.closest('.shop-cart-item');
+            const input = e.target.closest('[data-quantity-input]');
+            if (!input) return;
+            const item = input.closest('.shop-cart-item');
             if (item) {
-                CartStore.updateQuantity(item.dataset.priceId, parseInt(select.value, 10));
+                CartStore.updateQuantity(item.dataset.priceId, parseInt(input.value, 10));
+                this.render();
             }
         });
 

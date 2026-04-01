@@ -160,13 +160,20 @@
 }
 
 .shop-cart-item__quantity {
-  width: 50px;
-  padding: 0.2em;
+  width: 56px;
+  padding: 0.2em 0.1em 0.2em 0.4em;
   border: 1px solid var(--color-border);
   border-radius: 2px;
   background: transparent;
   color: var(--color-text);
   font-size: var(--wp--preset--font-size--10);
+  text-align: center;
+  -moz-appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
 }
 
 .shop-cart-item__remove {
