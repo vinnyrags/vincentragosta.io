@@ -5,10 +5,10 @@
  * !offline — End stream: end livestream session, send shipping DMs, open next queue
  */
 
-const { EmbedBuilder } = require('discord.js');
-const config = require('../config');
-const { livestream, queues } = require('../db');
-const { sendEmbed, sendToChannel, getMember } = require('../discord');
+import { EmbedBuilder } from 'discord.js';
+import config from '../config.js';
+import { livestream, queues } from '../db.js';
+import { sendEmbed, sendToChannel, getMember, getGuild } from '../discord.js';
 
 /**
  * Toggle the server-side livestream transient via WordPress REST API.
@@ -219,7 +219,7 @@ function startReminder() {
         if (!session) return;
 
         try {
-            const guild = require('../discord').getGuild();
+            const guild = getGuild();
             if (!guild) return;
             const owner = await guild.members.fetch(guild.ownerId);
             if (owner) {
@@ -261,4 +261,4 @@ function isLive() {
     return !!livestream.getActiveSession.get();
 }
 
-module.exports = { handleLive, handleOffline, addLivestreamBuyer, isLive };
+export { handleLive, handleOffline, addLivestreamBuyer, isLive };

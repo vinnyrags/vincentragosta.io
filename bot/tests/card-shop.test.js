@@ -11,8 +11,7 @@ let db, stmts;
 const ROLE_AKIVILI = '1488046525065072670';
 const CARD_SHOP_CHANNEL = 'PLACEHOLDER_CHANNEL_ID';
 
-// Build a mock discord object — vi.mock can't intercept CJS require(),
-// so we inject these via card-shop.js's _setDeps() instead.
+// Build a mock discord object
 function buildMockDiscord() {
     return {
         client: {
@@ -34,15 +33,52 @@ function buildMockDiscord() {
     };
 }
 
-const cardShop = require('../commands/card-shop');
+// Mock db and discord modules so vi.mock intercepts ESM imports
+vi.mock('../db.js', () => {
+    // Will be replaced in beforeEach via mockReturnValue
+    return {
+        cardListings: {},
+        purchases: {},
+    };
+});
+
+vi.mock('../discord.js', () => ({
+    client: {
+        channels: {
+            cache: {
+                get: vi.fn().mockReturnValue({
+                    id: 'PLACEHOLDER_CHANNEL_ID',
+                    send: vi.fn().mockResolvedValue({ id: 'embed_msg_1', edit: vi.fn() }),
+                    messages: { fetch: vi.fn().mockResolvedValue({ edit: vi.fn() }) },
+                }),
+            },
+        },
+    },
+    getMember: vi.fn().mockResolvedValue({
+        createDM: vi.fn().mockResolvedValue({
+            send: vi.fn().mockResolvedValue({}),
+        }),
+    }),
+}));
+
+// Import after mocks are set up
+const cardShopModule = await import('../commands/card-shop.js');
+const dbModule = await import('../db.js');
+const discordModule = await import('../discord.js');
 
 beforeEach(() => {
     db = createTestDb();
     stmts = buildStmts(db);
-    cardShop._setDeps({
-        testDb: { cardListings: stmts.cardListings, purchases: stmts.purchases },
-        testDiscord: buildMockDiscord(),
-    });
+
+    // Wire test DB stubs into the mocked module
+    Object.assign(dbModule.cardListings, stmts.cardListings);
+    Object.assign(dbModule.purchases, stmts.purchases);
+
+    // Reset discord mocks
+    const mockDiscord = buildMockDiscord();
+    discordModule.client.channels.cache.get = mockDiscord.client.channels.cache.get;
+    discordModule.getMember.mockImplementation(mockDiscord.getMember);
+
     vi.clearAllMocks();
     vi.useFakeTimers();
 });
@@ -57,7 +93,7 @@ afterEach(() => {
 
 describe('!sell permission guards', () => {
     it('rejects non-owner', async () => {
-        const { handleSell } = cardShop;
+        const { handleSell } = cardShopModule;
         const msg = createMockMessage({ roles: [] });
 
         await handleSell(msg, []);
@@ -69,7 +105,7 @@ describe('!sell permission guards', () => {
 
 describe('!sell input validation', () => {
     it('requires a mentioned buyer', async () => {
-        const { handleSell } = cardShop;
+        const { handleSell } = cardShopModule;
         const msg = createMockMessage({
             content: '!sell "Test Card" 25.00',
             roles: [ROLE_AKIVILI],
@@ -82,7 +118,7 @@ describe('!sell input validation', () => {
     });
 
     it('requires quoted card name', async () => {
-        const { handleSell } = cardShop;
+        const { handleSell } = cardShopModule;
         const buyer = createMockMention('buyer123');
         const msg = createMockMessage({
             content: '!sell @buyer Test Card 25.00',
@@ -97,7 +133,7 @@ describe('!sell input validation', () => {
     });
 
     it('requires a price', async () => {
-        const { handleSell } = cardShop;
+        const { handleSell } = cardShopModule;
         const buyer = createMockMention('buyer123');
         const msg = createMockMessage({
             content: '!sell @buyer "Test Card"',
@@ -114,7 +150,7 @@ describe('!sell input validation', () => {
 
 describe('!sell creates reserved listing', () => {
     it('creates a reserved listing in the database', async () => {
-        const { handleSell } = cardShop;
+        const { handleSell } = cardShopModule;
         const buyer = createMockMention('buyer123');
         const msg = createMockMessage({
             content: '!sell @buyer "Charizard VMAX" 50.00',
@@ -139,7 +175,7 @@ describe('!sell creates reserved listing', () => {
 
 describe('!list permission guards', () => {
     it('rejects non-owner', async () => {
-        const { handleList } = cardShop;
+        const { handleList } = cardShopModule;
         const msg = createMockMessage({ roles: [] });
 
         await handleList(msg, []);
@@ -151,7 +187,7 @@ describe('!list permission guards', () => {
 
 describe('!list input validation', () => {
     it('requires quoted card name', async () => {
-        const { handleList } = cardShop;
+        const { handleList } = cardShopModule;
         const msg = createMockMessage({
             content: '!list Test Card 25.00',
             roles: [ROLE_AKIVILI],
@@ -164,7 +200,7 @@ describe('!list input validation', () => {
     });
 
     it('requires a price', async () => {
-        const { handleList } = cardShop;
+        const { handleList } = cardShopModule;
         const msg = createMockMessage({
             content: '!list "Test Card"',
             roles: [ROLE_AKIVILI],
@@ -179,7 +215,7 @@ describe('!list input validation', () => {
 
 describe('!list creates active listing', () => {
     it('creates an active listing in the database', async () => {
-        const { handleList } = cardShop;
+        const { handleList } = cardShopModule;
         const msg = createMockMessage({
             content: '!list "Pikachu EX" 15.00',
             roles: [ROLE_AKIVILI],
@@ -202,7 +238,7 @@ describe('!list creates active listing', () => {
 
 describe('!sold permission guards', () => {
     it('rejects non-owner', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
         const msg = createMockMessage({ roles: [] });
 
         await handleSold(msg, []);
@@ -214,7 +250,7 @@ describe('!sold permission guards', () => {
 
 describe('!sold validation', () => {
     it('requires a message ID or reply', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
         const msg = createMockMessage({ roles: [ROLE_AKIVILI] });
 
         await handleSold(msg, []);
@@ -224,7 +260,7 @@ describe('!sold validation', () => {
     });
 
     it('rejects unknown message IDs', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
         const msg = createMockMessage({ roles: [ROLE_AKIVILI] });
 
         await handleSold(msg, ['nonexistent_msg']);
@@ -234,7 +270,7 @@ describe('!sold validation', () => {
     });
 
     it('rejects already-sold listings', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
 
         // Create and immediately sell a listing
         stmts.cardListings.create.run('Test Card', 1000, null, 'active');
@@ -251,7 +287,7 @@ describe('!sold validation', () => {
 
 describe('!sold marks listing', () => {
     it('marks an active listing as sold', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
 
         stmts.cardListings.create.run('Test Card', 1000, null, 'active');
         stmts.cardListings.setMessageId.run('msg_123', 1);
@@ -265,7 +301,7 @@ describe('!sold marks listing', () => {
     });
 
     it('works with reply references', async () => {
-        const { handleSold } = cardShop;
+        const { handleSold } = cardShopModule;
 
         stmts.cardListings.create.run('Test Card', 1000, null, 'active');
         stmts.cardListings.setMessageId.run('msg_456', 1);

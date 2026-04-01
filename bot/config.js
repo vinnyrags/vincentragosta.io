@@ -2,8 +2,11 @@
  * Configuration — reads from environment variables or wp-config-env.php.
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function readPhpDefine(name) {
     const configPath = path.resolve(__dirname, '../wp-config-env.php');
@@ -31,7 +34,7 @@ function optional(name, fallback = null) {
     return process.env[name] || readPhpDefine(name) || fallback;
 }
 
-module.exports = {
+export default {
     // Discord
     DISCORD_BOT_TOKEN: required('DISCORD_BOT_TOKEN'),
     GUILD_ID: '862139045974638612',

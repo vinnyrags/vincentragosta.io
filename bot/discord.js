@@ -2,8 +2,8 @@
  * Discord client setup and helpers.
  */
 
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
-const config = require('./config');
+import { Client, GatewayIntentBits, EmbedBuilder } from 'discord.js';
+import config from './config.js';
 
 const client = new Client({
     intents: [
@@ -89,7 +89,7 @@ async function addRole(member, roleId) {
     return false;
 }
 
-module.exports = {
+export {
     client,
     getChannel,
     getGuild,

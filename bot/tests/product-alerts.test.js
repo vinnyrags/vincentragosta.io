@@ -7,17 +7,18 @@
 
 import { describe, it, expect, vi } from 'vitest';
 
-vi.mock('../discord', () => ({
+vi.mock('../discord.js', () => ({
     sendEmbed: vi.fn().mockResolvedValue(null),
 }));
 
-vi.mock('../config', () => ({
-    default: undefined,
-    CHANNELS: {
-        POKEMON: 'ch-pokemon',
-        ANIME: 'ch-anime',
-        MATURE_DROPS: 'ch-mature',
-        DEALS: 'ch-deals',
+vi.mock('../config.js', () => ({
+    default: {
+        CHANNELS: {
+            POKEMON: 'ch-pokemon',
+            ANIME: 'ch-anime',
+            MATURE_DROPS: 'ch-mature',
+            DEALS: 'ch-deals',
+        },
     },
 }));
 

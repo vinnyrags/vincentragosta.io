@@ -9,9 +9,9 @@
  * Requires TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET, and TWITCH_WEBHOOK_SECRET.
  */
 
-const crypto = require('crypto');
-const config = require('../config');
-const { sendEmbed } = require('../discord');
+import crypto from 'node:crypto';
+import config from '../config.js';
+import { sendEmbed } from '../discord.js';
 
 /**
  * Verify Twitch EventSub webhook signature.
@@ -108,4 +108,4 @@ async function handleTwitchWebhook(req, res) {
     res.sendStatus(200);
 }
 
-module.exports = { handleTwitchWebhook };
+export { handleTwitchWebhook };

@@ -9,8 +9,8 @@
  * Triggered via HTTP endpoint after `make sync-products`.
  */
 
-const config = require('../config');
-const { sendEmbed } = require('../discord');
+import config from '../config.js';
+import { sendEmbed } from '../discord.js';
 
 /**
  * Map a product category to its Discord channel key.
@@ -91,4 +91,4 @@ async function alertNewProducts(products) {
     }
 }
 
-module.exports = { alertNewProduct, alertNewProducts };
+export { alertNewProduct, alertNewProducts };

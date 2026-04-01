@@ -7,10 +7,10 @@
  *   !sold <message_id>              — Manually mark a listing as sold (or reply to listing)
  */
 
-const { EmbedBuilder } = require('discord.js');
-const config = require('../config');
-let db = require('../db');
-let discord = require('../discord');
+import { EmbedBuilder } from 'discord.js';
+import config from '../config.js';
+import { cardListings } from '../db.js';
+import { client, getMember } from '../discord.js';
 
 // In-memory expiry timers: listingId → timeoutId
 const expiryTimers = new Map();
@@ -73,7 +73,7 @@ function buildListingEmbed(listing) {
  */
 async function updateListingEmbed(listing) {
     try {
-        const channel = discord.client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+        const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
         if (!channel || !listing.message_id) return;
         const msg = await channel.messages.fetch(listing.message_id);
         await msg.edit({ embeds: [buildListingEmbed(listing)] });
@@ -92,13 +92,13 @@ function startExpiryTimer(listingId) {
     const timer = setTimeout(async () => {
         expiryTimers.delete(listingId);
 
-        const listing = db.cardListings.getById.get(listingId);
+        const listing = cardListings.getById.get(listingId);
         if (!listing || listing.status !== 'reserved') return;
 
-        db.cardListings.markExpired.run(listingId);
-        db.cardListings.relistAsActive.run(listingId);
+        cardListings.markExpired.run(listingId);
+        cardListings.relistAsActive.run(listingId);
 
-        const relisted = db.cardListings.getById.get(listingId);
+        const relisted = cardListings.getById.get(listingId);
         await updateListingEmbed(relisted);
 
         console.log(`Card listing #${listingId} expired — relisted as active`);
@@ -152,24 +152,24 @@ async function handleSell(message, args) {
     }
 
     // Create reserved listing
-    const result = db.cardListings.create.run(cardName, priceCents, buyer.id, 'reserved');
+    const result = cardListings.create.run(cardName, priceCents, buyer.id, 'reserved');
     const listingId = Number(result.lastInsertRowid);
 
     // Post embed in #card-shop
-    const channel = discord.client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+    const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
     if (!channel) {
         return message.reply('Card shop channel not found. Check config.');
     }
 
-    const listing = db.cardListings.getById.get(listingId);
+    const listing = cardListings.getById.get(listingId);
     const embed = buildListingEmbed(listing);
     const msg = await channel.send({ embeds: [embed] });
-    db.cardListings.setMessageId.run(msg.id, listingId);
+    cardListings.setMessageId.run(msg.id, listingId);
 
     // DM the buyer with checkout link
     const url = checkoutUrl(listingId);
     try {
-        const member = await discord.getMember(buyer.id);
+        const member = await getMember(buyer.id);
         if (member) {
             const dm = await member.createDM();
             const dmEmbed = new EmbedBuilder()
@@ -224,19 +224,19 @@ async function handleList(message, args) {
     }
 
     // Create active listing
-    const result = db.cardListings.create.run(cardName, priceCents, null, 'active');
+    const result = cardListings.create.run(cardName, priceCents, null, 'active');
     const listingId = Number(result.lastInsertRowid);
 
     // Post embed in #card-shop
-    const channel = discord.client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+    const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
     if (!channel) {
         return message.reply('Card shop channel not found. Check config.');
     }
 
-    const listing = db.cardListings.getById.get(listingId);
+    const listing = cardListings.getById.get(listingId);
     const embed = buildListingEmbed(listing);
     const msg = await channel.send({ embeds: [embed] });
-    db.cardListings.setMessageId.run(msg.id, listingId);
+    cardListings.setMessageId.run(msg.id, listingId);
 
     if (message.channel.id !== channel.id) {
         await message.channel.send(`✅ Listed **${cardName}** for ${formatPrice(priceCents)} in <#${config.CHANNELS.CARD_SHOP}>.`);
@@ -261,7 +261,7 @@ async function handleSold(message, args) {
         return message.reply('Usage: `!sold <message_id>` or reply to the listing message.');
     }
 
-    const listing = db.cardListings.getByMessageId.get(targetMessageId);
+    const listing = cardListings.getByMessageId.get(targetMessageId);
     if (!listing) {
         return message.reply('No card listing found for that message.');
     }
@@ -271,25 +271,20 @@ async function handleSold(message, args) {
     }
 
     // Mark sold and update
-    db.cardListings.markSold.run(listing.id);
+    cardListings.markSold.run(listing.id);
     clearExpiryTimer(listing.id);
 
-    const updated = db.cardListings.getById.get(listing.id);
+    const updated = cardListings.getById.get(listing.id);
     await updateListingEmbed(updated);
 
     await message.channel.send(`✅ **${listing.card_name}** marked as sold.`);
 }
 
-module.exports = {
+export {
     handleSell,
     handleList,
     handleSold,
     clearExpiryTimer,
     updateListingEmbed,
-    // Exported for testing
-    _expiryTimers: expiryTimers,
-    _setDeps({ testDb, testDiscord }) {
-        if (testDb) db = testDb;
-        if (testDiscord) discord = testDiscord;
-    },
+    expiryTimers as _expiryTimers,
 };

@@ -1,24 +1,21 @@
 /**
  * Tests for Twitch EventSub webhook handler — signature verification and routing.
- *
- * Note: Discord notification calls (sendEmbed) are tested indirectly via
- * response codes and routing. Direct mock assertions on CJS modules aren't
- * reliable in this Vitest/CJS setup.
  */
 
 import { describe, it, expect, vi } from 'vitest';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 // Stub discord to prevent real client initialization
-vi.mock('../discord', () => ({
+vi.mock('../discord.js', () => ({
     sendEmbed: vi.fn().mockResolvedValue(null),
 }));
 
-vi.mock('../config', () => ({
-    default: undefined,
-    TWITCH_WEBHOOK_SECRET: 'test-secret',
-    CHANNELS: { ANNOUNCEMENTS: 'announcements' },
-    ROLES: { XIPE: 'role-xipe' },
+vi.mock('../config.js', () => ({
+    default: {
+        TWITCH_WEBHOOK_SECRET: 'test-secret',
+        CHANNELS: { ANNOUNCEMENTS: 'announcements' },
+        ROLES: { XIPE: 'role-xipe' },
+    },
 }));
 
 function buildSignedReq(body, secret = 'test-secret') {
@@ -62,8 +59,6 @@ describe('Twitch webhook routing', () => {
     });
 
     it('returns 200 and processes event even with wrong secret when config secret is absent', async () => {
-        // Note: vi.mock for CJS config doesn't work — real config may or may not have secret
-        // This test verifies the handler completes regardless
         const req = buildSignedReq({ subscription: { type: 'stream.online' }, event: {} }, 'wrong-secret');
         const res = mockRes();
         await handleTwitchWebhook(req, res);

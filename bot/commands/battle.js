@@ -12,10 +12,12 @@
  * Payment is verified via Stripe webhook.
  */
 
-const { EmbedBuilder } = require('discord.js');
-const config = require('../config');
-const { battles } = require('../db');
-const { sendToChannel, sendEmbed, getMember, addRole } = require('../discord');
+import { EmbedBuilder } from 'discord.js';
+import Stripe from 'stripe';
+import config from '../config.js';
+import { db, battles, purchases } from '../db.js';
+import { client, sendToChannel, sendEmbed, getMember, addRole } from '../discord.js';
+import { addLivestreamBuyer } from './live.js';
 
 /**
  * Build the battle status embed.
@@ -93,7 +95,7 @@ async function handleBattle(message, args) {
  * Look up a Stripe price ID by searching for a product by name.
  */
 async function findStripePriceId(productName) {
-    const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(config.STRIPE_SECRET_KEY);
     const products = await stripe.products.search({
         query: `name~"${productName.replace(/"/g, '\\"')}"`,
         limit: 1,
@@ -219,9 +221,8 @@ async function cancelBattle(message) {
 async function declareBattleWinner(message, args) {
     // Find the most recent closed battle
     const battle = battles.getBattleById.get(
-        // Get the most recent non-open battle
         (() => {
-            const row = require('../db').db.prepare(
+            const row = db.prepare(
                 "SELECT id FROM battles WHERE status = 'closed' ORDER BY created_at DESC LIMIT 1"
             ).get();
             return row?.id;
@@ -269,8 +270,7 @@ async function declareBattleWinner(message, args) {
     });
 
     // Add winner to livestream buyers so !offline collects shipping with everything else
-    const { addLivestreamBuyer } = require('./live');
-    const link = require('../db').purchases.getEmailByDiscordId.get(mentioned.id);
+    const link = purchases.getEmailByDiscordId.get(mentioned.id);
     if (link) {
         addLivestreamBuyer(mentioned.id, link.customer_email);
     } else {
@@ -334,7 +334,6 @@ async function ownerJoinBattle(message) {
 
     // Update the battle embed
     const paidEntries = battles.getPaidEntries.all(battle.id);
-    const { client } = require('../discord');
     try {
         const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
         if (channel && battle.channel_message_id) {
@@ -376,4 +375,4 @@ async function battleStatus(message) {
     await message.channel.send({ embeds: [embed] });
 }
 
-module.exports = { handleBattle };
+export { handleBattle };

@@ -19,14 +19,14 @@
  *   npm start (from bot/ directory)
  */
 
-const config = require('./config');
-const { client } = require('./discord');
-const { startServer } = require('./server');
-const { handleLive, handleOffline } = require('./commands/live');
-const { handleBattle } = require('./commands/battle');
-const { handleQueue, handleDuckRace } = require('./commands/queue');
-const { handleLink } = require('./commands/link');
-const { handleSell, handleList, handleSold } = require('./commands/card-shop');
+import config from './config.js';
+import { client } from './discord.js';
+import { startServer } from './server.js';
+import { handleLive, handleOffline } from './commands/live.js';
+import { handleBattle } from './commands/battle.js';
+import { handleQueue, handleDuckRace } from './commands/queue.js';
+import { handleLink } from './commands/link.js';
+import { handleSell, handleList, handleSold } from './commands/card-shop.js';
 const PREFIX = '!';
 
 // =========================================================================

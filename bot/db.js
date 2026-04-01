@@ -2,8 +2,11 @@
  * SQLite database for pack battles, purchase tracking, duck races, and card listings.
  */
 
-const Database = require('better-sqlite3');
-const path = require('path');
+import Database from 'better-sqlite3';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const db = new Database(path.resolve(__dirname, 'data.db'));
 
@@ -361,12 +364,12 @@ const cardListingStmts = {
     `),
 };
 
-module.exports = {
+export {
     db,
-    purchases: stmts,
-    battles: battleStmts,
-    ducks: duckStmts,
-    queues: queueStmts,
-    livestream: livestreamStmts,
-    cardListings: cardListingStmts,
+    stmts as purchases,
+    battleStmts as battles,
+    duckStmts as ducks,
+    queueStmts as queues,
+    livestreamStmts as livestream,
+    cardListingStmts as cardListings,
 };

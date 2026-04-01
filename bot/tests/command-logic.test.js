@@ -3,8 +3,6 @@
  *
  * Tests the database operations that command handlers perform (battle lifecycle,
  * queue management, livestream sessions) and command guard responses.
- * Direct handler testing via vi.mock isn't viable for CJS modules in this
- * Vitest setup, so we test the operations they compose.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
@@ -18,7 +16,7 @@ const ROLE_AKIVILI = '1488046525065072670';
 const ROLE_NANOOK = '1488046525899739148';
 
 // Stub discord to prevent real client initialization
-vi.mock('../discord', () => ({
+vi.mock('../discord.js', () => ({
     client: { channels: { cache: { get: vi.fn() } } },
     getChannel: vi.fn(),
     getGuild: vi.fn(),
@@ -29,20 +27,39 @@ vi.mock('../discord', () => ({
     addRole: vi.fn().mockResolvedValue(false),
 }));
 
-vi.mock('../config', () => ({
-    default: undefined,
-    CHANNELS: { ANNOUNCEMENTS: '1', ORDER_FEED: '2', DEALS: '3', PACK_BATTLES: '1488041101326811158', PACK_OPENINGS: '5' },
-    ROLES: { AKIVILI: '1488046525065072670', NANOOK: '1488046525899739148', NOUS: 'r3', AHA: 'r4', XIPE: 'r5' },
-    SHOP_URL: 'https://example.com/shop',
-    SITE_URL: 'https://example.com',
-    LIVESTREAM_SECRET: 'test-secret',
-    STRIPE_SECRET_KEY: 'sk_test_123',
-    GUILD_ID: 'guild123',
+vi.mock('../config.js', () => ({
+    default: {
+        CHANNELS: { ANNOUNCEMENTS: '1', ORDER_FEED: '2', DEALS: '3', PACK_BATTLES: '1488041101326811158', PACK_OPENINGS: '5' },
+        ROLES: { AKIVILI: '1488046525065072670', NANOOK: '1488046525899739148', NOUS: 'r3', AHA: 'r4', XIPE: 'r5' },
+        SHOP_URL: 'https://example.com/shop',
+        SITE_URL: 'https://example.com',
+        LIVESTREAM_SECRET: 'test-secret',
+        STRIPE_SECRET_KEY: 'sk_test_123',
+        GUILD_ID: 'guild123',
+    },
 }));
+
+vi.mock('../db.js', () => ({
+    db: null,
+    purchases: {},
+    battles: {},
+    queues: {},
+    livestream: {},
+    cardListings: {},
+    ducks: {},
+}));
+
+const dbModule = await import('../db.js');
 
 beforeEach(() => {
     db = createTestDb();
     stmts = buildStmts(db);
+    Object.assign(dbModule.db ?? {}, {});
+    dbModule.db = db;
+    Object.assign(dbModule.purchases, stmts.purchases);
+    Object.assign(dbModule.battles, stmts.battles);
+    Object.assign(dbModule.queues, stmts.queues);
+    Object.assign(dbModule.livestream, stmts.livestream);
     vi.clearAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,

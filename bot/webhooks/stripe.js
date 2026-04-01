@@ -9,11 +9,13 @@
  * - Role promotion (Xipe at 1+, Nous at 5+)
  */
 
-const config = require('../config');
-const { purchases, battles, cardListings } = require('../db');
-const { sendEmbed, getMember, addRole, hasRole } = require('../discord');
-const { addToQueue } = require('../commands/queue');
-const { addLivestreamBuyer } = require('../commands/live');
+import { EmbedBuilder } from 'discord.js';
+import config from '../config.js';
+import { db, purchases, battles, cardListings } from '../db.js';
+import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
+import { addToQueue } from '../commands/queue.js';
+import { addLivestreamBuyer } from '../commands/live.js';
+import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 
 /**
  * Process a completed checkout session.
@@ -116,7 +118,6 @@ async function handleCheckoutCompleted(session) {
  * Searches guild members by username and saves the mapping.
  */
 async function autoLinkDiscord(discordUsername, customerEmail) {
-    const { getGuild } = require('../discord');
     const guild = getGuild();
     if (!guild) return;
 
@@ -202,14 +203,12 @@ async function checkBattlePayment(session, discordUserId) {
     const paidEntries = battles.getPaidEntries.all(battle.id);
 
     // Update the battle message embed
-    const { client } = require('../discord');
     try {
         const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
         if (channel && battle.channel_message_id) {
             const msg = await channel.messages.fetch(battle.channel_message_id);
             const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
 
-            const { EmbedBuilder } = require('discord.js');
             const embed = new EmbedBuilder()
                 .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
                 .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
@@ -231,7 +230,6 @@ async function checkBattlePayment(session, discordUserId) {
     }
 
     // Notify in channel
-    const { sendToChannel } = require('../discord');
     await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries})`);
 }
 
@@ -250,7 +248,6 @@ async function checkCardSalePayment(session, discordUserId) {
     cardListings.markSold.run(listingId);
 
     // Clear expiry timer and update embed
-    const { clearExpiryTimer, updateListingEmbed } = require('../commands/card-shop');
     clearExpiryTimer(listingId);
 
     const updated = cardListings.getById.get(listingId);
@@ -259,4 +256,4 @@ async function checkCardSalePayment(session, discordUserId) {
     console.log(`Card listing #${listingId} sold: ${listing.card_name}`);
 }
 
-module.exports = { handleCheckoutCompleted };
+export { handleCheckoutCompleted };

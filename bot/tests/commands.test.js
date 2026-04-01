@@ -18,7 +18,7 @@ const ROLE_AKIVILI = '1488046525065072670';
 const ROLE_NANOOK = '1488046525899739148';
 
 // Mock discord module
-vi.mock('../discord', () => ({
+vi.mock('../discord.js', () => ({
     client: { channels: { cache: { get: vi.fn() } } },
     getChannel: vi.fn(),
     getGuild: vi.fn(),
@@ -29,18 +29,32 @@ vi.mock('../discord', () => ({
     addRole: vi.fn().mockResolvedValue(false),
 }));
 
+// Mock db module — wire up test DB in beforeEach
+vi.mock('../db.js', () => ({
+    db: null,
+    purchases: {},
+    battles: {},
+    queues: {},
+    livestream: {},
+    cardListings: {},
+    ducks: {},
+}));
+
 global.fetch = vi.fn().mockResolvedValue({
     ok: true,
     json: () => Promise.resolve({}),
 });
 
-// Modules that need test DB injection (vi.mock can't intercept CJS require)
-const queueMod = require('../commands/queue');
+const dbModule = await import('../db.js');
 
 beforeEach(() => {
     db = createTestDb();
     stmts = buildStmts(db);
-    queueMod._setDeps({ testDb: { queues: stmts.queues } });
+    dbModule.db = db;
+    Object.assign(dbModule.queues, stmts.queues);
+    Object.assign(dbModule.battles, stmts.battles);
+    Object.assign(dbModule.purchases, stmts.purchases);
+    Object.assign(dbModule.livestream, stmts.livestream);
     vi.clearAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
@@ -50,7 +64,7 @@ beforeEach(() => {
 
 describe('!battle permission guards', () => {
     it('rejects commands outside #pack-battles', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: 'wrong_channel',
             roles: [ROLE_AKIVILI],
@@ -63,7 +77,7 @@ describe('!battle permission guards', () => {
     });
 
     it('rejects non-admin battle management', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [],
@@ -76,7 +90,7 @@ describe('!battle permission guards', () => {
     });
 
     it('allows anyone to check status', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [],
@@ -88,7 +102,7 @@ describe('!battle permission guards', () => {
     });
 
     it('prevents closing when no active battle', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_AKIVILI],
@@ -99,7 +113,7 @@ describe('!battle permission guards', () => {
     });
 
     it('prevents cancelling when no active battle', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_AKIVILI],
@@ -110,7 +124,7 @@ describe('!battle permission guards', () => {
     });
 
     it('prevents winner without closed battle', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_AKIVILI],
@@ -123,7 +137,7 @@ describe('!battle permission guards', () => {
     });
 
     it('!battle join rejects non-owner', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_NANOOK],
@@ -136,7 +150,7 @@ describe('!battle permission guards', () => {
     });
 
     it('!battle join rejects when no active battle', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_AKIVILI],
@@ -147,7 +161,7 @@ describe('!battle permission guards', () => {
     });
 
     it('shows usage for unknown subcommand', async () => {
-        const { handleBattle } = require('../commands/battle');
+        const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: PACK_BATTLES,
             roles: [ROLE_AKIVILI],
@@ -162,7 +176,7 @@ describe('!battle permission guards', () => {
 
 describe('!queue permission guards', () => {
     it('shows no queue message when none exists', async () => {
-        const { handleQueue } = require('../commands/queue');
+        const { handleQueue } = await import('../commands/queue.js');
         const msg = createMockMessage();
 
         await handleQueue(msg, []);
@@ -172,7 +186,7 @@ describe('!queue permission guards', () => {
     });
 
     it('rejects non-mod from opening', async () => {
-        const { handleQueue } = require('../commands/queue');
+        const { handleQueue } = await import('../commands/queue.js');
         const msg = createMockMessage({ roles: [] });
 
         await handleQueue(msg, ['open']);
@@ -182,7 +196,7 @@ describe('!queue permission guards', () => {
     });
 
     it('rejects non-mod from closing', async () => {
-        const { handleQueue } = require('../commands/queue');
+        const { handleQueue } = await import('../commands/queue.js');
         const msg = createMockMessage({ roles: [] });
 
         await handleQueue(msg, ['close']);
@@ -194,7 +208,7 @@ describe('!queue permission guards', () => {
 
 describe('!duckrace permission guards', () => {
     it('rejects non-mod from declaring winner', async () => {
-        const { handleDuckRace } = require('../commands/queue');
+        const { handleDuckRace } = await import('../commands/queue.js');
         const msg = createMockMessage({ roles: [] });
 
         await handleDuckRace(msg, ['winner', '@someone']);
@@ -206,7 +220,7 @@ describe('!duckrace permission guards', () => {
 
 describe('!link input validation', () => {
     it('rejects missing email', async () => {
-        const { handleLink } = require('../commands/link');
+        const { handleLink } = await import('../commands/link.js');
         const msg = createMockMessage();
 
         await handleLink(msg, []);
@@ -216,7 +230,7 @@ describe('!link input validation', () => {
     });
 
     it('rejects invalid email format', async () => {
-        const { handleLink } = require('../commands/link');
+        const { handleLink } = await import('../commands/link.js');
         const msg = createMockMessage();
 
         await handleLink(msg, ['notanemail']);
@@ -226,7 +240,7 @@ describe('!link input validation', () => {
     });
 
     it('deletes the command message to protect email', async () => {
-        const { handleLink } = require('../commands/link');
+        const { handleLink } = await import('../commands/link.js');
         const msg = createMockMessage({ authorId: 'newuser' });
 
         await handleLink(msg, ['test@example.com']);
@@ -236,7 +250,7 @@ describe('!link input validation', () => {
 
 describe('!live and !offline permission guards', () => {
     it('!live rejects non-admin', async () => {
-        const { handleLive } = require('../commands/live');
+        const { handleLive } = await import('../commands/live.js');
         const msg = createMockMessage({ roles: [] });
 
         await handleLive(msg);
@@ -246,7 +260,7 @@ describe('!live and !offline permission guards', () => {
     });
 
     it('!offline rejects non-admin', async () => {
-        const { handleOffline } = require('../commands/live');
+        const { handleOffline } = await import('../commands/live.js');
         const msg = createMockMessage({ roles: [] });
 
         await handleOffline(msg);

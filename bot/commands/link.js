@@ -7,8 +7,9 @@
  * Usage: !link email@example.com
  */
 
-const config = require('../config');
-const { purchases } = require('../db');
+import Stripe from 'stripe';
+import config from '../config.js';
+import { purchases } from '../db.js';
 
 async function handleLink(message, args) {
     const email = args[0]?.toLowerCase().trim();
@@ -30,7 +31,7 @@ async function handleLink(message, args) {
 
     // Validate email exists in Stripe
     try {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const customers = await stripe.customers.list({ email, limit: 1 });
 
         if (!customers.data.length) {
@@ -52,4 +53,4 @@ async function handleLink(message, args) {
     );
 }
 
-module.exports = { handleLink };
+export { handleLink };

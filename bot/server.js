@@ -10,11 +10,13 @@
  *   GET  /health                  — Health check
  */
 
-const express = require('express');
-const config = require('./config');
-const { handleCheckoutCompleted } = require('./webhooks/stripe');
-const { handleTwitchWebhook } = require('./webhooks/twitch');
-const { alertNewProducts } = require('./alerts/products');
+import express from 'express';
+import Stripe from 'stripe';
+import config from './config.js';
+import { battles, cardListings } from './db.js';
+import { handleCheckoutCompleted } from './webhooks/stripe.js';
+import { handleTwitchWebhook } from './webhooks/twitch.js';
+import { alertNewProducts } from './alerts/products.js';
 
 const app = express();
 
@@ -26,7 +28,7 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (r
     let event;
 
     if (config.STRIPE_WEBHOOK_SECRET) {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         try {
             event = stripe.webhooks.constructEvent(
                 req.body,
@@ -72,9 +74,7 @@ app.post('/alerts/products', express.json(), async (req, res) => {
     const { products, secret } = req.body;
 
     // Simple shared secret for internal calls
-    const expectedSecret = config.optional?.('PRODUCT_ALERT_SECRET')
-        || process.env.PRODUCT_ALERT_SECRET
-        || 'itzenzo-sync';
+    const expectedSecret = process.env.PRODUCT_ALERT_SECRET || 'itzenzo-sync';
 
     if (secret !== expectedSecret) {
         return res.status(403).send('Invalid secret');
@@ -98,7 +98,6 @@ app.post('/alerts/products', express.json(), async (req, res) => {
 // =========================================================================
 
 app.get('/battle/checkout/:id', async (req, res) => {
-    const { battles } = require('./db');
     const battle = battles.getActiveBattle.get();
 
     if (!battle || !battle.stripe_price_id) {
@@ -106,7 +105,7 @@ app.get('/battle/checkout/:id', async (req, res) => {
     }
 
     try {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             line_items: [{ price: battle.stripe_price_id, quantity: 1 }],
@@ -144,7 +143,7 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
     const email = req.query.email;
 
     try {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const params = {
             mode: 'payment',
             line_items: [
@@ -188,7 +187,6 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
 // =========================================================================
 
 app.get('/card-shop/checkout/:listingId', async (req, res) => {
-    const { cardListings } = require('./db');
     const listing = cardListings.getById.get(Number(req.params.listingId));
 
     if (!listing || (listing.status !== 'active' && listing.status !== 'reserved')) {
@@ -196,7 +194,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
     }
 
     try {
-        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const session = await stripe.checkout.sessions.create({
             mode: 'payment',
             line_items: [
@@ -264,4 +262,4 @@ function startServer() {
     });
 }
 
-module.exports = { app, startServer };
+export { app, startServer };
