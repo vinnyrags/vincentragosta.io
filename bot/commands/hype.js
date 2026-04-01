@@ -177,7 +177,7 @@ async function handleHype(message, args) {
     const embed = new EmbedBuilder()
         .setTitle('🎬 Card Night Tonight!')
         .setDescription(
-            `We're going live later — here's what's on deck:\n\n` +
+            `Here's what I've got my eye on tonight:\n\n` +
             productLines.join('\n\n') +
             `\n\n🛒 **[Browse the full shop](${config.SHOP_URL})**\n` +
             `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV) when we go live!`
