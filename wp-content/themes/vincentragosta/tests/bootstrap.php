@@ -87,3 +87,6 @@ Load::load();
 
 // Switch to our theme.
 switch_theme($theme_name);
+
+// Load ACF function stubs (get_field, update_field) for tests that need them.
+require_once __DIR__ . '/Support/acf-stubs.php';
