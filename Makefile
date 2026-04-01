@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging push-products pull-products pull-products-publish sync-products satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging push-products pull-products pull-products-publish pull-products-staging sync-products satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -43,7 +43,8 @@ help:
 	@echo "  make push-products      - Push products from Google Sheets to Stripe"
 	@echo "  make pull-products      - Sync Stripe products to local WordPress (as drafts)"
 	@echo "  make pull-products-publish - Sync Stripe products to local WordPress (auto-publish)"
-	@echo "  make sync-products      - Full sync: Google Sheets → Stripe → WordPress"
+	@echo "  make pull-products-staging - Sync Stripe products to staging (clean + publish)"
+	@echo "  make sync-products      - Full sync: Sheets → Stripe → WordPress (clean rebuild)"
 	@echo "  make satis-refresh      - Rebuild Satis package repository on server"
 	@echo "  make satis-add URL=...  - Add a repository to Satis (rebuilds by default)"
 	@echo "  make satis-remove URL=... - Remove a repository from Satis and rebuild"
@@ -308,12 +309,18 @@ pull-products-publish:
 	@touch scripts/.publish
 	@ddev wp eval-file scripts/pull-products.php; rm -f scripts/.publish
 
-# Full sync: Google Sheets → Stripe → WordPress
+# Full sync: Google Sheets → Stripe → WordPress (clean rebuild)
 sync-products:
 	@echo "Full product sync: Sheets → Stripe → WordPress..."
-	node scripts/shop/push-products.js
+	node scripts/shop/push-products.js --clean
 	@echo ""
-	ddev wp eval-file scripts/pull-products.php
+	@touch scripts/.publish scripts/.clean
+	@ddev wp eval-file scripts/pull-products.php; rm -f scripts/.publish scripts/.clean
+
+# Sync Stripe products to staging WordPress (clean rebuild, auto-publish)
+pull-products-staging:
+	@echo "Syncing Stripe products to staging WordPress..."
+	ssh $(STAGING_HOST) "touch $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean && wp eval-file $(STAGING_DIR)/scripts/pull-products.php --path=$(STAGING_WP) --allow-root; rm -f $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean"
 
 # Rebuild Satis package repository on server
 satis-refresh:

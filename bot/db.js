@@ -1,5 +1,5 @@
 /**
- * SQLite database for pack battles, purchase tracking, and duck races.
+ * SQLite database for pack battles, purchase tracking, duck races, and card listings.
  */
 
 const Database = require('better-sqlite3');
@@ -106,6 +106,18 @@ db.exec(`
         discord_user_id TEXT PRIMARY KEY,
         customer_email TEXT NOT NULL,
         linked_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS card_listings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message_id TEXT,
+        card_name TEXT NOT NULL,
+        price INTEGER NOT NULL,
+        stripe_session_id TEXT,
+        buyer_discord_id TEXT,
+        status TEXT DEFAULT 'active',
+        created_at TEXT DEFAULT (datetime('now')),
+        sold_at TEXT
     );
 `);
 
@@ -306,6 +318,49 @@ const livestreamStmts = {
     `),
 };
 
+// =========================================================================
+// Card Listings
+// =========================================================================
+
+const cardListingStmts = {
+    create: db.prepare(`
+        INSERT INTO card_listings (card_name, price, buyer_discord_id, status)
+        VALUES (?, ?, ?, ?)
+    `),
+
+    setMessageId: db.prepare(`
+        UPDATE card_listings SET message_id = ? WHERE id = ?
+    `),
+
+    setStripeSessionId: db.prepare(`
+        UPDATE card_listings SET stripe_session_id = ? WHERE id = ?
+    `),
+
+    getById: db.prepare(`
+        SELECT * FROM card_listings WHERE id = ?
+    `),
+
+    getByMessageId: db.prepare(`
+        SELECT * FROM card_listings WHERE message_id = ?
+    `),
+
+    getByStripeSessionId: db.prepare(`
+        SELECT * FROM card_listings WHERE stripe_session_id = ?
+    `),
+
+    markSold: db.prepare(`
+        UPDATE card_listings SET status = 'sold', sold_at = datetime('now') WHERE id = ?
+    `),
+
+    markExpired: db.prepare(`
+        UPDATE card_listings SET status = 'expired' WHERE id = ?
+    `),
+
+    relistAsActive: db.prepare(`
+        UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?
+    `),
+};
+
 module.exports = {
     db,
     purchases: stmts,
@@ -313,4 +368,5 @@ module.exports = {
     ducks: duckStmts,
     queues: queueStmts,
     livestream: livestreamStmts,
+    cardListings: cardListingStmts,
 };

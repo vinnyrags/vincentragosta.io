@@ -26,6 +26,9 @@ if (!defined('STRIPE_SECRET_KEY') || STRIPE_SECRET_KEY === '') {
 // Check for publish flag via env var or marker file
 $publish = !empty(getenv('PUBLISH')) || file_exists(__DIR__ . '/.publish');
 
+// Check for clean flag via env var or marker file
+$clean = !empty(getenv('CLEAN')) || file_exists(__DIR__ . '/.clean');
+
 // Load Stripe SDK from child theme vendor
 $stripeAutoload = get_stylesheet_directory() . '/vendor/autoload.php';
 if (!file_exists($stripeAutoload)) {
@@ -35,6 +38,29 @@ if (!file_exists($stripeAutoload)) {
 require_once $stripeAutoload;
 
 $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+
+// Clean: permanently delete all existing WordPress products
+if ($clean) {
+    echo "Cleaning: deleting all existing WordPress products...\n";
+    $existingProducts = new WP_Query([
+        'post_type'      => 'product',
+        'post_status'    => ['publish', 'draft', 'pending', 'trash'],
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ]);
+
+    $deleteCount = 0;
+    foreach ($existingProducts->posts as $postId) {
+        // Delete featured image attachment
+        $thumbnailId = get_post_thumbnail_id($postId);
+        if ($thumbnailId) {
+            wp_delete_attachment($thumbnailId, true);
+        }
+        wp_delete_post($postId, true); // true = force delete, skip trash
+        $deleteCount++;
+    }
+    echo "  {$deleteCount} product(s) permanently deleted.\n\n";
+}
 
 echo "Fetching products from Stripe...\n";
 

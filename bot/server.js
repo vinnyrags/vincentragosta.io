@@ -184,6 +184,70 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
 });
 
 // =========================================================================
+// Card shop checkout — creates a Stripe session for individual card sales
+// =========================================================================
+
+app.get('/card-shop/checkout/:listingId', async (req, res) => {
+    const { cardListings } = require('./db');
+    const listing = cardListings.getById.get(Number(req.params.listingId));
+
+    if (!listing || (listing.status !== 'active' && listing.status !== 'reserved')) {
+        return res.status(404).send('This card is no longer available.');
+    }
+
+    try {
+        const stripe = require('stripe')(config.STRIPE_SECRET_KEY);
+        const session = await stripe.checkout.sessions.create({
+            mode: 'payment',
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: { name: listing.card_name },
+                        unit_amount: listing.price,
+                    },
+                    quantity: 1,
+                },
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: 'Shipping',
+                            description: 'Card shipping (USPS)',
+                        },
+                        unit_amount: config.CARD_SHIPPING_AMOUNT,
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `${config.SHOP_URL}?thanks=1`,
+            cancel_url: config.SHOP_URL,
+            metadata: {
+                card_listing_id: String(listing.id),
+                card_name: listing.card_name,
+                source: 'card-sale',
+                reserved_for: listing.buyer_discord_id || '',
+            },
+            shipping_address_collection: { allowed_countries: ['US'] },
+            custom_fields: [
+                {
+                    key: 'discord_username',
+                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
+                    type: 'text',
+                    optional: true,
+                },
+            ],
+        });
+
+        cardListings.setStripeSessionId.run(session.id, listing.id);
+        res.redirect(303, session.url);
+    } catch (e) {
+        console.error('Card shop checkout error:', e.message);
+        res.status(500).send('Checkout failed. Try again or contact a mod.');
+    }
+});
+
+// =========================================================================
 // Health check
 // =========================================================================
 

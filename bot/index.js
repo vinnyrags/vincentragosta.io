@@ -26,6 +26,7 @@ const { handleLive, handleOffline } = require('./commands/live');
 const { handleBattle } = require('./commands/battle');
 const { handleQueue, handleDuckRace } = require('./commands/queue');
 const { handleLink } = require('./commands/link');
+const { handleSell, handleList, handleSold } = require('./commands/card-shop');
 const PREFIX = '!';
 
 // =========================================================================
@@ -62,6 +63,15 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'link':
                 await handleLink(message, args);
+                break;
+            case 'sell':
+                await handleSell(message, args);
+                break;
+            case 'list':
+                await handleList(message, args);
+                break;
+            case 'sold':
+                await handleSold(message, args);
                 break;
             default:
                 // Unknown command — silently ignore

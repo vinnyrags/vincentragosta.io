@@ -101,6 +101,18 @@ export function createTestDb() {
             created_at TEXT DEFAULT (datetime('now')),
             UNIQUE(race_id, discord_user_id)
         );
+
+        CREATE TABLE IF NOT EXISTS card_listings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message_id TEXT,
+            card_name TEXT NOT NULL,
+            price INTEGER NOT NULL,
+            stripe_session_id TEXT,
+            buyer_discord_id TEXT,
+            status TEXT DEFAULT 'active',
+            created_at TEXT DEFAULT (datetime('now')),
+            sold_at TEXT
+        );
     `);
 
     return db;
@@ -153,6 +165,17 @@ export function buildStmts(db) {
             addBuyer: db.prepare(`INSERT OR IGNORE INTO livestream_buyers (session_id, discord_user_id, customer_email) VALUES (?, ?, ?)`),
             getBuyers: db.prepare(`SELECT * FROM livestream_buyers WHERE session_id = ? AND shipping_paid = 0`),
             markShippingPaid: db.prepare(`UPDATE livestream_buyers SET shipping_paid = 1 WHERE session_id = ? AND customer_email = ?`),
+        },
+        cardListings: {
+            create: db.prepare(`INSERT INTO card_listings (card_name, price, buyer_discord_id, status) VALUES (?, ?, ?, ?)`),
+            setMessageId: db.prepare(`UPDATE card_listings SET message_id = ? WHERE id = ?`),
+            setStripeSessionId: db.prepare(`UPDATE card_listings SET stripe_session_id = ? WHERE id = ?`),
+            getById: db.prepare(`SELECT * FROM card_listings WHERE id = ?`),
+            getByMessageId: db.prepare(`SELECT * FROM card_listings WHERE message_id = ?`),
+            getByStripeSessionId: db.prepare(`SELECT * FROM card_listings WHERE stripe_session_id = ?`),
+            markSold: db.prepare(`UPDATE card_listings SET status = 'sold', sold_at = datetime('now') WHERE id = ?`),
+            markExpired: db.prepare(`UPDATE card_listings SET status = 'expired' WHERE id = ?`),
+            relistAsActive: db.prepare(`UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?`),
         },
         db,
     };

@@ -10,7 +10,7 @@
  */
 
 const config = require('../config');
-const { purchases, battles } = require('../db');
+const { purchases, battles, cardListings } = require('../db');
 const { sendEmbed, getMember, addRole, hasRole } = require('../discord');
 const { addToQueue } = require('../commands/queue');
 const { addLivestreamBuyer } = require('../commands/live');
@@ -106,6 +106,9 @@ async function handleCheckoutCompleted(session) {
 
     // Check if this payment is for an active pack battle
     await checkBattlePayment(session, discordUserId);
+
+    // Check if this payment is for a card sale
+    await checkCardSalePayment(session, discordUserId);
 }
 
 /**
@@ -230,6 +233,30 @@ async function checkBattlePayment(session, discordUserId) {
     // Notify in channel
     const { sendToChannel } = require('../discord');
     await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries})`);
+}
+
+/**
+ * Check if a payment is for a card sale and mark the listing as sold.
+ */
+async function checkCardSalePayment(session, discordUserId) {
+    if (session.metadata?.source !== 'card-sale') return;
+
+    const listingId = Number(session.metadata?.card_listing_id);
+    if (!listingId) return;
+
+    const listing = cardListings.getById.get(listingId);
+    if (!listing || listing.status === 'sold') return;
+
+    cardListings.markSold.run(listingId);
+
+    // Clear expiry timer and update embed
+    const { clearExpiryTimer, updateListingEmbed } = require('../commands/card-shop');
+    clearExpiryTimer(listingId);
+
+    const updated = cardListings.getById.get(listingId);
+    await updateListingEmbed(updated);
+
+    console.log(`Card listing #${listingId} sold: ${listing.card_name}`);
 }
 
 module.exports = { handleCheckoutCompleted };
