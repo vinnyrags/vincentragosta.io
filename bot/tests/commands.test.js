@@ -34,9 +34,13 @@ global.fetch = vi.fn().mockResolvedValue({
     json: () => Promise.resolve({}),
 });
 
+// Modules that need test DB injection (vi.mock can't intercept CJS require)
+const queueMod = require('../commands/queue');
+
 beforeEach(() => {
     db = createTestDb();
     stmts = buildStmts(db);
+    queueMod._setDeps({ testDb: { queues: stmts.queues } });
     vi.clearAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
