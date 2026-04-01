@@ -27,6 +27,7 @@ import { handleBattle } from './commands/battle.js';
 import { handleQueue, handleDuckRace } from './commands/queue.js';
 import { handleLink } from './commands/link.js';
 import { handleSell, handleList, handleSold } from './commands/card-shop.js';
+import { handleShipping } from './commands/shipping.js';
 const PREFIX = '!';
 
 // =========================================================================
@@ -72,6 +73,9 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'sold':
                 await handleSold(message, args);
+                break;
+            case 'shipping':
+                await handleShipping(message, args);
                 break;
             default:
                 // Unknown command — silently ignore

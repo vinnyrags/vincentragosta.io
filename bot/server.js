@@ -246,6 +246,60 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 });
 
 // =========================================================================
+// Ad-hoc shipping checkout — creates a Stripe session for any amount
+// =========================================================================
+
+app.get('/shipping/checkout', async (req, res) => {
+    const amountCents = parseInt(req.query.amount, 10);
+    const reason = req.query.reason || 'Shipping';
+
+    if (!amountCents || amountCents <= 0) {
+        return res.status(400).send('Invalid shipping amount.');
+    }
+
+    try {
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        const session = await stripe.checkout.sessions.create({
+            mode: 'payment',
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: reason,
+                            description: `Shipping — $${(amountCents / 100).toFixed(2)}`,
+                        },
+                        unit_amount: amountCents,
+                    },
+                    quantity: 1,
+                },
+            ],
+            success_url: `${config.SHOP_URL}?shipping_paid=1`,
+            cancel_url: config.SHOP_URL,
+            metadata: {
+                source: 'ad-hoc-shipping',
+                discord_user_id: req.query.user || '',
+                reason,
+            },
+            shipping_address_collection: { allowed_countries: ['US'] },
+            custom_fields: [
+                {
+                    key: 'discord_username',
+                    label: { type: 'custom', custom: 'Discord username (optional)' },
+                    type: 'text',
+                    optional: true,
+                },
+            ],
+        });
+
+        res.redirect(303, session.url);
+    } catch (e) {
+        console.error('Shipping checkout error:', e.message);
+        res.status(500).send('Could not create shipping form. Contact a mod.');
+    }
+});
+
+// =========================================================================
 // Health check
 // =========================================================================
 
