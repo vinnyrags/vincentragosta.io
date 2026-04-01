@@ -81,10 +81,10 @@ describe('purchase count tracking for role promotion', () => {
         expect(count >= 1).toBe(true); // XIPE_PURCHASE_THRESHOLD
     });
 
-    it('reaches Nous threshold at 5', () => {
+    it('reaches Long threshold at 5', () => {
         for (let i = 0; i < 5; i++) stmts.purchases.incrementPurchaseCount.run('user1');
         const count = stmts.purchases.getPurchaseCount.get('user1').total_purchases;
-        expect(count >= 5).toBe(true); // NOUS_PURCHASE_THRESHOLD
+        expect(count >= 5).toBe(true); // LONG_PURCHASE_THRESHOLD
     });
 });
 
@@ -185,10 +185,10 @@ describe('purchase → promotion flow', () => {
         const count = stmts.purchases.getPurchaseCount.get('discord1').total_purchases;
         expect(count).toBe(1);
         expect(count >= 1).toBe(true); // Xipe threshold met
-        expect(count >= 5).toBe(false); // Nous threshold not met
+        expect(count >= 5).toBe(false); // Long threshold not met
     });
 
-    it('reaches Nous after 5 purchases', () => {
+    it('reaches Long after 5 purchases', () => {
         stmts.purchases.linkDiscord.run('discord1', 'buyer@example.com');
 
         for (let i = 0; i < 5; i++) {
@@ -198,6 +198,6 @@ describe('purchase → promotion flow', () => {
 
         const count = stmts.purchases.getPurchaseCount.get('discord1').total_purchases;
         expect(count).toBe(5);
-        expect(count >= 5).toBe(true); // Nous threshold met
+        expect(count >= 5).toBe(true); // Long threshold met
     });
 });

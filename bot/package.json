@@ -1,7 +1,7 @@
 {
-  "name": "itzenzo-bot",
+  "name": "nous-bot",
   "version": "1.0.0",
-  "description": "itzenzoTTV Discord bot — order notifications, pack battles, stream alerts, and more.",
+  "description": "Nous — Discord bot for itzenzoTTV. Order notifications, pack battles, stream alerts, and more.",
   "type": "module",
   "main": "index.js",
   "scripts": {

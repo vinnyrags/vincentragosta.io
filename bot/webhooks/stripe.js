@@ -6,7 +6,7 @@
  * - Low-stock alerts → #deals
  * - Pack battle payment verification
  * - Queue auto-entries (card products → active queue)
- * - Role promotion (Xipe at 1+, Nous at 5+)
+ * - Role promotion (Xipe at 1+, Long at 5+)
  */
 
 import { EmbedBuilder } from 'discord.js';
@@ -143,7 +143,7 @@ async function autoLinkDiscord(discordUsername, customerEmail) {
 
 /**
  * Check and apply role promotions based on purchase count.
- * Lan (0) → Xipe (1+) → Nous (5+)
+ * Lan (0) → Xipe (1+) → Long (5+)
  */
 async function checkRolePromotion(discordUserId) {
     const row = purchases.getPurchaseCount.get(discordUserId);
@@ -161,16 +161,16 @@ async function checkRolePromotion(discordUserId) {
         }
     }
 
-    // Promote to Nous at 5+ purchases
-    if (count >= config.NOUS_PURCHASE_THRESHOLD) {
-        if (!hasRole(member, config.ROLES.NOUS)) {
-            await addRole(member, config.ROLES.NOUS);
-            console.log(`Promoted ${member.user.tag} to Nous (${count} purchases)`);
+    // Promote to Long at 5+ purchases
+    if (count >= config.LONG_PURCHASE_THRESHOLD) {
+        if (!hasRole(member, config.ROLES.LONG)) {
+            await addRole(member, config.ROLES.LONG);
+            console.log(`Promoted ${member.user.tag} to Long (${count} purchases)`);
 
             // Announce promotion
             await sendEmbed('ANNOUNCEMENTS', {
-                title: '🎓 New Nous Member!',
-                description: `<@${discordUserId}> has been promoted to **Nous** (Erudition) for making ${count} purchases! Welcome to the inner circle.`,
+                title: '🎓 New Long Member!',
+                description: `<@${discordUserId}> has been promoted to **Long** (Permanence) for making ${count} purchases! Your loyalty has been recognized.`,
                 color: 0x3498db,
             });
         }

@@ -13,7 +13,7 @@ use WP_REST_Response;
 /**
  * Decrements stock for a product by Stripe price ID.
  *
- * Called by itzenzoBot when the owner joins a pack battle
+ * Called by Nous when the owner joins a pack battle
  * (consumes inventory without a Stripe payment).
  *
  * Secured with a shared secret from wp-config-env.php.

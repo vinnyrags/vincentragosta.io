@@ -57,12 +57,12 @@ describe('purchase counts and role promotion', () => {
         expect(count >= 1).toBe(true); // Xipe threshold
     });
 
-    it('reaches Nous threshold at 5 purchases', () => {
+    it('reaches Long threshold at 5 purchases', () => {
         for (let i = 0; i < 5; i++) {
             stmts.purchases.incrementPurchaseCount.run('user1');
         }
         const count = stmts.purchases.getPurchaseCount.get('user1').total_purchases;
-        expect(count >= 5).toBe(true); // Nous threshold
+        expect(count >= 5).toBe(true); // Long threshold
     });
 });
 

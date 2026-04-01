@@ -12,7 +12,7 @@ use WP_REST_Response;
 /**
  * Toggles the livestream-active transient.
  *
- * Called by itzenzoBot on !live and !offline to enable/disable
+ * Called by Nous on !live and !offline to enable/disable
  * shipping-free checkout for livestream buyers.
  *
  * Secured with a shared secret from wp-config-env.php.
