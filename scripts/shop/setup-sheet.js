@@ -19,6 +19,7 @@ const HEADERS = [
     'Cost',
     'Sale Price',
     'Image URL',
+    'Language',
 ];
 
 async function main() {
@@ -32,7 +33,7 @@ async function main() {
     // Set headers in row 1
     await sheets.spreadsheets.values.update({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Products!A1:G1',
+        range: 'Products!A1:H1',
         valueInputOption: 'RAW',
         requestBody: {
             values: [HEADERS],

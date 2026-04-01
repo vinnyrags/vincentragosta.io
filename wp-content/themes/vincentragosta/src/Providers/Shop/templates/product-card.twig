@@ -39,6 +39,9 @@
                 <span class="product-card__stock">{{ product.stockQuantity }} in stock</span>
             {% endif %}
         </div>
+        {% if product.language %}
+            <span class="product-card__language">{{ product.language }}</span>
+        {% endif %}
         {% if product.isInStock %}
             <button class="product-card__add-to-cart"
                     data-add-to-cart

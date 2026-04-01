@@ -76,6 +76,15 @@
             "min": 0
         },
         {
+            "key": "field_product_language",
+            "label": "Language",
+            "name": "language",
+            "type": "text",
+            "instructions": "Product language (e.g., Japanese, English). Auto-populated by sync from Stripe language metadata.",
+            "required": 0,
+            "placeholder": "Japanese"
+        },
+        {
             "key": "field_product_gallery_images",
             "label": "Gallery Images",
             "name": "gallery_images",

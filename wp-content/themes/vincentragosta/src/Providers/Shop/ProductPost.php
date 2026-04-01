@@ -105,6 +105,14 @@ class ProductPost extends Post
     }
 
     /**
+     * Get the product language (e.g., "Japanese", "English").
+     */
+    public function language(): string
+    {
+        return (string) $this->getField('language');
+    }
+
+    /**
      * Get space-separated category slugs for client-side filtering.
      */
     public function cardTypeSlugs(): string

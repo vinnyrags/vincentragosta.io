@@ -6,7 +6,7 @@
  *
  * Usage: node scripts/shop/push-products.js
  *
- * Columns: Name | Price | Category | Stock | Cost | Sale Price | Image URL
+ * Columns: Name | Price | Category | Stock | Cost | Sale Price | Image URL | Language
  */
 
 const fs = require('fs');
@@ -84,7 +84,7 @@ async function main() {
 
     const res = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${ACTIVE_SHEET}!A2:G`,
+        range: `${ACTIVE_SHEET}!A2:H`,
     });
 
     const rows = res.data.values || [];
@@ -101,7 +101,7 @@ async function main() {
     let skipped = 0;
 
     for (const row of rows) {
-        const [name, priceStr, category, stockStr, costStr, salePriceStr, imageUrl] = row;
+        const [name, priceStr, category, stockStr, costStr, salePriceStr, imageUrl, language] = row;
 
         if (!name || !priceStr) {
             console.log(`  Skipping row — missing name or price`);
@@ -121,6 +121,7 @@ async function main() {
         if (category) metadata.category = category.toLowerCase().trim();
         if (stockStr) metadata.stock = stockStr.trim();
         if (costStr) metadata.cost = costStr.trim();
+        if (language) metadata.language = language.trim();
 
         // Check if product already exists in Stripe (by name)
         const existing = await stripe.products.search({
@@ -165,7 +166,7 @@ async function main() {
                 }
             }
 
-            const info = [category, stockStr ? `stock:${stockStr}` : ''].filter(Boolean);
+            const info = [category, language, stockStr ? `stock:${stockStr}` : ''].filter(Boolean);
             console.log(`  Updated: ${name}${info.length ? ` [${info.join(', ')}]` : ''}`);
             updated++;
         } else {
@@ -183,7 +184,7 @@ async function main() {
             product = await stripe.products.create(createData);
             defaultPriceId = product.default_price;
 
-            const info = [category, stockStr ? `stock:${stockStr}` : ''].filter(Boolean);
+            const info = [category, language, stockStr ? `stock:${stockStr}` : ''].filter(Boolean);
             console.log(`  Created: ${name} ($${(priceAmount / 100).toFixed(2)})${info.length ? ` [${info.join(', ')}]` : ''}`);
             created++;
         }

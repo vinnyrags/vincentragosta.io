@@ -93,6 +93,7 @@ while ($hasMore) {
         $salePriceId = $metadata['sale_price_id'] ?? '';
         $onSale = $salePriceId !== '';
         $cost = $metadata['cost'] ?? '';
+        $language = $metadata['language'] ?? '';
 
         // Get price info
         $priceId = '';
@@ -155,6 +156,10 @@ while ($hasMore) {
                 update_field('cost', '$' . number_format((float) $cost, 2), $postId);
             }
 
+            if ($language !== '') {
+                update_field('language', $language, $postId);
+            }
+
             // Update image if changed
             if (!empty($images)) {
                 maybeUpdateFeaturedImage($postId, $images[0], $name);
@@ -168,7 +173,7 @@ while ($hasMore) {
             // Do NOT overwrite stock for existing products — WordPress is the live source of truth.
             // Stock is only set from Stripe metadata on new product creation.
 
-            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '', $onSale ? "SALE:{$saleDisplayPrice}" : '']);
+            $info = array_filter([$category, $language, $stock !== '' ? "stock:{$stock}" : '', $onSale ? "SALE:{$saleDisplayPrice}" : '']);
             echo "  Updated: {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";
             $updated++;
         } else {
@@ -194,6 +199,9 @@ while ($hasMore) {
             if ($cost !== '') {
                 update_field('cost', '$' . number_format((float) $cost, 2), $postId);
             }
+            if ($language !== '') {
+                update_field('language', $language, $postId);
+            }
 
             // Download and set featured image
             if (!empty($images)) {
@@ -206,7 +214,7 @@ while ($hasMore) {
             }
 
             $status = $publish ? 'published' : 'draft';
-            $info = array_filter([$category, $stock !== '' ? "stock:{$stock}" : '']);
+            $info = array_filter([$category, $language, $stock !== '' ? "stock:{$stock}" : '']);
             echo "  Created ({$status}): {$name} (ID {$postId})" . ($info ? " [" . implode(', ', $info) . "]" : '') . "\n";
             $created++;
         }

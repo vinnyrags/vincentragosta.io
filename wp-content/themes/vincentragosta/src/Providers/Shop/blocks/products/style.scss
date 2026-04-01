@@ -99,6 +99,7 @@
 .product-card__sale-badge {
   background: var(--wp--preset--color--accent-1);
   color: var(--color-on-accent);
+  border: 2px solid var(--wp--preset--color--contrast);
 }
 
 .product-card__content {
@@ -138,6 +139,12 @@
 
 .product-card__stock {
   color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.product-card__language {
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--10);
   font-weight: 500;
 }
 
