@@ -1,0 +1,192 @@
+/**
+ * Pre-Live Hype Command — !hype Product 1, Product 2, Product 3
+ *
+ * Posts a hype announcement in #announcements with product names, prices,
+ * and direct checkout links. Run on stream days to drive pre-stream purchases.
+ *
+ * Usage:
+ *   !hype Prismatic Evolutions Booster Box, Crown Zenith ETB
+ *   !hype Prismatic Evolutions Booster Box
+ */
+
+import { EmbedBuilder } from 'discord.js';
+import Stripe from 'stripe';
+import config from '../config.js';
+import { sendToChannel } from '../discord.js';
+
+/**
+ * Look up a Stripe product by name. Returns { name, priceId, price } or null.
+ */
+async function findProduct(stripe, productName) {
+    const products = await stripe.products.search({
+        query: `active:"true" AND name~"${productName.replace(/"/g, '\\"')}"`,
+        limit: 1,
+    });
+
+    if (!products.data.length) return null;
+
+    const product = products.data[0];
+
+    // Get the price ID
+    let priceId = null;
+    let unitAmount = null;
+
+    if (product.default_price) {
+        priceId = typeof product.default_price === 'string'
+            ? product.default_price
+            : product.default_price.id;
+    }
+
+    if (!priceId) {
+        const prices = await stripe.prices.list({
+            product: product.id,
+            active: true,
+            limit: 1,
+        });
+        if (prices.data.length) {
+            priceId = prices.data[0].id;
+            unitAmount = prices.data[0].unit_amount;
+        }
+    }
+
+    if (!priceId) return null;
+
+    // Fetch price amount if we don't have it yet
+    if (unitAmount === null) {
+        const price = await stripe.prices.retrieve(priceId);
+        unitAmount = price.unit_amount;
+    }
+
+    // Check for sale price
+    const salePriceId = product.metadata?.sale_price_id;
+    let saleAmount = null;
+    if (salePriceId) {
+        try {
+            const salePrice = await stripe.prices.retrieve(salePriceId);
+            saleAmount = salePrice.unit_amount;
+        } catch { /* sale price invalid — ignore */ }
+    }
+
+    return {
+        name: product.name,
+        priceId: salePriceId || priceId,
+        price: unitAmount,
+        salePrice: saleAmount,
+        onSale: !!salePriceId,
+    };
+}
+
+async function handleHype(message, args) {
+    // Only owner/mods can hype
+    const isAdmin = message.member.roles.cache.has(config.ROLES.NANOOK)
+        || message.member.roles.cache.has(config.ROLES.AKIVILI);
+
+    if (!isAdmin) {
+        return message.reply('Only moderators can use this command.');
+    }
+
+    // Parse comma-separated product names from the full args
+    const input = args.join(' ').trim();
+    if (!input) {
+        return message.reply('Usage: `!hype Product Name 1, Product Name 2`\n\nExample: `!hype Prismatic Evolutions Booster Box, Crown Zenith ETB`');
+    }
+
+    const productNames = input.split(',').map((s) => s.trim()).filter(Boolean);
+    if (!productNames.length) {
+        return message.reply('No product names found. Separate multiple products with commas.');
+    }
+
+    await message.channel.send(`🔍 Looking up ${productNames.length} product${productNames.length > 1 ? 's' : ''} in Stripe...`);
+
+    const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+    const found = [];
+    const notFound = [];
+
+    for (const name of productNames) {
+        const product = await findProduct(stripe, name);
+        if (product) {
+            found.push(product);
+        } else {
+            notFound.push(name);
+        }
+    }
+
+    // Report any products not found
+    if (notFound.length) {
+        await message.channel.send(
+            `⚠️ Could not find: ${notFound.map((n) => `**${n}**`).join(', ')}. Check spelling and try again.`
+        );
+    }
+
+    if (!found.length) {
+        return message.reply('No products found. Nothing to post.');
+    }
+
+    // Ask for confirmation before posting
+    const preview = found.map((p) => {
+        const priceStr = `$${(p.price / 100).toFixed(2)}`;
+        const saleStr = p.onSale ? ` ~~${priceStr}~~ **$${(p.salePrice / 100).toFixed(2)}**` : ` **${priceStr}**`;
+        return `• ${p.name} —${saleStr}`;
+    }).join('\n');
+
+    await message.channel.send(
+        `**Preview — posting to #announcements:**\n${preview}\n\n✅ React to confirm, or type \`cancel\` to abort.`
+    );
+
+    // Wait for confirmation (reaction or cancel message)
+    const confirmMsg = message.channel.lastMessage;
+
+    try {
+        await confirmMsg.react('✅');
+    } catch { /* can't react */ }
+
+    // Wait for either a ✅ reaction or a "cancel" message
+    const confirmed = await Promise.race([
+        confirmMsg.awaitReactions({
+            filter: (r, u) => r.emoji.name === '✅' && u.id === message.author.id,
+            max: 1,
+            time: 60_000,
+        }).then((collected) => collected.size > 0),
+        new Promise((resolve) => {
+            const collector = message.channel.createMessageCollector({
+                filter: (m) => m.author.id === message.author.id && m.content.toLowerCase() === 'cancel',
+                max: 1,
+                time: 60_000,
+            });
+            collector.on('collect', () => resolve(false));
+            collector.on('end', (_, reason) => { if (reason === 'time') resolve(false); });
+        }),
+    ]);
+
+    if (!confirmed) {
+        return message.channel.send('❌ Hype cancelled.');
+    }
+
+    // Build the hype embed
+    const baseUrl = config.SHOP_URL.replace(/\/shop$/, '');
+    const productLines = found.map((p) => {
+        const checkoutUrl = `${baseUrl}/bot/product/checkout/${p.priceId}`;
+        const priceStr = `$${(p.price / 100).toFixed(2)}`;
+
+        if (p.onSale) {
+            return `🔥 **${p.name}** — ~~${priceStr}~~ **$${(p.salePrice / 100).toFixed(2)}**\n🛒 [Buy Now](${checkoutUrl})`;
+        }
+        return `🔥 **${p.name}** — **${priceStr}**\n🛒 [Buy Now](${checkoutUrl})`;
+    });
+
+    const embed = new EmbedBuilder()
+        .setTitle('🎬 Card Night Tonight!')
+        .setDescription(
+            `We're going live later — here's what's on deck:\n\n` +
+            productLines.join('\n\n') +
+            `\n\n🛒 **[Browse the full shop](${config.SHOP_URL})**\n` +
+            `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV) when we go live!`
+        )
+        .setColor(0x9146ff)
+        .setFooter({ text: 'Grab yours before stream — pre-orders go into tonight\'s queue!' });
+
+    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
+    await message.channel.send('🎬 Hype posted to #announcements!');
+}
+
+export { handleHype };

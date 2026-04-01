@@ -1,5 +1,5 @@
 /**
- * itzenzoBot — Discord bot for itzenzoTTV.
+ * Nous — Discord bot for itzenzoTTV.
  *
  * Features:
  *  - Order notifications (Stripe → #order-feed)
@@ -10,7 +10,7 @@
  *  - Queue system (!queue open/close + auto-entries from Stripe purchases)
  *  - Duck race (!duckrace — one entry per unique buyer in queue)
  *  - Account linking (!link → email mapping for role promotion)
- *  - Role promotion (Xipe at 1+ purchases, Nous at 5+)
+ *  - Role promotion (Xipe at 1+ purchases, Long at 5+)
  *  - New product alerts (POST /alerts/products)
  *  - Pack battle results cross-posted to #pack-openings
  *
@@ -28,6 +28,7 @@ import { handleQueue, handleDuckRace } from './commands/queue.js';
 import { handleLink } from './commands/link.js';
 import { handleSell, handleList, handleSold } from './commands/card-shop.js';
 import { handleShipping } from './commands/shipping.js';
+import { handleHype } from './commands/hype.js';
 const PREFIX = '!';
 
 // =========================================================================
@@ -77,6 +78,9 @@ client.on('messageCreate', async (message) => {
             case 'shipping':
                 await handleShipping(message, args);
                 break;
+            case 'hype':
+                await handleHype(message, args);
+                break;
             default:
                 // Unknown command — silently ignore
                 break;
@@ -94,7 +98,7 @@ client.on('messageCreate', async (message) => {
 // =========================================================================
 
 client.once('ready', () => {
-    console.log(`itzenzoBot online as ${client.user.tag}`);
+    console.log(`Nous online as ${client.user.tag}`);
     console.log(`Guilds: ${client.guilds.cache.map((g) => g.name).join(', ')}`);
 
     // Start webhook server

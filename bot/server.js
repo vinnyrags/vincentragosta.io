@@ -246,6 +246,39 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 });
 
 // =========================================================================
+// Product direct checkout — creates a Stripe session for a product by price ID
+// =========================================================================
+
+app.get('/product/checkout/:priceId', async (req, res) => {
+    try {
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        const session = await stripe.checkout.sessions.create({
+            mode: 'payment',
+            line_items: [{ price: req.params.priceId, quantity: 1 }],
+            success_url: `${config.SHOP_URL}?thanks=1`,
+            cancel_url: config.SHOP_URL,
+            metadata: {
+                source: 'hype-checkout',
+            },
+            shipping_address_collection: { allowed_countries: ['US'] },
+            custom_fields: [
+                {
+                    key: 'discord_username',
+                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
+                    type: 'text',
+                    optional: true,
+                },
+            ],
+        });
+
+        res.redirect(303, session.url);
+    } catch (e) {
+        console.error('Product checkout error:', e.message);
+        res.status(500).send('Checkout failed. Try again or visit the shop directly.');
+    }
+});
+
+// =========================================================================
 // Ad-hoc shipping checkout — creates a Stripe session for any amount
 // =========================================================================
 
