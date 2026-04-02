@@ -25,7 +25,8 @@ db.exec(`
         customer_email TEXT,
         product_name TEXT,
         amount INTEGER,
-        created_at TEXT DEFAULT (datetime('now'))
+        created_at TEXT DEFAULT (datetime('now')),
+        shipped_at TEXT
     );
 
     CREATE TABLE IF NOT EXISTS purchase_counts (
@@ -125,6 +126,17 @@ db.exec(`
 `);
 
 // =========================================================================
+// Migrations
+// =========================================================================
+
+// Add shipped_at column to purchases if it doesn't exist (v2)
+try {
+    db.exec(`ALTER TABLE purchases ADD COLUMN shipped_at TEXT`);
+} catch {
+    // Column already exists — ignore
+}
+
+// =========================================================================
 // Purchases
 // =========================================================================
 
@@ -154,6 +166,18 @@ const stmts = {
 
     linkDiscord: db.prepare(`
         INSERT OR REPLACE INTO discord_links (discord_user_id, customer_email) VALUES (?, ?)
+    `),
+
+    getUnshipped: db.prepare(`
+        SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NOT NULL
+    `),
+
+    getUnshippedNoDiscord: db.prepare(`
+        SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NULL
+    `),
+
+    markShipped: db.prepare(`
+        UPDATE purchases SET shipped_at = datetime('now') WHERE shipped_at IS NULL
     `),
 };
 

@@ -14,6 +14,7 @@
  *  - New product alerts (POST /alerts/products)
  *  - Pack battle results + duck race winners cross-posted to #and-in-the-back
  *  - Queue archives posted to #card-night-queue
+ *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
  *
  * Usage:
  *   node bot/index.js
@@ -30,6 +31,8 @@ import { handleLink } from './commands/link.js';
 import { handleSell, handleList, handleSold } from './commands/card-shop.js';
 import { handleShipping } from './commands/shipping.js';
 import { handleHype } from './commands/hype.js';
+import { handleDroppedOff } from './commands/dropped-off.js';
+import { syncBotCommands } from './sync-bot-commands.js';
 const PREFIX = '!';
 
 // =========================================================================
@@ -82,6 +85,9 @@ client.on('messageCreate', async (message) => {
             case 'hype':
                 await handleHype(message, args);
                 break;
+            case 'dropped-off':
+                await handleDroppedOff(message);
+                break;
             default:
                 // Unknown command — silently ignore
                 break;
@@ -98,12 +104,15 @@ client.on('messageCreate', async (message) => {
 // Ready
 // =========================================================================
 
-client.once('ready', () => {
+client.once('ready', async () => {
     console.log(`Nous online as ${client.user.tag}`);
     console.log(`Guilds: ${client.guilds.cache.map((g) => g.name).join(', ')}`);
 
     // Start webhook server
     startServer();
+
+    // Sync #bot-commands reference
+    await syncBotCommands();
 });
 
 // =========================================================================

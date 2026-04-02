@@ -16,7 +16,8 @@ export function createTestDb() {
             customer_email TEXT,
             product_name TEXT,
             amount INTEGER,
-            created_at TEXT DEFAULT (datetime('now'))
+            created_at TEXT DEFAULT (datetime('now')),
+            shipped_at TEXT
         );
 
         CREATE TABLE IF NOT EXISTS purchase_counts (
@@ -127,6 +128,9 @@ export function buildStmts(db) {
             getDiscordIdByEmail: db.prepare(`SELECT discord_user_id FROM discord_links WHERE customer_email = ?`),
             getEmailByDiscordId: db.prepare(`SELECT customer_email FROM discord_links WHERE discord_user_id = ?`),
             linkDiscord: db.prepare(`INSERT OR REPLACE INTO discord_links (discord_user_id, customer_email) VALUES (?, ?)`),
+            getUnshipped: db.prepare(`SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NOT NULL`),
+            getUnshippedNoDiscord: db.prepare(`SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NULL`),
+            markShipped: db.prepare(`UPDATE purchases SET shipped_at = datetime('now') WHERE shipped_at IS NULL`),
         },
         battles: {
             getNextBattleNumber: db.prepare(`SELECT COALESCE(MAX(battle_number), 0) + 1 as next FROM battles WHERE battle_number IS NOT NULL`),
