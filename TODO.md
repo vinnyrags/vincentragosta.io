@@ -1,19 +1,20 @@
 ## HIGH PRIORITY
-- what are cool things we can do in twitch to prepare for our twitch stream (both gaming and card night)
+- what are cool things we can do in twitch (obs) to prepare for our twitch stream (both gaming and card night)
 - what are cool things we can do in tiktok studio to prepare for gaming
 - review shop page content against akivili business folder, is there an opportunity to update any of the content on the page, or perhaps even add new segments-- for example, for the join the itzenzoTTV discord core/group section, with all of the new commands we have built (inside of bot directory), is there more we can speak too here?
 - update twitch email somehow to itzenzottv@gmail.com
 - consider adding channel breakdown (discord) to shop page (mention aeon themed!)
 - draft we are back announcement
+- can we confirm if the #roles channel should be private until #verify is checked? (essentially adds Xipe to the user), I feel like someone shouldnt be able to access parts of my server without getting full access to the server, what do you think about this?
 - consider a community goals channel, that somehow keeps tabs on a $2500 goal that we would sell product towards, once hitting that we make another bulk purchase of product, this is actually a really cool idea
 - we should also consider analytics, and post-mortem somewhere in command center, so i can keep tabs on things on the daily, perhaps after every streeam, could we bake in a monthly snapshot analytics data as well, not sure if these could or should go into the same command center channel or if they should be different.
 - somewhere in welcome message we should mention the server is aeon themed (from honkai star rail)
 - finish sign up with carter pulse, need creator hub code
+- investigate top discord bots/apps we could add to server to make it more fun, or enhance my experience
 - how can we bake in the discord commands (and livestreaming strategy) into our content strategy, for example i had a good idea about potentially posting the checkout session link in social posts (in some way that is entertaining, not sure you can even do this)
 - i need to start working on spotify streaming playlists for the varying segments of my livestream, what do you suggest, is there a spotify api available to use that we can automate much of this?
 - can i stream tiktok studio from my ipad? I have access to my mac book pro, maybe I can work something off of that? ideally i just uses my ipad to simulcast to four different streaming platforms from just the one device, that would be completely optimal
 - i have a buddy who lives in canada that will have to pay $20/$25 to receive their product, since the shipping is much higher, I usually wait a month before I send him his order, how can we factor this scenario/experience into everything we have built thus far, how would I serve him the correct shipping without causing him nor myself any inconvenience.
-- can we remove the carlbot channel entirely, all carlbot commands will be run in #ops (does carlbot need to be present in this channel?)
 - build testing plan to run through all custom discord commands to fully test the suite (manually), pleasse write out a stepwise list detailing what I should do to thoroughly test the suite of commands
 - make sure youtube account is referencing itzenzottv@gmail.com
 - can we research cheap shipping supplies, I have been going to staples for all of my shiping supplies and it has been expensive. I like the card mailers that had the bubble wrap inside of them.
