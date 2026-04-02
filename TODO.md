@@ -6,12 +6,19 @@
 - review shop page content against akivili business folder, is there an opportunity to update any of the content on the page, or perhaps even add new segments-- for example, for the join the itzenzoTTV discord core/group section, with all of the new commands we have built (inside of bot directory), is there more we can speak too here?
 - update twitch email somehow to itzenzottv@gmail.com
 - draft we are back announcement
-- go live with shop code
+- talk with agent about how i have a very in depth pokemon card collection (and even some really cool yu gi oh cards), we should factor displaying a portion of them each livestream into our planning
+- talk with agent about how i hvae roughly 1K cards ready to be sold spanning from pokemon, anime and mature single cards, ranging from $1-$1000, how can we factor this into our livestream planning, I assume !sell will work fine for this
+- pull box commands to checkout sessions with stripe, perhaps we can just use !sell here, this is actually probably the move, pull boxes are anywhere from $1 - $5
+- talk about potential to only be able to stream from ipad out of the gate, what would that look like for the business, and if we cant use something like restream to simulcast what platform should I be streaming on?
+- sort by language as additional dropdown in products block, add language in spreadsheet, and update on production
+- add note under shop that i sell card singles, playmats and binders as well, message/join us in discord (linked with invite link) for more information
+- talk about table strategy, what to display for the varying parts of the livestream, be sure to update relevant documents in akivili
 - confirm emailing is working, how can we test this? where are we sending notifications in the current system?
 - on !offline, am I getting a post mortem anywhere, total sales on stripe for the night and other useful information, do we need a new channel for this sort of information under command center or can we funnel this information into an existing channel. i like the idea of a feed channel for information that wont get lost in conversation
 - build more generic modal system for age gate, that any block or template can use or extend to display their own messaging (trigger their own modal), can be on page load or via a trigger. please do a deep dive on how to best solve for this, and work up an effective and efficient implementation plan in plan mode and ultimately circle back and update the age gate code to reference the new modal system.
 - now that shop and functionality is pretty well built and we have real product data in the shop and in stripe, what can we do to start to work on a livestream strategy with what we have available, part two to this is a content strategy, make sure to do a cost assessment with what we have available, and what we need to do to put our best foot forward in content and livestreaming.
 - new image for one piece vol 5
+- clean up wordpress importer on production (if we need it lets install it via composer in git)
 - confirm !sell and !list will work for playmats, I also sell those adhoc during the live streams and dont necessarily want to put them in my shop (fairly explicit material on them), they range from $20-$50
 - future proof the db sizing, a year from now will i run into issues with all of my data from these commands in the sqlite db
 

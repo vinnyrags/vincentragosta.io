@@ -1,153 +1,111 @@
 # Shop Deployment Guide
 
-Step-by-step process for deploying the card shop to staging and production. The shop uses Stripe Checkout for payments — each environment needs its own Stripe configuration.
+Deploying the card shop and Nous bot to staging and production. The shop uses Stripe Checkout for payments. The Nous bot handles Discord notifications, role promotion, and livestream commands.
+
+**Current state (2026-04-02):** Production is live with Stripe in **test mode**. The switch to live mode happens when the business officially launches.
 
 ## Prerequisites
 
-- Stripe account with test mode keys (Dashboard → Developers → API keys)
+- Stripe account with API keys (Dashboard → Developers → API keys)
 - SSH access to the server (`root@174.138.70.29`)
-- Stripe webhook endpoint created in the Stripe Dashboard
+- Stripe webhook endpoints configured in the Stripe Dashboard
 
-## Staging Deployment
+## Architecture
 
-### 1. Deploy code to staging
+Two separate Stripe webhooks per environment:
 
-```bash
-make deploy-staging
-# or: git push production develop
-```
+| Webhook | Endpoint | Purpose |
+|---------|----------|---------|
+| **WordPress** | `/wp-json/shop/v1/webhook` | Stock management (decrement on purchase, restore on expiry) |
+| **Bot** | `/bot/webhooks/stripe` | Discord order notifications, role promotion, battle/queue tracking |
 
-### 2. Add Stripe constants to staging wp-config
+Both listen for: `checkout.session.completed`, `checkout.session.expired`
 
-SSH into the server and create/update the env config:
+Each webhook has its own signing secret (`whsec_...`).
 
-```bash
-ssh root@174.138.70.29
-nano /var/www/vincentragosta.dev/wp-config-env.php
-```
+## wp-config-env.php
 
-Add the following (use **test mode** keys for staging):
+Each environment needs these constants (in addition to DB, URLs, debug flags):
 
 ```php
-<?php
-// Stripe API keys (test mode)
+// Stripe API keys (test mode until business launch, then live mode)
 define('STRIPE_PUBLISHABLE_KEY', 'pk_test_...');
 define('STRIPE_SECRET_KEY', 'sk_test_...');
-define('STRIPE_WEBHOOK_SECRET', 'whsec_...');
+define('STRIPE_WEBHOOK_SECRET', 'whsec_...');       // WordPress webhook signing secret
+
+// Discord bot
+define('DISCORD_BOT_TOKEN', '<token>');
+
+// Bot Stripe webhook (separate from WordPress webhook)
+define('STRIPE_BOT_WEBHOOK_SECRET', 'whsec_...');   // Bot webhook signing secret
+
+// Bot config
+define('SHOP_URL', 'https://vincentragosta.io/shop');
+define('SITE_URL', 'https://vincentragosta.io');
+define('LIVESTREAM_SECRET', 'itzenzo-live');
 ```
 
-### 3. Create Stripe webhook endpoint
-
-In the Stripe Dashboard (test mode):
-
-1. Go to **Developers → Webhooks → Add destination**
-2. Events from: **Your account**
-3. Listen to: **checkout.session.completed**
-4. Endpoint URL: `https://staging.vincentragosta.io/wp-json/shop/v1/webhook`
-5. Destination name: `vincentragosta-shop-checkout-staging`
-6. Save and copy the **Signing secret** (`whsec_...`)
-7. Update the `STRIPE_WEBHOOK_SECRET` value in the staging `wp-config-env.php`
-
-### 4. Push local database to staging
+## Deploying Code
 
 ```bash
-make push-staging
+make release              # merge develop → main, push both to origin
+git push production main  # deploy to production
 ```
 
-### 5. Create ACF field group
+The post-receive hook handles: code checkout, composer install, npm ci + build for both themes, npm ci for bot, and `nous-bot` service restart.
 
-In the staging WordPress admin (or locally first, then sync via push-staging):
+## Syncing Products
 
-1. Go to **ACF → Field Groups → Add New**
-2. Create fields for the `product` post type:
-   - `stripe_price_id` (Text, required)
-   - `price` (Text — display price, e.g., "$24.99")
-   - `condition` (Select: Near Mint, Lightly Played, Moderately Played, Heavily Played, Damaged)
-   - `stock_quantity` (Number, default 1, min 0)
-   - `gallery_images` (Gallery)
-3. Location rule: Post Type → is equal to → Product
-4. Publish the field group
-
-### 6. Create shop page and test products
-
-1. Create a new Page titled "Shop" with the **Products** block
-2. Create a few test products with:
-   - Title, featured image, category (Pokemon/Anime/Mature Content)
-   - Fill in ACF fields (use Stripe test Price IDs)
-3. Create Stripe test products/prices in the Stripe Dashboard to get Price IDs
-
-### 7. Verify
-
-- [ ] Shop page loads with product grid
-- [ ] Sort/filter/search works
-- [ ] "Add to Cart" adds items to the drawer
-- [ ] Checkout redirects to Stripe test checkout
-- [ ] Use Stripe test card `4242 4242 4242 4242` to complete payment
-- [ ] Webhook fires and stock decrements
-- [ ] Thank-you page clears the cart
-
----
-
-## Production Deployment
-
-### 1. Switch to live Stripe keys
-
-In the Stripe Dashboard, toggle from **Test mode** to **Live mode** and get your live API keys.
-
-### 2. Create production webhook endpoint
-
-Same process as staging but with the production URL:
-
-1. Endpoint URL: `https://vincentragosta.io/wp-json/shop/v1/webhook`
-2. Destination name: `vincentragosta-shop-checkout-production`
-3. Copy the signing secret
-
-### 3. Add Stripe constants to production wp-config
+**Never push the full database.** Use `pull-products.php` to sync from Stripe:
 
 ```bash
 ssh root@174.138.70.29
-nano /var/www/vincentragosta.io/wp-config-env.php
+cd /var/www/vincentragosta.io
+
+# Auto-publish new products and clean stale ones
+touch scripts/.publish scripts/.clean
+wp eval-file scripts/pull-products.php --path=wp --allow-root
+rm -f scripts/.publish scripts/.clean
 ```
 
-```php
-<?php
-// Stripe API keys (live mode)
-define('STRIPE_PUBLISHABLE_KEY', 'pk_live_...');
-define('STRIPE_SECRET_KEY', 'sk_live_...');
-define('STRIPE_WEBHOOK_SECRET', 'whsec_...');
-```
+Flags:
+- `.publish` — auto-publish new products (without it, they're created as drafts)
+- `.clean` — delete WordPress products that no longer exist in Stripe
 
-### 4. Deploy code to production
+This creates/updates product CPT posts with correct price IDs, stock, images, and ACF fields from Stripe.
+
+## Switching to Stripe Live Mode
+
+When the business officially launches:
+
+1. Get live API keys from Stripe Dashboard (toggle to Live mode)
+2. Update `wp-config-env.php`:
+   - Replace `pk_test_`/`sk_test_` with `pk_live_`/`sk_live_`
+3. Create new webhooks in Stripe (live mode) — same endpoints, new signing secrets:
+   - WordPress: `https://vincentragosta.io/wp-json/shop/v1/webhook`
+   - Bot: `https://vincentragosta.io/bot/webhooks/stripe`
+4. Update `STRIPE_WEBHOOK_SECRET` and `STRIPE_BOT_WEBHOOK_SECRET` in wp-config
+5. Re-run `pull-products.php` to sync live mode products
+
+## Bot Service
+
+The Nous bot runs as a systemd service on the same droplet:
 
 ```bash
-make release
-# This merges develop → main and pushes both branches
+# Check status
+systemctl status nous-bot
+
+# View logs
+journalctl -u nous-bot -f
+
+# Restart
+systemctl restart nous-bot
+
+# Health check
+curl https://vincentragosta.io/bot/health
 ```
 
-Or manually:
-
-```bash
-git checkout main
-git merge develop
-git push origin main
-git push production main
-```
-
-### 5. Push database to production
-
-```bash
-make push-production
-```
-
-### 6. Verify
-
-- [ ] Shop page loads
-- [ ] Products display correctly
-- [ ] Checkout flow completes with a real (small) test purchase
-- [ ] Webhook fires and stock updates
-- [ ] Refund the test purchase in Stripe Dashboard
-
----
+**Port 3100:** Both staging and production use port 3100. Only one can run at a time. The staging bot (`nous-bot-staging`) is disabled in production.
 
 ## Stripe Test Cards
 
@@ -165,15 +123,22 @@ Use any future expiry date, any 3-digit CVC, and any billing ZIP.
 
 ### Webhook not firing
 - Verify the endpoint URL is correct in Stripe Dashboard
-- Check webhook logs in Stripe Dashboard → Developers → Webhooks → select endpoint → Recent deliveries
-- Ensure `STRIPE_WEBHOOK_SECRET` matches the signing secret shown in Stripe
+- Check webhook logs: Stripe Dashboard → Developers → Webhooks → select endpoint → Recent deliveries
+- Ensure the signing secret in `wp-config-env.php` matches Stripe (WordPress and bot have separate secrets)
 
 ### 500 error on checkout endpoint
 - Check that `STRIPE_SECRET_KEY` is defined in `wp-config-env.php`
 - Check server error logs: `tail -f /var/log/nginx/error.log`
-- Check WordPress debug log: `tail -f /var/www/{site}/wp-content/debug.log`
+- Check WordPress debug log: `tail -f /var/www/{site}/wp/wp-content/debug.log`
 
 ### Products not showing
 - Verify the Product CPT is registered: check WordPress admin sidebar for "Products"
 - Run `composer dump-autoload` on the server if classes aren't found
 - Run `npm run build` on the server if assets are missing
+- Check ACF field groups are synced: WP admin → ACF → check for "Sync available" badge
+
+### Bot won't start (EADDRINUSE)
+- Another process is using port 3100
+- Check: `ss -tlnp | grep 3100`
+- Kill the stale process or stop the conflicting service
+- Common cause: staging bot still running after a deploy triggered its restart via post-receive hook
