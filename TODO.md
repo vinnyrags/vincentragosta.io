@@ -7,6 +7,7 @@
 - update twitch email somehow to itzenzottv@gmail.com
 - draft we are back announcement
 - go live with shop code
+- confirm emailing is working, how can we test this? where are we sending notifications in the current system?
 - on !offline, am I getting a post mortem anywhere, total sales on stripe for the night and other useful information, do we need a new channel for this sort of information under command center or can we funnel this information into an existing channel. i like the idea of a feed channel for information that wont get lost in conversation
 - build more generic modal system for age gate, that any block or template can use or extend to display their own messaging (trigger their own modal), can be on page load or via a trigger. please do a deep dive on how to best solve for this, and work up an effective and efficient implementation plan in plan mode and ultimately circle back and update the age gate code to reference the new modal system.
 - now that shop and functionality is pretty well built and we have real product data in the shop and in stripe, what can we do to start to work on a livestream strategy with what we have available, part two to this is a content strategy, make sure to do a cost assessment with what we have available, and what we need to do to put our best foot forward in content and livestreaming.
