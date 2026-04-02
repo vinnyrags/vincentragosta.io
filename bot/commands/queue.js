@@ -4,7 +4,7 @@
  * Commands:
  *   !queue              — Show current queue
  *   !queue open         — Open a new queue (mods)
- *   !queue close        — Close the queue and archive to #pack-openings (mods)
+ *   !queue close        — Close the queue and archive to #card-night-queue (mods)
  *   !queue history      — Show recent queues with winners
  *   !duckrace           — Show duck race roster (unique buyers from queue)
  *   !duckrace winner @u — Declare duck race winner, assign Aha role (mods)
@@ -75,21 +75,21 @@ async function closeQueue(message) {
     // Post in current channel
     await message.channel.send({ embeds: [embed] });
 
-    // Archive to #pack-openings
+    // Archive to #card-night-queue
     const archiveEmbed = new EmbedBuilder()
         .setTitle(`📋 Queue #${active.id} — Archived`)
         .setDescription(buildQueueDescription(entries, uniqueBuyers))
         .setColor(0x95a5a6)
         .setFooter({ text: `Opened: ${active.created_at} • Closed: ${new Date().toISOString().replace('T', ' ').slice(0, 19)}` });
 
-    await sendEmbed('PACK_OPENINGS', {
+    await sendEmbed('CARD_NIGHT_QUEUE', {
         title: `📋 Queue #${active.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
         description: buildQueueDescription(entries, uniqueBuyers),
         color: 0x95a5a6,
         footer: `Opened: ${active.created_at}`,
     });
 
-    await message.channel.send(`Queue #${active.id} closed and archived to <#${config.CHANNELS.PACK_OPENINGS}>. Run \`!duckrace\` to see the race roster.`);
+    await message.channel.send(`Queue #${active.id} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>. Run \`!duckrace\` to see the race roster.`);
 }
 
 async function showQueue(message) {
@@ -223,8 +223,8 @@ async function declareDuckRaceWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Archive to pack-openings
-    await sendEmbed('PACK_OPENINGS', {
+    // Cross-post to #and-in-the-back (community hype)
+    await sendEmbed('AND_IN_THE_BACK', {
         title: `🦆 Queue #${target.id} — Duck Race Winner`,
         description: `Winner: <@${mentioned.id}>\nEntries: ${uniqueBuyers.length} buyers, ${entries.length} items`,
         color: 0xffd700,

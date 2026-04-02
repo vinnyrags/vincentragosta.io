@@ -213,7 +213,7 @@ async function handleOffline(message) {
         const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
 
         if (entries.length > 0) {
-            await sendEmbed('PACK_OPENINGS', {
+            await sendEmbed('CARD_NIGHT_QUEUE', {
                 title: `📋 Queue #${activeQueue.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
                 description: 'Tonight\'s queue archived.',
                 color: 0x95a5a6,
@@ -236,7 +236,7 @@ async function handleOffline(message) {
     // Confirm in current channel
     await message.channel.send(
         `📴 **Live session #${session.id} ended.**\n` +
-        `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to #pack-openings\n` +
+        `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>\n` +
         `• Shipping DMs sent to ${shippingsSent} buyer(s)${alreadyCovered.length ? `, ${alreadyCovered.length} already covered this week` : ''}\n` +
         `• New pre-order queue opened (#${newQueueId})\n` +
         `• Stream-ended message posted to #announcements`

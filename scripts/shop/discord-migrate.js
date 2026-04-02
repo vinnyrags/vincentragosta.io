@@ -132,7 +132,7 @@ async function phase2(guild) {
         { name: 'order-feed', category: '🛒 SHOP' },
         { name: 'pack-battles', category: '🛒 SHOP' },
         { name: 'pokemon', category: '🃏 CARDS' },
-        { name: 'pack-openings', category: '🃏 CARDS' },
+        { name: 'card-night-queue', category: '🛒 SHOP' },
         { name: 'looking-for-group', category: '🎮 GAMING' },
         { name: 'memes', category: '💬 COMMUNITY' },
         { name: 'murphy-tax', category: '💬 COMMUNITY' },
@@ -528,11 +528,11 @@ async function phase6(guild) {
 > #deals — flash sales, discord-exclusive deals
 > #order-feed — automated order notifications (bot)
 > #pack-battles — pack battle matchmaking
+> #card-night-queue — queue archives from each card night
 
 🃏 **CARDS**
 > #pokemon — Pokemon discussion and deals
 > #anime — Anime cards, Weiss Schwarz (renamed from #all-things-anime, history preserved)
-> #pack-openings — Pull reveals, stream clips
 > #buy-trade-sell — Community marketplace
 
 🎮 **GAMING**

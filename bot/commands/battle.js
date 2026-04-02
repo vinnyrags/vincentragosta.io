@@ -262,8 +262,8 @@ async function declareBattleWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Cross-post to pack-openings
-    await sendEmbed('PACK_OPENINGS', {
+    // Cross-post to #and-in-the-back (community hype)
+    await sendEmbed('AND_IN_THE_BACK', {
         title: `⚔️ Pack Battle #${num} Results`,
         description: `**${battle.product_name}** — ${paidEntries.length} entries\n🏆 Winner: <@${mentioned.id}>`,
         color: 0xffd700,

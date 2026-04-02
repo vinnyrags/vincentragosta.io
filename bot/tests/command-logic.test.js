@@ -29,7 +29,7 @@ vi.mock('../discord.js', () => ({
 
 vi.mock('../config.js', () => ({
     default: {
-        CHANNELS: { ANNOUNCEMENTS: '1', ORDER_FEED: '2', DEALS: '3', PACK_BATTLES: '1488041101326811158', PACK_OPENINGS: '5' },
+        CHANNELS: { ANNOUNCEMENTS: '1', ORDER_FEED: '2', DEALS: '3', PACK_BATTLES: '1488041101326811158', AND_IN_THE_BACK: '5', CARD_NIGHT_QUEUE: '6' },
         ROLES: { AKIVILI: '1488046525065072670', NANOOK: '1488046525899739148', LONG: 'r3', AHA: 'r4', XIPE: 'r5' },
         SHOP_URL: 'https://example.com/shop',
         SITE_URL: 'https://example.com',

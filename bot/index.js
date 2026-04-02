@@ -12,7 +12,8 @@
  *  - Account linking (!link → email mapping for role promotion)
  *  - Role promotion (Xipe at 1+ purchases, Long at 5+)
  *  - New product alerts (POST /alerts/products)
- *  - Pack battle results cross-posted to #pack-openings
+ *  - Pack battle results + duck race winners cross-posted to #and-in-the-back
+ *  - Queue archives posted to #card-night-queue
  *
  * Usage:
  *   node bot/index.js
