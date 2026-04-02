@@ -3,6 +3,7 @@
  *
  * Posts a hype announcement in #announcements with product names, prices,
  * and direct checkout links. Run on stream days to drive pre-stream purchases.
+ * Also drops raw checkout URLs in #ops for easy copy-paste to social platforms.
  *
  * Usage:
  *   !hype Prismatic Evolutions Booster Box, Crown Zenith ETB
@@ -189,7 +190,20 @@ async function handleHype(message, args) {
         .setFooter({ text: 'Grab yours before stream — pre-orders go into tonight\'s queue!' });
 
     await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
-    await message.channel.send('🎬 Hype posted to #announcements!');
+
+    // Post raw checkout URLs to #ops for easy copy-paste to social
+    const opsLines = [
+        '🔗 **Checkout links for social:**',
+        ...found.map((p) => {
+            const checkoutUrl = `${baseUrl}/bot/product/checkout/${p.priceId}`;
+            return `• **${p.name}** — <${checkoutUrl}>`;
+        }),
+        '',
+        '*Paste these into IG Story link stickers, YouTube descriptions, or anywhere outside Discord.*',
+    ];
+    await sendToChannel('OPS', opsLines.join('\n'));
+
+    await message.channel.send('🎬 Hype posted to #announcements! Checkout links dropped in #ops.');
 }
 
 export { handleHype };

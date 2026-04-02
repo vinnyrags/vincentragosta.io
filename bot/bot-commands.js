@@ -11,7 +11,7 @@ const messages = [
     `# Nous Command Reference
 
 ## Master Commands
-**\`!hype Product 1, Product 2\`** — Pre-stream hype. Looks up products in Stripe, shows a preview with prices (detects sales), then posts a hype embed to #announcements with direct checkout links. React ✅ to confirm.
+**\`!hype Product 1, Product 2\`** — Pre-stream hype. Looks up products in Stripe, shows a preview with prices (detects sales), then posts a hype embed to #announcements with direct checkout links. Also drops raw checkout URLs in #ops for easy copy-paste to IG Stories, YouTube descriptions, etc. React ✅ to confirm.
 > Example: \`!hype Prismatic Evolutions Booster Box, Crown Zenith ETB\`
 
 **\`!live\`** — Go live. Posts pre-order summary (queue stays open), starts livestream session, posts shop link with \`?live=1\` (shipping-free for livestream buyers). Posts going-live in #announcements.
