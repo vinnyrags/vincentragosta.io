@@ -1,11 +1,24 @@
 ## HIGH PRIORITY
-- somewhere in discord (in the appropriate channel), we need to discuss how shipping payment works, I am not currently sure where the best place for this could be, do you have any suggestions-- this could perhaps be expanded too to how payments in general work during the livestream for products and how shipping is collected at the end in a separate payment (and explain why this is done this way please for folks). I want to spoon feed all of my customers with complete transparency so they understand how everything works.
-- consider abstracting itzenzottv functionality (shop + bot) into its own repo. something to keep in mind, down the line I feel like I will create a shop.vincentragosta.io subdomain and host my shop there, when doing this, I would create an itzenzottv theme on a separate project install. i would want the naming of this abstraction that I am asking of you to make sense here, when we pull the code in for this new project it should all make sense within the context of this new website and the context of its current location (vincentragosta.io theme)
 - what are cool things we can do in twitch to prepare for our twitch stream (both gaming and card night)
 - what are cool things we can do in tiktok studio to prepare for gaming
 - review shop page content against akivili business folder, is there an opportunity to update any of the content on the page, or perhaps even add new segments-- for example, for the join the itzenzoTTV discord core/group section, with all of the new commands we have built (inside of bot directory), is there more we can speak too here?
 - update twitch email somehow to itzenzottv@gmail.com
+- consider adding channel breakdown (discord) to shop page (mention aeon themed!)
 - draft we are back announcement
+- consider a community goals channel, that somehow keeps tabs on a $2500 goal that we would sell product towards, once hitting that we make another bulk purchase of product, this is actually a really cool idea
+- we should also consider analytics, and post-mortem somewhere in command center, so i can keep tabs on things on the daily, perhaps after every streeam, could we bake in a monthly snapshot analytics data as well, not sure if these could or should go into the same command center channel or if they should be different.
+- somewhere in welcome message we should mention the server is aeon themed (from honkai star rail)
+- finish sign up with carter pulse, need creator hub code
+- how can we bake in the discord commands (and livestreaming strategy) into our content strategy, for example i had a good idea about potentially posting the checkout session link in social posts (in some way that is entertaining, not sure you can even do this)
+- i need to start working on spotify streaming playlists for the varying segments of my livestream, what do you suggest, is there a spotify api available to use that we can automate much of this?
+- can i stream tiktok studio from my ipad? I have access to my mac book pro, maybe I can work something off of that? ideally i just uses my ipad to simulcast to four different streaming platforms from just the one device, that would be completely optimal
+- i have a buddy who lives in canada that will have to pay $20/$25 to receive their product, since the shipping is much higher, I usually wait a month before I send him his order, how can we factor this scenario/experience into everything we have built thus far, how would I serve him the correct shipping without causing him nor myself any inconvenience.
+- can we remove the carlbot channel entirely, all carlbot commands will be run in #ops (does carlbot need to be present in this channel?)
+- build testing plan to run through all custom discord commands to fully test the suite (manually), pleasse write out a stepwise list detailing what I should do to thoroughly test the suite of commands
+- make sure youtube account is referencing itzenzottv@gmail.com
+- can we research cheap shipping supplies, I have been going to staples for all of my shiping supplies and it has been expensive. I like the card mailers that had the bubble wrap inside of them.
+- what is the muprhy-tax channel, a channels for dog posts? if so lets make that more clear in the description, even if this is not what the channel was intended to be, lets make the description more clear because I read it and was confused (that could just be a me thing)
+- does my discord doc accurately reflect the current state of my discord?
 - talk with agent about how i have a very in depth pokemon card collection (and even some really cool yu gi oh cards), we should factor displaying a portion of them each livestream into our planning
 - talk with agent about how i hvae roughly 1K cards ready to be sold spanning from pokemon, anime and mature single cards, ranging from $1-$1000, how can we factor this into our livestream planning, I assume !sell will work fine for this
 - pull box commands to checkout sessions with stripe, perhaps we can just use !sell here, this is actually probably the move, pull boxes are anywhere from $1 - $5
@@ -21,6 +34,7 @@
 - clean up wordpress importer on production (if we need it lets install it via composer in git)
 - confirm !sell and !list will work for playmats, I also sell those adhoc during the live streams and dont necessarily want to put them in my shop (fairly explicit material on them), they range from $20-$50
 - future proof the db sizing, a year from now will i run into issues with all of my data from these commands in the sqlite db
+- consider abstracting itzenzottv functionality (shop + bot) into its own repo. something to keep in mind, down the line I feel like I will create a shop.vincentragosta.io subdomain and host my shop there, when doing this, I would create an itzenzottv theme on a separate project install. i would want the naming of this abstraction that I am asking of you to make sense here, when we pull the code in for this new project it should all make sense within the context of this new website and the context of its current location (vincentragosta.io theme)
 
 ## MEDIUM PRIORITY
 - switch stripe over to live mode
