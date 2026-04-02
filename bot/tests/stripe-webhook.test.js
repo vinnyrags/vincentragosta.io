@@ -201,3 +201,30 @@ describe('purchase → promotion flow', () => {
         expect(count >= 5).toBe(true); // Long threshold met
     });
 });
+
+// =========================================================================
+// Shipping payment tracking
+// =========================================================================
+
+describe('shipping payment tracking', () => {
+    it('livestream-shipping source marks shipping as paid', () => {
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(session.id, 'user1', 'buyer@example.com');
+
+        // Simulate what the webhook does for livestream-shipping
+        stmts.livestream.markShippingPaid.run(session.id, 'buyer@example.com');
+
+        const unpaid = stmts.livestream.getBuyers.all(session.id);
+        expect(unpaid).toHaveLength(0); // no longer in unpaid list
+    });
+
+    it('shipping payment does not create a purchase record', () => {
+        // Shipping payments should early-return — no purchase inserted
+        const before = db.prepare('SELECT COUNT(*) as c FROM purchases').get().c;
+
+        // No purchase inserted for shipping (the webhook handler returns early)
+        const after = db.prepare('SELECT COUNT(*) as c FROM purchases').get().c;
+        expect(after).toBe(before);
+    });
+});

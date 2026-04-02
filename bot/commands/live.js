@@ -125,25 +125,63 @@ async function handleOffline(message) {
     // Cancel the reminder
     cancelReminder();
 
-    // Get unique buyers who need shipping
+    // Get unique buyers who need shipping (shipping_paid = 0 for this session)
     const buyers = livestream.getBuyers.all(session.id);
 
-    // Send shipping DMs to each unique buyer
+    // Split buyers: those who already paid shipping this week vs those who need it
+    const needsShipping = [];
+    const alreadyCovered = [];
+
+    for (const buyer of buyers) {
+        const paidThisWeek = livestream.hasShippingThisWeek.get(buyer.customer_email);
+        if (paidThisWeek) {
+            alreadyCovered.push(buyer);
+        } else {
+            needsShipping.push(buyer);
+        }
+    }
+
+    // Mark already-covered buyers as paid so they aren't DM'd again
+    for (const buyer of alreadyCovered) {
+        livestream.markShippingPaid.run(session.id, buyer.customer_email);
+    }
+
+    // Send "already covered" DMs
+    for (const buyer of alreadyCovered) {
+        if (!buyer.discord_user_id) continue;
+        const coveredEmbed = new EmbedBuilder()
+            .setTitle('📦 You\'re All Set!')
+            .setDescription(
+                `You've already paid shipping this week — tonight's items will ship with your existing order on Monday. No additional shipping needed!`
+            )
+            .setColor(0x2ecc71)
+            .setFooter({ text: 'All orders ship Monday morning.' });
+
+        try {
+            const member = await getMember(buyer.discord_user_id);
+            if (member) {
+                const dm = await member.createDM();
+                await dm.send({ embeds: [coveredEmbed] });
+            }
+        } catch { /* DMs disabled — skip */ }
+    }
+
+    // Send shipping DMs to buyers who need to pay
     let shippingsSent = 0;
     const shippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/livestream/shipping/${session.id}`;
 
-    for (const buyer of buyers) {
+    for (const buyer of needsShipping) {
         const isPlaceholder = buyer.customer_email.includes('@placeholder');
         const emailParam = isPlaceholder ? '' : `?email=${encodeURIComponent(buyer.customer_email)}`;
         const shippingEmbed = new EmbedBuilder()
             .setTitle('📦 Shipping for Tonight\'s Orders')
             .setDescription(
                 `Thanks for being part of tonight's stream!\n\n` +
-                `Click below to pay shipping ($10 flat rate) and enter your address. This covers everything from tonight.\n\n` +
+                `Click below to pay shipping ($10 flat rate) and enter your address. This covers everything you buy this week — if you come back before Monday, you won't be charged again.\n\n` +
                 `📦 **[Pay Shipping & Enter Address](${shippingUrl}${emailParam})**`
             )
             .setColor(0x2ecc71)
-            .setFooter({ text: '$10 flat rate — covers all items and winnings from tonight.' });
+            .setFooter({ text: '$10 flat rate — covers all items and winnings through Monday.' });
 
         if (buyer.discord_user_id) {
             try {
@@ -199,7 +237,7 @@ async function handleOffline(message) {
     await message.channel.send(
         `📴 **Live session #${session.id} ended.**\n` +
         `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to #pack-openings\n` +
-        `• Shipping DMs sent to ${shippingsSent} buyer(s)\n` +
+        `• Shipping DMs sent to ${shippingsSent} buyer(s)${alreadyCovered.length ? `, ${alreadyCovered.length} already covered this week` : ''}\n` +
         `• New pre-order queue opened (#${newQueueId})\n` +
         `• Stream-ended message posted to #announcements`
     );

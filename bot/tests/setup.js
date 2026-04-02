@@ -165,6 +165,7 @@ export function buildStmts(db) {
             addBuyer: db.prepare(`INSERT OR IGNORE INTO livestream_buyers (session_id, discord_user_id, customer_email) VALUES (?, ?, ?)`),
             getBuyers: db.prepare(`SELECT * FROM livestream_buyers WHERE session_id = ? AND shipping_paid = 0`),
             markShippingPaid: db.prepare(`UPDATE livestream_buyers SET shipping_paid = 1 WHERE session_id = ? AND customer_email = ?`),
+            hasShippingThisWeek: db.prepare(`SELECT 1 FROM livestream_buyers WHERE customer_email = ? AND shipping_paid = 1 AND created_at >= datetime('now', 'weekday 1', '-7 days') LIMIT 1`),
         },
         cardListings: {
             create: db.prepare(`INSERT INTO card_listings (card_name, price, buyer_discord_id, status) VALUES (?, ?, ?, ?)`),

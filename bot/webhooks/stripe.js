@@ -11,7 +11,7 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { db, purchases, battles, cardListings } from '../db.js';
+import { db, purchases, battles, cardListings, livestream } from '../db.js';
 import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
 import { addLivestreamBuyer } from '../commands/live.js';
@@ -21,6 +21,22 @@ import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
  * Process a completed checkout session.
  */
 async function handleCheckoutCompleted(session) {
+    // Handle shipping payments — mark as paid and exit early
+    if (session.metadata?.source === 'livestream-shipping') {
+        const sessionId = session.metadata.livestream_session_id;
+        const email = session.customer_details?.email || session.metadata.customer_email;
+        if (sessionId && email) {
+            livestream.markShippingPaid.run(Number(sessionId), email);
+            console.log(`Shipping paid: ${email} for session #${sessionId}`);
+        }
+        return;
+    }
+
+    // Ad-hoc shipping — not a product purchase
+    if (session.metadata?.source === 'ad-hoc-shipping') {
+        return;
+    }
+
     const customerEmail = session.customer_details?.email || session.customer_email;
     const lineItems = session.metadata?.line_items
         ? JSON.parse(session.metadata.line_items)

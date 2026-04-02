@@ -197,3 +197,60 @@ describe('shipping scenarios', () => {
         expect(buyers[0].customer_email).toContain('@placeholder');
     });
 });
+
+describe('weekly shipping tracking', () => {
+    it('hasShippingThisWeek returns undefined when no shipping paid', () => {
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(session.id, 'user1', 'user1@test.com');
+
+        const result = stmts.livestream.hasShippingThisWeek.get('user1@test.com');
+        expect(result).toBeUndefined();
+    });
+
+    it('hasShippingThisWeek returns truthy after shipping is paid', () => {
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(session.id, 'user1', 'user1@test.com');
+
+        stmts.livestream.markShippingPaid.run(session.id, 'user1@test.com');
+
+        const result = stmts.livestream.hasShippingThisWeek.get('user1@test.com');
+        expect(result).toBeTruthy();
+    });
+
+    it('buyer who paid shipping in earlier session is covered for the week', () => {
+        // Session 1 — buyer pays shipping
+        stmts.livestream.startSession.run();
+        const s1 = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(s1.id, 'user1', 'user1@test.com');
+        stmts.livestream.markShippingPaid.run(s1.id, 'user1@test.com');
+        stmts.livestream.endSession.run(s1.id);
+
+        // Session 2 — same buyer buys again
+        stmts.livestream.startSession.run();
+        const s2 = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(s2.id, 'user1', 'user1@test.com');
+
+        // Should be recognized as already covered
+        const paidThisWeek = stmts.livestream.hasShippingThisWeek.get('user1@test.com');
+        expect(paidThisWeek).toBeTruthy();
+
+        // But still shows as unpaid in this session's getBuyers
+        const unpaid = stmts.livestream.getBuyers.all(s2.id);
+        expect(unpaid).toHaveLength(1);
+    });
+
+    it('different buyers are tracked independently', () => {
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        stmts.livestream.addBuyer.run(session.id, 'user1', 'user1@test.com');
+        stmts.livestream.addBuyer.run(session.id, 'user2', 'user2@test.com');
+
+        // Only user1 pays shipping
+        stmts.livestream.markShippingPaid.run(session.id, 'user1@test.com');
+
+        expect(stmts.livestream.hasShippingThisWeek.get('user1@test.com')).toBeTruthy();
+        expect(stmts.livestream.hasShippingThisWeek.get('user2@test.com')).toBeUndefined();
+    });
+});

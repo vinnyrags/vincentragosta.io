@@ -319,6 +319,14 @@ const livestreamStmts = {
     markShippingPaid: db.prepare(`
         UPDATE livestream_buyers SET shipping_paid = 1 WHERE session_id = ? AND customer_email = ?
     `),
+
+    hasShippingThisWeek: db.prepare(`
+        SELECT 1 FROM livestream_buyers
+        WHERE customer_email = ?
+          AND shipping_paid = 1
+          AND created_at >= datetime('now', 'weekday 1', '-7 days')
+        LIMIT 1
+    `),
 };
 
 // =========================================================================

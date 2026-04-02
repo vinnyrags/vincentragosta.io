@@ -1,18 +1,26 @@
 ## HIGH PRIORITY
+- somewhere in discord (in the appropriate channel), we need to discuss how shipping payment works, I am not currently sure where the best place for this could be, do you have any suggestions-- this could perhaps be expanded too to how payments in general work during the livestream for products and how shipping is collected at the end in a separate payment (and explain why this is done this way please for folks). I want to spoon feed all of my customers with complete transparency so they understand how everything works.
 - consider abstracting itzenzottv functionality (shop + bot) into its own repo. something to keep in mind, down the line I feel like I will create a shop.vincentragosta.io subdomain and host my shop there, when doing this, I would create an itzenzottv theme on a separate project install. i would want the naming of this abstraction that I am asking of you to make sense here, when we pull the code in for this new project it should all make sense within the context of this new website and the context of its current location (vincentragosta.io theme)
-
-- flash sale in discord/stripe, how can we integrate this into a livestream moment where an alarm goes off, and a random flash sale happens
+- what are cool things we can do in twitch to prepare for our twitch stream (both gaming and card night)
+- what are cool things we can do in tiktok studio to prepare for gaming
 - review shop page content against akivili business folder, is there an opportunity to update any of the content on the page, or perhaps even add new segments-- for example, for the join the itzenzoTTV discord core/group section, with all of the new commands we have built (inside of bot directory), is there more we can speak too here?
+- update twitch email somehow to itzenzottv@gmail.com
+- draft we are back announcement
+- go live with shop code
+- build more generic modal system for age gate, that any block or template can use or extend to display their own messaging (trigger their own modal), can be on page load or via a trigger. please do a deep dive on how to best solve for this, and work up an effective and efficient implementation plan in plan mode and ultimately circle back and update the age gate code to reference the new modal system.
+- now that shop and functionality is pretty well built and we have real product data in the shop and in stripe, what can we do to start to work on a livestream strategy with what we have available, part two to this is a content strategy, make sure to do a cost assessment with what we have available, and what we need to do to put our best foot forward in content and livestreaming.
+- new image for one piece vol 5
+- confirm !sell and !list will work for playmats, I also sell those adhoc during the live streams and dont necessarily want to put them in my shop (fairly explicit material on them), they range from $20-$50
 
+## MEDIUM PRIORITY
+- switch stripe over to live mode
 - nous signal blog block will only display the current months blog posts in the block, we need to think through a way to check an archived page that has different months listed on the page that would maybe link to another page with the blog block on it that would showcase that months posts, I dont necessarily like this flow, there are too many steps but I also want to be careful about displaying a ton of data at once on a page while taking into account pagination or lazy loading it could get hairy, so maybe iour first step is thinking through this and how we can best sset this up. I think its a great idea and keeps the initial nous-signal page lean, 30 posts max right? if folks want to further explore trhe archives they should be able to do so from the nous-signal page by clicking a button called Archives or something cleverly written by nous himself.
 - we made an update to social icons hook in theme provider in the child theme that we want to move to the parent theme (confirm this action beforehand even though I cant think of any reason why we wouldnt want all social links to open in a new tab)
-- build more generic modal system for age gate, that any block or template can use or extend to display their own messaging (trigger their own modal), can be on page load or via a trigger. please do a deep dive on how to best solve for this, and work up an effective and efficient implementation plan in plan mode and ultimately circle back and update the age gate code to reference the new modal system.
 - if we were to review akivili in its entirety, everything in it vs the content/pages and content/projects, do you see opportunity to update the content on the current website with anything else that we have done and/or worked on that would better the cause on my website to get hired for web development business work, anything pertaining to server deployment stuff, any of the new make commands we have done, anything related to stripe? the card business? I was not sure I wanted to expose the shop in my global nav, to try to keep a clear separation ebtween the shop and the rest of my web development work, but maybe there is a fun and clever play we could even do-- I dont know about this but I could be persuaded if you make a compelling argument. I look forward to your assessment on this.
 - create starter repo that has project root plus child theme, rework claude.md to ensure no specific references to vincentragosta.io project, it will more than likely not have any information on me either, i.e, access to the content directory, docs directory or interviews directory, so if there are references to how I think or want claude to think/behave, then we should port that information over to claude.md.
 - rss feed of nous signal
 - consider cleaning up the file architecture of akivili
-
-## MEDIUM PRIORITY
+- flash sale in discord/stripe, how can we integrate this into a livestream moment where an alarm goes off, and a random flash sale happens
 
 ## LOW PRIORITY
 - consider having each PostProvider create its own category taxonomy, right now I am in the situation wheree blog and project categories are meshing, ideally they would have their own subset of categories. we may need to consider a strategy to move categories currently assigned to posts to the new project category after we do this.
