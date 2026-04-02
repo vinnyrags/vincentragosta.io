@@ -13,7 +13,7 @@ use WorDBless\BaseTestCase;
 use WP_REST_Request;
 
 /**
- * Integration tests for StockDecrementEndpoint (itzenzoBot stock decrement).
+ * Integration tests for StockDecrementEndpoint (Nous stock decrement).
  */
 class StockDecrementEndpointTest extends BaseTestCase
 {
