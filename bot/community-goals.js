@@ -2,9 +2,9 @@
  * Community Goals — tracks revenue toward the next restock.
  *
  * Every $2,500 in product revenue (shipping excluded) triggers a restock cycle.
- * Lifetime milestones reward the community at $5K, $10K, $25K, $50K.
+ * Lifetime milestones every $5K reward the community with free loot.
  *
- * The pinned message in #community-goals is updated on every purchase.
+ * The pinned message in #restock-tracker is updated on every purchase.
  */
 
 import { EmbedBuilder } from 'discord.js';
@@ -13,14 +13,7 @@ import config from './config.js';
 import { goals } from './db.js';
 
 const CYCLE_GOAL = 250000; // $2,500 in cents
-
-const LIFETIME_MILESTONES = [
-    { amount: 500000,   label: '$5,000',  reward: 'Community shoutout on stream!' },
-    { amount: 1000000,  label: '$10,000', reward: 'Opening a box on stream for the community!' },
-    { amount: 2500000,  label: '$25,000', reward: 'Community celebration stream!' },
-    { amount: 5000000,  label: '$50,000', reward: 'Something big is coming...' },
-    { amount: 10000000, label: '$100,000', reward: 'Legend status. The community built this.' },
-];
+const MILESTONE_INCREMENT = 500000; // $5,000 in cents
 
 /**
  * Build a text progress bar.
@@ -33,7 +26,15 @@ function progressBar(percent, length = 20) {
 }
 
 /**
- * Build the community goals embed.
+ * Get the next lifetime milestone amount based on current revenue.
+ * Milestones occur at every $5K: $5,000, $10,000, $15,000, etc.
+ */
+function getNextMilestone(lifetimeRevenue) {
+    return Math.ceil((lifetimeRevenue + 1) / MILESTONE_INCREMENT) * MILESTONE_INCREMENT;
+}
+
+/**
+ * Build the restock tracker embed.
  */
 function buildGoalEmbed(goal) {
     const cycleRevenue = goal.cycle_revenue;
@@ -57,22 +58,19 @@ function buildGoalEmbed(goal) {
     ].join('\n');
 
     const embed = new EmbedBuilder()
-        .setTitle(`📊 Community Restock Goal — Cycle #${cycle}`)
+        .setTitle(`📊 Restock Goal — Cycle #${cycle}`)
         .setDescription(description)
-        .setColor(percent >= 100 ? 0x2ecc71 : 0x3498db);
+        .setColor(0x2ecc71);
 
     // Lifetime stats
+    const nextMilestone = getNextMilestone(lifetimeRevenue);
+    const milestoneDollars = (nextMilestone / 100).toLocaleString('en-US');
+
     const lifetimeLines = [`💰 **$${lifetimeDollars}** lifetime revenue`];
     if (restocksCompleted > 0) {
         lifetimeLines.push(`📦 **${restocksCompleted}** restock${restocksCompleted !== 1 ? 's' : ''} funded by this community`);
     }
-
-    // Show next lifetime milestone
-    const nextMilestone = LIFETIME_MILESTONES.find((m) => lifetimeRevenue < m.amount);
-    if (nextMilestone) {
-        const msPercent = Math.round((lifetimeRevenue / nextMilestone.amount) * 100);
-        lifetimeLines.push(`🎯 Next milestone: **${nextMilestone.label}** (${msPercent}%) — *${nextMilestone.reward}*`);
-    }
+    lifetimeLines.push(`🎯 **Lifetime milestone: $${milestoneDollars}** — free loot for the community!`);
 
     embed.addFields({ name: 'Lifetime', value: lifetimeLines.join('\n') });
     embed.setFooter({ text: 'Updated live with every purchase' });
@@ -104,12 +102,15 @@ async function addRevenue(amountCents) {
         await announceRestock(goal.cycle - 1);
     }
 
-    // Check lifetime milestones
+    // Check lifetime milestones (every $5K)
     const lifetimeAfter = goal.lifetime_revenue;
-    for (const milestone of LIFETIME_MILESTONES) {
-        if (lifetimeBefore < milestone.amount && lifetimeAfter >= milestone.amount) {
-            await announceMilestone(milestone);
-        }
+    const milestonesBefore = Math.floor(lifetimeBefore / MILESTONE_INCREMENT);
+    const milestonesAfter = Math.floor(lifetimeAfter / MILESTONE_INCREMENT);
+
+    for (let i = milestonesBefore + 1; i <= milestonesAfter; i++) {
+        const amount = i * MILESTONE_INCREMENT;
+        const label = `$${(amount / 100).toLocaleString('en-US')}`;
+        await announceMilestone(label);
     }
 
     // Update pinned message
@@ -117,7 +118,7 @@ async function addRevenue(amountCents) {
 }
 
 /**
- * Update (or create) the pinned message in #community-goals.
+ * Update (or create) the pinned message in #restock-tracker.
  */
 async function updatePinnedMessage(goal) {
     const channel = client.channels.cache.get(config.CHANNELS.COMMUNITY_GOALS);
@@ -142,7 +143,7 @@ async function updatePinnedMessage(goal) {
 }
 
 /**
- * Announce a completed restock cycle in #community-goals.
+ * Announce a completed restock cycle in #restock-tracker.
  */
 async function announceRestock(cycleNumber) {
     const channel = client.channels.cache.get(config.CHANNELS.COMMUNITY_GOALS);
@@ -160,18 +161,17 @@ async function announceRestock(cycleNumber) {
 }
 
 /**
- * Announce a lifetime milestone in #community-goals and #announcements.
+ * Announce a lifetime milestone in #restock-tracker and #announcements.
  */
-async function announceMilestone(milestone) {
+async function announceMilestone(label) {
     const embed = new EmbedBuilder()
-        .setTitle(`🏆 Lifetime Milestone — ${milestone.label}!`)
+        .setTitle(`🏆 Lifetime Milestone — ${label}!`)
         .setDescription(
-            `The community just crossed **${milestone.label}** in lifetime sales!\n\n` +
-            `**${milestone.reward}**`
+            `The community just crossed **${label}** in lifetime sales!\n\n` +
+            '**Free loot for the community!** Stay tuned for the giveaway.'
         )
-        .setColor(0xf1c40f);
+        .setColor(0x2ecc71);
 
-    // Post in both community-goals and announcements
     const goalsChannel = client.channels.cache.get(config.CHANNELS.COMMUNITY_GOALS);
     if (goalsChannel) await goalsChannel.send({ embeds: [embed] });
 
@@ -188,4 +188,4 @@ async function initCommunityGoals() {
     console.log(`Community goals initialized: Cycle #${goal.cycle}, $${(goal.cycle_revenue / 100).toFixed(2)}/$${(CYCLE_GOAL / 100).toFixed(2)}`);
 }
 
-export { addRevenue, initCommunityGoals, CYCLE_GOAL, LIFETIME_MILESTONES };
+export { addRevenue, initCommunityGoals, CYCLE_GOAL, MILESTONE_INCREMENT };

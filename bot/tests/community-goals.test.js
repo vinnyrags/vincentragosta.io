@@ -5,6 +5,41 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createTestDb, buildStmts } from './setup.js';
 
+const MILESTONE_INCREMENT = 500000; // $5,000 in cents
+
+/** Mirror of getNextMilestone from community-goals.js */
+function getNextMilestone(lifetimeRevenue) {
+    return Math.ceil((lifetimeRevenue + 1) / MILESTONE_INCREMENT) * MILESTONE_INCREMENT;
+}
+
+describe('milestone calculation', () => {
+    it('first milestone is $5,000', () => {
+        expect(getNextMilestone(0)).toBe(500000);
+    });
+
+    it('next milestone after $5,000 is $10,000', () => {
+        expect(getNextMilestone(500000)).toBe(1000000);
+    });
+
+    it('next milestone at $4,999.99 is still $5,000', () => {
+        expect(getNextMilestone(499999)).toBe(500000);
+    });
+
+    it('increments by $5K each time', () => {
+        expect(getNextMilestone(1000000)).toBe(1500000); // $15K
+        expect(getNextMilestone(2499999)).toBe(2500000); // $25K
+        expect(getNextMilestone(2500000)).toBe(3000000); // $30K
+    });
+
+    it('detects milestones crossed', () => {
+        const before = 480000; // $4,800
+        const after = 520000;  // $5,200
+        const milestonesBefore = Math.floor(before / MILESTONE_INCREMENT);
+        const milestonesAfter = Math.floor(after / MILESTONE_INCREMENT);
+        expect(milestonesAfter - milestonesBefore).toBe(1); // crossed one milestone
+    });
+});
+
 describe('community goals DB operations', () => {
     let db;
     let stmts;
