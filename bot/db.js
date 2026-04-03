@@ -432,6 +432,54 @@ const goalStmts = {
     `),
 };
 
+// =========================================================================
+// Analytics
+// =========================================================================
+
+const analyticsStmts = {
+    getRangeStats: db.prepare(`
+        SELECT
+            COALESCE(SUM(amount), 0) as total_revenue,
+            COUNT(*) as order_count,
+            COUNT(DISTINCT COALESCE(discord_user_id, customer_email)) as unique_buyers
+        FROM purchases
+        WHERE created_at >= ? AND created_at < ?
+    `),
+
+    getTopProducts: db.prepare(`
+        SELECT product_name, COUNT(*) as count, SUM(amount) as revenue
+        FROM purchases
+        WHERE created_at >= ? AND created_at < ?
+        GROUP BY product_name
+        ORDER BY revenue DESC
+        LIMIT 5
+    `),
+
+    getStreamCount: db.prepare(`
+        SELECT COUNT(*) as count FROM livestream_sessions
+        WHERE created_at >= ? AND created_at < ?
+    `),
+
+    getNewBuyerCount: db.prepare(`
+        SELECT COUNT(DISTINCT buyer) as count FROM (
+            SELECT COALESCE(discord_user_id, customer_email) as buyer
+            FROM purchases
+            WHERE created_at >= ? AND created_at < ?
+            AND COALESCE(discord_user_id, customer_email) NOT IN (
+                SELECT COALESCE(discord_user_id, customer_email)
+                FROM purchases
+                WHERE created_at < ?
+            )
+        )
+    `),
+
+    getBattleCount: db.prepare(`
+        SELECT COUNT(*) as count FROM battles
+        WHERE created_at >= ? AND created_at < ?
+        AND status = 'complete'
+    `),
+};
+
 export {
     db,
     stmts as purchases,
@@ -441,4 +489,5 @@ export {
     livestreamStmts as livestream,
     cardListingStmts as cardListings,
     goalStmts as goals,
+    analyticsStmts as analytics,
 };

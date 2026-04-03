@@ -15,6 +15,7 @@
  *  - Pack battle results + duck race winners cross-posted to #and-in-the-back
  *  - Queue archives posted to #card-night-queue
  *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
+ *  - Analytics (!snapshot → on-demand snapshots, auto stream recaps on !offline)
  *
  * Usage:
  *   node bot/index.js
@@ -32,6 +33,7 @@ import { handleSell, handleList, handleSold } from './commands/card-shop.js';
 import { handleShipping } from './commands/shipping.js';
 import { handleHype } from './commands/hype.js';
 import { handleDroppedOff } from './commands/dropped-off.js';
+import { handleSnapshot } from './commands/snapshot.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -88,6 +90,9 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'dropped-off':
                 await handleDroppedOff(message);
+                break;
+            case 'snapshot':
+                await handleSnapshot(message, args);
                 break;
             default:
                 // Unknown command — silently ignore

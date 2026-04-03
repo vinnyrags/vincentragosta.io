@@ -69,8 +69,9 @@ const messages = [
 !battle winner @user                   → Declare winner
 !duckrace                              → Show duck race roster
 !duckrace winner @user                 → Duck race winner
-!offline                               → Close queue, send shipping DMs, open next queue
+!offline                               → Close queue, send shipping DMs, open next queue, post recap to #analytics
 !dropped-off                           → Monday: notify all buyers, mark orders shipped
+!snapshot                              → Anytime: post analytics snapshot to #analytics
 \`\`\``,
 
     // Message 6: Shipping Model
@@ -96,6 +97,18 @@ Weekly drop-off (!dropped-off) →  DMs each buyer + public #order-feed post
 **\`!link email@example.com\`** — Link Discord account to shop email (for role upgrades). Bot deletes the message to protect email. Validates email exists in Stripe.
 
 *Note: Discord username field on Stripe checkout auto-links accounts — \`!link\` is a manual fallback.*`,
+
+    // Message 8: Analytics
+    `## Analytics
+**\`!snapshot\`** — Post a snapshot of the current month to #analytics. Revenue, orders, buyers (new vs returning), stream count, avg per stream, top products, community goal state.
+
+**\`!snapshot march\`** — Snapshot for a specific month (current year)
+
+**\`!snapshot 2026\`** — Snapshot for a full year
+
+**\`!snapshot march 2026\`** — Snapshot for a specific month and year
+
+*Stream recaps are posted automatically to #analytics when \`!offline\` runs — no extra step needed.*`,
 ];
 
 export default messages;

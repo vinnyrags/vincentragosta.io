@@ -7,7 +7,7 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { livestream, queues } from '../db.js';
+import { livestream, queues, analytics, goals } from '../db.js';
 import { sendEmbed, sendToChannel, getMember, getGuild } from '../discord.js';
 
 /**
@@ -233,14 +233,93 @@ async function handleOffline(message) {
         color: 0x95a5a6,
     });
 
+    // Post analytics recap to #analytics
+    await postStreamRecap(session, closedQueueId);
+
     // Confirm in current channel
     await message.channel.send(
         `📴 **Live session #${session.id} ended.**\n` +
         `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>\n` +
         `• Shipping DMs sent to ${shippingsSent} buyer(s)${alreadyCovered.length ? `, ${alreadyCovered.length} already covered this week` : ''}\n` +
         `• New pre-order queue opened (#${newQueueId})\n` +
-        `• Stream-ended message posted to #announcements`
+        `• Stream-ended message posted to #announcements\n` +
+        `• Stream recap posted to <#${config.CHANNELS.ANALYTICS}>`
     );
+}
+
+// =========================================================================
+// Post-stream analytics recap — posted to #analytics after !offline
+// =========================================================================
+
+function formatDollars(cents) {
+    return `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+async function postStreamRecap(session, closedQueueId) {
+    const startTime = session.created_at;
+    const endTime = new Date().toISOString();
+
+    // Session stats
+    const stats = analytics.getRangeStats.get(startTime, endTime);
+    const topProducts = analytics.getTopProducts.all(startTime, endTime);
+    const newBuyers = analytics.getNewBuyerCount.get(startTime, endTime, startTime);
+    const battleCount = analytics.getBattleCount.get(startTime, endTime);
+
+    // Queue stats
+    let queueEntryCount = 0;
+    let queueBuyerCount = 0;
+    if (closedQueueId) {
+        const entries = queues.getEntries.all(closedQueueId);
+        const uniqueBuyers = queues.getUniqueBuyers.all(closedQueueId);
+        queueEntryCount = entries.length;
+        queueBuyerCount = uniqueBuyers.length;
+    }
+
+    // Community goal delta
+    const goal = goals.get.get();
+    const sessionRevenueDollars = formatDollars(stats.total_revenue);
+
+    // Build embed
+    const returningBuyers = stats.unique_buyers - newBuyers.count;
+    const lines = [
+        `**Revenue:** ${sessionRevenueDollars}`,
+        `**Orders:** ${stats.order_count}`,
+        `**Buyers:** ${stats.unique_buyers} (${newBuyers.count} new, ${returningBuyers} returning)`,
+    ];
+
+    if (battleCount.count > 0) {
+        lines.push(`**Battles:** ${battleCount.count}`);
+    }
+
+    if (queueEntryCount > 0) {
+        lines.push(`**Queue:** ${queueEntryCount} items from ${queueBuyerCount} buyers`);
+    }
+
+    const embed = new EmbedBuilder()
+        .setTitle(`📊 Stream Recap — Session #${session.id}`)
+        .setDescription(lines.join('\n'))
+        .setColor(0x5865f2);
+
+    // Top products
+    if (topProducts.length > 0) {
+        const productLines = topProducts.map((p, i) =>
+            `${i + 1}. **${p.product_name}** — ${p.count} sold (${formatDollars(p.revenue)})`
+        );
+        embed.addFields({ name: 'Top Products', value: productLines.join('\n') });
+    }
+
+    // Community goal state
+    const cyclePercent = Math.min(Math.round((goal.cycle_revenue / 250000) * 100), 100);
+    const goalLine = `Cycle #${goal.cycle} — ${cyclePercent}% (${formatDollars(goal.cycle_revenue)} / $2,500.00)`;
+    embed.addFields({ name: 'Community Goal', value: `${goalLine}\n+${sessionRevenueDollars} this stream` });
+
+    embed.setFooter({ text: `${session.created_at} → ${new Date().toLocaleTimeString('en-US')}` });
+
+    try {
+        await sendToChannel('ANALYTICS', { embeds: [embed] });
+    } catch (e) {
+        console.error('Failed to post stream recap:', e.message);
+    }
 }
 
 // =========================================================================

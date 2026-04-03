@@ -71,6 +71,7 @@ vi.mock('../config.js', () => ({
             OPS: '8',
             BOT_COMMANDS: '9',
             COMMUNITY_GOALS: '10',
+            ANALYTICS: '11',
         },
         ROLES: {
             AKIVILI: '1488046525065072670',
@@ -101,6 +102,7 @@ vi.mock('../db.js', () => ({
     cardListings: {},
     ducks: {},
     goals: {},
+    analytics: {},
 }));
 
 vi.mock('../community-goals.js', () => ({
@@ -129,6 +131,7 @@ beforeEach(() => {
     Object.assign(dbModule.livestream, stmts.livestream);
     Object.assign(dbModule.cardListings, stmts.cardListings);
     Object.assign(dbModule.goals, stmts.goals);
+    Object.assign(dbModule.analytics, stmts.analytics);
     vi.clearAllMocks();
 
     // Mock fetch (used by toggleLivestreamMode for WordPress REST API)
