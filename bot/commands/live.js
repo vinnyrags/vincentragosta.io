@@ -298,7 +298,7 @@ async function postStreamRecap(session, closedQueueId) {
     const embed = new EmbedBuilder()
         .setTitle(`📊 Stream Recap — Session #${session.id}`)
         .setDescription(lines.join('\n'))
-        .setColor(0x5865f2);
+        .setColor(0x2ecc71);
 
     // Top products
     if (topProducts.length > 0) {

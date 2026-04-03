@@ -1,16 +1,17 @@
 /**
- * Tests for bot-commands sync — verifies edit/post/delete logic.
+ * Tests for channel sync — verifies edit/post/delete logic for embed-based messages.
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 const BOT_USER_ID = 'bot123';
 
-// Mock channel with configurable existing messages
-function createMockChannel(existingMessages = []) {
-    const messages = existingMessages.map((content, i) => ({
+// Mock channel with configurable existing messages (embed-based)
+function createMockChannel(existingEmbeds = []) {
+    const messages = existingEmbeds.map((embed, i) => ({
         id: `msg_${i}`,
-        content,
+        content: '',
+        embeds: embed ? [embed] : [],
         author: { id: BOT_USER_ID },
         createdTimestamp: i,
         edit: vi.fn().mockResolvedValue({}),
@@ -26,7 +27,8 @@ function createMockChannel(existingMessages = []) {
     };
 }
 
-let mockChannel;
+let mockBotCommandsChannel;
+let mockFlowChannel;
 
 vi.mock('../discord.js', () => ({
     client: {
@@ -41,13 +43,24 @@ vi.mock('../discord.js', () => ({
 
 vi.mock('../config.js', () => ({
     default: {
-        CHANNELS: { BOT_COMMANDS: 'bot-commands-id' },
+        CHANNELS: {
+            BOT_COMMANDS: 'bot-commands-id',
+            LIVESTREAM_FLOW: 'livestream-flow-id',
+        },
     },
 }));
 
-// Default: 2 simple messages
 vi.mock('../bot-commands.js', () => ({
-    default: ['Message 1', 'Message 2'],
+    default: [
+        { title: 'Title 1', description: 'Desc 1', color: 0x2ecc71 },
+        { title: 'Title 2', description: 'Desc 2', color: 0x2ecc71 },
+    ],
+}));
+
+vi.mock('../livestream-flow.js', () => ({
+    default: [
+        { title: 'Flow 1', description: 'Flow Desc 1', color: 0x2ecc71 },
+    ],
 }));
 
 const { client } = await import('../discord.js');
@@ -55,75 +68,119 @@ const { syncBotCommands } = await import('../sync-bot-commands.js');
 
 beforeEach(() => {
     vi.clearAllMocks();
+    mockBotCommandsChannel = createMockChannel([]);
+    mockFlowChannel = createMockChannel([]);
 });
 
+function setupChannels(botEmbeds = [], flowEmbeds = []) {
+    mockBotCommandsChannel = createMockChannel(botEmbeds);
+    mockFlowChannel = createMockChannel(flowEmbeds);
+    client.channels.cache.get.mockImplementation((id) => {
+        if (id === 'bot-commands-id') return mockBotCommandsChannel;
+        if (id === 'livestream-flow-id') return mockFlowChannel;
+        return undefined;
+    });
+}
+
 describe('syncBotCommands', () => {
-    it('does nothing when content matches', async () => {
-        mockChannel = createMockChannel(['Message 1', 'Message 2']);
-        client.channels.cache.get.mockReturnValue(mockChannel);
+    it('does nothing when embeds match', async () => {
+        setupChannels(
+            [
+                { title: 'Title 1', description: 'Desc 1' },
+                { title: 'Title 2', description: 'Desc 2' },
+            ],
+            [{ title: 'Flow 1', description: 'Flow Desc 1' }]
+        );
 
         await syncBotCommands();
 
-        // No edits, no posts, no deletes
-        for (const msg of mockChannel._messages) {
+        for (const msg of mockBotCommandsChannel._messages) {
             expect(msg.edit).not.toHaveBeenCalled();
             expect(msg.delete).not.toHaveBeenCalled();
         }
-        expect(mockChannel.send).not.toHaveBeenCalled();
+        expect(mockBotCommandsChannel.send).not.toHaveBeenCalled();
+        expect(mockFlowChannel.send).not.toHaveBeenCalled();
     });
 
-    it('edits messages that have changed', async () => {
-        mockChannel = createMockChannel(['Old Message 1', 'Message 2']);
-        client.channels.cache.get.mockReturnValue(mockChannel);
+    it('edits embeds that have changed', async () => {
+        setupChannels(
+            [
+                { title: 'Old Title', description: 'Desc 1' },
+                { title: 'Title 2', description: 'Desc 2' },
+            ],
+            [{ title: 'Flow 1', description: 'Flow Desc 1' }]
+        );
 
         await syncBotCommands();
 
-        expect(mockChannel._messages[0].edit).toHaveBeenCalledWith('Message 1');
-        expect(mockChannel._messages[1].edit).not.toHaveBeenCalled();
+        expect(mockBotCommandsChannel._messages[0].edit).toHaveBeenCalled();
+        expect(mockBotCommandsChannel._messages[1].edit).not.toHaveBeenCalled();
     });
 
-    it('posts missing messages', async () => {
-        mockChannel = createMockChannel(['Message 1']);
-        client.channels.cache.get.mockReturnValue(mockChannel);
+    it('posts missing embeds', async () => {
+        setupChannels(
+            [{ title: 'Title 1', description: 'Desc 1' }],
+            []
+        );
 
         await syncBotCommands();
 
-        expect(mockChannel.send).toHaveBeenCalledWith('Message 2');
+        // Bot commands: 1 existing + 1 missing = 1 post
+        expect(mockBotCommandsChannel.send).toHaveBeenCalledTimes(1);
+        // Flow: 0 existing + 1 missing = 1 post
+        expect(mockFlowChannel.send).toHaveBeenCalledTimes(1);
     });
 
     it('deletes extra messages', async () => {
-        mockChannel = createMockChannel(['Message 1', 'Message 2', 'Extra message']);
-        client.channels.cache.get.mockReturnValue(mockChannel);
+        setupChannels(
+            [
+                { title: 'Title 1', description: 'Desc 1' },
+                { title: 'Title 2', description: 'Desc 2' },
+                { title: 'Extra', description: 'Should be deleted' },
+            ],
+            [{ title: 'Flow 1', description: 'Flow Desc 1' }]
+        );
 
         await syncBotCommands();
 
-        expect(mockChannel._messages[2].delete).toHaveBeenCalled();
+        expect(mockBotCommandsChannel._messages[2].delete).toHaveBeenCalled();
     });
 
     it('handles empty channel (posts all messages)', async () => {
-        mockChannel = createMockChannel([]);
-        client.channels.cache.get.mockReturnValue(mockChannel);
+        setupChannels([], []);
 
         await syncBotCommands();
 
-        expect(mockChannel.send).toHaveBeenCalledTimes(2);
-        expect(mockChannel.send).toHaveBeenCalledWith('Message 1');
-        expect(mockChannel.send).toHaveBeenCalledWith('Message 2');
+        expect(mockBotCommandsChannel.send).toHaveBeenCalledTimes(2);
+        expect(mockFlowChannel.send).toHaveBeenCalledTimes(1);
     });
 
     it('skips sync when channel not found', async () => {
         client.channels.cache.get.mockReturnValue(undefined);
-
-        // Should not throw
         await syncBotCommands();
+        // Should not throw
     });
 
     it('handles API errors gracefully', async () => {
-        mockChannel = createMockChannel([]);
-        mockChannel.messages.fetch.mockRejectedValue(new Error('API error'));
-        client.channels.cache.get.mockReturnValue(mockChannel);
+        setupChannels([], []);
+        mockBotCommandsChannel.messages.fetch.mockRejectedValue(new Error('API error'));
 
-        // Should not throw
         await syncBotCommands();
+        // Should not throw — flow channel still syncs
+        expect(mockFlowChannel.send).toHaveBeenCalledTimes(1);
+    });
+
+    it('converts plain text messages to embeds on edit', async () => {
+        // Simulate old plain-text messages (no embeds)
+        setupChannels(
+            [null, null],  // no embeds on existing messages
+            [{ title: 'Flow 1', description: 'Flow Desc 1' }]
+        );
+
+        await syncBotCommands();
+
+        // Both should be edited since they have no matching embeds
+        expect(mockBotCommandsChannel._messages[0].edit).toHaveBeenCalled();
+        expect(mockBotCommandsChannel._messages[1].edit).toHaveBeenCalled();
     });
 });

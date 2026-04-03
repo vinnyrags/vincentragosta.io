@@ -1,28 +1,52 @@
 /**
- * Sync #bot-commands channel with the canonical command reference.
+ * Sync reference channels with canonical embed content.
  *
- * On startup, compares existing bot messages in #bot-commands to the
- * content defined in bot-commands.js. Edits messages that have changed,
- * posts missing ones, and deletes extras. Only touches messages authored
- * by the bot itself.
+ * On startup, syncs #bot-commands and #livestream-flow. Compares existing
+ * bot embeds to the defined content, edits changed messages, posts missing
+ * ones, and deletes extras. Only touches messages authored by the bot.
  */
 
+import { EmbedBuilder } from 'discord.js';
 import { client } from './discord.js';
 import config from './config.js';
 import commandMessages from './bot-commands.js';
+import flowMessages from './livestream-flow.js';
 
-async function syncBotCommands() {
-    const channel = client.channels.cache.get(config.CHANNELS.BOT_COMMANDS);
+/**
+ * Build a Discord EmbedBuilder from a plain object.
+ */
+function buildEmbed({ title, description, color = 0x2ecc71, fields = [], footer = null }) {
+    const embed = new EmbedBuilder()
+        .setTitle(title)
+        .setDescription(description)
+        .setColor(color);
+    if (fields.length) embed.addFields(fields);
+    if (footer) embed.setFooter({ text: footer });
+    return embed;
+}
+
+/**
+ * Check if an existing message's embed matches the desired content.
+ */
+function embedMatches(message, desired) {
+    const existing = message.embeds?.[0];
+    if (!existing) return false;
+    return existing.title === desired.title
+        && existing.description === desired.description;
+}
+
+/**
+ * Sync a channel's messages with an array of embed definitions.
+ */
+async function syncChannel(channelKey, desiredMessages, label) {
+    const channel = client.channels.cache.get(config.CHANNELS[channelKey]);
     if (!channel) {
-        console.error('Bot commands channel not found — skipping sync');
+        console.error(`${label} channel not found — skipping sync`);
         return;
     }
 
     try {
-        // Fetch all messages in the channel (up to 100 — well within our count)
         const fetched = await channel.messages.fetch({ limit: 100 });
-
-        // Filter to only bot's own messages, sorted oldest-first
         const botMessages = [...fetched.values()]
             .filter((m) => m.author.id === client.user.id)
             .sort((a, b) => a.createdTimestamp - b.createdTimestamp);
@@ -31,38 +55,39 @@ async function syncBotCommands() {
         let posted = 0;
         let deleted = 0;
 
-        // Update or post each message in order
-        for (let i = 0; i < commandMessages.length; i++) {
-            const desired = commandMessages[i];
+        for (let i = 0; i < desiredMessages.length; i++) {
+            const embed = buildEmbed(desiredMessages[i]);
 
             if (i < botMessages.length) {
-                // Existing message — edit if content differs
-                if (botMessages[i].content !== desired) {
-                    await botMessages[i].edit(desired);
+                if (!embedMatches(botMessages[i], desiredMessages[i])) {
+                    await botMessages[i].edit({ content: '', embeds: [embed] });
                     edited++;
                 }
             } else {
-                // No existing message at this position — post new
-                await channel.send(desired);
+                await channel.send({ embeds: [embed] });
                 posted++;
             }
         }
 
-        // Delete any extra bot messages beyond the expected count
-        for (let i = commandMessages.length; i < botMessages.length; i++) {
+        for (let i = desiredMessages.length; i < botMessages.length; i++) {
             await botMessages[i].delete();
             deleted++;
         }
 
         const changes = edited + posted + deleted;
         if (changes > 0) {
-            console.log(`Bot commands synced: ${edited} edited, ${posted} posted, ${deleted} deleted`);
+            console.log(`${label} synced: ${edited} edited, ${posted} posted, ${deleted} deleted`);
         } else {
-            console.log('Bot commands up to date');
+            console.log(`${label} up to date`);
         }
     } catch (e) {
-        console.error('Failed to sync bot commands:', e.message);
+        console.error(`Failed to sync ${label}:`, e.message);
     }
+}
+
+async function syncBotCommands() {
+    await syncChannel('BOT_COMMANDS', commandMessages, 'Bot commands');
+    await syncChannel('LIVESTREAM_FLOW', flowMessages, 'Livestream flow');
 }
 
 export { syncBotCommands };

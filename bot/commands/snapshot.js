@@ -114,7 +114,7 @@ async function handleSnapshot(message, args) {
     const embed = new EmbedBuilder()
         .setTitle(`📊 Snapshot — ${range.label}`)
         .setDescription(lines.join('\n'))
-        .setColor(0x5865f2);
+        .setColor(0x2ecc71);
 
     // Top products field
     if (topProducts.length > 0) {
