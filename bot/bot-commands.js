@@ -136,7 +136,20 @@ const messages = [
         color: 0x2ecc71,
     },
 
-    // Message 9: Typical Stream Night Flow
+    // Message 9: Product Sync
+    {
+        title: '🔄 Product Sync',
+        description: [
+            '**`!sync`** — Full pipeline: Google Sheets → Stripe → WordPress. Deactivates stale products, syncs all rows from the spreadsheet to Stripe, then rebuilds WordPress product listings. Posts summary to #ops. New products trigger category alerts (#pokemon, #anime, etc.).',
+            '',
+            '**`!sync stripe`** — Stripe → WordPress only. Skips the Sheets step — useful if you edited Stripe directly or just need to refresh the shop.',
+            '',
+            '*Run `!sync` after updating the Google Sheets product catalog.*',
+        ].join('\n'),
+        color: 0x2ecc71,
+    },
+
+    // Message 10: Typical Stream Night Flow
     {
         title: '🔴 Typical Stream Night Flow',
         description: [

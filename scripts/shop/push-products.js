@@ -137,7 +137,7 @@ async function main() {
 
         if (existingProduct) {
             // Update existing product
-            const updateData = { metadata };
+            const updateData = { metadata, active: true };
             if (imageUrl) updateData.images = [imageUrl.trim()];
 
             product = await stripe.products.update(existingProduct.id, updateData);

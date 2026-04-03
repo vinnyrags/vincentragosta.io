@@ -17,6 +17,7 @@
  *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
  *  - Analytics (!snapshot → on-demand snapshots, auto stream recaps on !offline)
  *  - Giveaway system (!giveaway — reaction-based entries, social funnel, duck race draw)
+ *  - Product sync (!sync — Sheets → Stripe → WordPress pipeline)
  *
  * Usage:
  *   node bot/index.js
@@ -36,6 +37,7 @@ import { handleHype } from './commands/hype.js';
 import { handleDroppedOff } from './commands/dropped-off.js';
 import { handleSnapshot } from './commands/snapshot.js';
 import { handleGiveaway, handleGiveawayReaction, initGiveaways } from './commands/giveaway.js';
+import { handleSync } from './commands/sync.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -98,6 +100,9 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'giveaway':
                 await handleGiveaway(message, args);
+                break;
+            case 'sync':
+                await handleSync(message, args);
                 break;
             default:
                 // Unknown command — silently ignore
