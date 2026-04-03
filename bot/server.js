@@ -4,7 +4,6 @@
  * Routes:
  *   POST /webhooks/stripe    — Stripe checkout events
  *   POST /webhooks/twitch    — Twitch EventSub events
- *   POST /alerts/products    — New product alerts (from sync scripts)
  *   GET  /battle/checkout/:id     — Direct checkout for pack battle buy-in (no shipping)
  *   GET  /livestream/shipping/:id — $10 shipping for all livestream buyers (including battle winners)
  *   GET  /health                  — Health check
@@ -16,7 +15,6 @@ import config from './config.js';
 import { battles, cardListings } from './db.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
-import { alertNewProducts } from './alerts/products.js';
 
 const app = express();
 
@@ -65,33 +63,6 @@ app.post('/webhooks/stripe', express.raw({ type: 'application/json' }), async (r
 app.post('/webhooks/twitch', express.json({
     verify: (req, res, buf) => { req.rawBody = buf.toString(); },
 }), handleTwitchWebhook);
-
-// =========================================================================
-// Product alerts — triggered after make sync-products
-// =========================================================================
-
-app.post('/alerts/products', express.json(), async (req, res) => {
-    const { products, secret } = req.body;
-
-    // Simple shared secret for internal calls
-    const expectedSecret = process.env.PRODUCT_ALERT_SECRET || 'itzenzo-sync';
-
-    if (secret !== expectedSecret) {
-        return res.status(403).send('Invalid secret');
-    }
-
-    if (!Array.isArray(products) || !products.length) {
-        return res.status(400).send('No products provided');
-    }
-
-    try {
-        await alertNewProducts(products);
-        res.json({ ok: true, alerted: products.length });
-    } catch (e) {
-        console.error('Product alert error:', e.message);
-        res.status(500).json({ error: e.message });
-    }
-});
 
 // =========================================================================
 // Pack battle direct checkout — creates a Stripe session and redirects
