@@ -153,6 +153,17 @@ db.exec(`
         created_at TEXT DEFAULT (datetime('now')),
         sold_at TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS active_coupons (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        promo_code TEXT NOT NULL,
+        stripe_promo_id TEXT NOT NULL,
+        stripe_coupon_id TEXT NOT NULL,
+        discount_display TEXT NOT NULL,
+        status TEXT DEFAULT 'active',
+        activated_at TEXT DEFAULT (datetime('now')),
+        deactivated_at TEXT
+    );
 `);
 
 // =========================================================================
@@ -507,6 +518,25 @@ const giveawayStmts = {
 };
 
 // =========================================================================
+// Coupons
+// =========================================================================
+
+const couponStmts = {
+    activate: db.prepare(`
+        INSERT INTO active_coupons (promo_code, stripe_promo_id, stripe_coupon_id, discount_display)
+        VALUES (?, ?, ?, ?)
+    `),
+
+    getActive: db.prepare(`
+        SELECT * FROM active_coupons WHERE status = 'active' ORDER BY activated_at DESC LIMIT 1
+    `),
+
+    deactivate: db.prepare(`
+        UPDATE active_coupons SET status = 'inactive', deactivated_at = datetime('now') WHERE id = ?
+    `),
+};
+
+// =========================================================================
 // Analytics
 // =========================================================================
 
@@ -565,4 +595,5 @@ export {
     goalStmts as goals,
     analyticsStmts as analytics,
     giveawayStmts as giveaways,
+    couponStmts as coupons,
 };

@@ -136,7 +136,26 @@ const messages = [
         color: 0x2ecc71,
     },
 
-    // Message 9: Product Sync
+    // Message 9: Coupons
+    {
+        title: '🏷️ Coupons',
+        description: [
+            '**`!coupon create <CODE> <discount>`** — Create a Stripe coupon + promotion code. Discount is a percentage (`20%`) or dollar amount (`5.00`).',
+            '> Examples: `!coupon create SPRING20 20%` or `!coupon create WELCOME 5.00`',
+            '',
+            '**`!coupon <CODE>`** — Activate a promo code. Checkout pages show a promo code input field. Announces in #announcements.',
+            '> Example: `!coupon SPRING20`',
+            '',
+            '**`!coupon off`** — Deactivate the current promo code. Removes promo field from checkout.',
+            '',
+            '**`!coupon status`** — Show the currently active coupon.',
+            '',
+            '*Only one coupon can be active at a time. Customers who already checked out keep their discount. The promo code field only appears while a coupon is active — random browsers won\'t see it.*',
+        ].join('\n'),
+        color: 0x2ecc71,
+    },
+
+    // Message 10: Product Sync
     {
         title: '🔄 Product Sync',
         description: [
@@ -158,6 +177,8 @@ const messages = [
             '!live                                  → Go live (queue stays open)',
             '!sell @buyer "Card Name" 25.00        → Reserve a card for a viewer',
             '!list "Card Name" 25.00               → List a card for open purchase',
+            '!coupon STREAM10                       → Activate promo code for flash deal',
+            '!coupon off                            → Deactivate when deal window ends',
             '!battle start Product Name 12          → Start pack battle',
             '!battle close                          → Close entries',
             '!battle winner @user                   → Declare winner',

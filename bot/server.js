@@ -13,6 +13,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import config from './config.js';
 import { battles, cardListings } from './db.js';
+import { getActiveCoupon } from './commands/coupon.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
 
@@ -166,7 +167,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-        const session = await stripe.checkout.sessions.create({
+        const params = {
             mode: 'payment',
             line_items: [
                 {
@@ -206,7 +207,13 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                     optional: true,
                 },
             ],
-        });
+        };
+
+        if (getActiveCoupon()) {
+            params.allow_promotion_codes = true;
+        }
+
+        const session = await stripe.checkout.sessions.create(params);
 
         cardListings.setStripeSessionId.run(session.id, listing.id);
         res.redirect(303, session.url);
@@ -223,7 +230,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 app.get('/product/checkout/:priceId', async (req, res) => {
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-        const session = await stripe.checkout.sessions.create({
+        const params = {
             mode: 'payment',
             line_items: [{ price: req.params.priceId, quantity: 1 }],
             success_url: `${config.SHOP_URL}?thanks=1`,
@@ -240,7 +247,13 @@ app.get('/product/checkout/:priceId', async (req, res) => {
                     optional: true,
                 },
             ],
-        });
+        };
+
+        if (getActiveCoupon()) {
+            params.allow_promotion_codes = true;
+        }
+
+        const session = await stripe.checkout.sessions.create(params);
 
         res.redirect(303, session.url);
     } catch (e) {
