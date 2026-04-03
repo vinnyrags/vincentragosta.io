@@ -7,10 +7,11 @@
  *   !sold <message_id>              — Manually mark a listing as sold (or reply to listing)
  */
 
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import config from '../config.js';
 import { cardListings } from '../db.js';
 import { client, getMember } from '../discord.js';
+import { formatShippingRate, getShippingLabel } from '../shipping.js';
 
 // In-memory expiry timers: listingId → timeoutId
 const expiryTimers = new Map();
@@ -33,15 +34,13 @@ function checkoutUrl(listingId) {
  * Build an embed for a card listing based on its status.
  */
 function buildListingEmbed(listing) {
-    const shippingLabel = formatPrice(config.CARD_SHIPPING_AMOUNT);
     const priceLabel = formatPrice(listing.price);
-    const total = formatPrice(listing.price + config.CARD_SHIPPING_AMOUNT);
-    const url = checkoutUrl(listing.id);
+    const shippingNote = `*Shipping: ${formatShippingRate(config.SHIPPING.DOMESTIC)} US / ${formatShippingRate(config.SHIPPING.INTERNATIONAL)} International (waived if already covered this week/month)*`;
 
     if (listing.status === 'sold') {
         return new EmbedBuilder()
             .setTitle(`🃏 ${listing.card_name}`)
-            .setDescription(`~~${priceLabel} + ${shippingLabel} shipping~~\n\n**SOLD**`)
+            .setDescription(`~~${priceLabel}~~\n\n**SOLD**`)
             .setColor(0xe74c3c)
             .setFooter({ text: `Listing #${listing.id}` });
     }
@@ -50,19 +49,20 @@ function buildListingEmbed(listing) {
         return new EmbedBuilder()
             .setTitle(`🃏 ${listing.card_name}`)
             .setDescription(
-                `**${priceLabel}** + ${shippingLabel} shipping (${total} total)\n\n` +
-                `🔒 Reserved for <@${listing.buyer_discord_id}> — 15 minutes to checkout`
+                `**${priceLabel}**\n\n` +
+                `🔒 Reserved for <@${listing.buyer_discord_id}> — 15 minutes to checkout\n\n` +
+                shippingNote
             )
             .setColor(0xf1c40f)
             .setFooter({ text: `Listing #${listing.id}` });
     }
 
-    // active / available
+    // active / available — uses Discord button instead of raw link
     return new EmbedBuilder()
         .setTitle(`🃏 ${listing.card_name}`)
         .setDescription(
-            `**${priceLabel}** + ${shippingLabel} shipping (${total} total)\n\n` +
-            `🛒 **[Buy Now](${url})**`
+            `**${priceLabel}** — click Buy Now to check out\n\n` +
+            shippingNote
         )
         .setColor(0x2ecc71)
         .setFooter({ text: `Listing #${listing.id}` });
@@ -76,7 +76,15 @@ async function updateListingEmbed(listing) {
         const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
         if (!channel || !listing.message_id) return;
         const msg = await channel.messages.fetch(listing.message_id);
-        await msg.edit({ embeds: [buildListingEmbed(listing)] });
+
+        const editPayload = { embeds: [buildListingEmbed(listing)] };
+
+        // Remove button when sold/expired, keep for active/reserved
+        if (listing.status === 'sold' || listing.status === 'expired') {
+            editPayload.components = [];
+        }
+
+        await msg.edit(editPayload);
     } catch (e) {
         console.error('Failed to update card listing embed:', e.message);
     }
@@ -166,8 +174,9 @@ async function handleSell(message, args) {
     const msg = await channel.send({ embeds: [embed] });
     cardListings.setMessageId.run(msg.id, listingId);
 
-    // DM the buyer with checkout link
-    const url = checkoutUrl(listingId);
+    // DM the buyer with checkout link (includes ?user= for personalized shipping)
+    const url = `${checkoutUrl(listingId)}?user=${buyer.id}`;
+    const { rate, label: shippingLabel } = getShippingLabel(buyer.id);
     try {
         const member = await getMember(buyer.id);
         if (member) {
@@ -175,7 +184,8 @@ async function handleSell(message, args) {
             const dmEmbed = new EmbedBuilder()
                 .setTitle(`🃏 Card Reserved for You!`)
                 .setDescription(
-                    `**${cardName}** — ${formatPrice(priceCents)} + ${formatPrice(config.CARD_SHIPPING_AMOUNT)} shipping\n\n` +
+                    `**${cardName}** — ${formatPrice(priceCents)}\n` +
+                    `📦 ${shippingLabel}: ${formatShippingRate(rate)}\n\n` +
                     `🛒 **[Complete Purchase](${url})**\n\n` +
                     `⏰ You have 15 minutes before this listing opens to everyone.`
                 )
@@ -235,7 +245,16 @@ async function handleList(message, args) {
 
     const listing = cardListings.getById.get(listingId);
     const embed = buildListingEmbed(listing);
-    const msg = await channel.send({ embeds: [embed] });
+
+    // Add "Buy Now" button for identity-aware checkout
+    const buyButton = new ButtonBuilder()
+        .setCustomId(`card-buy-${listingId}`)
+        .setLabel('Buy Now')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('🛒');
+
+    const row = new ActionRowBuilder().addComponents(buyButton);
+    const msg = await channel.send({ embeds: [embed], components: [row] });
     cardListings.setMessageId.run(msg.id, listingId);
 
     if (message.channel.id !== channel.id) {

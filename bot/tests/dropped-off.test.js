@@ -35,6 +35,9 @@ vi.mock('../db.js', () => ({
         getUnshippedNoDiscord: { all: vi.fn() },
         markShipped: { run: vi.fn() },
     },
+    discordLinks: {
+        getCountry: { get: vi.fn().mockReturnValue(null) },
+    },
 }));
 
 const discordModule = await import('../discord.js');

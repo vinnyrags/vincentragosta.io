@@ -10,7 +10,7 @@
  *   !hype Prismatic Evolutions Booster Box
  */
 
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
 import { sendToChannel } from '../discord.js';
@@ -163,16 +163,15 @@ async function handleHype(message, args) {
         return message.channel.send('❌ Hype cancelled.');
     }
 
-    // Build the hype embed
+    // Build the hype embed with Discord buttons
     const baseUrl = config.SHOP_URL.replace(/\/shop$/, '');
     const productLines = found.map((p) => {
-        const checkoutUrl = `${baseUrl}/bot/product/checkout/${p.priceId}`;
         const priceStr = `$${(p.price / 100).toFixed(2)}`;
 
         if (p.onSale) {
-            return `🔥 **${p.name}** — ~~${priceStr}~~ **$${(p.salePrice / 100).toFixed(2)}**\n🛒 [Buy Now](${checkoutUrl})`;
+            return `🔥 **${p.name}** — ~~${priceStr}~~ **$${(p.salePrice / 100).toFixed(2)}**`;
         }
-        return `🔥 **${p.name}** — **${priceStr}**\n🛒 [Buy Now](${checkoutUrl})`;
+        return `🔥 **${p.name}** — **${priceStr}**`;
     });
 
     const embed = new EmbedBuilder()
@@ -189,9 +188,24 @@ async function handleHype(message, args) {
         .setColor(0x9146ff)
         .setFooter({ text: 'Grab yours before stream — pre-orders go into tonight\'s queue!' });
 
-    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
+    // Build "Buy Now" buttons for each product
+    const buttons = found.map((p) =>
+        new ButtonBuilder()
+            .setCustomId(`hype-buy-${p.priceId}`)
+            .setLabel(`Buy ${p.name.length > 50 ? p.name.slice(0, 47) + '...' : p.name}`)
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('🛒')
+    );
 
-    // Post raw checkout URLs to #ops for easy copy-paste to social
+    // Discord allows max 5 buttons per row
+    const rows = [];
+    for (let i = 0; i < buttons.length; i += 5) {
+        rows.push(new ActionRowBuilder().addComponents(buttons.slice(i, i + 5)));
+    }
+
+    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed], components: rows });
+
+    // Post raw checkout URLs to #ops for social platforms (no buttons — direct links)
     const opsLines = [
         '🔗 **Checkout links for social:**',
         ...found.map((p) => {

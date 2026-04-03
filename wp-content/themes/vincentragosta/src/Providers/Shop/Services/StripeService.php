@@ -39,6 +39,7 @@ class StripeService
      * @param string $cancelUrl URL to redirect to if checkout is cancelled.
      * @param array<string, string> $metadata Metadata to attach to the session.
      * @param bool $skipShipping If true, no shipping is collected (livestream mode).
+     * @param bool $international If true, use international shipping rate and countries.
      */
     public function createCheckoutSession(
         array $lineItems,
@@ -46,6 +47,7 @@ class StripeService
         string $cancelUrl,
         array $metadata = [],
         bool $skipShipping = false,
+        bool $international = false,
     ): Session {
         $params = [
             'mode'       => 'payment',
@@ -65,21 +67,39 @@ class StripeService
         ];
 
         if (!$skipShipping) {
-            $params['shipping_address_collection'] = [
-                'allowed_countries' => ['US'],
-            ];
-            $params['shipping_options'] = [
-                [
-                    'shipping_rate_data' => [
-                        'type'         => 'fixed_amount',
-                        'fixed_amount' => [
-                            'amount'   => 1000,
-                            'currency' => 'usd',
+            if ($international) {
+                $params['shipping_address_collection'] = [
+                    'allowed_countries' => ['CA'],
+                ];
+                $params['shipping_options'] = [
+                    [
+                        'shipping_rate_data' => [
+                            'type'         => 'fixed_amount',
+                            'fixed_amount' => [
+                                'amount'   => 2500,
+                                'currency' => 'usd',
+                            ],
+                            'display_name' => 'International Shipping',
                         ],
-                        'display_name' => 'Standard Shipping',
                     ],
-                ],
-            ];
+                ];
+            } else {
+                $params['shipping_address_collection'] = [
+                    'allowed_countries' => ['US'],
+                ];
+                $params['shipping_options'] = [
+                    [
+                        'shipping_rate_data' => [
+                            'type'         => 'fixed_amount',
+                            'fixed_amount' => [
+                                'amount'   => 1000,
+                                'currency' => 'usd',
+                            ],
+                            'display_name' => 'Standard Shipping (US)',
+                        ],
+                    ],
+                ];
+            }
         }
 
         return $this->client->checkout->sessions->create($params);

@@ -88,7 +88,11 @@ vi.mock('../config.js', () => ({
         LOW_STOCK_THRESHOLD: 3,
         LONG_PURCHASE_THRESHOLD: 5,
         XIPE_PURCHASE_THRESHOLD: 1,
-        CARD_SHIPPING_AMOUNT: 500,
+        SHIPPING: {
+            COUNTRIES: ['US', 'CA'],
+            DOMESTIC: 1000,
+            INTERNATIONAL: 2500,
+        },
         CARD_RESERVATION_MS: 15 * 60 * 1000,
     },
 }));
@@ -103,6 +107,9 @@ vi.mock('../db.js', () => ({
     ducks: {},
     goals: {},
     analytics: {},
+    shipping: {},
+    discordLinks: {},
+    coupons: {},
 }));
 
 vi.mock('../community-goals.js', () => ({
@@ -132,6 +139,8 @@ beforeEach(() => {
     Object.assign(dbModule.cardListings, stmts.cardListings);
     Object.assign(dbModule.goals, stmts.goals);
     Object.assign(dbModule.analytics, stmts.analytics);
+    Object.assign(dbModule.shipping, stmts.shipping);
+    Object.assign(dbModule.discordLinks, stmts.discordLinks);
     vi.clearAllMocks();
 
     // Mock fetch (used by toggleLivestreamMode for WordPress REST API)
@@ -650,6 +659,7 @@ describe('stripe webhook integration during livestream', () => {
 
         await handleCheckoutCompleted({
             id: 'cs_shipping',
+            amount_total: 1000,
             metadata: {
                 source: 'livestream-shipping',
                 livestream_session_id: String(session.id),
@@ -673,11 +683,12 @@ describe('stripe webhook integration during livestream', () => {
 
 describe('shipping scenarios during offline', () => {
     it('repeat buyer within same week is marked as already covered', async () => {
-        // Session 1 — buyer pays shipping
+        // Session 1 — buyer pays shipping (recorded in unified shipping_payments)
         stmts.livestream.startSession.run();
         const s1 = stmts.livestream.getActiveSession.get();
         stmts.livestream.addBuyer.run(s1.id, 'repeat_buyer', 'repeat@example.com');
         stmts.livestream.markShippingPaid.run(s1.id, 'repeat@example.com');
+        stmts.shipping.record.run('repeat@example.com', 'repeat_buyer', 1000, 'livestream');
         stmts.livestream.endSession.run(s1.id);
 
         // Session 2 — same buyer buys again
@@ -686,8 +697,8 @@ describe('shipping scenarios during offline', () => {
         const s2 = stmts.livestream.getActiveSession.get();
         stmts.livestream.addBuyer.run(s2.id, 'repeat_buyer', 'repeat@example.com');
 
-        // hasShippingThisWeek should detect the earlier payment
-        const paidThisWeek = stmts.livestream.hasShippingThisWeek.get('repeat@example.com');
+        // Unified shipping_payments should detect the earlier payment
+        const paidThisWeek = stmts.shipping.hasShippingThisWeek.get('repeat@example.com');
         expect(paidThisWeek).toBeTruthy();
 
         // Go offline — buyer should be in alreadyCovered list

@@ -9,6 +9,12 @@ import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
 import { livestream, queues, analytics, goals } from '../db.js';
 import { sendEmbed, sendToChannel, getMember, getGuild } from '../discord.js';
+import {
+    hasShippingCovered,
+    isInternationalByEmail,
+    formatShippingRate,
+    recordShipping,
+} from '../shipping.js';
 
 /**
  * Toggle the server-side livestream transient via WordPress REST API.
@@ -135,16 +141,18 @@ async function handleOffline(message) {
     // Get unique buyers who need shipping (shipping_paid = 0 for this session)
     const buyers = livestream.getBuyers.all(session.id);
 
-    // Split buyers: those who already paid shipping this week vs those who need it
-    const needsShipping = [];
+    // Split buyers into three groups using the unified shipping tracker
+    const domesticNeedsShipping = [];
+    const internationalNeedsShipping = [];
     const alreadyCovered = [];
 
     for (const buyer of buyers) {
-        const paidThisWeek = livestream.hasShippingThisWeek.get(buyer.customer_email);
-        if (paidThisWeek) {
+        if (hasShippingCovered(buyer.customer_email)) {
             alreadyCovered.push(buyer);
+        } else if (isInternationalByEmail(buyer.customer_email)) {
+            internationalNeedsShipping.push(buyer);
         } else {
-            needsShipping.push(buyer);
+            domesticNeedsShipping.push(buyer);
         }
     }
 
@@ -159,10 +167,10 @@ async function handleOffline(message) {
         const coveredEmbed = new EmbedBuilder()
             .setTitle('📦 You\'re All Set!')
             .setDescription(
-                `You've already paid shipping this week — tonight's items will ship with your existing order on Monday. No additional shipping needed!`
+                `You've already paid shipping this period — tonight's items will ship with your existing order. No additional shipping needed!`
             )
             .setColor(0x2ecc71)
-            .setFooter({ text: 'All orders ship Monday morning.' });
+            .setFooter({ text: 'Shipping already covered.' });
 
         try {
             const member = await getMember(buyer.discord_user_id);
@@ -175,39 +183,71 @@ async function handleOffline(message) {
 
     // Send shipping DMs to buyers who need to pay
     let shippingsSent = 0;
-    const shippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/livestream/shipping/${session.id}`;
+    const baseShippingUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/livestream/shipping/${session.id}`;
 
-    for (const buyer of needsShipping) {
+    // Domestic buyers — $10 weekly
+    for (const buyer of domesticNeedsShipping) {
         const isPlaceholder = buyer.customer_email.includes('@placeholder');
-        const emailParam = isPlaceholder ? '' : `?email=${encodeURIComponent(buyer.customer_email)}`;
+        const params = [];
+        if (!isPlaceholder) params.push(`email=${encodeURIComponent(buyer.customer_email)}`);
+        if (buyer.discord_user_id) params.push(`user=${buyer.discord_user_id}`);
+        const queryString = params.length ? `?${params.join('&')}` : '';
+
         const shippingEmbed = new EmbedBuilder()
             .setTitle('📦 Shipping for Tonight\'s Orders')
             .setDescription(
                 `Thanks for being part of tonight's stream!\n\n` +
-                `Click below to pay shipping ($10 flat rate) and enter your address. This covers everything you buy this week — if you come back before Monday, you won't be charged again.\n\n` +
-                `📦 **[Pay Shipping & Enter Address](${shippingUrl}${emailParam})**`
+                `Click below to pay shipping (${formatShippingRate(config.SHIPPING.DOMESTIC)} flat rate) and enter your address. This covers everything you buy this week — if you come back before Monday, you won't be charged again.\n\n` +
+                `📦 **[Pay Shipping & Enter Address](${baseShippingUrl}${queryString})**`
             )
             .setColor(0x2ecc71)
-            .setFooter({ text: '$10 flat rate — covers all items and winnings through Monday.' });
+            .setFooter({ text: `${formatShippingRate(config.SHIPPING.DOMESTIC)} flat rate — covers all items and winnings through Monday.` });
 
+        shippingsSent += await sendShippingDm(buyer, shippingEmbed);
+    }
+
+    // International buyers — $25 monthly
+    for (const buyer of internationalNeedsShipping) {
+        const params = [];
+        if (!buyer.customer_email.includes('@placeholder')) params.push(`email=${encodeURIComponent(buyer.customer_email)}`);
+        if (buyer.discord_user_id) params.push(`user=${buyer.discord_user_id}`);
+        const queryString = params.length ? `?${params.join('&')}` : '';
+
+        const shippingEmbed = new EmbedBuilder()
+            .setTitle('🌍 International Shipping for Tonight\'s Orders')
+            .setDescription(
+                `Thanks for being part of tonight's stream!\n\n` +
+                `Click below to pay shipping (${formatShippingRate(config.SHIPPING.INTERNATIONAL)} international flat rate) and enter your address. This covers all your purchases through the end of the month.\n\n` +
+                `📦 **[Pay Shipping & Enter Address](${baseShippingUrl}${queryString})**`
+            )
+            .setColor(0x3498db)
+            .setFooter({ text: `${formatShippingRate(config.SHIPPING.INTERNATIONAL)} flat rate — covers all items this month.` });
+
+        shippingsSent += await sendShippingDm(buyer, shippingEmbed);
+    }
+
+    /**
+     * Send a shipping DM to a buyer. Falls back to announcements if DMs disabled.
+     * Returns 1 if sent, 0 if failed.
+     */
+    async function sendShippingDm(buyer, embed) {
         if (buyer.discord_user_id) {
             try {
                 const member = await getMember(buyer.discord_user_id);
                 if (member) {
                     const dm = await member.createDM();
-                    await dm.send({ embeds: [shippingEmbed] });
-                    shippingsSent++;
-                    continue;
+                    await dm.send({ embeds: [embed] });
+                    return 1;
                 }
             } catch { /* DMs disabled — fall through */ }
         }
 
-        // Fallback: post in announcements if we can't DM
+        // Fallback: post in announcements
         await sendToChannel('ANNOUNCEMENTS', {
             content: buyer.discord_user_id ? `<@${buyer.discord_user_id}>` : buyer.customer_email,
-            embeds: [shippingEmbed],
+            embeds: [embed],
         });
-        shippingsSent++;
+        return 1;
     }
 
     // Close the current queue and archive it
@@ -244,10 +284,16 @@ async function handleOffline(message) {
     await postStreamRecap(session, closedQueueId);
 
     // Confirm in current channel
+    const shippingParts = [];
+    if (domesticNeedsShipping.length) shippingParts.push(`${domesticNeedsShipping.length} domestic`);
+    if (internationalNeedsShipping.length) shippingParts.push(`${internationalNeedsShipping.length} international`);
+    if (alreadyCovered.length) shippingParts.push(`${alreadyCovered.length} already covered`);
+    const shippingSummary = shippingParts.length ? shippingParts.join(', ') : 'no buyers';
+
     await message.channel.send(
         `📴 **Live session #${session.id} ended.**\n` +
         `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>\n` +
-        `• Shipping DMs sent to ${shippingsSent} buyer(s)${alreadyCovered.length ? `, ${alreadyCovered.length} already covered this week` : ''}\n` +
+        `• Shipping: ${shippingSummary} (${shippingsSent} DMs sent)\n` +
         `• New pre-order queue opened (#${newQueueId})\n` +
         `• Stream-ended message posted to #announcements\n` +
         `• Stream recap posted to <#${config.CHANNELS.ANALYTICS}>`

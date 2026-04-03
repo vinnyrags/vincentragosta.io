@@ -12,12 +12,11 @@
  * Payment is verified via Stripe webhook.
  */
 
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
 import { db, battles, purchases } from '../db.js';
 import { client, sendToChannel, sendEmbed, getMember, addRole } from '../discord.js';
-import { addLivestreamBuyer } from './live.js';
 
 /**
  * Build the battle status embed.
@@ -151,24 +150,39 @@ async function startBattle(message, args) {
     const result = battles.createBattle.run(productSlug, productName, priceId, max, null);
     const battleId = result.lastInsertRowid;
 
-    const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battleId}`;
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
-        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
+        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*Shipping included if not already covered this period.*`)
         .setColor(0x2ecc71)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
         )
         .setFooter({ text: 'Purchase = entry. No other action needed.' });
 
-    const msg = await message.channel.send({ embeds: [embed] });
+    const buyButton = new ButtonBuilder()
+        .setCustomId(`battle-buy-${battleId}`)
+        .setLabel('Buy Pack')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('🛒');
+
+    const row = new ActionRowBuilder().addComponents(buyButton);
+    const msg = await message.channel.send({ embeds: [embed], components: [row] });
     battles.setBattleMessage.run(msg.id, battleId);
 
-    // Also announce in #announcements
-    await sendEmbed('ANNOUNCEMENTS', {
-        title: '⚔️ Pack Battle Starting!',
-        description: `**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}>!\n\n🛒 **[Buy your pack to enter](${checkoutUrl})** • Max entries: ${max}`,
-        color: 0x2ecc71,
+    // Also announce in #announcements with button
+    const announceBuyButton = new ButtonBuilder()
+        .setCustomId(`battle-buy-${battleId}`)
+        .setLabel('Buy Pack to Enter')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('⚔️');
+
+    const announceRow = new ActionRowBuilder().addComponents(announceBuyButton);
+    await sendToChannel('ANNOUNCEMENTS', {
+        embeds: [new EmbedBuilder()
+            .setTitle('⚔️ Pack Battle Starting!')
+            .setDescription(`**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}>!\n\nMax entries: ${max}`)
+            .setColor(0x2ecc71)],
+        components: [announceRow],
     });
 }
 
@@ -269,16 +283,8 @@ async function declareBattleWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Add winner to livestream buyers so !offline collects shipping with everything else
-    const link = purchases.getEmailByDiscordId.get(mentioned.id);
-    if (link) {
-        addLivestreamBuyer(mentioned.id, link.customer_email);
-    } else {
-        // No linked email — add with a placeholder so !offline can still DM them
-        addLivestreamBuyer(mentioned.id, `battle-winner-${mentioned.id}@placeholder`);
-    }
-
-    await message.channel.send(`📦 <@${mentioned.id}>'s shipping will be collected when the stream ends (\`!offline\`).`);
+    // Winner's shipping was handled at buy-in time (via Discord button checkout)
+    await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping was included at purchase.`);
 }
 
 async function ownerJoinBattle(message) {

@@ -33,6 +33,20 @@ function buildMockDiscord() {
     };
 }
 
+vi.mock('../config.js', () => ({
+    default: {
+        ROLES: { AKIVILI: '1488046525065072670', NANOOK: '1488046525899739148' },
+        CHANNELS: { CARD_SHOP: '1488977861237801231', ORDER_FEED: '2', OPS: '3' },
+        SHOP_URL: 'https://example.com/shop',
+        SHIPPING: {
+            COUNTRIES: ['US', 'CA'],
+            DOMESTIC: 1000,
+            INTERNATIONAL: 2500,
+        },
+        CARD_RESERVATION_MS: 15 * 60 * 1000,
+    },
+}));
+
 // Mock db and discord modules so vi.mock intercepts ESM imports
 vi.mock('../db.js', () => {
     // Will be replaced in beforeEach via mockReturnValue
@@ -59,6 +73,16 @@ vi.mock('../discord.js', () => ({
             send: vi.fn().mockResolvedValue({}),
         }),
     }),
+}));
+
+vi.mock('../shipping.js', () => ({
+    formatShippingRate: vi.fn((amount) => `$${(amount / 100).toFixed(2)}`),
+    getShippingLabel: vi.fn().mockReturnValue({ rate: 1000, label: 'Standard Shipping (US)', isInternational: false }),
+    isInternational: vi.fn().mockReturnValue(false),
+    getShippingRate: vi.fn().mockReturnValue(1000),
+    hasShippingCoveredByDiscordId: vi.fn().mockReturnValue(false),
+    hasShippingCovered: vi.fn().mockReturnValue(false),
+    recordShipping: vi.fn(),
 }));
 
 // Import after mocks are set up

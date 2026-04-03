@@ -17,20 +17,35 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { purchases } from '../db.js';
+import { purchases, discordLinks } from '../db.js';
 import { getMember, sendEmbed, sendToChannel } from '../discord.js';
 
-async function handleDroppedOff(message) {
+async function handleDroppedOff(message, args = []) {
     // Only owner can run this
     if (!message.member.roles.cache.has(config.ROLES.AKIVILI)) {
         return message.reply('Only the server owner can run this command.');
     }
 
+    const isIntlMode = args[0]?.toLowerCase() === 'intl';
+
     // Get all unshipped purchases with linked Discord users
-    const unshipped = purchases.getUnshipped.all();
+    let unshipped = purchases.getUnshipped.all();
+
+    // Filter by domestic or international
+    if (isIntlMode) {
+        unshipped = unshipped.filter((row) => {
+            const country = discordLinks.getCountry.get(row.discord_user_id);
+            return country?.country && country.country !== 'US';
+        });
+    } else {
+        unshipped = unshipped.filter((row) => {
+            const country = discordLinks.getCountry.get(row.discord_user_id);
+            return !country?.country || country.country === 'US';
+        });
+    }
 
     if (unshipped.length === 0) {
-        return message.reply('No unshipped orders to notify.');
+        return message.reply(`No unshipped ${isIntlMode ? 'international ' : ''}orders to notify.`);
     }
 
     // Group purchases by discord_user_id
@@ -42,8 +57,8 @@ async function handleDroppedOff(message) {
         byUser.get(row.discord_user_id).push(row);
     }
 
-    // Also count purchases without a linked Discord user
-    const skipped = purchases.getUnshippedNoDiscord.all();
+    // Also count purchases without a linked Discord user (only for domestic mode)
+    const skipped = isIntlMode ? [] : purchases.getUnshippedNoDiscord.all();
 
     let dmsSent = 0;
     let dmsFailed = 0;
@@ -87,17 +102,25 @@ async function handleDroppedOff(message) {
         }
     }
 
-    // Mark all unshipped purchases as shipped (including those without Discord)
-    purchases.markShipped.run();
+    // Mark these purchases as shipped
+    for (const row of unshipped) {
+        purchases.markShipped.run();
+    }
 
     // Post public notification in #order-feed
+    const orderFeedTitle = isIntlMode ? '🌍 International Orders Shipped!' : '📬 Orders Shipped!';
+    const orderFeedDesc = isIntlMode
+        ? `International orders for this month have been shipped!\n\n` +
+          `📦 **${unshipped.length} order${unshipped.length !== 1 ? 's' : ''} shipped to ${byUser.size} buyer${byUser.size !== 1 ? 's' : ''}** — Monthly batch\n\n` +
+          'If you placed an international order, check your DMs for details.'
+        : `All orders from this week have been dropped off and are on their way!\n\n` +
+          `📦 **${unshipped.length + skipped.length} order${unshipped.length + skipped.length !== 1 ? 's' : ''} shipped to ${byUser.size + skipped.length} buyer${byUser.size + skipped.length !== 1 ? 's' : ''}**\n\n` +
+          'If you placed an order, check your DMs for details.\n' +
+          'Reach out if you need tracking info.';
+
     await sendEmbed('ORDER_FEED', {
-        title: '📬 Orders Shipped!',
-        description:
-            'All orders from this week have been dropped off and are on their way!\n\n' +
-            `📦 **${unshipped.length + skipped.length} order${unshipped.length + skipped.length !== 1 ? 's' : ''} shipped to ${byUser.size + skipped.length} buyer${byUser.size + skipped.length !== 1 ? 's' : ''}**\n\n` +
-            'If you placed an order, check your DMs for details.\n' +
-            'Reach out if you need tracking info.',
+        title: orderFeedTitle,
+        description: orderFeedDesc,
         color: 0x3498db,
         footer: new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' }),
     });

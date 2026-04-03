@@ -68,4 +68,17 @@ class CreateCheckoutEndpointTest extends TestCase
         $this->assertFalse($args['live']['required']);
         $this->assertFalse($args['live']['default']);
     }
+
+    public function testArgsIncludeInternationalFlag(): void
+    {
+        $reflection = new \ReflectionClass(CreateCheckoutEndpoint::class);
+        $method = $reflection->getMethod('getArgs');
+
+        $endpoint = $reflection->newInstanceWithoutConstructor();
+        $args = $method->invoke($endpoint);
+
+        $this->assertArrayHasKey('international', $args);
+        $this->assertFalse($args['international']['required']);
+        $this->assertFalse($args['international']['default']);
+    }
 }

@@ -47,6 +47,8 @@ vi.mock('../db.js', () => ({
     livestream: {},
     cardListings: {},
     ducks: {},
+    shipping: {},
+    discordLinks: {},
 }));
 
 const dbModule = await import('../db.js');
@@ -60,6 +62,8 @@ beforeEach(() => {
     Object.assign(dbModule.battles, stmts.battles);
     Object.assign(dbModule.queues, stmts.queues);
     Object.assign(dbModule.livestream, stmts.livestream);
+    Object.assign(dbModule.shipping, stmts.shipping);
+    Object.assign(dbModule.discordLinks, stmts.discordLinks);
     vi.clearAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,

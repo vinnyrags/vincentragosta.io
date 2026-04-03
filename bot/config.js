@@ -78,7 +78,11 @@ export default {
         GIVEAWAYS: '1489502926195003532',
     },
 
-    CARD_SHIPPING_AMOUNT: 500,
+    SHIPPING: {
+        COUNTRIES: ['US', 'CA'],
+        DOMESTIC: 1000,         // $10
+        INTERNATIONAL: 2500,    // $25
+    },
     CARD_RESERVATION_MS: 15 * 60 * 1000,
 
     // Role IDs

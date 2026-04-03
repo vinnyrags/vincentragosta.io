@@ -91,7 +91,17 @@ export function createTestDb() {
         CREATE TABLE IF NOT EXISTS discord_links (
             discord_user_id TEXT PRIMARY KEY,
             customer_email TEXT NOT NULL,
+            country TEXT DEFAULT NULL,
             linked_at TEXT DEFAULT (datetime('now'))
+        );
+
+        CREATE TABLE IF NOT EXISTS shipping_payments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            customer_email TEXT NOT NULL,
+            discord_user_id TEXT,
+            amount INTEGER NOT NULL,
+            source TEXT NOT NULL,
+            created_at TEXT DEFAULT (datetime('now'))
         );
 
         CREATE TABLE IF NOT EXISTS duck_race_entries (
@@ -231,6 +241,19 @@ export function buildStmts(db) {
             getEntries: db.prepare(`SELECT * FROM giveaway_entries WHERE giveaway_id = ? ORDER BY created_at ASC`),
             getEntryCount: db.prepare(`SELECT COUNT(*) as count FROM giveaway_entries WHERE giveaway_id = ?`),
             getExpired: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' AND ends_at IS NOT NULL AND ends_at <= datetime('now')`),
+        },
+        shipping: {
+            record: db.prepare(`INSERT INTO shipping_payments (customer_email, discord_user_id, amount, source) VALUES (?, ?, ?, ?)`),
+            hasShippingThisWeek: db.prepare(`SELECT 1 FROM shipping_payments WHERE customer_email = ? AND created_at >= datetime('now', 'weekday 1', '-7 days') LIMIT 1`),
+            hasShippingThisMonth: db.prepare(`SELECT 1 FROM shipping_payments WHERE customer_email = ? AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now') LIMIT 1`),
+            getThisWeek: db.prepare(`SELECT * FROM shipping_payments WHERE created_at >= datetime('now', 'weekday 1', '-7 days')`),
+            getThisMonth: db.prepare(`SELECT * FROM shipping_payments WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`),
+        },
+        discordLinks: {
+            setCountry: db.prepare(`UPDATE discord_links SET country = ? WHERE discord_user_id = ?`),
+            getCountry: db.prepare(`SELECT country FROM discord_links WHERE discord_user_id = ?`),
+            getCountryByEmail: db.prepare(`SELECT country FROM discord_links WHERE customer_email = ?`),
+            getInternationalUsers: db.prepare(`SELECT * FROM discord_links WHERE country IS NOT NULL AND country != 'US'`),
         },
         analytics: {
             getRangeStats: db.prepare(`

@@ -11,30 +11,37 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { db, purchases, battles, cardListings, livestream } from '../db.js';
+import { db, purchases, battles, cardListings, livestream, discordLinks } from '../db.js';
 import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
 import { addLivestreamBuyer } from '../commands/live.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
+import { recordShipping } from '../shipping.js';
 
 /**
  * Process a completed checkout session.
  */
 async function handleCheckoutCompleted(session) {
-    // Handle shipping payments — mark as paid and exit early
+    // Handle shipping payments — record in unified tracker and mark as paid
     if (session.metadata?.source === 'livestream-shipping') {
         const sessionId = session.metadata.livestream_session_id;
         const email = session.customer_details?.email || session.metadata.customer_email;
         if (sessionId && email) {
             livestream.markShippingPaid.run(Number(sessionId), email);
+            const amount = session.amount_total || 0;
+            recordShipping(email, session.metadata.discord_user_id || null, amount, 'livestream');
             console.log(`Shipping paid: ${email} for session #${sessionId}`);
         }
         return;
     }
 
-    // Ad-hoc shipping — not a product purchase
+    // Ad-hoc shipping — record in unified tracker
     if (session.metadata?.source === 'ad-hoc-shipping') {
+        const email = session.customer_details?.email;
+        if (email) {
+            recordShipping(email, session.metadata.discord_user_id || null, session.amount_total || 0, 'ad-hoc');
+        }
         return;
     }
 
@@ -133,6 +140,21 @@ async function handleCheckoutCompleted(session) {
     const productRevenue = session.amount_subtotal || session.amount_total || 0;
     if (productRevenue > 0) {
         await addRevenue(productRevenue);
+    }
+
+    // Track shipping paid at checkout (non-livestream purchases that included shipping)
+    const shippingAmount = session.shipping_cost?.amount_total
+        || session.total_details?.amount_shipping
+        || 0;
+    if (shippingAmount > 0 && customerEmail) {
+        recordShipping(customerEmail, discordUserId, shippingAmount, 'checkout');
+    }
+
+    // Auto-flag international buyers from shipping address
+    const shippingCountry = session.shipping_details?.address?.country;
+    if (shippingCountry && shippingCountry !== 'US' && discordUserId) {
+        discordLinks.setCountry.run(shippingCountry, discordUserId);
+        console.log(`Auto-flagged international: ${discordUserId} → ${shippingCountry}`);
     }
 }
 

@@ -40,6 +40,8 @@ import { handleSnapshot } from './commands/snapshot.js';
 import { handleGiveaway, handleGiveawayReaction, initGiveaways } from './commands/giveaway.js';
 import { handleSync } from './commands/sync.js';
 import { handleCoupon } from './commands/coupon.js';
+import { handleIntl, handleIntlShip } from './commands/intl.js';
+import { handleShippingAudit } from './commands/shipping-audit.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -95,7 +97,7 @@ client.on('messageCreate', async (message) => {
                 await handleHype(message, args);
                 break;
             case 'dropped-off':
-                await handleDroppedOff(message);
+                await handleDroppedOff(message, args);
                 break;
             case 'snapshot':
                 await handleSnapshot(message, args);
@@ -109,6 +111,15 @@ client.on('messageCreate', async (message) => {
             case 'coupon':
                 await handleCoupon(message, args);
                 break;
+            case 'intl':
+                await handleIntl(message, args);
+                break;
+            case 'intl-ship':
+                await handleIntlShip(message);
+                break;
+            case 'shipping-audit':
+                await handleShippingAudit(message, args);
+                break;
             default:
                 // Unknown command — silently ignore
                 break;
@@ -117,6 +128,31 @@ client.on('messageCreate', async (message) => {
         console.error(`Error handling command !${command}:`, e.message);
         try {
             await message.reply('Something went wrong. Try again or ping a mod.');
+        } catch { /* can't reply */ }
+    }
+});
+
+// =========================================================================
+// Button interaction handler — identity-aware checkouts
+// =========================================================================
+
+client.on('interactionCreate', async (interaction) => {
+    if (!interaction.isButton() && !interaction.isModalSubmit()) return;
+
+    try {
+        const { handleButtonInteraction, handleModalSubmit } = await import('./commands/interactions.js');
+
+        if (interaction.isButton()) {
+            await handleButtonInteraction(interaction);
+        } else if (interaction.isModalSubmit()) {
+            await handleModalSubmit(interaction);
+        }
+    } catch (e) {
+        console.error('Error handling interaction:', e.message);
+        try {
+            if (!interaction.replied && !interaction.deferred) {
+                await interaction.reply({ content: 'Something went wrong. Try again or ping a mod.', ephemeral: true });
+            }
         } catch { /* can't reply */ }
     }
 });

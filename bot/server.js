@@ -12,10 +12,18 @@
 import express from 'express';
 import Stripe from 'stripe';
 import config from './config.js';
-import { battles, cardListings } from './db.js';
+import { battles, cardListings, purchases } from './db.js';
 import { getActiveCoupon } from './commands/coupon.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
+import {
+    isInternational,
+    getShippingRate,
+    getShippingRateByEmail,
+    hasShippingCoveredByDiscordId,
+    hasShippingCovered,
+    getShippingLabel,
+} from './shipping.js';
 
 const app = express();
 
@@ -78,7 +86,9 @@ app.get('/battle/checkout/:id', async (req, res) => {
 
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-        const session = await stripe.checkout.sessions.create({
+        const discordUserId = req.query.user;
+
+        const params = {
             mode: 'payment',
             line_items: [{ price: battle.stripe_price_id, quantity: 1 }],
             success_url: `${config.SHOP_URL}?thanks=1`,
@@ -95,8 +105,23 @@ app.get('/battle/checkout/:id', async (req, res) => {
                     optional: true,
                 },
             ],
-            // No shipping — only the winner receives cards
-        });
+        };
+
+        // If Discord user is known, add conditional shipping
+        if (discordUserId && !hasShippingCoveredByDiscordId(discordUserId)) {
+            const { rate, label } = getShippingLabel(discordUserId);
+            params.line_items.push({
+                price_data: {
+                    currency: 'usd',
+                    product_data: { name: label },
+                    unit_amount: rate,
+                },
+                quantity: 1,
+            });
+            params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
+        }
+
+        const session = await stripe.checkout.sessions.create(params);
 
         res.redirect(303, session.url);
     } catch (e) {
@@ -113,6 +138,25 @@ app.get('/battle/checkout/:id', async (req, res) => {
 
 app.get('/livestream/shipping/:sessionId', async (req, res) => {
     const email = req.query.email;
+    const discordUserId = req.query.user;
+
+    // Determine rate: check if buyer is international
+    let rate = config.SHIPPING.DOMESTIC;
+    let displayName = 'Livestream Shipping';
+    let description = 'Flat rate shipping for all items and winnings from tonight\'s stream.';
+
+    if (discordUserId && isInternational(discordUserId)) {
+        rate = config.SHIPPING.INTERNATIONAL;
+        displayName = 'International Livestream Shipping';
+        description = 'International flat rate shipping — covers all purchases through end of month.';
+    } else if (email) {
+        const emailRate = getShippingRateByEmail(email);
+        if (emailRate === config.SHIPPING.INTERNATIONAL) {
+            rate = config.SHIPPING.INTERNATIONAL;
+            displayName = 'International Livestream Shipping';
+            description = 'International flat rate shipping — covers all purchases through end of month.';
+        }
+    }
 
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
@@ -122,11 +166,8 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
                 {
                     price_data: {
                         currency: 'usd',
-                        product_data: {
-                            name: 'Livestream Shipping',
-                            description: 'Flat rate shipping for all items and winnings from tonight\'s stream.',
-                        },
-                        unit_amount: 1000, // $10
+                        product_data: { name: displayName, description },
+                        unit_amount: rate,
                     },
                     quantity: 1,
                 },
@@ -136,8 +177,9 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
             metadata: {
                 livestream_session_id: req.params.sessionId,
                 source: 'livestream-shipping',
+                discord_user_id: discordUserId || '',
             },
-            shipping_address_collection: { allowed_countries: ['US'] },
+            shipping_address_collection: { allowed_countries: config.SHIPPING.COUNTRIES },
         };
 
         // Prefill email if available
@@ -167,6 +209,8 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        const discordUserId = req.query.user;
+
         const params = {
             mode: 'payment',
             line_items: [
@@ -175,17 +219,6 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                         currency: 'usd',
                         product_data: { name: listing.card_name },
                         unit_amount: listing.price,
-                    },
-                    quantity: 1,
-                },
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: {
-                            name: 'Shipping',
-                            description: 'Card shipping (USPS)',
-                        },
-                        unit_amount: config.CARD_SHIPPING_AMOUNT,
                     },
                     quantity: 1,
                 },
@@ -198,7 +231,6 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 source: 'card-sale',
                 reserved_for: listing.buyer_discord_id || '',
             },
-            shipping_address_collection: { allowed_countries: ['US'] },
             custom_fields: [
                 {
                     key: 'discord_username',
@@ -208,6 +240,27 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 },
             ],
         };
+
+        // Conditional shipping: if buyer identified and covered, skip shipping
+        const covered = discordUserId
+            ? hasShippingCoveredByDiscordId(discordUserId)
+            : false;
+
+        if (!covered) {
+            const rate = discordUserId ? getShippingRate(discordUserId) : config.SHIPPING.DOMESTIC;
+            const label = discordUserId && isInternational(discordUserId)
+                ? 'International Shipping' : 'Standard Shipping (US)';
+
+            params.line_items.push({
+                price_data: {
+                    currency: 'usd',
+                    product_data: { name: label, description: 'Card shipping (USPS)' },
+                    unit_amount: rate,
+                },
+                quantity: 1,
+            });
+            params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
+        }
 
         if (getActiveCoupon()) {
             params.allow_promotion_codes = true;
@@ -230,6 +283,8 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
 app.get('/product/checkout/:priceId', async (req, res) => {
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        const discordUserId = req.query.user;
+
         const params = {
             mode: 'payment',
             line_items: [{ price: req.params.priceId, quantity: 1 }],
@@ -238,7 +293,6 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             metadata: {
                 source: 'hype-checkout',
             },
-            shipping_address_collection: { allowed_countries: ['US'] },
             custom_fields: [
                 {
                     key: 'discord_username',
@@ -248,6 +302,28 @@ app.get('/product/checkout/:priceId', async (req, res) => {
                 },
             ],
         };
+
+        // Conditional shipping based on buyer identity
+        const covered = discordUserId
+            ? hasShippingCoveredByDiscordId(discordUserId)
+            : false;
+
+        if (!covered) {
+            const rate = discordUserId ? getShippingRate(discordUserId) : config.SHIPPING.DOMESTIC;
+            const label = discordUserId && isInternational(discordUserId)
+                ? 'International Shipping' : 'Standard Shipping (US)';
+
+            params.shipping_options = [
+                {
+                    shipping_rate_data: {
+                        type: 'fixed_amount',
+                        fixed_amount: { amount: rate, currency: 'usd' },
+                        display_name: label,
+                    },
+                },
+            ];
+            params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
+        }
 
         if (getActiveCoupon()) {
             params.allow_promotion_codes = true;
@@ -298,7 +374,7 @@ app.get('/shipping/checkout', async (req, res) => {
                 discord_user_id: req.query.user || '',
                 reason,
             },
-            shipping_address_collection: { allowed_countries: ['US'] },
+            shipping_address_collection: { allowed_countries: config.SHIPPING.COUNTRIES },
             custom_fields: [
                 {
                     key: 'discord_username',

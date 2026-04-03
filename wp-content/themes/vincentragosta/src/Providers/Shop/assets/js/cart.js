@@ -8,6 +8,7 @@
 const STORAGE_KEY = 'vincentragosta_cart';
 const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
 const LIVE_MODE_KEY = 'vincentragosta_live_mode';
+const INTL_MODE_KEY = 'vincentragosta_international';
 const CART_TTL = 24 * 60 * 60 * 1000; // 24 hours in ms
 const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
 
@@ -210,6 +211,50 @@ const CartStore = {
 };
 
 // ==========================================================================
+// CountryToggle — shipping region selector
+// ==========================================================================
+
+const CountryToggle = {
+    isInternational() {
+        return sessionStorage.getItem(INTL_MODE_KEY) === '1';
+    },
+
+    set(international) {
+        if (international) {
+            sessionStorage.setItem(INTL_MODE_KEY, '1');
+        } else {
+            sessionStorage.removeItem(INTL_MODE_KEY);
+        }
+        document.dispatchEvent(new CustomEvent('shop:country-changed', {
+            detail: { international },
+        }));
+    },
+
+    init() {
+        const container = document.querySelector('[data-country-toggle]');
+        if (!container) return;
+
+        const select = document.createElement('select');
+        select.className = 'shop-country-toggle__select';
+        select.setAttribute('aria-label', 'Shipping region');
+        select.innerHTML = `
+            <option value="US">🇺🇸 US — $10 shipping</option>
+            <option value="INTL">🌍 International — $25 shipping</option>
+        `;
+
+        if (this.isInternational()) {
+            select.value = 'INTL';
+        }
+
+        select.addEventListener('change', () => {
+            this.set(select.value === 'INTL');
+        });
+
+        container.appendChild(select);
+    },
+};
+
+// ==========================================================================
 // CartDrawer — slide-out panel
 // ==========================================================================
 
@@ -362,6 +407,7 @@ const CartCheckout = {
                         quantity: i.quantity,
                     })),
                     live: sessionStorage.getItem(LIVE_MODE_KEY) === '1',
+                    international: CountryToggle.isInternational(),
                 }),
             });
 
@@ -416,6 +462,9 @@ const ThankYouPage = {
 // ==========================================================================
 
 async function initCart() {
+    // Country toggle — shipping region selector
+    CountryToggle.init();
+
     // Age gate — hide mature products and prompt if needed
     if (AgeGate.shouldBlock()) {
         AgeGate.hideMatureProducts();

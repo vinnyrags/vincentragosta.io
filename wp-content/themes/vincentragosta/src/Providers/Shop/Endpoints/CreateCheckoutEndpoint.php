@@ -51,6 +51,11 @@ class CreateCheckoutEndpoint extends Endpoint
                 'type'     => 'boolean',
                 'default'  => false,
             ],
+            'international' => [
+                'required' => false,
+                'type'     => 'boolean',
+                'default'  => false,
+            ],
         ];
     }
 
@@ -60,6 +65,7 @@ class CreateCheckoutEndpoint extends Endpoint
 
         // Only honor live=true if the server-side livestream transient is active
         $isLive = (bool) $request->get_param('live') && (bool) get_transient('itzenzo_livestream_active');
+        $isInternational = (bool) $request->get_param('international');
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
@@ -161,6 +167,7 @@ class CreateCheckoutEndpoint extends Endpoint
                 $cancelUrl,
                 $metadata,
                 $isLive,
+                $isInternational,
             );
 
             return new WP_REST_Response([
