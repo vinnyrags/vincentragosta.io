@@ -20,19 +20,19 @@ while read oldrev newrev refname; do
     fi
 
     WP_PATH="$DEPLOY_DIR/wp"
+    COMMIT_MSG=$(git log -1 --format="%s" "$newrev" 2>/dev/null || echo "")
+    COMMIT_SHORT=$(git rev-parse --short "$newrev" 2>/dev/null || echo "")
+    FILE_COUNT=$(git diff --name-only "$oldrev" "$newrev" 2>/dev/null | wc -l | tr -d ' ')
 
     echo "============================================"
     echo "Deploying $branch to $ENV_NAME ($DEPLOY_DIR)"
     echo "============================================"
 
-    # Notify #dev-log: deployment started
-    COMMIT_MSG=$(git log -1 --format="%s" "$newrev" 2>/dev/null || echo "")
-    COMMIT_SHORT=$(git rev-parse --short "$newrev" 2>/dev/null || echo "")
+    # Notify #dev-log: git push received
     node "$DEPLOY_DIR/bot/notify-deploy.js" \
-        --status=started \
+        --status=push \
         --branch="$branch" \
-        --env="$ENV_NAME" \
-        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG}" 2>/dev/null || true
+        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG} (${FILE_COUNT} files)" 2>/dev/null || true
 
     # Back up env config (not in repo)
     cp "$DEPLOY_DIR/wp-config-env.php" /tmp/wp-config-env-${ENV_NAME}.php 2>/dev/null || true
@@ -99,7 +99,7 @@ while read oldrev newrev refname; do
     npm ci --no-audit --no-fund
     npm run build
 
-    # Install bot dependencies
+    # Install bot dependencies and run tests
     if [ -d "$DEPLOY_DIR/bot" ]; then
         echo ">> Installing bot dependencies..."
         cd "$DEPLOY_DIR/bot"
@@ -111,11 +111,6 @@ while read oldrev newrev refname; do
             # Tests passed — safe to restart
             PASS_COUNT=$(grep -oP '\d+ passed' /tmp/bot-test-output-${ENV_NAME}.txt | head -1 || echo "")
             echo ">> Bot tests passed${PASS_COUNT:+ ($PASS_COUNT)}"
-            node "$DEPLOY_DIR/bot/notify-deploy.js" \
-                --status=tests-passed \
-                --branch="$branch" \
-                --env="$ENV_NAME" \
-                --summary="Bot tests passed${PASS_COUNT:+ — $PASS_COUNT}" 2>/dev/null || true
 
             echo ">> Restarting Nous bot..."
             if [ "$ENV_NAME" = "staging" ]; then
@@ -137,6 +132,16 @@ while read oldrev newrev refname; do
                 --branch="$branch" \
                 --env="$ENV_NAME" \
                 --output="$FAIL_TAIL" 2>/dev/null || true
+
+            # Skip the success notification — we already posted the failure
+            echo ">> Flushing caches..."
+            wp cache flush --path=$WP_PATH --allow-root --quiet 2>/dev/null || true
+            chown -R www-data:www-data "$DEPLOY_DIR"
+
+            echo "============================================"
+            echo "Deployed $branch to $ENV_NAME (bot NOT restarted)"
+            echo "============================================"
+            continue
         fi
     fi
 
@@ -146,14 +151,12 @@ while read oldrev newrev refname; do
     # Fix permissions
     chown -R www-data:www-data "$DEPLOY_DIR"
 
-    # Notify #dev-log: deployment complete
-    DIFF_STAT=$(git diff --stat "$oldrev" "$newrev" -- bot/ | tail -1 || echo "")
+    # Notify #dev-log: deployment success
     node "$DEPLOY_DIR/bot/notify-deploy.js" \
         --status=success \
         --branch="$branch" \
         --env="$ENV_NAME" \
-        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG}${DIFF_STAT:+
-${DIFF_STAT}}" 2>/dev/null || true
+        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG} — ${PASS_COUNT:-tests passed}" 2>/dev/null || true
 
     echo "============================================"
     echo "Deployed $branch to $ENV_NAME successfully!"
