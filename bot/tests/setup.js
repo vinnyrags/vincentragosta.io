@@ -113,6 +113,26 @@ export function createTestDb() {
 
         INSERT OR IGNORE INTO community_goals (id) VALUES (1);
 
+        CREATE TABLE IF NOT EXISTS giveaways (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            prize_name TEXT NOT NULL,
+            channel_message_id TEXT,
+            status TEXT DEFAULT 'open',
+            created_at TEXT DEFAULT (datetime('now')),
+            ends_at TEXT,
+            closed_at TEXT,
+            winner_id TEXT
+        );
+
+        CREATE TABLE IF NOT EXISTS giveaway_entries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            giveaway_id INTEGER NOT NULL,
+            discord_user_id TEXT NOT NULL,
+            created_at TEXT DEFAULT (datetime('now')),
+            FOREIGN KEY (giveaway_id) REFERENCES giveaways(id),
+            UNIQUE(giveaway_id, discord_user_id)
+        );
+
         CREATE TABLE IF NOT EXISTS card_listings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             message_id TEXT,
@@ -197,6 +217,20 @@ export function buildStmts(db) {
             addRevenue: db.prepare(`UPDATE community_goals SET cycle_revenue = cycle_revenue + ?, lifetime_revenue = lifetime_revenue + ? WHERE id = 1`),
             resetCycle: db.prepare(`UPDATE community_goals SET cycle = cycle + 1, cycle_revenue = cycle_revenue - ? WHERE id = 1`),
             setMessageId: db.prepare(`UPDATE community_goals SET channel_message_id = ? WHERE id = 1`),
+        },
+        giveaways: {
+            create: db.prepare(`INSERT INTO giveaways (prize_name, ends_at) VALUES (?, ?)`),
+            getActive: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' ORDER BY id DESC LIMIT 1`),
+            getById: db.prepare(`SELECT * FROM giveaways WHERE id = ?`),
+            getByMessageId: db.prepare(`SELECT * FROM giveaways WHERE channel_message_id = ?`),
+            close: db.prepare(`UPDATE giveaways SET status = 'closed', closed_at = datetime('now') WHERE id = ?`),
+            cancel: db.prepare(`UPDATE giveaways SET status = 'cancelled', closed_at = datetime('now') WHERE id = ?`),
+            setWinner: db.prepare(`UPDATE giveaways SET status = 'complete', winner_id = ? WHERE id = ?`),
+            setMessageId: db.prepare(`UPDATE giveaways SET channel_message_id = ? WHERE id = ?`),
+            addEntry: db.prepare(`INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id) VALUES (?, ?)`),
+            getEntries: db.prepare(`SELECT * FROM giveaway_entries WHERE giveaway_id = ? ORDER BY created_at ASC`),
+            getEntryCount: db.prepare(`SELECT COUNT(*) as count FROM giveaway_entries WHERE giveaway_id = ?`),
+            getExpired: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' AND ends_at IS NOT NULL AND ends_at <= datetime('now')`),
         },
         analytics: {
             getRangeStats: db.prepare(`

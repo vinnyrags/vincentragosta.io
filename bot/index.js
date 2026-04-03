@@ -16,6 +16,7 @@
  *  - Queue archives posted to #card-night-queue
  *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
  *  - Analytics (!snapshot → on-demand snapshots, auto stream recaps on !offline)
+ *  - Giveaway system (!giveaway — reaction-based entries, social funnel, duck race draw)
  *
  * Usage:
  *   node bot/index.js
@@ -34,6 +35,7 @@ import { handleShipping } from './commands/shipping.js';
 import { handleHype } from './commands/hype.js';
 import { handleDroppedOff } from './commands/dropped-off.js';
 import { handleSnapshot } from './commands/snapshot.js';
+import { handleGiveaway, handleGiveawayReaction, initGiveaways } from './commands/giveaway.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -94,6 +96,9 @@ client.on('messageCreate', async (message) => {
             case 'snapshot':
                 await handleSnapshot(message, args);
                 break;
+            case 'giveaway':
+                await handleGiveaway(message, args);
+                break;
             default:
                 // Unknown command — silently ignore
                 break;
@@ -103,6 +108,25 @@ client.on('messageCreate', async (message) => {
         try {
             await message.reply('Something went wrong. Try again or ping a mod.');
         } catch { /* can't reply */ }
+    }
+});
+
+// =========================================================================
+// Reaction handler — giveaway entries
+// =========================================================================
+
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot) return;
+
+    // Fetch partial reactions (reactions on uncached messages)
+    if (reaction.partial) {
+        try { await reaction.fetch(); } catch { return; }
+    }
+
+    try {
+        await handleGiveawayReaction(reaction, user);
+    } catch (e) {
+        console.error('Error handling reaction:', e.message);
     }
 });
 
@@ -122,6 +146,9 @@ client.once('ready', async () => {
 
     // Initialize community goals pinned message
     await initCommunityGoals();
+
+    // Initialize giveaways (close expired, schedule active timers)
+    initGiveaways();
 });
 
 // =========================================================================

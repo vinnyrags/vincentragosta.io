@@ -109,6 +109,23 @@ Weekly drop-off (!dropped-off) →  DMs each buyer + public #order-feed post
 **\`!snapshot march 2026\`** — Snapshot for a specific month and year
 
 *Stream recaps are posted automatically to #analytics when \`!offline\` runs — no extra step needed.*`,
+
+    // Message 9: Giveaways
+    `## Giveaways
+**\`!giveaway start "Prize Name" [duration]\`** — Start a giveaway. Posts embed in #giveaways with 🎁 reaction to enter, teaser in #announcements, social copy in #ops. Duration optional (e.g., \`24h\`, \`3d\`, \`1w\`).
+> Example: \`!giveaway start "Prismatic Evolutions ETB" 48h\`
+
+**\`!giveaway status\`** — Show current giveaway (anyone can use)
+
+**\`!giveaway close\`** — Close entries. Auto-closes when duration expires.
+
+**\`!giveaway draw\`** — Random winner. Assigns Aha role, announces in #giveaways, #announcements, and #and-in-the-back.
+
+**\`!giveaway draw duckrace\`** — Load giveaway entries as a duck race roster for stream drawing.
+
+**\`!giveaway cancel\`** — Cancel the giveaway.
+
+*Only verified members (Xipe role) can enter. One entry per person. Social copy is posted to #ops for cross-platform promotion.*`,
 ];
 
 export default messages;
