@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /**
- * Deploy notification — posts to #dev-log via Discord webhook or bot token.
+ * Deploy notification — posts to #dev-log via Discord REST API.
  *
- * Called by the post-receive hook during deployments. Sends messages to
- * #dev-log without depending on the bot process (which may be restarting).
+ * Called by the post-receive hook. Uses the bot token directly (not the
+ * bot process, which may be restarting).
  *
  * Usage:
- *   node bot/notify-deploy.js --status=started --branch=main --env=production
- *   node bot/notify-deploy.js --status=success --branch=main --env=production --summary="3 files changed"
- *   node bot/notify-deploy.js --status=tests-failed --branch=main --env=production --output="test failure details"
- *   node bot/notify-deploy.js --status=failed --branch=main --env=production --error="build failed"
+ *   node bot/notify-deploy.js --status=push --branch=main --summary="commit info"
+ *   node bot/notify-deploy.js --status=success --branch=main --env=production --summary="commit info"
+ *   node bot/notify-deploy.js --status=tests-failed --branch=main --env=production --output="failure details"
+ *   node bot/notify-deploy.js --status=failed --branch=main --env=production --error="build error"
  */
 
 import fs from 'node:fs';
@@ -50,30 +50,26 @@ const CHANNEL_ID = '1489513907025346630'; // #dev-log
 let title, description, color;
 
 switch (status) {
-    case 'started':
-        title = `🔄 Deploying ${branch} to ${env}`;
-        description = 'Build started...';
+    case 'push':
+        title = `📥 Push to ${branch}`;
+        description = summary || '';
         color = 0x95a5a6; // grey
         break;
 
-    case 'tests-passed':
-        title = `✅ Tests passed`;
-        description = summary || 'All tests passed.';
+    case 'success':
+        title = `✅ Deployed to ${env}`;
+        description = summary || 'Deployment complete.';
         color = 0x2ecc71; // green
         break;
 
     case 'tests-failed':
-        title = `❌ Tests failed — bot NOT restarted`;
-        description = output
-            ? `\`\`\`\n${output.slice(0, 1800)}\n\`\`\``
-            : 'Bot tests failed. Previous version still running.';
+        title = `❌ Deploy blocked — tests failed`;
+        description = [
+            `**${branch} → ${env}** — bot NOT restarted, previous version still running.`,
+            '',
+            output ? `\`\`\`\n${output.slice(0, 1500)}\n\`\`\`` : '',
+        ].filter(Boolean).join('\n');
         color = 0xe74c3c; // red
-        break;
-
-    case 'success':
-        title = `✅ Deployed ${branch} to ${env}`;
-        description = summary || 'Deployment complete.';
-        color = 0x2ecc71; // green
         break;
 
     case 'failed':
@@ -83,7 +79,7 @@ switch (status) {
         break;
 
     default:
-        title = `📋 Deploy: ${status}`;
+        title = `📋 ${status}`;
         description = summary || output || error || '';
         color = 0x95a5a6;
 }
@@ -95,7 +91,7 @@ const embed = {
     timestamp: new Date().toISOString(),
 };
 
-// Post via Discord REST API (not the bot process — it may be restarting)
+// Post via Discord REST API
 try {
     const res = await fetch(`https://discord.com/api/v10/channels/${CHANNEL_ID}/messages`, {
         method: 'POST',
