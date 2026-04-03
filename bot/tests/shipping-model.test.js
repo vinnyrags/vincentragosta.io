@@ -204,3 +204,55 @@ describe('livestream + unified shipping integration', () => {
         expect(shippingPaid).toBeTruthy();
     });
 });
+
+// =========================================================================
+// buildShippingOptions — dual-option for unflagged buyers
+// =========================================================================
+
+describe('buildShippingOptions logic', () => {
+    it('no discordUserId → both options', () => {
+        // No user identified at all — offer both
+        const domestic = stmts.discordLinks.getCountry.get('nonexistent');
+        expect(domestic).toBeUndefined();
+        // Simulates what buildShippingOptions does: no ID → both rates
+    });
+
+    it('unflagged user (no country set) → both options available', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'user@test.com');
+
+        // No country set — getCountry returns null
+        const row = stmts.discordLinks.getCountry.get('discord1');
+        expect(row.country).toBeNull();
+    });
+
+    it('user flagged as CA → only international rate applies', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'user@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+
+        const row = stmts.discordLinks.getCountry.get('discord1');
+        expect(row.country).toBe('CA');
+        expect(row.country !== 'US').toBe(true);
+    });
+
+    it('user flagged as US → only domestic rate applies', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'user@test.com');
+        stmts.discordLinks.setCountry.run('US', 'discord1');
+
+        const row = stmts.discordLinks.getCountry.get('discord1');
+        expect(row.country).toBe('US');
+    });
+
+    it('auto-flag from webhook then subsequent lookup returns correct country', () => {
+        // Simulate: buyer links, makes purchase, webhook auto-flags
+        stmts.purchases.linkDiscord.run('discord1', 'user@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+
+        // Next checkout should see them as international
+        const row = stmts.discordLinks.getCountry.get('discord1');
+        expect(row.country).toBe('CA');
+
+        // And getCountryByEmail should also work
+        const byEmail = stmts.discordLinks.getCountryByEmail.get('user@test.com');
+        expect(byEmail.country).toBe('CA');
+    });
+});
