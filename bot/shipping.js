@@ -93,6 +93,52 @@ function getShippingLabel(discordUserId) {
     return { rate, label, isInternational: intl };
 }
 
+/**
+ * Build Stripe shipping_options for a checkout session.
+ *
+ * - Buyer flagged as international → single international option
+ * - Buyer flagged as domestic (or US) → single domestic option
+ * - Buyer unknown/unflagged → both options, buyer self-selects
+ */
+function buildShippingOptions(discordUserId) {
+    const domestic = {
+        shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: config.SHIPPING.DOMESTIC, currency: 'usd' },
+            display_name: 'Standard Shipping (US)',
+        },
+    };
+
+    const international = {
+        shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: config.SHIPPING.INTERNATIONAL, currency: 'usd' },
+            display_name: 'International Shipping',
+        },
+    };
+
+    // No buyer identified — offer both
+    if (!discordUserId) {
+        return [domestic, international];
+    }
+
+    // Check if buyer has a country flag
+    const intl = isInternational(discordUserId);
+    const hasFlag = (() => {
+        const row = discordLinks.getCountry.get(discordUserId);
+        return row?.country != null;
+    })();
+
+    // Flagged international → international only
+    if (intl) return [international];
+
+    // Flagged domestic (explicitly US) → domestic only
+    if (hasFlag) return [domestic];
+
+    // Linked but no country flag → offer both
+    return [domestic, international];
+}
+
 export {
     isInternational,
     isInternationalByEmail,
@@ -103,4 +149,5 @@ export {
     recordShipping,
     formatShippingRate,
     getShippingLabel,
+    buildShippingOptions,
 };

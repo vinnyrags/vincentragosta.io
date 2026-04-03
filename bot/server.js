@@ -23,6 +23,7 @@ import {
     hasShippingCoveredByDiscordId,
     hasShippingCovered,
     getShippingLabel,
+    buildShippingOptions,
 } from './shipping.js';
 
 const app = express();
@@ -107,17 +108,10 @@ app.get('/battle/checkout/:id', async (req, res) => {
             ],
         };
 
-        // If Discord user is known, add conditional shipping
-        if (discordUserId && !hasShippingCoveredByDiscordId(discordUserId)) {
-            const { rate, label } = getShippingLabel(discordUserId);
-            params.line_items.push({
-                price_data: {
-                    currency: 'usd',
-                    product_data: { name: label },
-                    unit_amount: rate,
-                },
-                quantity: 1,
-            });
+        // Add shipping unless already covered this period
+        const covered = discordUserId && hasShippingCoveredByDiscordId(discordUserId);
+        if (!covered) {
+            params.shipping_options = buildShippingOptions(discordUserId);
             params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
         }
 
@@ -241,24 +235,13 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
             ],
         };
 
-        // Conditional shipping: if buyer identified and covered, skip shipping
+        // Conditional shipping: skip if buyer already covered this period
         const covered = discordUserId
             ? hasShippingCoveredByDiscordId(discordUserId)
             : false;
 
         if (!covered) {
-            const rate = discordUserId ? getShippingRate(discordUserId) : config.SHIPPING.DOMESTIC;
-            const label = discordUserId && isInternational(discordUserId)
-                ? 'International Shipping' : 'Standard Shipping (US)';
-
-            params.line_items.push({
-                price_data: {
-                    currency: 'usd',
-                    product_data: { name: label, description: 'Card shipping (USPS)' },
-                    unit_amount: rate,
-                },
-                quantity: 1,
-            });
+            params.shipping_options = buildShippingOptions(discordUserId);
             params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
         }
 
@@ -309,19 +292,7 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             : false;
 
         if (!covered) {
-            const rate = discordUserId ? getShippingRate(discordUserId) : config.SHIPPING.DOMESTIC;
-            const label = discordUserId && isInternational(discordUserId)
-                ? 'International Shipping' : 'Standard Shipping (US)';
-
-            params.shipping_options = [
-                {
-                    shipping_rate_data: {
-                        type: 'fixed_amount',
-                        fixed_amount: { amount: rate, currency: 'usd' },
-                        display_name: label,
-                    },
-                },
-            ];
+            params.shipping_options = buildShippingOptions(discordUserId);
             params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
         }
 
