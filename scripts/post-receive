@@ -1,0 +1,161 @@
+#!/bin/bash
+set -e
+
+# Load nvm for node/npm access
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+while read oldrev newrev refname; do
+    branch=$(git rev-parse --symbolic --abbrev-ref "$refname")
+
+    if [ "$branch" = "main" ]; then
+        DEPLOY_DIR="/var/www/vincentragosta.io"
+        ENV_NAME="production"
+    elif [ "$branch" = "develop" ]; then
+        DEPLOY_DIR="/var/www/vincentragosta.dev"
+        ENV_NAME="staging"
+    else
+        echo "Branch $branch — no deployment configured, skipping."
+        continue
+    fi
+
+    WP_PATH="$DEPLOY_DIR/wp"
+
+    echo "============================================"
+    echo "Deploying $branch to $ENV_NAME ($DEPLOY_DIR)"
+    echo "============================================"
+
+    # Notify #dev-log: deployment started
+    COMMIT_MSG=$(git log -1 --format="%s" "$newrev" 2>/dev/null || echo "")
+    COMMIT_SHORT=$(git rev-parse --short "$newrev" 2>/dev/null || echo "")
+    node "$DEPLOY_DIR/bot/notify-deploy.js" \
+        --status=started \
+        --branch="$branch" \
+        --env="$ENV_NAME" \
+        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG}" 2>/dev/null || true
+
+    # Back up env config (not in repo)
+    cp "$DEPLOY_DIR/wp-config-env.php" /tmp/wp-config-env-${ENV_NAME}.php 2>/dev/null || true
+
+    # Checkout code
+    echo ">> Checking out $branch..."
+    GIT_WORK_TREE="$DEPLOY_DIR" git checkout -f "$branch"
+
+    CHILD_DIR="$DEPLOY_DIR/wp-content/themes/vincentragosta"
+    THEME_SLUG="vincentragosta"
+
+    # If stylesheet option does not match, run migration
+    CURRENT_STYLESHEET=$(wp option get stylesheet --path=$WP_PATH --allow-root --skip-themes --skip-plugins 2>/dev/null || echo "")
+    if [ -n "$CURRENT_STYLESHEET" ] && [ "$CURRENT_STYLESHEET" != "$THEME_SLUG" ]; then
+        echo ">> Migrating theme slug: $CURRENT_STYLESHEET → $THEME_SLUG"
+        wp option update stylesheet "$THEME_SLUG" --path=$WP_PATH --allow-root --skip-themes --skip-plugins
+        wp option update template "ix" --path=$WP_PATH --allow-root --skip-themes --skip-plugins
+        wp search-replace "wp:${CURRENT_STYLESHEET}/" "wp:${THEME_SLUG}/" --path=$WP_PATH --allow-root --all-tables --precise --skip-themes --skip-plugins
+        wp search-replace "\"${CURRENT_STYLESHEET}/" "\"${THEME_SLUG}/" --path=$WP_PATH --allow-root --all-tables --precise --skip-themes --skip-plugins
+        wp search-replace "wp-block-${CURRENT_STYLESHEET}-" "wp-block-${THEME_SLUG}-" --path=$WP_PATH --allow-root --all-tables --precise --skip-themes --skip-plugins
+
+        # Migrate theme_mods (nav menus, custom CSS, etc.) from old slug to new
+        OLD_MODS=$(wp option get "theme_mods_${CURRENT_STYLESHEET}" --format=json --path=$WP_PATH --allow-root --skip-themes --skip-plugins 2>/dev/null || echo "")
+        if [ -n "$OLD_MODS" ] && [ "$OLD_MODS" != "" ]; then
+            echo ">> Migrating theme_mods from $CURRENT_STYLESHEET to $THEME_SLUG"
+            wp option update "theme_mods_${THEME_SLUG}" "$OLD_MODS" --format=json --path=$WP_PATH --allow-root --skip-themes --skip-plugins
+        fi
+    fi
+
+    # Remove files no longer tracked by git (stale build artifacts, moved blocks, etc.)
+    echo ">> Cleaning untracked files from theme sources..."
+    GIT_WORK_TREE="$DEPLOY_DIR" git clean -fd -- wp-content/themes/vincentragosta/src
+
+    # Restore env config
+    cp /tmp/wp-config-env-${ENV_NAME}.php "$DEPLOY_DIR/wp-config-env.php"
+
+    # Restore auth.json for Composer (ACF Pro)
+    cp /root/.composer-auth.json "$DEPLOY_DIR/auth.json" 2>/dev/null || true
+
+    # Root composer install (WordPress core + plugins)
+    echo ">> Running root composer install..."
+    cd "$DEPLOY_DIR"
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
+
+    # Parent theme composer install
+    echo ">> Running IX composer install..."
+    cd "$DEPLOY_DIR/wp-content/themes/ix"
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
+
+    # Child theme composer install
+    echo ">> Running child theme composer install..."
+    cd "$CHILD_DIR"
+    COMPOSER_ALLOW_SUPERUSER=1 composer install --no-dev --optimize-autoloader --no-interaction
+
+    # Build IX
+    echo ">> Building IX assets..."
+    cd "$DEPLOY_DIR/wp-content/themes/ix"
+    npm ci --no-audit --no-fund
+    npm run build
+
+    # Build child theme
+    echo ">> Building child theme assets..."
+    cd "$CHILD_DIR"
+    npm ci --no-audit --no-fund
+    npm run build
+
+    # Install bot dependencies
+    if [ -d "$DEPLOY_DIR/bot" ]; then
+        echo ">> Installing bot dependencies..."
+        cd "$DEPLOY_DIR/bot"
+        npm ci --no-audit --no-fund
+
+        # Run bot tests BEFORE restarting
+        echo ">> Running bot tests..."
+        if npx vitest run --reporter=verbose 2>&1 | tee /tmp/bot-test-output-${ENV_NAME}.txt; then
+            # Tests passed — safe to restart
+            PASS_COUNT=$(grep -oP '\d+ passed' /tmp/bot-test-output-${ENV_NAME}.txt | head -1 || echo "")
+            echo ">> Bot tests passed${PASS_COUNT:+ ($PASS_COUNT)}"
+            node "$DEPLOY_DIR/bot/notify-deploy.js" \
+                --status=tests-passed \
+                --branch="$branch" \
+                --env="$ENV_NAME" \
+                --summary="Bot tests passed${PASS_COUNT:+ — $PASS_COUNT}" 2>/dev/null || true
+
+            echo ">> Restarting Nous bot..."
+            if [ "$ENV_NAME" = "staging" ]; then
+                systemctl restart nous-bot-staging 2>/dev/null || true
+            elif [ "$ENV_NAME" = "production" ]; then
+                systemctl restart nous-bot 2>/dev/null || true
+            fi
+        else
+            # Tests failed — do NOT restart the bot
+            echo ""
+            echo "============================================"
+            echo "⚠️  BOT TESTS FAILED — bot NOT restarted!"
+            echo "    Previous version is still running."
+            echo "============================================"
+            echo ""
+            FAIL_TAIL=$(tail -20 /tmp/bot-test-output-${ENV_NAME}.txt)
+            node "$DEPLOY_DIR/bot/notify-deploy.js" \
+                --status=tests-failed \
+                --branch="$branch" \
+                --env="$ENV_NAME" \
+                --output="$FAIL_TAIL" 2>/dev/null || true
+        fi
+    fi
+
+    echo ">> Flushing caches..."
+    wp cache flush --path=$WP_PATH --allow-root --quiet 2>/dev/null || true
+
+    # Fix permissions
+    chown -R www-data:www-data "$DEPLOY_DIR"
+
+    # Notify #dev-log: deployment complete
+    DIFF_STAT=$(git diff --stat "$oldrev" "$newrev" -- bot/ | tail -1 || echo "")
+    node "$DEPLOY_DIR/bot/notify-deploy.js" \
+        --status=success \
+        --branch="$branch" \
+        --env="$ENV_NAME" \
+        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG}${DIFF_STAT:+
+${DIFF_STAT}}" 2>/dev/null || true
+
+    echo "============================================"
+    echo "Deployed $branch to $ENV_NAME successfully!"
+    echo "============================================"
+done
