@@ -22,7 +22,7 @@ const messages = [
             '!hype Product 1, Product 2            → Looks up products in Stripe',
             '                                         Shows preview with prices (detects sales)',
             '                                         Confirm with ✅ → posts to #announcements',
-            '                                         Each product gets a direct checkout link',
+            '                                         Each product gets a Buy Now button',
             '```',
             '',
             '**Going Live**',

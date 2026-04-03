@@ -17,12 +17,12 @@ const messages = [
     {
         title: '🎛️ Master Commands',
         description: [
-            '**`!hype Product 1, Product 2`** — Pre-stream hype. Looks up products in Stripe, shows a preview with prices (detects sales), then posts a hype embed to #announcements with direct checkout links. Also drops raw checkout URLs in #ops for easy copy-paste to IG Stories, YouTube descriptions, etc. React ✅ to confirm.',
+            '**`!hype Product 1, Product 2`** — Pre-stream hype. Looks up products in Stripe, shows a preview with prices (detects sales), then posts a hype embed to #announcements with Buy Now buttons. Also drops raw checkout URLs in #ops for easy copy-paste to socials. React ✅ to confirm.',
             '> Example: `!hype Prismatic Evolutions Booster Box, Crown Zenith ETB`',
             '',
             '**`!live`** — Go live. Posts pre-order summary (queue stays open), starts livestream session, posts shop link with `?live=1` (shipping-free for livestream buyers). Posts going-live in #announcements.',
             '',
-            '**`!offline`** — End stream. Ends livestream session, closes queue and archives to #card-night-queue, DMs $10 shipping link to each unique buyer, opens next pre-order queue, posts stream-ended in #announcements, posts stream recap to #analytics.',
+            '**`!offline`** — End stream. Ends livestream session, closes queue and archives to #card-night-queue, splits buyers into domestic ($10) / international ($25) / already covered and DMs shipping links accordingly. Opens next pre-order queue, posts stream-ended in #announcements, posts stream recap to #analytics.',
         ].join('\n'),
         color: 0x2ecc71,
     },
@@ -31,7 +31,7 @@ const messages = [
     {
         title: '⚔️ Pack Battles',
         description: [
-            '**`!battle start <product name> [max]`** — Start a battle. Bot searches Stripe for the product, posts embed with direct checkout link. Default 20 max entries.',
+            '**`!battle start <product name> [max]`** — Start a battle. Bot searches Stripe for the product, posts embed with Buy Pack button. Shipping included at buy-in if not already covered. Default 20 max entries.',
             '> Example: `!battle start Prismatic Evolutions 12`',
             '',
             '**`!battle status`** — Show current battle (anyone can use)',
@@ -40,7 +40,7 @@ const messages = [
             '',
             '**`!battle cancel`** — Cancel the battle, notify entrants',
             '',
-            '**`!battle winner @user`** — Declare winner. Assigns Aha role, cross-posts to #announcements and #and-in-the-back. Winner shipping bundled into `!offline`.',
+            '**`!battle winner @user`** — Declare winner. Assigns Aha role, cross-posts to #announcements and #and-in-the-back. Shipping was handled at purchase.',
             '',
             '*Only one battle can be active at a time. Close or cancel before starting a new one.*',
         ].join('\n'),
