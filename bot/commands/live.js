@@ -57,8 +57,15 @@ async function handleLive(message) {
     // Start 4-hour reminder
     startReminder();
 
+    // Auto-open queue if none exists (first stream or manual close)
+    let activeQueue = queues.getActiveQueue.get();
+    if (!activeQueue) {
+        const queueResult = queues.createQueue.run();
+        activeQueue = queues.getActiveQueue.get();
+        await message.channel.send(`📋 No queue was open — auto-opened queue #${activeQueue.id}`);
+    }
+
     // Post pre-order summary if queue has entries (but keep it open)
-    const activeQueue = queues.getActiveQueue.get();
     if (activeQueue) {
         const entries = queues.getEntries.all(activeQueue.id);
         const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
