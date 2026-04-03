@@ -147,13 +147,12 @@ while read oldrev newrev refname; do
     chown -R www-data:www-data "$DEPLOY_DIR"
 
     # Notify #dev-log: deployment complete
-    DIFF_STAT=$(git diff --stat "$oldrev" "$newrev" -- bot/ | tail -1 || echo "")
+    FILE_COUNT=$(git diff --name-only "$oldrev" "$newrev" 2>/dev/null | wc -l | tr -d ' ')
     node "$DEPLOY_DIR/bot/notify-deploy.js" \
         --status=success \
         --branch="$branch" \
         --env="$ENV_NAME" \
-        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG}${DIFF_STAT:+
-${DIFF_STAT}}" 2>/dev/null || true
+        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG} (${FILE_COUNT} files)" 2>/dev/null || true
 
     echo "============================================"
     echo "Deployed $branch to $ENV_NAME successfully!"
