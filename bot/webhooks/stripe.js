@@ -16,6 +16,7 @@ import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole
 import { addToQueue } from '../commands/queue.js';
 import { addLivestreamBuyer } from '../commands/live.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
+import { addRevenue } from '../community-goals.js';
 
 /**
  * Process a completed checkout session.
@@ -127,6 +128,12 @@ async function handleCheckoutCompleted(session) {
 
     // Check if this payment is for a card sale
     await checkCardSalePayment(session, discordUserId);
+
+    // Track revenue toward community goals (shipping excluded)
+    const productRevenue = session.amount_subtotal || session.amount_total || 0;
+    if (productRevenue > 0) {
+        await addRevenue(productRevenue);
+    }
 }
 
 /**

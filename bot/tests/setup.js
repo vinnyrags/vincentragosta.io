@@ -103,6 +103,16 @@ export function createTestDb() {
             UNIQUE(race_id, discord_user_id)
         );
 
+        CREATE TABLE IF NOT EXISTS community_goals (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            cycle INTEGER DEFAULT 1,
+            cycle_revenue INTEGER DEFAULT 0,
+            lifetime_revenue INTEGER DEFAULT 0,
+            channel_message_id TEXT
+        );
+
+        INSERT OR IGNORE INTO community_goals (id) VALUES (1);
+
         CREATE TABLE IF NOT EXISTS card_listings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             message_id TEXT,
@@ -181,6 +191,12 @@ export function buildStmts(db) {
             markSold: db.prepare(`UPDATE card_listings SET status = 'sold', sold_at = datetime('now') WHERE id = ?`),
             markExpired: db.prepare(`UPDATE card_listings SET status = 'expired' WHERE id = ?`),
             relistAsActive: db.prepare(`UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?`),
+        },
+        goals: {
+            get: db.prepare(`SELECT * FROM community_goals WHERE id = 1`),
+            addRevenue: db.prepare(`UPDATE community_goals SET cycle_revenue = cycle_revenue + ?, lifetime_revenue = lifetime_revenue + ? WHERE id = 1`),
+            resetCycle: db.prepare(`UPDATE community_goals SET cycle = cycle + 1, cycle_revenue = cycle_revenue - ? WHERE id = 1`),
+            setMessageId: db.prepare(`UPDATE community_goals SET channel_message_id = ? WHERE id = 1`),
         },
         db,
     };

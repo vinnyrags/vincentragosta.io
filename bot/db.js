@@ -112,6 +112,16 @@ db.exec(`
         linked_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS community_goals (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        cycle INTEGER DEFAULT 1,
+        cycle_revenue INTEGER DEFAULT 0,
+        lifetime_revenue INTEGER DEFAULT 0,
+        channel_message_id TEXT
+    );
+
+    INSERT OR IGNORE INTO community_goals (id) VALUES (1);
+
     CREATE TABLE IF NOT EXISTS card_listings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         message_id TEXT,
@@ -396,6 +406,32 @@ const cardListingStmts = {
     `),
 };
 
+// =========================================================================
+// Community Goals
+// =========================================================================
+
+const goalStmts = {
+    get: db.prepare(`SELECT * FROM community_goals WHERE id = 1`),
+
+    addRevenue: db.prepare(`
+        UPDATE community_goals
+        SET cycle_revenue = cycle_revenue + ?,
+            lifetime_revenue = lifetime_revenue + ?
+        WHERE id = 1
+    `),
+
+    resetCycle: db.prepare(`
+        UPDATE community_goals
+        SET cycle = cycle + 1,
+            cycle_revenue = cycle_revenue - ?
+        WHERE id = 1
+    `),
+
+    setMessageId: db.prepare(`
+        UPDATE community_goals SET channel_message_id = ? WHERE id = 1
+    `),
+};
+
 export {
     db,
     stmts as purchases,
@@ -404,4 +440,5 @@ export {
     queueStmts as queues,
     livestreamStmts as livestream,
     cardListingStmts as cardListings,
+    goalStmts as goals,
 };

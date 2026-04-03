@@ -33,6 +33,7 @@ import { handleShipping } from './commands/shipping.js';
 import { handleHype } from './commands/hype.js';
 import { handleDroppedOff } from './commands/dropped-off.js';
 import { syncBotCommands } from './sync-bot-commands.js';
+import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
 
 // =========================================================================
@@ -113,6 +114,9 @@ client.once('ready', async () => {
 
     // Sync #bot-commands reference
     await syncBotCommands();
+
+    // Initialize community goals pinned message
+    await initCommunityGoals();
 });
 
 // =========================================================================
