@@ -54,7 +54,6 @@ async function pullToWordPress() {
         timeout: 120000,
         env: {
             ...process.env,
-            // Set marker flags for clean + publish
             PUBLISH: '1',
             CLEAN: '1',
         },
@@ -63,7 +62,7 @@ async function pullToWordPress() {
 }
 
 /**
- * Parse sync output for a summary line.
+ * Parse sync output for a summary line (e.g., "2 created, 11 updated, 0 skipped").
  */
 function parseSummary(output) {
     const doneMatch = output.match(/Done:\s*(.+)/);
@@ -71,11 +70,34 @@ function parseSummary(output) {
 }
 
 /**
- * Parse new products for alerts.
+ * Parse new products from push-products.js output (Sheets → Stripe).
+ * Captures name, price, and category from "Created:" lines.
+ *
+ * Example: "  Created: Pokemon Astral Radiance ($10.99) [pokemon, ENG, stock:12]"
  */
-function parseNewProducts(output) {
+function parsePushNewProducts(output) {
     const products = [];
-    const regex = /Created(?: \(published\))?: (.+?) (?:\(ID \d+\) )?\[(\w+)/g;
+    const regex = /^\s*Created:\s+(.+?)\s+\(\$(\d+\.\d{2})\)\s+\[(\w+)/gm;
+    let match;
+    while ((match = regex.exec(output)) !== null) {
+        products.push({
+            name: match[1],
+            price: Math.round(parseFloat(match[2]) * 100),
+            category: match[3],
+        });
+    }
+    return products;
+}
+
+/**
+ * Parse new products from pull-products.php output (Stripe → WordPress).
+ * Captures name and category from "Created (published):" lines.
+ *
+ * Example: "  Created (published): Pokemon Lost Origin (ID 595) [pokemon, ENG, stock:7]"
+ */
+function parsePullNewProducts(output) {
+    const products = [];
+    const regex = /Created\s*\(published\):\s+(.+?)\s+\(ID \d+\)\s+\[(\w+)/g;
     let match;
     while ((match = regex.exec(output)) !== null) {
         products.push({ name: match[1], category: match[2] });
@@ -108,6 +130,7 @@ async function syncFull(message) {
         // Step 1: Sheets → Stripe
         const pushOutput = await pushToStripe(true);
         const pushSummary = parseSummary(pushOutput);
+        const pushNewProducts = parsePushNewProducts(pushOutput);
 
         await message.channel.send(
             `✅ **Sheets → Stripe** complete${pushSummary ? `: ${pushSummary}` : ''}`
@@ -116,7 +139,6 @@ async function syncFull(message) {
         // Step 2: Stripe → WordPress
         const pullOutput = await pullToWordPress();
         const pullSummary = parseSummary(pullOutput);
-        const newProducts = parseNewProducts(pullOutput);
 
         await message.channel.send(
             `✅ **Stripe → WordPress** complete${pullSummary ? `: ${pullSummary}` : ''}`
@@ -128,15 +150,14 @@ async function syncFull(message) {
         if (pullSummary) lines.push(`**Stripe → WordPress:** ${pullSummary}`);
         await sendToChannel('OPS', lines.join('\n'));
 
-        // Send new product alerts
-        if (newProducts.length > 0) {
-            for (const product of newProducts) {
-                await alertNewProducts([{
-                    name: product.name,
-                    category: product.category,
-                    shop_url: config.SHOP_URL,
-                }]);
-            }
+        // Alert new products (use push data for price, batch the call)
+        if (pushNewProducts.length > 0) {
+            await alertNewProducts(pushNewProducts.map((p) => ({
+                name: p.name,
+                price: p.price,
+                category: p.category,
+                shop_url: config.SHOP_URL,
+            })));
         }
     } catch (e) {
         console.error('Product sync failed:', e.message);
@@ -153,7 +174,7 @@ async function syncStripeToWordPress(message) {
     try {
         const pullOutput = await pullToWordPress();
         const pullSummary = parseSummary(pullOutput);
-        const newProducts = parseNewProducts(pullOutput);
+        const newProducts = parsePullNewProducts(pullOutput);
 
         await message.channel.send(
             `✅ **Stripe → WordPress** complete${pullSummary ? `: ${pullSummary}` : ''}`
@@ -161,14 +182,13 @@ async function syncStripeToWordPress(message) {
 
         await sendToChannel('OPS', `📦 **Product Sync Complete**\n\n**Stripe → WordPress:** ${pullSummary || 'done'}`);
 
+        // Alert new products (no price data from pull output, batch the call)
         if (newProducts.length > 0) {
-            for (const product of newProducts) {
-                await alertNewProducts([{
-                    name: product.name,
-                    category: product.category,
-                    shop_url: config.SHOP_URL,
-                }]);
-            }
+            await alertNewProducts(newProducts.map((p) => ({
+                name: p.name,
+                category: p.category,
+                shop_url: config.SHOP_URL,
+            })));
         }
     } catch (e) {
         console.error('Stripe → WordPress sync failed:', e.message);
@@ -176,4 +196,4 @@ async function syncStripeToWordPress(message) {
     }
 }
 
-export { handleSync };
+export { handleSync, parseSummary, parsePushNewProducts, parsePullNewProducts };
