@@ -27,7 +27,8 @@
     "wpackagist-plugin/relevanssi": "^4.26",
     "vincentragosta/mythus": "dev-main",
     "vincentragosta/ix": "dev-main",
-    "wpackagist-plugin/instagram-feed": "^6.10"
+    "wpackagist-plugin/instagram-feed": "^6.10",
+    "wpackagist-plugin/wordpress-importer": "^0.9"
   },
   "extra": {
     "wordpress-install-dir": "wp",
