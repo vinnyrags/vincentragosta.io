@@ -160,6 +160,7 @@ db.exec(`
         stripe_session_id TEXT,
         buyer_discord_id TEXT,
         status TEXT DEFAULT 'active',
+        purchase_count INTEGER DEFAULT 0,
         created_at TEXT DEFAULT (datetime('now')),
         sold_at TEXT
     );
@@ -205,6 +206,13 @@ db.exec(`
         created_at TEXT DEFAULT (datetime('now'))
     );
 `);
+
+// Add purchase_count column to card_listings if it doesn't exist (v4)
+try {
+    db.exec(`ALTER TABLE card_listings ADD COLUMN purchase_count INTEGER DEFAULT 0`);
+} catch {
+    // Column already exists — ignore
+}
 
 // Add stripe_session_id column to shipping_payments if it doesn't exist (v4)
 try {
@@ -553,6 +561,14 @@ const cardListingStmts = {
 
     relistAsActive: db.prepare(`
         UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?
+    `),
+
+    getByStatus: db.prepare(`
+        SELECT * FROM card_listings WHERE status = ? ORDER BY created_at DESC LIMIT 1
+    `),
+
+    incrementPurchaseCount: db.prepare(`
+        UPDATE card_listings SET purchase_count = purchase_count + 1 WHERE id = ?
     `),
 };
 

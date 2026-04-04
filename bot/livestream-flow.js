@@ -47,6 +47,8 @@ const messages = [
             'CARD SALES:',
             '!sell @buyer "Card Name" 25.00        → Reserve for a viewer (15-min expiry)',
             '!list "Card Name" 25.00               → List for open purchase',
+            '!pull "Pull Box" 3.00                 → Open pull box (unlimited buyers)',
+            '!pull close                           → Close pull box, show revenue',
             '',
             'COUPON / FLASH DEAL:',
             '!coupon STREAM10                      → Activate promo code (shows field on checkout)',

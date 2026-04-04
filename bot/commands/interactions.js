@@ -46,6 +46,11 @@ async function handleButtonInteraction(interaction) {
         return handleHypeBuy(interaction, priceId);
     }
 
+    if (customId.startsWith('pull-buy-')) {
+        const listingId = customId.replace('pull-buy-', '');
+        return handlePullBuy(interaction, Number(listingId));
+    }
+
     if (customId.startsWith('battle-buy-')) {
         const battleId = customId.replace('battle-buy-', '');
         return handleBattleBuy(interaction, Number(battleId));
@@ -75,6 +80,8 @@ async function handleModalSubmit(interaction) {
 
     if (type === 'card') {
         return handleCardBuy(interaction, Number(id), true);
+    } else if (type === 'pull') {
+        return handlePullBuy(interaction, Number(id), true);
     } else if (type === 'hype') {
         return handleHypeBuy(interaction, id, true);
     } else if (type === 'battle') {
@@ -196,6 +203,36 @@ async function handleBattleBuy(interaction, battleId, isDeferred = false) {
 
     await interaction.editReply({
         content: `⚔️ **${battle.product_name}** Pack Battle\n${shippingNote}\n\n🛒 **[Buy Your Pack](${checkoutUrl})**`,
+    });
+}
+
+/**
+ * Pull box button handler — same as card buy but allows 'pull' status.
+ */
+async function handlePullBuy(interaction, listingId, isDeferred = false) {
+    const discordUserId = interaction.user.id;
+
+    const link = purchases.getEmailByDiscordId.get(discordUserId);
+    if (!link && !isDeferred) {
+        return showEmailModal(interaction, `pull-${listingId}`);
+    }
+
+    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+
+    const listing = cardListings.getById.get(listingId);
+    if (!listing || listing.status !== 'pull') {
+        return interaction.editReply({ content: 'This pull box is no longer available.' });
+    }
+
+    const covered = hasShippingCoveredByDiscordId(discordUserId);
+    const checkoutUrl = buildCheckoutUrl(`card-shop/checkout/${listingId}`, discordUserId);
+
+    const shippingNote = covered
+        ? '✅ Shipping already covered this period!'
+        : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
+
+    await interaction.editReply({
+        content: `🎰 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Buy Pull](${checkoutUrl})**`,
     });
 }
 

@@ -18,6 +18,7 @@ import { addLivestreamBuyer } from '../commands/live.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
 import { recordShipping } from '../shipping.js';
+import { recordPullPurchase } from '../commands/pull.js';
 
 /**
  * Process a completed checkout session.
@@ -289,6 +290,13 @@ async function checkCardSalePayment(session, discordUserId) {
 
     const listing = cardListings.getById.get(listingId);
     if (!listing || listing.status === 'sold') return;
+
+    // Pull boxes stay open — increment counter instead of marking sold
+    if (listing.status === 'pull') {
+        await recordPullPurchase(listingId);
+        console.log(`Pull box #${listingId} purchase: ${listing.card_name} (${listing.purchase_count + 1} total)`);
+        return;
+    }
 
     cardListings.markSold.run(listingId);
 

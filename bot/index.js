@@ -45,6 +45,7 @@ import { handleShippingAudit } from './commands/shipping-audit.js';
 import { handleWaive } from './commands/waive.js';
 import { handleRefund } from './commands/refund.js';
 import { handleNous } from './commands/nous.js';
+import { handlePull } from './commands/pull.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -131,6 +132,9 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'nous':
                 await handleNous(message, args);
+                break;
+            case 'pull':
+                await handlePull(message, args);
                 break;
             default:
                 // Unknown command — silently ignore

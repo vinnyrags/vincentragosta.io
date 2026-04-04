@@ -197,7 +197,7 @@ app.get('/livestream/shipping/:sessionId', async (req, res) => {
 app.get('/card-shop/checkout/:listingId', async (req, res) => {
     const listing = cardListings.getById.get(Number(req.params.listingId));
 
-    if (!listing || (listing.status !== 'active' && listing.status !== 'reserved')) {
+    if (!listing || !['active', 'reserved', 'pull'].includes(listing.status)) {
         return res.status(404).send('This card is no longer available.');
     }
 
