@@ -70,6 +70,8 @@ const messages = [
             '',
             'AD-HOC:',
             '!shipping @user 10.00 [reason]        → Send a shipping checkout link',
+            '!waive @user                          → Waive shipping (pre-waive or refund)',
+            '!refund @user [amount] [reason]       → Refund most recent purchase',
             '!sold <message_id>                    → Mark a card listing as sold',
             '```',
             '',

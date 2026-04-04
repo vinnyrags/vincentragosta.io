@@ -30,7 +30,7 @@ async function handleCheckoutCompleted(session) {
         if (sessionId && email) {
             livestream.markShippingPaid.run(Number(sessionId), email);
             const amount = session.amount_total || 0;
-            recordShipping(email, session.metadata.discord_user_id || null, amount, 'livestream');
+            recordShipping(email, session.metadata.discord_user_id || null, amount, 'livestream', session.id);
             console.log(`Shipping paid: ${email} for session #${sessionId}`);
         }
         return;
@@ -40,7 +40,7 @@ async function handleCheckoutCompleted(session) {
     if (session.metadata?.source === 'ad-hoc-shipping') {
         const email = session.customer_details?.email;
         if (email) {
-            recordShipping(email, session.metadata.discord_user_id || null, session.amount_total || 0, 'ad-hoc');
+            recordShipping(email, session.metadata.discord_user_id || null, session.amount_total || 0, 'ad-hoc', session.id);
         }
         return;
     }
@@ -147,7 +147,7 @@ async function handleCheckoutCompleted(session) {
         || session.total_details?.amount_shipping
         || 0;
     if (shippingAmount > 0 && customerEmail) {
-        recordShipping(customerEmail, discordUserId, shippingAmount, 'checkout');
+        recordShipping(customerEmail, discordUserId, shippingAmount, 'checkout', session.id);
     }
 
     // Auto-flag international buyers from shipping address

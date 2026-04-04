@@ -101,6 +101,7 @@ export function createTestDb() {
             discord_user_id TEXT,
             amount INTEGER NOT NULL,
             source TEXT NOT NULL,
+            stripe_session_id TEXT DEFAULT NULL,
             created_at TEXT DEFAULT (datetime('now'))
         );
 
@@ -171,6 +172,8 @@ export function buildStmts(db) {
             getUnshipped: db.prepare(`SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NOT NULL`),
             getUnshippedNoDiscord: db.prepare(`SELECT * FROM purchases WHERE shipped_at IS NULL AND discord_user_id IS NULL`),
             markShipped: db.prepare(`UPDATE purchases SET shipped_at = datetime('now') WHERE shipped_at IS NULL`),
+            getRecentByDiscordId: db.prepare(`SELECT * FROM purchases WHERE discord_user_id = ? ORDER BY id DESC LIMIT 1`),
+            getBySessionId: db.prepare(`SELECT * FROM purchases WHERE stripe_session_id = ?`),
         },
         battles: {
             getNextBattleNumber: db.prepare(`SELECT COALESCE(MAX(battle_number), 0) + 1 as next FROM battles WHERE battle_number IS NOT NULL`),
@@ -243,9 +246,12 @@ export function buildStmts(db) {
             getExpired: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' AND ends_at IS NOT NULL AND ends_at <= datetime('now')`),
         },
         shipping: {
-            record: db.prepare(`INSERT INTO shipping_payments (customer_email, discord_user_id, amount, source) VALUES (?, ?, ?, ?)`),
+            record: db.prepare(`INSERT INTO shipping_payments (customer_email, discord_user_id, amount, source, stripe_session_id) VALUES (?, ?, ?, ?, ?)`),
             hasShippingThisWeek: db.prepare(`SELECT 1 FROM shipping_payments WHERE customer_email = ? AND created_at >= datetime('now', 'weekday 1', '-7 days') LIMIT 1`),
             hasShippingThisMonth: db.prepare(`SELECT 1 FROM shipping_payments WHERE customer_email = ? AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now') LIMIT 1`),
+            getByEmailThisWeek: db.prepare(`SELECT * FROM shipping_payments WHERE customer_email = ? AND created_at >= datetime('now', 'weekday 1', '-7 days') ORDER BY created_at DESC LIMIT 1`),
+            getByEmailThisMonth: db.prepare(`SELECT * FROM shipping_payments WHERE customer_email = ? AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now') ORDER BY created_at DESC LIMIT 1`),
+            deleteById: db.prepare(`DELETE FROM shipping_payments WHERE id = ?`),
             getThisWeek: db.prepare(`SELECT * FROM shipping_payments WHERE created_at >= datetime('now', 'weekday 1', '-7 days')`),
             getThisMonth: db.prepare(`SELECT * FROM shipping_payments WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')`),
         },

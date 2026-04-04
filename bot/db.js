@@ -206,6 +206,13 @@ db.exec(`
     );
 `);
 
+// Add stripe_session_id column to shipping_payments if it doesn't exist (v4)
+try {
+    db.exec(`ALTER TABLE shipping_payments ADD COLUMN stripe_session_id TEXT DEFAULT NULL`);
+} catch {
+    // Column already exists — ignore
+}
+
 // =========================================================================
 // Purchases
 // =========================================================================
@@ -248,6 +255,14 @@ const stmts = {
 
     markShipped: db.prepare(`
         UPDATE purchases SET shipped_at = datetime('now') WHERE shipped_at IS NULL
+    `),
+
+    getRecentByDiscordId: db.prepare(`
+        SELECT * FROM purchases WHERE discord_user_id = ? ORDER BY id DESC LIMIT 1
+    `),
+
+    getBySessionId: db.prepare(`
+        SELECT * FROM purchases WHERE stripe_session_id = ?
     `),
 };
 
@@ -429,8 +444,8 @@ const livestreamStmts = {
 
 const shippingStmts = {
     record: db.prepare(`
-        INSERT INTO shipping_payments (customer_email, discord_user_id, amount, source)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO shipping_payments (customer_email, discord_user_id, amount, source, stripe_session_id)
+        VALUES (?, ?, ?, ?, ?)
     `),
 
     hasShippingThisWeek: db.prepare(`
@@ -445,6 +460,24 @@ const shippingStmts = {
         WHERE customer_email = ?
           AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')
         LIMIT 1
+    `),
+
+    getByEmailThisWeek: db.prepare(`
+        SELECT * FROM shipping_payments
+        WHERE customer_email = ?
+          AND created_at >= datetime('now', 'weekday 1', '-7 days')
+        ORDER BY created_at DESC LIMIT 1
+    `),
+
+    getByEmailThisMonth: db.prepare(`
+        SELECT * FROM shipping_payments
+        WHERE customer_email = ?
+          AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')
+        ORDER BY created_at DESC LIMIT 1
+    `),
+
+    deleteById: db.prepare(`
+        DELETE FROM shipping_payments WHERE id = ?
     `),
 
     getThisWeek: db.prepare(`

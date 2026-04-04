@@ -19,7 +19,7 @@ beforeEach(() => {
 
 describe('shipping_payments table', () => {
     it('records a shipping payment', () => {
-        stmts.shipping.record.run('user@test.com', 'discord123', 1000, 'checkout');
+        stmts.shipping.record.run('user@test.com', 'discord123', 1000, 'checkout', null);
 
         const records = stmts.shipping.getThisWeek.all();
         expect(records).toHaveLength(1);
@@ -29,16 +29,16 @@ describe('shipping_payments table', () => {
     });
 
     it('records multiple payments from different sources', () => {
-        stmts.shipping.record.run('user1@test.com', 'discord1', 1000, 'checkout');
-        stmts.shipping.record.run('user2@test.com', 'discord2', 2500, 'livestream');
-        stmts.shipping.record.run('user3@test.com', null, 1000, 'ad-hoc');
+        stmts.shipping.record.run('user1@test.com', 'discord1', 1000, 'checkout', null);
+        stmts.shipping.record.run('user2@test.com', 'discord2', 2500, 'livestream', null);
+        stmts.shipping.record.run('user3@test.com', null, 1000, 'ad-hoc', null);
 
         const records = stmts.shipping.getThisWeek.all();
         expect(records).toHaveLength(3);
     });
 
     it('allows null discord_user_id', () => {
-        stmts.shipping.record.run('user@test.com', null, 1000, 'checkout');
+        stmts.shipping.record.run('user@test.com', null, 1000, 'checkout', null);
 
         const records = stmts.shipping.getThisWeek.all();
         expect(records).toHaveLength(1);
@@ -57,14 +57,14 @@ describe('hasShippingThisWeek', () => {
     });
 
     it('returns truthy after shipping is recorded', () => {
-        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout');
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', null);
 
         const result = stmts.shipping.hasShippingThisWeek.get('user@test.com');
         expect(result).toBeTruthy();
     });
 
     it('is email-specific — different emails are independent', () => {
-        stmts.shipping.record.run('user1@test.com', 'discord1', 1000, 'checkout');
+        stmts.shipping.record.run('user1@test.com', 'discord1', 1000, 'checkout', null);
 
         expect(stmts.shipping.hasShippingThisWeek.get('user1@test.com')).toBeTruthy();
         expect(stmts.shipping.hasShippingThisWeek.get('user2@test.com')).toBeUndefined();
@@ -78,7 +78,7 @@ describe('hasShippingThisMonth', () => {
     });
 
     it('returns truthy after shipping is recorded', () => {
-        stmts.shipping.record.run('user@test.com', 'discord1', 2500, 'livestream');
+        stmts.shipping.record.run('user@test.com', 'discord1', 2500, 'livestream', null);
 
         const result = stmts.shipping.hasShippingThisMonth.get('user@test.com');
         expect(result).toBeTruthy();
@@ -150,14 +150,14 @@ describe('discord_links country management', () => {
 
 describe('double-charge prevention', () => {
     it('domestic buyer who paid via checkout is covered for the week', () => {
-        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout');
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', null);
 
         // Later this week, they buy via Discord button — should be covered
         expect(stmts.shipping.hasShippingThisWeek.get('user@test.com')).toBeTruthy();
     });
 
     it('domestic buyer who paid via livestream is covered for the week', () => {
-        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'livestream');
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'livestream', null);
 
         expect(stmts.shipping.hasShippingThisWeek.get('user@test.com')).toBeTruthy();
     });
@@ -165,14 +165,14 @@ describe('double-charge prevention', () => {
     it('international buyer who paid via checkout is covered for the month', () => {
         stmts.purchases.linkDiscord.run('discord1', 'user@test.com');
         stmts.discordLinks.setCountry.run('CA', 'discord1');
-        stmts.shipping.record.run('user@test.com', 'discord1', 2500, 'checkout');
+        stmts.shipping.record.run('user@test.com', 'discord1', 2500, 'checkout', null);
 
         expect(stmts.shipping.hasShippingThisMonth.get('user@test.com')).toBeTruthy();
     });
 
     it('different payment sources all count toward coverage', () => {
         // Checkout payment
-        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout');
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', null);
 
         // Should still be covered even though it was from a checkout, not livestream
         expect(stmts.shipping.hasShippingThisWeek.get('user@test.com')).toBeTruthy();
@@ -194,7 +194,7 @@ describe('livestream + unified shipping integration', () => {
         stmts.livestream.markShippingPaid.run(session.id, 'user1@test.com');
 
         // Also record in unified shipping_payments
-        stmts.shipping.record.run('user1@test.com', 'user1', 1000, 'livestream');
+        stmts.shipping.record.run('user1@test.com', 'user1', 1000, 'livestream', null);
 
         // Both tables should reflect payment
         const livestreamPaid = stmts.livestream.hasShippingThisWeek.get('user1@test.com');
@@ -254,5 +254,138 @@ describe('buildShippingOptions logic', () => {
         // And getCountryByEmail should also work
         const byEmail = stmts.discordLinks.getCountryByEmail.get('user@test.com');
         expect(byEmail.country).toBe('CA');
+    });
+});
+
+// =========================================================================
+// stripe_session_id on shipping_payments
+// =========================================================================
+
+describe('shipping_payments stripe_session_id', () => {
+    it('records stripe_session_id when provided', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', 'cs_test_123');
+
+        const record = stmts.shipping.getByEmailThisWeek.get('user@test.com');
+        expect(record.stripe_session_id).toBe('cs_test_123');
+    });
+
+    it('stores null stripe_session_id when not provided', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', null);
+
+        const record = stmts.shipping.getByEmailThisWeek.get('user@test.com');
+        expect(record.stripe_session_id).toBeNull();
+    });
+});
+
+// =========================================================================
+// getByEmailThisWeek / getByEmailThisMonth
+// =========================================================================
+
+describe('getByEmailThisWeek', () => {
+    it('returns the full record', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', 'cs_test_456');
+
+        const record = stmts.shipping.getByEmailThisWeek.get('user@test.com');
+        expect(record).toBeDefined();
+        expect(record.customer_email).toBe('user@test.com');
+        expect(record.amount).toBe(1000);
+        expect(record.stripe_session_id).toBe('cs_test_456');
+    });
+
+    it('returns undefined when no record exists', () => {
+        const record = stmts.shipping.getByEmailThisWeek.get('nobody@test.com');
+        expect(record).toBeUndefined();
+    });
+});
+
+describe('getByEmailThisMonth', () => {
+    it('returns the full record', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 2500, 'checkout', 'cs_test_789');
+
+        const record = stmts.shipping.getByEmailThisMonth.get('user@test.com');
+        expect(record).toBeDefined();
+        expect(record.amount).toBe(2500);
+        expect(record.stripe_session_id).toBe('cs_test_789');
+    });
+});
+
+// =========================================================================
+// deleteById
+// =========================================================================
+
+describe('deleteById', () => {
+    it('removes a shipping record', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 1000, 'checkout', null);
+
+        const record = stmts.shipping.getByEmailThisWeek.get('user@test.com');
+        expect(record).toBeDefined();
+
+        stmts.shipping.deleteById.run(record.id);
+
+        const after = stmts.shipping.getByEmailThisWeek.get('user@test.com');
+        expect(after).toBeUndefined();
+    });
+
+    it('does not affect other records', () => {
+        stmts.shipping.record.run('user1@test.com', 'discord1', 1000, 'checkout', null);
+        stmts.shipping.record.run('user2@test.com', 'discord2', 1000, 'checkout', null);
+
+        const record1 = stmts.shipping.getByEmailThisWeek.get('user1@test.com');
+        stmts.shipping.deleteById.run(record1.id);
+
+        expect(stmts.shipping.getByEmailThisWeek.get('user1@test.com')).toBeUndefined();
+        expect(stmts.shipping.getByEmailThisWeek.get('user2@test.com')).toBeDefined();
+    });
+});
+
+// =========================================================================
+// Waiver record (amount=0, source='waiver')
+// =========================================================================
+
+describe('waiver records', () => {
+    it('waiver with amount=0 counts as shipping covered', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 0, 'waiver', null);
+
+        // hasShippingThisWeek checks for ANY row, not amount > 0
+        expect(stmts.shipping.hasShippingThisWeek.get('user@test.com')).toBeTruthy();
+    });
+
+    it('waiver with amount=0 counts for monthly coverage', () => {
+        stmts.shipping.record.run('user@test.com', 'discord1', 0, 'waiver', null);
+
+        expect(stmts.shipping.hasShippingThisMonth.get('user@test.com')).toBeTruthy();
+    });
+});
+
+// =========================================================================
+// Purchase lookup statements
+// =========================================================================
+
+describe('purchase lookup', () => {
+    it('getRecentByDiscordId returns most recent purchase', () => {
+        stmts.purchases.insertPurchase.run('cs_1', 'discord1', 'user@test.com', 'Product A', 2000);
+        stmts.purchases.insertPurchase.run('cs_2', 'discord1', 'user@test.com', 'Product B', 3000);
+
+        const recent = stmts.purchases.getRecentByDiscordId.get('discord1');
+        expect(recent.stripe_session_id).toBe('cs_2');
+        expect(recent.product_name).toBe('Product B');
+    });
+
+    it('getRecentByDiscordId returns undefined for unknown user', () => {
+        const recent = stmts.purchases.getRecentByDiscordId.get('nonexistent');
+        expect(recent).toBeUndefined();
+    });
+
+    it('getBySessionId returns the matching purchase', () => {
+        stmts.purchases.insertPurchase.run('cs_abc', 'discord1', 'user@test.com', 'Product X', 5000);
+
+        const purchase = stmts.purchases.getBySessionId.get('cs_abc');
+        expect(purchase).toBeDefined();
+        expect(purchase.product_name).toBe('Product X');
+    });
+
+    it('getBySessionId returns undefined for unknown session', () => {
+        const purchase = stmts.purchases.getBySessionId.get('cs_nonexistent');
+        expect(purchase).toBeUndefined();
     });
 });

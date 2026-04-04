@@ -72,8 +72,22 @@ function hasShippingCoveredByDiscordId(discordUserId) {
 /**
  * Record a shipping payment in the unified shipping_payments table.
  */
-function recordShipping(email, discordUserId, amount, source) {
-    shipping.record.run(email, discordUserId || null, amount, source);
+function recordShipping(email, discordUserId, amount, source, stripeSessionId = null) {
+    shipping.record.run(email, discordUserId || null, amount, source, stripeSessionId || null);
+}
+
+/**
+ * Get the current period's shipping record for a buyer.
+ * Auto-detects domestic vs international based on email.
+ */
+function getShippingRecord(email) {
+    const intl = isInternationalByEmail(email);
+
+    if (intl) {
+        return shipping.getByEmailThisMonth.get(email) || null;
+    }
+
+    return shipping.getByEmailThisWeek.get(email) || null;
 }
 
 /**
@@ -147,6 +161,7 @@ export {
     hasShippingCovered,
     hasShippingCoveredByDiscordId,
     recordShipping,
+    getShippingRecord,
     formatShippingRate,
     getShippingLabel,
     buildShippingOptions,

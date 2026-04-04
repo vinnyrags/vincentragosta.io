@@ -688,7 +688,7 @@ describe('shipping scenarios during offline', () => {
         const s1 = stmts.livestream.getActiveSession.get();
         stmts.livestream.addBuyer.run(s1.id, 'repeat_buyer', 'repeat@example.com');
         stmts.livestream.markShippingPaid.run(s1.id, 'repeat@example.com');
-        stmts.shipping.record.run('repeat@example.com', 'repeat_buyer', 1000, 'livestream');
+        stmts.shipping.record.run('repeat@example.com', 'repeat_buyer', 1000, 'livestream', null);
         stmts.livestream.endSession.run(s1.id);
 
         // Session 2 — same buyer buys again

@@ -42,6 +42,8 @@ import { handleSync } from './commands/sync.js';
 import { handleCoupon } from './commands/coupon.js';
 import { handleIntl, handleIntlShip } from './commands/intl.js';
 import { handleShippingAudit } from './commands/shipping-audit.js';
+import { handleWaive } from './commands/waive.js';
+import { handleRefund } from './commands/refund.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 const PREFIX = '!';
@@ -119,6 +121,12 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'shipping-audit':
                 await handleShippingAudit(message, args);
+                break;
+            case 'waive':
+                await handleWaive(message, args);
+                break;
+            case 'refund':
+                await handleRefund(message, args);
                 break;
             default:
                 // Unknown command — silently ignore
