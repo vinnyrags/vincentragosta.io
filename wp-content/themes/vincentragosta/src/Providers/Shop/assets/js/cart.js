@@ -5,6 +5,8 @@
  * Listens for 'shop:add-to-cart' events from the products block view.js.
  */
 
+import { createModal } from '../../../Theme/assets/js/modal';
+
 const STORAGE_KEY = 'vincentragosta_cart';
 const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
 const LIVE_MODE_KEY = 'vincentragosta_live_mode';
@@ -58,64 +60,29 @@ const AgeGate = {
      * Show the age gate modal. Returns a promise that resolves
      * to true (verified) or false (declined).
      */
-    show() {
-        return new Promise((resolve) => {
-            const config = window.shopConfig || {};
-            const message = config.ageGateMessage || 'You must be 18 or older to view this content.';
+    async show() {
+        const config = window.shopConfig || {};
+        const message = config.ageGateMessage || 'You must be 18 or older to view this content.';
 
-            const overlay = document.createElement('div');
-            overlay.className = 'shop-age-gate';
-            overlay.setAttribute('role', 'dialog');
-            overlay.setAttribute('aria-modal', 'true');
-            overlay.setAttribute('aria-label', 'Age verification');
-            overlay.innerHTML = `
-                <div class="shop-age-gate__panel">
-                    <h2 class="shop-age-gate__title">Age Verification Required</h2>
-                    <p class="shop-age-gate__message">${message}</p>
-                    <div class="shop-age-gate__actions">
-                        <button class="shop-age-gate__confirm" data-age-confirm>I am 18 or older</button>
-                        <button class="shop-age-gate__decline" data-age-decline>Continue without mature content</button>
-                    </div>
-                </div>
-            `;
-
-            document.body.appendChild(overlay);
-
-            // Focus the confirm button
-            const confirmBtn = overlay.querySelector('[data-age-confirm]');
-            confirmBtn.focus();
-
-            overlay.addEventListener('click', (e) => {
-                if (e.target.closest('[data-age-confirm]')) {
-                    AgeGate.verify();
-                    overlay.remove();
-                    resolve(true);
-                }
-                if (e.target.closest('[data-age-decline]')) {
-                    overlay.remove();
-                    // Redirect to shop without the mature filter
-                    window.location.href = '/shop/';
-                    resolve(false);
-                }
-            });
-
-            // Trap focus inside the modal
-            overlay.addEventListener('keydown', (e) => {
-                if (e.key === 'Tab') {
-                    const focusable = overlay.querySelectorAll('button');
-                    const first = focusable[0];
-                    const last = focusable[focusable.length - 1];
-
-                    if (e.shiftKey && document.activeElement === first) {
-                        e.preventDefault();
-                        last.focus();
-                    } else if (!e.shiftKey && document.activeElement === last) {
-                        e.preventDefault();
-                        first.focus();
-                    }
-                }
-            });
+        const result = await createModal({
+            title: 'Age Verification Required',
+            message,
+            buttons: [
+                { label: 'I am 18 or older', value: 'confirm', primary: true },
+                { label: 'Continue without mature content', value: 'decline' },
+            ],
+            ariaLabel: 'Age verification',
+            className: 'modal--age-gate',
         });
+
+        if (result === 'confirm') {
+            AgeGate.verify();
+            return true;
+        }
+
+        // Declined or dismissed — redirect to shop without the mature filter
+        window.location.href = (window.shopConfig || {}).shopUrl || '/shop/';
+        return false;
     },
 
     /**
@@ -450,7 +417,7 @@ const ThankYouPage = {
             <p class="is-style-muted">Your payment was successful. You'll receive a confirmation email from Stripe shortly.</p>
             <div class="wp-block-buttons">
                 <div class="wp-block-button">
-                    <a class="wp-block-button__link wp-element-button" href="/shop/">Back to Shop</a>
+                    <a class="wp-block-button__link wp-element-button" href="${(window.shopConfig || {}).shopUrl || '/shop/'}">Back to Shop</a>
                 </div>
             </div>
         `;

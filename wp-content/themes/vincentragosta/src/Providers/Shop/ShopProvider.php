@@ -103,10 +103,14 @@ class ShopProvider extends Provider
             ? (get_field('mature_category_slug', 'option') ?: 'mature')
             : 'mature';
 
+        $shopPageId  = function_exists('get_field') ? get_field('shop_page', 'option') : 0;
+        $shopPageUrl = $shopPageId ? get_permalink((int) $shopPageId) : '/shop/';
+
         wp_localize_script('vincentragosta-shop-cart', 'shopConfig', [
             'stripeKey'           => defined('STRIPE_PUBLISHABLE_KEY') ? STRIPE_PUBLISHABLE_KEY : '',
             'restUrl'             => rest_url('shop/v1/'),
             'nonce'               => wp_create_nonce('wp_rest'),
+            'shopUrl'             => $shopPageUrl ?: '/shop/',
             'ageGateEnabled'      => (bool) $ageGateEnabled,
             'ageGateMessage'      => $ageGateMessage,
             'matureCategorySlug'  => $matureCategorySlug,
