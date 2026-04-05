@@ -456,3 +456,129 @@ describe('WordPress shop email capture: second purchase skips shipping', () => {
         expect(covered).toBeUndefined();
     });
 });
+
+// =========================================================================
+// Shipping lookup response — cart footer badge labelling
+// =========================================================================
+
+describe('shipping lookup response (cart footer badge)', () => {
+    /**
+     * Replicate what GET /shipping/lookup does for a given email.
+     * Returns the same shape as the endpoint response.
+     */
+    function simulateLookup(email) {
+        const link = stmts.purchases.getDiscordIdByEmail.get(email);
+        const known = !!link;
+
+        const countryRow = link ? stmts.discordLinks.getCountry.get(link.discord_user_id) : null;
+        const countryKnown = countryRow?.country != null;
+
+        // isInternationalByEmail logic
+        const intlRow = link ? stmts.discordLinks.getCountryByEmail.get(email) : null;
+        const international = intlRow?.country != null && intlRow.country !== 'US';
+
+        // hasShippingCovered logic (simplified — domestic = week, international = month)
+        const covered = international
+            ? !!stmts.shipping.hasShippingThisMonth.get(email)
+            : !!stmts.shipping.hasShippingThisWeek.get(email);
+
+        const rate = covered ? 0 : (international ? 2500 : 1000);
+        const label = international ? 'International Shipping' : 'Standard Shipping (US)';
+
+        return { email, known, covered, international, countryKnown, rate, label };
+    }
+
+    it('brand new email: countryKnown=false, badge shows both rates', () => {
+        // Email never seen before — not linked, no country, not covered
+        const result = simulateLookup('newbuyer@test.com');
+
+        expect(result.known).toBe(false);
+        expect(result.countryKnown).toBe(false);
+        expect(result.covered).toBe(false);
+        expect(result.international).toBe(false);
+        expect(result.rate).toBe(1000); // default rate, but badge should show BOTH
+        // Cart badge logic: countryKnown=false → "Shipping: $10 US / $25 International"
+    });
+
+    it('linked email, no country flag: countryKnown=false, badge shows both rates', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'linked@test.com');
+        // No country set — getCountry returns null
+
+        const result = simulateLookup('linked@test.com');
+
+        expect(result.known).toBe(true);
+        expect(result.countryKnown).toBe(false);
+        expect(result.covered).toBe(false);
+        // Cart badge logic: countryKnown=false → "Shipping: $10 US / $25 International"
+    });
+
+    it('linked email, flagged US: countryKnown=true, badge shows US rate', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'us@test.com');
+        stmts.discordLinks.setCountry.run('US', 'discord1');
+
+        const result = simulateLookup('us@test.com');
+
+        expect(result.known).toBe(true);
+        expect(result.countryKnown).toBe(true);
+        expect(result.international).toBe(false);
+        expect(result.rate).toBe(1000);
+        expect(result.label).toBe('Standard Shipping (US)');
+        // Cart badge logic: countryKnown=true, not intl → "US shipping: $10.00"
+    });
+
+    it('linked email, flagged CA: countryKnown=true, badge shows international rate', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'ca@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+
+        const result = simulateLookup('ca@test.com');
+
+        expect(result.known).toBe(true);
+        expect(result.countryKnown).toBe(true);
+        expect(result.international).toBe(true);
+        expect(result.rate).toBe(2500);
+        expect(result.label).toBe('International Shipping');
+        // Cart badge logic: countryKnown=true, intl → "International shipping: $25.00"
+    });
+
+    it('covered domestic buyer: badge shows "covered this week"', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'covered@test.com');
+        stmts.discordLinks.setCountry.run('US', 'discord1');
+        stmts.shipping.record.run('covered@test.com', 'discord1', 1000, 'checkout', 'cs_1');
+
+        const result = simulateLookup('covered@test.com');
+
+        expect(result.covered).toBe(true);
+        expect(result.international).toBe(false);
+        expect(result.rate).toBe(0);
+        // Cart badge logic: covered + not intl → "Shipping covered this week!"
+    });
+
+    it('covered international buyer: badge shows "covered this month"', () => {
+        stmts.purchases.linkDiscord.run('discord1', 'coveredintl@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+        stmts.shipping.record.run('coveredintl@test.com', 'discord1', 2500, 'checkout', 'cs_1');
+
+        const result = simulateLookup('coveredintl@test.com');
+
+        expect(result.covered).toBe(true);
+        expect(result.international).toBe(true);
+        expect(result.rate).toBe(0);
+        // Cart badge logic: covered + intl → "Shipping covered this month!"
+    });
+
+    it('first purchase after auto-flag: countryKnown becomes true on subsequent lookup', () => {
+        // Simulate: first purchase with unknown country
+        const before = simulateLookup('autoflag@test.com');
+        expect(before.countryKnown).toBe(false);
+
+        // Webhook auto-flags after first purchase
+        stmts.purchases.linkDiscord.run('discord1', 'autoflag@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+
+        // Second lookup — now country is known
+        const after = simulateLookup('autoflag@test.com');
+        expect(after.countryKnown).toBe(true);
+        expect(after.international).toBe(true);
+        expect(after.rate).toBe(2500);
+    });
+});
