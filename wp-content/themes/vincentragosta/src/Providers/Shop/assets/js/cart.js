@@ -506,14 +506,19 @@ const CartCheckout = {
         // Step 2: Look up shipping status if we have an email
         let shippingCovered = false;
         let international = CountryToggle.isInternational();
+        let countryKnown = true;
 
         if (email) {
             const lookup = await ShippingLookup.lookup(email);
             if (lookup) {
                 shippingCovered = lookup.covered;
                 international = lookup.international;
+                countryKnown = lookup.countryKnown ?? false;
             }
             CartDrawer.renderShippingStatus();
+        } else {
+            // No email — country is unknown, offer both options
+            countryKnown = false;
         }
 
         const checkoutBtn = document.querySelector('[data-cart-checkout]');
@@ -537,6 +542,7 @@ const CartCheckout = {
                     live: sessionStorage.getItem(LIVE_MODE_KEY) === '1',
                     live_token: sessionStorage.getItem(LIVE_TOKEN_KEY) || '',
                     international,
+                    country_known: countryKnown,
                     email: email || '',
                     shipping_covered: shippingCovered,
                 }),

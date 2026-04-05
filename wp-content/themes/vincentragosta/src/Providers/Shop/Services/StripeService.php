@@ -49,6 +49,7 @@ class StripeService
         bool $skipShipping = false,
         bool $international = false,
         ?string $customerEmail = null,
+        bool $countryKnown = true,
     ): Session {
         $params = [
             'mode'       => 'payment',
@@ -57,18 +58,32 @@ class StripeService
             'success_url' => $successUrl,
             'cancel_url'  => $cancelUrl,
             'metadata'    => $metadata,
-            'custom_fields' => [
-                [
-                    'key'      => 'discord_username',
-                    'label'    => ['type' => 'custom', 'custom' => 'Discord username for role upgrades (optional)'],
-                    'type'     => 'text',
-                    'optional' => true,
-                ],
-            ],
         ];
 
         if (!$skipShipping) {
-            if ($international) {
+            if (!$countryKnown) {
+                // Unknown buyer — present both options, buyer self-selects.
+                // Webhook auto-flags their country from shipping address for future purchases.
+                $params['shipping_address_collection'] = [
+                    'allowed_countries' => ['US', 'CA'],
+                ];
+                $params['shipping_options'] = [
+                    [
+                        'shipping_rate_data' => [
+                            'type'         => 'fixed_amount',
+                            'fixed_amount' => ['amount' => 1000, 'currency' => 'usd'],
+                            'display_name' => 'Standard Shipping (US)',
+                        ],
+                    ],
+                    [
+                        'shipping_rate_data' => [
+                            'type'         => 'fixed_amount',
+                            'fixed_amount' => ['amount' => 2500, 'currency' => 'usd'],
+                            'display_name' => 'International Shipping',
+                        ],
+                    ],
+                ];
+            } elseif ($international) {
                 $params['shipping_address_collection'] = [
                     'allowed_countries' => ['CA'],
                 ];
@@ -76,10 +91,7 @@ class StripeService
                     [
                         'shipping_rate_data' => [
                             'type'         => 'fixed_amount',
-                            'fixed_amount' => [
-                                'amount'   => 2500,
-                                'currency' => 'usd',
-                            ],
+                            'fixed_amount' => ['amount' => 2500, 'currency' => 'usd'],
                             'display_name' => 'International Shipping',
                         ],
                     ],
@@ -92,10 +104,7 @@ class StripeService
                     [
                         'shipping_rate_data' => [
                             'type'         => 'fixed_amount',
-                            'fixed_amount' => [
-                                'amount'   => 1000,
-                                'currency' => 'usd',
-                            ],
+                            'fixed_amount' => ['amount' => 1000, 'currency' => 'usd'],
                             'display_name' => 'Standard Shipping (US)',
                         ],
                     ],

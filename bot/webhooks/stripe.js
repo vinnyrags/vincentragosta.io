@@ -13,7 +13,7 @@ import { EmbedBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
 import { db, purchases, battles, cardListings, livestream, discordLinks } from '../db.js';
-import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
+import { client, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
 import { addLivestreamBuyer } from '../commands/live.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
@@ -66,15 +66,6 @@ async function handleCheckoutCompleted(session) {
         } catch (e) {
             console.error('Failed to fetch line items from Stripe:', e.message);
         }
-    }
-
-    // Auto-link Discord username from Stripe checkout custom field
-    const discordUsername = session.custom_fields
-        ?.find((f) => f.key === 'discord_username')
-        ?.text?.value?.trim();
-
-    if (discordUsername && customerEmail) {
-        await autoLinkDiscord(discordUsername, customerEmail);
     }
 
     // Try to find linked Discord user
@@ -172,34 +163,6 @@ async function handleCheckoutCompleted(session) {
     if (shippingCountry && shippingCountry !== 'US' && discordUserId) {
         discordLinks.setCountry.run(shippingCountry, discordUserId);
         console.log(`Auto-flagged international: ${discordUserId} → ${shippingCountry}`);
-    }
-}
-
-/**
- * Auto-link a Discord username from Stripe checkout to their Discord user ID.
- * Searches guild members by username and saves the mapping.
- */
-async function autoLinkDiscord(discordUsername, customerEmail) {
-    const guild = getGuild();
-    if (!guild) return;
-
-    try {
-        // Search for the member — try exact match on username or displayName
-        const members = await guild.members.fetch({ query: discordUsername, limit: 5 });
-        const match = members.find(
-            (m) =>
-                m.user.username.toLowerCase() === discordUsername.toLowerCase()
-                || m.displayName.toLowerCase() === discordUsername.toLowerCase()
-        );
-
-        if (match) {
-            purchases.linkDiscord.run(match.id, customerEmail);
-            console.log(`Auto-linked ${match.user.tag} (${match.id}) via checkout field`);
-        } else {
-            console.log(`Could not find Discord member: "${discordUsername}"`);
-        }
-    } catch (e) {
-        console.error('Auto-link error:', e.message);
     }
 }
 

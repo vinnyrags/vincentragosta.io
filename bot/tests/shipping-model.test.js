@@ -389,3 +389,70 @@ describe('purchase lookup', () => {
         expect(purchase).toBeUndefined();
     });
 });
+
+// =========================================================================
+// WordPress shop → second purchase skips shipping (email capture flow)
+// =========================================================================
+
+describe('WordPress shop email capture: second purchase skips shipping', () => {
+    it('domestic buyer: first purchase records shipping, second lookup shows covered', () => {
+        // First purchase — webhook records shipping paid at checkout
+        stmts.purchases.insertPurchase.run('cs_first', null, 'buyer@test.com', 'Pokemon Pack', 1999);
+        stmts.shipping.record.run('buyer@test.com', null, 1000, 'checkout', 'cs_first');
+
+        // Second purchase — shipping lookup check (what the /shipping/lookup endpoint does)
+        const covered = stmts.shipping.hasShippingThisWeek.get('buyer@test.com');
+        expect(covered).toBeTruthy();
+    });
+
+    it('international buyer: first purchase records shipping, second lookup shows covered', () => {
+        // Link email and flag as international
+        stmts.purchases.linkDiscord.run('discord1', 'intl@test.com');
+        stmts.discordLinks.setCountry.run('CA', 'discord1');
+
+        // First purchase with international shipping
+        stmts.purchases.insertPurchase.run('cs_intl_first', 'discord1', 'intl@test.com', 'Anime Box', 3500);
+        stmts.shipping.record.run('intl@test.com', 'discord1', 2500, 'checkout', 'cs_intl_first');
+
+        // Second purchase — should be covered for the month
+        const covered = stmts.shipping.hasShippingThisMonth.get('intl@test.com');
+        expect(covered).toBeTruthy();
+    });
+
+    it('unlinked buyer: shipping coverage works by email alone (no Discord link needed)', () => {
+        // Buyer who never linked Discord — just entered email in the modal
+        stmts.shipping.record.run('nolink@test.com', null, 1000, 'checkout', 'cs_nolink');
+
+        // Second purchase lookup — still covered even without Discord link
+        const covered = stmts.shipping.hasShippingThisWeek.get('nolink@test.com');
+        expect(covered).toBeTruthy();
+    });
+
+    it('coverage does not bleed across different emails', () => {
+        stmts.shipping.record.run('alice@test.com', null, 1000, 'checkout', 'cs_alice');
+
+        expect(stmts.shipping.hasShippingThisWeek.get('alice@test.com')).toBeTruthy();
+        expect(stmts.shipping.hasShippingThisWeek.get('bob@test.com')).toBeUndefined();
+    });
+
+    it('full flow: purchase → shipping record → lookup returns covered with rate 0', () => {
+        // Simulate the full flow as the shipping lookup endpoint would
+        stmts.purchases.insertPurchase.run('cs_flow', null, 'flow@test.com', 'Product A', 2000);
+        stmts.shipping.record.run('flow@test.com', null, 1000, 'checkout', 'cs_flow');
+
+        // Replicate what GET /shipping/lookup does
+        const covered = !!stmts.shipping.hasShippingThisWeek.get('flow@test.com');
+        const rate = covered ? 0 : 1000;
+
+        expect(covered).toBe(true);
+        expect(rate).toBe(0);
+    });
+
+    it('first purchase with no shipping record: lookup shows not covered', () => {
+        // Buyer exists but no shipping payment recorded (e.g., livestream mode)
+        stmts.purchases.insertPurchase.run('cs_nosship', null, 'nosship@test.com', 'Product B', 1500);
+
+        const covered = stmts.shipping.hasShippingThisWeek.get('nosship@test.com');
+        expect(covered).toBeUndefined();
+    });
+});

@@ -11,6 +11,7 @@
 import { db } from '../db.js';
 import config from '../config.js';
 import { handleSync } from './sync.js';
+import { initCommunityGoals } from '../community-goals.js';
 
 const TABLES_TO_CLEAR = [
     'purchases',
@@ -92,7 +93,10 @@ async function handleReset(message) {
         ? `Cleared: ${cleared.join(', ')}`
         : 'All tables were already empty';
 
-    await message.channel.send(`✅ **Database wiped.** ${summary}\n\nCommunity goals reset to cycle 1, $0.`);
+    // Refresh the #restock-tracker pinned message
+    await initCommunityGoals();
+
+    await message.channel.send(`✅ **Database wiped.** ${summary}\n\nCommunity goals reset to cycle 1, $0. Restock tracker updated.`);
 
     // Step 2: Sync products to restore stock
     await message.channel.send('🔄 **Restoring stock via !sync...**');

@@ -12,7 +12,7 @@
 import express from 'express';
 import Stripe from 'stripe';
 import config from './config.js';
-import { battles, cardListings, purchases } from './db.js';
+import { battles, cardListings, purchases, discordLinks } from './db.js';
 import { getActiveCoupon } from './commands/coupon.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
@@ -99,14 +99,6 @@ app.get('/battle/checkout/:id', async (req, res) => {
                 battle_id: String(battle.id),
                 source: 'pack-battle',
             },
-            custom_fields: [
-                {
-                    key: 'discord_username',
-                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
-                    type: 'text',
-                    optional: true,
-                },
-            ],
         };
 
         // Add shipping unless already covered this period
@@ -226,14 +218,6 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 source: 'card-sale',
                 reserved_for: listing.buyer_discord_id || '',
             },
-            custom_fields: [
-                {
-                    key: 'discord_username',
-                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
-                    type: 'text',
-                    optional: true,
-                },
-            ],
         };
 
         // Conditional shipping: skip if buyer already covered this period
@@ -277,14 +261,6 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             metadata: {
                 source: 'hype-checkout',
             },
-            custom_fields: [
-                {
-                    key: 'discord_username',
-                    label: { type: 'custom', custom: 'Discord username for role upgrades (optional)' },
-                    type: 'text',
-                    optional: true,
-                },
-            ],
         };
 
         // Conditional shipping based on buyer identity
@@ -376,14 +352,17 @@ app.get('/shipping/lookup', (req, res) => {
 
     const intl = isInternationalByEmail(email);
     const covered = hasShippingCovered(email);
+
+    // Check if we know this email and whether their country is flagged
+    const link = purchases.getDiscordIdByEmail.get(email);
+    const known = !!link;
+    const countryRow = link ? discordLinks.getCountry.get(link.discord_user_id) : null;
+    const countryKnown = countryRow?.country != null;
+
     const rate = covered ? 0 : (intl ? config.SHIPPING.INTERNATIONAL : config.SHIPPING.DOMESTIC);
     const label = intl ? 'International Shipping' : 'Standard Shipping (US)';
 
-    // Check if we know this email at all
-    const link = purchases.getDiscordIdByEmail.get(email);
-    const known = !!link;
-
-    res.json({ email, known, covered, international: intl, rate, label });
+    res.json({ email, known, covered, international: intl, countryKnown, rate, label });
 });
 
 // =========================================================================

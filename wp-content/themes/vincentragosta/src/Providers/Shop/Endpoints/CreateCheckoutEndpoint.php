@@ -72,6 +72,11 @@ class CreateCheckoutEndpoint extends Endpoint
                 'type'     => 'boolean',
                 'default'  => false,
             ],
+            'country_known' => [
+                'required' => false,
+                'type'     => 'boolean',
+                'default'  => true,
+            ],
         ];
     }
 
@@ -86,6 +91,7 @@ class CreateCheckoutEndpoint extends Endpoint
             && $storedToken
             && hash_equals((string) $storedToken, $providedToken);
         $isInternational = (bool) $request->get_param('international');
+        $countryKnown = (bool) $request->get_param('country_known');
         $customerEmail = $request->get_param('email') ?: null;
         $shippingCovered = (bool) $request->get_param('shipping_covered');
 
@@ -193,6 +199,7 @@ class CreateCheckoutEndpoint extends Endpoint
                 $skipShipping,
                 $isInternational,
                 $customerEmail,
+                $countryKnown,
             );
 
             return new WP_REST_Response([
