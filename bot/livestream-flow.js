@@ -148,9 +148,9 @@ const messages = [
         description: [
             '**Domestic (US): $10/week  •  International (CA+): $25/month**',
             '```',
-            'Normal shop (domestic)         →  $10 at checkout',
-            'Normal shop (international)    →  $25 at checkout (country toggle)',
-            'Livestream (?live=1)           →  Free → DM after !offline',
+            'Normal shop (email entered)    →  Bot checks coverage → $10/$25 or skip',
+            'Normal shop (email skipped)    →  $10/$25 at checkout (country toggle)',
+            'Livestream (?live=1&token=)    →  Free → DM after !offline',
             'Discord buttons (!list/!hype)  →  Bot checks → $10/$25 or skip',
             'Pack battle buy-in             →  Bot checks → $10/$25 or skip',
             'Ad-hoc (!shipping @user amt)   →  Any amount, DM with checkout link',

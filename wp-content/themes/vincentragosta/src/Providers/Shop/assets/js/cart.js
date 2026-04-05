@@ -12,6 +12,7 @@ const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
 const LIVE_MODE_KEY = 'vincentragosta_live_mode';
 const LIVE_TOKEN_KEY = 'vincentragosta_live_token';
 const INTL_MODE_KEY = 'vincentragosta_international';
+const EMAIL_KEY = 'vincentragosta_buyer_email';
 const CART_TTL = 24 * 60 * 60 * 1000; // 24 hours in ms
 const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
 
@@ -227,6 +228,93 @@ const CountryToggle = {
 };
 
 // ==========================================================================
+// EmailCapture — modal-based email collection with localStorage persistence
+// ==========================================================================
+
+function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+const EmailCapture = {
+    getEmail() {
+        return localStorage.getItem(EMAIL_KEY) || null;
+    },
+
+    setEmail(email) {
+        localStorage.setItem(EMAIL_KEY, email.toLowerCase().trim());
+    },
+
+    clearEmail() {
+        localStorage.removeItem(EMAIL_KEY);
+    },
+
+    async prompt() {
+        let emailValue = '';
+
+        // Attach listener after modal renders to capture input value
+        requestAnimationFrame(() => {
+            const input = document.getElementById('modal-email');
+            if (input) {
+                input.addEventListener('input', (e) => { emailValue = e.target.value; });
+                input.focus();
+            }
+        });
+
+        const result = await createModal({
+            title: 'Before You Checkout',
+            html: `
+                <label class="modal__label" for="modal-email">Email address</label>
+                <input type="email" id="modal-email" class="modal__input" placeholder="you@example.com" autocomplete="email" />
+                <p class="modal__helper">We use your email to check if your shipping is already covered and to speed up checkout. You only need to enter this once.</p>
+            `,
+            buttons: [
+                { label: 'Continue', value: 'continue', primary: true },
+                { label: 'Skip', value: 'skip' },
+            ],
+            ariaLabel: 'Email for shipping lookup',
+            className: 'modal--email-capture',
+        });
+
+        if (result === 'continue' && emailValue && isValidEmail(emailValue)) {
+            this.setEmail(emailValue);
+            return emailValue.toLowerCase().trim();
+        }
+
+        if (result === 'skip') {
+            return 'skip';
+        }
+
+        return null; // Escape / dismiss
+    },
+};
+
+// ==========================================================================
+// ShippingLookup — check shipping status via WP proxy to bot
+// ==========================================================================
+
+const ShippingLookup = {
+    cache: null,
+
+    async lookup(email) {
+        try {
+            const response = await fetch(
+                `${window.shopConfig.restUrl}shipping-lookup?email=${encodeURIComponent(email)}`,
+                { headers: { 'X-WP-Nonce': window.shopConfig.nonce } }
+            );
+            if (!response.ok) return null;
+            this.cache = await response.json();
+            return this.cache;
+        } catch {
+            return null;
+        }
+    },
+
+    getCached() {
+        return this.cache;
+    },
+};
+
+// ==========================================================================
 // CartDrawer — slide-out panel
 // ==========================================================================
 
@@ -246,6 +334,7 @@ const CartDrawer = {
                 </div>
                 <div class="shop-cart-drawer__items"></div>
                 <div class="shop-cart-drawer__footer">
+                    <div class="shop-cart-drawer__shipping-status" data-shipping-status></div>
                     <button class="shop-cart-drawer__checkout" data-cart-checkout disabled>Checkout</button>
                 </div>
             </div>
@@ -303,8 +392,52 @@ const CartDrawer = {
         checkoutBtn.disabled = false;
     },
 
+    renderShippingStatus() {
+        if (!this.el) return;
+        const container = this.el.querySelector('[data-shipping-status]');
+        if (!container) return;
+
+        const email = EmailCapture.getEmail();
+        const lookup = ShippingLookup.getCached();
+
+        if (!email) {
+            container.innerHTML = '';
+            return;
+        }
+
+        if (lookup?.covered) {
+            container.innerHTML = `
+                <div class="shop-cart-drawer__shipping-badge shop-cart-drawer__shipping-badge--covered">
+                    Shipping covered this ${lookup.international ? 'month' : 'week'}!
+                </div>
+                <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
+            `;
+        } else if (lookup) {
+            const rate = `$${(lookup.rate / 100).toFixed(2)}`;
+            container.innerHTML = `
+                <div class="shop-cart-drawer__shipping-badge">
+                    ${lookup.international ? 'International' : 'US'} shipping: ${rate}
+                </div>
+                <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
+            `;
+        } else {
+            container.innerHTML = `
+                <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
+            `;
+        }
+    },
+
     bindEvents() {
         if (!this.el) return;
+
+        // Change email
+        this.el.addEventListener('click', (e) => {
+            if (e.target.closest('[data-change-email]')) {
+                EmailCapture.clearEmail();
+                ShippingLookup.cache = null;
+                this.renderShippingStatus();
+            }
+        });
 
         // Close buttons and backdrop
         this.el.addEventListener('click', (e) => {
@@ -360,6 +493,29 @@ const CartCheckout = {
         const items = CartStore.getItems();
         if (!items.length) return;
 
+        // Step 1: Ensure we have an email (from localStorage or modal prompt)
+        let email = EmailCapture.getEmail();
+        if (!email) {
+            const result = await EmailCapture.prompt();
+            if (result === null) return; // Dismissed — abort checkout
+            if (result !== 'skip') {
+                email = result;
+            }
+        }
+
+        // Step 2: Look up shipping status if we have an email
+        let shippingCovered = false;
+        let international = CountryToggle.isInternational();
+
+        if (email) {
+            const lookup = await ShippingLookup.lookup(email);
+            if (lookup) {
+                shippingCovered = lookup.covered;
+                international = lookup.international;
+            }
+            CartDrawer.renderShippingStatus();
+        }
+
         const checkoutBtn = document.querySelector('[data-cart-checkout]');
         if (checkoutBtn) {
             checkoutBtn.disabled = true;
@@ -380,7 +536,9 @@ const CartCheckout = {
                     })),
                     live: sessionStorage.getItem(LIVE_MODE_KEY) === '1',
                     live_token: sessionStorage.getItem(LIVE_TOKEN_KEY) || '',
-                    international: CountryToggle.isInternational(),
+                    international,
+                    email: email || '',
+                    shipping_covered: shippingCovered,
                 }),
             });
 

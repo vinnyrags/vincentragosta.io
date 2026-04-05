@@ -1,0 +1,79 @@
+// ==========================================================================
+// Email Capture — modal input + shipping status badge in cart drawer
+// ==========================================================================
+
+// Modal input field
+.modal__label {
+  display: block;
+  font-size: var(--wp--preset--font-size--20);
+  font-weight: 600;
+  margin-block-end: var(--wp--preset--spacing--10);
+  text-align: left;
+}
+
+.modal__input {
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: var(--wp--preset--font-size--20);
+  margin-block-end: var(--wp--preset--spacing--20);
+
+  &:focus {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+    border-color: var(--wp--preset--color--accent-1);
+  }
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+}
+
+.modal__helper {
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--10);
+  line-height: 1.5;
+  text-align: left;
+  margin: 0;
+}
+
+// Shipping status in cart drawer footer
+.shop-cart-drawer__shipping-status {
+  margin-block-end: var(--wp--preset--spacing--20);
+  text-align: center;
+}
+
+.shop-cart-drawer__shipping-badge {
+  font-size: var(--wp--preset--font-size--10);
+  color: var(--color-text-muted);
+  padding: 0.4em 0.8em;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  display: inline-block;
+  margin-block-end: var(--wp--preset--spacing--10);
+
+  &--covered {
+    color: #2ecc71;
+    border-color: #2ecc71;
+  }
+}
+
+.shop-cart-drawer__email-change {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--wp--preset--font-size--10);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--color-text);
+  }
+}

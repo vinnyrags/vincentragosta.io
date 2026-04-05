@@ -61,6 +61,17 @@ class CreateCheckoutEndpoint extends Endpoint
                 'type'     => 'string',
                 'default'  => '',
             ],
+            'email' => [
+                'required'          => false,
+                'type'              => 'string',
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_email',
+            ],
+            'shipping_covered' => [
+                'required' => false,
+                'type'     => 'boolean',
+                'default'  => false,
+            ],
         ];
     }
 
@@ -75,6 +86,8 @@ class CreateCheckoutEndpoint extends Endpoint
             && $storedToken
             && hash_equals((string) $storedToken, $providedToken);
         $isInternational = (bool) $request->get_param('international');
+        $customerEmail = $request->get_param('email') ?: null;
+        $shippingCovered = (bool) $request->get_param('shipping_covered');
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
@@ -170,13 +183,16 @@ class CreateCheckoutEndpoint extends Endpoint
                 $metadata['live'] = '1';
             }
 
+            $skipShipping = $isLive || $shippingCovered;
+
             $session = $this->stripe->createCheckoutSession(
                 $lineItems,
                 $successUrl,
                 $cancelUrl,
                 $metadata,
-                $isLive,
+                $skipShipping,
                 $isInternational,
+                $customerEmail,
             );
 
             return new WP_REST_Response([

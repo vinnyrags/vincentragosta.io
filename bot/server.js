@@ -18,6 +18,7 @@ import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
 import {
     isInternational,
+    isInternationalByEmail,
     getShippingRate,
     getShippingRateByEmail,
     hasShippingCoveredByDiscordId,
@@ -361,6 +362,28 @@ app.get('/shipping/checkout', async (req, res) => {
         console.error('Shipping checkout error:', e.message);
         res.status(500).send('Could not create shipping form. Contact a mod.');
     }
+});
+
+// =========================================================================
+// Shipping status lookup — check if a buyer has shipping covered
+// =========================================================================
+
+app.get('/shipping/lookup', (req, res) => {
+    const email = req.query.email?.trim().toLowerCase();
+    if (!email) {
+        return res.status(400).json({ error: 'Missing email parameter' });
+    }
+
+    const intl = isInternationalByEmail(email);
+    const covered = hasShippingCovered(email);
+    const rate = covered ? 0 : (intl ? config.SHIPPING.INTERNATIONAL : config.SHIPPING.DOMESTIC);
+    const label = intl ? 'International Shipping' : 'Standard Shipping (US)';
+
+    // Check if we know this email at all
+    const link = purchases.getDiscordIdByEmail.get(email);
+    const known = !!link;
+
+    res.json({ email, known, covered, international: intl, rate, label });
 });
 
 // =========================================================================

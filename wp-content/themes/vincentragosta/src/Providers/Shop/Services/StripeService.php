@@ -48,6 +48,7 @@ class StripeService
         array $metadata = [],
         bool $skipShipping = false,
         bool $international = false,
+        ?string $customerEmail = null,
     ): Session {
         $params = [
             'mode'       => 'payment',
@@ -100,6 +101,10 @@ class StripeService
                     ],
                 ];
             }
+        }
+
+        if ($customerEmail) {
+            $params['customer_email'] = $customerEmail;
         }
 
         return $this->client->checkout->sessions->create($params);
