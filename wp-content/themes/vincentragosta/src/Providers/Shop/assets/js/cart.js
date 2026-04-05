@@ -412,11 +412,18 @@ const CartDrawer = {
                 </div>
                 <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
             `;
-        } else if (lookup) {
+        } else if (lookup && lookup.countryKnown) {
             const rate = `$${(lookup.rate / 100).toFixed(2)}`;
             container.innerHTML = `
                 <div class="shop-cart-drawer__shipping-badge">
                     ${lookup.international ? 'International' : 'US'} shipping: ${rate}
+                </div>
+                <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
+            `;
+        } else if (lookup) {
+            container.innerHTML = `
+                <div class="shop-cart-drawer__shipping-badge">
+                    Shipping: $10 US / $25 International
                 </div>
                 <button class="shop-cart-drawer__email-change" data-change-email type="button">${email}</button>
             `;
