@@ -64,14 +64,18 @@ class LivestreamToggleEndpoint extends Endpoint
         $active = (bool) $request->get_param('active');
 
         if ($active) {
+            // Generate a signed token so only the link shared in Discord works
+            $token = bin2hex(random_bytes(16));
             // Set for 12 hours — well beyond any stream length, auto-expires as a safety net
-            set_transient('itzenzo_livestream_active', true, 43200);
+            set_transient('itzenzo_livestream_active', $token, 43200);
         } else {
             delete_transient('itzenzo_livestream_active');
+            $token = null;
         }
 
         return new WP_REST_Response([
             'livestream_active' => $active,
+            'token'            => $token,
         ]);
     }
 }

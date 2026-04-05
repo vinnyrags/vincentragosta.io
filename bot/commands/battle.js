@@ -152,7 +152,7 @@ async function startBattle(message, args) {
 
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
-        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*Shipping included if not already covered this period.*`)
+        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
         .setColor(0x2ecc71)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
@@ -284,7 +284,7 @@ async function declareBattleWinner(message, args) {
     });
 
     // Winner's shipping was handled at buy-in time (via Discord button checkout)
-    await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping was included at purchase.`);
+    await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping ($10 US / $25 International) was included at purchase.`);
 }
 
 async function ownerJoinBattle(message) {
@@ -347,7 +347,7 @@ async function ownerJoinBattle(message) {
             const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
             const embed = new EmbedBuilder()
                 .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
-                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
+                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
                 .setColor(0x2ecc71)
                 .addFields(
                     { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },

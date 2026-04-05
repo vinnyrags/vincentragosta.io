@@ -33,9 +33,13 @@ async function toggleLivestreamMode(active) {
         });
         if (!response.ok) {
             console.error(`Failed to toggle livestream mode: ${response.status}`);
+            return null;
         }
+        const data = await response.json();
+        return data.token || null;
     } catch (e) {
         console.error('Could not reach WordPress to toggle livestream mode:', e.message);
+        return null;
     }
 }
 
@@ -57,8 +61,8 @@ async function handleLive(message) {
         return message.reply('Already live! Use `!offline` to end the current session first.');
     }
 
-    // Enable shipping-free mode on the WordPress side
-    await toggleLivestreamMode(true);
+    // Enable shipping-free mode on the WordPress side (returns signed token)
+    const liveToken = await toggleLivestreamMode(true);
 
     // Start 4-hour reminder
     startReminder();
@@ -89,7 +93,9 @@ async function handleLive(message) {
     const result = livestream.startSession.run();
     const sessionId = result.lastInsertRowid;
 
-    const shopLink = `${config.SHOP_URL}?live=1`;
+    const shopLink = liveToken
+        ? `${config.SHOP_URL}?live=1&token=${liveToken}`
+        : `${config.SHOP_URL}?live=1`;
 
     // Post going-live announcement
     const embed = new EmbedBuilder()

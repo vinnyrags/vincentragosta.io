@@ -10,6 +10,7 @@
  */
 
 import { EmbedBuilder } from 'discord.js';
+import Stripe from 'stripe';
 import config from '../config.js';
 import { db, purchases, battles, cardListings, livestream, discordLinks } from '../db.js';
 import { client, getGuild, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
@@ -19,6 +20,8 @@ import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
 import { recordShipping } from '../shipping.js';
 import { recordPullPurchase } from '../commands/pull.js';
+
+const stripe = new Stripe(config.STRIPE_SECRET_KEY);
 
 /**
  * Process a completed checkout session.
@@ -47,10 +50,23 @@ async function handleCheckoutCompleted(session) {
     }
 
     const customerEmail = session.customer_details?.email || session.customer_email;
-    const lineItems = session.metadata?.line_items
-        ? JSON.parse(session.metadata.line_items)
-        : [];
     const totalAmount = session.amount_total;
+
+    // Resolve line items — prefer metadata (bot endpoints), fall back to Stripe API (WordPress/external)
+    let lineItems = [];
+    if (session.metadata?.line_items) {
+        lineItems = JSON.parse(session.metadata.line_items);
+    } else {
+        try {
+            const fetched = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
+            lineItems = fetched.data.map((item) => ({
+                name: item.description || 'Unknown Product',
+                quantity: item.quantity || 1,
+            }));
+        } catch (e) {
+            console.error('Failed to fetch line items from Stripe:', e.message);
+        }
+    }
 
     // Auto-link Discord username from Stripe checkout custom field
     const discordUsername = session.custom_fields

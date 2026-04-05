@@ -56,6 +56,11 @@ class CreateCheckoutEndpoint extends Endpoint
                 'type'     => 'boolean',
                 'default'  => false,
             ],
+            'live_token' => [
+                'required' => false,
+                'type'     => 'string',
+                'default'  => '',
+            ],
         ];
     }
 
@@ -63,8 +68,12 @@ class CreateCheckoutEndpoint extends Endpoint
     {
         $items = $request->get_param('items');
 
-        // Only honor live=true if the server-side livestream transient is active
-        $isLive = (bool) $request->get_param('live') && (bool) get_transient('itzenzo_livestream_active');
+        // Only honor live=true if the token matches the server-side livestream transient
+        $storedToken = get_transient('itzenzo_livestream_active');
+        $providedToken = sanitize_text_field($request->get_param('live_token') ?? '');
+        $isLive = (bool) $request->get_param('live')
+            && $storedToken
+            && hash_equals((string) $storedToken, $providedToken);
         $isInternational = (bool) $request->get_param('international');
 
         if (!is_array($items) || empty($items)) {
