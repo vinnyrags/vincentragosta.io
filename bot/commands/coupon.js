@@ -177,7 +177,7 @@ async function handleActivate(message, code) {
         await sendEmbed('ANNOUNCEMENTS', {
             title: '🏷️ Coupon Active!',
             description: `Use code **\`${code}\`** at checkout for **${displayDiscount}**!`,
-            color: 0x2ecc71,
+            color: 0xceff00,
         });
 
         await message.channel.send(
@@ -233,7 +233,7 @@ async function handleStatus(message) {
             `**Discount:** ${current.discount_display}\n` +
             `**Activated:** ${current.activated_at}`
         )
-        .setColor(0x2ecc71);
+        .setColor(0xceff00);
 
     await message.channel.send({ embeds: [embed] });
 }

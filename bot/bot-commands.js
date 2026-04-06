@@ -10,7 +10,7 @@ const messages = [
     {
         title: '📖 Nous Command Reference',
         description: 'All commands at a glance. Organized by feature area.',
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 2: Master Commands
@@ -24,7 +24,7 @@ const messages = [
             '',
             '**`!offline`** — End stream. Ends livestream session, closes queue and archives to #card-night-queue, opens next pre-order queue, posts stream-ended in #announcements, posts stream recap to #analytics.',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 3: Pack Battles
@@ -44,7 +44,7 @@ const messages = [
             '',
             '*Only one battle can be active at a time. Close or cancel before starting a new one.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 4: Queue & Duck Race
@@ -63,7 +63,7 @@ const messages = [
             '',
             '**`!duckrace winner @user`** — Declare winner, assign Aha role, cross-post',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 5: Card Shop
@@ -85,7 +85,7 @@ const messages = [
             '',
             '*Card name must be in quotes. Price in dollars. Shipping: $10 US / $25 international (waived if already covered this week/month).*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 6: Giveaways
@@ -107,7 +107,7 @@ const messages = [
             '',
             '*Only verified members (Xipe role) can enter. One entry per person. Social copy is posted to #ops for cross-platform promotion.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 7: Analytics
@@ -124,7 +124,7 @@ const messages = [
             '',
             '*Stream recaps are posted automatically to #analytics when `!offline` runs — no extra step needed.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 8: Other Commands
@@ -159,7 +159,7 @@ const messages = [
             '',
             '*Note: Discord username field on Stripe checkout auto-links accounts — `!link` is a manual fallback.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 9: Coupons
@@ -178,7 +178,7 @@ const messages = [
             '',
             '*Only one coupon can be active at a time. Customers who already checked out keep their discount. The promo code field only appears while a coupon is active — random browsers won\'t see it.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 10: Product Sync
@@ -191,7 +191,7 @@ const messages = [
             '',
             '*Run `!sync` after updating the Google Sheets product catalog.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 10: Typical Stream Night Flow
@@ -216,7 +216,7 @@ const messages = [
             '!snapshot                              → Anytime: post analytics snapshot to #analytics',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 10: Shipping Model
@@ -241,7 +241,7 @@ const messages = [
             '',
             '*Double-charge prevention: one payment covers all purchases for the period (week/month). Bot checks before every checkout.*',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 ];
 

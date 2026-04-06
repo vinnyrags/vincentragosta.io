@@ -64,7 +64,7 @@ function buildListingEmbed(listing) {
             `**${priceLabel}** — click Buy Now to check out\n\n` +
             shippingNote
         )
-        .setColor(0x2ecc71)
+        .setColor(0xceff00)
         .setFooter({ text: `Listing #${listing.id}` });
 }
 

@@ -34,7 +34,7 @@ function buildBattleEmbed(battle, entries, paidEntries) {
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
         .setDescription(statusText)
-        .setColor(battle.status === 'open' ? 0x2ecc71 : battle.status === 'complete' ? 0xffd700 : 0xe74c3c)
+        .setColor(battle.status === 'open' ? 0xceff00 : battle.status === 'complete' ? 0xffd700 : 0xe74c3c)
         .addFields(
             { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
         );
@@ -153,7 +153,7 @@ async function startBattle(message, args) {
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
         .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
-        .setColor(0x2ecc71)
+        .setColor(0xceff00)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
         )
@@ -181,7 +181,7 @@ async function startBattle(message, args) {
         embeds: [new EmbedBuilder()
             .setTitle('⚔️ Pack Battle Starting!')
             .setDescription(`**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}>!\n\nMax entries: ${max}`)
-            .setColor(0x2ecc71)],
+            .setColor(0xceff00)],
         components: [announceRow],
     });
 }
@@ -348,7 +348,7 @@ async function ownerJoinBattle(message) {
             const embed = new EmbedBuilder()
                 .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
                 .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
-                .setColor(0x2ecc71)
+                .setColor(0xceff00)
                 .addFields(
                     { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
                 );

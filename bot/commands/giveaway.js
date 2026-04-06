@@ -108,7 +108,7 @@ function buildGiveawayEmbed(giveaway) {
     const isCancelled = giveaway.status === 'cancelled';
 
     let statusText = '🟢 OPEN — React below to enter!';
-    let color = 0x2ecc71;
+    let color = 0xceff00;
     if (isClosed) { statusText = '🔴 CLOSED — Winner to be drawn on stream'; color = 0xe74c3c; }
     if (isComplete) { statusText = `🏆 COMPLETE — Winner: <@${giveaway.winner_id}>`; color = 0xffd700; }
     if (isCancelled) { statusText = '❌ CANCELLED'; color = 0x95a5a6; }
@@ -227,7 +227,7 @@ async function startGiveaway(message, args) {
     await sendEmbed('ANNOUNCEMENTS', {
         title: `🎁 Giveaway — ${prizeName}`,
         description: `We're giving away **${prizeName}**!${durationText}\n\nHead to <#${config.CHANNELS.GIVEAWAYS}> and react with ${REACTION_EMOJI} to enter. Must be verified.`,
-        color: 0x2ecc71,
+        color: 0xceff00,
     });
 
     // Post social copy to #ops
@@ -311,7 +311,7 @@ async function drawWinner(message, args) {
         const embed = new EmbedBuilder()
             .setTitle(`🦆 Duck Race Roster — ${giveaway.prize_name}`)
             .setDescription(`${entries.length} entrants loaded from Giveaway #${giveaway.id}:\n\n${roster}`)
-            .setColor(0x2ecc71)
+            .setColor(0xceff00)
             .setFooter({ text: 'Use !giveaway draw to pick randomly, or run the duck race on stream!' });
 
         await message.channel.send({ embeds: [embed] });

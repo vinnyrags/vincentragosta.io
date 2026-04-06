@@ -65,7 +65,7 @@ async function handleShippingAudit(message, args = []) {
 
     // Build results embed
     const embed = new EmbedBuilder()
-        .setColor(missingShipping.length || discrepancies.length ? 0xe74c3c : 0x2ecc71)
+        .setColor(missingShipping.length || discrepancies.length ? 0xe74c3c : 0xceff00)
         .setFooter({ text: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }) });
 
     if (!missingShipping.length && !discrepancies.length) {

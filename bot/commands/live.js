@@ -54,7 +54,7 @@ async function handleLive(message) {
             await sendEmbed('ANNOUNCEMENTS', {
                 title: `📋 ${entries.length} Pre-Orders Tonight!`,
                 description: `${uniqueBuyers.length} buyer(s) already in the queue. Let's go!`,
-                color: 0x2ecc71,
+                color: 0xceff00,
             });
         }
     }
@@ -70,12 +70,9 @@ async function handleLive(message) {
         .setTitle('🔴 We\'re Live!')
         .setDescription(
             `Card night is starting! Come hang.\n\n` +
-            `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV)\n` +
-            `📱 [TikTok](https://tiktok.com/@itzenzoTTV)\n` +
-            `📸 [Instagram](https://instagram.com/itzenzo.TTV)\n` +
-            `🎬 [YouTube](https://youtube.com/@itzenzoTTV)`
+            `Watch on: [Twitch](https://twitch.tv/itzenzoTTV) · [TikTok](https://tiktok.com/@itzenzoTTV) · [Instagram](https://instagram.com/itzenzo.TTV) · [YouTube](https://youtube.com/@itzenzoTTV)`
         )
-        .setColor(0x9146ff);
+        .setColor(0xceff00);
 
     const buttons = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
@@ -221,7 +218,7 @@ async function postStreamRecap(session, closedQueueId) {
     const embed = new EmbedBuilder()
         .setTitle(`📊 Stream Recap — Session #${session.id}`)
         .setDescription(lines.join('\n'))
-        .setColor(0x2ecc71);
+        .setColor(0xceff00);
 
     // Top products
     if (topProducts.length > 0) {

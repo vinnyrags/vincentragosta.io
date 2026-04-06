@@ -45,14 +45,14 @@ async function alertNewProduct(product) {
     await sendEmbed(channelKey, {
         title: '🆕 New Drop!',
         description,
-        color: channelKey === 'MATURE_DROPS' ? 0xc0392b : 0x2ecc71,
+        color: channelKey === 'MATURE_DROPS' ? 0xc0392b : 0xceff00,
     });
 
     // Also post to #deals for visibility
     await sendEmbed('DEALS', {
         title: '🆕 New Product Added',
         description: `**${name}** just dropped${category ? ` in ${category}` : ''}!\n\nCheck <#${config.CHANNELS[channelKey]}> for details.`,
-        color: 0x2ecc71,
+        color: 0xceff00,
     });
 
     console.log(`Product alert sent: ${name} → ${channelKey}`);
@@ -85,7 +85,7 @@ async function alertNewProducts(products) {
             await sendEmbed(channelKey, {
                 title: `🆕 ${items.length} New Drops!`,
                 description: list,
-                color: channelKey === 'MATURE_DROPS' ? 0xc0392b : 0x2ecc71,
+                color: channelKey === 'MATURE_DROPS' ? 0xc0392b : 0xceff00,
             });
         }
     }

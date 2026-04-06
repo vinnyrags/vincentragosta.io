@@ -33,7 +33,7 @@ const messages = [
             '                                         • Posts going-live in #announcements with shop link',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 2: During Stream
@@ -82,7 +82,7 @@ const messages = [
             'Bot DMs you a reminder if !offline hasn\'t been run (just a nudge)',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 3: End of Stream
@@ -100,7 +100,7 @@ const messages = [
             '',
             '**Note:** Shipping is handled proactively at checkout — no post-stream DMs needed.',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 4: Card Night Structure
@@ -135,7 +135,7 @@ const messages = [
             '                  Go as long as it feels right',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 5: Shipping Reference & Quick Links
@@ -161,7 +161,7 @@ const messages = [
             'Pricing formula   → cost × 1.45, round up',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 
     // Message 6: Revenue Notes
@@ -188,7 +188,7 @@ const messages = [
             '  First purchase pays shipping, all subsequent skip for the period',
             '```',
         ].join('\n'),
-        color: 0x2ecc71,
+        color: 0xceff00,
     },
 ];
 

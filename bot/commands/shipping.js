@@ -53,7 +53,7 @@ async function handleShipping(message, args) {
             `You owe **$${amountDollars.toFixed(2)}** for shipping.\n\n` +
             `📦 **[Pay Shipping & Enter Address](${shippingUrl})**`
         )
-        .setColor(0x2ecc71)
+        .setColor(0xceff00)
         .setFooter({ text: `$${amountDollars.toFixed(2)} — sent by ${message.author.tag}` });
 
     try {

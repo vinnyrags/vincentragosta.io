@@ -83,7 +83,7 @@ async function handleDroppedOff(message, args = []) {
                 `Hey! Your order from itzenzoTTV has been shipped:\n\n${productList}\n\n` +
                 'If you need tracking info, just reach out to me here in the server.'
             )
-            .setColor(0x2ecc71)
+            .setColor(0xceff00)
             .setFooter({ text: `Shipped ${new Date().toLocaleDateString('en-US', { timeZone: 'America/New_York' })}` });
 
         try {

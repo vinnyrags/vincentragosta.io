@@ -59,7 +59,7 @@ switch (status) {
     case 'success':
         title = `✅ Deployed to ${env}`;
         description = summary || 'Deployment complete.';
-        color = 0x2ecc71; // green
+        color = 0xceff00; // green
         break;
 
     case 'tests-failed':

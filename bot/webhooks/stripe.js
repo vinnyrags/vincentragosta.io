@@ -93,7 +93,7 @@ async function handleCheckoutCompleted(session) {
         await sendEmbed('ORDER_FEED', {
             title: '🛒 New Order!',
             description: `Someone just picked up **${productName}**${quantity > 1 ? ` (×${quantity})` : ''}!`,
-            color: 0x2ecc71,
+            color: 0xceff00,
             footer: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
         });
 
@@ -231,7 +231,7 @@ async function checkBattlePayment(session, discordUserId) {
             const embed = new EmbedBuilder()
                 .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
                 .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
-                .setColor(0x2ecc71)
+                .setColor(0xceff00)
                 .addFields(
                     { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
                 );

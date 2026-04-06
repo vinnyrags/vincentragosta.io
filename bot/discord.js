@@ -46,7 +46,7 @@ async function sendToChannel(key, content) {
 /**
  * Send an embed to a channel by config key.
  */
-async function sendEmbed(key, { title, description, color = 0x2ecc71, fields = [], footer = null }) {
+async function sendEmbed(key, { title, description, color = 0xceff00, fields = [], footer = null }) {
     const embed = new EmbedBuilder()
         .setTitle(title)
         .setDescription(description)

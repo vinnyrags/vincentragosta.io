@@ -52,14 +52,14 @@ vi.mock('../config.js', () => ({
 
 vi.mock('../bot-commands.js', () => ({
     default: [
-        { title: 'Title 1', description: 'Desc 1', color: 0x2ecc71 },
-        { title: 'Title 2', description: 'Desc 2', color: 0x2ecc71 },
+        { title: 'Title 1', description: 'Desc 1', color: 0xceff00 },
+        { title: 'Title 2', description: 'Desc 2', color: 0xceff00 },
     ],
 }));
 
 vi.mock('../livestream-flow.js', () => ({
     default: [
-        { title: 'Flow 1', description: 'Flow Desc 1', color: 0x2ecc71 },
+        { title: 'Flow 1', description: 'Flow Desc 1', color: 0xceff00 },
     ],
 }));
 

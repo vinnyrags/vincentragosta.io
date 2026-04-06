@@ -54,7 +54,7 @@ async function openQueue(message) {
     const embed = new EmbedBuilder()
         .setTitle('📋 Queue Open!')
         .setDescription('Pre-orders are now being accepted. Every card product purchase is automatically added to the queue.\n\nEvery unique buyer gets one entry into tonight\'s duck race.')
-        .setColor(0x2ecc71)
+        .setColor(0xceff00)
         .setFooter({ text: `Queue #${queueId}` });
 
     await message.channel.send({ embeds: [embed] });
@@ -263,7 +263,7 @@ function buildQueueEmbed(queue, entries, uniqueBuyers, status) {
     const embed = new EmbedBuilder()
         .setTitle(`📋 Queue #${queue.id}`)
         .setDescription(`${statusText}\n\n${buildQueueDescription(entries, uniqueBuyers)}`)
-        .setColor(status === 'open' ? 0x2ecc71 : 0xe74c3c)
+        .setColor(status === 'open' ? 0xceff00 : 0xe74c3c)
         .addFields(
             { name: 'Items', value: String(entries.length), inline: true },
             { name: 'Buyers', value: String(uniqueBuyers.length), inline: true },

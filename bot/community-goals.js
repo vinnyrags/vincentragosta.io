@@ -60,7 +60,7 @@ function buildGoalEmbed(goal) {
     const embed = new EmbedBuilder()
         .setTitle(`📊 Restock Goal — Cycle #${cycle}`)
         .setDescription(description)
-        .setColor(0x2ecc71);
+        .setColor(0xceff00);
 
     // Lifetime stats
     const nextMilestone = getNextMilestone(lifetimeRevenue);
@@ -155,7 +155,7 @@ async function announceRestock(cycleNumber) {
             `**Cycle #${cycleNumber} complete!** The community just hit $${(CYCLE_GOAL / 100).toFixed(2)} in sales.\n\n` +
             'New product is on the way. Stay tuned for the drop!'
         )
-        .setColor(0x2ecc71);
+        .setColor(0xceff00);
 
     await channel.send({ embeds: [embed] });
 }
@@ -170,7 +170,7 @@ async function announceMilestone(label) {
             `The community just crossed **${label}** in lifetime sales!\n\n` +
             '**Free loot for the community!** Stay tuned for the giveaway.'
         )
-        .setColor(0x2ecc71);
+        .setColor(0xceff00);
 
     const goalsChannel = client.channels.cache.get(config.CHANNELS.COMMUNITY_GOALS);
     if (goalsChannel) await goalsChannel.send({ embeds: [embed] });

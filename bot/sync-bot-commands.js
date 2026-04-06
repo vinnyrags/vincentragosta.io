@@ -15,7 +15,7 @@ import flowMessages from './livestream-flow.js';
 /**
  * Build a Discord EmbedBuilder from a plain object.
  */
-function buildEmbed({ title, description, color = 0x2ecc71, fields = [], footer = null }) {
+function buildEmbed({ title, description, color = 0xceff00, fields = [], footer = null }) {
     const embed = new EmbedBuilder()
         .setTitle(title)
         .setDescription(description)

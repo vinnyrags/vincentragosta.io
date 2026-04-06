@@ -107,7 +107,7 @@ async function handleReset(message) {
     await message.channel.send({ embeds: [new EmbedBuilder()
         .setTitle('✅ Database Wiped')
         .setDescription(`${summary}\n\nCommunity goals reset to cycle 1, $0. Restock tracker updated.`)
-        .setColor(0x2ecc71)] });
+        .setColor(0xceff00)] });
 
     // Step 2: Sync products to restore stock
     await message.channel.send({ embeds: [new EmbedBuilder()
