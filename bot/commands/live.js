@@ -72,7 +72,9 @@ async function handleLive(message) {
     if (!activeQueue) {
         const queueResult = queues.createQueue.run();
         activeQueue = queues.getActiveQueue.get();
-        await message.channel.send(`📋 No queue was open — auto-opened queue #${activeQueue.id}`);
+        await message.channel.send({ embeds: [new EmbedBuilder()
+            .setDescription(`📋 No queue was open — auto-opened queue #${activeQueue.id}`)
+            .setColor(0x3498db)] });
     }
 
     // Post pre-order summary if queue has entries (but keep it open)
@@ -110,12 +112,17 @@ async function handleLive(message) {
     await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
 
     // Confirm in current channel
-    await message.channel.send(
-        `🔴 **Live session #${sessionId} started.**\n` +
-        `• Queue${activeQueue ? ` #${activeQueue.id}` : ''} stays open — orders continue adding\n` +
-        `• Shop link with \`?live=1\`: ${shopLink}\n` +
-        `• Livestream purchases are shipping-free — collected after \`!offline\``
-    );
+    const confirmEmbed = new EmbedBuilder()
+        .setTitle('🔴 Live Session Started')
+        .setDescription(
+            `**Session #${sessionId}**\n\n` +
+            `• Queue${activeQueue ? ` #${activeQueue.id}` : ''} stays open — orders continue adding\n` +
+            `• Livestream purchases are shipping-free — collected after \`!offline\``
+        )
+        .addFields({ name: 'Shop Link', value: shopLink })
+        .setColor(0x9146ff);
+
+    await message.channel.send({ embeds: [confirmEmbed] });
 }
 
 // =========================================================================
@@ -296,14 +303,18 @@ async function handleOffline(message) {
     if (alreadyCovered.length) shippingParts.push(`${alreadyCovered.length} already covered`);
     const shippingSummary = shippingParts.length ? shippingParts.join(', ') : 'no buyers';
 
-    await message.channel.send(
-        `📴 **Live session #${session.id} ended.**\n` +
-        `• Queue${closedQueueId ? ` #${closedQueueId}` : ''} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>\n` +
-        `• Shipping: ${shippingSummary} (${shippingsSent} DMs sent)\n` +
-        `• New pre-order queue opened (#${newQueueId})\n` +
-        `• Stream-ended message posted to #announcements\n` +
-        `• Stream recap posted to <#${config.CHANNELS.ANALYTICS}>`
-    );
+    const offlineEmbed = new EmbedBuilder()
+        .setTitle('📴 Live Session Ended')
+        .setDescription(`**Session #${session.id}**`)
+        .addFields(
+            { name: 'Queue', value: `${closedQueueId ? `#${closedQueueId} closed` : 'None'} → archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>`, inline: false },
+            { name: 'Shipping', value: `${shippingSummary} (${shippingsSent} DMs sent)`, inline: false },
+            { name: 'Next Queue', value: `#${newQueueId} opened for pre-orders`, inline: false },
+        )
+        .setColor(0x95a5a6)
+        .setFooter({ text: 'Stream recap posted to #analytics' });
+
+    await message.channel.send({ embeds: [offlineEmbed] });
 }
 
 // =========================================================================

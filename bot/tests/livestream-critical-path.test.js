@@ -274,7 +274,9 @@ describe('full card night critical path', () => {
         }));
 
         // Confirm posted in channel
-        expect(liveMsg.channel.send).toHaveBeenCalledWith(expect.stringContaining('Live session'));
+        const liveCalls = liveMsg.channel.send.mock.calls;
+        const liveEmbed = liveCalls.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session'));
+        expect(liveEmbed).toBeTruthy();
 
         // ── Step 5: Live purchases arrive ───────────────────────────
         vi.clearAllMocks();
@@ -360,7 +362,9 @@ describe('full card night critical path', () => {
         }));
 
         // Confirm in channel
-        expect(offlineMsg.channel.send).toHaveBeenCalledWith(expect.stringContaining('ended'));
+        const offlineCalls2 = offlineMsg.channel.send.mock.calls;
+        const offlineEmbed = offlineCalls2.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
+        expect(offlineEmbed).toBeTruthy();
 
         // ── Step 8: Declare duck race winner ────────────────────────
         vi.clearAllMocks();
@@ -531,7 +535,9 @@ describe('manual mid-stream queue close', () => {
         expect(newQueue.id).not.toBe(queue.id);
 
         // Offline doesn't crash when queue was already closed
-        expect(offlineMsg.channel.send).toHaveBeenCalledWith(expect.stringContaining('ended'));
+        const offlineCalls2 = offlineMsg.channel.send.mock.calls;
+        const offlineEmbed = offlineCalls2.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
+        expect(offlineEmbed).toBeTruthy();
     });
 
     it('can reopen queue after manual close and resume taking orders', async () => {
@@ -705,10 +711,12 @@ describe('shipping scenarios during offline', () => {
         const offlineMsg = adminMsg();
         await handleOffline(offlineMsg);
 
-        // Confirm message mentions "already covered"
-        expect(offlineMsg.channel.send).toHaveBeenCalledWith(
-            expect.stringContaining('already covered')
-        );
+        // Confirm embed mentions "already covered" in shipping field
+        const offlineCalls = offlineMsg.channel.send.mock.calls;
+        const embedCall = offlineCalls.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
+        expect(embedCall).toBeTruthy();
+        const shippingField = embedCall[0].embeds[0].data.fields.find(f => f.name === 'Shipping');
+        expect(shippingField.value).toContain('already covered');
     });
 
     it('unlinked buyer (no discord ID) gets shipping posted to announcements', async () => {
@@ -764,7 +772,9 @@ describe('edge cases', () => {
         expect(stmts.queues.getActiveQueue.get()).toBeTruthy();
 
         // No crash
-        expect(offlineMsg.channel.send).toHaveBeenCalledWith(expect.stringContaining('ended'));
+        const offlineCalls2 = offlineMsg.channel.send.mock.calls;
+        const offlineEmbed = offlineCalls2.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
+        expect(offlineEmbed).toBeTruthy();
     });
 
     it('queue with zero entries still closes cleanly', async () => {

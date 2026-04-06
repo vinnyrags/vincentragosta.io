@@ -8,6 +8,7 @@
  * Akivili only. Requires confirmation before executing.
  */
 
+import { EmbedBuilder } from 'discord.js';
 import { db } from '../db.js';
 import config from '../config.js';
 import { handleSync } from './sync.js';
@@ -38,11 +39,14 @@ async function handleReset(message) {
     }
 
     // Require confirmation
-    await message.channel.send(
-        '⚠️ **This will wipe ALL data** — purchases, shipping, battles, queues, card listings, giveaways, discord links, and community goals.\n\n' +
-        'Stock will be restored via `!sync` (Sheets → Stripe → WordPress).\n\n' +
-        '✅ React to confirm, or type `cancel` to abort.'
-    );
+    await message.channel.send({ embeds: [new EmbedBuilder()
+        .setTitle('⚠️ System Reset')
+        .setDescription(
+            'This will wipe **ALL data** — purchases, shipping, battles, queues, card listings, giveaways, discord links, and community goals.\n\n' +
+            'Stock will be restored via `!sync` (Sheets → Stripe → WordPress).\n\n' +
+            '✅ React to confirm, or type `cancel` to abort.'
+        )
+        .setColor(0xe74c3c)] });
 
     const confirmMsg = message.channel.lastMessage;
     try { await confirmMsg.react('✅'); } catch { /* can't react */ }
@@ -65,11 +69,15 @@ async function handleReset(message) {
     ]);
 
     if (!confirmed) {
-        return message.channel.send('❌ Reset cancelled.');
+        return message.channel.send({ embeds: [new EmbedBuilder()
+            .setDescription('❌ Reset cancelled.')
+            .setColor(0xe74c3c)] });
     }
 
     // Step 1: Clear all tables
-    await message.channel.send('🗑️ Clearing all tables...');
+    await message.channel.send({ embeds: [new EmbedBuilder()
+        .setDescription('🗑️ Clearing all tables...')
+        .setColor(0xf39c12)] });
 
     const cleared = [];
     for (const table of TABLES_TO_CLEAR) {
@@ -96,10 +104,15 @@ async function handleReset(message) {
     // Refresh the #restock-tracker pinned message
     await initCommunityGoals();
 
-    await message.channel.send(`✅ **Database wiped.** ${summary}\n\nCommunity goals reset to cycle 1, $0. Restock tracker updated.`);
+    await message.channel.send({ embeds: [new EmbedBuilder()
+        .setTitle('✅ Database Wiped')
+        .setDescription(`${summary}\n\nCommunity goals reset to cycle 1, $0. Restock tracker updated.`)
+        .setColor(0x2ecc71)] });
 
     // Step 2: Sync products to restore stock
-    await message.channel.send('🔄 **Restoring stock via !sync...**');
+    await message.channel.send({ embeds: [new EmbedBuilder()
+        .setDescription('🔄 **Restoring stock via !sync...**')
+        .setColor(0x3498db)] });
     await handleSync(message, []);
 }
 
