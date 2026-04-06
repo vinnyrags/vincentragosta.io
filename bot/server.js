@@ -27,8 +27,8 @@ import {
 const app = express();
 
 /**
- * Stripe custom field for Discord username — added to all checkout endpoints.
- * Enables auto-linking purchases to Discord accounts at checkout time.
+ * Stripe custom field for Discord username — only shown when the buyer
+ * isn't already known via Discord (no ?user= query param).
  */
 const discordUsernameField = {
     key: 'discord_username',
@@ -36,6 +36,10 @@ const discordUsernameField = {
     type: 'text',
     optional: true,
 };
+
+function customFieldsFor(discordUserId) {
+    return discordUserId ? [] : [discordUsernameField];
+}
 
 // =========================================================================
 // Stripe webhook — needs raw body for signature verification
@@ -107,7 +111,7 @@ app.get('/battle/checkout/:id', async (req, res) => {
                 battle_id: String(battle.id),
                 source: 'pack-battle',
             },
-            custom_fields: [discordUsernameField],
+            custom_fields: customFieldsFor(discordUserId),
         };
 
         // Add shipping unless already covered this period
@@ -162,7 +166,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 source: 'card-sale',
                 reserved_for: listing.buyer_discord_id || '',
             },
-            custom_fields: [discordUsernameField],
+            custom_fields: customFieldsFor(discordUserId),
         };
 
         // Conditional shipping: skip if buyer already covered this period
@@ -206,7 +210,7 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             metadata: {
                 source: 'hype-checkout',
             },
-            custom_fields: [discordUsernameField],
+            custom_fields: customFieldsFor(discordUserId),
         };
 
         // Conditional shipping based on buyer identity
@@ -269,7 +273,7 @@ app.get('/shipping/checkout', async (req, res) => {
                 reason,
             },
             shipping_address_collection: { allowed_countries: config.SHIPPING.COUNTRIES },
-            custom_fields: [discordUsernameField],
+            custom_fields: customFieldsFor(req.query.user),
         });
 
         res.redirect(303, session.url);
