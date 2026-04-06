@@ -68,7 +68,13 @@ async function handleLive(message) {
     // Post going-live announcement
     const embed = new EmbedBuilder()
         .setTitle('🔴 We\'re Live!')
-        .setDescription('Card night is starting! Come hang.\n\nShipping is included at checkout.')
+        .setDescription(
+            `Card night is starting! Come hang.\n\n` +
+            `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV)\n` +
+            `📱 [TikTok](https://tiktok.com/@itzenzoTTV)\n` +
+            `📸 [Instagram](https://instagram.com/itzenzo.TTV)\n` +
+            `🎬 [YouTube](https://youtube.com/@itzenzoTTV)`
+        )
         .setColor(0x9146ff);
 
     const buttons = new ActionRowBuilder().addComponents(
@@ -76,14 +82,6 @@ async function handleLive(message) {
             .setLabel('🛒 Shop Now')
             .setStyle(ButtonStyle.Link)
             .setURL(shopLink),
-        new ButtonBuilder()
-            .setLabel('👉 Watch on Twitch')
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://twitch.tv/itzenzoTTV'),
-        new ButtonBuilder()
-            .setLabel('📱 TikTok')
-            .setStyle(ButtonStyle.Link)
-            .setURL('https://tiktok.com/@itzenzoTTV'),
     );
 
     await sendToChannel('ANNOUNCEMENTS', { embeds: [embed], components: [buttons] });
