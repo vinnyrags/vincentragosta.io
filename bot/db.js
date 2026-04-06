@@ -221,6 +221,13 @@ try {
     // Column already exists — ignore
 }
 
+// Add channel_message_id column to queues for real-time #queue embed (v5)
+try {
+    db.exec(`ALTER TABLE queues ADD COLUMN channel_message_id TEXT`);
+} catch {
+    // Column already exists — ignore
+}
+
 // =========================================================================
 // Purchases
 // =========================================================================
@@ -400,6 +407,10 @@ const queueStmts = {
 
     getEntryCount: db.prepare(`
         SELECT COUNT(*) as count FROM queue_entries WHERE queue_id = ?
+    `),
+
+    setChannelMessage: db.prepare(`
+        UPDATE queues SET channel_message_id = ? WHERE id = ?
     `),
 
     getRecentQueues: db.prepare(`

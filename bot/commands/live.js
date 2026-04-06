@@ -13,6 +13,7 @@ import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'disc
 import config from '../config.js';
 import { livestream, queues, analytics, goals } from '../db.js';
 import { sendEmbed, sendToChannel, getGuild } from '../discord.js';
+import { postQueueChannelEmbed, updateQueueChannelEmbed } from './queue.js';
 
 // =========================================================================
 // !live
@@ -40,6 +41,7 @@ async function handleLive(message) {
     if (!activeQueue) {
         const queueResult = queues.createQueue.run();
         activeQueue = queues.getActiveQueue.get();
+        await postQueueChannelEmbed(activeQueue);
         await message.channel.send({ embeds: [new EmbedBuilder()
             .setDescription(`📋 No queue was open — auto-opened queue #${activeQueue.id}`)
             .setColor(0x3498db)] });
@@ -120,28 +122,20 @@ async function handleOffline(message) {
     // Cancel the reminder
     cancelReminder();
 
-    // Close the current queue and archive it
+    // Close the current queue and update #queue embed
     const activeQueue = queues.getActiveQueue.get();
     let closedQueueId = null;
     if (activeQueue) {
         queues.closeQueue.run(activeQueue.id);
         closedQueueId = activeQueue.id;
-        const entries = queues.getEntries.all(activeQueue.id);
-        const uniqueBuyers = queues.getUniqueBuyers.all(activeQueue.id);
-
-        if (entries.length > 0) {
-            await sendEmbed('CARD_NIGHT_QUEUE', {
-                title: `📋 Queue #${activeQueue.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
-                description: 'Tonight\'s queue archived.',
-                color: 0x95a5a6,
-                footer: `Opened: ${activeQueue.created_at}`,
-            });
-        }
+        await updateQueueChannelEmbed(activeQueue.id);
     }
 
     // Open next queue for pre-orders
     const queueResult = queues.createQueue.run();
     const newQueueId = queueResult.lastInsertRowid;
+    const newQueue = queues.getQueueById.get(newQueueId);
+    await postQueueChannelEmbed(newQueue);
 
     // Post stream-ended recap
     await sendEmbed('ANNOUNCEMENTS', {
@@ -158,7 +152,7 @@ async function handleOffline(message) {
         .setTitle('📴 Live Session Ended')
         .setDescription(`**Session #${session.id}**`)
         .addFields(
-            { name: 'Queue', value: `${closedQueueId ? `#${closedQueueId} closed` : 'None'} → archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>`, inline: false },
+            { name: 'Queue', value: `${closedQueueId ? `#${closedQueueId} closed` : 'None'} → updated in <#${config.CHANNELS.QUEUE}>`, inline: false },
             { name: 'Next Queue', value: `#${newQueueId} opened for pre-orders`, inline: false },
         )
         .setColor(0x95a5a6)

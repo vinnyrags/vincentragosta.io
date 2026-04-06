@@ -120,7 +120,7 @@ async function handleCheckoutCompleted(session) {
     for (const item of lineItems) {
         const productName = item.name || 'Unknown Product';
         const quantity = item.quantity || 1;
-        const added = addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
+        const added = await addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
         if (added) {
             console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
         }

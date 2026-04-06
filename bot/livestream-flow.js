@@ -92,7 +92,7 @@ const messages = [
             '```',
             '!offline                              → Master switch OFF',
             '                                         • Ends livestream session',
-            '                                         • Closes queue, archives to #card-night-queue',
+            '                                         • Closes queue, updates #queue embed',
             '                                         • Opens next pre-order queue',
             '                                         • Posts stream-ended in #announcements',
             '                                         • Posts stream recap to #analytics',

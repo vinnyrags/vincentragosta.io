@@ -55,7 +55,8 @@ export function createTestDb() {
             status TEXT DEFAULT 'open',
             created_at TEXT DEFAULT (datetime('now')),
             closed_at TEXT,
-            duck_race_winner_id TEXT
+            duck_race_winner_id TEXT,
+            channel_message_id TEXT
         );
 
         CREATE TABLE IF NOT EXISTS queue_entries (
@@ -204,6 +205,7 @@ export function buildStmts(db) {
             getEntries: db.prepare(`SELECT * FROM queue_entries WHERE queue_id = ? ORDER BY created_at ASC`),
             getUniqueBuyers: db.prepare(`SELECT DISTINCT COALESCE(discord_user_id, customer_email) AS buyer FROM queue_entries WHERE queue_id = ?`),
             getEntryCount: db.prepare(`SELECT COUNT(*) as count FROM queue_entries WHERE queue_id = ?`),
+            setChannelMessage: db.prepare(`UPDATE queues SET channel_message_id = ? WHERE id = ?`),
             getRecentQueues: db.prepare(`SELECT * FROM queues WHERE status IN ('closed', 'complete') ORDER BY created_at DESC LIMIT ?`),
         },
         livestream: {

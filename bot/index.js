@@ -13,7 +13,7 @@
  *  - Role promotion (Xipe at 1+ purchases, Long at 5+)
  *  - New product alerts (POST /alerts/products)
  *  - Pack battle results + duck race winners cross-posted to #and-in-the-back
- *  - Queue archives posted to #card-night-queue
+ *  - Real-time queue embed updated in #queue
  *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
  *  - Analytics (!snapshot → on-demand snapshots, auto stream recaps on !offline)
  *  - Giveaway system (!giveaway — reaction-based entries, social funnel, duck race draw)

@@ -68,7 +68,7 @@ vi.mock('../config.js', () => ({
             DEALS: '3',
             PACK_BATTLES: '4',
             AND_IN_THE_BACK: '5',
-            CARD_NIGHT_QUEUE: '6',
+            QUEUE: '6',
             CARD_SHOP: '7',
             OPS: '8',
             BOT_COMMANDS: '9',
@@ -337,10 +337,7 @@ describe('full card night critical path', () => {
         expect(newQueue).toBeTruthy();
         expect(newQueue.id).not.toBe(queue.id);
 
-        // Queue archived to #card-night-queue
-        expect(mockSendEmbed).toHaveBeenCalledWith('CARD_NIGHT_QUEUE', expect.objectContaining({
-            title: expect.stringContaining(`Queue #${queue.id}`),
-        }));
+        // Queue embed updated in #queue channel (via updateQueueChannelEmbed)
 
         // Stream-ended announcement
         expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
@@ -483,7 +480,7 @@ describe('manual mid-stream queue close', () => {
         const session = stmts.livestream.getActiveSession.get();
 
         // Pre-order arrives
-        addToQueue('alice_discord', 'alice@example.com', 'Pack A', 1, 'cs_pre');
+        await addToQueue('alice_discord', 'alice@example.com', 'Pack A', 1, 'cs_pre');
 
         expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
 
@@ -495,7 +492,7 @@ describe('manual mid-stream queue close', () => {
         expect(stmts.queues.getQueueById.get(queue.id).status).toBe('closed');
 
         // ── Purchases during closed queue are silently dropped ──────
-        const added = addToQueue('bob_discord', 'bob@example.com', 'Pack B', 1, 'cs_dropped');
+        const added = await addToQueue('bob_discord', 'bob@example.com', 'Pack B', 1, 'cs_dropped');
         expect(added).toBe(false);
 
         // ── Offline still works cleanly ─────────────────────────────
@@ -534,7 +531,7 @@ describe('manual mid-stream queue close', () => {
         expect(secondQueue.id).not.toBe(firstQueue.id);
 
         // New orders go into the new queue
-        const added = addToQueue('charlie', 'c@e.com', 'Card', 1, 'cs_new');
+        const added = await addToQueue('charlie', 'c@e.com', 'Card', 1, 'cs_new');
         expect(added).toBe(true);
         expect(stmts.queues.getEntries.all(secondQueue.id)).toHaveLength(1);
         expect(stmts.queues.getEntries.all(firstQueue.id)).toHaveLength(0);

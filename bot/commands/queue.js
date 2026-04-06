@@ -4,19 +4,22 @@
  * Commands:
  *   !queue              — Show current queue
  *   !queue open         — Open a new queue (mods)
- *   !queue close        — Close the queue and archive to #card-night-queue (mods)
+ *   !queue close        — Close the queue (mods)
  *   !queue history      — Show recent queues with winners
  *   !duckrace           — Show duck race roster (unique buyers from queue)
  *   !duckrace winner @u — Declare duck race winner, assign Aha role (mods)
  *
  * Queue entries are auto-added when card products are purchased via Stripe.
  * Each buyer gets exactly one duck race entry regardless of how many items.
+ *
+ * A persistent embed in #queue updates in real time on every purchase,
+ * queue open/close, and duck race winner declaration.
  */
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
 import { queues } from '../db.js';
-import { sendEmbed, getMember, addRole } from '../discord.js';
+import { client, sendEmbed, getMember, addRole } from '../discord.js';
 
 // =========================================================================
 // Queue commands
@@ -50,6 +53,10 @@ async function openQueue(message) {
 
     const result = queues.createQueue.run();
     const queueId = result.lastInsertRowid;
+    const queue = queues.getQueueById.get(queueId);
+
+    // Post real-time embed to #queue channel
+    await postQueueChannelEmbed(queue);
 
     const embed = new EmbedBuilder()
         .setTitle('📋 Queue Open!')
@@ -72,24 +79,12 @@ async function closeQueue(message) {
     const uniqueBuyers = queues.getUniqueBuyers.all(active.id);
     const embed = buildQueueEmbed(active, entries, uniqueBuyers, 'closed');
 
+    // Update #queue channel embed to closed state
+    await updateQueueChannelEmbed(active.id);
+
     // Post in current channel
     await message.channel.send({ embeds: [embed] });
-
-    // Archive to #card-night-queue
-    const archiveEmbed = new EmbedBuilder()
-        .setTitle(`📋 Queue #${active.id} — Archived`)
-        .setDescription(buildQueueDescription(entries, uniqueBuyers))
-        .setColor(0x95a5a6)
-        .setFooter({ text: `Opened: ${active.created_at} • Closed: ${new Date().toISOString().replace('T', ' ').slice(0, 19)}` });
-
-    await sendEmbed('CARD_NIGHT_QUEUE', {
-        title: `📋 Queue #${active.id} — ${entries.length} items from ${uniqueBuyers.length} buyers`,
-        description: buildQueueDescription(entries, uniqueBuyers),
-        color: 0x95a5a6,
-        footer: `Opened: ${active.created_at}`,
-    });
-
-    await message.channel.send(`Queue #${active.id} closed and archived to <#${config.CHANNELS.CARD_NIGHT_QUEUE}>. Run \`!duckrace\` to see the race roster.`);
+    await message.channel.send(`Queue #${active.id} closed. Run \`!duckrace\` to see the race roster.`);
 }
 
 async function showQueue(message) {
@@ -209,6 +204,9 @@ async function declareDuckRaceWinner(message, args) {
         await addRole(member, config.ROLES.AHA);
     }
 
+    // Update #queue channel embed with winner
+    await updateQueueChannelEmbed(target.id);
+
     const entries = queues.getEntries.all(target.id);
 
     // Post in current channel
@@ -232,6 +230,64 @@ async function declareDuckRaceWinner(message, args) {
         description: `Winner: <@${mentioned.id}>\nEntries: ${uniqueBuyers.length} buyers, ${entries.length} items`,
         color: 0xffd700,
     });
+}
+
+// =========================================================================
+// Real-time #queue channel embed
+// =========================================================================
+
+/**
+ * Post a new queue embed to #queue and store the message ID.
+ */
+async function postQueueChannelEmbed(queue) {
+    try {
+        const channel = client.channels.cache.get(config.CHANNELS.QUEUE);
+        if (!channel) return;
+
+        const entries = queues.getEntries.all(queue.id);
+        const uniqueBuyers = queues.getUniqueBuyers.all(queue.id);
+        const status = queue.duck_race_winner_id ? 'complete' : queue.status;
+        const embed = buildQueueEmbed(queue, entries, uniqueBuyers, status);
+
+        const msg = await channel.send({ embeds: [embed] });
+        queues.setChannelMessage.run(msg.id, queue.id);
+    } catch (e) {
+        console.error('Failed to post queue channel embed:', e.message);
+    }
+}
+
+/**
+ * Update the existing #queue channel embed. Falls back to posting
+ * a new message if the original was deleted.
+ */
+async function updateQueueChannelEmbed(queueId) {
+    try {
+        const queue = queues.getQueueById.get(queueId);
+        if (!queue) return;
+
+        const channel = client.channels.cache.get(config.CHANNELS.QUEUE);
+        if (!channel) return;
+
+        const entries = queues.getEntries.all(queue.id);
+        const uniqueBuyers = queues.getUniqueBuyers.all(queue.id);
+        const status = queue.duck_race_winner_id ? 'complete' : queue.status;
+        const embed = buildQueueEmbed(queue, entries, uniqueBuyers, status);
+
+        if (queue.channel_message_id) {
+            try {
+                const msg = await channel.messages.fetch(queue.channel_message_id);
+                await msg.edit({ embeds: [embed] });
+                return;
+            } catch {
+                // Message deleted — fall through to post a new one
+            }
+        }
+
+        const msg = await channel.send({ embeds: [embed] });
+        queues.setChannelMessage.run(msg.id, queue.id);
+    } catch (e) {
+        console.error('Failed to update queue channel embed:', e.message);
+    }
 }
 
 // =========================================================================
@@ -259,12 +315,16 @@ function buildQueueDescription(entries, uniqueBuyers) {
 function buildQueueEmbed(queue, entries, uniqueBuyers, status) {
     const statusText = status === 'open'
         ? '🟢 OPEN — Purchases are automatically added'
-        : '🔴 CLOSED';
+        : status === 'complete'
+            ? `🏆 COMPLETE — Winner: <@${queue.duck_race_winner_id}>`
+            : '🔴 CLOSED';
+
+    const color = status === 'open' ? 0xceff00 : status === 'complete' ? 0xffd700 : 0xe74c3c;
 
     const embed = new EmbedBuilder()
         .setTitle(`📋 Queue #${queue.id}`)
         .setDescription(`${statusText}\n\n${buildQueueDescription(entries, uniqueBuyers)}`)
-        .setColor(status === 'open' ? 0xceff00 : 0xe74c3c)
+        .setColor(color)
         .addFields(
             { name: 'Items', value: String(entries.length), inline: true },
             { name: 'Buyers', value: String(uniqueBuyers.length), inline: true },
@@ -279,11 +339,15 @@ function buildQueueEmbed(queue, entries, uniqueBuyers, status) {
  * Add a purchase to the active queue (called from Stripe webhook).
  * Returns true if added, false if no active queue.
  */
-function addToQueue(discordUserId, customerEmail, productName, quantity, stripeSessionId) {
+async function addToQueue(discordUserId, customerEmail, productName, quantity, stripeSessionId) {
     const active = queues.getActiveQueue.get();
     if (!active) return false;
 
     queues.addEntry.run(active.id, discordUserId, customerEmail, productName, quantity, stripeSessionId);
+
+    // Update the real-time #queue channel embed
+    await updateQueueChannelEmbed(active.id);
+
     return true;
 }
 
@@ -291,4 +355,6 @@ export {
     handleQueue,
     handleDuckRace,
     addToQueue,
+    postQueueChannelEmbed,
+    updateQueueChannelEmbed,
 };
