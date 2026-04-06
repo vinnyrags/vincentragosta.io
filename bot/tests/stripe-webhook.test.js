@@ -122,6 +122,99 @@ describe('Discord auto-linking', () => {
 });
 
 // =========================================================================
+// Auto-link via Discord username (checkout custom field)
+// =========================================================================
+
+describe('auto-link via Discord username custom field', () => {
+    it('auto-links when username resolves to a known discord user', () => {
+        // Simulate what the webhook does: no existing link, so check custom field
+        const email = 'newbuyer@example.com';
+        const resolvedDiscordId = 'resolved_123';
+
+        // No link exists yet
+        expect(stmts.purchases.getDiscordIdByEmail.get(email)).toBeUndefined();
+
+        // Auto-link (same operation the webhook performs after findMemberByUsername succeeds)
+        stmts.purchases.linkDiscord.run(resolvedDiscordId, email);
+
+        // Now the link exists
+        const link = stmts.purchases.getDiscordIdByEmail.get(email);
+        expect(link.discord_user_id).toBe(resolvedDiscordId);
+    });
+
+    it('auto-linked user gets purchase recorded with discord ID', () => {
+        const email = 'newbuyer@example.com';
+        const resolvedDiscordId = 'resolved_123';
+
+        // Auto-link first
+        stmts.purchases.linkDiscord.run(resolvedDiscordId, email);
+
+        // Purchase recorded with the resolved discord ID (not null)
+        stmts.purchases.insertPurchase.run('cs_autolink', resolvedDiscordId, email, 'Card Pack', 2500);
+        const p = db.prepare('SELECT * FROM purchases WHERE stripe_session_id = ?').get('cs_autolink');
+        expect(p.discord_user_id).toBe(resolvedDiscordId);
+    });
+
+    it('auto-linked user gets added to queue with discord ID', () => {
+        const email = 'newbuyer@example.com';
+        const resolvedDiscordId = 'resolved_123';
+
+        // Auto-link
+        stmts.purchases.linkDiscord.run(resolvedDiscordId, email);
+
+        // Open a queue and add entry with resolved ID
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+        stmts.queues.addEntry.run(queue.id, resolvedDiscordId, email, 'Card Pack', 1, 'cs_autolink');
+
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe(resolvedDiscordId);
+
+        // Counts as a unique buyer for duck race
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
+        expect(buyers).toHaveLength(1);
+    });
+
+    it('skips auto-link when email is already linked (existing link takes precedence)', () => {
+        const email = 'existing@example.com';
+        const existingDiscordId = 'existing_456';
+
+        // Pre-existing link
+        stmts.purchases.linkDiscord.run(existingDiscordId, email);
+
+        // Webhook flow: lookup succeeds → skip auto-link entirely
+        const link = stmts.purchases.getDiscordIdByEmail.get(email);
+        expect(link.discord_user_id).toBe(existingDiscordId);
+    });
+
+    it('purchase proceeds unlinked when username is not found', () => {
+        const email = 'noDiscord@example.com';
+
+        // No link exists, username lookup would fail → purchase recorded unlinked
+        stmts.purchases.insertPurchase.run('cs_nofind', null, email, 'Card Pack', 1500);
+        const p = db.prepare('SELECT * FROM purchases WHERE stripe_session_id = ?').get('cs_nofind');
+        expect(p.discord_user_id).toBeNull();
+        expect(p.customer_email).toBe(email);
+    });
+
+    it('auto-link enables role promotion on first purchase', () => {
+        const email = 'newbuyer@example.com';
+        const resolvedDiscordId = 'resolved_123';
+
+        // Auto-link at purchase time
+        stmts.purchases.linkDiscord.run(resolvedDiscordId, email);
+        stmts.purchases.insertPurchase.run('cs_promo', resolvedDiscordId, email, 'Card', 2500);
+        stmts.purchases.incrementPurchaseCount.run(resolvedDiscordId);
+
+        // Xipe threshold met on first purchase
+        const count = stmts.purchases.getPurchaseCount.get(resolvedDiscordId).total_purchases;
+        expect(count).toBe(1);
+        expect(count >= 1).toBe(true);
+    });
+});
+
+// =========================================================================
 // Battle payment flow (operations checkBattlePayment performs)
 // =========================================================================
 
@@ -207,18 +300,6 @@ describe('purchase → promotion flow', () => {
 // =========================================================================
 
 describe('shipping payment tracking', () => {
-    it('livestream-shipping source marks shipping as paid', () => {
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
-        stmts.livestream.addBuyer.run(session.id, 'user1', 'buyer@example.com');
-
-        // Simulate what the webhook does for livestream-shipping
-        stmts.livestream.markShippingPaid.run(session.id, 'buyer@example.com');
-
-        const unpaid = stmts.livestream.getBuyers.all(session.id);
-        expect(unpaid).toHaveLength(0); // no longer in unpaid list
-    });
-
     it('shipping payment does not create a purchase record', () => {
         // Shipping payments should early-return — no purchase inserted
         const before = db.prepare('SELECT COUNT(*) as c FROM purchases').get().c;

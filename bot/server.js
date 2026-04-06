@@ -4,8 +4,8 @@
  * Routes:
  *   POST /webhooks/stripe    — Stripe checkout events
  *   POST /webhooks/twitch    — Twitch EventSub events
- *   GET  /battle/checkout/:id     — Direct checkout for pack battle buy-in (no shipping)
- *   GET  /livestream/shipping/:id — $10 shipping for all livestream buyers (including battle winners)
+ *   GET  /battle/checkout/:id     — Direct checkout for pack battle buy-in
+ *   GET  /shipping/lookup         — Check shipping coverage by email
  *   GET  /health                  — Health check
  */
 
@@ -17,10 +17,7 @@ import { getActiveCoupon } from './commands/coupon.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
 import {
-    isInternational,
     isInternationalByEmail,
-    getShippingRate,
-    getShippingRateByEmail,
     hasShippingCoveredByDiscordId,
     hasShippingCovered,
     getShippingLabel,
@@ -28,6 +25,17 @@ import {
 } from './shipping.js';
 
 const app = express();
+
+/**
+ * Stripe custom field for Discord username — added to all checkout endpoints.
+ * Enables auto-linking purchases to Discord accounts at checkout time.
+ */
+const discordUsernameField = {
+    key: 'discord_username',
+    label: { type: 'custom', custom: 'Discord username' },
+    type: 'text',
+    optional: true,
+};
 
 // =========================================================================
 // Stripe webhook — needs raw body for signature verification
@@ -99,6 +107,7 @@ app.get('/battle/checkout/:id', async (req, res) => {
                 battle_id: String(battle.id),
                 source: 'pack-battle',
             },
+            custom_fields: [discordUsernameField],
         };
 
         // Add shipping unless already covered this period
@@ -118,71 +127,6 @@ app.get('/battle/checkout/:id', async (req, res) => {
 });
 
 // =========================================================================
-// Battle winner shipping — $0 checkout to collect winner's address
-// =========================================================================
-// Livestream shipping — $10 flat rate for all items from tonight's stream
-// =========================================================================
-
-app.get('/livestream/shipping/:sessionId', async (req, res) => {
-    const email = req.query.email;
-    const discordUserId = req.query.user;
-
-    // Determine rate: check if buyer is international
-    let rate = config.SHIPPING.DOMESTIC;
-    let displayName = 'Livestream Shipping';
-    let description = 'Flat rate shipping for all items and winnings from tonight\'s stream.';
-
-    if (discordUserId && isInternational(discordUserId)) {
-        rate = config.SHIPPING.INTERNATIONAL;
-        displayName = 'International Livestream Shipping';
-        description = 'International flat rate shipping — covers all purchases through end of month.';
-    } else if (email) {
-        const emailRate = getShippingRateByEmail(email);
-        if (emailRate === config.SHIPPING.INTERNATIONAL) {
-            rate = config.SHIPPING.INTERNATIONAL;
-            displayName = 'International Livestream Shipping';
-            description = 'International flat rate shipping — covers all purchases through end of month.';
-        }
-    }
-
-    try {
-        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-        const params = {
-            mode: 'payment',
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: { name: displayName, description },
-                        unit_amount: rate,
-                    },
-                    quantity: 1,
-                },
-            ],
-            success_url: `${config.SHOP_URL}?shipping_paid=1`,
-            cancel_url: config.SHOP_URL,
-            metadata: {
-                livestream_session_id: req.params.sessionId,
-                source: 'livestream-shipping',
-                discord_user_id: discordUserId || '',
-            },
-            shipping_address_collection: { allowed_countries: config.SHIPPING.COUNTRIES },
-        };
-
-        // Prefill email if available
-        if (email) {
-            params.customer_email = email;
-            params.metadata.customer_email = email;
-        }
-
-        const session = await stripe.checkout.sessions.create(params);
-        res.redirect(303, session.url);
-    } catch (e) {
-        console.error('Livestream shipping checkout error:', e.message);
-        res.status(500).send('Could not create shipping form. Contact a mod.');
-    }
-});
-
 // =========================================================================
 // Card shop checkout — creates a Stripe session for individual card sales
 // =========================================================================
@@ -218,6 +162,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 source: 'card-sale',
                 reserved_for: listing.buyer_discord_id || '',
             },
+            custom_fields: [discordUsernameField],
         };
 
         // Conditional shipping: skip if buyer already covered this period
@@ -261,6 +206,7 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             metadata: {
                 source: 'hype-checkout',
             },
+            custom_fields: [discordUsernameField],
         };
 
         // Conditional shipping based on buyer identity
@@ -323,14 +269,7 @@ app.get('/shipping/checkout', async (req, res) => {
                 reason,
             },
             shipping_address_collection: { allowed_countries: config.SHIPPING.COUNTRIES },
-            custom_fields: [
-                {
-                    key: 'discord_username',
-                    label: { type: 'custom', custom: 'Discord username (optional)' },
-                    type: 'text',
-                    optional: true,
-                },
-            ],
+            custom_fields: [discordUsernameField],
         });
 
         res.redirect(303, session.url);

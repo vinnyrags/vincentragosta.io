@@ -46,6 +46,7 @@ const mockGetMember = vi.fn().mockImplementation((userId) =>
 const mockSendEmbed = vi.fn().mockResolvedValue(null);
 const mockSendToChannel = vi.fn().mockResolvedValue(null);
 const mockAddRole = vi.fn().mockResolvedValue(false);
+const mockFindMemberByUsername = vi.fn().mockResolvedValue(null);
 
 vi.mock('../discord.js', () => ({
     client: { channels: { cache: { get: vi.fn() } } },
@@ -54,6 +55,7 @@ vi.mock('../discord.js', () => ({
     sendToChannel: (...args) => mockSendToChannel(...args),
     sendEmbed: (...args) => mockSendEmbed(...args),
     getMember: (...args) => mockGetMember(...args),
+    findMemberByUsername: (...args) => mockFindMemberByUsername(...args),
     hasRole: vi.fn().mockReturnValue(false),
     addRole: (...args) => mockAddRole(...args),
 }));
@@ -143,7 +145,7 @@ beforeEach(() => {
     Object.assign(dbModule.discordLinks, stmts.discordLinks);
     vi.clearAllMocks();
 
-    // Mock fetch (used by toggleLivestreamMode for WordPress REST API)
+    // Mock fetch (used by any external HTTP calls)
     global.fetch = vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({}),
@@ -152,7 +154,7 @@ beforeEach(() => {
 
 // Import command handlers (after mocks are in place)
 const { handleQueue, handleDuckRace, addToQueue } = await import('../commands/queue.js');
-const { handleLive, handleOffline, addLivestreamBuyer } = await import('../commands/live.js');
+const { handleLive, handleOffline } = await import('../commands/live.js');
 const { handleCheckoutCompleted } = await import('../webhooks/stripe.js');
 
 // =========================================================================
@@ -174,8 +176,8 @@ function fakeCheckoutSession({
     sessionId = `cs_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
     email = 'buyer@example.com',
     discordUserId = null,
+    discordUsername = null,
     products = [{ name: 'Prismatic Evolutions ETB', quantity: 1 }],
-    live = false,
     amount = 3999,
 } = {}) {
     // Pre-link discord so the webhook can find the user
@@ -183,7 +185,7 @@ function fakeCheckoutSession({
         stmts.purchases.linkDiscord.run(discordUserId, email);
     }
 
-    return {
+    const session = {
         id: sessionId,
         customer_details: { email },
         customer_email: email,
@@ -195,10 +197,17 @@ function fakeCheckoutSession({
                 quantity: p.quantity || 1,
                 stock_remaining: p.stock ?? 10,
             }))),
-            live: live ? '1' : '0',
         },
-        custom_fields: [],
     };
+
+    // Add Discord username custom field (simulates buyer filling it in at checkout)
+    if (discordUsername) {
+        session.custom_fields = [
+            { key: 'discord_username', text: { value: discordUsername } },
+        ];
+    }
+
+    return session;
 }
 
 // =========================================================================
@@ -257,12 +266,6 @@ describe('full card night critical path', () => {
         // Queue stays open
         expect(stmts.queues.getActiveQueue.get().id).toBe(queue.id);
 
-        // WordPress toggle called
-        expect(global.fetch).toHaveBeenCalledWith(
-            expect.stringContaining('/wp-json/shop/v1/livestream'),
-            expect.objectContaining({ method: 'POST' })
-        );
-
         // Pre-order summary posted (queue had entries)
         expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
             title: expect.stringContaining('Pre-Orders'),
@@ -303,10 +306,6 @@ describe('full card night critical path', () => {
         uniqueBuyers = stmts.queues.getUniqueBuyers.all(queue.id);
         expect(uniqueBuyers).toHaveLength(3); // alice, bob, charlie
 
-        // Livestream buyers tracked (only live=1 purchases)
-        const buyers = stmts.livestream.getBuyers.all(session.id);
-        expect(buyers).toHaveLength(2); // alice + charlie (bob was pre-order only)
-
         // ── Step 6: Check duck race roster ──────────────────────────
         const duckMsg = adminMsg({ content: '!duckrace' });
         await handleDuckRace(duckMsg, []);
@@ -337,19 +336,6 @@ describe('full card night critical path', () => {
         const newQueue = stmts.queues.getActiveQueue.get();
         expect(newQueue).toBeTruthy();
         expect(newQueue.id).not.toBe(queue.id);
-
-        // WordPress toggle called (disable live mode)
-        expect(global.fetch).toHaveBeenCalledWith(
-            expect.stringContaining('/wp-json/shop/v1/livestream'),
-            expect.objectContaining({
-                method: 'POST',
-                body: expect.stringContaining('"active":false'),
-            })
-        );
-
-        // Shipping DMs sent to livestream buyers
-        expect(mockGetMember).toHaveBeenCalledWith('alice_discord');
-        expect(mockGetMember).toHaveBeenCalledWith('charlie_discord');
 
         // Queue archived to #card-night-queue
         expect(mockSendEmbed).toHaveBeenCalledWith('CARD_NIGHT_QUEUE', expect.objectContaining({
@@ -498,7 +484,6 @@ describe('manual mid-stream queue close', () => {
 
         // Pre-order arrives
         addToQueue('alice_discord', 'alice@example.com', 'Pack A', 1, 'cs_pre');
-        addLivestreamBuyer('alice_discord', 'alice@example.com');
 
         expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
 
@@ -513,21 +498,12 @@ describe('manual mid-stream queue close', () => {
         const added = addToQueue('bob_discord', 'bob@example.com', 'Pack B', 1, 'cs_dropped');
         expect(added).toBe(false);
 
-        // But livestream buyer tracking still works (independent of queue)
-        const tracked = addLivestreamBuyer('bob_discord', 'bob@example.com');
-        expect(tracked).toBe(true);
-        expect(stmts.livestream.getBuyers.all(session.id)).toHaveLength(2);
-
         // ── Offline still works cleanly ─────────────────────────────
         const offlineMsg = adminMsg({ content: '!offline' });
         await handleOffline(offlineMsg);
 
         // Session ended
         expect(stmts.livestream.getActiveSession.get()).toBeUndefined();
-
-        // Shipping DMs sent to both buyers (alice and bob)
-        expect(mockGetMember).toHaveBeenCalledWith('alice_discord');
-        expect(mockGetMember).toHaveBeenCalledWith('bob_discord');
 
         // New queue opened
         const newQueue = stmts.queues.getActiveQueue.get();
@@ -589,49 +565,19 @@ describe('stripe webhook integration during livestream', () => {
         expect(queueEntries).toHaveLength(1);
         expect(queueEntries[0].product_name).toBe('ETB');
 
-        // In livestream buyers
-        const buyers = stmts.livestream.getBuyers.all(session.id);
-        expect(buyers).toHaveLength(1);
-        expect(buyers[0].customer_email).toBe('buyer@example.com');
-    });
-
-    it('non-live purchase only lands in queue (not livestream buyers)', async () => {
-        stmts.queues.createQueue.run();
-        const queue = stmts.queues.getActiveQueue.get();
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
-
-        await handleCheckoutCompleted(fakeCheckoutSession({
-            sessionId: 'cs_preorder_only',
-            email: 'preorder@example.com',
-            discordUserId: 'pre_discord',
-            products: [{ name: 'Pre-order Pack', quantity: 1 }],
-            live: false,
-        }));
-
-        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
-        expect(stmts.livestream.getBuyers.all(session.id)).toHaveLength(0);
     });
 
     it('purchase without active queue is silently dropped from queue', async () => {
-        // No queue open, but livestream is active
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
-
         await handleCheckoutCompleted(fakeCheckoutSession({
             sessionId: 'cs_no_queue',
             email: 'buyer@example.com',
             discordUserId: 'buyer1',
             products: [{ name: 'Pack', quantity: 1 }],
-            live: true,
         }));
 
         // No queue entries (no active queue)
         const allQueues = db.prepare('SELECT * FROM queue_entries').all();
         expect(allQueues).toHaveLength(0);
-
-        // But livestream buyer is still tracked
-        expect(stmts.livestream.getBuyers.all(session.id)).toHaveLength(1);
     });
 
     it('multi-item purchase creates multiple queue entries but one duck race entry', async () => {
@@ -656,100 +602,51 @@ describe('stripe webhook integration during livestream', () => {
         expect(uniqueBuyers).toHaveLength(1); // one duck race entry
     });
 
-    it('shipping payment does not add to queue or livestream buyers', async () => {
+    it('ad-hoc shipping payment does not add to queue', async () => {
         stmts.queues.createQueue.run();
         const queue = stmts.queues.getActiveQueue.get();
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
-        stmts.livestream.addBuyer.run(session.id, 'buyer1', 'buyer@example.com');
 
         await handleCheckoutCompleted({
             id: 'cs_shipping',
             amount_total: 1000,
             metadata: {
-                source: 'livestream-shipping',
-                livestream_session_id: String(session.id),
-                customer_email: 'buyer@example.com',
+                source: 'ad-hoc-shipping',
             },
             customer_details: { email: 'buyer@example.com' },
         });
 
-        // Queue unchanged
+        // Queue unchanged — ad-hoc shipping payments early-return
         expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(0);
-
-        // Buyer now marked as shipping paid
-        const unpaid = stmts.livestream.getBuyers.all(session.id);
-        expect(unpaid).toHaveLength(0);
     });
 });
 
 // =========================================================================
-// Shipping Scenarios During Offline
+// Offline without shipping DMs (proactive model)
 // =========================================================================
 
-describe('shipping scenarios during offline', () => {
-    it('repeat buyer within same week is marked as already covered', async () => {
-        // Session 1 — buyer pays shipping (recorded in unified shipping_payments)
-        stmts.livestream.startSession.run();
-        const s1 = stmts.livestream.getActiveSession.get();
-        stmts.livestream.addBuyer.run(s1.id, 'repeat_buyer', 'repeat@example.com');
-        stmts.livestream.markShippingPaid.run(s1.id, 'repeat@example.com');
-        stmts.shipping.record.run('repeat@example.com', 'repeat_buyer', 1000, 'livestream', null);
-        stmts.livestream.endSession.run(s1.id);
-
-        // Session 2 — same buyer buys again
+describe('offline session lifecycle', () => {
+    it('offline closes queue, opens new one, ends session', async () => {
         stmts.queues.createQueue.run();
-        stmts.livestream.startSession.run();
-        const s2 = stmts.livestream.getActiveSession.get();
-        stmts.livestream.addBuyer.run(s2.id, 'repeat_buyer', 'repeat@example.com');
-
-        // Unified shipping_payments should detect the earlier payment
-        const paidThisWeek = stmts.shipping.hasShippingThisWeek.get('repeat@example.com');
-        expect(paidThisWeek).toBeTruthy();
-
-        // Go offline — buyer should be in alreadyCovered list
-        const offlineMsg = adminMsg();
-        await handleOffline(offlineMsg);
-
-        // Confirm embed mentions "already covered" in shipping field
-        const offlineCalls = offlineMsg.channel.send.mock.calls;
-        const embedCall = offlineCalls.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
-        expect(embedCall).toBeTruthy();
-        const shippingField = embedCall[0].embeds[0].data.fields.find(f => f.name === 'Shipping');
-        expect(shippingField.value).toContain('already covered');
-    });
-
-    it('unlinked buyer (no discord ID) gets shipping posted to announcements', async () => {
-        stmts.queues.createQueue.run();
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
-
-        // Buyer with no discord ID
-        stmts.livestream.addBuyer.run(session.id, null, 'anonymous@example.com');
-
-        const offlineMsg = adminMsg();
-        await handleOffline(offlineMsg);
-
-        // getMember not called for null discord ID — fallback to channel post
-        // (the handler checks buyer.discord_user_id before calling getMember)
-        expect(mockSendToChannel).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
-            content: 'anonymous@example.com',
-        }));
-    });
-
-    it('offline with no buyers sends no DMs', async () => {
-        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
         stmts.livestream.startSession.run();
 
         const offlineMsg = adminMsg();
         await handleOffline(offlineMsg);
 
-        // No shipping DMs attempted
-        expect(mockGetMember).not.toHaveBeenCalled();
-
-        // But session still ended and new queue opened
+        // Session ended
         expect(stmts.livestream.getActiveSession.get()).toBeUndefined();
-        expect(stmts.queues.getActiveQueue.get()).toBeTruthy();
+
+        // Queue closed
+        const closedQueue = stmts.queues.getQueueById.get(queue.id);
+        expect(closedQueue.status).toBe('closed');
+
+        // New queue opened
+        const newQueue = stmts.queues.getActiveQueue.get();
+        expect(newQueue).toBeTruthy();
+        expect(newQueue.id).not.toBe(queue.id);
+
+        // No shipping DMs — shipping is proactive at checkout
+        expect(mockGetMember).not.toHaveBeenCalled();
     });
 });
 
@@ -988,52 +885,209 @@ describe('WordPress shop buyer journey (no Discord)', () => {
         expect(payments.c).toBe(3);
     });
 
-    it('WordPress shop purchase via Discord link (?live=1): no shipping at checkout, DM after offline', async () => {
-        // !live opens queue and enables livestream mode
+});
+
+// =========================================================================
+// Discord Username Auto-Link at Checkout
+//
+// Buyers who fill in the optional "Discord username" field at Stripe
+// checkout get auto-linked — their purchase appears by name in the
+// queue and counts toward duck race entries + role promotions.
+// =========================================================================
+
+describe('Discord username auto-link at checkout', () => {
+    it('valid username: auto-links and appears in queue by discord ID', async () => {
         stmts.queues.createQueue.run();
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
         const queue = stmts.queues.getActiveQueue.get();
 
-        // Buyer purchases through Discord shop link — live=1 means no shipping at checkout
-        // Webhook records purchase + livestream buyer (live metadata present)
-        stmts.queues.addEntry.run(queue.id, null, 'discordbuyer@gmail.com', 'Pack', 1, 'cs_discord');
-        stmts.purchases.insertPurchase.run('cs_discord', null, 'discordbuyer@gmail.com', 'Pack', 1999);
-        stmts.livestream.addBuyer.run(session.id, null, 'discordbuyer@gmail.com');
+        // Mock findMemberByUsername to resolve "itzenzottv" → discord ID
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'itzen_discord_id',
+            user: { username: 'itzenzottv', tag: 'itzenzottv#0' },
+        });
 
-        // No shipping recorded (it was skipped at checkout — deferred to !offline)
-        expect(stmts.shipping.hasShippingThisWeek.get('discordbuyer@gmail.com')).toBeUndefined();
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_valid',
+            email: 'itzen@example.com',
+            discordUsername: 'itzenzottv',
+            products: [{ name: 'Prismatic Evolutions ETB', quantity: 1 }],
+        }));
 
-        // Queue entry exists
-        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
+        // Discord link was created
+        const link = stmts.purchases.getDiscordIdByEmail.get('itzen@example.com');
+        expect(link).toBeTruthy();
+        expect(link.discord_user_id).toBe('itzen_discord_id');
 
-        // Livestream buyer tracked for shipping DM
-        const buyers = stmts.livestream.getBuyers.all(session.id);
+        // Queue entry has the discord user ID (not null)
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe('itzen_discord_id');
+
+        // Counts as a duck race entry
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
         expect(buyers).toHaveLength(1);
-        expect(buyers[0].customer_email).toBe('discordbuyer@gmail.com');
+
+        // Purchase recorded with discord ID
+        const purchase = db.prepare('SELECT * FROM purchases WHERE stripe_session_id = ?').get('cs_autolink_valid');
+        expect(purchase.discord_user_id).toBe('itzen_discord_id');
     });
 
-    it('same buyer: one purchase via shop (pays shipping), one via Discord link (deferred): not double-charged', async () => {
+    it('valid username with @ prefix: strips @ and still auto-links', async () => {
         stmts.queues.createQueue.run();
-        stmts.livestream.startSession.run();
-        const session = stmts.livestream.getActiveSession.get();
+
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'at_user_id',
+            user: { username: 'someuser', tag: 'someuser#0' },
+        });
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_at',
+            email: 'atuser@example.com',
+            discordUsername: '@someuser',
+            products: [{ name: 'Card Pack', quantity: 1 }],
+        }));
+
+        // findMemberByUsername was called with the @ stripped
+        expect(mockFindMemberByUsername).toHaveBeenCalledWith('someuser');
+
+        // Link created
+        const link = stmts.purchases.getDiscordIdByEmail.get('atuser@example.com');
+        expect(link.discord_user_id).toBe('at_user_id');
+    });
+
+    it('invalid username (not in server): purchase proceeds unlinked', async () => {
+        stmts.queues.createQueue.run();
         const queue = stmts.queues.getActiveQueue.get();
 
-        // First: WordPress shop purchase (not livestream link) — pays $10 shipping
-        stmts.queues.addEntry.run(queue.id, null, 'mixed@gmail.com', 'Pack A', 1, 'cs_shop');
-        stmts.shipping.record.run('mixed@gmail.com', null, 1000, 'checkout', 'cs_shop');
+        // findMemberByUsername returns null — username not found
+        mockFindMemberByUsername.mockResolvedValueOnce(null);
 
-        // Second: Discord livestream link — shipping deferred, buyer tracked
-        stmts.queues.addEntry.run(queue.id, null, 'mixed@gmail.com', 'Pack B', 1, 'cs_live');
-        stmts.livestream.addBuyer.run(session.id, null, 'mixed@gmail.com');
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_invalid',
+            email: 'nobody@example.com',
+            discordUsername: 'doesnotexist',
+            products: [{ name: 'Booster Box', quantity: 1 }],
+        }));
 
-        // At !offline time: buyer already has shipping covered this week
-        expect(stmts.shipping.hasShippingThisWeek.get('mixed@gmail.com')).toBeTruthy();
+        // No discord link created
+        const link = stmts.purchases.getDiscordIdByEmail.get('nobody@example.com');
+        expect(link).toBeUndefined();
 
-        // They should be in the "already covered" group, not DM'd for shipping again
-        // 2 queue entries, but only 1 shipping payment
-        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(2);
-        const payments = db.prepare('SELECT COUNT(*) as c FROM shipping_payments WHERE customer_email = ?').get('mixed@gmail.com');
-        expect(payments.c).toBe(1);
+        // Queue entry exists but with null discord_user_id
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBeNull();
+        expect(entries[0].customer_email).toBe('nobody@example.com');
+
+        // Does NOT count as a duck race entry
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
+        expect(buyers).toHaveLength(0);
+    });
+
+    it('username field empty: no lookup attempted, proceeds unlinked', async () => {
+        stmts.queues.createQueue.run();
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_empty',
+            email: 'skipfield@example.com',
+            products: [{ name: 'Card Pack', quantity: 1 }],
+            // No discordUsername — field left blank
+        }));
+
+        // findMemberByUsername not called
+        expect(mockFindMemberByUsername).not.toHaveBeenCalled();
+
+        // No link
+        expect(stmts.purchases.getDiscordIdByEmail.get('skipfield@example.com')).toBeUndefined();
+    });
+
+    it('already linked by email: skips auto-link, uses existing discord ID', async () => {
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Pre-existing link (from a previous !link command)
+        stmts.purchases.linkDiscord.run('existing_discord_id', 'linked@example.com');
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_existing',
+            email: 'linked@example.com',
+            discordUsername: 'someotheruser',
+            products: [{ name: 'ETB', quantity: 1 }],
+        }));
+
+        // findMemberByUsername NOT called — existing link takes precedence
+        expect(mockFindMemberByUsername).not.toHaveBeenCalled();
+
+        // Queue entry uses the existing discord ID
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe('existing_discord_id');
+    });
+
+    it('auto-link enables role promotion on first purchase', async () => {
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'promo_user_id',
+            user: { username: 'promouser', tag: 'promouser#0' },
+        });
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_autolink_promo',
+            email: 'promo@example.com',
+            discordUsername: 'promouser',
+            products: [{ name: 'Card', quantity: 1 }],
+        }));
+
+        // Purchase count incremented (role promotion path was entered)
+        const count = stmts.purchases.getPurchaseCount.get('promo_user_id');
+        expect(count).toBeTruthy();
+        expect(count.total_purchases).toBe(1);
+    });
+
+    it('auto-linked buyer in full livestream flow: appears in queue and duck race', async () => {
+        // Open queue and go live
+        const openMsg = adminMsg({ content: '!queue open' });
+        await handleQueue(openMsg, ['open']);
+        const queue = stmts.queues.getActiveQueue.get();
+
+        const liveMsg = adminMsg({ content: '!live' });
+        await handleLive(liveMsg);
+        vi.clearAllMocks();
+
+        // Linked buyer purchases (pre-existing link)
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_flow_linked',
+            email: 'alice@example.com',
+            discordUserId: 'alice_discord',
+            products: [{ name: 'ETB', quantity: 1 }],
+        }));
+
+        // Auto-linked buyer purchases (no prior !link, fills in username at checkout)
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'newguy_discord',
+            user: { username: 'newguy', tag: 'newguy#0' },
+        });
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_flow_autolink',
+            email: 'newguy@example.com',
+            discordUsername: 'newguy',
+            products: [{ name: 'Booster Box', quantity: 2 }],
+        }));
+
+        // Unlinked buyer purchases (no username, no prior link)
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_flow_anon',
+            email: 'anon@example.com',
+            products: [{ name: 'Card Sleeves', quantity: 1 }],
+        }));
+
+        // Queue has 3 entries (1 + 1 + 1)
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(3);
+
+        // Duck race: 2 entries (alice + newguy). Anon has no discord ID → excluded
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
+        expect(buyers).toHaveLength(2);
+        const buyerIds = buyers.map((b) => b.discord_user_id).sort();
+        expect(buyerIds).toEqual(['alice_discord', 'newguy_discord']);
     });
 });

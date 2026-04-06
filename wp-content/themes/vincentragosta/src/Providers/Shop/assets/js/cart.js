@@ -9,24 +9,10 @@ import { createModal } from '../../../Theme/assets/js/modal';
 
 const STORAGE_KEY = 'vincentragosta_cart';
 const CART_TIMESTAMP_KEY = 'vincentragosta_cart_updated';
-const LIVE_MODE_KEY = 'vincentragosta_live_mode';
-const LIVE_TOKEN_KEY = 'vincentragosta_live_token';
 const INTL_MODE_KEY = 'vincentragosta_international';
 const EMAIL_KEY = 'vincentragosta_buyer_email';
 const CART_TTL = 24 * 60 * 60 * 1000; // 24 hours in ms
 const AGE_VERIFIED_KEY = 'vincentragosta_age_verified';
-
-// Detect ?live=1&token=... in URL and persist to sessionStorage
-(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('live') === '1') {
-        sessionStorage.setItem(LIVE_MODE_KEY, '1');
-        const token = params.get('token');
-        if (token) {
-            sessionStorage.setItem(LIVE_TOKEN_KEY, token);
-        }
-    }
-})();
 
 // ==========================================================================
 // AgeGate — modal that fires before mature content is visible
@@ -546,8 +532,6 @@ const CartCheckout = {
                         priceId: i.priceId,
                         quantity: i.quantity,
                     })),
-                    live: sessionStorage.getItem(LIVE_MODE_KEY) === '1',
-                    live_token: sessionStorage.getItem(LIVE_TOKEN_KEY) || '',
                     international,
                     country_known: countryKnown,
                     email: email || '',

@@ -46,20 +46,10 @@ class CreateCheckoutEndpoint extends Endpoint
                 'required' => true,
                 'type'     => 'array',
             ],
-            'live' => [
-                'required' => false,
-                'type'     => 'boolean',
-                'default'  => false,
-            ],
             'international' => [
                 'required' => false,
                 'type'     => 'boolean',
                 'default'  => false,
-            ],
-            'live_token' => [
-                'required' => false,
-                'type'     => 'string',
-                'default'  => '',
             ],
             'email' => [
                 'required'          => false,
@@ -84,12 +74,6 @@ class CreateCheckoutEndpoint extends Endpoint
     {
         $items = $request->get_param('items');
 
-        // Only honor live=true if the token matches the server-side livestream transient
-        $storedToken = get_transient('itzenzo_livestream_active');
-        $providedToken = sanitize_text_field($request->get_param('live_token') ?? '');
-        $isLive = (bool) $request->get_param('live')
-            && $storedToken
-            && hash_equals((string) $storedToken, $providedToken);
         $isInternational = (bool) $request->get_param('international');
         $countryKnown = (bool) $request->get_param('country_known');
         $customerEmail = $request->get_param('email') ?: null;
@@ -185,11 +169,7 @@ class CreateCheckoutEndpoint extends Endpoint
                 'product_ids' => implode(',', $productIds),
             ];
 
-            if ($isLive) {
-                $metadata['live'] = '1';
-            }
-
-            $skipShipping = $isLive || $shippingCovered;
+            $skipShipping = $shippingCovered;
 
             $session = $this->stripe->createCheckoutSession(
                 $lineItems,

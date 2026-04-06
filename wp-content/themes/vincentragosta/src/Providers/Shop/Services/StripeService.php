@@ -38,7 +38,7 @@ class StripeService
      * @param string $successUrl URL to redirect to after successful payment.
      * @param string $cancelUrl URL to redirect to if checkout is cancelled.
      * @param array<string, string> $metadata Metadata to attach to the session.
-     * @param bool $skipShipping If true, no shipping is collected (livestream mode).
+     * @param bool $skipShipping If true, no shipping is collected (buyer already covered this period).
      * @param bool $international If true, use international shipping rate and countries.
      */
     public function createCheckoutSession(
@@ -58,6 +58,14 @@ class StripeService
             'success_url' => $successUrl,
             'cancel_url'  => $cancelUrl,
             'metadata'    => $metadata,
+            'custom_fields' => [
+                [
+                    'key'      => 'discord_username',
+                    'label'    => ['type' => 'custom', 'custom' => 'Discord username'],
+                    'type'     => 'text',
+                    'optional' => true,
+                ],
+            ],
         ];
 
         if (!$skipShipping) {

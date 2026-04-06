@@ -101,11 +101,10 @@ class StockStateMachineTest extends BaseTestCase
         return $container->get(CreateCheckoutEndpoint::class);
     }
 
-    private function checkoutRequest(array $items, bool $live = false): WP_REST_Request
+    private function checkoutRequest(array $items): WP_REST_Request
     {
         $request = new WP_REST_Request('POST', '/shop/v1/checkout');
         $request->set_param('items', $items);
-        $request->set_param('live', $live);
         return $request;
     }
 
@@ -440,37 +439,4 @@ class StockStateMachineTest extends BaseTestCase
     }
 
     // =====================================================================
-    // Livestream mode
-    // =====================================================================
-
-    public function testLivestreamModeRequiresActiveTransient(): void
-    {
-        $productId = $this->createProduct('Live Card', 5, 'price_live');
-        $this->mockRepo->method('findByPriceId')->willReturn($this->mockProduct($productId));
-        $endpoint = $this->buildEndpoint();
-
-        // Without transient, live=true is ignored but checkout still works
-        $result = $endpoint->callback($this->checkoutRequest(
-            [['priceId' => 'price_live', 'quantity' => 1]],
-            true
-        ));
-        $this->assertNotInstanceOf(\WP_Error::class, $result);
-    }
-
-    public function testLivestreamModeHonorsActiveTransient(): void
-    {
-        $productId = $this->createProduct('Live Card 2', 5, 'price_live2');
-        $this->mockRepo->method('findByPriceId')->willReturn($this->mockProduct($productId));
-        $endpoint = $this->buildEndpoint();
-
-        set_transient('itzenzo_livestream_active', true, 3600);
-
-        $result = $endpoint->callback($this->checkoutRequest(
-            [['priceId' => 'price_live2', 'quantity' => 1]],
-            true
-        ));
-        $this->assertNotInstanceOf(\WP_Error::class, $result);
-
-        delete_transient('itzenzo_livestream_active');
-    }
 }

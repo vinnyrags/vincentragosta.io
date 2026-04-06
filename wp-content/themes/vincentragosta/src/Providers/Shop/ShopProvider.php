@@ -6,7 +6,6 @@ namespace ChildTheme\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\LivestreamToggleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
@@ -41,7 +40,6 @@ class ShopProvider extends Provider
     protected array $routes = [
         CancelCheckoutEndpoint::class,
         CreateCheckoutEndpoint::class,
-        LivestreamToggleEndpoint::class,
         ShippingLookupEndpoint::class,
         StockDecrementEndpoint::class,
         StripeWebhookEndpoint::class,

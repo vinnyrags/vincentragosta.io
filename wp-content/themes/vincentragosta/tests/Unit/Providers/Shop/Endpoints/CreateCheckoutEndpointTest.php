@@ -56,19 +56,6 @@ class CreateCheckoutEndpointTest extends TestCase
         $this->assertTrue($args['items']['required']);
     }
 
-    public function testArgsIncludeLiveFlag(): void
-    {
-        $reflection = new \ReflectionClass(CreateCheckoutEndpoint::class);
-        $method = $reflection->getMethod('getArgs');
-
-        $endpoint = $reflection->newInstanceWithoutConstructor();
-        $args = $method->invoke($endpoint);
-
-        $this->assertArrayHasKey('live', $args);
-        $this->assertFalse($args['live']['required']);
-        $this->assertFalse($args['live']['default']);
-    }
-
     public function testArgsIncludeInternationalFlag(): void
     {
         $reflection = new \ReflectionClass(CreateCheckoutEndpoint::class);

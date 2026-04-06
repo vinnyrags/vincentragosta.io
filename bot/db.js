@@ -441,7 +441,7 @@ const livestreamStmts = {
         SELECT 1 FROM livestream_buyers
         WHERE customer_email = ?
           AND shipping_paid = 1
-          AND created_at >= datetime('now', 'weekday 1', '-7 days')
+          AND created_at >= datetime('now', '-5 hours', 'start of day', 'weekday 1', '-7 days', '+5 hours')
         LIMIT 1
     `),
 };
@@ -459,28 +459,28 @@ const shippingStmts = {
     hasShippingThisWeek: db.prepare(`
         SELECT 1 FROM shipping_payments
         WHERE customer_email = ?
-          AND created_at >= datetime('now', 'weekday 1', '-7 days')
+          AND created_at >= datetime('now', '-5 hours', 'start of day', 'weekday 1', '-7 days', '+5 hours')
         LIMIT 1
     `),
 
     hasShippingThisMonth: db.prepare(`
         SELECT 1 FROM shipping_payments
         WHERE customer_email = ?
-          AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')
+          AND strftime('%Y-%m', created_at, '-5 hours') = strftime('%Y-%m', 'now', '-5 hours')
         LIMIT 1
     `),
 
     getByEmailThisWeek: db.prepare(`
         SELECT * FROM shipping_payments
         WHERE customer_email = ?
-          AND created_at >= datetime('now', 'weekday 1', '-7 days')
+          AND created_at >= datetime('now', '-5 hours', 'start of day', 'weekday 1', '-7 days', '+5 hours')
         ORDER BY created_at DESC LIMIT 1
     `),
 
     getByEmailThisMonth: db.prepare(`
         SELECT * FROM shipping_payments
         WHERE customer_email = ?
-          AND strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')
+          AND strftime('%Y-%m', created_at, '-5 hours') = strftime('%Y-%m', 'now', '-5 hours')
         ORDER BY created_at DESC LIMIT 1
     `),
 
@@ -490,12 +490,12 @@ const shippingStmts = {
 
     getThisWeek: db.prepare(`
         SELECT * FROM shipping_payments
-        WHERE created_at >= datetime('now', 'weekday 1', '-7 days')
+        WHERE created_at >= datetime('now', '-5 hours', 'start of day', 'weekday 1', '-7 days', '+5 hours')
     `),
 
     getThisMonth: db.prepare(`
         SELECT * FROM shipping_payments
-        WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now')
+        WHERE strftime('%Y-%m', created_at, '-5 hours') = strftime('%Y-%m', 'now', '-5 hours')
     `),
 };
 

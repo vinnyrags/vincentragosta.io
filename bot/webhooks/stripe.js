@@ -12,10 +12,9 @@
 import { EmbedBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
-import { db, purchases, battles, cardListings, livestream, discordLinks } from '../db.js';
-import { client, sendToChannel, sendEmbed, getMember, addRole, hasRole } from '../discord.js';
+import { db, purchases, battles, cardListings, discordLinks } from '../db.js';
+import { client, sendToChannel, sendEmbed, getMember, findMemberByUsername, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
-import { addLivestreamBuyer } from '../commands/live.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
 import { recordShipping } from '../shipping.js';
@@ -27,19 +26,6 @@ const stripe = new Stripe(config.STRIPE_SECRET_KEY);
  * Process a completed checkout session.
  */
 async function handleCheckoutCompleted(session) {
-    // Handle shipping payments — record in unified tracker and mark as paid
-    if (session.metadata?.source === 'livestream-shipping') {
-        const sessionId = session.metadata.livestream_session_id;
-        const email = session.customer_details?.email || session.metadata.customer_email;
-        if (sessionId && email) {
-            livestream.markShippingPaid.run(Number(sessionId), email);
-            const amount = session.amount_total || 0;
-            recordShipping(email, session.metadata.discord_user_id || null, amount, 'livestream', session.id);
-            console.log(`Shipping paid: ${email} for session #${sessionId}`);
-        }
-        return;
-    }
-
     // Ad-hoc shipping — record in unified tracker
     if (session.metadata?.source === 'ad-hoc-shipping') {
         const email = session.customer_details?.email;
@@ -70,7 +56,23 @@ async function handleCheckoutCompleted(session) {
 
     // Try to find linked Discord user
     const link = purchases.getDiscordIdByEmail.get(customerEmail);
-    const discordUserId = link?.discord_user_id || null;
+    let discordUserId = link?.discord_user_id || null;
+
+    // Auto-link via Discord username from checkout custom field
+    if (!discordUserId && session.custom_fields?.length) {
+        const field = session.custom_fields.find((f) => f.key === 'discord_username');
+        const username = field?.text?.value?.trim().replace(/^@/, '');
+        if (username) {
+            const member = await findMemberByUsername(username);
+            if (member) {
+                purchases.linkDiscord.run(member.id, customerEmail);
+                discordUserId = member.id;
+                console.log(`Auto-linked ${username} (${member.id}) → ${customerEmail}`);
+            } else {
+                console.log(`Discord username "${username}" not found in server — purchase unlinked`);
+            }
+        }
+    }
 
     // Process each line item
     for (const item of lineItems) {
@@ -121,14 +123,6 @@ async function handleCheckoutCompleted(session) {
         const added = addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
         if (added) {
             console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
-        }
-    }
-
-    // Track livestream buyers (purchases with live=1 metadata)
-    if (session.metadata?.live === '1' && customerEmail) {
-        const tracked = addLivestreamBuyer(discordUserId, customerEmail);
-        if (tracked) {
-            console.log(`Livestream buyer tracked: ${discordUserId || customerEmail}`);
         }
     }
 

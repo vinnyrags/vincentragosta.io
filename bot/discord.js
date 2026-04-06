@@ -89,6 +89,21 @@ async function addRole(member, roleId) {
     return false;
 }
 
+/**
+ * Search for a guild member by exact Discord username.
+ * Returns the member if found, null otherwise.
+ */
+async function findMemberByUsername(username) {
+    const guild = getGuild();
+    if (!guild || !username) return null;
+    try {
+        const results = await guild.members.fetch({ query: username, limit: 5 });
+        return results.find((m) => m.user.username === username) || null;
+    } catch {
+        return null;
+    }
+}
+
 export {
     client,
     getChannel,
@@ -96,6 +111,7 @@ export {
     sendToChannel,
     sendEmbed,
     getMember,
+    findMemberByUsername,
     hasRole,
     addRole,
 };
