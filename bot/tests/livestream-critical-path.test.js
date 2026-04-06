@@ -832,3 +832,208 @@ describe('edge cases', () => {
         expect(preOrderCalls).toHaveLength(0);
     });
 });
+
+// =========================================================================
+// WordPress Shop Buyer Journey (Primary Path)
+//
+// The most common buyer path: discovers via TikTok/social → watches
+// livestream → buys from vincentragosta.io/shop directly (NOT through
+// Discord). They may not know Discord exists. Shipping coverage must
+// work entirely through email matching — no Discord link required.
+// =========================================================================
+
+describe('WordPress shop buyer journey (no Discord)', () => {
+    it('first purchase during livestream: added to queue, pays shipping', () => {
+        // !live opens a queue
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const queue = stmts.queues.getActiveQueue.get();
+        const session = stmts.livestream.getActiveSession.get();
+
+        // Buyer purchases through WordPress shop (no ?live=1 token)
+        // Webhook fires — addToQueue adds them since queue is open
+        stmts.queues.addEntry.run(queue.id, null, 'newbuyer@gmail.com', 'Pokemon Pack', 1, 'cs_wp_1');
+
+        // Shipping was charged at WordPress checkout (recorded by webhook)
+        stmts.shipping.record.run('newbuyer@gmail.com', null, 1000, 'checkout', 'cs_wp_1');
+
+        // Verify queue entry exists
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].customer_email).toBe('newbuyer@gmail.com');
+        expect(entries[0].discord_user_id).toBeNull();
+
+        // Shipping was recorded
+        expect(stmts.shipping.hasShippingThisWeek.get('newbuyer@gmail.com')).toBeTruthy();
+    });
+
+    it('second purchase during same livestream: added to queue, shipping skipped', () => {
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // First purchase — pays shipping
+        stmts.queues.addEntry.run(queue.id, null, 'buyer@gmail.com', 'Pack A', 1, 'cs_wp_1');
+        stmts.shipping.record.run('buyer@gmail.com', null, 1000, 'checkout', 'cs_wp_1');
+
+        // Second purchase — shipping lookup returns covered
+        const covered = !!stmts.shipping.hasShippingThisWeek.get('buyer@gmail.com');
+        expect(covered).toBe(true);
+
+        // Still added to queue
+        stmts.queues.addEntry.run(queue.id, null, 'buyer@gmail.com', 'Pack B', 1, 'cs_wp_2');
+
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(2);
+
+        // Only 1 shipping payment exists (not 2)
+        const payments = db.prepare('SELECT COUNT(*) as c FROM shipping_payments WHERE customer_email = ?').get('buyer@gmail.com');
+        expect(payments.c).toBe(1);
+    });
+
+    it('international buyer: first purchase with $25, second purchase shipping skipped for the month', () => {
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // First purchase — buyer selects international at Stripe checkout
+        stmts.queues.addEntry.run(queue.id, null, 'canada@gmail.com', 'Anime Box', 1, 'cs_intl_1');
+        stmts.shipping.record.run('canada@gmail.com', null, 2500, 'checkout', 'cs_intl_1');
+
+        // Webhook auto-flags their country from shipping address
+        stmts.purchases.linkDiscord.run('auto_discord', 'canada@gmail.com');
+        stmts.discordLinks.setCountry.run('CA', 'auto_discord');
+
+        // Second purchase — covered for the entire month
+        expect(stmts.shipping.hasShippingThisMonth.get('canada@gmail.com')).toBeTruthy();
+
+        // Queue still accepts the entry
+        stmts.queues.addEntry.run(queue.id, 'auto_discord', 'canada@gmail.com', 'Pack B', 1, 'cs_intl_2');
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(2);
+    });
+
+    it('purchase between streams (no queue): no queue entry, shipping charged', () => {
+        // No !live, no queue — buyer finds shop via social media
+        const active = stmts.queues.getActiveQueue.get();
+        expect(active).toBeUndefined();
+
+        // Purchase goes through WordPress — shipping charged at checkout
+        stmts.shipping.record.run('social@gmail.com', null, 1000, 'checkout', 'cs_between');
+        stmts.purchases.insertPurchase.run('cs_between', null, 'social@gmail.com', 'Pokemon Pack', 1999);
+
+        // No queue entry (addToQueue would return false)
+        const allEntries = db.prepare('SELECT COUNT(*) as c FROM queue_entries').get();
+        expect(allEntries.c).toBe(0);
+
+        // Shipping was still recorded for coverage tracking
+        expect(stmts.shipping.hasShippingThisWeek.get('social@gmail.com')).toBeTruthy();
+    });
+
+    it('purchase between streams, then during livestream: shipping not charged again', () => {
+        // Between streams — buyer pays shipping on first purchase
+        stmts.shipping.record.run('returning@gmail.com', null, 1000, 'checkout', 'cs_pre');
+        stmts.purchases.insertPurchase.run('cs_pre', null, 'returning@gmail.com', 'Pack A', 1999);
+
+        // Later that week, livestream starts
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Same buyer purchases again — shipping already covered this week
+        const covered = !!stmts.shipping.hasShippingThisWeek.get('returning@gmail.com');
+        expect(covered).toBe(true);
+
+        // Added to queue
+        stmts.queues.addEntry.run(queue.id, null, 'returning@gmail.com', 'Pack B', 1, 'cs_live');
+
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
+
+        // Still only 1 shipping payment
+        const payments = db.prepare('SELECT COUNT(*) as c FROM shipping_payments WHERE customer_email = ?').get('returning@gmail.com');
+        expect(payments.c).toBe(1);
+    });
+
+    it('multiple buyers, mixed shipping states during livestream', () => {
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Buyer A — first purchase, pays shipping
+        stmts.queues.addEntry.run(queue.id, null, 'buyerA@gmail.com', 'Pack', 1, 'cs_a1');
+        stmts.shipping.record.run('buyerA@gmail.com', null, 1000, 'checkout', 'cs_a1');
+
+        // Buyer B — first purchase, pays shipping
+        stmts.queues.addEntry.run(queue.id, null, 'buyerB@gmail.com', 'Pack', 1, 'cs_b1');
+        stmts.shipping.record.run('buyerB@gmail.com', null, 2500, 'checkout', 'cs_b1');
+
+        // Buyer A — second purchase, shipping covered
+        expect(stmts.shipping.hasShippingThisWeek.get('buyerA@gmail.com')).toBeTruthy();
+        stmts.queues.addEntry.run(queue.id, null, 'buyerA@gmail.com', 'Pack 2', 1, 'cs_a2');
+
+        // Buyer C — first purchase, pays shipping
+        stmts.queues.addEntry.run(queue.id, null, 'buyerC@gmail.com', 'Pack', 1, 'cs_c1');
+        stmts.shipping.record.run('buyerC@gmail.com', null, 1000, 'checkout', 'cs_c1');
+
+        // Buyer B — second purchase, shipping covered (monthly for intl)
+        stmts.purchases.linkDiscord.run('b_discord', 'buyerB@gmail.com');
+        stmts.discordLinks.setCountry.run('CA', 'b_discord');
+        expect(stmts.shipping.hasShippingThisMonth.get('buyerB@gmail.com')).toBeTruthy();
+        stmts.queues.addEntry.run(queue.id, 'b_discord', 'buyerB@gmail.com', 'Pack 2', 1, 'cs_b2');
+
+        // 5 queue entries total
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(5);
+
+        // 3 shipping payments total (A, B, C — no duplicates)
+        const payments = db.prepare('SELECT COUNT(*) as c FROM shipping_payments').get();
+        expect(payments.c).toBe(3);
+    });
+
+    it('WordPress shop purchase via Discord link (?live=1): no shipping at checkout, DM after offline', async () => {
+        // !live opens queue and enables livestream mode
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Buyer purchases through Discord shop link — live=1 means no shipping at checkout
+        // Webhook records purchase + livestream buyer (live metadata present)
+        stmts.queues.addEntry.run(queue.id, null, 'discordbuyer@gmail.com', 'Pack', 1, 'cs_discord');
+        stmts.purchases.insertPurchase.run('cs_discord', null, 'discordbuyer@gmail.com', 'Pack', 1999);
+        stmts.livestream.addBuyer.run(session.id, null, 'discordbuyer@gmail.com');
+
+        // No shipping recorded (it was skipped at checkout — deferred to !offline)
+        expect(stmts.shipping.hasShippingThisWeek.get('discordbuyer@gmail.com')).toBeUndefined();
+
+        // Queue entry exists
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
+
+        // Livestream buyer tracked for shipping DM
+        const buyers = stmts.livestream.getBuyers.all(session.id);
+        expect(buyers).toHaveLength(1);
+        expect(buyers[0].customer_email).toBe('discordbuyer@gmail.com');
+    });
+
+    it('same buyer: one purchase via shop (pays shipping), one via Discord link (deferred): not double-charged', async () => {
+        stmts.queues.createQueue.run();
+        stmts.livestream.startSession.run();
+        const session = stmts.livestream.getActiveSession.get();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // First: WordPress shop purchase (not livestream link) — pays $10 shipping
+        stmts.queues.addEntry.run(queue.id, null, 'mixed@gmail.com', 'Pack A', 1, 'cs_shop');
+        stmts.shipping.record.run('mixed@gmail.com', null, 1000, 'checkout', 'cs_shop');
+
+        // Second: Discord livestream link — shipping deferred, buyer tracked
+        stmts.queues.addEntry.run(queue.id, null, 'mixed@gmail.com', 'Pack B', 1, 'cs_live');
+        stmts.livestream.addBuyer.run(session.id, null, 'mixed@gmail.com');
+
+        // At !offline time: buyer already has shipping covered this week
+        expect(stmts.shipping.hasShippingThisWeek.get('mixed@gmail.com')).toBeTruthy();
+
+        // They should be in the "already covered" group, not DM'd for shipping again
+        // 2 queue entries, but only 1 shipping payment
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(2);
+        const payments = db.prepare('SELECT COUNT(*) as c FROM shipping_payments WHERE customer_email = ?').get('mixed@gmail.com');
+        expect(payments.c).toBe(1);
+    });
+});

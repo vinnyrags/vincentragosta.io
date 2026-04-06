@@ -92,7 +92,7 @@ async function handleReset(message) {
     }
 
     // Reset community goals to defaults
-    db.prepare('UPDATE community_goals SET cycle = 1, cycle_revenue = 0, lifetime_revenue = 0, channel_message_id = NULL WHERE id = 1').run();
+    db.prepare('UPDATE community_goals SET cycle = 1, cycle_revenue = 0, lifetime_revenue = 0 WHERE id = 1').run();
 
     // Reset autoincrement counters
     try { db.prepare('DELETE FROM sqlite_sequence').run(); } catch { /* may not exist */ }
