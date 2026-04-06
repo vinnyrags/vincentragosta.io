@@ -98,7 +98,7 @@ async function findMemberByUsername(username) {
     if (!guild || !username) return null;
     try {
         const results = await guild.members.fetch({ query: username, limit: 5 });
-        return results.find((m) => m.user.username === username) || null;
+        return results.find((m) => m.user.username.toLowerCase() === username.toLowerCase()) || null;
     } catch {
         return null;
     }

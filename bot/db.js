@@ -395,7 +395,7 @@ const queueStmts = {
     `),
 
     getUniqueBuyers: db.prepare(`
-        SELECT DISTINCT discord_user_id FROM queue_entries WHERE queue_id = ? AND discord_user_id IS NOT NULL
+        SELECT DISTINCT COALESCE(discord_user_id, customer_email) AS buyer FROM queue_entries WHERE queue_id = ?
     `),
 
     getEntryCount: db.prepare(`

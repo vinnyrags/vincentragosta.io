@@ -96,7 +96,7 @@ describe('queue entries', () => {
         expect(buyers).toHaveLength(2); // 2 duck race entries, not 6
     });
 
-    it('entries without discord user id are not counted as unique buyers', () => {
+    it('entries without discord user id are counted as unique buyers by email', () => {
         stmts.queues.createQueue.run();
         const queue = stmts.queues.getActiveQueue.get();
 
@@ -104,7 +104,9 @@ describe('queue entries', () => {
         stmts.queues.addEntry.run(queue.id, 'user1', 'u1@test.com', 'Pack B', 1, 's2');
 
         const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
-        expect(buyers).toHaveLength(1); // only linked user
+        expect(buyers).toHaveLength(2); // linked user + anon by email
+        const ids = buyers.map((b) => b.buyer).sort();
+        expect(ids).toEqual(['anon@test.com', 'user1']);
     });
 });
 

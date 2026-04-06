@@ -979,9 +979,10 @@ describe('Discord username auto-link at checkout', () => {
         expect(entries[0].discord_user_id).toBeNull();
         expect(entries[0].customer_email).toBe('nobody@example.com');
 
-        // Does NOT count as a duck race entry
+        // Counts as a duck race entry by email
         const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
-        expect(buyers).toHaveLength(0);
+        expect(buyers).toHaveLength(1);
+        expect(buyers[0].buyer).toBe('nobody@example.com');
     });
 
     it('username field empty: no lookup attempted, proceeds unlinked', async () => {
@@ -1084,10 +1085,10 @@ describe('Discord username auto-link at checkout', () => {
         const entries = stmts.queues.getEntries.all(queue.id);
         expect(entries).toHaveLength(3);
 
-        // Duck race: 2 entries (alice + newguy). Anon has no discord ID → excluded
+        // Duck race: 3 unique entries (alice, newguy, anon by email)
         const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
-        expect(buyers).toHaveLength(2);
-        const buyerIds = buyers.map((b) => b.discord_user_id).sort();
-        expect(buyerIds).toEqual(['alice_discord', 'newguy_discord']);
+        expect(buyers).toHaveLength(3);
+        const buyerIds = buyers.map((b) => b.buyer).sort();
+        expect(buyerIds).toEqual(['alice_discord', 'anon@example.com', 'newguy_discord']);
     });
 });

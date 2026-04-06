@@ -202,7 +202,7 @@ export function buildStmts(db) {
             setDuckRaceWinner: db.prepare(`UPDATE queues SET status = 'complete', duck_race_winner_id = ? WHERE id = ?`),
             addEntry: db.prepare(`INSERT INTO queue_entries (queue_id, discord_user_id, customer_email, product_name, quantity, stripe_session_id) VALUES (?, ?, ?, ?, ?, ?)`),
             getEntries: db.prepare(`SELECT * FROM queue_entries WHERE queue_id = ? ORDER BY created_at ASC`),
-            getUniqueBuyers: db.prepare(`SELECT DISTINCT discord_user_id FROM queue_entries WHERE queue_id = ? AND discord_user_id IS NOT NULL`),
+            getUniqueBuyers: db.prepare(`SELECT DISTINCT COALESCE(discord_user_id, customer_email) AS buyer FROM queue_entries WHERE queue_id = ?`),
             getEntryCount: db.prepare(`SELECT COUNT(*) as count FROM queue_entries WHERE queue_id = ?`),
             getRecentQueues: db.prepare(`SELECT * FROM queues WHERE status IN ('closed', 'complete') ORDER BY created_at DESC LIMIT ?`),
         },

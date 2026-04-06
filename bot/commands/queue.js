@@ -162,7 +162,10 @@ async function showDuckRace(message) {
         return message.reply('No entries in the duck race yet — queue has no purchases.');
     }
 
-    const roster = uniqueBuyers.map((b, i) => `${i + 1}. <@${b.discord_user_id}>`).join('\n');
+    const roster = uniqueBuyers.map((b, i) => {
+        const label = /^\d+$/.test(b.buyer) ? `<@${b.buyer}>` : b.buyer;
+        return `${i + 1}. ${label}`;
+    }).join('\n');
 
     const embed = new EmbedBuilder()
         .setTitle(`🦆 Duck Race — Queue #${queue.id}`)
@@ -193,7 +196,7 @@ async function declareDuckRaceWinner(message, args) {
 
     // Verify winner is actually in the roster
     const uniqueBuyers = queues.getUniqueBuyers.all(target.id);
-    const isInRoster = uniqueBuyers.some((b) => b.discord_user_id === mentioned.id);
+    const isInRoster = uniqueBuyers.some((b) => b.buyer === mentioned.id);
     if (!isInRoster) {
         return message.reply(`<@${mentioned.id}> is not in the duck race roster for Queue #${target.id}.`);
     }
@@ -238,18 +241,11 @@ async function declareDuckRaceWinner(message, args) {
 function buildQueueDescription(entries, uniqueBuyers) {
     if (!entries.length) return 'No entries yet.';
 
-    // Group entries by buyer
-    const byBuyer = {};
-    for (const entry of entries) {
+    const lines = entries.map((entry, i) => {
         const key = entry.discord_user_id || entry.customer_email || 'Unknown';
-        if (!byBuyer[key]) byBuyer[key] = [];
-        byBuyer[key].push(entry);
-    }
-
-    const lines = Object.entries(byBuyer).map(([key, items], i) => {
         const label = key === 'Unknown' ? key : /^\d+$/.test(key) ? `<@${key}>` : key;
-        const products = items.map((e) => `${e.product_name}${e.quantity > 1 ? ` ×${e.quantity}` : ''}`).join(', ');
-        return `${i + 1}. ${label} — ${products}`;
+        const product = `${entry.product_name}${entry.quantity > 1 ? ` ×${entry.quantity}` : ''}`;
+        return `${i + 1}. ${label} — ${product}`;
     });
 
     return lines.join('\n') + `\n\n🦆 **Duck race entries:** ${uniqueBuyers.length}`;
