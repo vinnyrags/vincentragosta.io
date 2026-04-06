@@ -576,12 +576,75 @@ const ThankYouPage = {
         if (!el) return;
 
         CartStore.clear();
+
+        const shopUrl = (window.shopConfig || {}).shopUrl || '/shop/';
+        const discordInvite = 'https://discord.gg/EXqX685TTq';
+
         el.innerHTML = `
-            <h2>Thank you for your order!</h2>
-            <p class="is-style-muted">Your payment was successful. You'll receive a confirmation email from Stripe shortly.</p>
-            <div class="wp-block-buttons">
-                <div class="wp-block-button">
-                    <a class="wp-block-button__link wp-element-button" href="${(window.shopConfig || {}).shopUrl || '/shop/'}">Back to Shop</a>
+            <div class="thank-you">
+                <div class="thank-you__hero">
+                    <h2>Thank you for your order!</h2>
+                    <p>Your payment was successful and your order is confirmed. You'll receive a receipt from Stripe at the email you provided.</p>
+                </div>
+
+                <div class="thank-you__section">
+                    <h3>Shipping</h3>
+                    <p>We ship on a flat-rate system designed to save you money:</p>
+                    <ul>
+                        <li><strong>US orders:</strong> $10 flat per week. One payment covers everything you buy that week.</li>
+                        <li><strong>International orders:</strong> $25 flat per month. One payment covers the entire month.</li>
+                    </ul>
+                    <p>If your shipping was already covered from a previous purchase this period, you weren't charged again. Orders typically ship within a few business days.</p>
+                </div>
+
+                <div class="thank-you__section thank-you__section--discord">
+                    <h3>Join the Community</h3>
+                    <p>Our Discord server is where everything happens. As a buyer, here's what you get access to:</p>
+                    <ul>
+                        <li><strong>#order-feed</strong> - Watch your order appear in real time</li>
+                        <li><strong>Duck races</strong> - Every purchase earns you an entry to win a free pack</li>
+                        <li><strong>Pack battles</strong> - Buy a pack, we open them all live, highest value card wins everything</li>
+                        <li><strong>#card-shop</strong> - Individual card sales only available through Discord</li>
+                        <li><strong>Early drops</strong> - New product announcements hit Discord before anywhere else</li>
+                    </ul>
+                    <div class="wp-block-buttons">
+                        <div class="wp-block-button">
+                            <a class="wp-block-button__link wp-element-button" href="${discordInvite}" target="_blank" rel="noopener">Join Our Discord</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="thank-you__section">
+                    <h3>Link Your Account</h3>
+                    <p>If you're already in our Discord and didn't enter your username at checkout, you can link your account manually by typing <code>!link your@email.com</code> in any channel. This connects your purchases to your Discord profile so you get:</p>
+                    <ul>
+                        <li>Your name displayed in the queue and order feed</li>
+                        <li>Automatic role upgrades as you hit purchase milestones</li>
+                        <li>Shipping status tracked to your account</li>
+                    </ul>
+                </div>
+
+                <div class="thank-you__section">
+                    <h3>Catch Us Live</h3>
+                    <p>Card nights run Monday through Thursday. We open your packs on stream, run duck races and pack battles, and hang out with the community. Gaming streams happen Friday through Sunday.</p>
+                    <p>Follow us so you never miss a stream:</p>
+                    <p>
+                        <a href="https://twitch.tv/itzenzoTTV" target="_blank" rel="noopener">Twitch</a> &middot;
+                        <a href="https://tiktok.com/@itzenzoTTV" target="_blank" rel="noopener">TikTok</a> &middot;
+                        <a href="https://instagram.com/itzenzo.TTV" target="_blank" rel="noopener">Instagram</a> &middot;
+                        <a href="https://youtube.com/@itzenzoTTV" target="_blank" rel="noopener">YouTube</a>
+                    </p>
+                </div>
+
+                <div class="thank-you__section">
+                    <h3>Questions?</h3>
+                    <p>Hop into our Discord and check the <strong>#how-it-works</strong> channel for a full breakdown of shipping, the queue system, and how card nights work. We're always around to help.</p>
+                </div>
+
+                <div class="wp-block-buttons" style="margin-top: var(--wp--preset--spacing--40);">
+                    <div class="wp-block-button">
+                        <a class="wp-block-button__link wp-element-button" href="${shopUrl}">Back to Shop</a>
+                    </div>
                 </div>
             </div>
         `;

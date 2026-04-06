@@ -1,0 +1,44 @@
+@use 'common/breakpoints' as *;
+
+.thank-you {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--wp--preset--spacing--40) 0;
+
+    &__hero {
+        margin-bottom: var(--wp--preset--spacing--50);
+        text-align: center;
+
+        h2 {
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+    }
+
+    &__section {
+        margin-bottom: var(--wp--preset--spacing--50);
+
+        h3 {
+            margin-bottom: var(--wp--preset--spacing--20);
+        }
+
+        ul {
+            padding-left: 1.25em;
+            margin: var(--wp--preset--spacing--20) 0;
+
+            li {
+                margin-bottom: 0.5em;
+            }
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.15em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .wp-block-buttons {
+            margin-top: var(--wp--preset--spacing--30);
+        }
+    }
+}
