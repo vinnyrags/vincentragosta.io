@@ -325,11 +325,6 @@ function buildQueueEmbed(queue, entries, uniqueBuyers, status) {
         .setTitle(`📋 Queue #${queue.id}`)
         .setDescription(`${statusText}\n\n${buildQueueDescription(entries, uniqueBuyers)}`)
         .setColor(color)
-        .addFields(
-            { name: 'Items', value: String(entries.length), inline: true },
-            { name: 'Buyers', value: String(uniqueBuyers.length), inline: true },
-            { name: 'Duck Race Entries', value: String(uniqueBuyers.length), inline: true },
-        )
         .setFooter({ text: `Queue #${queue.id} • Opened ${queue.created_at}` });
 
     return embed;
