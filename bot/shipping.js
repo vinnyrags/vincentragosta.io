@@ -14,7 +14,7 @@ import { purchases, shipping, discordLinks } from './db.js';
  */
 function isInternational(discordUserId) {
     const row = discordLinks.getCountry.get(discordUserId);
-    return row?.country && row.country !== 'US';
+    return !!(row?.country && row.country !== 'US');
 }
 
 /**
@@ -22,7 +22,7 @@ function isInternational(discordUserId) {
  */
 function isInternationalByEmail(email) {
     const row = discordLinks.getCountryByEmail.get(email);
-    return row?.country && row.country !== 'US';
+    return !!(row?.country && row.country !== 'US');
 }
 
 /**
