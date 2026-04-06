@@ -9,7 +9,7 @@
  * queue lifecycle, and analytics.
  */
 
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import config from '../config.js';
 import { livestream, queues, analytics, goals } from '../db.js';
 import { sendEmbed, sendToChannel, getGuild } from '../discord.js';
@@ -68,14 +68,25 @@ async function handleLive(message) {
     // Post going-live announcement
     const embed = new EmbedBuilder()
         .setTitle('🔴 We\'re Live!')
-        .setDescription(
-            `Card night is starting! Come hang.\n\n` +
-            `🛒 **[Shop Now](${shopLink})** — shipping is included at checkout.\n\n` +
-            `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV)`
-        )
+        .setDescription('Card night is starting! Come hang.\n\nShipping is included at checkout.')
         .setColor(0x9146ff);
 
-    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed] });
+    const buttons = new ActionRowBuilder().addComponents(
+        new ButtonBuilder()
+            .setLabel('🛒 Shop Now')
+            .setStyle(ButtonStyle.Link)
+            .setURL(shopLink),
+        new ButtonBuilder()
+            .setLabel('👉 Watch on Twitch')
+            .setStyle(ButtonStyle.Link)
+            .setURL('https://twitch.tv/itzenzoTTV'),
+        new ButtonBuilder()
+            .setLabel('📱 TikTok')
+            .setStyle(ButtonStyle.Link)
+            .setURL('https://tiktok.com/@itzenzoTTV'),
+    );
+
+    await sendToChannel('ANNOUNCEMENTS', { embeds: [embed], components: [buttons] });
 
     // Confirm in current channel
     const confirmEmbed = new EmbedBuilder()
