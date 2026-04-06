@@ -247,7 +247,7 @@ function buildQueueDescription(entries, uniqueBuyers) {
     }
 
     const lines = Object.entries(byBuyer).map(([key, items], i) => {
-        const label = key.startsWith('Unknown') ? key : `<@${key}>`;
+        const label = key === 'Unknown' ? key : /^\d+$/.test(key) ? `<@${key}>` : key;
         const products = items.map((e) => `${e.product_name}${e.quantity > 1 ? ` ×${e.quantity}` : ''}`).join(', ');
         return `${i + 1}. ${label} — ${products}`;
     });
