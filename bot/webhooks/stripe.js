@@ -13,7 +13,7 @@ import { EmbedBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
 import { db, purchases, battles, cardListings, discordLinks } from '../db.js';
-import { client, sendToChannel, sendEmbed, getMember, findMemberByUsername, addRole, hasRole } from '../discord.js';
+import { client, sendToChannel, sendEmbed, getMember, getGuild, findMemberByUsername, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
@@ -157,6 +157,88 @@ async function handleCheckoutCompleted(session) {
     if (shippingCountry && shippingCountry !== 'US' && discordUserId) {
         discordLinks.setCountry.run(shippingCountry, discordUserId);
         console.log(`Auto-flagged international: ${discordUserId} → ${shippingCountry}`);
+    }
+
+    // Detect shipping mismatch — international address but domestic rate selected
+    await checkShippingMismatch(session, discordUserId, customerEmail);
+}
+
+/**
+ * Check if the buyer selected domestic shipping but entered a non-US address.
+ * If mismatched, DM the buyer a checkout link for the difference (or DM the
+ * server owner if the buyer has no Discord account).
+ */
+async function checkShippingMismatch(session, discordUserId, customerEmail) {
+    const shippingCountry = session.shipping_details?.address?.country;
+    const shippingPaid = session.shipping_cost?.amount_total
+        || session.total_details?.amount_shipping
+        || 0;
+
+    // Only relevant when shipping was charged and address is non-US
+    if (!shippingCountry || shippingCountry === 'US' || shippingPaid === 0) return;
+
+    // Check if they paid the domestic rate instead of international
+    const difference = config.SHIPPING.INTERNATIONAL - shippingPaid;
+    if (difference <= 0) return;
+
+    const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/shipping/checkout`
+        + `?amount=${difference}`
+        + `&reason=${encodeURIComponent('Shipping Difference — International')}`
+        + (discordUserId ? `&user=${discordUserId}` : '');
+
+    console.log(`Shipping mismatch: ${customerEmail} paid ${shippingPaid} but address is ${shippingCountry} (owes ${difference})`);
+
+    if (discordUserId) {
+        // DM the buyer directly
+        try {
+            const member = await getMember(discordUserId);
+            if (member) {
+                const dm = await member.createDM();
+                const embed = new EmbedBuilder()
+                    .setTitle('📦 Shipping Adjustment Needed')
+                    .setDescription(
+                        `It looks like your order shipped to **${shippingCountry}** but was charged the US shipping rate.\n\n` +
+                        `There's a **$${(difference / 100).toFixed(2)}** difference for international shipping. ` +
+                        `Please use the link below to cover it — thanks!\n\n` +
+                        `🛒 **[Pay Shipping Difference](${checkoutUrl})**`
+                    )
+                    .setColor(0xceff00);
+
+                await dm.send({ embeds: [embed] });
+                console.log(`Sent shipping mismatch DM to ${discordUserId}`);
+            }
+        } catch (e) {
+            console.error(`Failed to DM buyer ${discordUserId} about shipping mismatch:`, e.message);
+        }
+    }
+
+    // Always notify the server owner
+    try {
+        const guild = getGuild();
+        if (guild) {
+            const owner = await guild.members.fetch(guild.ownerId);
+            if (owner) {
+                const dm = await owner.createDM();
+                const embed = new EmbedBuilder()
+                    .setTitle('⚠️ Shipping Mismatch Detected')
+                    .setDescription(
+                        `**Email:** ${customerEmail}\n` +
+                        `**Country:** ${shippingCountry}\n` +
+                        `**Paid:** $${(shippingPaid / 100).toFixed(2)} (domestic)\n` +
+                        `**Owed:** $${(config.SHIPPING.INTERNATIONAL / 100).toFixed(2)} (international)\n` +
+                        `**Difference:** $${(difference / 100).toFixed(2)}\n` +
+                        (discordUserId
+                            ? `**Discord:** <@${discordUserId}> — DM sent with checkout link`
+                            : `**Discord:** Not linked — reach out manually`) +
+                        `\n\n🛒 **[Checkout Link](${checkoutUrl})**`
+                    )
+                    .setColor(0xe74c3c);
+
+                await dm.send({ embeds: [embed] });
+            }
+        }
+    } catch (e) {
+        console.error('Failed to notify owner about shipping mismatch:', e.message);
     }
 }
 
