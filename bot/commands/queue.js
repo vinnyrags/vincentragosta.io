@@ -248,7 +248,12 @@ function buildQueueDescription(entries, uniqueBuyers) {
         return `${i + 1}. ${label} — ${product}`;
     });
 
-    return lines.join('\n') + `\n\n🦆 **Duck race entries:** ${uniqueBuyers.length}`;
+    const roster = uniqueBuyers.map((b, i) => {
+        const label = /^\d+$/.test(b.buyer) ? `<@${b.buyer}>` : b.buyer;
+        return `${i + 1}. ${label}`;
+    }).join('\n');
+
+    return lines.join('\n') + `\n\n🦆 **Duck race roster (${uniqueBuyers.length}):**\n${roster}`;
 }
 
 function buildQueueEmbed(queue, entries, uniqueBuyers, status) {

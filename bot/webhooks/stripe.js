@@ -92,7 +92,7 @@ async function handleCheckoutCompleted(session) {
         // Post order notification in #order-feed
         await sendEmbed('ORDER_FEED', {
             title: '🛒 New Order!',
-            description: `Someone just picked up **${productName}**${quantity > 1 ? ` (×${quantity})` : ''}!`,
+            description: `${discordUserId ? `<@${discordUserId}>` : customerEmail || 'Someone'} just picked up **${productName}**${quantity > 1 ? ` (×${quantity})` : ''}!`,
             color: 0xceff00,
             footer: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
         });
