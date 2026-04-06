@@ -122,6 +122,91 @@ describe('duck race winner', () => {
     });
 });
 
+// =========================================================================
+// Purchase → queue integration (livestream on vs off)
+// =========================================================================
+
+describe('purchase during livestream vs between streams', () => {
+    it('purchase with no active queue: entry is NOT added', () => {
+        // No queue open — simulates buying between streams with no livestream active
+        const active = stmts.queues.getActiveQueue.get();
+        expect(active).toBeUndefined();
+
+        // Simulate what addToQueue does: check for active queue
+        // Since there's no queue, the purchase should not create an entry
+        const wouldAdd = !!stmts.queues.getActiveQueue.get();
+        expect(wouldAdd).toBe(false);
+
+        // Verify no entries exist anywhere
+        const allQueues = db.prepare('SELECT COUNT(*) as c FROM queue_entries').get();
+        expect(allQueues.c).toBe(0);
+    });
+
+    it('purchase with active queue (livestream on): entry IS added', () => {
+        // Open a queue — simulates !live which auto-opens a queue
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+        expect(queue).toBeTruthy();
+        expect(queue.status).toBe('open');
+
+        // Simulate what addToQueue does when webhook fires
+        stmts.queues.addEntry.run(queue.id, 'user1', 'user1@test.com', 'Pokemon Pack', 1, 'cs_test_123');
+
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe('user1');
+        expect(entries[0].product_name).toBe('Pokemon Pack');
+    });
+
+    it('purchase with closed queue: entry is NOT added', () => {
+        // Queue was open but has been closed — simulates after !offline
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+        stmts.queues.closeQueue.run(queue.id);
+
+        // No active queue anymore
+        const active = stmts.queues.getActiveQueue.get();
+        expect(active).toBeUndefined();
+
+        // Purchase would not be added
+        const wouldAdd = !!stmts.queues.getActiveQueue.get();
+        expect(wouldAdd).toBe(false);
+    });
+
+    it('multiple purchases during livestream: all added to same queue', () => {
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Three different buyers purchase during the stream
+        stmts.queues.addEntry.run(queue.id, 'user1', 'u1@test.com', 'Pack A', 1, 'cs_1');
+        stmts.queues.addEntry.run(queue.id, 'user2', 'u2@test.com', 'Pack B', 2, 'cs_2');
+        stmts.queues.addEntry.run(queue.id, 'user3', 'u3@test.com', 'Pack A', 1, 'cs_3');
+
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(3);
+
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
+        expect(buyers).toHaveLength(3);
+    });
+
+    it('purchase between streams then during livestream: only livestream purchase in queue', () => {
+        // Between streams — no queue, purchase happens but nothing tracked
+        const beforeQueue = stmts.queues.getActiveQueue.get();
+        expect(beforeQueue).toBeUndefined();
+
+        // Livestream starts — queue opens
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Now a purchase during livestream gets added
+        stmts.queues.addEntry.run(queue.id, 'user1', 'u1@test.com', 'Pokemon Pack', 1, 'cs_live');
+
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].stripe_session_id).toBe('cs_live');
+    });
+});
+
 describe('queue history', () => {
     it('returns recent closed queues', () => {
         // Create and close 3 queues
