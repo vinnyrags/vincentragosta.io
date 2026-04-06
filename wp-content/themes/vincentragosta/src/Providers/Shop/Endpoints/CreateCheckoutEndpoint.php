@@ -67,6 +67,11 @@ class CreateCheckoutEndpoint extends Endpoint
                 'type'     => 'boolean',
                 'default'  => true,
             ],
+            'discord_linked' => [
+                'required' => false,
+                'type'     => 'boolean',
+                'default'  => false,
+            ],
         ];
     }
 
@@ -78,6 +83,7 @@ class CreateCheckoutEndpoint extends Endpoint
         $countryKnown = (bool) $request->get_param('country_known');
         $customerEmail = $request->get_param('email') ?: null;
         $shippingCovered = (bool) $request->get_param('shipping_covered');
+        $discordLinked = (bool) $request->get_param('discord_linked');
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
@@ -180,6 +186,7 @@ class CreateCheckoutEndpoint extends Endpoint
                 $isInternational,
                 $customerEmail,
                 $countryKnown,
+                $discordLinked,
             );
 
             return new WP_REST_Response([

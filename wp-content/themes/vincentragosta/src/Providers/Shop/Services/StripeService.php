@@ -50,6 +50,7 @@ class StripeService
         bool $international = false,
         ?string $customerEmail = null,
         bool $countryKnown = true,
+        bool $discordLinked = false,
     ): Session {
         $params = [
             'mode'       => 'payment',
@@ -58,15 +59,18 @@ class StripeService
             'success_url' => $successUrl,
             'cancel_url'  => $cancelUrl,
             'metadata'    => $metadata,
-            'custom_fields' => [
+        ];
+
+        if (!$discordLinked) {
+            $params['custom_fields'] = [
                 [
                     'key'      => 'discord_username',
                     'label'    => ['type' => 'custom', 'custom' => 'Discord username'],
                     'type'     => 'text',
                     'optional' => true,
                 ],
-            ],
-        ];
+            ];
+        }
 
         if (!$skipShipping) {
             if (!$countryKnown) {

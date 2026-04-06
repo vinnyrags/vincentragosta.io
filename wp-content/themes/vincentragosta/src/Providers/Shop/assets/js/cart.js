@@ -500,6 +500,7 @@ const CartCheckout = {
         let shippingCovered = false;
         let international = CountryToggle.isInternational();
         let countryKnown = true;
+        let discordLinked = false;
 
         if (email) {
             const lookup = await ShippingLookup.lookup(email);
@@ -507,6 +508,7 @@ const CartCheckout = {
                 shippingCovered = lookup.covered;
                 international = lookup.international;
                 countryKnown = lookup.countryKnown ?? false;
+                discordLinked = lookup.known ?? false;
             }
             CartDrawer.renderShippingStatus();
         } else {
@@ -536,6 +538,7 @@ const CartCheckout = {
                     country_known: countryKnown,
                     email: email || '',
                     shipping_covered: shippingCovered,
+                    discord_linked: discordLinked,
                 }),
             });
 
