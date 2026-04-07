@@ -35,8 +35,12 @@ async function updateBattleMessage(battle, entries, paidEntries, status) {
             embed.setFooter({ text: `Battle #${battle.battle_number || '?'} • ${paidEntries.length} entries • Opening packs now!` });
         }
 
-        // Remove buttons for non-open states
-        await msg.edit({ embeds: [embed], components: [] });
+        // Keep buttons for open battles, remove for closed/complete/cancelled
+        const editPayload = { embeds: [embed] };
+        if (status !== 'open') {
+            editPayload.components = [];
+        }
+        await msg.edit(editPayload);
     } catch (e) {
         console.error('Failed to update battle message:', e.message);
     }
@@ -359,34 +363,17 @@ async function ownerJoinBattle(message) {
         }
     }
 
-    // Update the battle embed
+    // Update the battle embed in #pack-battles
+    const entries = battles.getEntries.all(battle.id);
     const paidEntries = battles.getPaidEntries.all(battle.id);
-    try {
-        const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
-        if (channel && battle.channel_message_id) {
-            const msg = await channel.messages.fetch(battle.channel_message_id);
-            const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
-            const embed = new EmbedBuilder()
-                .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
-                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
-                .setColor(0xceff00)
-                .addFields(
-                    { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
-                );
+    await updateBattleMessage(battle, entries, paidEntries, 'open');
 
-            if (paidEntries.length > 0) {
-                const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}>`).join('\n');
-                embed.addFields({ name: 'Roster', value: roster });
-            }
+    // Post entry notification in #pack-battles
+    await sendToChannel('PACK_BATTLES', `⚔️ <@${message.author.id}> is in! (${paidEntries.length}/${battle.max_entries})`);
 
-            embed.setFooter({ text: 'Purchase = entry. No other action needed.' });
-            await msg.edit({ embeds: [embed] });
-        }
-    } catch (e) {
-        console.error('Failed to update battle embed:', e.message);
+    if (message.channel.id !== config.CHANNELS.PACK_BATTLES) {
+        await message.channel.send(`⚔️ Joined battle — ${paidEntries.length}/${battle.max_entries} entries (stock decremented)`);
     }
-
-    await message.channel.send(`⚔️ <@${message.author.id}> is in! (owner entry — stock decremented)`);
 }
 
 async function battleStatus(message) {
