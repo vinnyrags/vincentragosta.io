@@ -1176,6 +1176,53 @@ describe('duplicate battle entry prevention', () => {
         expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(2);
     });
 
+    it('battle auto-closes when max entries reached via webhook', async () => {
+        // Create a battle with max 2 entries
+        stmts.battles.createBattle.run('test-product', 'Test Product', 'price_123', 2, null);
+        const battle = stmts.battles.getActiveBattle.get();
+
+        // Link both users so webhook can find them
+        stmts.purchases.linkDiscord.run('alice_discord', 'alice@example.com');
+        stmts.purchases.linkDiscord.run('bob_discord', 'bob@example.com');
+
+        // First battle purchase
+        const session1 = fakeCheckoutSession({
+            sessionId: 'cs_battle_auto_1',
+            email: 'alice@example.com',
+            discordUserId: 'alice_discord',
+            products: [{ name: 'Test Product', quantity: 1 }],
+        });
+        session1.metadata.source = 'pack-battle';
+        session1.metadata.battle_id = String(battle.id);
+        await handleCheckoutCompleted(session1);
+
+        // Battle still open after first entry
+        expect(stmts.battles.getActiveBattle.get()).toBeTruthy();
+
+        // Second battle purchase fills it
+        const session2 = fakeCheckoutSession({
+            sessionId: 'cs_battle_auto_2',
+            email: 'bob@example.com',
+            discordUserId: 'bob_discord',
+            products: [{ name: 'Test Product', quantity: 1 }],
+        });
+        session2.metadata.source = 'pack-battle';
+        session2.metadata.battle_id = String(battle.id);
+        await handleCheckoutCompleted(session2);
+
+        // Battle auto-closed — no longer active
+        expect(stmts.battles.getActiveBattle.get()).toBeUndefined();
+
+        // Battle has a battle number and closed status
+        const closed = stmts.battles.getBattleById.get(battle.id);
+        expect(closed.status).toBe('closed');
+        expect(closed.battle_number).toBeTruthy();
+
+        // Both entries are paid
+        const paidEntries = stmts.battles.getPaidEntries.all(battle.id);
+        expect(paidEntries).toHaveLength(2);
+    });
+
     it('same user can enter different battles', () => {
         stmts.battles.createBattle.run('product-a', 'Product A', 'price_a', 10, null);
         const battleA = stmts.battles.getActiveBattle.get();

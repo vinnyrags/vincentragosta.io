@@ -15,6 +15,7 @@ import config from '../config.js';
 import { db, purchases, battles, cardListings, discordLinks } from '../db.js';
 import { client, sendToChannel, sendEmbed, getMember, getGuild, findMemberByUsername, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
+import { updateBattleMessage } from '../commands/battle.js';
 import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
 import { recordShipping } from '../shipping.js';
@@ -303,37 +304,21 @@ async function checkBattlePayment(session, discordUserId) {
     battles.addEntry.run(battle.id, odiscordUserId);
     battles.confirmPayment.run(session.id, battle.id, odiscordUserId);
 
+    const entries = battles.getEntries.all(battle.id);
     const paidEntries = battles.getPaidEntries.all(battle.id);
 
-    // Update the battle message embed
-    try {
-        const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
-        if (channel && battle.channel_message_id) {
-            const msg = await channel.messages.fetch(battle.channel_message_id);
-            const checkoutUrl = `${config.SHOP_URL.replace(/\/shop$/, '')}/bot/battle/checkout/${battle.id}`;
+    // Auto-close if battle is now full
+    if (paidEntries.length >= battle.max_entries) {
+        const { next } = battles.getNextBattleNumber.get();
+        battles.setBattleNumber.run(next, battle.id);
+        battles.closeBattle.run(battle.id);
 
-            const embed = new EmbedBuilder()
-                .setTitle(`⚔️ Pack Battle — ${battle.product_name}`)
-                .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n🛒 **[Buy your pack here](${checkoutUrl})**`)
-                .setColor(0xceff00)
-                .addFields(
-                    { name: 'Entries', value: `${paidEntries.length}/${battle.max_entries}`, inline: true },
-                );
-
-            if (paidEntries.length > 0) {
-                const roster = paidEntries.map((e, i) => `${i + 1}. <@${e.discord_user_id}>`).join('\n');
-                embed.addFields({ name: 'Roster', value: roster });
-            }
-
-            embed.setFooter({ text: `Battle #${battle.id} • Purchase = entry. No other action needed.` });
-            await msg.edit({ embeds: [embed] });
-        }
-    } catch (e) {
-        console.error('Failed to update battle message:', e.message);
+        await updateBattleMessage({ ...battle, battle_number: next }, entries, paidEntries, 'closed');
+        await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries}) — **Battle full! Entries closed.**`);
+    } else {
+        await updateBattleMessage(battle, entries, paidEntries, 'open');
+        await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries})`);
     }
-
-    // Notify in channel
-    await sendToChannel('PACK_BATTLES', `⚔️ <@${odiscordUserId}> is in! (${paidEntries.length}/${battle.max_entries})`);
 }
 
 /**

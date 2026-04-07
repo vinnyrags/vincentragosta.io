@@ -421,4 +421,4 @@ async function battleStatus(message) {
     await message.channel.send({ embeds: [embed] });
 }
 
-export { handleBattle };
+export { handleBattle, updateBattleMessage };
