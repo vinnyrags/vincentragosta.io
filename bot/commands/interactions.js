@@ -194,6 +194,12 @@ async function handleBattleBuy(interaction, battleId, isDeferred = false) {
         return interaction.editReply({ content: 'This battle is no longer open.' });
     }
 
+    // Check if user already entered this battle
+    const entries = battles.getEntries.all(battle.id);
+    if (entries.some((e) => e.discord_user_id === discordUserId)) {
+        return interaction.editReply({ content: `You're already in this battle! One entry per person. Good luck! 🍀` });
+    }
+
     const covered = hasShippingCoveredByDiscordId(discordUserId);
     const checkoutUrl = buildCheckoutUrl(`battle/checkout/${battleId}`, discordUserId);
 
