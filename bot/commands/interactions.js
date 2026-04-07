@@ -57,6 +57,11 @@ async function handleButtonInteraction(interaction) {
         return handleBattleBuy(interaction, Number(battleId));
     }
 
+    if (customId.startsWith('sell-buy-')) {
+        const listingId = customId.replace('sell-buy-', '');
+        return handleSellBuy(interaction, Number(listingId));
+    }
+
     if (customId === 'welcome-link') {
         return handleWelcomeLink(interaction);
     }
@@ -108,6 +113,8 @@ async function handleModalSubmit(interaction) {
         return handleHypeBuy(interaction, id, true);
     } else if (type === 'battle') {
         return handleBattleBuy(interaction, Number(id), true);
+    } else if (type === 'sell') {
+        return handleSellBuy(interaction, Number(id), true);
     }
 
     await interaction.editReply({ content: 'Email linked! Please click the Buy button again.' });
@@ -159,6 +166,36 @@ async function handleCardBuy(interaction, listingId, isDeferred = false) {
     const listing = cardListings.getById.get(listingId);
     if (!listing || (listing.status !== 'active' && listing.status !== 'reserved')) {
         return interaction.editReply({ content: 'This card is no longer available.' });
+    }
+
+    const covered = hasShippingCoveredByDiscordId(discordUserId);
+    const checkoutUrl = buildCheckoutUrl(`card-shop/checkout/${listingId}`, discordUserId);
+
+    const shippingNote = covered
+        ? '✅ Shipping already covered this period!'
+        : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
+
+    await interaction.editReply({
+        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**`,
+    });
+}
+
+/**
+ * Reserved card (sell) button handler — same flow as card-buy.
+ */
+async function handleSellBuy(interaction, listingId, isDeferred = false) {
+    const discordUserId = interaction.user.id;
+
+    const link = purchases.getEmailByDiscordId.get(discordUserId);
+    if (!link && !isDeferred) {
+        return showEmailModal(interaction, `sell-${listingId}`);
+    }
+
+    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+
+    const listing = cardListings.getById.get(listingId);
+    if (!listing || listing.status !== 'reserved') {
+        return interaction.editReply({ content: 'This reservation is no longer available.' });
     }
 
     const covered = hasShippingCoveredByDiscordId(discordUserId);

@@ -38,7 +38,9 @@ const discordUsernameField = {
 };
 
 function customFieldsFor(discordUserId) {
-    return discordUserId ? [] : [discordUsernameField];
+    if (!discordUserId) return [discordUsernameField];
+    const link = purchases.getEmailByDiscordId.get(discordUserId);
+    return link ? [] : [discordUsernameField];
 }
 
 // =========================================================================

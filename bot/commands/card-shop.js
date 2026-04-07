@@ -127,7 +127,7 @@ function startExpiryTimer(listingId) {
                         .setTitle('⏰ Reservation Expired')
                         .setDescription(`Your reservation for **${expired.card_name}** has expired.`)
                         .setColor(0x95a5a6);
-                    await dmMsg.edit({ embeds: [embed] });
+                    await dmMsg.edit({ embeds: [embed], components: [] });
                 }
             } catch (e) {
                 console.error(`Failed to update expired DM for listing #${listingId}:`, e.message);
@@ -199,8 +199,14 @@ async function handleSell(message, args) {
     const msg = await channel.send({ embeds: [embed] });
     cardListings.setMessageId.run(msg.id, listingId);
 
-    // DM the buyer with checkout link (includes ?user= for personalized shipping)
-    const url = `${checkoutUrl(listingId)}?user=${buyer.id}`;
+    // DM the buyer with a Buy Now button (identity captured via interaction handler)
+    const buyButton = new ButtonBuilder()
+        .setCustomId(`sell-buy-${listingId}`)
+        .setLabel('Complete Purchase')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('🛒');
+    const buyRow = new ActionRowBuilder().addComponents(buyButton);
+
     const covered = hasShippingCoveredByDiscordId(buyer.id);
     const shippingNote = covered
         ? '✅ Shipping already covered this period'
@@ -217,16 +223,15 @@ async function handleSell(message, args) {
                 .setDescription(
                     `**${cardName}** — ${formatPrice(priceCents)}\n` +
                     `${shippingNote}\n\n` +
-                    `🛒 **[Complete Purchase](${url})**\n\n` +
                     `⏰ This reservation expires in 15 minutes.`
                 )
                 .setColor(0xf1c40f);
-            const dmMsg = await dm.send({ embeds: [dmEmbed] });
+            const dmMsg = await dm.send({ embeds: [dmEmbed], components: [buyRow] });
             cardListings.setBuyerDmMessageId.run(dmMsg.id, listingId);
         }
     } catch {
-        // DMs disabled — post fallback in channel
-        await channel.send(`<@${buyer.id}> Your card is reserved! Checkout here: ${url}`);
+        // DMs disabled — post fallback in channel with button
+        await channel.send({ content: `<@${buyer.id}> Your card is reserved!`, components: [buyRow] });
     }
 
     // Start 15-minute expiry
