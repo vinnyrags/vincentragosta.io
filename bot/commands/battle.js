@@ -169,20 +169,12 @@ async function startBattle(message, args) {
         await message.channel.send(`⚔️ Pack battle started in <#${config.CHANNELS.PACK_BATTLES}> — **${productName}** (${max} max entries)`);
     }
 
-    // Also announce in #announcements with button
-    const announceBuyButton = new ButtonBuilder()
-        .setCustomId(`battle-buy-${battleId}`)
-        .setLabel('Buy Pack to Enter')
-        .setStyle(ButtonStyle.Primary)
-        .setEmoji('⚔️');
-
-    const announceRow = new ActionRowBuilder().addComponents(announceBuyButton);
+    // Announce in #announcements (no buy button — that's only in #pack-battles)
     await sendToChannel('ANNOUNCEMENTS', {
         embeds: [new EmbedBuilder()
             .setTitle('⚔️ Pack Battle Starting!')
-            .setDescription(`**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}>!\n\nMax entries: ${max}`)
+            .setDescription(`**${productName}** — Head to <#${config.CHANNELS.PACK_BATTLES}> to enter!\n\nMax entries: ${max}`)
             .setColor(0xceff00)],
-        components: [announceRow],
     });
 }
 
