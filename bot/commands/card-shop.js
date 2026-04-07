@@ -57,6 +57,14 @@ function buildListingEmbed(listing) {
             .setFooter({ text: `Listing #${listing.id}` });
     }
 
+    if (listing.status === 'expired') {
+        return new EmbedBuilder()
+            .setTitle(`🃏 ${listing.card_name}`)
+            .setDescription(`~~${priceLabel}~~\n\n**EXPIRED** — reservation lapsed`)
+            .setColor(0x95a5a6)
+            .setFooter({ text: `Listing #${listing.id}` });
+    }
+
     // active / available — uses Discord button instead of raw link
     return new EmbedBuilder()
         .setTitle(`🃏 ${listing.card_name}`)
@@ -104,12 +112,29 @@ function startExpiryTimer(listingId) {
         if (!listing || listing.status !== 'reserved') return;
 
         cardListings.markExpired.run(listingId);
-        cardListings.relistAsActive.run(listingId);
 
-        const relisted = cardListings.getById.get(listingId);
-        await updateListingEmbed(relisted);
+        const expired = cardListings.getById.get(listingId);
+        await updateListingEmbed(expired);
 
-        console.log(`Card listing #${listingId} expired — relisted as active`);
+        // Update the buyer's DM to show expiry
+        if (expired.buyer_discord_id && expired.buyer_dm_message_id) {
+            try {
+                const member = await getMember(expired.buyer_discord_id);
+                if (member) {
+                    const dm = await member.createDM();
+                    const dmMsg = await dm.messages.fetch(expired.buyer_dm_message_id);
+                    const embed = new EmbedBuilder()
+                        .setTitle('⏰ Reservation Expired')
+                        .setDescription(`Your reservation for **${expired.card_name}** has expired.`)
+                        .setColor(0x95a5a6);
+                    await dmMsg.edit({ embeds: [embed] });
+                }
+            } catch (e) {
+                console.error(`Failed to update expired DM for listing #${listingId}:`, e.message);
+            }
+        }
+
+        console.log(`Card listing #${listingId} expired — reservation lapsed`);
     }, config.CARD_RESERVATION_MS);
 
     expiryTimers.set(listingId, timer);
@@ -193,7 +218,7 @@ async function handleSell(message, args) {
                     `**${cardName}** — ${formatPrice(priceCents)}\n` +
                     `${shippingNote}\n\n` +
                     `🛒 **[Complete Purchase](${url})**\n\n` +
-                    `⏰ You have 15 minutes before this listing opens to everyone.`
+                    `⏰ This reservation expires in 15 minutes.`
                 )
                 .setColor(0xf1c40f);
             const dmMsg = await dm.send({ embeds: [dmEmbed] });
