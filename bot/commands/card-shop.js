@@ -11,7 +11,7 @@ import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'disc
 import config from '../config.js';
 import { cardListings } from '../db.js';
 import { client, getMember } from '../discord.js';
-import { formatShippingRate, getShippingLabel } from '../shipping.js';
+import { formatShippingRate, getShippingLabel, hasShippingCoveredByDiscordId } from '../shipping.js';
 
 // In-memory expiry timers: listingId → timeoutId
 const expiryTimers = new Map();
@@ -176,7 +176,13 @@ async function handleSell(message, args) {
 
     // DM the buyer with checkout link (includes ?user= for personalized shipping)
     const url = `${checkoutUrl(listingId)}?user=${buyer.id}`;
-    const { rate, label: shippingLabel } = getShippingLabel(buyer.id);
+    const covered = hasShippingCoveredByDiscordId(buyer.id);
+    const shippingNote = covered
+        ? '✅ Shipping already covered this period'
+        : (() => {
+            const { rate, label } = getShippingLabel(buyer.id);
+            return `📦 ${label}: ${formatShippingRate(rate)}`;
+        })();
     try {
         const member = await getMember(buyer.id);
         if (member) {
@@ -185,7 +191,7 @@ async function handleSell(message, args) {
                 .setTitle(`🃏 Card Reserved for You!`)
                 .setDescription(
                     `**${cardName}** — ${formatPrice(priceCents)}\n` +
-                    `📦 ${shippingLabel}: ${formatShippingRate(rate)}\n\n` +
+                    `${shippingNote}\n\n` +
                     `🛒 **[Complete Purchase](${url})**\n\n` +
                     `⏰ You have 15 minutes before this listing opens to everyone.`
                 )
