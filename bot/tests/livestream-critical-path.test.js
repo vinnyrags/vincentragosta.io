@@ -368,10 +368,6 @@ describe('full card night critical path', () => {
         expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
             title: expect.stringContaining('Duck Race Winner'),
         }));
-        expect(mockSendEmbed).toHaveBeenCalledWith('AND_IN_THE_BACK', expect.objectContaining({
-            title: expect.stringContaining('Duck Race Winner'),
-        }));
-
         // ── Step 9: Verify queue history ────────────────────────────
         vi.clearAllMocks();
 

@@ -302,13 +302,6 @@ async function declareBattleWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Cross-post to #and-in-the-back (community hype)
-    await sendEmbed('AND_IN_THE_BACK', {
-        title: `⚔️ Pack Battle #${num} Results`,
-        description: `**${battle.product_name}** — ${paidEntries.length} entries\n🏆 Winner: <@${mentioned.id}>`,
-        color: 0xffd700,
-    });
-
     // Check if winner needs shipping — battles don't charge shipping at buy-in
     const isOwner = mentioned.id === (getGuild()?.ownerId);
     const covered = hasShippingCoveredByDiscordId(mentioned.id);

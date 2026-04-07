@@ -224,12 +224,6 @@ async function declareDuckRaceWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Cross-post to #and-in-the-back (community hype)
-    await sendEmbed('AND_IN_THE_BACK', {
-        title: `🦆 Queue #${target.id} — Duck Race Winner`,
-        description: `Winner: <@${mentioned.id}>\nEntries: ${uniqueBuyers.length} buyers, ${entries.length} items`,
-        color: 0xffd700,
-    });
 }
 
 // =========================================================================
