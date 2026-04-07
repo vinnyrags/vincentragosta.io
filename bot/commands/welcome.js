@@ -7,7 +7,6 @@
 
 import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import config from '../config.js';
-import { welcome } from '../db.js';
 import { client } from '../discord.js';
 
 function buildWelcomeEmbed() {
@@ -63,6 +62,7 @@ function buildWelcomeButton() {
  */
 async function initWelcome() {
     try {
+        const { welcome } = await import('../db.js');
         const channel = client.channels.cache.get(config.CHANNELS.WELCOME);
         if (!channel) {
             console.log('Welcome channel not found — skipping initWelcome');
