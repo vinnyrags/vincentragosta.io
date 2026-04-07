@@ -145,6 +145,12 @@ export function createTestDb() {
             UNIQUE(giveaway_id, discord_user_id)
         );
 
+        CREATE TABLE IF NOT EXISTS welcome_config (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            channel_message_id TEXT
+        );
+        INSERT OR IGNORE INTO welcome_config (id) VALUES (1);
+
         CREATE TABLE IF NOT EXISTS card_listings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             message_id TEXT,
@@ -265,6 +271,10 @@ export function buildStmts(db) {
             getCountry: db.prepare(`SELECT country FROM discord_links WHERE discord_user_id = ?`),
             getCountryByEmail: db.prepare(`SELECT country FROM discord_links WHERE customer_email = ?`),
             getInternationalUsers: db.prepare(`SELECT * FROM discord_links WHERE country IS NOT NULL AND country != 'US'`),
+        },
+        welcome: {
+            get: db.prepare('SELECT * FROM welcome_config WHERE id = 1'),
+            setMessageId: db.prepare('UPDATE welcome_config SET channel_message_id = ? WHERE id = 1'),
         },
         analytics: {
             getRangeStats: db.prepare(`

@@ -228,6 +228,15 @@ try {
     // Column already exists — ignore
 }
 
+// Welcome config singleton for persistent #welcome embed (v6)
+db.exec(`
+    CREATE TABLE IF NOT EXISTS welcome_config (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        channel_message_id TEXT
+    );
+    INSERT OR IGNORE INTO welcome_config (id) VALUES (1);
+`);
+
 // =========================================================================
 // Purchases
 // =========================================================================
@@ -730,6 +739,11 @@ const analyticsStmts = {
     `),
 };
 
+const welcomeStmts = {
+    get: db.prepare('SELECT * FROM welcome_config WHERE id = 1'),
+    setMessageId: db.prepare('UPDATE welcome_config SET channel_message_id = ? WHERE id = 1'),
+};
+
 export {
     db,
     stmts as purchases,
@@ -744,4 +758,5 @@ export {
     couponStmts as coupons,
     shippingStmts as shipping,
     discordLinkStmts as discordLinks,
+    welcomeStmts as welcome,
 };

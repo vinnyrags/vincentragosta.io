@@ -18,6 +18,7 @@
  */
 
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
+import Stripe from 'stripe';
 import config from '../config.js';
 import { purchases, cardListings, battles } from '../db.js';
 import {
@@ -55,6 +56,10 @@ async function handleButtonInteraction(interaction) {
         const battleId = customId.replace('battle-buy-', '');
         return handleBattleBuy(interaction, Number(battleId));
     }
+
+    if (customId === 'welcome-link') {
+        return handleWelcomeLink(interaction);
+    }
 }
 
 /**
@@ -68,15 +73,32 @@ async function handleModalSubmit(interaction) {
         return interaction.reply({ content: 'Please enter a valid email address.', ephemeral: true });
     }
 
-    // Auto-link the buyer
-    purchases.linkDiscord.run(interaction.user.id, email);
-
-    // Parse the original context to retry the checkout
+    // Parse the original context
     const context = interaction.customId.replace('email-link-', '');
     const [type, ...rest] = context.split('-');
     const id = rest.join('-');
 
     await interaction.deferReply({ ephemeral: true });
+
+    // Standalone welcome link — validate email in Stripe before linking
+    if (type === 'welcome') {
+        try {
+            const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+            const customers = await stripe.customers.list({ email, limit: 1 });
+            if (!customers.data.length) {
+                return interaction.editReply({ content: 'No purchases found for that email. Make sure you are using the same email you used at checkout.' });
+            }
+        } catch (e) {
+            console.error('Stripe customer lookup error:', e.message);
+            return interaction.editReply({ content: 'Could not verify email right now. Try again later.' });
+        }
+
+        purchases.linkDiscord.run(interaction.user.id, email);
+        return interaction.editReply({ content: 'Your account has been linked! Your name will now appear in the queue, order feed, and duck race roster.' });
+    }
+
+    // Auto-link the buyer (purchase context — no Stripe validation needed)
+    purchases.linkDiscord.run(interaction.user.id, email);
 
     if (type === 'card') {
         return handleCardBuy(interaction, Number(id), true);
@@ -88,7 +110,7 @@ async function handleModalSubmit(interaction) {
         return handleBattleBuy(interaction, Number(id), true);
     }
 
-    await interaction.editReply({ content: `Email linked! Please click the Buy button again.` });
+    await interaction.editReply({ content: 'Email linked! Please click the Buy button again.' });
 }
 
 /**
@@ -205,6 +227,24 @@ async function handleBattleBuy(interaction, battleId, isDeferred = false) {
     await interaction.editReply({
         content: `⚔️ **${battle.product_name}** Pack Battle\n📦 Shipping is only charged if you win\n\n🛒 **[Buy Your Pack](${checkoutUrl})**`,
     });
+}
+
+/**
+ * Welcome channel Link Account button handler.
+ */
+async function handleWelcomeLink(interaction) {
+    const discordUserId = interaction.user.id;
+
+    // Check if already linked
+    const link = purchases.getEmailByDiscordId.get(discordUserId);
+    if (link) {
+        return interaction.reply({
+            content: `Your account is already linked to **${link.customer_email}**.`,
+            ephemeral: true,
+        });
+    }
+
+    return showEmailModal(interaction, 'welcome');
 }
 
 /**

@@ -49,6 +49,7 @@ import { handlePull } from './commands/pull.js';
 import { handleReset } from './commands/reset.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
+import { initWelcome } from './commands/welcome.js';
 const PREFIX = '!';
 
 // =========================================================================
@@ -212,6 +213,9 @@ client.once('ready', async () => {
 
     // Initialize community goals pinned message
     await initCommunityGoals();
+
+    // Initialize welcome embed in #welcome
+    await initWelcome();
 
     // Initialize giveaways (close expired, schedule active timers)
     initGiveaways();
