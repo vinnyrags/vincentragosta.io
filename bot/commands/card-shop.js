@@ -196,7 +196,8 @@ async function handleSell(message, args) {
                     `⏰ You have 15 minutes before this listing opens to everyone.`
                 )
                 .setColor(0xf1c40f);
-            await dm.send({ embeds: [dmEmbed] });
+            const dmMsg = await dm.send({ embeds: [dmEmbed] });
+            cardListings.setBuyerDmMessageId.run(dmMsg.id, listingId);
         }
     } catch {
         // DMs disabled — post fallback in channel

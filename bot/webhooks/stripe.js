@@ -348,20 +348,21 @@ async function checkCardSalePayment(session, discordUserId) {
     const updated = cardListings.getById.get(listingId);
     await updateListingEmbed(updated);
 
-    // DM the buyer to confirm purchase
-    if (discordUserId) {
+    // Update the buyer's DM in place to show purchase confirmed
+    if (discordUserId && listing.buyer_dm_message_id) {
         try {
             const member = await getMember(discordUserId);
             if (member) {
                 const dm = await member.createDM();
+                const dmMsg = await dm.messages.fetch(listing.buyer_dm_message_id);
                 const embed = new EmbedBuilder()
                     .setTitle('✅ Purchase Confirmed!')
                     .setDescription(`**${listing.card_name}** is yours. Thanks for the purchase!`)
                     .setColor(0xceff00);
-                await dm.send({ embeds: [embed] });
+                await dmMsg.edit({ embeds: [embed] });
             }
         } catch (e) {
-            console.error(`Failed to DM card sale confirmation to ${discordUserId}:`, e.message);
+            console.error(`Failed to update card sale DM for ${discordUserId}:`, e.message);
         }
     }
 

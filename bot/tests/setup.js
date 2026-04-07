@@ -158,6 +158,7 @@ export function createTestDb() {
             price INTEGER NOT NULL,
             stripe_session_id TEXT,
             buyer_discord_id TEXT,
+            buyer_dm_message_id TEXT,
             status TEXT DEFAULT 'active',
             purchase_count INTEGER DEFAULT 0,
             created_at TEXT DEFAULT (datetime('now')),
@@ -235,6 +236,7 @@ export function buildStmts(db) {
             relistAsActive: db.prepare(`UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?`),
             getByStatus: db.prepare(`SELECT * FROM card_listings WHERE status = ? ORDER BY created_at DESC LIMIT 1`),
             incrementPurchaseCount: db.prepare(`UPDATE card_listings SET purchase_count = purchase_count + 1 WHERE id = ?`),
+            setBuyerDmMessageId: db.prepare(`UPDATE card_listings SET buyer_dm_message_id = ? WHERE id = ?`),
         },
         goals: {
             get: db.prepare(`SELECT * FROM community_goals WHERE id = 1`),

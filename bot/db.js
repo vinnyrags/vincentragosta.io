@@ -228,6 +228,13 @@ try {
     // Column already exists — ignore
 }
 
+// Add buyer_dm_message_id to card_listings for in-place DM updates (v7)
+try {
+    db.exec(`ALTER TABLE card_listings ADD COLUMN buyer_dm_message_id TEXT`);
+} catch {
+    // Column already exists — ignore
+}
+
 // Welcome config singleton for persistent #welcome embed (v6)
 db.exec(`
     CREATE TABLE IF NOT EXISTS welcome_config (
@@ -589,6 +596,10 @@ const cardListingStmts = {
 
     incrementPurchaseCount: db.prepare(`
         UPDATE card_listings SET purchase_count = purchase_count + 1 WHERE id = ?
+    `),
+
+    setBuyerDmMessageId: db.prepare(`
+        UPDATE card_listings SET buyer_dm_message_id = ? WHERE id = ?
     `),
 };
 
