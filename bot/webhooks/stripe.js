@@ -116,13 +116,15 @@ async function handleCheckoutCompleted(session) {
         }
     }
 
-    // Add card product purchases to the active queue
-    for (const item of lineItems) {
-        const productName = item.name || 'Unknown Product';
-        const quantity = item.quantity || 1;
-        const added = await addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
-        if (added) {
-            console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
+    // Add card product purchases to the active queue (skip pack battles — they have their own reward)
+    if (session.metadata?.source !== 'pack-battle') {
+        for (const item of lineItems) {
+            const productName = item.name || 'Unknown Product';
+            const quantity = item.quantity || 1;
+            const added = await addToQueue(discordUserId, customerEmail, productName, quantity, session.id);
+            if (added) {
+                console.log(`Queue entry: ${productName} (×${quantity}) for ${discordUserId || customerEmail}`);
+            }
         }
     }
 

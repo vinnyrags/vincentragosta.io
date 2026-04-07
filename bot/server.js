@@ -98,9 +98,18 @@ app.get('/battle/checkout/:id', async (req, res) => {
         return res.status(404).send('No active battle or no product linked.');
     }
 
+    const discordUserId = req.query.user;
+
+    // Prevent duplicate entries — one buy per user per battle
+    if (discordUserId) {
+        const existing = battles.getEntries.all(battle.id);
+        if (existing.some((e) => e.discord_user_id === discordUserId)) {
+            return res.status(400).send('You already entered this battle. One entry per person.');
+        }
+    }
+
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-        const discordUserId = req.query.user;
 
         const params = {
             mode: 'payment',
