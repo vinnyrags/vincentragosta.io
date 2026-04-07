@@ -71,7 +71,7 @@ async function initWelcome() {
 
         const embed = buildWelcomeEmbed();
         const row = buildWelcomeButton();
-        const row_config = welcome.get();
+        const row_config = welcome.getConfig.get();
 
         if (row_config?.channel_message_id) {
             try {

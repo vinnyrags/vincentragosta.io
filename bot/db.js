@@ -740,7 +740,7 @@ const analyticsStmts = {
 };
 
 const welcomeStmts = {
-    get: db.prepare('SELECT * FROM welcome_config WHERE id = 1'),
+    getConfig: db.prepare('SELECT * FROM welcome_config WHERE id = 1'),
     setMessageId: db.prepare('UPDATE welcome_config SET channel_message_id = ? WHERE id = 1'),
 };
 
