@@ -103,7 +103,12 @@ async function handleReset(message) {
     db.prepare('UPDATE community_goals SET cycle = 1, cycle_revenue = 0, lifetime_revenue = 0 WHERE id = 1').run();
 
     // Reset autoincrement counters
-    try { db.prepare('DELETE FROM sqlite_sequence').run(); } catch { /* may not exist */ }
+    try {
+        db.prepare('DELETE FROM sqlite_sequence').run();
+        console.log('Autoincrement counters reset');
+    } catch (e) {
+        console.log('sqlite_sequence reset skipped:', e.message);
+    }
 
     const summary = cleared.length
         ? `Cleared: ${cleared.join(', ')}`
