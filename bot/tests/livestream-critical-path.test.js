@@ -156,6 +156,7 @@ beforeEach(() => {
 const { handleQueue, handleDuckRace, addToQueue } = await import('../commands/queue.js');
 const { handleLive, handleOffline } = await import('../commands/live.js');
 const { handleCheckoutCompleted } = await import('../webhooks/stripe.js');
+const { handleBattle } = await import('../commands/battle.js');
 
 // =========================================================================
 // Helpers
@@ -1087,5 +1088,226 @@ describe('Discord username auto-link at checkout', () => {
         expect(buyers).toHaveLength(3);
         const buyerIds = buyers.map((b) => b.buyer).sort();
         expect(buyerIds).toEqual(['alice_discord', 'anon@example.com', 'newguy_discord']);
+    });
+});
+
+// =========================================================================
+// Pack Battle Purchases Excluded from Queue
+// =========================================================================
+
+describe('pack battle queue exclusion', () => {
+    it('pack battle purchases do not create queue entries', async () => {
+        stmts.queues.createQueue.run();
+        const queue = stmts.queues.getActiveQueue.get();
+
+        // Regular shop purchase — should land in queue
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_shop_1',
+            email: 'alice@example.com',
+            discordUserId: 'alice_discord',
+            products: [{ name: 'Booster Box', quantity: 1 }],
+        }));
+
+        expect(stmts.queues.getEntries.all(queue.id)).toHaveLength(1);
+
+        // Pack battle purchase — should NOT land in queue
+        const battleSession = fakeCheckoutSession({
+            sessionId: 'cs_battle_1',
+            email: 'bob@example.com',
+            discordUserId: 'bob_discord',
+            products: [{ name: 'Prismatic Evolutions', quantity: 1 }],
+        });
+        battleSession.metadata.source = 'pack-battle';
+        battleSession.metadata.battle_id = '1';
+
+        await handleCheckoutCompleted(battleSession);
+
+        // Queue still has only the shop purchase
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].product_name).toBe('Booster Box');
+
+        // Duck race roster only has alice (shop buyer), not bob (battle buyer)
+        const buyers = stmts.queues.getUniqueBuyers.all(queue.id);
+        expect(buyers).toHaveLength(1);
+        expect(buyers[0].buyer).toBe('alice_discord');
+    });
+
+    it('pack battle purchase still records in purchases table', async () => {
+        stmts.queues.createQueue.run();
+
+        const battleSession = fakeCheckoutSession({
+            sessionId: 'cs_battle_2',
+            email: 'charlie@example.com',
+            discordUserId: 'charlie_discord',
+            products: [{ name: 'Pack Battle ETB', quantity: 1 }],
+        });
+        battleSession.metadata.source = 'pack-battle';
+
+        await handleCheckoutCompleted(battleSession);
+
+        // Purchase is recorded even though queue entry is not
+        const purchase = stmts.purchases.getDiscordIdByEmail.get('charlie@example.com');
+        expect(purchase).toBeTruthy();
+        expect(purchase.discord_user_id).toBe('charlie_discord');
+    });
+});
+
+// =========================================================================
+// Duplicate Battle Entry Prevention
+// =========================================================================
+
+describe('duplicate battle entry prevention', () => {
+    it('same user cannot enter the same battle twice via addEntry', () => {
+        // Create a battle
+        stmts.battles.createBattle.run('test-product', 'Test Product', 'price_123', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+
+        // First entry succeeds
+        stmts.battles.addEntry.run(battle.id, 'alice_discord');
+        expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
+
+        // Second entry for same user is silently ignored (INSERT OR IGNORE + UNIQUE constraint)
+        stmts.battles.addEntry.run(battle.id, 'alice_discord');
+        expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
+
+        // Different user can still enter
+        stmts.battles.addEntry.run(battle.id, 'bob_discord');
+        expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(2);
+    });
+
+    it('same user can enter different battles', () => {
+        stmts.battles.createBattle.run('product-a', 'Product A', 'price_a', 10, null);
+        const battleA = stmts.battles.getActiveBattle.get();
+        stmts.battles.addEntry.run(battleA.id, 'alice_discord');
+        stmts.battles.closeBattle.run(battleA.id);
+
+        stmts.battles.createBattle.run('product-b', 'Product B', 'price_b', 10, null);
+        const battleB = stmts.battles.getActiveBattle.get();
+        stmts.battles.addEntry.run(battleB.id, 'alice_discord');
+
+        expect(stmts.battles.getEntryCount.get(battleA.id).count).toBe(1);
+        expect(stmts.battles.getEntryCount.get(battleB.id).count).toBe(1);
+    });
+});
+
+// =========================================================================
+// Owner Battle Join
+// =========================================================================
+
+describe('owner battle join', () => {
+    it('!battle join adds owner to battle roster', async () => {
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+
+        const msg = adminMsg({ content: '!battle join', authorId: 'owner1' });
+        await handleBattle(msg, ['join']);
+
+        const entries = stmts.battles.getEntries.all(battle.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe('owner1');
+
+        // Entry is marked as paid
+        const paidEntries = stmts.battles.getPaidEntries.all(battle.id);
+        expect(paidEntries).toHaveLength(1);
+    });
+
+    it('!battle join rejects if owner already entered', async () => {
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+
+        const msg1 = adminMsg({ content: '!battle join', authorId: 'owner1' });
+        await handleBattle(msg1, ['join']);
+
+        const msg2 = adminMsg({ content: '!battle join', authorId: 'owner1' });
+        await handleBattle(msg2, ['join']);
+
+        // Still only one entry
+        expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
+        expect(msg2.reply).toHaveBeenCalledWith(expect.stringContaining('already in this battle'));
+    });
+
+    it('!battle join rejects if battle is full', async () => {
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 1, null);
+        const battle = stmts.battles.getActiveBattle.get();
+
+        // Fill the battle
+        stmts.battles.addEntry.run(battle.id, 'other_user');
+
+        const msg = adminMsg({ content: '!battle join', authorId: 'owner1' });
+        await handleBattle(msg, ['join']);
+
+        expect(msg.reply).toHaveBeenCalledWith(expect.stringContaining('full'));
+        expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
+    });
+
+    it('!battle join rejects non-owner', async () => {
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+
+        const msg = createMockMessage({ roles: [ROLE_NANOOK], authorId: 'mod1' });
+        await handleBattle(msg, ['join']);
+
+        expect(msg.reply).toHaveBeenCalledWith(expect.stringContaining('Only the server owner'));
+    });
+});
+
+// =========================================================================
+// Case-Insensitive Discord Username Auto-Link
+// =========================================================================
+
+describe('case-insensitive Discord username auto-link', () => {
+    it('mixed-case username at checkout auto-links correctly', async () => {
+        stmts.queues.createQueue.run();
+
+        // Mock findMemberByUsername to return a member for the mixed-case lookup
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'mixedcase_discord',
+            user: { username: 'itzenzottv' },
+        });
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_case_test',
+            email: 'mixedcase@example.com',
+            discordUsername: 'ItZeNzOtTv',  // Mixed case input
+            products: [{ name: 'Card Pack', quantity: 1 }],
+        }));
+
+        // findMemberByUsername was called with the mixed-case input
+        expect(mockFindMemberByUsername).toHaveBeenCalledWith('ItZeNzOtTv');
+
+        // Discord link was created
+        const link = stmts.purchases.getDiscordIdByEmail.get('mixedcase@example.com');
+        expect(link).toBeTruthy();
+        expect(link.discord_user_id).toBe('mixedcase_discord');
+
+        // Queue entry has the discord user ID (not email)
+        const queue = stmts.queues.getActiveQueue.get();
+        const entries = stmts.queues.getEntries.all(queue.id);
+        expect(entries).toHaveLength(1);
+        expect(entries[0].discord_user_id).toBe('mixedcase_discord');
+    });
+
+    it('username with leading @ is stripped before lookup', async () => {
+        stmts.queues.createQueue.run();
+
+        mockFindMemberByUsername.mockResolvedValueOnce({
+            id: 'at_user_discord',
+            user: { username: 'testuser' },
+        });
+
+        await handleCheckoutCompleted(fakeCheckoutSession({
+            sessionId: 'cs_at_test',
+            email: 'atuser@example.com',
+            discordUsername: '@TestUser',
+            products: [{ name: 'Card Pack', quantity: 1 }],
+        }));
+
+        // @ was stripped before lookup
+        expect(mockFindMemberByUsername).toHaveBeenCalledWith('TestUser');
+
+        // Link created successfully
+        const link = stmts.purchases.getDiscordIdByEmail.get('atuser@example.com');
+        expect(link).toBeTruthy();
+        expect(link.discord_user_id).toBe('at_user_discord');
     });
 });
