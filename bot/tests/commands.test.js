@@ -71,15 +71,15 @@ beforeEach(() => {
 });
 
 describe('!battle permission guards', () => {
-    it('rejects commands outside #pack-battles', async () => {
+    it('allows commands from any channel', async () => {
         const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({
             channelId: 'wrong_channel',
             roles: [ROLE_AKIVILI],
         });
 
-        await handleBattle(msg, ['start', 'Test']);
-        expect(msg.reply).toHaveBeenCalledWith(
+        await handleBattle(msg, ['status']);
+        expect(msg.reply).not.toHaveBeenCalledWith(
             expect.stringContaining('only work in')
         );
     });

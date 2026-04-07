@@ -57,12 +57,7 @@ function buildBattleEmbed(battle, entries, paidEntries) {
 async function handleBattle(message, args) {
     const subcommand = args[0]?.toLowerCase();
 
-    // Only allow in #pack-battles
-    if (message.channel.id !== config.CHANNELS.PACK_BATTLES) {
-        return message.reply('Pack battle commands only work in <#' + config.CHANNELS.PACK_BATTLES + '>.');
-    }
-
-    // Only mods/owner can manage battles
+    // Only mods/owner can manage battles (anyone can check status)
     const isAdmin = message.member.roles.cache.has(config.ROLES.NANOOK)
         || message.member.roles.cache.has(config.ROLES.AKIVILI);
 
@@ -166,8 +161,13 @@ async function startBattle(message, args) {
         .setEmoji('🛒');
 
     const row = new ActionRowBuilder().addComponents(buyButton);
-    const msg = await message.channel.send({ embeds: [embed], components: [row] });
+    const battleChannel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
+    const msg = await battleChannel.send({ embeds: [embed], components: [row] });
     battles.setBattleMessage.run(msg.id, battleId);
+
+    if (message.channel.id !== config.CHANNELS.PACK_BATTLES) {
+        await message.channel.send(`⚔️ Pack battle started in <#${config.CHANNELS.PACK_BATTLES}> — **${productName}** (${max} max entries)`);
+    }
 
     // Also announce in #announcements with button
     const announceBuyButton = new ButtonBuilder()

@@ -284,11 +284,11 @@ describe('livestream lifecycle', () => {
 // =========================================================================
 
 describe('command guards (message-level)', () => {
-    it('!battle rejects outside #pack-battles channel', async () => {
+    it('!battle works from any channel (no channel restriction)', async () => {
         const { handleBattle } = await import('../commands/battle.js');
         const msg = createMockMessage({ channelId: 'wrong-channel', roles: [ROLE_AKIVILI] });
         await handleBattle(msg, ['status']);
-        expect(msg.reply).toHaveBeenCalledWith(expect.stringContaining('only work in'));
+        expect(msg.reply).not.toHaveBeenCalledWith(expect.stringContaining('only work in'));
     });
 
     it('!battle rejects non-admin for management commands', async () => {
