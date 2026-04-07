@@ -114,7 +114,7 @@ app.get('/battle/checkout/:id', async (req, res) => {
         const params = {
             mode: 'payment',
             line_items: [{ price: battle.stripe_price_id, quantity: 1 }],
-            success_url: `${config.SHOP_URL}?thanks=1`,
+            success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
                 battle_id: String(battle.id),
@@ -167,7 +167,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                     quantity: 1,
                 },
             ],
-            success_url: `${config.SHOP_URL}?thanks=1`,
+            success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
                 card_listing_id: String(listing.id),
@@ -214,7 +214,7 @@ app.get('/product/checkout/:priceId', async (req, res) => {
         const params = {
             mode: 'payment',
             line_items: [{ price: req.params.priceId, quantity: 1 }],
-            success_url: `${config.SHOP_URL}?thanks=1`,
+            success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
                 source: 'hype-checkout',
