@@ -117,8 +117,8 @@ async function handleCheckoutCompleted(session) {
         }
     }
 
-    // Add card product purchases to the active queue (skip pack battles — they have their own reward)
-    if (session.metadata?.source !== 'pack-battle') {
+    // Add card product purchases to the active queue (skip battles and individual card sales)
+    if (session.metadata?.source !== 'pack-battle' && session.metadata?.source !== 'card-sale') {
         for (const item of lineItems) {
             const productName = item.name || 'Unknown Product';
             const quantity = item.quantity || 1;
@@ -347,6 +347,23 @@ async function checkCardSalePayment(session, discordUserId) {
 
     const updated = cardListings.getById.get(listingId);
     await updateListingEmbed(updated);
+
+    // DM the buyer to confirm purchase
+    if (discordUserId) {
+        try {
+            const member = await getMember(discordUserId);
+            if (member) {
+                const dm = await member.createDM();
+                const embed = new EmbedBuilder()
+                    .setTitle('✅ Purchase Confirmed!')
+                    .setDescription(`**${listing.card_name}** is yours. Thanks for the purchase!`)
+                    .setColor(0xceff00);
+                await dm.send({ embeds: [embed] });
+            }
+        } catch (e) {
+            console.error(`Failed to DM card sale confirmation to ${discordUserId}:`, e.message);
+        }
+    }
 
     console.log(`Card listing #${listingId} sold: ${listing.card_name}`);
 }
