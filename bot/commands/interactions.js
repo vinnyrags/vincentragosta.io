@@ -200,15 +200,10 @@ async function handleBattleBuy(interaction, battleId, isDeferred = false) {
         return interaction.editReply({ content: `You're already in this battle! One entry per person. Good luck! 🍀` });
     }
 
-    const covered = hasShippingCoveredByDiscordId(discordUserId);
     const checkoutUrl = buildCheckoutUrl(`battle/checkout/${battleId}`, discordUserId);
 
-    const shippingNote = covered
-        ? '✅ Shipping already covered this period!'
-        : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
-
     await interaction.editReply({
-        content: `⚔️ **${battle.product_name}** Pack Battle\n${shippingNote}\n\n🛒 **[Buy Your Pack](${checkoutUrl})**`,
+        content: `⚔️ **${battle.product_name}** Pack Battle\n📦 Shipping is only charged if you win\n\n🛒 **[Buy Your Pack](${checkoutUrl})**`,
     });
 }
 

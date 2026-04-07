@@ -123,12 +123,8 @@ app.get('/battle/checkout/:id', async (req, res) => {
             custom_fields: customFieldsFor(discordUserId),
         };
 
-        // Add shipping unless already covered this period
-        const covered = discordUserId && hasShippingCoveredByDiscordId(discordUserId);
-        if (!covered) {
-            params.shipping_options = buildShippingOptions(discordUserId);
-            params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
-        }
+        // No shipping on battle buy-in — only the winner gets shipped product.
+        // Winner's shipping is handled after !battle winner declaration.
 
         const session = await stripe.checkout.sessions.create(params);
 

@@ -16,7 +16,8 @@ import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'disc
 import Stripe from 'stripe';
 import config from '../config.js';
 import { db, battles, purchases } from '../db.js';
-import { client, sendToChannel, sendEmbed, getMember, addRole } from '../discord.js';
+import { client, sendToChannel, sendEmbed, getMember, addRole, getGuild } from '../discord.js';
+import { hasShippingCoveredByDiscordId, getShippingRate, formatShippingRate } from '../shipping.js';
 
 /**
  * Update the original battle message in #pack-battles.
@@ -175,7 +176,7 @@ async function startBattle(message, args) {
 
     const embed = new EmbedBuilder()
         .setTitle(`⚔️ Pack Battle — ${productName}`)
-        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*Shipping: $10 US / $25 International (waived if already covered this week/month)*`)
+        .setDescription(`🟢 OPEN — Buy your pack to enter!\n\n*No shipping at buy-in — only the winner pays shipping.*`)
         .setColor(0xceff00)
         .addFields(
             { name: 'Entries', value: `0/${max}`, inline: true },
@@ -308,8 +309,39 @@ async function declareBattleWinner(message, args) {
         color: 0xffd700,
     });
 
-    // Winner's shipping was handled at buy-in time (via Discord button checkout)
-    await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping ($10 US / $25 International) was included at purchase.`);
+    // Check if winner needs shipping — battles don't charge shipping at buy-in
+    const isOwner = mentioned.id === (getGuild()?.ownerId);
+    const covered = hasShippingCoveredByDiscordId(mentioned.id);
+
+    if (isOwner) {
+        await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards!`);
+    } else if (covered) {
+        await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping already covered this period.`);
+    } else {
+        // DM winner with shipping checkout link
+        const rate = getShippingRate(mentioned.id);
+        const shippingUrl = `${config.SITE_URL}/bot/shipping/checkout?amount=${rate}&reason=${encodeURIComponent(`Shipping — ${battle.product_name} battle`)}&user=${mentioned.id}`;
+
+        try {
+            const winner = await getMember(mentioned.id);
+            if (winner) {
+                const dm = await winner.createDM();
+                const embed = new EmbedBuilder()
+                    .setTitle('🏆 You Won the Pack Battle!')
+                    .setDescription(
+                        `Congrats on winning **${battle.product_name}**! All the cards are yours.\n\n` +
+                        `To get them shipped, please pay shipping (${formatShippingRate(rate)}) using the link below:\n\n` +
+                        `🛒 **[Pay Shipping](${shippingUrl})**`
+                    )
+                    .setColor(0xffd700);
+                await dm.send({ embeds: [embed] });
+            }
+        } catch (e) {
+            console.error(`Failed to DM battle winner ${mentioned.id}:`, e.message);
+        }
+
+        await message.channel.send(`🏆 <@${mentioned.id}> wins all the cards! Shipping DM sent (${formatShippingRate(rate)}).`);
+    }
 }
 
 async function ownerJoinBattle(message) {
