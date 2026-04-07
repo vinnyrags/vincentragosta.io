@@ -19,6 +19,30 @@ import { db, battles, purchases } from '../db.js';
 import { client, sendToChannel, sendEmbed, getMember, addRole } from '../discord.js';
 
 /**
+ * Update the original battle message in #pack-battles.
+ * Removes the Buy Pack button and shows the current state.
+ */
+async function updateBattleMessage(battle, entries, paidEntries, status) {
+    try {
+        const channel = client.channels.cache.get(config.CHANNELS.PACK_BATTLES);
+        const messageId = battle.channel_message_id || battles.getBattleById.get(battle.id)?.channel_message_id;
+        if (!channel || !messageId) return;
+
+        const msg = await channel.messages.fetch(messageId);
+        const embed = buildBattleEmbed({ ...battle, status }, entries, paidEntries);
+
+        if (status === 'closed') {
+            embed.setFooter({ text: `Battle #${battle.battle_number || '?'} • ${paidEntries.length} entries • Opening packs now!` });
+        }
+
+        // Remove buttons for non-open states
+        await msg.edit({ embeds: [embed], components: [] });
+    } catch (e) {
+        console.error('Failed to update battle message:', e.message);
+    }
+}
+
+/**
  * Build the battle status embed.
  * Every entry is a paid entry — purchase is the only way to join.
  */
@@ -189,6 +213,8 @@ async function closeBattle(message) {
 
     if (paidEntries.length === 0) {
         battles.deleteBattle.run(battle.id);
+        // Update original message if it exists
+        await updateBattleMessage(battle, [], [], 'cancelled');
         await message.channel.send(`❌ Pack battle **${battle.product_name}** closed with no entries — not counted.`);
         return;
     }
@@ -199,10 +225,11 @@ async function closeBattle(message) {
     battles.closeBattle.run(battle.id);
 
     const numberedBattle = { ...battle, battle_number: next, status: 'closed' };
-    const embed = buildBattleEmbed(numberedBattle, entries, paidEntries);
-    embed.setFooter({ text: `Battle #${next} • ${paidEntries.length} entries • Opening packs now!` });
 
-    await message.channel.send({ embeds: [embed] });
+    // Update the original message in #pack-battles (remove button, show closed state)
+    await updateBattleMessage(numberedBattle, entries, paidEntries, 'closed');
+
+    await message.channel.send(`⚔️ Pack battle #${next} **${battle.product_name}** is closed — ${paidEntries.length} entries. Opening packs now!`);
 }
 
 async function cancelBattle(message) {
@@ -214,10 +241,13 @@ async function cancelBattle(message) {
     const entries = battles.getEntries.all(battle.id);
 
     if (entries.length === 0) {
+        await updateBattleMessage(battle, [], [], 'cancelled');
         battles.deleteBattle.run(battle.id);
         await message.channel.send(`❌ Pack battle **${battle.product_name}** cancelled — not counted.`);
     } else {
         battles.cancelBattle.run(battle.id);
+        const paidEntries = battles.getPaidEntries.all(battle.id);
+        await updateBattleMessage(battle, entries, paidEntries, 'cancelled');
         await message.channel.send(`❌ Pack battle **${battle.product_name}** has been cancelled.`);
         const entrants = entries.map((e) => `<@${e.discord_user_id}>`).join(', ');
         await message.channel.send(`Notifying entrants: ${entrants} — battle cancelled, refunds if applicable.`);
@@ -254,10 +284,9 @@ async function declareBattleWinner(message, args) {
 
     const entries = battles.getEntries.all(battle.id);
     const paidEntries = battles.getPaidEntries.all(battle.id);
-    const embed = buildBattleEmbed({ ...battle, status: 'complete', winner_id: mentioned.id }, entries, paidEntries);
 
-    // Post in pack-battles
-    await message.channel.send({ embeds: [embed] });
+    // Update the original message in #pack-battles with winner
+    await updateBattleMessage({ ...battle, winner_id: mentioned.id }, entries, paidEntries, 'complete');
 
     const num = battle.battle_number || '?';
 
