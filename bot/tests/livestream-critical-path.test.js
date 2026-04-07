@@ -1311,3 +1311,88 @@ describe('case-insensitive Discord username auto-link', () => {
         expect(link.discord_user_id).toBe('at_user_discord');
     });
 });
+
+// =========================================================================
+// Battle Winner Shipping
+// =========================================================================
+
+describe('battle winner shipping', () => {
+    it('winner without shipping coverage gets a DM', async () => {
+        // Create and close a battle with one entry
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+        stmts.battles.addEntry.run(battle.id, 'winner_discord');
+        stmts.battles.confirmPayment.run('cs_winner', battle.id, 'winner_discord');
+
+        const { next } = stmts.battles.getNextBattleNumber.get();
+        stmts.battles.setBattleNumber.run(next, battle.id);
+        stmts.battles.closeBattle.run(battle.id);
+
+        // Link the winner so shipping lookup works
+        stmts.purchases.linkDiscord.run('winner_discord', 'winner@example.com');
+
+        // Declare winner
+        const msg = adminMsg({ content: '!battle winner @winner' });
+        const winnerMention = createMockMention('winner_discord');
+        msg.mentions.users.first = vi.fn().mockReturnValue(winnerMention);
+        await handleBattle(msg, ['winner', '@winner']);
+
+        // Winner should have been DM'd (getMember was called to send DM)
+        expect(mockGetMember).toHaveBeenCalledWith('winner_discord');
+
+        // Confirmation in command channel mentions shipping DM
+        const sendCalls = msg.channel.send.mock.calls;
+        const shippingMsg = sendCalls.find((c) => typeof c[0] === 'string' && c[0].includes('Shipping DM sent'));
+        expect(shippingMsg).toBeTruthy();
+    });
+
+    it('winner with shipping already covered does not get a shipping DM', async () => {
+        // Create and close a battle
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+        stmts.battles.addEntry.run(battle.id, 'covered_discord');
+        stmts.battles.confirmPayment.run('cs_covered', battle.id, 'covered_discord');
+
+        const { next } = stmts.battles.getNextBattleNumber.get();
+        stmts.battles.setBattleNumber.run(next, battle.id);
+        stmts.battles.closeBattle.run(battle.id);
+
+        // Link and record shipping so they're covered
+        stmts.purchases.linkDiscord.run('covered_discord', 'covered@example.com');
+        stmts.shipping.record.run('covered@example.com', 'covered_discord', 1000, 'checkout', 'cs_ship');
+
+        // Declare winner
+        const msg = adminMsg({ content: '!battle winner @covered' });
+        const coveredMention = createMockMention('covered_discord');
+        msg.mentions.users.first = vi.fn().mockReturnValue(coveredMention);
+        await handleBattle(msg, ['winner', '@covered']);
+
+        // Confirmation should say already covered, not DM sent
+        const sendCalls = msg.channel.send.mock.calls;
+        const coveredMsg = sendCalls.find((c) => typeof c[0] === 'string' && c[0].includes('already covered'));
+        expect(coveredMsg).toBeTruthy();
+    });
+
+    it('owner winning does not trigger shipping DM', async () => {
+        stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
+        const battle = stmts.battles.getActiveBattle.get();
+        stmts.battles.addEntry.run(battle.id, 'owner1');
+        stmts.battles.confirmPayment.run('cs_owner', battle.id, 'owner1');
+
+        const { next } = stmts.battles.getNextBattleNumber.get();
+        stmts.battles.setBattleNumber.run(next, battle.id);
+        stmts.battles.closeBattle.run(battle.id);
+
+        const msg = adminMsg({ content: '!battle winner @owner' });
+        const ownerMention = createMockMention('owner1');
+        msg.mentions.users.first = vi.fn().mockReturnValue(ownerMention);
+        await handleBattle(msg, ['winner', '@owner']);
+
+        // Confirmation should NOT mention shipping DM or already covered
+        const sendCalls = msg.channel.send.mock.calls;
+        const winMsg = sendCalls.find((c) => typeof c[0] === 'string' && c[0].includes('wins all the cards'));
+        expect(winMsg).toBeTruthy();
+        const shippingMsg = sendCalls.find((c) => typeof c[0] === 'string' && c[0].includes('Shipping DM'));
+        expect(shippingMsg).toBeFalsy();
+    });
+});

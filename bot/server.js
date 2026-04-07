@@ -253,6 +253,12 @@ app.get('/shipping/checkout', async (req, res) => {
         return res.status(400).send('Invalid shipping amount.');
     }
 
+    // Guard against double-paying shipping
+    const discordUserId = req.query.user;
+    if (discordUserId && hasShippingCoveredByDiscordId(discordUserId)) {
+        return res.status(200).send('Your shipping is already covered this period — no action needed!');
+    }
+
     try {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const session = await stripe.checkout.sessions.create({
