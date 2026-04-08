@@ -366,7 +366,7 @@ async function checkCardSalePayment(session, discordUserId) {
                     .setTitle('✅ Purchase Confirmed!')
                     .setDescription(`**${listing.card_name}** is yours. Thanks for the purchase!`)
                     .setColor(0xceff00);
-                await dmMsg.edit({ embeds: [embed] });
+                await dmMsg.edit({ embeds: [embed], components: [] });
             }
         } catch (e) {
             console.error(`Failed to update card sale DM for ${discordUserId}:`, e.message);
