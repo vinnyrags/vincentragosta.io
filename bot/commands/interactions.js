@@ -278,7 +278,7 @@ async function handlePullBuy(interaction, listingId) {
         : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
 
     await interaction.editReply({
-        content: `🎰 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Buy Pull](${checkoutUrl})**`,
+        content: `🎰 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Buy Pack(s)](${checkoutUrl})**`,
     });
 }
 

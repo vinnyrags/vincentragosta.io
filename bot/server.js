@@ -158,18 +158,23 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
         const stripe = new Stripe(config.STRIPE_SECRET_KEY);
         const discordUserId = req.query.user;
 
+        const isPull = listing.status === 'pull';
+        const lineItem = {
+            price_data: {
+                currency: 'usd',
+                product_data: { name: listing.card_name },
+                unit_amount: listing.price,
+            },
+            quantity: 1,
+        };
+
+        if (isPull) {
+            lineItem.adjustable_quantity = { enabled: true, minimum: 1, maximum: 20 };
+        }
+
         const params = {
             mode: 'payment',
-            line_items: [
-                {
-                    price_data: {
-                        currency: 'usd',
-                        product_data: { name: listing.card_name },
-                        unit_amount: listing.price,
-                    },
-                    quantity: 1,
-                },
-            ],
+            line_items: [lineItem],
             success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {

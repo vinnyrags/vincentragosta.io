@@ -84,7 +84,7 @@ async function handlePullOpen(message) {
     const embed = buildPullEmbed(name, priceCents, 0);
     const buyButton = new ButtonBuilder()
         .setCustomId(`pull-buy-${listingId}`)
-        .setLabel('Buy Pull')
+        .setLabel('Buy Pack(s)')
         .setStyle(ButtonStyle.Primary)
         .setEmoji('🎰');
 
@@ -155,7 +155,7 @@ function buildPullEmbed(name, priceCents, purchaseCount) {
     const shippingNote = `*Shipping: ${formatShippingRate(config.SHIPPING.DOMESTIC)} US / ${formatShippingRate(config.SHIPPING.INTERNATIONAL)} International (waived if already covered this week/month)*`;
 
     const lines = [
-        `**${priceLabel}** per pull — click Buy Pull to check out`,
+        `**${priceLabel}** per pull — click Buy Pack(s) to check out`,
     ];
 
     if (purchaseCount > 0) {
