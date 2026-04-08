@@ -195,7 +195,7 @@ export function buildStmts(db) {
             cancelBattle: db.prepare(`UPDATE battles SET status = 'cancelled', closed_at = datetime('now') WHERE id = ?`),
             setBattleWinner: db.prepare(`UPDATE battles SET status = 'complete', winner_id = ? WHERE id = ?`),
             setBattleMessage: db.prepare(`UPDATE battles SET channel_message_id = ? WHERE id = ?`),
-            addEntry: db.prepare(`INSERT OR IGNORE INTO battle_entries (battle_id, discord_user_id) VALUES (?, ?)`),
+            addEntry: db.prepare(`INSERT OR IGNORE INTO battle_entries (battle_id, discord_user_id) SELECT ?, ? WHERE (SELECT COUNT(*) FROM battle_entries WHERE battle_id = ?) < (SELECT max_entries FROM battles WHERE id = ?)`),
             confirmPayment: db.prepare(`UPDATE battle_entries SET paid = 1, stripe_session_id = ? WHERE battle_id = ? AND discord_user_id = ?`),
             getEntries: db.prepare(`SELECT * FROM battle_entries WHERE battle_id = ?`),
             getPaidEntries: db.prepare(`SELECT * FROM battle_entries WHERE battle_id = ? AND paid = 1`),

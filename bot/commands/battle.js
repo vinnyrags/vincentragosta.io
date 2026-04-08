@@ -361,7 +361,7 @@ async function ownerJoinBattle(message) {
     }
 
     // Add entry as paid (no Stripe session)
-    battles.addEntry.run(battle.id, message.author.id);
+    battles.addEntry.run(battle.id, message.author.id, battle.id, battle.id);
     battles.confirmPayment.run(`owner-${battle.id}`, battle.id, message.author.id);
 
     // Decrement stock in WordPress

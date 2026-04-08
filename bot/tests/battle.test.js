@@ -82,8 +82,8 @@ describe('battle entries', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
-        stmts.battles.addEntry.run(battle.id, 'user2');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
+        stmts.battles.addEntry.run(battle.id, 'user2', battle.id, battle.id);
 
         const count = stmts.battles.getEntryCount.get(battle.id);
         expect(count.count).toBe(2);
@@ -93,8 +93,8 @@ describe('battle entries', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
-        stmts.battles.addEntry.run(battle.id, 'user1'); // duplicate
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id); // duplicate
 
         const count = stmts.battles.getEntryCount.get(battle.id);
         expect(count.count).toBe(1);
@@ -104,7 +104,7 @@ describe('battle entries', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('session_abc', battle.id, 'user1');
 
         const paid = stmts.battles.getPaidEntries.all(battle.id);
@@ -116,8 +116,8 @@ describe('battle entries', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
-        stmts.battles.addEntry.run(battle.id, 'user2');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
+        stmts.battles.addEntry.run(battle.id, 'user2', battle.id, battle.id);
         stmts.battles.confirmPayment.run('session_abc', battle.id, 'user1');
 
         const all = stmts.battles.getEntries.all(battle.id);
@@ -152,7 +152,7 @@ describe('battle numbering', () => {
         // Battle 1: has entries, gets number 1
         stmts.battles.createBattle.run('a', 'A', 'p1', 10, null);
         const b1 = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(b1.id, 'user1');
+        stmts.battles.addEntry.run(b1.id, 'user1', b1.id, b1.id);
         stmts.battles.confirmPayment.run('s1', b1.id, 'user1');
         stmts.battles.setBattleNumber.run(1, b1.id);
         stmts.battles.closeBattle.run(b1.id);

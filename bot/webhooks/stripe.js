@@ -316,7 +316,7 @@ async function checkBattlePayment(session, discordUserId) {
 
     // Add entry and mark as paid in one step
     const odiscordUserId = discordUserId || `unknown-${session.id}`;
-    battles.addEntry.run(battle.id, odiscordUserId);
+    battles.addEntry.run(battle.id, odiscordUserId, battle.id, battle.id);
     battles.confirmPayment.run(session.id, battle.id, odiscordUserId);
 
     const entries = battles.getEntries.all(battle.id);

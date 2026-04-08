@@ -1160,15 +1160,15 @@ describe('duplicate battle entry prevention', () => {
         const battle = stmts.battles.getActiveBattle.get();
 
         // First entry succeeds
-        stmts.battles.addEntry.run(battle.id, 'alice_discord');
+        stmts.battles.addEntry.run(battle.id, 'alice_discord', battle.id, battle.id);
         expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
 
         // Second entry for same user is silently ignored (INSERT OR IGNORE + UNIQUE constraint)
-        stmts.battles.addEntry.run(battle.id, 'alice_discord');
+        stmts.battles.addEntry.run(battle.id, 'alice_discord', battle.id, battle.id);
         expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(1);
 
         // Different user can still enter
-        stmts.battles.addEntry.run(battle.id, 'bob_discord');
+        stmts.battles.addEntry.run(battle.id, 'bob_discord', battle.id, battle.id);
         expect(stmts.battles.getEntryCount.get(battle.id).count).toBe(2);
     });
 
@@ -1222,12 +1222,12 @@ describe('duplicate battle entry prevention', () => {
     it('same user can enter different battles', () => {
         stmts.battles.createBattle.run('product-a', 'Product A', 'price_a', 10, null);
         const battleA = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battleA.id, 'alice_discord');
+        stmts.battles.addEntry.run(battleA.id, 'alice_discord', battleA.id, battleA.id);
         stmts.battles.closeBattle.run(battleA.id);
 
         stmts.battles.createBattle.run('product-b', 'Product B', 'price_b', 10, null);
         const battleB = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battleB.id, 'alice_discord');
+        stmts.battles.addEntry.run(battleB.id, 'alice_discord', battleB.id, battleB.id);
 
         expect(stmts.battles.getEntryCount.get(battleA.id).count).toBe(1);
         expect(stmts.battles.getEntryCount.get(battleB.id).count).toBe(1);
@@ -1275,7 +1275,7 @@ describe('owner battle join', () => {
         const battle = stmts.battles.getActiveBattle.get();
 
         // Fill the battle
-        stmts.battles.addEntry.run(battle.id, 'other_user');
+        stmts.battles.addEntry.run(battle.id, 'other_user', battle.id, battle.id);
 
         const msg = adminMsg({ content: '!battle join', authorId: 'owner1' });
         await handleBattle(msg, ['join']);
@@ -1364,7 +1364,7 @@ describe('battle winner shipping', () => {
         // Create and close a battle with one entry
         stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battle.id, 'winner_discord');
+        stmts.battles.addEntry.run(battle.id, 'winner_discord', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_winner', battle.id, 'winner_discord');
 
         const { next } = stmts.battles.getNextBattleNumber.get();
@@ -1393,7 +1393,7 @@ describe('battle winner shipping', () => {
         // Create and close a battle
         stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battle.id, 'covered_discord');
+        stmts.battles.addEntry.run(battle.id, 'covered_discord', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_covered', battle.id, 'covered_discord');
 
         const { next } = stmts.battles.getNextBattleNumber.get();
@@ -1419,7 +1419,7 @@ describe('battle winner shipping', () => {
     it('owner winning does not trigger shipping DM', async () => {
         stmts.battles.createBattle.run('test-pack', 'Test Pack', 'price_test', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battle.id, 'owner1');
+        stmts.battles.addEntry.run(battle.id, 'owner1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_owner', battle.id, 'owner1');
 
         const { next } = stmts.battles.getNextBattleNumber.get();

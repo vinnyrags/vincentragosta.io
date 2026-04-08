@@ -77,7 +77,7 @@ describe('battle owner entry stock tracking', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'owner123');
+        stmts.battles.addEntry.run(battle.id, 'owner123', battle.id, battle.id);
         stmts.battles.confirmPayment.run(`owner-${battle.id}`, battle.id, 'owner123');
 
         const paid = stmts.battles.getPaidEntries.all(battle.id);
@@ -89,8 +89,8 @@ describe('battle owner entry stock tracking', () => {
         stmts.battles.createBattle.run('test', 'Test', 'price_1', 10, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'owner123');
-        stmts.battles.addEntry.run(battle.id, 'owner123'); // duplicate ignored
+        stmts.battles.addEntry.run(battle.id, 'owner123', battle.id, battle.id);
+        stmts.battles.addEntry.run(battle.id, 'owner123', battle.id, battle.id); // duplicate ignored
 
         const entries = stmts.battles.getEntries.all(battle.id);
         expect(entries).toHaveLength(1);

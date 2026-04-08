@@ -85,7 +85,7 @@ describe('battle lifecycle database operations', () => {
         const battle = stmts.battles.getActiveBattle.get();
         expect(battle.status).toBe('open');
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_1', battle.id, 'user1');
 
         const { next } = stmts.battles.getNextBattleNumber.get();
@@ -100,7 +100,7 @@ describe('battle lifecycle database operations', () => {
     it('cancel sets status to cancelled', () => {
         stmts.battles.createBattle.run('product', 'Test', 'price_1', 20, null);
         const battle = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.cancelBattle.run(battle.id);
 
         expect(stmts.battles.getBattleById.get(battle.id).status).toBe('cancelled');
@@ -117,7 +117,7 @@ describe('battle lifecycle database operations', () => {
     it('setBattleWinner marks complete with winner_id', () => {
         stmts.battles.createBattle.run('p', 'T', 'price_1', 20, null);
         const battle = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_1', battle.id, 'user1');
         stmts.battles.closeBattle.run(battle.id);
 
@@ -132,7 +132,7 @@ describe('battle lifecycle database operations', () => {
         stmts.battles.createBattle.run('p', 'T', 'price_1', 20, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'owner1');
+        stmts.battles.addEntry.run(battle.id, 'owner1', battle.id, battle.id);
         stmts.battles.confirmPayment.run(`owner-${battle.id}`, battle.id, 'owner1');
 
         const entries = stmts.battles.getPaidEntries.all(battle.id);
@@ -144,7 +144,7 @@ describe('battle lifecycle database operations', () => {
         // Battle 1
         stmts.battles.createBattle.run('a', 'A', 'p1', 20, null);
         let b = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(b.id, 'u1');
+        stmts.battles.addEntry.run(b.id, 'u1', b.id, b.id);
         stmts.battles.confirmPayment.run('s1', b.id, 'u1');
         let { next } = stmts.battles.getNextBattleNumber.get();
         stmts.battles.setBattleNumber.run(next, b.id);
@@ -154,7 +154,7 @@ describe('battle lifecycle database operations', () => {
         // Battle 2
         stmts.battles.createBattle.run('b', 'B', 'p2', 20, null);
         b = stmts.battles.getActiveBattle.get();
-        stmts.battles.addEntry.run(b.id, 'u2');
+        stmts.battles.addEntry.run(b.id, 'u2', b.id, b.id);
         stmts.battles.confirmPayment.run('s2', b.id, 'u2');
         ({ next } = stmts.battles.getNextBattleNumber.get());
         stmts.battles.setBattleNumber.run(next, b.id);

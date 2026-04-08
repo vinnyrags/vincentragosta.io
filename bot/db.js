@@ -344,7 +344,9 @@ const battleStmts = {
     `),
 
     addEntry: db.prepare(`
-        INSERT OR IGNORE INTO battle_entries (battle_id, discord_user_id) VALUES (?, ?)
+        INSERT OR IGNORE INTO battle_entries (battle_id, discord_user_id)
+        SELECT ?, ?
+        WHERE (SELECT COUNT(*) FROM battle_entries WHERE battle_id = ?) < (SELECT max_entries FROM battles WHERE id = ?)
     `),
 
     confirmPayment: db.prepare(`

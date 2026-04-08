@@ -223,7 +223,7 @@ describe('battle payment flow', () => {
         stmts.battles.createBattle.run('product', 'Test Product', 'price_123', 20, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_pay_123', battle.id, 'user1');
 
         const entries = stmts.battles.getPaidEntries.all(battle.id);
@@ -236,8 +236,8 @@ describe('battle payment flow', () => {
         stmts.battles.createBattle.run('product', 'Test', 'price_1', 2, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
-        stmts.battles.addEntry.run(battle.id, 'user2');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
+        stmts.battles.addEntry.run(battle.id, 'user2', battle.id, battle.id);
 
         const count = stmts.battles.getEntryCount.get(battle.id).count;
         expect(count >= battle.max_entries).toBe(true);
@@ -251,7 +251,7 @@ describe('battle payment flow', () => {
         stmts.battles.createBattle.run('product', 'Test', 'price_1', 20, null);
         const battle = stmts.battles.getActiveBattle.get();
 
-        stmts.battles.addEntry.run(battle.id, 'user1');
+        stmts.battles.addEntry.run(battle.id, 'user1', battle.id, battle.id);
         stmts.battles.confirmPayment.run('cs_battle_pay', battle.id, 'user1');
 
         const entry = stmts.battles.getPaidEntries.all(battle.id)[0];
