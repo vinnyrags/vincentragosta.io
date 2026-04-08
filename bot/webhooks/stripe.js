@@ -303,6 +303,14 @@ async function checkBattlePayment(session, discordUserId) {
     const entryCount = battles.getEntryCount.get(battle.id).count;
     if (entryCount >= battle.max_entries) {
         console.log(`Battle #${battle.id} is full — payment from ${discordUserId || 'unknown'} not added`);
+
+        // Alert owner — this person paid but didn't get in, needs a refund
+        const buyerLabel = discordUserId ? `<@${discordUserId}>` : (session.customer_details?.email || 'unknown');
+        await sendEmbed('OPS', {
+            title: '⚠️ Battle Overfill — Refund Needed',
+            description: `**${battle.product_name}** battle is full (${battle.max_entries}/${battle.max_entries}) but ${buyerLabel} just paid.\n\nStripe session: \`${session.id}\`\n\nThis buyer needs a refund.`,
+            color: 0xe74c3c,
+        });
         return;
     }
 
