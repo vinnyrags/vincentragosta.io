@@ -121,9 +121,16 @@ app.get('/battle/checkout/:id', async (req, res) => {
             metadata: {
                 battle_id: String(battle.id),
                 source: 'pack-battle',
+                discord_user_id: discordUserId || '',
             },
             custom_fields: customFieldsFor(discordUserId),
         };
+
+        // Prefill email for linked buyers
+        if (discordUserId) {
+            const link = purchases.getEmailByDiscordId.get(discordUserId);
+            if (link) params.customer_email = link.customer_email;
+        }
 
         // No shipping on battle buy-in — only the winner gets shipped product.
         // Winner's shipping is handled after !battle winner declaration.
@@ -172,9 +179,16 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
                 card_name: listing.card_name,
                 source: 'card-sale',
                 reserved_for: listing.buyer_discord_id || '',
+                discord_user_id: discordUserId || '',
             },
             custom_fields: customFieldsFor(discordUserId),
         };
+
+        // Prefill email for linked buyers
+        if (discordUserId) {
+            const link = purchases.getEmailByDiscordId.get(discordUserId);
+            if (link) params.customer_email = link.customer_email;
+        }
 
         // Conditional shipping: skip if buyer already covered this period
         const covered = discordUserId
@@ -216,9 +230,16 @@ app.get('/product/checkout/:priceId', async (req, res) => {
             cancel_url: config.SHOP_URL,
             metadata: {
                 source: 'hype-checkout',
+                discord_user_id: discordUserId || '',
             },
             custom_fields: customFieldsFor(discordUserId),
         };
+
+        // Prefill email for linked buyers
+        if (discordUserId) {
+            const link = purchases.getEmailByDiscordId.get(discordUserId);
+            if (link) params.customer_email = link.customer_email;
+        }
 
         // Conditional shipping based on buyer identity
         const covered = discordUserId

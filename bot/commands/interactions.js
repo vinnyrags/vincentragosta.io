@@ -79,46 +79,22 @@ async function handleModalSubmit(interaction) {
         return interaction.reply({ content: 'Please enter a valid email address.', ephemeral: true });
     }
 
-    // Parse the original context
-    const context = interaction.customId.replace('email-link-', '');
-    const [type, ...rest] = context.split('-');
-    const id = rest.join('-');
-
     await interaction.deferReply({ ephemeral: true });
 
-    // Standalone welcome link — validate email in Stripe before linking
-    if (type === 'welcome') {
-        try {
-            const stripe = new Stripe(config.STRIPE_SECRET_KEY);
-            const customers = await stripe.customers.list({ email, limit: 1 });
-            if (!customers.data.length) {
-                return interaction.editReply({ content: 'No purchases found for that email. Make sure you are using the same email you used at checkout.' });
-            }
-        } catch (e) {
-            console.error('Stripe customer lookup error:', e.message);
-            return interaction.editReply({ content: 'Could not verify email right now. Try again later.' });
+    // Welcome channel Link Account — validate email in Stripe before linking
+    try {
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        const customers = await stripe.customers.list({ email, limit: 1 });
+        if (!customers.data.length) {
+            return interaction.editReply({ content: 'No purchases found for that email. Make sure you are using the same email you used at checkout.' });
         }
-
-        purchases.linkDiscord.run(interaction.user.id, email);
-        return interaction.editReply({ content: 'Your account has been linked! Your name will now appear in the queue, order feed, and duck race roster.' });
+    } catch (e) {
+        console.error('Stripe customer lookup error:', e.message);
+        return interaction.editReply({ content: 'Could not verify email right now. Try again later.' });
     }
 
-    // Auto-link the buyer (purchase context — no Stripe validation needed)
     purchases.linkDiscord.run(interaction.user.id, email);
-
-    if (type === 'card') {
-        return handleCardBuy(interaction, Number(id), true);
-    } else if (type === 'pull') {
-        return handlePullBuy(interaction, Number(id), true);
-    } else if (type === 'hype') {
-        return handleHypeBuy(interaction, id, true);
-    } else if (type === 'battle') {
-        return handleBattleBuy(interaction, Number(id), true);
-    } else if (type === 'sell') {
-        return handleSellBuy(interaction, Number(id), true);
-    }
-
-    await interaction.editReply({ content: 'Email linked! Please click the Buy button again.' });
+    return interaction.editReply({ content: 'Your account has been linked! Your name will now appear in the queue, order feed, and duck race roster.' });
 }
 
 /**
@@ -153,16 +129,10 @@ function buildCheckoutUrl(path, discordUserId) {
 /**
  * Card shop button handler.
  */
-async function handleCardBuy(interaction, listingId, isDeferred = false) {
+async function handleCardBuy(interaction, listingId) {
     const discordUserId = interaction.user.id;
 
-    // Check if buyer has a linked email
-    const link = purchases.getEmailByDiscordId.get(discordUserId);
-    if (!link && !isDeferred) {
-        return showEmailModal(interaction, `card-${listingId}`);
-    }
-
-    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
     const listing = cardListings.getById.get(listingId);
     if (!listing || listing.status === 'sold' || listing.status === 'expired') {
@@ -201,15 +171,10 @@ async function handleCardBuy(interaction, listingId, isDeferred = false) {
 /**
  * Reserved card (sell) button handler — same flow as card-buy.
  */
-async function handleSellBuy(interaction, listingId, isDeferred = false) {
+async function handleSellBuy(interaction, listingId) {
     const discordUserId = interaction.user.id;
 
-    const link = purchases.getEmailByDiscordId.get(discordUserId);
-    if (!link && !isDeferred) {
-        return showEmailModal(interaction, `sell-${listingId}`);
-    }
-
-    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
     const listing = cardListings.getById.get(listingId);
     if (!listing || listing.status !== 'reserved') {
@@ -231,15 +196,10 @@ async function handleSellBuy(interaction, listingId, isDeferred = false) {
 /**
  * Hype product button handler.
  */
-async function handleHypeBuy(interaction, priceId, isDeferred = false) {
+async function handleHypeBuy(interaction, priceId) {
     const discordUserId = interaction.user.id;
 
-    const link = purchases.getEmailByDiscordId.get(discordUserId);
-    if (!link && !isDeferred) {
-        return showEmailModal(interaction, `hype-${priceId}`);
-    }
-
-    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
     const covered = hasShippingCoveredByDiscordId(discordUserId);
     const checkoutUrl = buildCheckoutUrl(`product/checkout/${priceId}`, discordUserId);
@@ -256,15 +216,10 @@ async function handleHypeBuy(interaction, priceId, isDeferred = false) {
 /**
  * Battle buy-in button handler.
  */
-async function handleBattleBuy(interaction, battleId, isDeferred = false) {
+async function handleBattleBuy(interaction, battleId) {
     const discordUserId = interaction.user.id;
 
-    const link = purchases.getEmailByDiscordId.get(discordUserId);
-    if (!link && !isDeferred) {
-        return showEmailModal(interaction, `battle-${battleId}`);
-    }
-
-    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
     const battle = battles.getBattleById.get(battleId);
     if (!battle || battle.status !== 'open') {
@@ -305,15 +260,10 @@ async function handleWelcomeLink(interaction) {
 /**
  * Pull box button handler — same as card buy but allows 'pull' status.
  */
-async function handlePullBuy(interaction, listingId, isDeferred = false) {
+async function handlePullBuy(interaction, listingId) {
     const discordUserId = interaction.user.id;
 
-    const link = purchases.getEmailByDiscordId.get(discordUserId);
-    if (!link && !isDeferred) {
-        return showEmailModal(interaction, `pull-${listingId}`);
-    }
-
-    if (!isDeferred) await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ ephemeral: true });
 
     const listing = cardListings.getById.get(listingId);
     if (!listing || listing.status !== 'pull') {

@@ -59,7 +59,14 @@ async function handleCheckoutCompleted(session) {
     const link = purchases.getDiscordIdByEmail.get(customerEmail);
     let discordUserId = link?.discord_user_id || null;
 
-    // Auto-link via Discord username from checkout custom field
+    // Auto-link via metadata discord_user_id (from Discord button purchases)
+    if (!discordUserId && session.metadata?.discord_user_id) {
+        discordUserId = session.metadata.discord_user_id;
+        purchases.linkDiscord.run(discordUserId, customerEmail);
+        console.log(`Auto-linked via metadata: ${discordUserId} → ${customerEmail}`);
+    }
+
+    // Auto-link via Discord username from checkout custom field (shop/non-Discord purchases)
     if (!discordUserId && session.custom_fields?.length) {
         const field = session.custom_fields.find((f) => f.key === 'discord_username');
         const username = field?.text?.value?.trim().replace(/^@/, '');
