@@ -146,7 +146,7 @@ async function handleCheckoutCompleted(session) {
     await checkBattlePayment(session, discordUserId);
 
     // Check if this payment is for a card sale
-    await checkCardSalePayment(session, discordUserId);
+    await checkCardSalePayment(session, discordUserId, lineItems);
 
     // Track revenue toward community goals (shipping excluded)
     const productRevenue = session.amount_subtotal || session.amount_total || 0;
@@ -339,7 +339,7 @@ async function checkBattlePayment(session, discordUserId) {
 /**
  * Check if a payment is for a card sale and mark the listing as sold.
  */
-async function checkCardSalePayment(session, discordUserId) {
+async function checkCardSalePayment(session, discordUserId, lineItems = []) {
     if (session.metadata?.source !== 'card-sale') return;
 
     const listingId = Number(session.metadata?.card_listing_id);
@@ -348,10 +348,11 @@ async function checkCardSalePayment(session, discordUserId) {
     const listing = cardListings.getById.get(listingId);
     if (!listing || listing.status === 'sold') return;
 
-    // Pull boxes stay open — increment counter instead of marking sold
+    // Pull boxes stay open — record entry with buyer + quantity
     if (listing.status === 'pull') {
-        await recordPullPurchase(listingId);
-        console.log(`Pull box #${listingId} purchase: ${listing.card_name} (${listing.purchase_count + 1} total)`);
+        const quantity = lineItems[0]?.quantity || 1;
+        await recordPullPurchase(listingId, discordUserId, session.customer_details?.email, quantity);
+        console.log(`Pull box #${listingId} purchase: ${listing.card_name} ×${quantity} for ${discordUserId || session.customer_details?.email}`);
         return;
     }
 

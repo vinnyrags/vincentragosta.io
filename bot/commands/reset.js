@@ -30,6 +30,7 @@ const TABLES_TO_CLEAR = [
     'giveaways',
     'giveaway_entries',
     'card_listings',
+    'pull_entries',
     'active_coupons',
 ];
 

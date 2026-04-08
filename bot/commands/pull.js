@@ -13,7 +13,7 @@
 
 import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import config from '../config.js';
-import { cardListings } from '../db.js';
+import { cardListings, pullEntries } from '../db.js';
 import { client } from '../discord.js';
 import { formatShippingRate } from '../shipping.js';
 
@@ -108,16 +108,22 @@ async function handlePullClose(message) {
 
     cardListings.markSold.run(pull.id);
 
-    // Update embed — remove button, show final count
+    // Update embed — remove button, show final count + entries
+    const entries = pullEntries.getEntries.all(pull.id);
     try {
         const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
         if (channel && pull.message_id) {
             const msg = await channel.messages.fetch(pull.message_id);
+            const entryLines = entries.map((e, i) => {
+                const label = e.discord_user_id ? `<@${e.discord_user_id}>` : (e.customer_email || 'Unknown');
+                return `${i + 1}. ${label}${e.quantity > 1 ? ` ×${e.quantity}` : ''}`;
+            });
             const embed = new EmbedBuilder()
                 .setTitle(`🎰 ${pull.card_name}`)
                 .setDescription(
                     `~~$${(pull.price / 100).toFixed(2)}~~\n\n` +
-                    `**CLOSED** — ${pull.purchase_count} pull${pull.purchase_count !== 1 ? 's' : ''} sold`
+                    `**CLOSED** — ${pull.purchase_count} pull${pull.purchase_count !== 1 ? 's' : ''} sold` +
+                    (entryLines.length > 0 ? `\n\n${entryLines.join('\n')}` : '')
                 )
                 .setColor(0xe74c3c)
                 .setFooter({ text: `Pull Box #${pull.id}` });
@@ -150,7 +156,7 @@ async function handlePullStatus(message) {
 /**
  * Build the pull box embed.
  */
-function buildPullEmbed(name, priceCents, purchaseCount) {
+function buildPullEmbed(name, priceCents, purchaseCount, entries = []) {
     const priceLabel = `$${(priceCents / 100).toFixed(2)}`;
     const shippingNote = `*Shipping: ${formatShippingRate(config.SHIPPING.DOMESTIC)} US / ${formatShippingRate(config.SHIPPING.INTERNATIONAL)} International (waived if already covered this week/month)*`;
 
@@ -158,7 +164,14 @@ function buildPullEmbed(name, priceCents, purchaseCount) {
         `**${priceLabel}** per pull — click Buy Pack(s) to check out`,
     ];
 
-    if (purchaseCount > 0) {
+    if (entries.length > 0) {
+        lines.push('', `🎯 **${purchaseCount}** pull${purchaseCount !== 1 ? 's' : ''} sold`);
+        const entryLines = entries.map((e, i) => {
+            const label = e.discord_user_id ? `<@${e.discord_user_id}>` : (e.customer_email || 'Unknown');
+            return `${i + 1}. ${label}${e.quantity > 1 ? ` ×${e.quantity}` : ''}`;
+        });
+        lines.push('', entryLines.join('\n'));
+    } else if (purchaseCount > 0) {
         lines.push('', `🎯 **${purchaseCount}** pull${purchaseCount !== 1 ? 's' : ''} sold`);
     }
 
@@ -175,19 +188,26 @@ function buildPullEmbed(name, priceCents, purchaseCount) {
  * Called by the Stripe webhook when a pull box purchase completes.
  * Increments the counter and updates the embed.
  */
-async function recordPullPurchase(listingId) {
-    cardListings.incrementPurchaseCount.run(listingId);
+async function recordPullPurchase(listingId, discordUserId = null, customerEmail = null, quantity = 1) {
+    // Record individual entry
+    pullEntries.addEntry.run(listingId, discordUserId, customerEmail, quantity);
+
+    // Update total count on listing
+    for (let i = 0; i < quantity; i++) {
+        cardListings.incrementPurchaseCount.run(listingId);
+    }
 
     const listing = cardListings.getById.get(listingId);
     if (!listing || !listing.message_id) return;
 
-    // Update embed with new count
+    // Update embed with entries list
     try {
         const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
         if (!channel) return;
 
+        const entries = pullEntries.getEntries.all(listingId);
         const msg = await channel.messages.fetch(listing.message_id);
-        const embed = buildPullEmbed(listing.card_name, listing.price, listing.purchase_count);
+        const embed = buildPullEmbed(listing.card_name, listing.price, listing.purchase_count, entries);
 
         // Keep the button
         await msg.edit({ embeds: [embed] });

@@ -151,6 +151,16 @@ export function createTestDb() {
         );
         INSERT OR IGNORE INTO welcome_config (id) VALUES (1);
 
+        CREATE TABLE IF NOT EXISTS pull_entries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            listing_id INTEGER NOT NULL,
+            discord_user_id TEXT,
+            customer_email TEXT,
+            quantity INTEGER DEFAULT 1,
+            created_at TEXT DEFAULT (datetime('now')),
+            FOREIGN KEY (listing_id) REFERENCES card_listings(id)
+        );
+
         CREATE TABLE IF NOT EXISTS card_listings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             message_id TEXT,
@@ -278,6 +288,10 @@ export function buildStmts(db) {
         welcome: {
             getConfig: db.prepare('SELECT * FROM welcome_config WHERE id = 1'),
             setMessageId: db.prepare('UPDATE welcome_config SET channel_message_id = ? WHERE id = 1'),
+        },
+        pullEntries: {
+            addEntry: db.prepare('INSERT INTO pull_entries (listing_id, discord_user_id, customer_email, quantity) VALUES (?, ?, ?, ?)'),
+            getEntries: db.prepare('SELECT * FROM pull_entries WHERE listing_id = ? ORDER BY created_at ASC'),
         },
         analytics: {
             getRangeStats: db.prepare(`
