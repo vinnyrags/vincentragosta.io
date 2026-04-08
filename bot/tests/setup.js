@@ -317,6 +317,18 @@ export function buildStmts(db) {
                 WHERE created_at >= ? AND created_at < ?
                 AND status = 'complete'
             `),
+            getShippingStats: db.prepare(`
+                SELECT
+                    COALESCE(SUM(amount), 0) as total_shipping,
+                    COUNT(*) as shipping_count
+                FROM shipping_payments
+                WHERE created_at >= ? AND created_at < ?
+            `),
+            getCardSaleCount: db.prepare(`
+                SELECT COUNT(*) as count FROM card_listings
+                WHERE sold_at >= ? AND sold_at < ?
+                AND status = 'sold'
+            `),
         },
         db,
     };

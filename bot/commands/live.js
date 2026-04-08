@@ -178,6 +178,8 @@ async function postStreamRecap(session, closedQueueId) {
     const topProducts = analytics.getTopProducts.all(startTime, endTime);
     const newBuyers = analytics.getNewBuyerCount.get(startTime, endTime, startTime);
     const battleCount = analytics.getBattleCount.get(startTime, endTime);
+    const shippingStats = analytics.getShippingStats.get(startTime, endTime);
+    const cardSaleCount = analytics.getCardSaleCount.get(startTime, endTime);
 
     // Queue stats
     let queueEntryCount = 0;
@@ -191,13 +193,23 @@ async function postStreamRecap(session, closedQueueId) {
 
     // Community goal delta
     const goal = goals.get.get();
-    const sessionRevenueDollars = formatDollars(stats.total_revenue);
+    const productRevenue = stats.total_revenue - shippingStats.total_shipping;
+    const avgOrderValue = stats.order_count > 0 ? Math.round(stats.total_revenue / stats.order_count) : 0;
+
+    // Stream duration
+    const durationMs = new Date(endTime) - new Date(startTime);
+    const hours = Math.floor(durationMs / 3600000);
+    const minutes = Math.floor((durationMs % 3600000) / 60000);
+    const duration = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 
     // Build embed
     const returningBuyers = stats.unique_buyers - newBuyers.count;
     const lines = [
-        `**Revenue:** ${sessionRevenueDollars}`,
-        `**Orders:** ${stats.order_count}`,
+        `**Product Revenue:** ${formatDollars(productRevenue)}`,
+        `**Shipping Collected:** ${formatDollars(shippingStats.total_shipping)} (${shippingStats.shipping_count} payments)`,
+        `**Total Revenue:** ${formatDollars(stats.total_revenue)}`,
+        '',
+        `**Orders:** ${stats.order_count} (avg ${formatDollars(avgOrderValue)})`,
         `**Buyers:** ${stats.unique_buyers} (${newBuyers.count} new, ${returningBuyers} returning)`,
     ];
 
@@ -205,9 +217,15 @@ async function postStreamRecap(session, closedQueueId) {
         lines.push(`**Battles:** ${battleCount.count}`);
     }
 
+    if (cardSaleCount.count > 0) {
+        lines.push(`**Card Sales:** ${cardSaleCount.count}`);
+    }
+
     if (queueEntryCount > 0) {
         lines.push(`**Queue:** ${queueEntryCount} items from ${queueBuyerCount} buyers`);
     }
+
+    lines.push(`**Duration:** ${duration}`);
 
     const embed = new EmbedBuilder()
         .setTitle(`📊 Stream Recap — Session #${session.id}`)
@@ -225,7 +243,7 @@ async function postStreamRecap(session, closedQueueId) {
     // Community goal state
     const cyclePercent = Math.min(Math.round((goal.cycle_revenue / 250000) * 100), 100);
     const goalLine = `Cycle #${goal.cycle} — ${cyclePercent}% (${formatDollars(goal.cycle_revenue)} / $2,500.00)`;
-    embed.addFields({ name: 'Community Goal', value: `${goalLine}\n+${sessionRevenueDollars} this stream` });
+    embed.addFields({ name: 'Community Goal', value: `${goalLine}\n+${formatDollars(productRevenue)} this stream` });
 
     embed.setFooter({ text: `${session.created_at} → ${new Date().toLocaleTimeString('en-US')}` });
 
