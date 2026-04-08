@@ -120,7 +120,7 @@ async function handleBattle(message, args) {
 async function findStripePriceId(productName) {
     const stripe = new Stripe(config.STRIPE_SECRET_KEY);
     const products = await stripe.products.search({
-        query: `name~"${productName.replace(/"/g, '\\"')}"`,
+        query: `active:"true" AND name~"${productName.replace(/"/g, '\\"')}"`,
         limit: 1,
     });
 
