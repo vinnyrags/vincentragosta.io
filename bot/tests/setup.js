@@ -237,6 +237,7 @@ export function buildStmts(db) {
             getByStatus: db.prepare(`SELECT * FROM card_listings WHERE status = ? ORDER BY created_at DESC LIMIT 1`),
             incrementPurchaseCount: db.prepare(`UPDATE card_listings SET purchase_count = purchase_count + 1 WHERE id = ?`),
             setBuyerDmMessageId: db.prepare(`UPDATE card_listings SET buyer_dm_message_id = ? WHERE id = ?`),
+            reserveForBuyer: db.prepare(`UPDATE card_listings SET status = 'reserved', buyer_discord_id = ? WHERE id = ? AND status = 'active'`),
         },
         goals: {
             get: db.prepare(`SELECT * FROM community_goals WHERE id = 1`),

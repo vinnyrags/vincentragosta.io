@@ -340,6 +340,7 @@ export {
     handleSell,
     handleList,
     handleSold,
+    startExpiryTimer,
     clearExpiryTimer,
     updateListingEmbed,
     expiryTimers as _expiryTimers,

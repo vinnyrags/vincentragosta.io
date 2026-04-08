@@ -21,6 +21,7 @@ import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from
 import Stripe from 'stripe';
 import config from '../config.js';
 import { purchases, cardListings, battles } from '../db.js';
+import { startExpiryTimer, updateListingEmbed } from './card-shop.js';
 import {
     hasShippingCoveredByDiscordId,
     hasShippingCovered,
@@ -164,8 +165,25 @@ async function handleCardBuy(interaction, listingId, isDeferred = false) {
     if (!isDeferred) await interaction.deferReply({ ephemeral: true });
 
     const listing = cardListings.getById.get(listingId);
-    if (!listing || (listing.status !== 'active' && listing.status !== 'reserved')) {
+    if (!listing || listing.status === 'sold' || listing.status === 'expired') {
         return interaction.editReply({ content: 'This card is no longer available.' });
+    }
+
+    // If already reserved by someone else, block
+    if (listing.status === 'reserved' && listing.buyer_discord_id !== discordUserId) {
+        return interaction.editReply({ content: 'This card is already being purchased by someone else.' });
+    }
+
+    // First click on an active listing — reserve it for this buyer
+    if (listing.status === 'active') {
+        const result = cardListings.reserveForBuyer.run(discordUserId, listingId);
+        if (result.changes === 0) {
+            // Race condition — someone else reserved it between our check and update
+            return interaction.editReply({ content: 'This card is already being purchased by someone else.' });
+        }
+        const reserved = cardListings.getById.get(listingId);
+        await updateListingEmbed(reserved);
+        startExpiryTimer(listingId);
     }
 
     const covered = hasShippingCoveredByDiscordId(discordUserId);
@@ -176,7 +194,7 @@ async function handleCardBuy(interaction, listingId, isDeferred = false) {
         : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
 
     await interaction.editReply({
-        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**`,
+        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**\n\n⏰ Reserved for you — 15 minutes to complete.`,
     });
 }
 

@@ -601,6 +601,10 @@ const cardListingStmts = {
     setBuyerDmMessageId: db.prepare(`
         UPDATE card_listings SET buyer_dm_message_id = ? WHERE id = ?
     `),
+
+    reserveForBuyer: db.prepare(`
+        UPDATE card_listings SET status = 'reserved', buyer_discord_id = ? WHERE id = ? AND status = 'active'
+    `),
 };
 
 // =========================================================================
