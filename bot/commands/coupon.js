@@ -79,7 +79,8 @@ async function handleCreate(message, args) {
     }
 
     try {
-        const stripe = new Stripe(config.STRIPE_SECRET_KEY);
+        // Pin API version — newer versions removed the coupon param from promotionCodes.create
+        const stripe = new Stripe(config.STRIPE_SECRET_KEY, { apiVersion: '2024-12-18.acacia' });
 
         // Check if promo code already exists in Stripe
         const existing = await stripe.promotionCodes.list({ code, limit: 1 });
