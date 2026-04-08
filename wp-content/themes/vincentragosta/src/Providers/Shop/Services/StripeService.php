@@ -56,6 +56,7 @@ class StripeService
             'mode'       => 'payment',
             'expires_at' => time() + 1800, // 30 minutes
             'line_items' => $lineItems,
+            'allow_promotion_codes' => true,
             'success_url' => $successUrl,
             'cancel_url'  => $cancelUrl,
             'metadata'    => $metadata,

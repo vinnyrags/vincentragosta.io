@@ -13,7 +13,6 @@ import express from 'express';
 import Stripe from 'stripe';
 import config from './config.js';
 import { battles, cardListings, purchases, discordLinks } from './db.js';
-import { getActiveCoupon } from './commands/coupon.js';
 import { handleCheckoutCompleted } from './webhooks/stripe.js';
 import { handleTwitchWebhook } from './webhooks/twitch.js';
 import {
@@ -114,6 +113,7 @@ app.get('/battle/checkout/:id', async (req, res) => {
         const params = {
             mode: 'payment',
             line_items: [{ price: battle.stripe_price_id, quantity: 1 }],
+            allow_promotion_codes: true,
             success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
@@ -175,6 +175,7 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
         const params = {
             mode: 'payment',
             line_items: [lineItem],
+            allow_promotion_codes: true,
             success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
@@ -203,10 +204,6 @@ app.get('/card-shop/checkout/:listingId', async (req, res) => {
             params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
         }
 
-        if (getActiveCoupon()) {
-            params.allow_promotion_codes = true;
-        }
-
         const session = await stripe.checkout.sessions.create(params);
 
         cardListings.setStripeSessionId.run(session.id, listing.id);
@@ -229,6 +226,7 @@ app.get('/product/checkout/:priceId', async (req, res) => {
         const params = {
             mode: 'payment',
             line_items: [{ price: req.params.priceId, quantity: 1 }],
+            allow_promotion_codes: true,
             success_url: `${config.SITE_URL}/shop/thank-you/`,
             cancel_url: config.SHOP_URL,
             metadata: {
@@ -252,10 +250,6 @@ app.get('/product/checkout/:priceId', async (req, res) => {
         if (!covered) {
             params.shipping_options = buildShippingOptions(discordUserId);
             params.shipping_address_collection = { allowed_countries: config.SHIPPING.COUNTRIES };
-        }
-
-        if (getActiveCoupon()) {
-            params.allow_promotion_codes = true;
         }
 
         const session = await stripe.checkout.sessions.create(params);
