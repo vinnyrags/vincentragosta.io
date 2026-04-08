@@ -95,7 +95,7 @@ vi.mock('../config.js', () => ({
             DOMESTIC: 1000,
             INTERNATIONAL: 2500,
         },
-        CARD_RESERVATION_MS: 15 * 60 * 1000,
+        CARD_RESERVATION_MS: 30 * 60 * 1000,
     },
 }));
 

@@ -72,7 +72,7 @@ const messages = [
     {
         title: '🃏 Card Shop',
         description: [
-            '**`!sell @buyer "Card Name" 25.00`** — Reserve a card for a specific buyer. Posts listing in #card-shop, DMs buyer a Buy Now button with identity capture. 15-minute reservation expiry.',
+            '**`!sell @buyer "Card Name" 25.00`** — Reserve a card for a specific buyer. Posts listing in #card-shop, DMs buyer a Buy Now button with identity capture. 30-minute reservation expiry.',
             '',
             '**`!list "Card Name" 25.00`** — List a card for open purchase in #card-shop. Posts a "Buy Now" button — buyer clicks, bot checks shipping status, creates personalized checkout.',
             '',

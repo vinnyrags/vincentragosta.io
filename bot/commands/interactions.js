@@ -194,7 +194,7 @@ async function handleCardBuy(interaction, listingId, isDeferred = false) {
         : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
 
     await interaction.editReply({
-        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**\n\n⏰ Reserved for you — 15 minutes to complete.`,
+        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**\n\n⏰ Reserved for you — 30 minutes to complete.`,
     });
 }
 

@@ -45,7 +45,7 @@ const messages = [
             'Viewers buy from shop link             → Shipping handled at checkout (email lookup)',
             '',
             'CARD SALES:',
-            '!sell @buyer "Card Name" 25.00        → Reserve for a viewer (15-min expiry)',
+            '!sell @buyer "Card Name" 25.00        → Reserve for a viewer (30-min expiry)',
             '!list "Card Name" 25.00               → List for open purchase',
             '!pull "Pull Box" 3.00                 → Open pull box (unlimited buyers)',
             '!pull close                           → Close pull box, show revenue',

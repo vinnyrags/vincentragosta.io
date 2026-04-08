@@ -83,7 +83,7 @@ export default {
         DOMESTIC: 1000,         // $10
         INTERNATIONAL: 2500,    // $25
     },
-    CARD_RESERVATION_MS: 15 * 60 * 1000,
+    CARD_RESERVATION_MS: 30 * 60 * 1000,
 
     // Role IDs
     ROLES: {

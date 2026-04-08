@@ -50,7 +50,7 @@ function buildListingEmbed(listing) {
             .setTitle(`🃏 ${listing.card_name}`)
             .setDescription(
                 `**${priceLabel}**\n\n` +
-                `🔒 Reserved for <@${listing.buyer_discord_id}> — 15 minutes to checkout\n\n` +
+                `🔒 Reserved for <@${listing.buyer_discord_id}> — 30 minutes to checkout\n\n` +
                 shippingNote
             )
             .setColor(0xf1c40f)
@@ -99,7 +99,7 @@ async function updateListingEmbed(listing) {
 }
 
 /**
- * Start a 15-minute expiry timer for a reserved listing.
+ * Start a 30-minute expiry timer for a reserved listing.
  * On expiry, relists the card as active and updates the embed.
  */
 function startExpiryTimer(listingId) {
@@ -223,7 +223,7 @@ async function handleSell(message, args) {
                 .setDescription(
                     `**${cardName}** — ${formatPrice(priceCents)}\n` +
                     `${shippingNote}\n\n` +
-                    `⏰ This reservation expires in 15 minutes.`
+                    `⏰ This reservation expires in 30 minutes.`
                 )
                 .setColor(0xf1c40f);
             const dmMsg = await dm.send({ embeds: [dmEmbed], components: [buyRow] });
@@ -234,7 +234,7 @@ async function handleSell(message, args) {
         await channel.send({ content: `<@${buyer.id}> Your card is reserved!`, components: [buyRow] });
     }
 
-    // Start 15-minute expiry
+    // Start 30-minute expiry
     startExpiryTimer(listingId);
 
     if (message.channel.id !== channel.id) {
