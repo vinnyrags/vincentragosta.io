@@ -98,8 +98,9 @@ async function handleCreate(message, args) {
 
             if (matchesPercent || matchesAmount) {
                 return message.channel.send(
-                    `✅ **Coupon already exists** — \`${code}\` (${displayDiscount})\n` +
-                    `Use \`!coupon ${code}\` to activate it on checkout.`
+                    `✅ **Coupon already exists** — \`${code}\` (${displayDiscount})\n\n` +
+                    `**DM this to the buyer:**\n` +
+                    `> Here's a ${displayDiscount} code for your next purchase: **${code}** — enter it at checkout in the promo code field.`
                 );
             }
 
@@ -124,12 +125,9 @@ async function handleCreate(message, args) {
         });
 
         await message.channel.send(
-            `✅ **Coupon created**\n` +
-            `• Code: \`${code}\`\n` +
-            `• Discount: ${displayDiscount}\n` +
-            `• Stripe coupon: \`${coupon.id}\`\n` +
-            `• Promo code ID: \`${promoCode.id}\`\n\n` +
-            `Use \`!coupon ${code}\` to activate it on checkout.`
+            `✅ **Coupon created** — \`${code}\` (${displayDiscount})\n\n` +
+            `**DM this to the buyer:**\n` +
+            `> Here's a ${displayDiscount} code for your next purchase: **${code}** — enter it at checkout in the promo code field.`
         );
     } catch (e) {
         console.error('Coupon create error:', e.message);
