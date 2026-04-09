@@ -14,22 +14,23 @@ import config from '../config.js';
 import { handleSync } from './sync.js';
 import { initCommunityGoals } from '../community-goals.js';
 
+// Order matters — child tables before parents (foreign key constraints)
 const TABLES_TO_CLEAR = [
+    'queue_entries',
+    'queues',
+    'battle_entries',
+    'battles',
+    'duck_race_entries',
+    'giveaway_entries',
+    'giveaways',
+    'pull_entries',
+    'card_listings',
+    'livestream_buyers',
+    'livestream_sessions',
     'purchases',
     'purchase_counts',
-    'battles',
-    'battle_entries',
-    'duck_race_entries',
-    'queues',
-    'queue_entries',
-    'livestream_sessions',
-    'livestream_buyers',
     'discord_links',
     'shipping_payments',
-    'giveaways',
-    'giveaway_entries',
-    'card_listings',
-    'pull_entries',
     'active_coupons',
 ];
 
