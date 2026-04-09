@@ -17,7 +17,7 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { purchases, discordLinks } from '../db.js';
+import { purchases, discordLinks, queues } from '../db.js';
 import { getMember, sendEmbed, sendToChannel } from '../discord.js';
 
 async function handleDroppedOff(message, args = []) {
@@ -30,6 +30,19 @@ async function handleDroppedOff(message, args = []) {
 
     // Get all unshipped purchases with linked Discord users
     let unshipped = purchases.getUnshipped.all();
+
+    // Exclude purchases in the active pre-order queue (not yet opened on stream)
+    const activeQueue = queues.getActiveQueue.get();
+    if (activeQueue) {
+        const activeEntries = queues.getEntries.all(activeQueue.id);
+        const activeSessionIds = new Set(activeEntries.map((e) => e.stripe_session_id).filter(Boolean));
+        const before = unshipped.length;
+        unshipped = unshipped.filter((row) => !activeSessionIds.has(row.stripe_session_id));
+        const excluded = before - unshipped.length;
+        if (excluded > 0) {
+            console.log(`Dropped-off: excluded ${excluded} purchases in active queue #${activeQueue.id}`);
+        }
+    }
 
     // Filter by domestic or international
     if (isIntlMode) {

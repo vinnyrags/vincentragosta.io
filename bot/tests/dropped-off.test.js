@@ -38,6 +38,10 @@ vi.mock('../db.js', () => ({
     discordLinks: {
         getCountry: { get: vi.fn().mockReturnValue(null) },
     },
+    queues: {
+        getActiveQueue: { get: vi.fn().mockReturnValue(null) },
+        getEntries: { all: vi.fn().mockReturnValue([]) },
+    },
 }));
 
 const discordModule = await import('../discord.js');
