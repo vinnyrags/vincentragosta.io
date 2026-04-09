@@ -118,16 +118,24 @@ describe('!dropped-off DM flow', () => {
             description: expect.stringContaining('3 orders shipped to 2 buyers'),
         }));
 
-        // Should post summary in #ops
-        expect(mockSendToChannel).toHaveBeenCalledWith('OPS', expect.stringContaining('2 DMs sent successfully'));
+        // Should post summary embed in #ops
+        expect(mockSendEmbed).toHaveBeenCalledWith('OPS', expect.objectContaining({
+            title: expect.stringContaining('Dropped Off Summary'),
+        }));
 
         // Should mark all as shipped
         expect(purchases.markShipped.run).toHaveBeenCalled();
 
-        // Should confirm in channel
-        expect(msg.channel.send).toHaveBeenCalledWith(
-            expect.stringContaining('2 buyers notified')
-        );
+        // Should confirm in channel with embed
+        expect(msg.channel.send).toHaveBeenCalledWith(expect.objectContaining({
+            embeds: expect.arrayContaining([
+                expect.objectContaining({
+                    data: expect.objectContaining({
+                        title: expect.stringContaining('Dropped Off Complete'),
+                    }),
+                }),
+            ]),
+        }));
     });
 
     it('aggregates duplicate product names per user', async () => {
@@ -167,7 +175,9 @@ describe('!dropped-off DM flow', () => {
         await handleDroppedOff(msg);
 
         // Ops summary should mention skipped
-        expect(mockSendToChannel).toHaveBeenCalledWith('OPS', expect.stringContaining('1 orders skipped'));
+        expect(mockSendEmbed).toHaveBeenCalledWith('OPS', expect.objectContaining({
+            description: expect.stringContaining('1 orders skipped'),
+        }));
 
         // Order feed should count total (linked + unlinked)
         expect(mockSendEmbed).toHaveBeenCalledWith('ORDER_FEED', expect.objectContaining({
@@ -192,7 +202,9 @@ describe('!dropped-off DM flow', () => {
         expect(purchases.markShipped.run).toHaveBeenCalled();
 
         // Ops summary should report failed DMs
-        expect(mockSendToChannel).toHaveBeenCalledWith('OPS', expect.stringContaining('1 DMs failed'));
+        expect(mockSendEmbed).toHaveBeenCalledWith('OPS', expect.objectContaining({
+            description: expect.stringContaining('1 DMs failed'),
+        }));
     });
 
     it('is safe to run multiple times (idempotent)', async () => {

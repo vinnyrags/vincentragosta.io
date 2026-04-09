@@ -127,7 +127,6 @@ async function handleDroppedOff(message, args = []) {
 
     // Post detailed summary in #ops
     const opsLines = [
-        `📬 **Dropped Off Summary**`,
         `• ${unshipped.length} orders across ${byUser.size} Discord-linked buyers`,
         `• ${dmsSent} DMs sent successfully`,
     ];
@@ -140,12 +139,18 @@ async function handleDroppedOff(message, args = []) {
         opsLines.push(`• ${skipped.length} orders skipped (no linked Discord account)`);
     }
 
-    await sendToChannel('OPS', opsLines.join('\n'));
+    await sendEmbed('OPS', {
+        title: '📬 Dropped Off Summary',
+        description: opsLines.join('\n'),
+        color: 0xceff00,
+    });
 
     // Confirm in the command channel
-    await message.channel.send(
-        `📬 Done — ${dmsSent} buyer${dmsSent !== 1 ? 's' : ''} notified, ${unshipped.length + skipped.length} orders marked as shipped.`
-    );
+    const totalOrders = unshipped.length + skipped.length;
+    await message.channel.send({ embeds: [new EmbedBuilder()
+        .setTitle('📬 Dropped Off Complete')
+        .setDescription(`**${dmsSent}** buyer${dmsSent !== 1 ? 's' : ''} notified, **${totalOrders}** order${totalOrders !== 1 ? 's' : ''} marked as shipped.`)
+        .setColor(0xceff00)] });
 }
 
 export { handleDroppedOff };
