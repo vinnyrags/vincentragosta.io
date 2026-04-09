@@ -196,6 +196,10 @@ async function declareDuckRaceWinner(message, args) {
         return message.reply(`<@${mentioned.id}> is not in the duck race roster for Queue #${target.id}.`);
     }
 
+    // Close the queue first if still open, then mark complete with winner
+    if (target.status === 'open') {
+        queues.closeQueue.run(target.id);
+    }
     queues.setDuckRaceWinner.run(mentioned.id, target.id);
 
     // Assign Aha role
@@ -223,6 +227,13 @@ async function declareDuckRaceWinner(message, args) {
         description: `<@${mentioned.id}> wins tonight's duck race! Congrats!`,
         color: 0xffd700,
     });
+
+    // Open next queue for pre-orders
+    const newQueueResult = queues.createQueue.run();
+    const newQueue = queues.getQueueById.get(newQueueResult.lastInsertRowid);
+    await postQueueChannelEmbed(newQueue);
+
+    await message.channel.send(`📋 Queue #${target.id} closed. Queue #${newQueue.id} opened for next stream.`);
 
 }
 

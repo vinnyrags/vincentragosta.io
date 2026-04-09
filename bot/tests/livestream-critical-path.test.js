@@ -320,7 +320,31 @@ describe('full card night critical path', () => {
             ]),
         }));
 
-        // ── Step 7: Go offline ──────────────────────────────────────
+        // ── Step 7: Declare duck race winner (closes queue, opens next) ──
+        vi.clearAllMocks();
+
+        const winnerMsg = adminMsg({ content: '!duckrace winner @alice' });
+        const aliceMention = createMockMention('alice_discord');
+        winnerMsg.mentions.users.first = vi.fn().mockReturnValue(aliceMention);
+        await handleDuckRace(winnerMsg, ['winner', '@alice']);
+
+        // Queue marked complete with winner and closed
+        const completedQueue = stmts.queues.getQueueById.get(queue.id);
+        expect(completedQueue.status).toBe('complete');
+        expect(completedQueue.duck_race_winner_id).toBe('alice_discord');
+
+        // New queue opened for next stream's pre-orders
+        const newQueue = stmts.queues.getActiveQueue.get();
+        expect(newQueue).toBeTruthy();
+        expect(newQueue.id).not.toBe(queue.id);
+
+        // Winner announced in channel + announcements
+        expect(winnerMsg.channel.send).toHaveBeenCalled();
+        expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
+            title: expect.stringContaining('Duck Race Winner'),
+        }));
+
+        // ── Step 8: Go offline ──────────────────────────────────────
         vi.clearAllMocks();
 
         const offlineMsg = adminMsg({ content: '!offline' });
@@ -329,16 +353,8 @@ describe('full card night critical path', () => {
         // Session ended
         expect(stmts.livestream.getActiveSession.get()).toBeUndefined();
 
-        // Old queue closed
-        const closedQueue = stmts.queues.getQueueById.get(queue.id);
-        expect(closedQueue.status).toBe('closed');
-
-        // New queue opened for next week's pre-orders
-        const newQueue = stmts.queues.getActiveQueue.get();
-        expect(newQueue).toBeTruthy();
-        expect(newQueue.id).not.toBe(queue.id);
-
-        // Queue embed updated in #queue channel (via updateQueueChannelEmbed)
+        // Queue is still open (offline doesn't close it — duck race already did)
+        expect(stmts.queues.getActiveQueue.get()).toBeTruthy();
 
         // Stream-ended announcement
         expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
@@ -350,24 +366,6 @@ describe('full card night critical path', () => {
         const offlineEmbed = offlineCalls2.find(c => c[0]?.embeds?.[0]?.data?.title?.includes('Live Session Ended'));
         expect(offlineEmbed).toBeTruthy();
 
-        // ── Step 8: Declare duck race winner ────────────────────────
-        vi.clearAllMocks();
-
-        const winnerMsg = adminMsg({ content: '!duckrace winner @alice' });
-        const aliceMention = createMockMention('alice_discord');
-        winnerMsg.mentions.users.first = vi.fn().mockReturnValue(aliceMention);
-        await handleDuckRace(winnerMsg, ['winner', '@alice']);
-
-        // Queue marked complete with winner
-        const completedQueue = stmts.queues.getQueueById.get(queue.id);
-        expect(completedQueue.status).toBe('complete');
-        expect(completedQueue.duck_race_winner_id).toBe('alice_discord');
-
-        // Winner announced in channel + announcements + and-in-the-back
-        expect(winnerMsg.channel.send).toHaveBeenCalled();
-        expect(mockSendEmbed).toHaveBeenCalledWith('ANNOUNCEMENTS', expect.objectContaining({
-            title: expect.stringContaining('Duck Race Winner'),
-        }));
         // ── Step 9: Verify queue history ────────────────────────────
         vi.clearAllMocks();
 
@@ -376,7 +374,7 @@ describe('full card night critical path', () => {
         expect(historyMsg.channel.send).toHaveBeenCalled();
 
         const recentQueues = stmts.queues.getRecentQueues.all(5);
-        expect(recentQueues).toHaveLength(1); // the closed/completed queue
+        expect(recentQueues).toHaveLength(1); // the completed queue
         expect(recentQueues[0].duck_race_winner_id).toBe('alice_discord');
     });
 });
@@ -619,7 +617,7 @@ describe('stripe webhook integration during livestream', () => {
 // =========================================================================
 
 describe('offline session lifecycle', () => {
-    it('offline closes queue, opens new one, ends session', async () => {
+    it('offline keeps existing queue open, ends session', async () => {
         stmts.queues.createQueue.run();
         const queue = stmts.queues.getActiveQueue.get();
         stmts.livestream.startSession.run();
@@ -630,14 +628,10 @@ describe('offline session lifecycle', () => {
         // Session ended
         expect(stmts.livestream.getActiveSession.get()).toBeUndefined();
 
-        // Queue closed
-        const closedQueue = stmts.queues.getQueueById.get(queue.id);
-        expect(closedQueue.status).toBe('closed');
-
-        // New queue opened
-        const newQueue = stmts.queues.getActiveQueue.get();
-        expect(newQueue).toBeTruthy();
-        expect(newQueue.id).not.toBe(queue.id);
+        // Queue still open (offline no longer closes — duck race does)
+        const activeQueue = stmts.queues.getActiveQueue.get();
+        expect(activeQueue).toBeTruthy();
+        expect(activeQueue.id).toBe(queue.id);
 
         // No shipping DMs — shipping is proactive at checkout
         expect(mockGetMember).not.toHaveBeenCalled();
@@ -668,15 +662,17 @@ describe('edge cases', () => {
         expect(offlineEmbed).toBeTruthy();
     });
 
-    it('queue with zero entries still closes cleanly', async () => {
+    it('queue with zero entries stays open after offline (no duck race needed)', async () => {
         stmts.queues.createQueue.run();
         stmts.livestream.startSession.run();
 
         const offlineMsg = adminMsg();
         await handleOffline(offlineMsg);
 
-        const closedQueue = stmts.queues.getQueueById.get(1);
-        expect(closedQueue.status).toBe('closed');
+        // Queue stays open — offline no longer closes it
+        const activeQueue = stmts.queues.getActiveQueue.get();
+        expect(activeQueue).toBeTruthy();
+        expect(activeQueue.status).toBe('open');
     });
 
     it('anyone can view queue and duck race (no admin required)', async () => {

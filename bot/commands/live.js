@@ -122,20 +122,17 @@ async function handleOffline(message) {
     // Cancel the reminder
     cancelReminder();
 
-    // Close the current queue and update #queue embed
-    const activeQueue = queues.getActiveQueue.get();
-    let closedQueueId = null;
-    if (activeQueue) {
-        queues.closeQueue.run(activeQueue.id);
-        closedQueueId = activeQueue.id;
-        await updateQueueChannelEmbed(activeQueue.id);
-    }
+    // Find the most recently completed queue for the recap
+    const recentQueues = queues.getRecentQueues.all(1);
+    const closedQueueId = recentQueues.length ? recentQueues[0].id : null;
 
-    // Open next queue for pre-orders
-    const queueResult = queues.createQueue.run();
-    const newQueueId = queueResult.lastInsertRowid;
-    const newQueue = queues.getQueueById.get(newQueueId);
-    await postQueueChannelEmbed(newQueue);
+    // Ensure a queue is open for next stream's pre-orders
+    let activeQueue = queues.getActiveQueue.get();
+    if (!activeQueue) {
+        const queueResult = queues.createQueue.run();
+        activeQueue = queues.getQueueById.get(queueResult.lastInsertRowid);
+        await postQueueChannelEmbed(activeQueue);
+    }
 
     // Post stream-ended recap
     await sendEmbed('ANNOUNCEMENTS', {
@@ -152,8 +149,7 @@ async function handleOffline(message) {
         .setTitle('📴 Live Session Ended')
         .setDescription(`**Session #${session.id}**`)
         .addFields(
-            { name: 'Queue', value: `${closedQueueId ? `#${closedQueueId} closed` : 'None'} → updated in <#${config.CHANNELS.QUEUE}>`, inline: false },
-            { name: 'Next Queue', value: `#${newQueueId} opened for pre-orders`, inline: false },
+            { name: 'Queue', value: `#${activeQueue.id} open for pre-orders`, inline: false },
         )
         .setColor(0x95a5a6)
         .setFooter({ text: 'Stream recap posted to #analytics' });
