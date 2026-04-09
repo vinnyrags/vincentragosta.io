@@ -124,6 +124,32 @@ async function handleCheckoutCompleted(session) {
         }
     }
 
+    // DM the buyer a purchase receipt (skip card sales — they get their own DM)
+    if (discordUserId && session.metadata?.source !== 'card-sale') {
+        try {
+            const member = await getMember(discordUserId);
+            if (member) {
+                const dm = await member.createDM();
+                const itemList = lineItems.map((item) => {
+                    const name = item.name || 'Unknown Product';
+                    const qty = item.quantity || 1;
+                    return `• **${name}**${qty > 1 ? ` ×${qty}` : ''}`;
+                }).join('\n');
+
+                const totalDollars = (totalAmount / 100).toFixed(2);
+                const embed = new EmbedBuilder()
+                    .setTitle('🧾 Purchase Receipt')
+                    .setDescription(`${itemList}\n\n**Total:** $${totalDollars}`)
+                    .setColor(0xceff00)
+                    .setFooter({ text: `Session: ${session.id.slice(0, 20)}...` });
+
+                await dm.send({ embeds: [embed] });
+            }
+        } catch (e) {
+            console.error(`Failed to DM receipt to ${discordUserId}:`, e.message);
+        }
+    }
+
     // Add card product purchases to the active queue (skip battles and individual card sales)
     if (session.metadata?.source !== 'pack-battle' && session.metadata?.source !== 'card-sale') {
         for (const item of lineItems) {
