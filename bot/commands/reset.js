@@ -9,11 +9,10 @@
  */
 
 import { EmbedBuilder } from 'discord.js';
-import { db, queues } from '../db.js';
+import { db } from '../db.js';
 import config from '../config.js';
 import { handleSync } from './sync.js';
 import { initCommunityGoals } from '../community-goals.js';
-import { updateQueueChannelEmbed } from './queue.js';
 
 const TABLES_TO_CLEAR = [
     'purchases',
@@ -74,13 +73,6 @@ async function handleReset(message) {
         return message.channel.send({ embeds: [new EmbedBuilder()
             .setDescription('❌ Reset cancelled.')
             .setColor(0xe74c3c)] });
-    }
-
-    // Step 0: Close active queue if one exists
-    const activeQueue = queues.getActiveQueue.get();
-    if (activeQueue) {
-        queues.closeQueue.run(activeQueue.id);
-        await updateQueueChannelEmbed(activeQueue.id);
     }
 
     // Step 1: Clear all tables
