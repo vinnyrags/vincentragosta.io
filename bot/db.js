@@ -302,6 +302,10 @@ const stmts = {
         SELECT * FROM purchases WHERE discord_user_id = ? ORDER BY id DESC LIMIT 1
     `),
 
+    getRecentsByDiscordId: db.prepare(`
+        SELECT * FROM purchases WHERE discord_user_id = ? ORDER BY id DESC LIMIT 10
+    `),
+
     getBySessionId: db.prepare(`
         SELECT * FROM purchases WHERE stripe_session_id = ?
     `),
