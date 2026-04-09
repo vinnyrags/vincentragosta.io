@@ -10,7 +10,8 @@
 import Stripe from 'stripe';
 import config from '../config.js';
 import { purchases } from '../db.js';
-import { sendEmbed } from '../discord.js';
+import { EmbedBuilder } from 'discord.js';
+import { sendEmbed, getMember } from '../discord.js';
 
 const stripe = new Stripe(config.STRIPE_SECRET_KEY);
 
@@ -123,6 +124,28 @@ async function handleRefund(message, args) {
             ].filter(Boolean).join('\n'),
             color: 0xe74c3c,
         });
+
+        // DM the buyer about the refund
+        const discordUserId = purchase?.discord_user_id || (isSessionMode ? null : message.mentions.users.first()?.id);
+        if (discordUserId) {
+            try {
+                const member = await getMember(discordUserId);
+                if (member) {
+                    const dm = await member.createDM();
+                    const dmEmbed = new EmbedBuilder()
+                        .setTitle(`💸 Refund Processed${isPartial ? ' (Partial)' : ''}`)
+                        .setDescription(
+                            `**$${refundDollars}** has been refunded for **${productName}**.\n\n` +
+                            `The refund should appear on your statement within 5-10 business days.` +
+                            (reason ? `\n\n**Reason:** ${reason}` : '')
+                        )
+                        .setColor(0xceff00);
+                    await dm.send({ embeds: [dmEmbed] });
+                }
+            } catch (e) {
+                console.error(`Failed to DM refund notification to ${discordUserId}:`, e.message);
+            }
+        }
     } catch (e) {
         console.error('Refund error:', e.message);
 
