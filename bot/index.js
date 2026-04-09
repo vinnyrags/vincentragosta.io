@@ -9,10 +9,10 @@
  *  - Pack battle system (!battle commands + Stripe payment verification)
  *  - Queue system (!queue open/close + auto-entries from Stripe purchases)
  *  - Duck race (!duckrace — one entry per unique buyer in queue)
- *  - Account linking (!link → email mapping for role promotion)
+ *  - Account linking (auto via Stripe metadata, manual via #welcome Link Account button)
  *  - Role promotion (Xipe at 1+ purchases, Long at 5+)
- *  - New product alerts (POST /alerts/products)
- *  - Pack battle results + duck race winners cross-posted to #and-in-the-back
+ *  - New product alerts (POST /alerts/products → #deals)
+ *  - Duck race winner closes queue, opens next for pre-orders
  *  - Real-time queue embed updated in #queue
  *  - Shipping notifications (!dropped-off → DMs buyers, posts to #order-feed + #ops)
  *  - Analytics (!snapshot → on-demand snapshots, auto stream recaps on !offline)

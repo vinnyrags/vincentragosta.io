@@ -186,7 +186,7 @@ async function handleHype(message, args) {
             `👉 [Watch on Twitch](https://twitch.tv/itzenzoTTV) when we go live!`
         )
         .setColor(0x9146ff)
-        .setFooter({ text: 'Shipping: $10 US / $25 International — pre-orders go into tonight\'s queue!' });
+        .setFooter({ text: 'Shipping: $10 US / $25 International — purchases go into the queue + duck race!' });
 
     // Build "Buy Now" buttons for each product
     const buttons = found.map((p) =>
