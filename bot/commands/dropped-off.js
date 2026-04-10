@@ -17,7 +17,7 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { purchases, discordLinks, queues } from '../db.js';
+import { purchases, discordLinks, queues, shipping } from '../db.js';
 import { getMember, sendEmbed, sendToChannel } from '../discord.js';
 
 async function handleDroppedOff(message, args = []) {
@@ -44,17 +44,22 @@ async function handleDroppedOff(message, args = []) {
         }
     }
 
+    // Determine if a buyer is international: country flag OR paid international shipping rate
+    function isInternationalBuyer(discordUserId, email) {
+        const country = discordLinks.getCountry.get(discordUserId);
+        if (country?.country && country.country !== 'US') return true;
+        // Check if they paid international shipping rate ($25 = 2500 cents)
+        const shippingRecord = email
+            ? shipping.getByEmailThisMonth.get(email)
+            : null;
+        return shippingRecord?.amount === config.SHIPPING.INTERNATIONAL;
+    }
+
     // Filter by domestic or international
     if (isIntlMode) {
-        unshipped = unshipped.filter((row) => {
-            const country = discordLinks.getCountry.get(row.discord_user_id);
-            return country?.country && country.country !== 'US';
-        });
+        unshipped = unshipped.filter((row) => isInternationalBuyer(row.discord_user_id, row.customer_email));
     } else {
-        unshipped = unshipped.filter((row) => {
-            const country = discordLinks.getCountry.get(row.discord_user_id);
-            return !country?.country || country.country === 'US';
-        });
+        unshipped = unshipped.filter((row) => !isInternationalBuyer(row.discord_user_id, row.customer_email));
     }
 
     if (unshipped.length === 0) {

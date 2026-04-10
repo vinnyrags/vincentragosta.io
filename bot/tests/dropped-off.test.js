@@ -26,6 +26,7 @@ vi.mock('../config.js', () => ({
         ROLES: { AKIVILI: '1488046525065072670', NANOOK: '1488046525899739148' },
         CHANNELS: { ORDER_FEED: 'order-feed', OPS: 'ops' },
         SHOP_URL: 'https://example.com/shop',
+        SHIPPING: { DOMESTIC: 1000, INTERNATIONAL: 2500 },
     },
 }));
 
@@ -41,6 +42,9 @@ vi.mock('../db.js', () => ({
     queues: {
         getActiveQueue: { get: vi.fn().mockReturnValue(null) },
         getEntries: { all: vi.fn().mockReturnValue([]) },
+    },
+    shipping: {
+        getByEmailThisMonth: { get: vi.fn().mockReturnValue(null) },
     },
 }));
 
