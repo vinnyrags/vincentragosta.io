@@ -37,7 +37,7 @@ import { handleShipping } from './commands/shipping.js';
 import { handleHype } from './commands/hype.js';
 import { handleDroppedOff } from './commands/dropped-off.js';
 import { handleSnapshot } from './commands/snapshot.js';
-import { handleGiveaway, handleGiveawayReaction, initGiveaways } from './commands/giveaway.js';
+import { handleGiveaway, initGiveaways } from './commands/giveaway.js';
 import { handleSync } from './commands/sync.js';
 import { handleCoupon } from './commands/coupon.js';
 import { handleIntl, handleIntlShip } from './commands/intl.js';
@@ -182,18 +182,11 @@ client.on('interactionCreate', async (interaction) => {
 // Reaction handler — giveaway entries
 // =========================================================================
 
+// Reaction handler — kept for future use (giveaways now use buttons)
 client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
-
-    // Fetch partial reactions (reactions on uncached messages)
     if (reaction.partial) {
         try { await reaction.fetch(); } catch { return; }
-    }
-
-    try {
-        await handleGiveawayReaction(reaction, user);
-    } catch (e) {
-        console.error('Error handling reaction:', e.message);
     }
 });
 

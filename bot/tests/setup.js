@@ -133,13 +133,16 @@ export function createTestDb() {
             created_at TEXT DEFAULT (datetime('now')),
             ends_at TEXT,
             closed_at TEXT,
-            winner_id TEXT
+            winner_id TEXT,
+            is_social INTEGER DEFAULT 0,
+            social_link TEXT
         );
 
         CREATE TABLE IF NOT EXISTS giveaway_entries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             giveaway_id INTEGER NOT NULL,
             discord_user_id TEXT NOT NULL,
+            tiktok_username TEXT,
             created_at TEXT DEFAULT (datetime('now')),
             FOREIGN KEY (giveaway_id) REFERENCES giveaways(id),
             UNIQUE(giveaway_id, discord_user_id)
@@ -257,7 +260,7 @@ export function buildStmts(db) {
             setMessageId: db.prepare(`UPDATE community_goals SET channel_message_id = ? WHERE id = 1`),
         },
         giveaways: {
-            create: db.prepare(`INSERT INTO giveaways (prize_name, ends_at) VALUES (?, ?)`),
+            create: db.prepare(`INSERT INTO giveaways (prize_name, ends_at, is_social, social_link) VALUES (?, ?, ?, ?)`),
             getActive: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' ORDER BY id DESC LIMIT 1`),
             getById: db.prepare(`SELECT * FROM giveaways WHERE id = ?`),
             getByMessageId: db.prepare(`SELECT * FROM giveaways WHERE channel_message_id = ?`),
@@ -265,7 +268,7 @@ export function buildStmts(db) {
             cancel: db.prepare(`UPDATE giveaways SET status = 'cancelled', closed_at = datetime('now') WHERE id = ?`),
             setWinner: db.prepare(`UPDATE giveaways SET status = 'complete', winner_id = ? WHERE id = ?`),
             setMessageId: db.prepare(`UPDATE giveaways SET channel_message_id = ? WHERE id = ?`),
-            addEntry: db.prepare(`INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id) VALUES (?, ?)`),
+            addEntry: db.prepare(`INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id, tiktok_username) VALUES (?, ?, ?)`),
             getEntries: db.prepare(`SELECT * FROM giveaway_entries WHERE giveaway_id = ? ORDER BY created_at ASC`),
             getEntryCount: db.prepare(`SELECT COUNT(*) as count FROM giveaway_entries WHERE giveaway_id = ?`),
             getExpired: db.prepare(`SELECT * FROM giveaways WHERE status = 'open' AND ends_at IS NOT NULL AND ends_at <= datetime('now')`),

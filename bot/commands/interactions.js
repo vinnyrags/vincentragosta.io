@@ -20,8 +20,9 @@
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
-import { purchases, cardListings, battles } from '../db.js';
+import { purchases, cardListings, battles, giveaways } from '../db.js';
 import { startExpiryTimer, updateListingEmbed } from './card-shop.js';
+import { handleGiveawayEntry } from './giveaway.js';
 import {
     hasShippingCoveredByDiscordId,
     hasShippingCovered,
@@ -66,12 +67,39 @@ async function handleButtonInteraction(interaction) {
     if (customId === 'welcome-link') {
         return handleWelcomeLink(interaction);
     }
+
+    if (customId.startsWith('giveaway-enter-')) {
+        const giveawayId = Number(customId.replace('giveaway-enter-', ''));
+        return handleGiveawayButton(interaction, giveawayId);
+    }
 }
 
 /**
- * Handle email modal submission for unlinked buyers.
+ * Handle modal submissions — email linking and giveaway TikTok entry.
  */
 async function handleModalSubmit(interaction) {
+    // Giveaway TikTok username modal
+    if (interaction.customId.startsWith('giveaway-tiktok-')) {
+        const giveawayId = Number(interaction.customId.replace('giveaway-tiktok-', ''));
+        const tiktokUsername = interaction.fields.getTextInputValue('tiktok_input')?.trim().replace(/^@/, '');
+
+        if (!tiktokUsername) {
+            return interaction.reply({ content: 'Please enter your TikTok username.', ephemeral: true });
+        }
+
+        return handleGiveawayEntry(interaction, giveawayId, tiktokUsername);
+    }
+
+    // Email linking modal (welcome channel)
+    if (!interaction.customId.startsWith('email-link-')) return;
+
+    return handleEmailLinkSubmit(interaction);
+}
+
+/**
+ * Handle email modal submission for account linking.
+ */
+async function handleEmailLinkSubmit(interaction) {
     if (!interaction.customId.startsWith('email-link-')) return;
 
     const email = interaction.fields.getTextInputValue('email_input')?.trim();
@@ -255,6 +283,40 @@ async function handleWelcomeLink(interaction) {
     }
 
     return showEmailModal(interaction, 'welcome');
+}
+
+/**
+ * Giveaway entry button handler.
+ * Standard giveaways: enter immediately.
+ * Social giveaways: show TikTok username modal first.
+ */
+async function handleGiveawayButton(interaction, giveawayId) {
+    const giveaway = giveaways.getById.get(giveawayId);
+    if (!giveaway || giveaway.status !== 'open') {
+        return interaction.reply({ content: 'This giveaway is no longer open.', ephemeral: true });
+    }
+
+    // Social giveaway — show TikTok username modal
+    if (giveaway.is_social) {
+        const modal = new ModalBuilder()
+            .setCustomId(`giveaway-tiktok-${giveawayId}`)
+            .setTitle('Enter Giveaway');
+
+        const tiktokInput = new TextInputBuilder()
+            .setCustomId('tiktok_input')
+            .setLabel('Your TikTok username')
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+            .setPlaceholder('itzenzottv');
+
+        const row = new ActionRowBuilder().addComponents(tiktokInput);
+        modal.addComponents(row);
+
+        return interaction.showModal(modal);
+    }
+
+    // Standard giveaway — enter directly
+    return handleGiveawayEntry(interaction, giveawayId);
 }
 
 /**

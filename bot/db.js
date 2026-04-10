@@ -254,6 +254,11 @@ db.exec(`
     INSERT OR IGNORE INTO welcome_config (id) VALUES (1);
 `);
 
+// Add social giveaway fields (v8)
+try { db.exec(`ALTER TABLE giveaways ADD COLUMN is_social INTEGER DEFAULT 0`); } catch { /* exists */ }
+try { db.exec(`ALTER TABLE giveaways ADD COLUMN social_link TEXT`); } catch { /* exists */ }
+try { db.exec(`ALTER TABLE giveaway_entries ADD COLUMN tiktok_username TEXT`); } catch { /* exists */ }
+
 // =========================================================================
 // Purchases
 // =========================================================================
@@ -669,7 +674,7 @@ const goalStmts = {
 
 const giveawayStmts = {
     create: db.prepare(`
-        INSERT INTO giveaways (prize_name, ends_at) VALUES (?, ?)
+        INSERT INTO giveaways (prize_name, ends_at, is_social, social_link) VALUES (?, ?, ?, ?)
     `),
 
     getActive: db.prepare(`
@@ -701,7 +706,7 @@ const giveawayStmts = {
     `),
 
     addEntry: db.prepare(`
-        INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id) VALUES (?, ?)
+        INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id, tiktok_username) VALUES (?, ?, ?)
     `),
 
     getEntries: db.prepare(`
