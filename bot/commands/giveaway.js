@@ -88,13 +88,15 @@ async function closeGiveaway(giveawayId) {
     giveaways.close.run(giveawayId);
     const entryCount = giveaways.getEntryCount.get(giveawayId).count;
 
-    await sendEmbed('GIVEAWAYS', {
+    // Update the original giveaway embed (removes button, shows CLOSED)
+    await updateGiveawayEmbed(giveaway);
+
+    // Update announcements
+    await sendEmbed('ANNOUNCEMENTS', {
         title: `🔴 Giveaway Closed — ${giveaway.prize_name}`,
-        description: `Entries are closed! **${entryCount}** entered.\n\nWinner will be drawn on stream.`,
+        description: `Entries are closed! **${entryCount}** entered. Winner will be drawn on stream.`,
         color: 0xe74c3c,
     });
-
-    await updateGiveawayEmbed(giveaway);
 }
 
 // =========================================================================
