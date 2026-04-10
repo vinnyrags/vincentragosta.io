@@ -141,7 +141,7 @@ async function handleCheckoutCompleted(session) {
                     .setTitle('🧾 Purchase Receipt')
                     .setDescription(`${itemList}\n\n**Total:** $${totalDollars}`)
                     .setColor(0xceff00)
-                    .setFooter({ text: `Session: ${session.id.slice(0, 20)}...` });
+                    .setFooter({ text: 'Thank you for your purchase!' });
 
                 await dm.send({ embeds: [embed] });
             }
