@@ -48,13 +48,15 @@ async function handleCoupon(message, args) {
 // =========================================================================
 
 async function handleCreate(message, args) {
-    // Parse: !coupon create SPRING20 20%  OR  !coupon create WELCOME 5.00
+    // Parse: !coupon create SPRING20 20% [uses]
     if (args.length < 2) {
-        return message.reply('Usage: `!coupon create <CODE> <discount>`\nExamples: `!coupon create SPRING20 20%` or `!coupon create WELCOME 5.00`');
+        return message.reply('Usage: `!coupon create <CODE> <discount> [uses]`\nExamples: `!coupon create SPRING20 20%` (single use) or `!coupon create FLASH50 50% unlimited`');
     }
 
     const code = args[0].toUpperCase();
     const discountRaw = args[1];
+    const usesArg = args[2]?.toLowerCase();
+    const maxRedemptions = usesArg === 'unlimited' ? null : (parseInt(usesArg, 10) || 1);
 
     // Determine discount type
     const isPercent = discountRaw.endsWith('%');
@@ -119,13 +121,16 @@ async function handleCreate(message, args) {
         const coupon = await stripe.coupons.create(couponParams);
 
         // Create the customer-facing promotion code
-        const promoCode = await stripe.promotionCodes.create({
-            coupon: coupon.id,
-            code,
-        });
+        const promoParams = { coupon: coupon.id, code };
+        if (maxRedemptions) {
+            promoParams.max_redemptions = maxRedemptions;
+        }
+        const promoCode = await stripe.promotionCodes.create(promoParams);
+
+        const usesLabel = maxRedemptions ? `${maxRedemptions} use${maxRedemptions !== 1 ? 's' : ''}` : 'unlimited';
 
         await message.channel.send(
-            `✅ **Coupon created** — \`${code}\` (${displayDiscount})\n\n` +
+            `✅ **Coupon created** — \`${code}\` (${displayDiscount}, ${usesLabel})\n\n` +
             `**DM this to the buyer:**\n` +
             `> Here's a ${displayDiscount} code for your next purchase: **${code}** — enter it at checkout in the promo code field.`
         );
