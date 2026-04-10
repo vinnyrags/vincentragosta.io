@@ -32,15 +32,22 @@ function buildWelcomeEmbed() {
             {
                 name: 'Link Your Account',
                 value:
-                    'If you have made a purchase, click the **Link Account** button below and enter the email you used at checkout. ' +
+                    'If you made a purchase and did not enter your Discord name at checkout, click the **Link Account** button below and enter the email you used at checkout. ' +
                     'This connects your purchases to your Discord profile so your name appears in the queue, order feed, and duck race roster. ' +
                     'You also get automatic role upgrades as you hit purchase milestones.',
             },
             {
+                name: 'Get Verified',
+                value:
+                    'Head to <#1488183429437853696> and react to get the **Xipe** role. ' +
+                    'This unlocks full server access — giveaways, pack battles, pull boxes, community channels, and more. ' +
+                    'Once verified, check out <#1488041097153347704> to pick up additional roles like **Ena** for After Dark content.',
+            },
+            {
                 name: 'Role Progression',
                 value:
-                    '**Xipe** — Verified member (react in #verify)\n' +
-                    '**Long** — 5+ purchases (Permanence — loyalty recognized)',
+                    '**Xipe** — Verified member\n' +
+                    '**Long** — 5+ purchases (loyalty recognized)',
             },
         )
         .setFooter({ text: 'itzenzoTTV — Cards. Games. After Dark.' });
