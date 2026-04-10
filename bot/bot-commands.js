@@ -170,8 +170,8 @@ const messages = [
     {
         title: '🏷️ Coupons',
         description: [
-            '**`!coupon create <CODE> <discount>`** — Create a Stripe coupon + promotion code. Discount is a percentage (`20%`) or dollar amount (`5.00`). Shows a copy-pasteable DM message for the buyer.',
-            '> Examples: `!coupon create SPRING20 20%` or `!coupon create WELCOME 5.00`',
+            '**`!coupon create <CODE> <discount> [uses]`** — Create a Stripe coupon. Defaults to single use. Add `unlimited` or a number for more.',
+            '> Examples: `!coupon create CREDIT5 5.00` (1 use) · `!coupon create FLASH20 20% unlimited` · `!coupon create VIP10 10% 5`',
             '',
             '**`!coupon <CODE>`** — Announce a promo code in #announcements.',
             '> Example: `!coupon SPRING20`',
