@@ -236,29 +236,29 @@ function generateSpinFrames(entryCount, winnerIndex) {
     const totalFrames = 10;
     const frames = [];
 
-    // Start from a random position
-    let pos = Math.floor(Math.random() * entryCount);
-
     for (let i = 0; i < totalFrames; i++) {
         if (i === totalFrames - 1) {
             // Final frame: land on winner
-            pos = winnerIndex;
+            frames.push(winnerIndex);
+        } else if (i >= totalFrames - 3) {
+            // Last few frames: close neighbors of winner (deceleration feel)
+            const offset = (totalFrames - 1 - i) * Math.ceil(entryCount / 20);
+            const nearby = ((winnerIndex - offset) % entryCount + entryCount) % entryCount;
+            frames.push(nearby);
         } else {
-            // Advance by decreasing amounts to simulate deceleration
-            const speed = i < 4 ? 3 : i < 7 ? 2 : 1;
-            pos = (pos + speed) % entryCount;
+            // Early/mid frames: random positions (fast wheel blur)
+            frames.push(Math.floor(Math.random() * entryCount));
         }
-        frames.push(pos);
     }
 
     return frames;
 }
 
 function getFrameDelay(frameIndex) {
-    if (frameIndex < 4) return 800;
-    if (frameIndex < 7) return 1500;
-    if (frameIndex < 9) return 2200;
-    return 2500;
+    if (frameIndex < 4) return 500;
+    if (frameIndex < 7) return 900;
+    if (frameIndex < 9) return 1500;
+    return 2000;
 }
 
 /**
