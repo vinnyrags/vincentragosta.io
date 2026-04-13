@@ -7,6 +7,9 @@
  * !giveaway draw                                          — Random winner
  * !giveaway draw duckrace                                 — Load entries for stream
  * !giveaway cancel                                        — Cancel and notify
+ * !giveaway test <count>                                  — Create test giveaway with fake entries (owner)
+ * !giveaway test clean                                    — Remove test giveaways (owner)
+ * !giveaway test off                                      — Disable test mode (owner)
  *
  * Standard giveaways: button click to enter (Xipe required).
  * Social giveaways: button click shows TikTok username modal, entry requires
@@ -15,10 +18,32 @@
 
 import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 import config from '../config.js';
-import { giveaways } from '../db.js';
-import { sendToChannel, sendEmbed, getMember, addRole } from '../discord.js';
+import { db, giveaways } from '../db.js';
+import { sendToChannel, sendEmbed, getMember, addRole, getChannel } from '../discord.js';
 
 const DISCORD_INVITE = 'https://discord.gg/EXqX685TTq';
+
+// =========================================================================
+// Test mode — routes giveaway/announcement channels to #ops
+// =========================================================================
+
+let testMode = false;
+
+function giveawayChannel() {
+    return testMode ? 'OPS' : 'GIVEAWAYS';
+}
+
+function announcementChannel() {
+    return testMode ? 'OPS' : 'ANNOUNCEMENTS';
+}
+
+function isTestMode() {
+    return testMode;
+}
+
+function setTestMode(on) {
+    testMode = on;
+}
 
 /**
  * Format a JS Date as SQLite datetime string (YYYY-MM-DD HH:MM:SS).
@@ -92,8 +117,8 @@ async function closeGiveaway(giveawayId) {
     await updateGiveawayEmbed(giveaway);
 
     // Update announcements
-    await sendEmbed('ANNOUNCEMENTS', {
-        title: `🔴 Giveaway Closed — ${giveaway.prize_name}`,
+    await sendEmbed(announcementChannel(), {
+        title: `\uD83D\uDD34 Giveaway Closed \u2014 ${giveaway.prize_name}`,
         description: `Entries are closed! **${entryCount}** entered. Winner will be drawn on stream.`,
         color: 0xe74c3c,
     });
@@ -112,11 +137,11 @@ function buildGiveawayEmbed(giveaway) {
     const isCancelled = giveaway.status === 'cancelled';
     const isSocial = !!giveaway.is_social;
 
-    let statusText = '🟢 OPEN';
+    let statusText = '\uD83D\uDFE2 OPEN';
     let color = 0xceff00;
-    if (isClosed) { statusText = '🔴 CLOSED — Winner to be drawn on stream'; color = 0xe74c3c; }
-    if (isComplete) { statusText = `🏆 COMPLETE — Winner: <@${giveaway.winner_id}>`; color = 0xffd700; }
-    if (isCancelled) { statusText = '❌ CANCELLED'; color = 0x95a5a6; }
+    if (isClosed) { statusText = '\uD83D\uDD34 CLOSED \u2014 Winner to be drawn on stream'; color = 0xe74c3c; }
+    if (isComplete) { statusText = `\uD83C\uDFC6 COMPLETE \u2014 Winner: <@${giveaway.winner_id}>`; color = 0xffd700; }
+    if (isCancelled) { statusText = '\u274C CANCELLED'; color = 0x95a5a6; }
 
     const lines = [statusText, ''];
 
@@ -135,16 +160,17 @@ function buildGiveawayEmbed(giveaway) {
     }
 
     if (isOpen && giveaway.ends_at) {
-        lines.push(`⏰ **Ends:** ${formatTimeRemaining(giveaway.ends_at)}`);
+        lines.push(`\u23F0 **Ends:** ${formatTimeRemaining(giveaway.ends_at)}`);
     }
-    lines.push(`🎟️ **Entries:** ${entryCount}`);
+    lines.push(`\uD83C\uDF9F\uFE0F **Entries:** ${entryCount}`);
 
     if (isOpen) {
         lines.push('', '*Must be verified (Xipe role).*');
     }
 
-    // Show entry roster
-    if (entries.length > 0) {
+    // Show entry roster — capped for scale
+    if (entries.length > 0 && entries.length <= 20) {
+        // Small giveaway: show full roster
         lines.push('');
         const roster = entries.map((e, i) => {
             const label = `<@${e.discord_user_id}>`;
@@ -152,10 +178,19 @@ function buildGiveawayEmbed(giveaway) {
             return `${i + 1}. ${label}${tiktok}`;
         }).join('\n');
         lines.push(roster);
+    } else if (entries.length > 20) {
+        // Large giveaway: count + last 5 entries
+        lines.push('');
+        const recent = entries.slice(-5).map((e) => {
+            const label = `<@${e.discord_user_id}>`;
+            const tiktok = e.tiktok_username ? ` (@${e.tiktok_username})` : '';
+            return label + tiktok;
+        });
+        lines.push(`Latest entries: ${recent.join(', ')}`);
     }
 
     const embed = new EmbedBuilder()
-        .setTitle(`🎁 Giveaway — ${giveaway.prize_name}`)
+        .setTitle(`\uD83C\uDF81 Giveaway \u2014 ${giveaway.prize_name}`)
         .setDescription(lines.join('\n'))
         .setColor(color)
         .setFooter({ text: `Giveaway #${giveaway.id}` });
@@ -168,7 +203,7 @@ function buildGiveawayButton(giveawayId) {
         .setCustomId(`giveaway-enter-${giveawayId}`)
         .setLabel('Enter Giveaway')
         .setStyle(ButtonStyle.Primary)
-        .setEmoji('🎁');
+        .setEmoji('\uD83C\uDF81');
 
     return new ActionRowBuilder().addComponents(button);
 }
@@ -177,7 +212,7 @@ async function updateGiveawayEmbed(giveaway) {
     if (!giveaway.channel_message_id) return;
 
     try {
-        const channel = (await import('../discord.js')).getChannel('GIVEAWAYS');
+        const channel = getChannel(giveawayChannel());
         if (!channel) return;
         const msg = await channel.messages.fetch(giveaway.channel_message_id);
         const updated = giveaways.getById.get(giveaway.id);
@@ -206,6 +241,7 @@ async function handleGiveaway(message, args) {
 
     const isAdmin = message.member.roles.cache.has(config.ROLES.NANOOK)
         || message.member.roles.cache.has(config.ROLES.AKIVILI);
+    const isOwner = message.member.roles.cache.has(config.ROLES.AKIVILI);
 
     if (!isAdmin) {
         return message.reply('Only moderators can manage giveaways.');
@@ -220,6 +256,9 @@ async function handleGiveaway(message, args) {
             return drawWinner(message, args.slice(1));
         case 'cancel':
             return cancelGiveaway(message);
+        case 'test':
+            if (!isOwner) return message.reply('Owner only.');
+            return handleTest(message, args.slice(1));
         default:
             return message.reply('Usage: `!giveaway start "Prize" [24h] [social] [url]`, `!giveaway close`, `!giveaway draw [duckrace]`, `!giveaway cancel`');
     }
@@ -237,7 +276,7 @@ async function startGiveaway(message, args) {
 
     // Parse: "Prize Name" [duration] [social] [url]
     const joined = args.join(' ');
-    const quoteMatch = joined.match(/^[""](.+?)[""]\s*(.*)?$/);
+    const quoteMatch = joined.match(/^["\u201C](.+?)["\u201D]\s*(.*)?$/);
     if (!quoteMatch) {
         return message.reply('Usage: `!giveaway start "Prize Name" [24h] [social] [tiktok-url]`\nPrize name must be in quotes.');
     }
@@ -271,33 +310,34 @@ async function startGiveaway(message, args) {
     // Post embed to #giveaways with button
     const embed = buildGiveawayEmbed(giveaway);
     const row = buildGiveawayButton(giveawayId);
-    const giveawayMsg = await sendToChannel('GIVEAWAYS', { embeds: [embed], components: [row] });
+    const giveawayMsg = await sendToChannel(giveawayChannel(), { embeds: [embed], components: [row] });
 
     if (giveawayMsg) {
         giveaways.setMessageId.run(giveawayMsg.id, giveawayId);
     }
 
     // Cross-post teaser to #announcements
+    const targetGiveawayChannel = config.CHANNELS[giveawayChannel()];
     const durationText = endsAt ? ` Ends in **${formatTimeRemaining(endsAt)}**.` : '';
     const socialText = isSocial ? ' Complete the social engagement and ' : ' ';
-    await sendEmbed('ANNOUNCEMENTS', {
-        title: `🎁 Giveaway — ${prizeName}`,
-        description: `We're giving away **${prizeName}**!${durationText}\n\n${socialText}Head to <#${config.CHANNELS.GIVEAWAYS}> and click **Enter Giveaway** to enter. Must be verified.`,
+    await sendEmbed(announcementChannel(), {
+        title: `\uD83C\uDF81 Giveaway \u2014 ${prizeName}`,
+        description: `We're giving away **${prizeName}**!${durationText}\n\n${socialText}Head to <#${targetGiveawayChannel}> and click **Enter Giveaway** to enter. Must be verified.`,
         color: 0xceff00,
     });
 
     // Post social copy to #ops
     const socialCopy = [
-        `📋 **Social Copy for Giveaway #${giveawayId}:**`,
+        `\uD83D\uDCCB **Social Copy for Giveaway #${giveawayId}:**`,
         '```',
-        `🎁 GIVEAWAY — ${prizeName}!`,
+        `\uD83C\uDF81 GIVEAWAY \u2014 ${prizeName}!`,
         '',
         isSocial
             ? 'How to enter:\n1. Like this post\n2. Comment + tag 3 friends\n3. Join our Discord and click Enter Giveaway'
             : 'Want a chance to win? Join our Discord and click Enter Giveaway!',
         '',
-        `👉 ${DISCORD_INVITE}`,
-        `${durationText ? `\n⏰ ${durationText}` : ''}`,
+        `\uD83D\uDC49 ${DISCORD_INVITE}`,
+        `${durationText ? `\n\u23F0 ${durationText}` : ''}`,
         '```',
     ].join('\n');
     await sendToChannel('OPS', socialCopy);
@@ -309,12 +349,13 @@ async function startGiveaway(message, args) {
 
     const typeLabel = isSocial ? 'Social giveaway' : 'Giveaway';
     await message.channel.send(
-        `🎁 **${typeLabel} #${giveawayId} started: ${prizeName}**\n` +
-        `• Posted to <#${config.CHANNELS.GIVEAWAYS}> with Enter Giveaway button\n` +
-        `• Teaser posted to #announcements\n` +
-        `• Social copy posted to #ops` +
-        (endsAt ? `\n• Auto-closes in ${formatTimeRemaining(endsAt)}` : '') +
-        (socialLink ? `\n• TikTok: ${socialLink}` : '')
+        `\uD83C\uDF81 **${typeLabel} #${giveawayId} started: ${prizeName}**\n` +
+        `\u2022 Posted to <#${targetGiveawayChannel}> with Enter Giveaway button\n` +
+        `\u2022 Teaser posted to ${testMode ? '#ops' : '#announcements'}\n` +
+        `\u2022 Social copy posted to #ops` +
+        (endsAt ? `\n\u2022 Auto-closes in ${formatTimeRemaining(endsAt)}` : '') +
+        (socialLink ? `\n\u2022 TikTok: ${socialLink}` : '') +
+        (testMode ? '\n\u2022 **TEST MODE — all messages routing to #ops**' : '')
     );
 }
 
@@ -338,7 +379,7 @@ async function closeGiveawayCommand(message) {
     await closeGiveaway(giveaway.id);
 
     const entryCount = giveaways.getEntryCount.get(giveaway.id).count;
-    await message.channel.send(`🔴 **Giveaway #${giveaway.id} closed.** ${entryCount} entries. Use \`!giveaway draw\` or \`!giveaway draw duckrace\` to pick a winner.`);
+    await message.channel.send(`\uD83D\uDD34 **Giveaway #${giveaway.id} closed.** ${entryCount} entries. Use \`!spin giveaway\` or \`!giveaway draw\` to pick a winner.`);
 }
 
 async function drawWinner(message, args) {
@@ -347,7 +388,7 @@ async function drawWinner(message, args) {
         return message.reply('Giveaway is still open. Run `!giveaway close` first.');
     }
 
-    const giveaway = (await import('../db.js')).db.prepare(
+    const giveaway = db.prepare(
         `SELECT * FROM giveaways WHERE status = 'closed' ORDER BY closed_at DESC LIMIT 1`
     ).get();
 
@@ -363,21 +404,24 @@ async function drawWinner(message, args) {
     const mode = args[0]?.toLowerCase();
 
     if (mode === 'duckrace') {
-        const roster = entries.map((e, i) => {
+        // Cap at 50 for embed display
+        const displayEntries = entries.slice(0, 50);
+        const roster = displayEntries.map((e, i) => {
             const tiktok = e.tiktok_username ? ` (@${e.tiktok_username})` : '';
             return `${i + 1}. <@${e.discord_user_id}>${tiktok}`;
         }).join('\n');
+        const overflow = entries.length > 50 ? `\n\n*...and ${entries.length - 50} more*` : '';
         const embed = new EmbedBuilder()
-            .setTitle(`🦆 Duck Race Roster — ${giveaway.prize_name}`)
-            .setDescription(`${entries.length} entrants loaded from Giveaway #${giveaway.id}:\n\n${roster}`)
+            .setTitle(`\uD83E\uDD86 Duck Race Roster \u2014 ${giveaway.prize_name}`)
+            .setDescription(`${entries.length} entrants loaded from Giveaway #${giveaway.id}:\n\n${roster}${overflow}`)
             .setColor(0xceff00)
-            .setFooter({ text: 'Use !giveaway draw to pick randomly, or run the duck race on stream!' });
+            .setFooter({ text: 'Use !spin giveaway to draw, or !giveaway draw for instant random pick.' });
 
         await message.channel.send({ embeds: [embed] });
         return;
     }
 
-    // Random draw
+    // Random draw (instant, no animation)
     const winner = entries[Math.floor(Math.random() * entries.length)];
 
     giveaways.setWinner.run(winner.discord_user_id, giveaway.id);
@@ -391,22 +435,22 @@ async function drawWinner(message, args) {
 
     const tiktokNote = winner.tiktok_username ? ` (TikTok: @${winner.tiktok_username})` : '';
 
-    await sendEmbed('GIVEAWAYS', {
-        title: `🏆 Giveaway Winner — ${giveaway.prize_name}`,
-        description: `Congratulations <@${winner.discord_user_id}>!${tiktokNote} 🎉\n\nYou've won **${giveaway.prize_name}**!`,
+    await sendEmbed(giveawayChannel(), {
+        title: `\uD83C\uDFC6 Giveaway Winner \u2014 ${giveaway.prize_name}`,
+        description: `Congratulations <@${winner.discord_user_id}>!${tiktokNote} \uD83C\uDF89\n\nYou've won **${giveaway.prize_name}**!`,
         color: 0xffd700,
     });
 
-    await sendEmbed('ANNOUNCEMENTS', {
-        title: `🏆 Giveaway Winner — ${giveaway.prize_name}`,
-        description: `<@${winner.discord_user_id}> just won **${giveaway.prize_name}**! 🎉`,
+    await sendEmbed(announcementChannel(), {
+        title: `\uD83C\uDFC6 Giveaway Winner \u2014 ${giveaway.prize_name}`,
+        description: `<@${winner.discord_user_id}> just won **${giveaway.prize_name}**! \uD83C\uDF89`,
         color: 0xffd700,
     });
 
     await message.channel.send(
-        `🏆 **<@${winner.discord_user_id}>${tiktokNote} wins ${giveaway.prize_name}!**\n` +
-        `• Aha role assigned\n` +
-        `• Announced in #giveaways and #announcements`
+        `\uD83C\uDFC6 **<@${winner.discord_user_id}>${tiktokNote} wins ${giveaway.prize_name}!**\n` +
+        `\u2022 Aha role assigned\n` +
+        `\u2022 Announced in ${testMode ? '#ops' : '#giveaways and #announcements'}`
     );
 }
 
@@ -421,13 +465,77 @@ async function cancelGiveaway(message) {
 
     await updateGiveawayEmbed(giveaway);
 
-    await sendEmbed('GIVEAWAYS', {
-        title: `❌ Giveaway Cancelled — ${giveaway.prize_name}`,
+    await sendEmbed(giveawayChannel(), {
+        title: `\u274C Giveaway Cancelled \u2014 ${giveaway.prize_name}`,
         description: 'This giveaway has been cancelled.',
         color: 0x95a5a6,
     });
 
-    await message.channel.send(`❌ **Giveaway #${giveaway.id} cancelled.**`);
+    await message.channel.send(`\u274C **Giveaway #${giveaway.id} cancelled.**`);
+}
+
+// =========================================================================
+// Test mode commands
+// =========================================================================
+
+async function handleTest(message, args) {
+    const sub = args[0]?.toLowerCase();
+
+    if (sub === 'clean') {
+        const testGiveaways = db.prepare("SELECT id FROM giveaways WHERE prize_name LIKE 'TEST%'").all();
+        for (const g of testGiveaways) {
+            db.prepare('DELETE FROM giveaway_entries WHERE giveaway_id = ?').run(g.id);
+            db.prepare('DELETE FROM giveaways WHERE id = ?').run(g.id);
+        }
+        testMode = false;
+        return message.channel.send(`\uD83E\uDDF9 Cleaned ${testGiveaways.length} test giveaways. Test mode off.`);
+    }
+
+    if (sub === 'off') {
+        testMode = false;
+        return message.channel.send('\uD83D\uDFE2 Test mode off. Giveaway messages will route to public channels.');
+    }
+
+    const count = parseInt(sub) || 100;
+
+    // Enable test mode
+    testMode = true;
+
+    // Create a closed giveaway with fake entries
+    const result = giveaways.create.run(`TEST GIVEAWAY (${count} entries)`, null, 1, 'https://tiktok.com/@test');
+    const giveawayId = result.lastInsertRowid;
+    giveaways.close.run(giveawayId);
+
+    // Insert fake entries in a transaction for speed
+    const insert = db.prepare(
+        'INSERT OR IGNORE INTO giveaway_entries (giveaway_id, discord_user_id, tiktok_username) VALUES (?, ?, ?)'
+    );
+    const insertMany = db.transaction((entries) => {
+        for (const e of entries) insert.run(...e);
+    });
+
+    const fakeEntries = Array.from({ length: count }, (_, i) => [
+        giveawayId,
+        `fake_${String(i).padStart(5, '0')}`,
+        `tiktok_user_${i}`,
+    ]);
+    insertMany(fakeEntries);
+
+    // Post the giveaway embed to #ops
+    const giveaway = giveaways.getById.get(giveawayId);
+    const embed = buildGiveawayEmbed(giveaway);
+    const giveawayMsg = await sendToChannel('OPS', { embeds: [embed] });
+    if (giveawayMsg) {
+        giveaways.setMessageId.run(giveawayMsg.id, giveawayId);
+    }
+
+    await message.channel.send(
+        `\uD83E\uDDEA **Test giveaway #${giveawayId} created** with ${count.toLocaleString()} fake entries.\n` +
+        `\u2022 Test mode ON \u2014 all messages routing to #ops\n` +
+        `\u2022 Embed posted to #ops\n` +
+        `\u2022 Run \`!spin giveaway\` or \`!spin giveaway pick @yourself\` to test\n` +
+        `\u2022 Run \`!giveaway test clean\` when done`
+    );
 }
 
 // =========================================================================
@@ -446,21 +554,30 @@ async function handleGiveawayEntry(interaction, giveawayId, tiktokUsername = nul
         return interaction.reply({ content: 'You need to be verified (Xipe role) to enter giveaways. Head to #verify first!', ephemeral: true });
     }
 
-    // Check for duplicate
-    const entries = giveaways.getEntries.all(giveaway.id);
-    if (entries.some((e) => e.discord_user_id === interaction.user.id)) {
-        return interaction.reply({ content: 'You\'re already entered in this giveaway! Good luck! 🍀', ephemeral: true });
+    // Check for duplicate (indexed DB lookup, not O(n) JS scan)
+    const existing = giveaways.hasEntry.get(giveaway.id, interaction.user.id);
+    if (existing) {
+        const entry = giveaways.getEntryByUser.get(giveaway.id, interaction.user.id);
+        const entryCount = giveaways.getEntryCount.get(giveaway.id).count;
+        const tiktok = entry?.tiktok_username ? ` as @${entry.tiktok_username}` : '';
+        return interaction.reply({
+            content: `\u2705 You're already entered${tiktok}! You're one of ${entryCount.toLocaleString()} entries. Good luck! \uD83C\uDF40`,
+            ephemeral: true,
+        });
     }
 
     // Add entry
     giveaways.addEntry.run(giveaway.id, interaction.user.id, tiktokUsername || null);
 
-    // Update embed with new entry
-    await updateGiveawayEmbed(giveaway);
+    // Throttle embed updates — first 5, then every 10th
+    const entryCount = giveaways.getEntryCount.get(giveaway.id).count;
+    if (entryCount <= 5 || entryCount % 10 === 0) {
+        await updateGiveawayEmbed(giveaway);
+    }
 
     const confirmText = tiktokUsername
-        ? `You're in! 🎁 Entry recorded as @${tiktokUsername}. Good luck!`
-        : 'You\'re in! 🎁 Good luck!';
+        ? `You're in! \uD83C\uDF81 Entry recorded as @${tiktokUsername}. Entry #${entryCount.toLocaleString()}. Good luck!`
+        : `You're in! \uD83C\uDF81 Entry #${entryCount.toLocaleString()}. Good luck!`;
 
     return interaction.reply({ content: confirmText, ephemeral: true });
 }
@@ -481,4 +598,13 @@ function initGiveaways() {
     }
 }
 
-export { handleGiveaway, handleGiveawayEntry, initGiveaways, updateGiveawayEmbed };
+export {
+    handleGiveaway,
+    handleGiveawayEntry,
+    initGiveaways,
+    updateGiveawayEmbed,
+    giveawayChannel,
+    announcementChannel,
+    isTestMode,
+    setTestMode,
+};

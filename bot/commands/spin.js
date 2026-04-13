@@ -15,9 +15,9 @@
 
 import { EmbedBuilder } from 'discord.js';
 import config from '../config.js';
-import { giveaways } from '../db.js';
+import { db, giveaways } from '../db.js';
 import { client, sendEmbed, getMember, addRole } from '../discord.js';
-import { updateGiveawayEmbed } from './giveaway.js';
+import { updateGiveawayEmbed, giveawayChannel, announcementChannel } from './giveaway.js';
 
 let spinInProgress = false;
 
@@ -70,7 +70,6 @@ async function spinGiveaway(message, pickedWinnerId) {
         return message.channel.send('Giveaway is still open. Run `!giveaway close` first.');
     }
 
-    const { db } = await import('../db.js');
     const giveaway = db.prepare(
         `SELECT * FROM giveaways WHERE status = 'closed' ORDER BY closed_at DESC LIMIT 1`
     ).get();
@@ -125,13 +124,13 @@ async function finalizeGiveaway(giveaway, winnerId, message) {
     const entry = giveaways.getEntries.all(giveaway.id).find((e) => e.discord_user_id === winnerId);
     const tiktokNote = entry?.tiktok_username ? ` (TikTok: @${entry.tiktok_username})` : '';
 
-    await sendEmbed('GIVEAWAYS', {
+    await sendEmbed(giveawayChannel(), {
         title: `\uD83C\uDFC6 Giveaway Winner \u2014 ${giveaway.prize_name}`,
         description: `Congratulations <@${winnerId}>!${tiktokNote} \uD83C\uDF89\n\nYou've won **${giveaway.prize_name}**!`,
         color: 0xffd700,
     });
 
-    await sendEmbed('ANNOUNCEMENTS', {
+    await sendEmbed(announcementChannel(), {
         title: `\uD83C\uDFC6 Giveaway Winner \u2014 ${giveaway.prize_name}`,
         description: `<@${winnerId}> just won **${giveaway.prize_name}**! \uD83C\uDF89`,
         color: 0xffd700,
@@ -140,7 +139,7 @@ async function finalizeGiveaway(giveaway, winnerId, message) {
     await message.channel.send(
         `\uD83C\uDFC6 **<@${winnerId}>${tiktokNote} wins ${giveaway.prize_name}!**\n` +
         `\u2022 Aha role assigned\n` +
-        `\u2022 Announced in #giveaways and #announcements`
+        `\u2022 Announced in ${giveawayChannel() === 'OPS' ? '#ops' : '#giveaways and #announcements'}`
     );
 }
 
@@ -165,13 +164,7 @@ async function spinAdHoc(message, args, isPick) {
 
     if (isPick) {
         // First entry in the parsed list is the pick target
-        // For mentions: first mentioned user is the winner
-        // For text: first quoted string is the winner
         const pickTarget = entries[0];
-        const inEntries = entries.some((e) => e.id === pickTarget.id);
-        if (!inEntries) {
-            return message.channel.send(`"${pickTarget.label}" is not in the entries.`);
-        }
         winnerId = pickTarget.id;
         await message.channel.send(`\uD83C\uDFA1 Spin picked. Starting...`);
     } else {
@@ -268,24 +261,54 @@ function getFrameDelay(frameIndex) {
     return 2500;
 }
 
+/**
+ * Build a spin embed showing a window of entries around the highlighted position.
+ * For large entry lists (>9), shows a slot-machine style 9-entry window.
+ * For small lists (<=9), shows all entries.
+ */
 function buildSpinEmbed(title, entries, highlightIndex, isFinished) {
-    const lines = entries.map((entry, i) => {
-        if (isFinished && i === highlightIndex) {
-            return `\uD83C\uDFC6 **${entry.label}**  \u25C0 WINNER`;
+    const totalEntries = entries.length;
+    const windowSize = Math.min(9, totalEntries);
+    const half = Math.floor(windowSize / 2);
+
+    const lines = [];
+
+    if (totalEntries <= 9) {
+        // Small list: show all entries
+        for (let i = 0; i < totalEntries; i++) {
+            lines.push(formatSpinLine(entries[i], i, highlightIndex, isFinished));
         }
-        if (i === highlightIndex) {
-            return `\uD83D\uDC49 **${entry.label}**  \u25C0`;
+    } else {
+        // Large list: show window around highlight
+        for (let offset = -half; offset <= half; offset++) {
+            const idx = ((highlightIndex + offset) % totalEntries + totalEntries) % totalEntries;
+            lines.push(formatSpinLine(entries[idx], idx, highlightIndex, isFinished));
         }
-        return `\u2003\u2003 ${entry.label}`;
-    });
+    }
+
+    const header = totalEntries > 9
+        ? `*${totalEntries.toLocaleString()} entries*\n`
+        : '';
+
+    const winnerLabel = entries[highlightIndex].label;
 
     return new EmbedBuilder()
         .setTitle(`\uD83C\uDFA1 ${title}${isFinished ? ' \u2014 Winner!' : ''}`)
-        .setDescription(lines.join('\n'))
+        .setDescription(header + lines.join('\n'))
         .setColor(isFinished ? 0xffd700 : 0xceff00)
         .setFooter({ text: isFinished
-            ? `Winner: ${entries[highlightIndex].label}`
+            ? `Winner: ${winnerLabel}`
             : 'Spinning...' });
+}
+
+function formatSpinLine(entry, entryIndex, highlightIndex, isFinished) {
+    if (isFinished && entryIndex === highlightIndex) {
+        return `\uD83C\uDFC6 **${entry.label}**  \u25C0 WINNER`;
+    }
+    if (entryIndex === highlightIndex) {
+        return `\uD83D\uDC49 **${entry.label}**  \u25C0`;
+    }
+    return `\u2003\u2003 ${entry.label}`;
 }
 
 export { handleSpin };

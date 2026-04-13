@@ -717,6 +717,14 @@ const giveawayStmts = {
         SELECT COUNT(*) as count FROM giveaway_entries WHERE giveaway_id = ?
     `),
 
+    hasEntry: db.prepare(`
+        SELECT 1 FROM giveaway_entries WHERE giveaway_id = ? AND discord_user_id = ? LIMIT 1
+    `),
+
+    getEntryByUser: db.prepare(`
+        SELECT * FROM giveaway_entries WHERE giveaway_id = ? AND discord_user_id = ? LIMIT 1
+    `),
+
     getExpired: db.prepare(`
         SELECT * FROM giveaways WHERE status = 'open' AND ends_at IS NOT NULL AND ends_at <= datetime('now')
     `),
