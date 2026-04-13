@@ -104,7 +104,7 @@ async function spinGiveaway(message, pickedWinnerId) {
 
     try {
         const title = `Giveaway \u2014 ${giveaway.prize_name}`;
-        await runSpinAnimation(message.channel, entries, winnerId, title);
+        await runSpinAnimation(message.channel, entries, winnerId, title, true);
         await finalizeGiveaway(giveaway, winnerId, message);
     } finally {
         spinInProgress = false;
@@ -213,9 +213,18 @@ function parseEntries(args, message) {
 // Animation engine
 // =========================================================================
 
-async function runSpinAnimation(channel, entries, winnerId, title) {
+/**
+ * Run the spin animation.
+ * @param {object}  channel   - Discord channel to post in
+ * @param {Array}   entries   - Array of { id, label }
+ * @param {string}  winnerId  - The winner's id
+ * @param {string}  title     - Embed title context
+ * @param {boolean} extended  - If true, run ~30 sec (giveaways). Default ~10 sec (ad-hoc).
+ */
+async function runSpinAnimation(channel, entries, winnerId, title, extended = false) {
     const winnerIndex = entries.findIndex((e) => e.id === winnerId);
-    const frames = generateSpinFrames(entries.length, winnerIndex);
+    const frameCount = extended ? 20 : 10;
+    const frames = generateSpinFrames(entries.length, winnerIndex, frameCount);
     const totalFrames = frames.length;
 
     // Post initial "spinning" embed
@@ -225,23 +234,22 @@ async function runSpinAnimation(channel, entries, winnerId, title) {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     for (let i = 1; i < totalFrames; i++) {
-        await delay(getFrameDelay(i));
+        await delay(getFrameDelay(i, totalFrames));
         const isLast = i === totalFrames - 1;
         const embed = buildSpinEmbed(title, entries, frames[i], isLast);
         await spinMsg.edit({ embeds: [embed] });
     }
 }
 
-function generateSpinFrames(entryCount, winnerIndex) {
-    const totalFrames = 10;
+function generateSpinFrames(entryCount, winnerIndex, totalFrames) {
     const frames = [];
 
     for (let i = 0; i < totalFrames; i++) {
         if (i === totalFrames - 1) {
             // Final frame: land on winner
             frames.push(winnerIndex);
-        } else if (i >= totalFrames - 3) {
-            // Last few frames: close neighbors of winner (deceleration feel)
+        } else if (i >= totalFrames - 4) {
+            // Last few frames: close neighbors of winner (deceleration)
             const offset = (totalFrames - 1 - i) * Math.ceil(entryCount / 20);
             const nearby = ((winnerIndex - offset) % entryCount + entryCount) % entryCount;
             frames.push(nearby);
@@ -254,11 +262,18 @@ function generateSpinFrames(entryCount, winnerIndex) {
     return frames;
 }
 
-function getFrameDelay(frameIndex) {
-    if (frameIndex < 4) return 500;
-    if (frameIndex < 7) return 900;
-    if (frameIndex < 9) return 1500;
-    return 2000;
+/**
+ * Frame delay in ms. Starts fast, decelerates toward the end.
+ * Extended mode (20 frames): ~30 sec total.
+ * Standard mode (10 frames): ~10 sec total.
+ */
+function getFrameDelay(frameIndex, totalFrames) {
+    const progress = frameIndex / (totalFrames - 1); // 0.0 → 1.0
+    if (progress < 0.4) return 500;        // fast blur
+    if (progress < 0.6) return 1000;       // slowing
+    if (progress < 0.8) return 2000;       // nearly there
+    if (progress < 0.95) return 3000;      // suspense
+    return 3500;                           // final landing
 }
 
 /**
