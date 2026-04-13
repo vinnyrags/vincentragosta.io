@@ -225,6 +225,8 @@ const messages = [
             '!duckrace winner @user                 → Manual winner (skip animation)',
             '!spin giveaway                         → Animated giveaway winner draw',
             '!spin "10% off" "Free pack" "Shoutout" → Ad-hoc wheel spin',
+            '!capture                               → Log moment timestamp to #moments',
+            '!capture Big Charizard pull             → Log with a note',
             '!offline                               → Close queue, post recap, open next queue',
             '!dropped-off                           → Monday: notify all buyers, mark orders shipped',
             '!snapshot                              → Anytime: post analytics snapshot to #analytics',
