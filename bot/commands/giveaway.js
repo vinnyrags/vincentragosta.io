@@ -514,11 +514,16 @@ async function handleTest(message, args) {
         for (const e of entries) insert.run(...e);
     });
 
-    const fakeEntries = Array.from({ length: count }, (_, i) => [
-        giveawayId,
-        `fake_${String(i).padStart(5, '0')}`,
-        `tiktok_user_${i}`,
-    ]);
+    // Inject the test account as a real entry that can be @mentioned and picked
+    const TEST_ACCOUNT_ID = '1490206350943191052'; // @rhapttv
+    const fakeEntries = [
+        [giveawayId, TEST_ACCOUNT_ID, 'rhapttv'],
+        ...Array.from({ length: count - 1 }, (_, i) => [
+            giveawayId,
+            `fake_${String(i).padStart(5, '0')}`,
+            `tiktok_user_${i}`,
+        ]),
+    ];
     insertMany(fakeEntries);
 
     // Post the giveaway embed to #ops
@@ -530,10 +535,11 @@ async function handleTest(message, args) {
     }
 
     await message.channel.send(
-        `\uD83E\uDDEA **Test giveaway #${giveawayId} created** with ${count.toLocaleString()} fake entries.\n` +
+        `\uD83E\uDDEA **Test giveaway #${giveawayId} created** with ${count.toLocaleString()} entries.\n` +
         `\u2022 Test mode ON \u2014 all messages routing to #ops\n` +
         `\u2022 Embed posted to #ops\n` +
-        `\u2022 Run \`!spin giveaway\` or \`!spin giveaway pick @yourself\` to test\n` +
+        `\u2022 <@${TEST_ACCOUNT_ID}> (rhapttv) injected as a real entry for pick testing\n` +
+        `\u2022 Run \`!spin giveaway\` or \`!spin giveaway pick @rhapttv\` to test\n` +
         `\u2022 Run \`!giveaway test clean\` when done`
     );
 }
