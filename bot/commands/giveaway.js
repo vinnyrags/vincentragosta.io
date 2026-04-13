@@ -481,4 +481,4 @@ function initGiveaways() {
     }
 }
 
-export { handleGiveaway, handleGiveawayEntry, initGiveaways };
+export { handleGiveaway, handleGiveawayEntry, initGiveaways, updateGiveawayEmbed };

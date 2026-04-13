@@ -47,6 +47,7 @@ import { handleRefund } from './commands/refund.js';
 import { handleNous } from './commands/nous.js';
 import { handlePull } from './commands/pull.js';
 import { handleReset } from './commands/reset.js';
+import { handleSpin } from './commands/spin.js';
 import { syncBotCommands } from './sync-bot-commands.js';
 import { initCommunityGoals } from './community-goals.js';
 import { initWelcome } from './commands/welcome.js';
@@ -110,6 +111,9 @@ client.on('messageCreate', async (message) => {
                 break;
             case 'giveaway':
                 await handleGiveaway(message, args);
+                break;
+            case 'spin':
+                await handleSpin(message, args);
                 break;
             case 'sync':
                 await handleSync(message, args);
