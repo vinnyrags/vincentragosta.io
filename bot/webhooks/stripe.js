@@ -97,19 +97,11 @@ async function handleCheckoutCompleted(session) {
             totalAmount
         );
 
-        // Post order notification in #order-feed
-        await sendEmbed('ORDER_FEED', {
-            title: '🛒 New Order!',
-            description: `${discordUserId ? `<@${discordUserId}>` : customerEmail || 'Someone'} just picked up **${productName}**${quantity > 1 ? ` (×${quantity})` : ''}!`,
-            color: 0xceff00,
-            footer: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
-        });
-
         // Low-stock alert in #deals
         if (stock !== undefined && stock <= config.LOW_STOCK_THRESHOLD && stock > 0) {
             await sendEmbed('DEALS', {
-                title: '⚠️ Low Stock Alert',
-                description: `**${productName}** — only **${stock}** left in stock!`,
+                title: '\u26A0\uFE0F Low Stock Alert',
+                description: `**${productName}** \u2014 only **${stock}** left in stock!`,
                 color: 0xe74c3c,
             });
         }
@@ -117,11 +109,28 @@ async function handleCheckoutCompleted(session) {
         // Sold out alert
         if (stock !== undefined && stock === 0) {
             await sendEmbed('DEALS', {
-                title: '🚫 Sold Out',
+                title: '\uD83D\uDEAB Sold Out',
                 description: `**${productName}** is now sold out!`,
                 color: 0x95a5a6,
             });
         }
+    }
+
+    // Post one consolidated order notification in #order-feed
+    if (lineItems.length > 0) {
+        const buyerLabel = discordUserId ? `<@${discordUserId}>` : customerEmail || 'Someone';
+        const itemList = lineItems.map((item) => {
+            const name = item.name || 'Unknown Product';
+            const qty = item.quantity || 1;
+            return `\u2022 **${name}**${qty > 1 ? ` (\u00D7${qty})` : ''}`;
+        }).join('\n');
+
+        await sendEmbed('ORDER_FEED', {
+            title: '\uD83D\uDED2 New Order!',
+            description: `${buyerLabel} just picked up:\n${itemList}`,
+            color: 0xceff00,
+            footer: new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }),
+        });
     }
 
     // DM the buyer a purchase receipt (skip card sales — they get their own DM)
