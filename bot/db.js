@@ -165,6 +165,14 @@ db.exec(`
         sold_at TEXT
     );
 
+    CREATE TABLE IF NOT EXISTS list_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        message_id TEXT,
+        status TEXT DEFAULT 'open',
+        created_at TEXT DEFAULT (datetime('now')),
+        closed_at TEXT
+    );
+
     CREATE TABLE IF NOT EXISTS active_coupons (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         promo_code TEXT NOT NULL,
@@ -253,6 +261,13 @@ db.exec(`
     );
     INSERT OR IGNORE INTO welcome_config (id) VALUES (1);
 `);
+
+// Add list_session_id column to card_listings (v9)
+try {
+    db.exec(`ALTER TABLE card_listings ADD COLUMN list_session_id INTEGER DEFAULT NULL`);
+} catch {
+    // Column already exists — ignore
+}
 
 // Add social giveaway fields (v8)
 try { db.exec(`ALTER TABLE giveaways ADD COLUMN is_social INTEGER DEFAULT 0`); } catch { /* exists */ }
@@ -626,6 +641,19 @@ const cardListingStmts = {
     reserveForBuyer: db.prepare(`
         UPDATE card_listings SET status = 'reserved', buyer_discord_id = ? WHERE id = ? AND status = 'active'
     `),
+
+    getBySessionId: db.prepare(`
+        SELECT * FROM card_listings WHERE list_session_id = ? ORDER BY id ASC
+    `),
+
+    createWithSession: db.prepare(`
+        INSERT INTO card_listings (card_name, price, buyer_discord_id, status, list_session_id)
+        VALUES (?, ?, ?, ?, ?)
+    `),
+
+    expireBySessionId: db.prepare(`
+        UPDATE card_listings SET status = 'expired' WHERE list_session_id = ? AND status IN ('active', 'reserved')
+    `),
 };
 
 // =========================================================================
@@ -734,6 +762,22 @@ const giveawayStmts = {
 // Coupons
 // =========================================================================
 
+// =========================================================================
+// List Sessions
+// =========================================================================
+
+const listSessionStmts = {
+    create: db.prepare(`INSERT INTO list_sessions (status) VALUES ('open')`),
+
+    getActive: db.prepare(`SELECT * FROM list_sessions WHERE status = 'open' ORDER BY created_at DESC LIMIT 1`),
+
+    getById: db.prepare(`SELECT * FROM list_sessions WHERE id = ?`),
+
+    setMessageId: db.prepare(`UPDATE list_sessions SET message_id = ? WHERE id = ?`),
+
+    close: db.prepare(`UPDATE list_sessions SET status = 'closed', closed_at = datetime('now') WHERE id = ?`),
+};
+
 const couponStmts = {
     activate: db.prepare(`
         INSERT INTO active_coupons (promo_code, stripe_promo_id, stripe_coupon_id, discount_display)
@@ -824,6 +868,7 @@ export {
     queueStmts as queues,
     livestreamStmts as livestream,
     cardListingStmts as cardListings,
+    listSessionStmts as listSessions,
     goalStmts as goals,
     analyticsStmts as analytics,
     giveawayStmts as giveaways,

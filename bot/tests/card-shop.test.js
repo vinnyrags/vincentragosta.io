@@ -53,6 +53,7 @@ vi.mock('../db.js', () => {
     return {
         cardListings: {},
         purchases: {},
+        listSessions: {},
     };
 });
 
@@ -97,6 +98,7 @@ beforeEach(() => {
     // Wire test DB stubs into the mocked module
     Object.assign(dbModule.cardListings, stmts.cardListings);
     Object.assign(dbModule.purchases, stmts.purchases);
+    Object.assign(dbModule.listSessions, stmts.listSessions);
 
     // Reset discord mocks
     const mockDiscord = buildMockDiscord();
@@ -128,19 +130,6 @@ describe('!sell permission guards', () => {
 });
 
 describe('!sell input validation', () => {
-    it('requires a mentioned buyer', async () => {
-        const { handleSell } = cardShopModule;
-        const msg = createMockMessage({
-            content: '!sell "Test Card" 25.00',
-            roles: [ROLE_AKIVILI],
-        });
-
-        await handleSell(msg, []);
-        expect(msg.reply).toHaveBeenCalledWith(
-            expect.stringContaining('Usage:')
-        );
-    });
-
     it('requires quoted card name', async () => {
         const { handleSell } = cardShopModule;
         const buyer = createMockMention('buyer123');
@@ -193,8 +182,27 @@ describe('!sell creates reserved listing', () => {
     });
 });
 
+describe('!sell without buyer creates active listing', () => {
+    it('creates an active listing when no @user is mentioned', async () => {
+        const { handleSell } = cardShopModule;
+        const msg = createMockMessage({
+            content: '!sell "Pikachu EX" 15.00',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleSell(msg, []);
+
+        const listing = stmts.cardListings.getById.get(1);
+        expect(listing).toBeTruthy();
+        expect(listing.card_name).toBe('Pikachu EX');
+        expect(listing.price).toBe(1500);
+        expect(listing.status).toBe('active');
+        expect(listing.buyer_discord_id).toBeNull();
+    });
+});
+
 // =========================================================================
-// !list command
+// !list subcommands
 // =========================================================================
 
 describe('!list permission guards', () => {
@@ -209,11 +217,11 @@ describe('!list permission guards', () => {
     });
 });
 
-describe('!list input validation', () => {
-    it('requires quoted card name', async () => {
+describe('!list shows usage without subcommand', () => {
+    it('shows usage when no subcommand provided', async () => {
         const { handleList } = cardShopModule;
         const msg = createMockMessage({
-            content: '!list Test Card 25.00',
+            content: '!list',
             roles: [ROLE_AKIVILI],
         });
 
@@ -222,37 +230,148 @@ describe('!list input validation', () => {
             expect.stringContaining('Usage:')
         );
     });
+});
 
-    it('requires a price', async () => {
+describe('!list open', () => {
+    it('creates a new list session', async () => {
         const { handleList } = cardShopModule;
         const msg = createMockMessage({
-            content: '!list "Test Card"',
+            content: '!list open',
             roles: [ROLE_AKIVILI],
         });
 
-        await handleList(msg, []);
+        await handleList(msg, ['open']);
+
+        const session = stmts.listSessions.getActive.get();
+        expect(session).toBeTruthy();
+        expect(session.status).toBe('open');
+    });
+
+    it('rejects opening when a list is already open', async () => {
+        const { handleList } = cardShopModule;
+        stmts.listSessions.create.run();
+
+        const msg = createMockMessage({
+            content: '!list open',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['open']);
+        expect(msg.reply).toHaveBeenCalledWith(
+            expect.stringContaining('already open')
+        );
+    });
+});
+
+describe('!list add', () => {
+    it('adds an item to the active list session', async () => {
+        const { handleList } = cardShopModule;
+
+        // Create an active session
+        const result = stmts.listSessions.create.run();
+        const sessionId = Number(result.lastInsertRowid);
+        stmts.listSessions.setMessageId.run('session_msg_1', sessionId);
+
+        const msg = createMockMessage({
+            content: '!list add "Charizard VMAX" 50.00',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['add']);
+
+        const items = stmts.cardListings.getBySessionId.all(sessionId);
+        expect(items).toHaveLength(1);
+        expect(items[0].card_name).toBe('Charizard VMAX');
+        expect(items[0].price).toBe(5000);
+        expect(items[0].status).toBe('active');
+        expect(items[0].list_session_id).toBe(sessionId);
+    });
+
+    it('rejects when no list is open', async () => {
+        const { handleList } = cardShopModule;
+        const msg = createMockMessage({
+            content: '!list add "Test Card" 10.00',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['add']);
+        expect(msg.reply).toHaveBeenCalledWith(
+            expect.stringContaining('No list is open')
+        );
+    });
+
+    it('requires quoted card name', async () => {
+        const { handleList } = cardShopModule;
+        stmts.listSessions.create.run();
+
+        const msg = createMockMessage({
+            content: '!list add Test Card 25.00',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['add']);
+        expect(msg.reply).toHaveBeenCalledWith(
+            expect.stringContaining('Usage:')
+        );
+    });
+
+    it('requires a price', async () => {
+        const { handleList } = cardShopModule;
+        stmts.listSessions.create.run();
+
+        const msg = createMockMessage({
+            content: '!list add "Test Card"',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['add']);
         expect(msg.reply).toHaveBeenCalledWith(
             expect.stringContaining('Include a price')
         );
     });
 });
 
-describe('!list creates active listing', () => {
-    it('creates an active listing in the database', async () => {
+describe('!list close', () => {
+    it('closes the active list and expires unsold items', async () => {
         const { handleList } = cardShopModule;
+
+        // Create session with items
+        const result = stmts.listSessions.create.run();
+        const sessionId = Number(result.lastInsertRowid);
+        stmts.listSessions.setMessageId.run('session_msg_1', sessionId);
+        stmts.cardListings.createWithSession.run('Card A', 1000, null, 'active', sessionId);
+        stmts.cardListings.createWithSession.run('Card B', 2000, null, 'active', sessionId);
+        // Simulate one item already sold
+        stmts.cardListings.createWithSession.run('Card C', 3000, null, 'active', sessionId);
+        stmts.cardListings.markSold.run(3);
+
         const msg = createMockMessage({
-            content: '!list "Pikachu EX" 15.00',
+            content: '!list close',
             roles: [ROLE_AKIVILI],
         });
 
-        await handleList(msg, []);
+        await handleList(msg, ['close']);
 
-        const listing = stmts.cardListings.getById.get(1);
-        expect(listing).toBeTruthy();
-        expect(listing.card_name).toBe('Pikachu EX');
-        expect(listing.price).toBe(1500);
-        expect(listing.status).toBe('active');
-        expect(listing.buyer_discord_id).toBeNull();
+        const session = stmts.listSessions.getById.get(sessionId);
+        expect(session.status).toBe('closed');
+
+        const items = stmts.cardListings.getBySessionId.all(sessionId);
+        expect(items[0].status).toBe('expired');
+        expect(items[1].status).toBe('expired');
+        expect(items[2].status).toBe('sold'); // sold item stays sold
+    });
+
+    it('rejects when no list is open', async () => {
+        const { handleList } = cardShopModule;
+        const msg = createMockMessage({
+            content: '!list close',
+            roles: [ROLE_AKIVILI],
+        });
+
+        await handleList(msg, ['close']);
+        expect(msg.reply).toHaveBeenCalledWith(
+            expect.stringContaining('No list is open')
+        );
     });
 });
 
@@ -367,6 +486,64 @@ describe('expiry timer', () => {
 // =========================================================================
 // DB operations
 // =========================================================================
+
+// =========================================================================
+// List session DB operations
+// =========================================================================
+
+describe('list session DB operations', () => {
+    it('creates and retrieves active session', () => {
+        stmts.listSessions.create.run();
+        const session = stmts.listSessions.getActive.get();
+        expect(session).toBeTruthy();
+        expect(session.status).toBe('open');
+    });
+
+    it('creates items linked to a session', () => {
+        const result = stmts.listSessions.create.run();
+        const sessionId = Number(result.lastInsertRowid);
+
+        stmts.cardListings.createWithSession.run('Card A', 1000, null, 'active', sessionId);
+        stmts.cardListings.createWithSession.run('Card B', 2000, null, 'active', sessionId);
+
+        const items = stmts.cardListings.getBySessionId.all(sessionId);
+        expect(items).toHaveLength(2);
+        expect(items[0].card_name).toBe('Card A');
+        expect(items[1].card_name).toBe('Card B');
+        expect(items[0].list_session_id).toBe(sessionId);
+    });
+
+    it('expires unsold items by session ID', () => {
+        const result = stmts.listSessions.create.run();
+        const sessionId = Number(result.lastInsertRowid);
+
+        stmts.cardListings.createWithSession.run('Active', 1000, null, 'active', sessionId);
+        stmts.cardListings.createWithSession.run('Reserved', 2000, 'buyer1', 'reserved', sessionId);
+        stmts.cardListings.createWithSession.run('Sold', 3000, null, 'active', sessionId);
+        stmts.cardListings.markSold.run(3);
+
+        stmts.cardListings.expireBySessionId.run(sessionId);
+
+        expect(stmts.cardListings.getById.get(1).status).toBe('expired');
+        expect(stmts.cardListings.getById.get(2).status).toBe('expired');
+        expect(stmts.cardListings.getById.get(3).status).toBe('sold');
+    });
+
+    it('closes a session', () => {
+        const result = stmts.listSessions.create.run();
+        const sessionId = Number(result.lastInsertRowid);
+
+        stmts.listSessions.close.run(sessionId);
+        const session = stmts.listSessions.getById.get(sessionId);
+        expect(session.status).toBe('closed');
+        expect(session.closed_at).toBeTruthy();
+    });
+
+    it('getActive returns null when no open session', () => {
+        const session = stmts.listSessions.getActive.get();
+        expect(session).toBeUndefined();
+    });
+});
 
 describe('card listing DB operations', () => {
     it('creates and retrieves by ID', () => {

@@ -12,11 +12,11 @@
 import { EmbedBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
-import { db, purchases, battles, cardListings, discordLinks } from '../db.js';
+import { db, purchases, battles, cardListings, listSessions, discordLinks } from '../db.js';
 import { client, sendToChannel, sendEmbed, getMember, getGuild, findMemberByUsername, addRole, hasRole } from '../discord.js';
 import { addToQueue } from '../commands/queue.js';
 import { updateBattleMessage } from '../commands/battle.js';
-import { clearExpiryTimer, updateListingEmbed } from '../commands/card-shop.js';
+import { clearExpiryTimer, updateListingEmbed, updateListSessionEmbed } from '../commands/card-shop.js';
 import { addRevenue } from '../community-goals.js';
 import { recordShipping } from '../shipping.js';
 import { recordPullPurchase } from '../commands/pull.js';
@@ -397,7 +397,14 @@ async function checkCardSalePayment(session, discordUserId, lineItems = []) {
     clearExpiryTimer(listingId);
 
     const updated = cardListings.getById.get(listingId);
-    await updateListingEmbed(updated);
+
+    // Update the appropriate embed — list session or standalone
+    if (updated.list_session_id) {
+        const session = listSessions.getById.get(updated.list_session_id);
+        if (session) await updateListSessionEmbed(session);
+    } else {
+        await updateListingEmbed(updated);
+    }
 
     // Update the buyer's DM in place to show purchase confirmed
     if (discordUserId && listing.buyer_dm_message_id) {

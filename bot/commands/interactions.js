@@ -20,8 +20,8 @@
 import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from 'discord.js';
 import Stripe from 'stripe';
 import config from '../config.js';
-import { purchases, cardListings, battles, giveaways } from '../db.js';
-import { startExpiryTimer, updateListingEmbed } from './card-shop.js';
+import { purchases, cardListings, listSessions, battles, giveaways } from '../db.js';
+import { startExpiryTimer, updateListingEmbed, updateListSessionEmbed } from './card-shop.js';
 import { handleGiveawayEntry } from './giveaway.js';
 import {
     hasShippingCoveredByDiscordId,
@@ -344,4 +344,58 @@ async function handlePullBuy(interaction, listingId) {
     });
 }
 
-export { handleButtonInteraction, handleModalSubmit };
+/**
+ * Route select menu interactions by customId prefix.
+ */
+async function handleSelectMenuInteraction(interaction) {
+    const customId = interaction.customId;
+
+    if (customId.startsWith('list-buy-')) {
+        const sessionId = Number(customId.replace('list-buy-', ''));
+        const listingId = Number(interaction.values[0]);
+        return handleListBuy(interaction, sessionId, listingId);
+    }
+}
+
+/**
+ * List session select menu handler — reserve a card and provide checkout.
+ */
+async function handleListBuy(interaction, sessionId, listingId) {
+    const discordUserId = interaction.user.id;
+
+    await interaction.deferReply({ ephemeral: true });
+
+    const listing = cardListings.getById.get(listingId);
+    if (!listing || listing.status !== 'active' || listing.list_session_id !== sessionId) {
+        return interaction.editReply({ content: 'This card is no longer available.' });
+    }
+
+    // Reserve for buyer (atomic — only one user can win the race)
+    const result = cardListings.reserveForBuyer.run(discordUserId, listingId);
+    if (result.changes === 0) {
+        return interaction.editReply({ content: 'This card is already being purchased by someone else.' });
+    }
+
+    // Update the summary embed (removes this item from select menu, shows reserved)
+    const session = listSessions.getById.get(sessionId);
+    if (session) {
+        await updateListSessionEmbed(session);
+    }
+
+    // Start 30-min expiry timer
+    startExpiryTimer(listingId);
+
+    // Send checkout link
+    const covered = hasShippingCoveredByDiscordId(discordUserId);
+    const checkoutUrl = buildCheckoutUrl(`card-shop/checkout/${listingId}`, discordUserId);
+
+    const shippingNote = covered
+        ? '✅ Shipping already covered this period!'
+        : `📦 Includes ${formatShippingRate(getShippingLabel(discordUserId).rate)} shipping`;
+
+    await interaction.editReply({
+        content: `🃏 **${listing.card_name}** — $${(listing.price / 100).toFixed(2)}\n${shippingNote}\n\n🛒 **[Complete Purchase](${checkoutUrl})**\n\n⏰ Reserved for you — 30 minutes to complete.`,
+    });
+}
+
+export { handleButtonInteraction, handleModalSubmit, handleSelectMenuInteraction };

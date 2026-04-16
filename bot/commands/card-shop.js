@@ -2,14 +2,17 @@
  * Card Shop System — Individual card sales via Discord.
  *
  * Commands:
- *   !sell @buyer "Card Name" 25.00 — Reserve a card for a specific buyer (stream sales)
- *   !list "Card Name" 25.00         — List a card for open purchase (passive inventory)
- *   !sold <message_id>              — Manually mark a listing as sold (or reply to listing)
+ *   !sell "Card Name" 25.00          — Open listing (anyone can buy via button)
+ *   !sell @buyer "Card Name" 25.00   — Reserve a card for a specific buyer (stream sales)
+ *   !list open                       — Open a new batch card list session
+ *   !list add "Card Name" 25.00      — Add a card to the active list session
+ *   !list close                      — Close the list, expire unsold items
+ *   !sold <message_id>               — Manually mark a listing as sold (or reply to listing)
  */
 
-import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder } from 'discord.js';
 import config from '../config.js';
-import { cardListings } from '../db.js';
+import { cardListings, listSessions } from '../db.js';
 import { client, getMember } from '../discord.js';
 import { formatShippingRate, getShippingLabel, hasShippingCoveredByDiscordId } from '../shipping.js';
 
@@ -111,6 +114,36 @@ function startExpiryTimer(listingId) {
         const listing = cardListings.getById.get(listingId);
         if (!listing || listing.status !== 'reserved') return;
 
+        // List session items get relisted (back in the dropdown) instead of expired
+        if (listing.list_session_id) {
+            const session = listSessions.getById.get(listing.list_session_id);
+            if (session && session.status === 'open') {
+                cardListings.relistAsActive.run(listingId);
+                await updateListSessionEmbed(session);
+                console.log(`Card listing #${listingId} reservation lapsed — relisted in List #${session.id}`);
+
+                // Update the buyer's DM if present
+                if (listing.buyer_discord_id && listing.buyer_dm_message_id) {
+                    try {
+                        const member = await getMember(listing.buyer_discord_id);
+                        if (member) {
+                            const dm = await member.createDM();
+                            const dmMsg = await dm.messages.fetch(listing.buyer_dm_message_id);
+                            const embed = new EmbedBuilder()
+                                .setTitle('⏰ Reservation Expired')
+                                .setDescription(`Your reservation for **${listing.card_name}** has expired.`)
+                                .setColor(0x95a5a6);
+                            await dmMsg.edit({ embeds: [embed], components: [] });
+                        }
+                    } catch (e) {
+                        console.error(`Failed to update expired DM for listing #${listingId}:`, e.message);
+                    }
+                }
+                return;
+            }
+        }
+
+        // Standalone listing — mark expired as before
         cardListings.markExpired.run(listingId);
 
         const expired = cardListings.getById.get(listingId);
@@ -152,7 +185,39 @@ function clearExpiryTimer(listingId) {
 }
 
 /**
- * !sell @buyer "Card Name" 25.00
+ * Post a standalone active listing with a Buy Now button in #card-shop.
+ * Shared by !sell (no buyer) path.
+ */
+async function postActiveListing(message, cardName, priceCents) {
+    const result = cardListings.create.run(cardName, priceCents, null, 'active');
+    const listingId = Number(result.lastInsertRowid);
+
+    const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+    if (!channel) {
+        return message.reply('Card shop channel not found. Check config.');
+    }
+
+    const listing = cardListings.getById.get(listingId);
+    const embed = buildListingEmbed(listing);
+
+    const buyButton = new ButtonBuilder()
+        .setCustomId(`card-buy-${listingId}`)
+        .setLabel('Buy Now')
+        .setStyle(ButtonStyle.Primary)
+        .setEmoji('🛒');
+
+    const row = new ActionRowBuilder().addComponents(buyButton);
+    const msg = await channel.send({ embeds: [embed], components: [row] });
+    cardListings.setMessageId.run(msg.id, listingId);
+
+    if (message.channel.id !== channel.id) {
+        await message.channel.send(`✅ Listed **${cardName}** for ${formatPrice(priceCents)} in <#${config.CHANNELS.CARD_SHOP}>.`);
+    }
+}
+
+/**
+ * !sell "Card Name" 25.00          — open listing (anyone can buy)
+ * !sell @buyer "Card Name" 25.00   — reserved listing for a specific buyer
  */
 async function handleSell(message, args) {
     if (!message.member.roles.cache.has(config.ROLES.AKIVILI)) {
@@ -160,15 +225,12 @@ async function handleSell(message, args) {
     }
 
     const buyer = message.mentions.users.first();
-    if (!buyer) {
-        return message.reply('Usage: `!sell @buyer "Card Name" 25.00`');
-    }
 
     // Parse quoted card name
     const fullText = message.content;
     const nameMatch = fullText.match(/"([^"]+)"/);
     if (!nameMatch) {
-        return message.reply('Card name must be in quotes: `!sell @buyer "Card Name" 25.00`');
+        return message.reply('Card name must be in quotes: `!sell "Card Name" 25.00` or `!sell @buyer "Card Name" 25.00`');
     }
     const cardName = nameMatch[1];
 
@@ -176,7 +238,7 @@ async function handleSell(message, args) {
     const afterQuote = fullText.slice(fullText.lastIndexOf('"') + 1).trim();
     const priceMatch = afterQuote.match(/([\d]+(?:\.[\d]{1,2})?)/);
     if (!priceMatch) {
-        return message.reply('Include a price: `!sell @buyer "Card Name" 25.00`');
+        return message.reply('Include a price: `!sell "Card Name" 25.00`');
     }
     const priceCents = Math.round(parseFloat(priceMatch[1]) * 100);
 
@@ -184,7 +246,12 @@ async function handleSell(message, args) {
         return message.reply('Price must be greater than zero.');
     }
 
-    // Create reserved listing
+    // No buyer mentioned — post an open listing
+    if (!buyer) {
+        return postActiveListing(message, cardName, priceCents);
+    }
+
+    // Buyer mentioned — reserved listing flow
     const result = cardListings.create.run(cardName, priceCents, buyer.id, 'reserved');
     const listingId = Number(result.lastInsertRowid);
 
@@ -242,19 +309,130 @@ async function handleSell(message, args) {
     }
 }
 
+// =========================================================================
+// List Session — batch listing system
+// =========================================================================
+
 /**
- * !list "Card Name" 25.00
+ * Build the summary embed for a list session.
  */
-async function handleList(message, args) {
-    if (!message.member.roles.cache.has(config.ROLES.AKIVILI)) {
-        return message.reply('Only the server owner can list cards for sale.');
+function buildListSessionEmbed(session, items) {
+    const isOpen = session.status === 'open';
+    const shippingNote = `*Shipping: ${formatShippingRate(config.SHIPPING.DOMESTIC)} US / ${formatShippingRate(config.SHIPPING.INTERNATIONAL)} International (waived if already covered this week/month)*`;
+
+    const lines = items.map((item, i) => {
+        const num = i + 1;
+        const price = formatPrice(item.price);
+        if (item.status === 'sold') {
+            return `${num}. ~~${item.card_name}~~ — ~~${price}~~ SOLD`;
+        }
+        if (item.status === 'reserved') {
+            return `${num}. ${item.card_name} — ${price} 🔒`;
+        }
+        if (item.status === 'expired') {
+            return `${num}. ~~${item.card_name}~~ — ~~${price}~~ EXPIRED`;
+        }
+        return `${num}. ${item.card_name} — ${price}`;
+    });
+
+    const soldCount = items.filter(i => i.status === 'sold').length;
+    const statusLabel = isOpen ? 'OPEN' : 'CLOSED';
+    const color = isOpen ? 0xceff00 : 0x95a5a6;
+
+    const description = (lines.length ? lines.join('\n') : '*No items yet*') +
+        `\n\n*${items.length} item${items.length !== 1 ? 's' : ''} listed${soldCount ? ` • ${soldCount} sold` : ''}*` +
+        (isOpen && items.length ? `\n\n${shippingNote}` : '');
+
+    return new EmbedBuilder()
+        .setTitle(`🗂️ Card List #${session.id} — ${statusLabel}`)
+        .setDescription(description)
+        .setColor(color);
+}
+
+/**
+ * Build the select menu for purchasing items from a list session.
+ * Returns null if no active items remain.
+ */
+function buildListSessionSelectMenu(session, items) {
+    const available = items.filter(i => i.status === 'active');
+    if (!available.length) return null;
+
+    const menu = new StringSelectMenuBuilder()
+        .setCustomId(`list-buy-${session.id}`)
+        .setPlaceholder('Select a card to buy')
+        .addOptions(
+            available.map(item => ({
+                label: `${item.card_name} — ${formatPrice(item.price)}`,
+                value: String(item.id),
+            }))
+        );
+
+    return new ActionRowBuilder().addComponents(menu);
+}
+
+/**
+ * Fetch items, rebuild embed + select menu, and edit the session message in #card-shop.
+ */
+async function updateListSessionEmbed(session) {
+    try {
+        const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+        if (!channel || !session.message_id) return;
+
+        const items = cardListings.getBySessionId.all(session.id);
+        const embed = buildListSessionEmbed(session, items);
+        const menuRow = session.status === 'open' ? buildListSessionSelectMenu(session, items) : null;
+
+        const msg = await channel.messages.fetch(session.message_id);
+        await msg.edit({
+            embeds: [embed],
+            components: menuRow ? [menuRow] : [],
+        });
+    } catch (e) {
+        console.error('Failed to update list session embed:', e.message);
+    }
+}
+
+/**
+ * !list open — create a new list session
+ */
+async function handleListOpen(message) {
+    const existing = listSessions.getActive.get();
+    if (existing) {
+        return message.reply(`A list is already open (List #${existing.id}). Close it first with \`!list close\`.`);
+    }
+
+    const result = listSessions.create.run();
+    const sessionId = Number(result.lastInsertRowid);
+    const session = listSessions.getById.get(sessionId);
+
+    const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
+    if (!channel) {
+        return message.reply('Card shop channel not found. Check config.');
+    }
+
+    const embed = buildListSessionEmbed(session, []);
+    const msg = await channel.send({ embeds: [embed] });
+    listSessions.setMessageId.run(msg.id, sessionId);
+
+    if (message.channel.id !== channel.id) {
+        await message.channel.send(`✅ Opened **Card List #${sessionId}** in <#${config.CHANNELS.CARD_SHOP}>.`);
+    }
+}
+
+/**
+ * !list add "Card Name" 25.00 — add an item to the active list session
+ */
+async function handleListAdd(message) {
+    const session = listSessions.getActive.get();
+    if (!session) {
+        return message.reply('No list is open. Start one with `!list open`.');
     }
 
     // Parse quoted card name
     const fullText = message.content;
     const nameMatch = fullText.match(/"([^"]+)"/);
     if (!nameMatch) {
-        return message.reply('Usage: `!list "Card Name" 25.00`');
+        return message.reply('Usage: `!list add "Card Name" 25.00`');
     }
     const cardName = nameMatch[1];
 
@@ -262,7 +440,7 @@ async function handleList(message, args) {
     const afterQuote = fullText.slice(fullText.lastIndexOf('"') + 1).trim();
     const priceMatch = afterQuote.match(/([\d]+(?:\.[\d]{1,2})?)/);
     if (!priceMatch) {
-        return message.reply('Include a price: `!list "Card Name" 25.00`');
+        return message.reply('Include a price: `!list add "Card Name" 25.00`');
     }
     const priceCents = Math.round(parseFloat(priceMatch[1]) * 100);
 
@@ -270,32 +448,59 @@ async function handleList(message, args) {
         return message.reply('Price must be greater than zero.');
     }
 
-    // Create active listing
-    const result = cardListings.create.run(cardName, priceCents, null, 'active');
-    const listingId = Number(result.lastInsertRowid);
+    // Create listing linked to session
+    cardListings.createWithSession.run(cardName, priceCents, null, 'active', session.id);
 
-    // Post embed in #card-shop
-    const channel = client.channels.cache.get(config.CHANNELS.CARD_SHOP);
-    if (!channel) {
-        return message.reply('Card shop channel not found. Check config.');
+    // Update the summary embed
+    await updateListSessionEmbed(session);
+
+    await message.channel.send(`✅ Added **${cardName}** (${formatPrice(priceCents)}) to List #${session.id}.`);
+}
+
+/**
+ * !list close — close the active list session, expire unsold items
+ */
+async function handleListClose(message) {
+    const session = listSessions.getActive.get();
+    if (!session) {
+        return message.reply('No list is open.');
     }
 
-    const listing = cardListings.getById.get(listingId);
-    const embed = buildListingEmbed(listing);
+    // Clear expiry timers for any reserved items in this session
+    const items = cardListings.getBySessionId.all(session.id);
+    for (const item of items) {
+        if (item.status === 'reserved') {
+            clearExpiryTimer(item.id);
+        }
+    }
 
-    // Add "Buy Now" button for identity-aware checkout
-    const buyButton = new ButtonBuilder()
-        .setCustomId(`card-buy-${listingId}`)
-        .setLabel('Buy Now')
-        .setStyle(ButtonStyle.Primary)
-        .setEmoji('🛒');
+    // Expire all unsold items and close the session
+    cardListings.expireBySessionId.run(session.id);
+    listSessions.close.run(session.id);
 
-    const row = new ActionRowBuilder().addComponents(buyButton);
-    const msg = await channel.send({ embeds: [embed], components: [row] });
-    cardListings.setMessageId.run(msg.id, listingId);
+    // Update the embed to closed state
+    const closed = listSessions.getById.get(session.id);
+    await updateListSessionEmbed(closed);
 
-    if (message.channel.id !== channel.id) {
-        await message.channel.send(`✅ Listed **${cardName}** for ${formatPrice(priceCents)} in <#${config.CHANNELS.CARD_SHOP}>.`);
+    const soldCount = items.filter(i => i.status === 'sold').length;
+    await message.channel.send(`✅ Closed **Card List #${session.id}** — ${soldCount} sold, ${items.length - soldCount} expired.`);
+}
+
+/**
+ * !list open | !list add "Card" 25.00 | !list close
+ */
+async function handleList(message, args) {
+    if (!message.member.roles.cache.has(config.ROLES.AKIVILI)) {
+        return message.reply('Only the server owner can manage card lists.');
+    }
+
+    const sub = args[0]?.toLowerCase();
+    switch (sub) {
+        case 'open':  return handleListOpen(message);
+        case 'add':   return handleListAdd(message);
+        case 'close': return handleListClose(message);
+        default:
+            return message.reply('Usage: `!list open`, `!list add "Card Name" 25.00`, `!list close`');
     }
 }
 
@@ -331,7 +536,14 @@ async function handleSold(message, args) {
     clearExpiryTimer(listing.id);
 
     const updated = cardListings.getById.get(listing.id);
-    await updateListingEmbed(updated);
+
+    // Update the appropriate embed — list session or standalone
+    if (updated.list_session_id) {
+        const session = listSessions.getById.get(updated.list_session_id);
+        if (session) await updateListSessionEmbed(session);
+    } else {
+        await updateListingEmbed(updated);
+    }
 
     await message.channel.send(`✅ **${listing.card_name}** marked as sold.`);
 }
@@ -343,5 +555,6 @@ export {
     startExpiryTimer,
     clearExpiryTimer,
     updateListingEmbed,
+    updateListSessionEmbed,
     expiryTimers as _expiryTimers,
 };

@@ -166,13 +166,15 @@ client.on('messageCreate', async (message) => {
 // =========================================================================
 
 client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isButton() && !interaction.isModalSubmit()) return;
+    if (!interaction.isButton() && !interaction.isModalSubmit() && !interaction.isStringSelectMenu()) return;
 
     try {
-        const { handleButtonInteraction, handleModalSubmit } = await import('./commands/interactions.js');
+        const { handleButtonInteraction, handleModalSubmit, handleSelectMenuInteraction } = await import('./commands/interactions.js');
 
         if (interaction.isButton()) {
             await handleButtonInteraction(interaction);
+        } else if (interaction.isStringSelectMenu()) {
+            await handleSelectMenuInteraction(interaction);
         } else if (interaction.isModalSubmit()) {
             await handleModalSubmit(interaction);
         }

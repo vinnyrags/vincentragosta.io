@@ -175,7 +175,16 @@ export function createTestDb() {
             status TEXT DEFAULT 'active',
             purchase_count INTEGER DEFAULT 0,
             created_at TEXT DEFAULT (datetime('now')),
-            sold_at TEXT
+            sold_at TEXT,
+            list_session_id INTEGER DEFAULT NULL
+        );
+
+        CREATE TABLE IF NOT EXISTS list_sessions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message_id TEXT,
+            status TEXT DEFAULT 'open',
+            created_at TEXT DEFAULT (datetime('now')),
+            closed_at TEXT
         );
     `);
 
@@ -240,11 +249,13 @@ export function buildStmts(db) {
         },
         cardListings: {
             create: db.prepare(`INSERT INTO card_listings (card_name, price, buyer_discord_id, status) VALUES (?, ?, ?, ?)`),
+            createWithSession: db.prepare(`INSERT INTO card_listings (card_name, price, buyer_discord_id, status, list_session_id) VALUES (?, ?, ?, ?, ?)`),
             setMessageId: db.prepare(`UPDATE card_listings SET message_id = ? WHERE id = ?`),
             setStripeSessionId: db.prepare(`UPDATE card_listings SET stripe_session_id = ? WHERE id = ?`),
             getById: db.prepare(`SELECT * FROM card_listings WHERE id = ?`),
             getByMessageId: db.prepare(`SELECT * FROM card_listings WHERE message_id = ?`),
             getByStripeSessionId: db.prepare(`SELECT * FROM card_listings WHERE stripe_session_id = ?`),
+            getBySessionId: db.prepare(`SELECT * FROM card_listings WHERE list_session_id = ? ORDER BY id ASC`),
             markSold: db.prepare(`UPDATE card_listings SET status = 'sold', sold_at = datetime('now') WHERE id = ?`),
             markExpired: db.prepare(`UPDATE card_listings SET status = 'expired' WHERE id = ?`),
             relistAsActive: db.prepare(`UPDATE card_listings SET status = 'active', buyer_discord_id = NULL, stripe_session_id = NULL WHERE id = ?`),
@@ -252,6 +263,14 @@ export function buildStmts(db) {
             incrementPurchaseCount: db.prepare(`UPDATE card_listings SET purchase_count = purchase_count + 1 WHERE id = ?`),
             setBuyerDmMessageId: db.prepare(`UPDATE card_listings SET buyer_dm_message_id = ? WHERE id = ?`),
             reserveForBuyer: db.prepare(`UPDATE card_listings SET status = 'reserved', buyer_discord_id = ? WHERE id = ? AND status = 'active'`),
+            expireBySessionId: db.prepare(`UPDATE card_listings SET status = 'expired' WHERE list_session_id = ? AND status IN ('active', 'reserved')`),
+        },
+        listSessions: {
+            create: db.prepare(`INSERT INTO list_sessions (status) VALUES ('open')`),
+            getActive: db.prepare(`SELECT * FROM list_sessions WHERE status = 'open' ORDER BY created_at DESC LIMIT 1`),
+            getById: db.prepare(`SELECT * FROM list_sessions WHERE id = ?`),
+            setMessageId: db.prepare(`UPDATE list_sessions SET message_id = ? WHERE id = ?`),
+            close: db.prepare(`UPDATE list_sessions SET status = 'closed', closed_at = datetime('now') WHERE id = ?`),
         },
         goals: {
             get: db.prepare(`SELECT * FROM community_goals WHERE id = 1`),
