@@ -226,7 +226,7 @@ The project uses a Bedrock-inspired structure where WordPress core is installed 
 ### 3.1 Bare Git Repository
 
 ```bash
-git init --bare /var/repo/vincentragosta.git
+git init --bare /var/repo/vincentragosta.git  # Note: GitHub repo renamed to vincentragosta.io; bare repo on server kept as-is
 ```
 
 ### 3.2 Post-Receive Hook
@@ -250,6 +250,9 @@ The hook:
 
 ```bash
 git remote add production root@174.138.70.29:/var/repo/vincentragosta.git
+
+# GitHub origin (repo was renamed from vincentragosta → vincentragosta.io):
+git remote set-url origin git@github.com:vinnyrags/vincentragosta.io.git
 ```
 
 ### Deployment Commands
