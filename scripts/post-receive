@@ -5,6 +5,20 @@ set -e
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
+# Post deploy notifications to #dev-log via Discord REST API.
+# Reads bot token from the Nous bot's .env file.
+notify_discord() {
+    local title="$1" description="$2" color="$3"
+    local token channel_id="1489513907025346630"
+    token=$(grep '^DISCORD_BOT_TOKEN=' /opt/nous-bot/.env 2>/dev/null | cut -d'=' -f2-)
+    [ -z "$token" ] && return 0
+    curl -s -X POST "https://discord.com/api/v10/channels/${channel_id}/messages" \
+        -H "Authorization: Bot ${token}" \
+        -H "Content-Type: application/json" \
+        -d "{\"embeds\":[{\"title\":\"${title}\",\"description\":\"${description}\",\"color\":${color},\"timestamp\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}]}" \
+        > /dev/null 2>&1 || true
+}
+
 while read oldrev newrev refname; do
     branch=$(git rev-parse --symbolic --abbrev-ref "$refname")
 
@@ -29,10 +43,7 @@ while read oldrev newrev refname; do
     echo "============================================"
 
     # Notify #dev-log: git push received
-    node "$DEPLOY_DIR/bot/notify-deploy.js" \
-        --status=push \
-        --branch="$branch" \
-        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG} (${FILE_COUNT} files)" 2>/dev/null || true
+    notify_discord "📥 Push to ${branch}" "\`${COMMIT_SHORT}\` ${COMMIT_MSG} (${FILE_COUNT} files)" 9807270
 
     # Back up env config (not in repo)
     cp "$DEPLOY_DIR/wp-config-env.php" /tmp/wp-config-env-${ENV_NAME}.php 2>/dev/null || true
@@ -99,52 +110,6 @@ while read oldrev newrev refname; do
     npm ci --no-audit --no-fund
     npm run build
 
-    # Install bot dependencies and run tests
-    if [ -d "$DEPLOY_DIR/bot" ]; then
-        echo ">> Installing bot dependencies..."
-        cd "$DEPLOY_DIR/bot"
-        npm ci --no-audit --no-fund
-
-        # Run bot tests BEFORE restarting
-        echo ">> Running bot tests..."
-        if npx vitest run --reporter=verbose 2>&1 | tee /tmp/bot-test-output-${ENV_NAME}.txt; then
-            # Tests passed — safe to restart
-            PASS_COUNT=$(grep -oP '\d+ passed' /tmp/bot-test-output-${ENV_NAME}.txt | head -1 || echo "")
-            echo ">> Bot tests passed${PASS_COUNT:+ ($PASS_COUNT)}"
-
-            echo ">> Restarting Nous bot..."
-            if [ "$ENV_NAME" = "staging" ]; then
-                systemctl restart nous-bot-staging 2>/dev/null || true
-            elif [ "$ENV_NAME" = "production" ]; then
-                systemctl restart nous-bot 2>/dev/null || true
-            fi
-        else
-            # Tests failed — do NOT restart the bot
-            echo ""
-            echo "============================================"
-            echo "⚠️  BOT TESTS FAILED — bot NOT restarted!"
-            echo "    Previous version is still running."
-            echo "============================================"
-            echo ""
-            FAIL_TAIL=$(tail -20 /tmp/bot-test-output-${ENV_NAME}.txt)
-            node "$DEPLOY_DIR/bot/notify-deploy.js" \
-                --status=tests-failed \
-                --branch="$branch" \
-                --env="$ENV_NAME" \
-                --output="$FAIL_TAIL" 2>/dev/null || true
-
-            # Skip the success notification — we already posted the failure
-            echo ">> Flushing caches..."
-            wp cache flush --path=$WP_PATH --allow-root --quiet 2>/dev/null || true
-            chown -R www-data:www-data "$DEPLOY_DIR"
-
-            echo "============================================"
-            echo "Deployed $branch to $ENV_NAME (bot NOT restarted)"
-            echo "============================================"
-            continue
-        fi
-    fi
-
     echo ">> Flushing caches..."
     wp cache flush --path=$WP_PATH --allow-root --quiet 2>/dev/null || true
 
@@ -152,11 +117,7 @@ while read oldrev newrev refname; do
     chown -R www-data:www-data "$DEPLOY_DIR"
 
     # Notify #dev-log: deployment success
-    node "$DEPLOY_DIR/bot/notify-deploy.js" \
-        --status=success \
-        --branch="$branch" \
-        --env="$ENV_NAME" \
-        --summary="\`${COMMIT_SHORT}\` ${COMMIT_MSG} — ${PASS_COUNT:-tests passed}" 2>/dev/null || true
+    notify_discord "✅ Deployed to ${ENV_NAME}" "\`${COMMIT_SHORT}\` ${COMMIT_MSG}" 13631232
 
     echo "============================================"
     echo "Deployed $branch to $ENV_NAME successfully!"

@@ -1,6 +1,6 @@
 # Shop Deployment Guide
 
-Deploying the card shop and Nous bot to staging and production. The shop uses Stripe Checkout for payments. The Nous bot handles Discord notifications, role promotion, and livestream commands.
+Deploying the card shop to staging and production. The shop uses Stripe Checkout for payments. The Nous bot (Discord notifications, role promotion, livestream commands) is now managed separately in the [itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV) repository.
 
 **Current state (2026-04-02):** Production is live with Stripe in **test mode**. The switch to live mode happens when the business officially launches.
 
@@ -17,7 +17,7 @@ Two separate Stripe webhooks per environment:
 | Webhook | Endpoint | Purpose |
 |---------|----------|---------|
 | **WordPress** | `/wp-json/shop/v1/webhook` | Stock management (decrement on purchase, restore on expiry) |
-| **Bot** | `/bot/webhooks/stripe` | Discord order notifications, role promotion, battle/queue tracking |
+| **Bot** | `/bot/webhooks/stripe` | Discord order notifications, role promotion, battle/queue tracking (managed in itzenzoTTV repo) |
 
 Both listen for: `checkout.session.completed`, `checkout.session.expired`
 
@@ -32,18 +32,9 @@ Each environment needs these constants (in addition to DB, URLs, debug flags):
 define('STRIPE_PUBLISHABLE_KEY', 'pk_test_...');
 define('STRIPE_SECRET_KEY', 'sk_test_...');
 define('STRIPE_WEBHOOK_SECRET', 'whsec_...');       // WordPress webhook signing secret
-
-// Discord bot
-define('DISCORD_BOT_TOKEN', '<token>');
-
-// Bot Stripe webhook (separate from WordPress webhook)
-define('STRIPE_BOT_WEBHOOK_SECRET', 'whsec_...');   // Bot webhook signing secret
-
-// Bot config
-define('SHOP_URL', 'https://vincentragosta.io/shop');
-define('SITE_URL', 'https://vincentragosta.io');
-define('LIVESTREAM_SECRET', 'itzenzo-live');
 ```
+
+Bot-specific secrets (`DISCORD_BOT_TOKEN`, `STRIPE_BOT_WEBHOOK_SECRET`, `SHOP_URL`, `SITE_URL`, `LIVESTREAM_SECRET`) now live in the bot's `.env` file at `/opt/nous-bot/.env`. See the itzenzoTTV repo for details.
 
 ## Deploying Code
 
@@ -52,7 +43,7 @@ make release              # merge develop → main, push both to origin
 git push production main  # deploy to production
 ```
 
-The post-receive hook handles: code checkout, composer install, npm ci + build for both themes, npm ci for bot, and `nous-bot` service restart.
+The post-receive hook handles: code checkout, composer install, npm ci + build for both themes.
 
 ## Syncing Products
 
@@ -74,6 +65,8 @@ Flags:
 
 This creates/updates product CPT posts with correct price IDs, stock, images, and ACF fields from Stripe.
 
+The full sync pipeline (Google Sheets → Stripe → WordPress) is now handled via the bot's `!sync` command in Discord, or via the itzenzoTTV repo's scripts directly.
+
 ## Switching to Stripe Live Mode
 
 When the business officially launches:
@@ -84,28 +77,21 @@ When the business officially launches:
 3. Create new webhooks in Stripe (live mode) — same endpoints, new signing secrets:
    - WordPress: `https://vincentragosta.io/wp-json/shop/v1/webhook`
    - Bot: `https://vincentragosta.io/bot/webhooks/stripe`
-4. Update `STRIPE_WEBHOOK_SECRET` and `STRIPE_BOT_WEBHOOK_SECRET` in wp-config
-5. Re-run `pull-products.php` to sync live mode products
+4. Update `STRIPE_WEBHOOK_SECRET` in `wp-config-env.php`
+5. Update `STRIPE_BOT_WEBHOOK_SECRET` in `/opt/nous-bot/.env`
+6. Re-run `pull-products.php` to sync live mode products
 
 ## Bot Service
 
-The Nous bot runs as a systemd service on the same droplet:
+The Nous bot is deployed from the [itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV) repository to `/opt/nous-bot/` on the same server. See that repo's documentation for service management, deployment, and configuration.
+
+Quick reference:
 
 ```bash
-# Check status
 systemctl status nous-bot
-
-# View logs
 journalctl -u nous-bot -f
-
-# Restart
-systemctl restart nous-bot
-
-# Health check
 curl https://vincentragosta.io/bot/health
 ```
-
-**Port 3100:** Both staging and production use port 3100. Only one can run at a time. The staging bot (`nous-bot-staging`) is disabled in production.
 
 ## Stripe Test Cards
 
@@ -124,7 +110,7 @@ Use any future expiry date, any 3-digit CVC, and any billing ZIP.
 ### Webhook not firing
 - Verify the endpoint URL is correct in Stripe Dashboard
 - Check webhook logs: Stripe Dashboard → Developers → Webhooks → select endpoint → Recent deliveries
-- Ensure the signing secret in `wp-config-env.php` matches Stripe (WordPress and bot have separate secrets)
+- Ensure the signing secret matches (WordPress secret in `wp-config-env.php`, bot secret in `/opt/nous-bot/.env`)
 
 ### 500 error on checkout endpoint
 - Check that `STRIPE_SECRET_KEY` is defined in `wp-config-env.php`
@@ -136,9 +122,3 @@ Use any future expiry date, any 3-digit CVC, and any billing ZIP.
 - Run `composer dump-autoload` on the server if classes aren't found
 - Run `npm run build` on the server if assets are missing
 - Check ACF field groups are synced: WP admin → ACF → check for "Sync available" badge
-
-### Bot won't start (EADDRINUSE)
-- Another process is using port 3100
-- Check: `ss -tlnp | grep 3100`
-- Kill the stale process or stop the conflicting service
-- Common cause: staging bot still running after a deploy triggered its restart via post-receive hook

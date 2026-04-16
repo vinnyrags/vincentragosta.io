@@ -2,12 +2,7 @@
 auth.json
 wp-config-env.php
 TODO.md
-scripts/shop/node_modules
 scripts/.publish
-bot/node_modules
-bot/data.db
-bot/data.db-wal
-bot/data.db-shm
 
 .idea
 .DS_Store

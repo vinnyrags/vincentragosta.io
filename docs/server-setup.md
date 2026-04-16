@@ -265,13 +265,33 @@ git push production main
 git push production develop
 ```
 
+### 3.4 Nous Bot (Separate Deployment)
+
+The Nous Discord bot was extracted to the [itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV) repository and deploys independently via its own bare repo:
+
+```bash
+git init --bare /var/repo/itzenzoTTV.git
+```
+
+| Branch | Deploys to | Service |
+|--------|-----------|---------|
+| main | /opt/nous-bot | nous-bot |
+| develop | /opt/nous-bot-staging | nous-bot-staging |
+
+The bot's post-receive hook (`/var/repo/itzenzoTTV.git/hooks/post-receive`) installs deps, runs tests, and restarts the systemd service on success. Configuration is via `.env` files (not `wp-config-env.php`).
+
+Nginx proxies `/bot/` to `localhost:3100` — no Nginx changes needed regardless of deploy path.
+
 ### Key Files on Server
 
 | File | Purpose |
 |------|---------|
-| `/var/repo/vincentragosta.git/` | Bare git repository |
+| `/var/repo/vincentragosta.git/` | Bare git repository (WordPress) |
+| `/var/repo/itzenzoTTV.git/` | Bare git repository (Nous bot) |
 | `/var/www/vincentragosta.io/wp-config-env.php` | Production DB/URL/debug config |
 | `/var/www/vincentragosta.dev/wp-config-env.php` | Staging DB/URL/debug config |
+| `/opt/nous-bot/.env` | Production bot secrets |
+| `/opt/nous-bot-staging/.env` | Staging bot secrets |
 | `/root/.composer-auth.json` | ACF Pro license for Composer |
 | `/root/.wp-credentials` | All passwords (root-only readable) |
 
