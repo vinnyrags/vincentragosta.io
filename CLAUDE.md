@@ -10,6 +10,8 @@ This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a 
 - **Parent theme** (`wp-content/themes/ix/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
+The **Nous Discord bot** (order notifications, pack battles, stream alerts) was extracted to a separate repository ([itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/itzenzoTTV.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code.
+
 - **PHP 8.4+** with strict types
 - **PHP-DI 7.0** for dependency injection (autowiring-first, owned by Mythus)
 - **Timber 2.x / Twig** for templating
@@ -279,6 +281,9 @@ From the project root:
 | `make pull-production` | Pull production database + uploads to local DDEV |
 | `make pull-patterns` | Export block patterns from production to PHP files |
 | `make pull-patterns-staging` | Export block patterns from staging to PHP files |
+| `make pull-products` | Sync Stripe products to local WordPress (as drafts) |
+| `make pull-products-publish` | Sync Stripe products to local WordPress (auto-publish) |
+| `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
 
 From a theme directory:
 
