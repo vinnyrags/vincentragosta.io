@@ -1,6 +1,5 @@
 ## HIGH PRIORITY
 - what are cool things we can do in twitch (obs) to prepare for our twitch stream (both gaming and card night)
-- what are cool things we can do in tiktok studio to prepare for gaming
 - draft we are back announcement
 - add tiktok feed to shop page via same plugin smashballoon that we use for instagram
 - finish sign up with carter pulse, need creator hub code
@@ -12,23 +11,17 @@
 - talk with agent about how i have roughly 1K cards ready to be sold spanning from pokemon, anime and mature single cards, ranging from $1-$1000, how can we factor this into our livestream planning, I assume !sell will work fine for this
 - does my discord doc accurately reflect the current state of my discord? please do a deep dive on current discord configuration soup to nuts and update what needs to be updated in discord
 - talk about potential to only be able to stream from ipad out of the gate, what would that look like for the business, and if we cant use something like restream to simulcast what platform should I be streaming on?
-- add note under shop that i sell card singles, playmats and binders as well, message/join us in discord (linked with invite link) for more information
+- add note under shop that i sell card singles, playmats and binders as well, message/join us in discord (linked with invite link) for more information. Also add shipping info: "📦 Domestic shipping: $10 flat rate, 5-7 business days. International: $25, 7-14 business days. Orders ship weekly."
 - talk about table strategy, what to display for the varying parts of the livestream, be sure to update relevant documents in akivili
-- sort by language as additional dropdown in products block, add language in spreadsheet, and update on production
-
-- now that shop and functionality is pretty well built and we have real product data in the shop and in stripe, what can we do to start to work on a livestream strategy with what we have available, part two to this is a content strategy, make sure to do a cost assessment with what we have available, and what we need to do to put our best foot forward in content and livestreaming.
+- sort by language as additional dropdown in products block
 - new image for one piece vol 5
 
-- future proof the db sizing, a year from now will i run into issues with all of my data from these commands in the sqlite db
-- consider abstracting itzenzottv functionality (shop + bot) into its own repo. something to keep in mind, down the line I feel like I will create a shop.vincentragosta.io subdomain and host my shop there, when doing this, I would create an itzenzottv theme on a separate project install. i would want the naming of this abstraction that I am asking of you to make sense here, when we pull the code in for this new project it should all make sense within the context of this new website and the context of its current location (vincentragosta.io theme)
-- update messaging on pack battle, should catch no names entered or email entered
-- !queue not working correctly
-- !list allowed both smoky and chai to purchase! what the heck!
+- consider reworking coupons to support multiple coupons at once (we actually may not want to do this)
 
-- we need to think about the purpose behind #card-night-queue in general, perhaps we change name of card-night-queue to queue-log, and keep it truly a channel for nightly queues and duck race winners, thoughts on this? please cross reference our discord.md doc in akivili/business
-- thank you page messaging, says they will receive an email from stripe, can we update this messaging to be much more informative around our system.
-- I feel like our shipping language needs to be updated, only under rare circumstance now do we ship to folks at the end of a stream, we made the shipping system proactive (and only one case is reactive), the language should reflect this-- we dont need to go out of our way to say the shipping is proactive as that is the natural default thinking, we can maybe give a shoutout to the one instance where folks would pay shipping at the end of a livestream . please re-acclimate yourself with our system in akivili/business, and make sure the shipping language reflects what I just said here, if it doesnt lets talk it through before you proceed to make any updates
-- can we add a YOU ARE CONNECTED TO DISCORD (or maybe you are in livestream mode, or you are viewing the livestream shop) bit somewhere in the products block, perhaps above everything in the block markup, this will tell users that they are connected and synced (is there an opportunity here to show more useful information and perhaps send them back to discord to complete any linking or processes), what do you think about this idea and how would you implement it?
+- can you do a deep dive over the current itzenzottv repo codebase and see if there is stale data in the akivili/business documentation please, I saw a reference to ?live and &token, those I believe are no longer relevant
+- can we change !capture command to !moment instead, and updated all docs and discord messaging and tests accordingly
+- how can we test the behavior we just created around shipping (both in the code and in discord), do we need to update any akivili documentation still? do we need additional messaging on the shop page maybe (vincentragosta.io/shop/)? what about the critical path tests?
+- are we testing commands like waive and refund at all in any of our critical path tests in discord? id like to try to cover all commands in some real world scenario, you can ask me questions if you need context on how my livestreams would operate and the scenarios i could find myself in if needed
 
 ## MEDIUM PRIORITY
 - switch stripe over to live mode

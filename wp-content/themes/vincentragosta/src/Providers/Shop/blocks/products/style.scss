@@ -260,3 +260,31 @@
     opacity: 0.6;
   }
 }
+
+// ==========================================================================
+// Shipping Info
+// ==========================================================================
+
+.shop-shipping-info {
+  margin-block-start: var(--wp--preset--spacing--50);
+  padding: var(--wp--preset--spacing--40);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: var(--wp--preset--font-size--small);
+    color: var(--wp--preset--color--muted, #888);
+    line-height: 1.6;
+  }
+
+  a {
+    color: var(--wp--preset--color--nous-accent, #ceff00);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
