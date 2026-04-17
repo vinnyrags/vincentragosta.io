@@ -69,6 +69,29 @@
 }
 
 // ==========================================================================
+// Search All Months Link (shown when client-side search has no results)
+// ==========================================================================
+
+.blog-grid__search-all-container {
+  display: none;
+  text-align: center;
+  margin-top: var(--wp--preset--spacing--30);
+}
+
+.blog-grid__search-all {
+  color: var(--wp--preset--color--nous-red);
+  font-family: var(--wp--preset--font-family--fira-code);
+  font-size: var(--wp--preset--font-size--10);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ==========================================================================
 // Hidden State (search/tag filtering)
 // ==========================================================================
 
@@ -78,6 +101,8 @@
 
 .blog-grid__empty {
   display: none;
+  grid-column: 1 / -1;
+  text-align: center;
   color: var(--color-text-muted);
   font-size: var(--wp--preset--font-size--30);
   font-family: var(--wp--preset--font-family--fira-code);

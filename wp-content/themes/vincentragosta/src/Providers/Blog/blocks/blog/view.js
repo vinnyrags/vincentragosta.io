@@ -38,12 +38,38 @@ function initBlog() {
             });
         }
 
-        // Search filter
+        // Search filter with global search fallback
         const searchInput = block.querySelector('.blog-search__input');
+        const searchAllContainer = grid.querySelector('.blog-grid__search-all-container');
+        const searchAllLink = block.querySelector('.blog-grid__search-all');
+
+        function updateSearchAllLink(query) {
+            if (!searchAllContainer || !searchAllLink) return;
+            const hasQuery = query.trim().length > 0;
+            const noVisibleCards = !grid.querySelector(`${CARD}:not([aria-hidden="true"])`);
+            if (hasQuery && noVisibleCards) {
+                const url = new URL(window.location.origin);
+                url.searchParams.set('s', query.trim());
+                url.searchParams.set('post_type', 'post');
+                searchAllLink.href = url.toString();
+                searchAllContainer.style.display = 'block';
+            } else {
+                searchAllContainer.style.display = 'none';
+            }
+        }
+
         if (searchInput) {
             searchInput.addEventListener('input', () => {
                 filterBySearch(grid, CARD, searchInput.value, HIDDEN_ATTRS);
                 reveal.reinit();
+                updateSearchAllLink(searchInput.value);
+            });
+
+            // Enter key triggers global search when no local results
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && searchAllContainer && searchAllContainer.style.display !== 'none') {
+                    window.location.href = searchAllLink.href;
+                }
             });
         }
 

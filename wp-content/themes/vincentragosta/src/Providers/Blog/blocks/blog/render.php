@@ -78,7 +78,7 @@ if ($mode === 'all') {
 
     $showToolbar = true;
 
-    // Collect unique tags from this month's posts.
+    // Collect unique tags from the loaded posts.
     $tags = [];
     foreach ($posts as $post) {
         foreach ($post->tags() as $term) {

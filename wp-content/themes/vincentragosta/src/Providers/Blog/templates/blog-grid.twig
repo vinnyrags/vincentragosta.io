@@ -11,7 +11,12 @@
     {% for post in posts %}
       {% include 'post-card.twig' with { post: post, signal_number: ((pagination.current_page - 1) * posts|length) + loop.index } %}
     {% endfor %}
-    <p class="blog-grid__empty" aria-live="polite">NO SIGNALS MATCH YOUR QUERY</p>
+    <div class="blog-grid__empty" aria-live="polite">
+      <p class="blog-grid__empty-text">NO SIGNALS MATCH YOUR QUERY</p>
+      <p class="blog-grid__search-all-container">
+        <a href="#" class="blog-grid__search-all">SEARCH ALL MONTHS</a>
+      </p>
+    </div>
   </div>
 
   {% if not show_toolbar %}
