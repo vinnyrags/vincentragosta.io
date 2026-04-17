@@ -14,7 +14,9 @@
     <p class="blog-grid__empty" aria-live="polite">NO SIGNALS MATCH YOUR QUERY</p>
   </div>
 
-  {% include 'pagination.twig' with { pagination: pagination } %}
+  {% if not show_toolbar %}
+    {% include 'pagination.twig' with { pagination: pagination } %}
+  {% endif %}
 
   <p class="nous-signal-end" aria-label="End of posts">END OF TRANSMISSION</p>
 {% else %}

@@ -14,6 +14,15 @@
             />
         </div>
         <div class="blog-toolbar__controls">
+            {% if month_options is defined and month_options|length > 1 %}
+                <div class="blog-month">
+                    {% include 'dropdown.twig' with {
+                        name: 'month',
+                        options: month_options,
+                        selected: active_month
+                    } only %}
+                </div>
+            {% endif %}
             {% if tags is defined and tags|length > 0 %}
                 <div class="blog-filter">
                     {% set tag_options = [{ value: 'all', label: 'All Tags' }] %}

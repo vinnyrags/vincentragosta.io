@@ -27,6 +27,17 @@ function initBlog() {
 
         const reveal = createScrollReveal(block, grid, CARD);
 
+        // Month navigation (server-side — triggers page reload)
+        const monthDropdown = block.querySelector('[data-dropdown="month"]');
+        if (monthDropdown) {
+            monthDropdown.addEventListener('change', (e) => {
+                const url = new URL(window.location.href);
+                url.searchParams.set('month', e.detail.value);
+                url.searchParams.delete('tag');
+                window.location.href = url.toString();
+            });
+        }
+
         // Search filter
         const searchInput = block.querySelector('.blog-search__input');
         if (searchInput) {
