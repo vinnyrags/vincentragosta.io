@@ -1,6 +1,10 @@
 {% extends "base.twig" %}
 
 {% block main %}
+    {% if schema is defined %}
+        <script type="application/ld+json">{{ schema | raw }}</script>
+    {% endif %}
+
     <article class="site-content blog-post">
         {{ post.content | raw }}
 

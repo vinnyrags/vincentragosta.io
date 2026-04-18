@@ -4,7 +4,7 @@
   </div>
 
   <div class="nous-signal-card__header">
-    <span class="nous-signal-card__id">SIGNAL #{{ '%04d'|format(signal_number|default(1)) }} — {{ post.date('Y.m.d') }}</span>
+    <time class="nous-signal-card__id" datetime="{{ post.date('c') }}">SIGNAL #{{ '%04d'|format(signal_number|default(1)) }} — {{ post.date('Y.m.d') }}</time>
     <span class="nous-signal-card__status-dot"></span>
   </div>
 
