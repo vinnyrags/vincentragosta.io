@@ -38,7 +38,7 @@ $schema->add([
     'dateModified' => get_the_modified_date('c', $timber_post->ID),
     'author' => $schema->person(),
     'publisher' => $schema->organization(),
-    'description' => wp_strip_all_tags((string) $timber_post->preview()->length(30)),
+    'description' => wp_strip_all_tags($timber_post->post_excerpt ?: wp_trim_words(wp_strip_all_tags($timber_post->post_content), 30)),
     'mainEntityOfPage' => get_permalink($timber_post->ID),
     'wordCount' => $wordCount,
     'timeRequired' => "PT{$readingMinutes}M",

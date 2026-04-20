@@ -29,7 +29,7 @@ $creativeWork = [
     '@context' => 'https://schema.org',
     '@type' => 'CreativeWork',
     'name' => $timber_post->title(),
-    'description' => wp_strip_all_tags((string) $timber_post->preview()->length(30)),
+    'description' => wp_strip_all_tags($timber_post->post_excerpt ?: wp_trim_words(wp_strip_all_tags($timber_post->post_content), 30)),
     'url' => get_permalink($timber_post->ID),
     'creator' => (new SchemaBuilderService())->person(),
 ];
