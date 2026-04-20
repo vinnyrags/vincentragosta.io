@@ -1,0 +1,240 @@
+{
+    "key": "group_itzenzo_settings",
+    "title": "itzenzo.tv Settings",
+    "fields": [
+        {
+            "key": "field_itzenzo_tab_general",
+            "label": "General",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_site_title",
+            "label": "Site Title",
+            "name": "itzenzo_site_title",
+            "type": "text",
+            "default_value": "itzenzo.tv",
+            "required": 1
+        },
+        {
+            "key": "field_itzenzo_site_tagline",
+            "label": "Tagline",
+            "name": "itzenzo_site_tagline",
+            "type": "text",
+            "default_value": "Cards. Games. After Dark.",
+            "required": 0
+        },
+        {
+            "key": "field_itzenzo_site_description",
+            "label": "Site Description",
+            "name": "itzenzo_site_description",
+            "type": "textarea",
+            "instructions": "Used in meta description for the homepage.",
+            "default_value": "Trading card shop and streaming community. Pack battles, pull boxes, sealed product, and more.",
+            "rows": 2
+        },
+        {
+            "key": "field_itzenzo_tab_social",
+            "label": "Social Links",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_discord_url",
+            "label": "Discord Invite URL",
+            "name": "itzenzo_discord_url",
+            "type": "url",
+            "default_value": "https://discord.gg/EXqX685TTq"
+        },
+        {
+            "key": "field_itzenzo_twitch_url",
+            "label": "Twitch URL",
+            "name": "itzenzo_twitch_url",
+            "type": "url",
+            "default_value": "https://twitch.tv/itzenzoTTV"
+        },
+        {
+            "key": "field_itzenzo_tiktok_url",
+            "label": "TikTok URL",
+            "name": "itzenzo_tiktok_url",
+            "type": "url",
+            "default_value": "https://tiktok.com/@itzenzoTTV"
+        },
+        {
+            "key": "field_itzenzo_instagram_url",
+            "label": "Instagram URL",
+            "name": "itzenzo_instagram_url",
+            "type": "url",
+            "default_value": "https://instagram.com/itzenzo.TTV"
+        },
+        {
+            "key": "field_itzenzo_youtube_url",
+            "label": "YouTube URL",
+            "name": "itzenzo_youtube_url",
+            "type": "url",
+            "default_value": "https://youtube.com/@itzenzoTTV"
+        },
+        {
+            "key": "field_itzenzo_tab_about",
+            "label": "About Page",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_about_heading",
+            "label": "About Heading",
+            "name": "itzenzo_about_heading",
+            "type": "text",
+            "default_value": "Cards. Games. After Dark."
+        },
+        {
+            "key": "field_itzenzo_about_description",
+            "label": "About Description",
+            "name": "itzenzo_about_description",
+            "type": "wysiwyg",
+            "instructions": "Main about page content. Supports HTML.",
+            "default_value": "<p>itzenzo.tv is a trading card shop and streaming community built around pack openings, pack battles, and live entertainment. We sell sealed Pokemon, anime, and collectible card products through our shop and livestreams.</p>",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "tabs": "visual"
+        },
+        {
+            "key": "field_itzenzo_stream_schedule",
+            "label": "Stream Schedule",
+            "name": "itzenzo_stream_schedule",
+            "type": "repeater",
+            "instructions": "Stream schedule entries displayed on the about page.",
+            "min": 0,
+            "max": 10,
+            "layout": "table",
+            "sub_fields": [
+                {
+                    "key": "field_itzenzo_schedule_days",
+                    "label": "Days",
+                    "name": "days",
+                    "type": "text",
+                    "instructions": "e.g., Monday - Thursday"
+                },
+                {
+                    "key": "field_itzenzo_schedule_description",
+                    "label": "Description",
+                    "name": "description",
+                    "type": "text",
+                    "instructions": "e.g., Card nights (8-10 PM EST) — pack openings, pack battles"
+                }
+            ]
+        },
+        {
+            "key": "field_itzenzo_tab_shipping",
+            "label": "Shipping Page",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_shipping_domestic_rate",
+            "label": "Domestic Rate",
+            "name": "itzenzo_shipping_domestic_rate",
+            "type": "text",
+            "default_value": "$10 flat rate"
+        },
+        {
+            "key": "field_itzenzo_shipping_domestic_delivery",
+            "label": "Domestic Delivery Time",
+            "name": "itzenzo_shipping_domestic_delivery",
+            "type": "text",
+            "default_value": "5-7 business days"
+        },
+        {
+            "key": "field_itzenzo_shipping_domestic_frequency",
+            "label": "Domestic Shipping Frequency",
+            "name": "itzenzo_shipping_domestic_frequency",
+            "type": "text",
+            "default_value": "Orders ship weekly"
+        },
+        {
+            "key": "field_itzenzo_shipping_domestic_note",
+            "label": "Domestic Note",
+            "name": "itzenzo_shipping_domestic_note",
+            "type": "text",
+            "default_value": "One shipping charge covers all purchases within the same week"
+        },
+        {
+            "key": "field_itzenzo_shipping_intl_rate",
+            "label": "International Rate",
+            "name": "itzenzo_shipping_intl_rate",
+            "type": "text",
+            "default_value": "$25 flat rate"
+        },
+        {
+            "key": "field_itzenzo_shipping_intl_delivery",
+            "label": "International Delivery Time",
+            "name": "itzenzo_shipping_intl_delivery",
+            "type": "text",
+            "default_value": "7-14 business days"
+        },
+        {
+            "key": "field_itzenzo_shipping_intl_frequency",
+            "label": "International Shipping Frequency",
+            "name": "itzenzo_shipping_intl_frequency",
+            "type": "text",
+            "default_value": "Orders ship monthly"
+        },
+        {
+            "key": "field_itzenzo_shipping_intl_note",
+            "label": "International Note",
+            "name": "itzenzo_shipping_intl_note",
+            "type": "text",
+            "default_value": "One shipping charge covers all purchases within the same month"
+        },
+        {
+            "key": "field_itzenzo_shipping_intl_countries",
+            "label": "International Countries",
+            "name": "itzenzo_shipping_intl_countries",
+            "type": "text",
+            "default_value": "Currently shipping to US and Canada"
+        },
+        {
+            "key": "field_itzenzo_shipping_how_it_works",
+            "label": "How It Works",
+            "name": "itzenzo_shipping_how_it_works",
+            "type": "wysiwyg",
+            "default_value": "<p>If you've already paid for shipping this period, your next order ships free. We check this automatically at checkout using your email address. You can also sell singles and playmats through our Discord server.</p>",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "tabs": "visual"
+        },
+        {
+            "key": "field_itzenzo_tab_thankyou",
+            "label": "Thank You Page",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_thankyou_heading",
+            "label": "Thank You Heading",
+            "name": "itzenzo_thankyou_heading",
+            "type": "text",
+            "default_value": "Thank you for your order!"
+        },
+        {
+            "key": "field_itzenzo_thankyou_message",
+            "label": "Thank You Message",
+            "name": "itzenzo_thankyou_message",
+            "type": "textarea",
+            "default_value": "Your payment has been processed. You'll receive a confirmation via email and a notification in Discord when your order ships.",
+            "rows": 3
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "itzenzo-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "itzenzoSettings"
+}

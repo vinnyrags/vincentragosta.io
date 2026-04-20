@@ -1,0 +1,9 @@
+{
+    "page_title": "itzenzo.tv Settings",
+    "menu_title": "itzenzo.tv",
+    "menu_slug": "itzenzo-settings",
+    "capability": "edit_posts",
+    "icon_url": "dashicons-store",
+    "position": 30,
+    "redirect": false
+}
