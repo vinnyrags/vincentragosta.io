@@ -6,6 +6,7 @@ namespace ChildTheme\Providers\Shop\Endpoints;
 
 use ChildTheme\Providers\Shop\ProductRepository;
 use ChildTheme\Providers\Shop\Services\StripeService;
+use ChildTheme\Providers\Shop\ShopProvider;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -161,7 +162,7 @@ class CreateCheckoutEndpoint extends Endpoint
             }
         }
 
-        $successUrl = home_url('/shop/thank-you/?session_id={CHECKOUT_SESSION_ID}');
+        $successUrl = ShopProvider::frontendUrl() . '/thank-you?session_id={CHECKOUT_SESSION_ID}';
 
         // Build a cancel token so the cancel endpoint can restore stock immediately
         $cancelToken = base64_encode(json_encode([

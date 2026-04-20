@@ -112,5 +112,7 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "active": true,
-    "show_in_rest": 0
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "productFields"
 }

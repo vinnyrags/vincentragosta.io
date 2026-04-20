@@ -28,7 +28,9 @@
     "vincentragosta/mythus": "dev-main",
     "vincentragosta/ix": "dev-main",
     "wpackagist-plugin/instagram-feed": "^6.10",
-    "wpackagist-plugin/wordpress-importer": "^0.9"
+    "wpackagist-plugin/wordpress-importer": "^0.9",
+    "wpackagist-plugin/wp-graphql": "^2.0",
+    "wpackagist-plugin/wpgraphql-acf": "^2.5"
   },
   "extra": {
     "wordpress-install-dir": "wp",

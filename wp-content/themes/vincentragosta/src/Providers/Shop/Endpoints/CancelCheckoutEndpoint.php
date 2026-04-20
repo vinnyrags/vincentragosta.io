@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop\Endpoints;
 
+use ChildTheme\Providers\Shop\ShopProvider;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -47,7 +48,7 @@ class CancelCheckoutEndpoint extends Endpoint
         $token = $request->get_param('token');
 
         if (!$token) {
-            wp_redirect(home_url('/shop/'));
+            wp_redirect(ShopProvider::frontendUrl());
             exit;
         }
 
@@ -55,7 +56,7 @@ class CancelCheckoutEndpoint extends Endpoint
         $decoded = base64_decode($token, true);
 
         if (!$decoded) {
-            wp_redirect(home_url('/shop/'));
+            wp_redirect(ShopProvider::frontendUrl());
             exit;
         }
 
@@ -65,7 +66,7 @@ class CancelCheckoutEndpoint extends Endpoint
 
         // Token expires after 35 minutes (slightly longer than the 30-min session)
         if (!$productIds || (time() - $timestamp) > 2100) {
-            wp_redirect(home_url('/shop/'));
+            wp_redirect(ShopProvider::frontendUrl());
             exit;
         }
 
@@ -73,7 +74,7 @@ class CancelCheckoutEndpoint extends Endpoint
         $cacheKey = 'stock_restored_' . md5($productIds . $timestamp);
 
         if (get_transient($cacheKey)) {
-            wp_redirect(home_url('/shop/'));
+            wp_redirect(ShopProvider::frontendUrl());
             exit;
         }
 
@@ -117,7 +118,7 @@ class CancelCheckoutEndpoint extends Endpoint
         set_transient($cacheKey, true, 2100); // 35 minutes
         set_transient('stock_restored_session_' . $productIds, true, 2100);
 
-        wp_redirect(home_url('/shop/'));
+        wp_redirect(ShopProvider::frontendUrl());
         exit;
     }
 }

@@ -160,4 +160,19 @@ class ShopProvider extends Provider
 
         return $shopPageId && is_page((int) $shopPageId);
     }
+
+    /**
+     * Get the frontend URL for the shop.
+     *
+     * Returns the ITZENZO_FRONTEND_URL constant if defined,
+     * otherwise falls back to the WordPress shop page URL.
+     */
+    public static function frontendUrl(): string
+    {
+        if (defined('ITZENZO_FRONTEND_URL')) {
+            return rtrim(ITZENZO_FRONTEND_URL, '/');
+        }
+
+        return home_url('/shop');
+    }
 }
