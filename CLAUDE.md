@@ -10,7 +10,9 @@ This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a 
 - **Parent theme** (`wp-content/themes/ix/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
-The **Nous Discord bot** (order notifications, pack battles, stream alerts) was extracted to a separate repository ([itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/itzenzoTTV.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code.
+The **Nous Discord bot** (order notifications, pack battles, stream alerts) lives in a separate repository ([Nous](https://github.com/vinnyrags/Nous)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/Nous.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code.
+
+The **itzenzo.tv storefront** ([itzenzo.tv](https://github.com/vinnyrags/itzenzo.tv)) is a headless Next.js frontend that uses this WordPress instance as its backend. The ShopProvider registers product CPTs, REST endpoints (checkout, webhooks, stock), and ACF field groups. WPGraphQL + WPGraphQL for ACF expose product data and site settings. The shop page on vincentragosta.io 301-redirects to `https://itzenzo.tv`. The ShopProvider is headless-only — no frontend blocks, cart assets, or shop UI are rendered by WordPress.
 
 - **PHP 8.4+** with strict types
 - **PHP-DI 7.0** for dependency injection (autowiring-first, owned by Mythus)
