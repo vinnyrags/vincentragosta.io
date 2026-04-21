@@ -4,6 +4,7 @@ namespace ChildTheme\Tests\Unit\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use ChildTheme\Providers\Shop\ShopProvider;
 use IX\Providers\Provider;
@@ -19,7 +20,7 @@ class ShopProviderTest extends TestCase
         $this->assertTrue(is_subclass_of(ShopProvider::class, Provider::class));
     }
 
-    public function testDeclaresBlocks(): void
+    public function testNoBlocksRegistered(): void
     {
         $reflection = new \ReflectionClass(ShopProvider::class);
         $property = $reflection->getProperty('blocks');
@@ -28,7 +29,7 @@ class ShopProviderTest extends TestCase
         $provider = $reflection->newInstanceWithoutConstructor();
         $blocks = $property->getValue($provider);
 
-        $this->assertContains('products', $blocks);
+        $this->assertEmpty($blocks, 'Products block moved to itzenzo.tv — no blocks should be registered');
     }
 
     public function testDeclaresRoutes(): void
@@ -53,6 +54,7 @@ class ShopProviderTest extends TestCase
         $provider = $reflection->newInstanceWithoutConstructor();
         $hooks = $property->getValue($provider);
 
+        $this->assertContains(ShopRedirect::class, $hooks);
         $this->assertContains(StockStatusBadge::class, $hooks);
     }
 
