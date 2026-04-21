@@ -94,6 +94,8 @@ class CreateCheckoutEndpoint extends Endpoint
             );
         }
 
+        global $wpdb;
+
         $lineItems = [];
         $productIds = [];
 
@@ -119,7 +121,43 @@ class CreateCheckoutEndpoint extends Endpoint
                 );
             }
 
-            if (!$product->isInStock()) {
+            // Atomic stock decrement — validates and reserves in one statement.
+            // Returns 0 affected rows if insufficient stock, preventing overselling.
+            $currentStock = (int) get_post_meta($product->id, 'stock_quantity', true);
+
+            if ($currentStock < $quantity) {
+                // Restore any stock already decremented in this request
+                $this->restoreStock($productIds);
+
+                if ($currentStock <= 0) {
+                    return new WP_Error(
+                        'out_of_stock',
+                        sprintf('%s is sold out.', $product->title()),
+                        ['status' => 409]
+                    );
+                }
+
+                return new WP_Error(
+                    'insufficient_stock',
+                    sprintf('Only %d of %s available.', $currentStock, $product->title()),
+                    ['status' => 409]
+                );
+            }
+
+            // Atomic UPDATE — only succeeds if stock hasn't changed underneath us
+            $decremented = $wpdb->query($wpdb->prepare(
+                "UPDATE {$wpdb->postmeta}
+                 SET meta_value = CAST(meta_value AS SIGNED) - %d
+                 WHERE post_id = %d AND meta_key = %s AND CAST(meta_value AS SIGNED) >= %d",
+                $quantity,
+                $product->id,
+                'stock_quantity',
+                $quantity,
+            ));
+
+            if (!$decremented) {
+                $this->restoreStock($productIds);
+
                 return new WP_Error(
                     'out_of_stock',
                     sprintf('%s is sold out.', $product->title()),
@@ -127,12 +165,15 @@ class CreateCheckoutEndpoint extends Endpoint
                 );
             }
 
-            if ($quantity > $product->stockQuantity()) {
-                return new WP_Error(
-                    'insufficient_stock',
-                    sprintf('Only %d of %s available.', $product->stockQuantity(), $product->title()),
-                    ['status' => 409]
-                );
+            // Sync in-memory meta and caches
+            $newStock = max(0, $currentStock - $quantity);
+            update_post_meta($product->id, 'stock_quantity', $newStock);
+            clean_post_cache($product->id);
+
+            // Keep Stripe metadata in sync
+            $stripeProductId = $product->stripeProductId();
+            if ($stripeProductId) {
+                $this->stripe->syncStockToStripe($stripeProductId, $newStock);
             }
 
             $lineItems[] = [
@@ -141,25 +182,6 @@ class CreateCheckoutEndpoint extends Endpoint
             ];
 
             $productIds[] = $product->id . ':' . $quantity;
-        }
-
-        // Optimistic stock decrement — reserve stock now, restore on abandoned checkout.
-        foreach ($items as $item) {
-            $priceId = sanitize_text_field($item['priceId'] ?? '');
-            $quantity = (int) ($item['quantity'] ?? 0);
-            $product = $this->repository->findByPriceId($priceId);
-
-            if ($product) {
-                $currentStock = (int) get_field('stock_quantity', $product->id);
-                $newStock = max(0, $currentStock - $quantity);
-                update_field('stock_quantity', $newStock, $product->id);
-
-                // Keep Stripe metadata in sync
-                $stripeProductId = $product->stripeProductId();
-                if ($stripeProductId) {
-                    $this->stripe->syncStockToStripe($stripeProductId, $newStock);
-                }
-            }
         }
 
         $successUrl = ShopProvider::frontendUrl() . '/thank-you?session_id={CHECKOUT_SESSION_ID}';
@@ -212,6 +234,8 @@ class CreateCheckoutEndpoint extends Endpoint
      */
     private function restoreStock(array $productIds): void
     {
+        global $wpdb;
+
         foreach ($productIds as $pair) {
             [$postId, $quantity] = explode(':', $pair);
             $postId = (int) $postId;
@@ -221,8 +245,20 @@ class CreateCheckoutEndpoint extends Endpoint
                 continue;
             }
 
-            $currentStock = (int) get_field('stock_quantity', $postId);
-            update_field('stock_quantity', $currentStock + $quantity, $postId);
+            // Atomic increment in MySQL
+            $wpdb->query($wpdb->prepare(
+                "UPDATE {$wpdb->postmeta}
+                 SET meta_value = CAST(meta_value AS SIGNED) + %d
+                 WHERE post_id = %d AND meta_key = %s",
+                $quantity,
+                $postId,
+                'stock_quantity',
+            ));
+
+            // Sync in-memory meta
+            $currentStock = (int) get_post_meta($postId, 'stock_quantity', true);
+            update_post_meta($postId, 'stock_quantity', $currentStock + $quantity);
+            clean_post_cache($postId);
         }
     }
 }

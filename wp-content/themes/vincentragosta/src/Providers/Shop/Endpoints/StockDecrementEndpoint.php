@@ -84,9 +84,33 @@ class StockDecrementEndpoint extends Endpoint
             );
         }
 
-        $currentStock = (int) get_field('stock_quantity', $product->id);
-        $newStock = max(0, $currentStock - $quantity);
-        update_field('stock_quantity', $newStock, $product->id);
+        global $wpdb;
+
+        $oldStock = (int) get_post_meta($product->id, 'stock_quantity', true);
+
+        // Atomic stock decrement — prevents overselling under concurrent requests
+        $decremented = $wpdb->query($wpdb->prepare(
+            "UPDATE {$wpdb->postmeta}
+             SET meta_value = CAST(meta_value AS SIGNED) - %d
+             WHERE post_id = %d AND meta_key = %s AND CAST(meta_value AS SIGNED) >= %d",
+            $quantity,
+            $product->id,
+            'stock_quantity',
+            $quantity,
+        ));
+
+        if (!$decremented) {
+            return new WP_Error(
+                'insufficient_stock',
+                sprintf('%s does not have enough stock.', $product->title()),
+                ['status' => 409]
+            );
+        }
+
+        // Sync in-memory meta and caches
+        $newStock = max(0, $oldStock - $quantity);
+        update_post_meta($product->id, 'stock_quantity', $newStock);
+        clean_post_cache($product->id);
 
         // Keep Stripe metadata in sync
         $stripeProductId = $product->stripeProductId();
@@ -103,7 +127,7 @@ class StockDecrementEndpoint extends Endpoint
 
         return new WP_REST_Response([
             'product'   => $product->title(),
-            'old_stock' => $currentStock,
+            'old_stock' => $oldStock,
             'new_stock' => $newStock,
         ]);
     }
