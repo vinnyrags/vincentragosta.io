@@ -17,7 +17,7 @@
     "has_archive": false,
     "supports": ["title", "editor", "thumbnail"],
     "taxonomies": ["category"],
-    "menu_icon": "dashicons-cart",
+    "show_in_menu": "itzenzo-settings",
     "show_in_rest": true,
     "show_in_graphql": true,
     "graphql_single_name": "Product",

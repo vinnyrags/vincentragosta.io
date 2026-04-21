@@ -1,8 +1,8 @@
 {
     "page_title": "Shop Settings",
-    "menu_title": "Settings",
+    "menu_title": "Shop Settings",
     "menu_slug": "shop-settings",
     "capability": "edit_posts",
-    "parent_slug": "edit.php?post_type=product",
+    "parent_slug": "itzenzo-settings",
     "redirect": false
 }
