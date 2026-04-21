@@ -200,6 +200,60 @@
             "tabs": "visual"
         },
         {
+            "key": "field_itzenzo_tab_how_it_works",
+            "label": "How It Works Page",
+            "type": "tab"
+        },
+        {
+            "key": "field_itzenzo_hiw_heading",
+            "label": "Page Heading",
+            "name": "itzenzo_hiw_heading",
+            "type": "text",
+            "default_value": "How It Works"
+        },
+        {
+            "key": "field_itzenzo_hiw_subheading",
+            "label": "Page Subheading",
+            "name": "itzenzo_hiw_subheading",
+            "type": "textarea",
+            "default_value": "Everything you need to know about buying, shipping, and getting involved.",
+            "rows": 2
+        },
+        {
+            "key": "field_itzenzo_hiw_sections",
+            "label": "Sections",
+            "name": "itzenzo_hiw_sections",
+            "type": "repeater",
+            "instructions": "Each section appears as a card on the How It Works page.",
+            "min": 0,
+            "max": 20,
+            "layout": "block",
+            "sub_fields": [
+                {
+                    "key": "field_itzenzo_hiw_section_icon",
+                    "label": "Icon",
+                    "name": "icon",
+                    "type": "text",
+                    "instructions": "Emoji or short label (e.g., 🛒, ⚔️, 📦)"
+                },
+                {
+                    "key": "field_itzenzo_hiw_section_title",
+                    "label": "Title",
+                    "name": "title",
+                    "type": "text"
+                },
+                {
+                    "key": "field_itzenzo_hiw_section_body",
+                    "label": "Body",
+                    "name": "body",
+                    "type": "wysiwyg",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "tabs": "visual"
+                }
+            ]
+        },
+        {
             "key": "field_itzenzo_tab_thankyou",
             "label": "Thank You Page",
             "type": "tab"
