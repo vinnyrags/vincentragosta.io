@@ -2,6 +2,7 @@
 auth.json
 wp-config-env.php
 TODO.md
+tmp
 scripts/.publish
 
 .idea
