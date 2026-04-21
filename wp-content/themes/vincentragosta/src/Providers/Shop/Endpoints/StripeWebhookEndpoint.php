@@ -105,6 +105,7 @@ class StripeWebhookEndpoint extends Endpoint
             return;
         }
 
+        global $wpdb;
         $pairs = explode(',', $productData);
 
         foreach ($pairs as $pair) {
@@ -116,12 +117,23 @@ class StripeWebhookEndpoint extends Endpoint
                 continue;
             }
 
-            $currentStock = (int) get_field('stock_quantity', $postId);
-            $newStock = $currentStock + $quantity;
-            update_field('stock_quantity', $newStock, $postId);
+            // Atomic stock restore
+            $wpdb->query($wpdb->prepare(
+                "UPDATE {$wpdb->postmeta}
+                 SET meta_value = CAST(meta_value AS SIGNED) + %d
+                 WHERE post_id = %d AND meta_key = %s",
+                $quantity,
+                $postId,
+                'stock_quantity',
+            ));
+
+            // Sync in-memory meta and cache
+            $newStock = (int) get_post_meta($postId, 'stock_quantity', true) + $quantity;
+            update_post_meta($postId, 'stock_quantity', $newStock);
+            clean_post_cache($postId);
 
             // Keep Stripe metadata in sync
-            $stripeProductId = get_field('stripe_product_id', $postId);
+            $stripeProductId = get_post_meta($postId, 'stripe_product_id', true);
             if ($stripeProductId) {
                 $this->stripe->syncStockToStripe($stripeProductId, $newStock);
             }

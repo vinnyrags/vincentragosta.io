@@ -78,7 +78,8 @@ class CancelCheckoutEndpoint extends Endpoint
             exit;
         }
 
-        // Restore stock
+        // Restore stock atomically
+        global $wpdb;
         $pairs = explode(',', $productIds);
 
         foreach ($pairs as $pair) {
@@ -95,12 +96,22 @@ class CancelCheckoutEndpoint extends Endpoint
                 continue;
             }
 
-            $currentStock = (int) get_field('stock_quantity', $postId);
-            $newStock = $currentStock + $quantity;
-            update_field('stock_quantity', $newStock, $postId);
+            $wpdb->query($wpdb->prepare(
+                "UPDATE {$wpdb->postmeta}
+                 SET meta_value = CAST(meta_value AS SIGNED) + %d
+                 WHERE post_id = %d AND meta_key = %s",
+                $quantity,
+                $postId,
+                'stock_quantity',
+            ));
+
+            // Sync in-memory meta and cache
+            $newStock = (int) get_post_meta($postId, 'stock_quantity', true) + $quantity;
+            update_post_meta($postId, 'stock_quantity', $newStock);
+            clean_post_cache($postId);
 
             // Keep Stripe metadata in sync
-            $stripeProductId = get_field('stripe_product_id', $postId);
+            $stripeProductId = get_post_meta($postId, 'stripe_product_id', true);
             if ($stripeProductId && defined('STRIPE_SECRET_KEY') && STRIPE_SECRET_KEY !== '') {
                 try {
                     $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
