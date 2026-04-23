@@ -62,6 +62,16 @@ class ShopProvider extends Provider
     {
         add_action('init', [$this, 'registerPostType']);
 
+        // Lift WPGraphQL's default 100-node cap for card connections — the
+        // /cards catalog expects the full published set in one payload so
+        // the toolbar's client-side search/filter covers everything.
+        add_filter('graphql_connection_max_query_amount', static function ($amount, $source, $args, $context, $info) {
+            if (isset($info->fieldName) && $info->fieldName === 'cards') {
+                return 1000;
+            }
+            return $amount;
+        }, 10, 5);
+
         parent::register();
 
         $this->acfManager->registerSavePath();

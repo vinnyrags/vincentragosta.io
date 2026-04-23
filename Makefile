@@ -324,10 +324,16 @@ enrich-singles:
 	@echo "Enriching Singles tab via Pokemon TCG API..."
 	cd ../Nous/scripts/shop && node enrich-singles.js
 
-# Push card singles from Google Sheets Singles tab to Stripe
+# Push card singles from Google Sheets Singles tab to Stripe.
+# Pulls STRIPE_SECRET_KEY from local wp-config via DDEV so the target is
+# self-sufficient — no manual env var needed.
 push-cards:
 	@echo "Pushing cards from Google Sheets to Stripe..."
-	cd ../Nous/scripts/shop && node push-cards.js
+	@STRIPE_SECRET_KEY=$$(ddev wp eval "echo STRIPE_SECRET_KEY;" 2>/dev/null | tail -1); \
+	if [ -z "$$STRIPE_SECRET_KEY" ]; then \
+		echo "Error: could not read STRIPE_SECRET_KEY from DDEV. Is DDEV running?"; exit 1; \
+	fi; \
+	cd ../Nous/scripts/shop && STRIPE_SECRET_KEY="$$STRIPE_SECRET_KEY" node push-cards.js $(ARGS)
 
 # Sync Stripe card singles to local WordPress (as drafts)
 pull-cards:
