@@ -155,6 +155,8 @@
             },
             "default_value": "",
             "return_format": "value",
+            "multiple": 0,
+            "ui": 0,
             "allow_null": 1
         },
         {
@@ -175,6 +177,8 @@
             },
             "default_value": "regular",
             "return_format": "value",
+            "multiple": 0,
+            "ui": 0,
             "allow_null": 0
         },
         {
@@ -212,6 +216,8 @@
             },
             "default_value": "near-mint",
             "return_format": "value",
+            "multiple": 0,
+            "ui": 0,
             "allow_null": 0
         },
         {
