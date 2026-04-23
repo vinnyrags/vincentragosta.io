@@ -6,7 +6,7 @@ WordPress site with a three-layer architecture: a mu-plugin framework ([Mythus](
 - **[IX](https://github.com/vinnyrags/IX)** (`wp-content/themes/ix/`) — Timber/Twig bridge parent theme. Extends Mythus with template resolution and reusable blog/project infrastructure.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends IX providers for the vincentragosta.io website.
 
-The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers product CPTs, REST endpoints (checkout, webhooks, stock), and ACF field groups that the bot and storefront consume.
+The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers the `product` and `card` CPTs, the card singles taxonomies (`card_game`, `card_set`), Stripe checkout/webhook endpoints, the `wp_card_view_requests` table that powers the storefront's "Request to See on Stream" flow, and ACF field groups that the bot and storefront consume.
 
 ## Prerequisites
 
@@ -41,6 +41,9 @@ make start     # start DDEV, restore DB snapshot, install deps, build assets
 | `make pull-patterns` / `pull-patterns-staging` | Export block patterns from remote |
 | `make pull-products` / `pull-products-publish` | Sync Stripe products to local WordPress |
 | `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
+| `make backup-singles` / `enrich-singles` | Back up and Pokemon-TCG-enrich the `Singles` tab in Google Sheets |
+| `make push-cards` / `pull-cards` / `pull-cards-publish` / `pull-cards-staging` | Card singles pipeline — Sheets → Stripe → WordPress |
+| `make sync-cards` | Full card pipeline: `push-cards` + `pull-cards-publish` |
 | `make nous-import FILE=... TITLE=... DATE=... TAGS=...` | Import a Nous Signal post from a PHP block markup file |
 | `make satis-refresh` / `satis-add` / `satis-remove` | Manage the private Satis Composer repository |
 

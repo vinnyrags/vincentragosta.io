@@ -1,0 +1,28 @@
+{
+  "post_type": "card",
+  "args": {
+    "labels": {
+      "name": "Cards",
+      "singular_name": "Card",
+      "add_new_item": "Add New Card",
+      "edit_item": "Edit Card",
+      "new_item": "New Card",
+      "view_item": "View Card",
+      "search_items": "Search Cards",
+      "not_found": "No cards found",
+      "not_found_in_trash": "No cards found in Trash",
+      "menu_name": "Cards"
+    },
+    "public": true,
+    "publicly_queryable": false,
+    "has_archive": false,
+    "supports": ["title", "editor", "thumbnail"],
+    "taxonomies": ["card_game", "card_set"],
+    "menu_icon": "dashicons-id-alt",
+    "show_in_menu": "shop-settings",
+    "show_in_rest": true,
+    "show_in_graphql": true,
+    "graphql_single_name": "Card",
+    "graphql_plural_name": "Cards"
+  }
+}

@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CardRequestStatusEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CardRequestsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
+use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
 
@@ -27,6 +32,8 @@ class ShopProvider extends Provider
      */
     protected array $hooks = [
         StockStatusBadge::class,
+        CardRequestsMigration::class,
+        CardRequestsAdminPage::class,
     ];
 
     /**
@@ -34,6 +41,9 @@ class ShopProvider extends Provider
      */
     protected array $routes = [
         CancelCheckoutEndpoint::class,
+        CardRequestEndpoint::class,
+        CardRequestsListEndpoint::class,
+        CardRequestStatusEndpoint::class,
         CreateCheckoutEndpoint::class,
         ShippingLookupEndpoint::class,
         StockDecrementEndpoint::class,
@@ -58,11 +68,55 @@ class ShopProvider extends Provider
     }
 
     /**
-     * Register the product post type.
+     * Register the product and card post types, plus card taxonomies.
      */
     public function registerPostType(): void
     {
         $this->registerPostTypeFromConfig('post-type.json');
+        $this->registerPostTypeFromConfig('card-post-type.json');
+        $this->registerCardTaxonomies();
+    }
+
+    /**
+     * Register the card_game and card_set taxonomies for the card CPT.
+     */
+    private function registerCardTaxonomies(): void
+    {
+        register_taxonomy('card_game', ['card'], [
+            'labels' => [
+                'name'          => __('Card Games', 'vincentragosta'),
+                'singular_name' => __('Card Game', 'vincentragosta'),
+                'menu_name'     => __('Games', 'vincentragosta'),
+            ],
+            'public'             => true,
+            'publicly_queryable' => true,
+            'hierarchical'       => false,
+            'show_ui'            => true,
+            'show_admin_column'  => true,
+            'show_in_rest'       => true,
+            'show_in_graphql'    => true,
+            'graphql_single_name' => 'cardGame',
+            'graphql_plural_name' => 'cardGames',
+            'rewrite'            => ['slug' => 'card-game'],
+        ]);
+
+        register_taxonomy('card_set', ['card'], [
+            'labels' => [
+                'name'          => __('Card Sets', 'vincentragosta'),
+                'singular_name' => __('Card Set', 'vincentragosta'),
+                'menu_name'     => __('Sets', 'vincentragosta'),
+            ],
+            'public'             => true,
+            'publicly_queryable' => true,
+            'hierarchical'       => true,
+            'show_ui'            => true,
+            'show_admin_column'  => true,
+            'show_in_rest'       => true,
+            'show_in_graphql'    => true,
+            'graphql_single_name' => 'cardSet',
+            'graphql_plural_name' => 'cardSets',
+            'rewrite'            => ['slug' => 'card-set'],
+        ]);
     }
 
     /**

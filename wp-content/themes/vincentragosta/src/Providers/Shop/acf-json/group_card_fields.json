@@ -1,0 +1,244 @@
+{
+    "key": "group_card_fields",
+    "title": "Card Fields",
+    "fields": [
+        {
+            "key": "field_card_stripe_price_id",
+            "label": "Stripe Price ID",
+            "name": "stripe_price_id",
+            "type": "text",
+            "instructions": "The Price ID from the Stripe Dashboard (starts with price_). Auto-populated by the pull-cards sync command.",
+            "required": 1,
+            "placeholder": "price_..."
+        },
+        {
+            "key": "field_card_stripe_product_id",
+            "label": "Stripe Product ID",
+            "name": "stripe_product_id",
+            "type": "text",
+            "instructions": "The Product ID from Stripe (starts with prod_). Auto-populated by the pull-cards sync command.",
+            "required": 0,
+            "placeholder": "prod_..."
+        },
+        {
+            "key": "field_card_price",
+            "label": "Display Price",
+            "name": "price",
+            "type": "text",
+            "instructions": "Display price shown on the storefront. Stripe is the source of truth for the actual charge. Auto-populated by sync.",
+            "required": 0,
+            "placeholder": "$4.99"
+        },
+        {
+            "key": "field_card_sale_price",
+            "label": "Sale Price",
+            "name": "sale_price",
+            "type": "text",
+            "instructions": "Display sale price. Auto-populated by sync when sale_price_id is set in Stripe metadata.",
+            "required": 0,
+            "placeholder": "$3.99"
+        },
+        {
+            "key": "field_card_sale_price_id",
+            "label": "Sale Stripe Price ID",
+            "name": "sale_price_id",
+            "type": "text",
+            "instructions": "The Stripe Price ID for the sale price. When present, card is on sale. Auto-populated by sync.",
+            "required": 0,
+            "placeholder": "price_..."
+        },
+        {
+            "key": "field_card_sku",
+            "label": "SKU",
+            "name": "sku",
+            "type": "text",
+            "instructions": "Optional stock-keeping unit for internal tracking.",
+            "required": 0,
+            "placeholder": "PKM-BASE-4"
+        },
+        {
+            "key": "field_card_cost",
+            "label": "Cost Per Unit",
+            "name": "cost",
+            "type": "text",
+            "instructions": "Per-unit cost. Auto-populated by sync from Stripe cost metadata. Used for margin calculation.",
+            "required": 0,
+            "placeholder": "$2.00"
+        },
+        {
+            "key": "field_card_stock_quantity",
+            "label": "Stock Quantity",
+            "name": "stock_quantity",
+            "type": "number",
+            "instructions": "Number of copies available. Decremented automatically on successful payment.",
+            "required": 0,
+            "default_value": 1,
+            "min": 0
+        },
+        {
+            "key": "field_card_language",
+            "label": "Language",
+            "name": "language",
+            "type": "text",
+            "instructions": "Card language (e.g., English, Japanese).",
+            "required": 0,
+            "placeholder": "English"
+        },
+        {
+            "key": "field_card_game",
+            "label": "Game",
+            "name": "game",
+            "type": "text",
+            "instructions": "Game slug (e.g., pokemon, yugioh, magic, one-piece). Also duplicated to the Card Game taxonomy.",
+            "required": 0,
+            "placeholder": "pokemon"
+        },
+        {
+            "key": "field_card_name",
+            "label": "Card Name",
+            "name": "card_name",
+            "type": "text",
+            "instructions": "Canonical card name (e.g., Charizard).",
+            "required": 0
+        },
+        {
+            "key": "field_card_number",
+            "label": "Card Number",
+            "name": "card_number",
+            "type": "text",
+            "instructions": "Number within the set (e.g., 4/102).",
+            "required": 0,
+            "placeholder": "4/102"
+        },
+        {
+            "key": "field_card_set_name",
+            "label": "Set Name",
+            "name": "set_name",
+            "type": "text",
+            "instructions": "Human-readable set name (e.g., Base Set). Duplicated to the Card Set taxonomy.",
+            "required": 0
+        },
+        {
+            "key": "field_card_set_code",
+            "label": "Set Code",
+            "name": "set_code",
+            "type": "text",
+            "instructions": "Set code/id used by the Pokemon TCG API (e.g., base1).",
+            "required": 0
+        },
+        {
+            "key": "field_card_release_year",
+            "label": "Release Year",
+            "name": "release_year",
+            "type": "number",
+            "instructions": "Four-digit release year.",
+            "required": 0,
+            "min": 1990,
+            "max": 2099
+        },
+        {
+            "key": "field_card_rarity",
+            "label": "Rarity",
+            "name": "rarity",
+            "type": "select",
+            "instructions": "Card rarity.",
+            "required": 0,
+            "choices": {
+                "": "—",
+                "common": "Common",
+                "uncommon": "Uncommon",
+                "rare": "Rare",
+                "holo-rare": "Holo Rare",
+                "ultra-rare": "Ultra Rare",
+                "secret": "Secret",
+                "promo": "Promo"
+            },
+            "default_value": "",
+            "return_format": "value",
+            "allow_null": 1
+        },
+        {
+            "key": "field_card_variant",
+            "label": "Variant",
+            "name": "variant",
+            "type": "select",
+            "instructions": "Print variant.",
+            "required": 0,
+            "choices": {
+                "regular": "Regular",
+                "holo": "Holo",
+                "reverse-holo": "Reverse Holo",
+                "full-art": "Full Art",
+                "1st-edition": "1st Edition",
+                "shadowless": "Shadowless",
+                "other": "Other"
+            },
+            "default_value": "regular",
+            "return_format": "value",
+            "allow_null": 0
+        },
+        {
+            "key": "field_card_artist",
+            "label": "Artist",
+            "name": "artist",
+            "type": "text",
+            "instructions": "Illustrator credit (optional).",
+            "required": 0
+        },
+        {
+            "key": "field_card_back_image",
+            "label": "Back Image",
+            "name": "back_image",
+            "type": "image",
+            "instructions": "Optional reverse-side image for condition verification.",
+            "required": 0,
+            "return_format": "array",
+            "preview_size": "medium",
+            "library": "all"
+        },
+        {
+            "key": "field_card_condition",
+            "label": "Condition",
+            "name": "condition",
+            "type": "select",
+            "instructions": "All catalog cards are Near Mint by default. Graded or other conditions use the ad-hoc !sell flow.",
+            "required": 0,
+            "choices": {
+                "near-mint": "Near Mint",
+                "lightly-played": "Lightly Played",
+                "moderately-played": "Moderately Played",
+                "heavily-played": "Heavily Played",
+                "damaged": "Damaged"
+            },
+            "default_value": "near-mint",
+            "return_format": "value",
+            "allow_null": 0
+        },
+        {
+            "key": "field_card_notes",
+            "label": "Internal Notes",
+            "name": "notes",
+            "type": "textarea",
+            "instructions": "Internal notes only — not synced, not displayed on the storefront.",
+            "required": 0,
+            "rows": 3
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "card"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "cardFields"
+}

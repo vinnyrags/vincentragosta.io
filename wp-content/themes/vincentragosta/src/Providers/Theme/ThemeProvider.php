@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
+use ChildTheme\Providers\Shop\CardPost;
 use ChildTheme\Providers\Shop\ProductPost;
 use IX\Providers\Blog\BlogPost;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
@@ -98,6 +99,7 @@ class ThemeProvider extends BaseThemeProvider
         $classMap[ProjectPost::POST_TYPE] = ProjectPost::class;
         $classMap[BlogPost::POST_TYPE] = BlogPost::class;
         $classMap[ProductPost::POST_TYPE] = ProductPost::class;
+        $classMap[CardPost::POST_TYPE] = CardPost::class;
 
         return $classMap;
     }

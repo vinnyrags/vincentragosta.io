@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging nous-import satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging sync-cards enrich-singles backup-singles nous-import satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -43,6 +43,13 @@ help:
 	@echo "  make pull-products      - Sync Stripe products to local WordPress (as drafts)"
 	@echo "  make pull-products-publish - Sync Stripe products to local WordPress (auto-publish)"
 	@echo "  make pull-products-staging - Sync Stripe products to staging (clean + publish)"
+	@echo "  make backup-singles     - Duplicate the Singles tab as Singles_Backup_YYYY-MM-DD"
+	@echo "  make enrich-singles     - Populate set/rarity/image data via Pokemon TCG API"
+	@echo "  make push-cards         - Push card singles from Google Sheets to Stripe"
+	@echo "  make pull-cards         - Sync Stripe card singles to local WordPress (as drafts)"
+	@echo "  make pull-cards-publish - Sync Stripe card singles to local WordPress (auto-publish)"
+	@echo "  make pull-cards-staging - Sync Stripe card singles to staging (clean + publish)"
+	@echo "  make sync-cards         - Full card pipeline: push-cards + pull-cards-publish"
 	@echo "  make nous-import FILE=... TITLE=... EXCERPT=... DATE=... TAGS=... - Import a Nous Signal post"
 	@echo "  make satis-refresh      - Rebuild Satis package repository on server"
 	@echo "  make satis-add URL=...  - Add a repository to Satis (rebuilds by default)"
@@ -306,6 +313,41 @@ pull-products-publish:
 pull-products-staging:
 	@echo "Syncing Stripe products to staging WordPress..."
 	ssh $(STAGING_HOST) "touch $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean && wp eval-file $(STAGING_DIR)/scripts/pull-products.php --path=$(STAGING_WP) --allow-root; rm -f $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean"
+
+# Duplicate the Singles tab in Google Sheets as a backup
+backup-singles:
+	@echo "Backing up Singles tab..."
+	cd ../Nous/scripts/shop && node backup-singles.js
+
+# Enrich Singles rows with set/rarity/image data from the Pokemon TCG API
+enrich-singles:
+	@echo "Enriching Singles tab via Pokemon TCG API..."
+	cd ../Nous/scripts/shop && node enrich-singles.js
+
+# Push card singles from Google Sheets Singles tab to Stripe
+push-cards:
+	@echo "Pushing cards from Google Sheets to Stripe..."
+	cd ../Nous/scripts/shop && node push-cards.js
+
+# Sync Stripe card singles to local WordPress (as drafts)
+pull-cards:
+	@echo "Syncing Stripe card singles to WordPress..."
+	ddev wp eval-file scripts/pull-cards.php
+
+# Sync Stripe card singles to local WordPress (auto-publish)
+pull-cards-publish:
+	@echo "Syncing Stripe card singles to WordPress (auto-publish)..."
+	@touch scripts/.publish
+	@ddev wp eval-file scripts/pull-cards.php; rm -f scripts/.publish
+
+# Sync Stripe card singles to staging WordPress (clean rebuild, auto-publish)
+pull-cards-staging:
+	@echo "Syncing Stripe card singles to staging WordPress..."
+	ssh $(STAGING_HOST) "touch $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean && wp eval-file $(STAGING_DIR)/scripts/pull-cards.php --path=$(STAGING_WP) --allow-root; rm -f $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean"
+
+# Full card pipeline: Sheets -> Stripe -> local WordPress (published)
+sync-cards: push-cards pull-cards-publish
+	@echo "✓ Card pipeline complete"
 
 # Import a Nous Signal post from a PHP block markup file
 nous-import:

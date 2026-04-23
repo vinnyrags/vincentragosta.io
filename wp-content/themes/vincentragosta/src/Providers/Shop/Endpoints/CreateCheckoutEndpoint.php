@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop\Endpoints;
 
+use ChildTheme\Providers\Shop\CardRepository;
 use ChildTheme\Providers\Shop\ProductRepository;
 use ChildTheme\Providers\Shop\Services\StripeService;
 use ChildTheme\Providers\Shop\ShopProvider;
@@ -23,6 +24,7 @@ class CreateCheckoutEndpoint extends Endpoint
     public function __construct(
         private readonly StripeService $stripe,
         private readonly ProductRepository $repository,
+        private readonly CardRepository $cardRepository,
     ) {}
 
     public function getRoute(): string
@@ -111,7 +113,8 @@ class CreateCheckoutEndpoint extends Endpoint
                 );
             }
 
-            $product = $this->repository->findByPriceId($priceId);
+            $product = $this->repository->findByPriceId($priceId)
+                ?? $this->cardRepository->findByPriceId($priceId);
 
             if (!$product) {
                 return new WP_Error(

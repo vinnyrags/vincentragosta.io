@@ -88,6 +88,13 @@ while ($hasMore) {
         $images = $stripeProduct->images ?? [];
         $defaultPrice = $stripeProduct->default_price;
         $metadata = $stripeProduct->metadata ? $stripeProduct->metadata->toArray() : [];
+
+        // Skip card singles — those are claimed by pull-cards.php.
+        if (($metadata['type'] ?? '') === 'card') {
+            $startingAfter = $productId;
+            continue;
+        }
+
         $category = $metadata['category'] ?? '';
         $stock = $metadata['stock'] ?? '';
         $salePriceId = $metadata['sale_price_id'] ?? '';
