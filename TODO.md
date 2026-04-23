@@ -18,17 +18,15 @@
 - can we change !capture command to !moment instead, and update all docs and discord messaging and tests accordingly
 
 - can folks react to a minecraft message to have the minecraft server invitation link DM'ed to them via nous? we should have messaging around this in discord (like how to join the various minecraft SMPs that we have, maybe in #welcome), this should probably live somewhere practical, maybe there is an opportunity to combine some channels, as it stands we have #roles, #verify and now there is a potential to add another channel here for a single opt-in use, I want to protect the user experiencee at all costs, I dont want them to have to go through 100 hoops to get access to things but I also understand we have limitations in discord. i am curious to the plan you come up with for this as this would be a great addition to the server. I also have three servers at the moment that we have running that folks can get an invitation too, java hardcore survival, bedrock horror survival and our OG creative server (that has existed for over 5 years). now that i think about it we should probably repurpose #minecfraft channel to have it be react only, and we do our invitation reactions/messaging there, if there are any messages currently in the channel we should remove them to prepare for just these interactions.
+- can we setup a script to hook into my itzenzoTTV google sheets doc, specifically the Singles tab, and help build out this data. can we add two new columns, one for set number (the number the card is in its set), and another for set (the name of the set the card belongs too), are you able to help me populate these values for all 344 current values we have. by the time I am done with this I should have close to 500 cards in this list. we have access to google sheets, you can check the makefile sync products command to see how we are gaining access to google sheets
+
 - create singles shop (without pictures), folks should be able to buy singles from my shop, in discord they should be able to request to show a single, create queue entry to review/look for a card for review for a customer
 
-### Load Testing & Resilience (P2-P3)
-- [P2] PHP-FPM pool size — default ~10 workers. Increase pm.max_children on the server for higher concurrent checkout capacity.
-- [P2] Next.js  instance — PM2 runs 1 process. Enable cluster mode (4-8 instances) to multiply request capacity.
-- [P2] Discord API rate limiting — at 200+ concurrent purchases, DMs start failing. Need a queue to throttle Discord API calls.
-- [P3] SQLite event loop blocking — better-sqlite3 is synchronous. At 500+ concurrent webhook handlers, the event loop freezes. Consider async DB or webhook queue.
-- [P3] ISR thundering herd — every 60 seconds all cached responses expire simultaneously, causing a spike of WPGraphQL queries. Stagger revalidation.
-- create a load testing strategy (k6 or Artillery) to simulate 100-5000 concurrent users against the checkout flow, so future changes don't regress under load
-- set up proper staging environments for staging.vincentragosta.io (git deploy pipeline) and staging.itzenzo.tv (nginx, SSL, PM2, bare repo, post-receive hook)
-  
+- if i never ship orders, but the week passes for domestic orders, will the system still reset on the Monday, and charge the buyer again if they bought in for the new week, I also want to know if I wanted to waive shipping for the next week for someone, what command I would run to complete this. I am just confirming process with these questions, no need to change any code lets just have a conversation about this.
+- refund should kill the shippingeasy order (if possible, and if this makes sense)
+
+- create community page menu item, on the new page we talk about
+- font family for headings in page section content should be the same font family we use in the header nav links
 
 ## MEDIUM PRIORITY
 - switch stripe over to live mode

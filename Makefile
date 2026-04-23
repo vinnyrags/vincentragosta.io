@@ -9,7 +9,7 @@ MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
 # Server config
 STAGING_HOST := root@174.138.70.29
-STAGING_DIR := /var/www/vincentragosta.dev
+STAGING_DIR := /var/www/staging.vincentragosta.io
 STAGING_WP := $(STAGING_DIR)/wp
 STAGING_URL := https://staging.vincentragosta.io
 PRODUCTION_HOST := root@174.138.70.29
