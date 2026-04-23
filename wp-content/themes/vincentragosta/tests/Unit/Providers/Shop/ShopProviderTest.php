@@ -4,7 +4,6 @@ namespace ChildTheme\Tests\Unit\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
-use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use ChildTheme\Providers\Shop\ShopProvider;
 use IX\Providers\Provider;
@@ -54,7 +53,6 @@ class ShopProviderTest extends TestCase
         $provider = $reflection->newInstanceWithoutConstructor();
         $hooks = $property->getValue($provider);
 
-        $this->assertContains(ShopRedirect::class, $hooks);
         $this->assertContains(StockStatusBadge::class, $hooks);
     }
 

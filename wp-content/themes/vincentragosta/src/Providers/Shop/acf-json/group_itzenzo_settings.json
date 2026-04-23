@@ -73,57 +73,8 @@
             "default_value": "https://youtube.com/@itzenzoTTV"
         },
         {
-            "key": "field_itzenzo_tab_about",
-            "label": "About Page",
-            "type": "tab"
-        },
-        {
-            "key": "field_itzenzo_about_heading",
-            "label": "About Heading",
-            "name": "itzenzo_about_heading",
-            "type": "text",
-            "default_value": "Cards. Games. After Dark."
-        },
-        {
-            "key": "field_itzenzo_about_description",
-            "label": "About Description",
-            "name": "itzenzo_about_description",
-            "type": "wysiwyg",
-            "instructions": "Main about page content. Supports HTML.",
-            "default_value": "<p>itzenzo.tv is a trading card shop and streaming community built around pack openings, pack battles, and live entertainment. We sell sealed Pokemon, anime, and collectible card products through our shop and livestreams.</p>",
-            "toolbar": "basic",
-            "media_upload": 0,
-            "tabs": "visual"
-        },
-        {
-            "key": "field_itzenzo_stream_schedule",
-            "label": "Stream Schedule",
-            "name": "itzenzo_stream_schedule",
-            "type": "repeater",
-            "instructions": "Stream schedule entries displayed on the about page.",
-            "min": 0,
-            "max": 10,
-            "layout": "table",
-            "sub_fields": [
-                {
-                    "key": "field_itzenzo_schedule_days",
-                    "label": "Days",
-                    "name": "days",
-                    "type": "text",
-                    "instructions": "e.g., Monday - Thursday"
-                },
-                {
-                    "key": "field_itzenzo_schedule_description",
-                    "label": "Description",
-                    "name": "description",
-                    "type": "text",
-                    "instructions": "e.g., Card nights (8-10 PM EST) — pack openings, pack battles"
-                }
-            ]
-        },
-        {
             "key": "field_itzenzo_tab_shipping",
-            "label": "Shipping Page",
+            "label": "Shipping",
             "type": "tab"
         },
         {
@@ -190,88 +141,76 @@
             "default_value": "Currently shipping to US and Canada"
         },
         {
-            "key": "field_itzenzo_shipping_how_it_works",
-            "label": "How It Works",
-            "name": "itzenzo_shipping_how_it_works",
-            "type": "wysiwyg",
-            "default_value": "<p>If you've already paid for shipping this period, your next order ships free. We check this automatically at checkout using your email address. You can also sell singles and playmats through our Discord server.</p>",
-            "toolbar": "basic",
-            "media_upload": 0,
-            "tabs": "visual"
-        },
-        {
-            "key": "field_itzenzo_tab_how_it_works",
-            "label": "How It Works Page",
+            "key": "field_itzenzo_tab_schedule",
+            "label": "Schedule",
             "type": "tab"
         },
         {
-            "key": "field_itzenzo_hiw_heading",
-            "label": "Page Heading",
-            "name": "itzenzo_hiw_heading",
-            "type": "text",
-            "default_value": "How It Works"
-        },
-        {
-            "key": "field_itzenzo_hiw_subheading",
-            "label": "Page Subheading",
-            "name": "itzenzo_hiw_subheading",
-            "type": "textarea",
-            "default_value": "Everything you need to know about buying, shipping, and getting involved.",
-            "rows": 2
-        },
-        {
-            "key": "field_itzenzo_hiw_sections",
-            "label": "Sections",
-            "name": "itzenzo_hiw_sections",
+            "key": "field_itzenzo_stream_schedule",
+            "label": "Stream Schedule",
+            "name": "itzenzo_stream_schedule",
             "type": "repeater",
-            "instructions": "Each section appears as a card on the How It Works page.",
+            "instructions": "Stream schedule entries displayed on the about page.",
             "min": 0,
-            "max": 20,
-            "layout": "block",
+            "max": 10,
+            "layout": "table",
             "sub_fields": [
                 {
-                    "key": "field_itzenzo_hiw_section_icon",
-                    "label": "Icon",
-                    "name": "icon",
+                    "key": "field_itzenzo_schedule_days",
+                    "label": "Days",
+                    "name": "days",
                     "type": "text",
-                    "instructions": "Emoji or short label (e.g., 🛒, ⚔️, 📦)"
+                    "instructions": "e.g., Monday - Thursday"
                 },
                 {
-                    "key": "field_itzenzo_hiw_section_title",
-                    "label": "Title",
-                    "name": "title",
-                    "type": "text"
-                },
-                {
-                    "key": "field_itzenzo_hiw_section_body",
-                    "label": "Body",
-                    "name": "body",
-                    "type": "wysiwyg",
-                    "toolbar": "basic",
-                    "media_upload": 0,
-                    "tabs": "visual"
+                    "key": "field_itzenzo_schedule_description",
+                    "label": "Description",
+                    "name": "description",
+                    "type": "text",
+                    "instructions": "e.g., Card nights (8-10 PM EST) — pack openings, pack battles"
                 }
             ]
         },
         {
-            "key": "field_itzenzo_tab_thankyou",
-            "label": "Thank You Page",
+            "key": "field_itzenzo_tab_shop",
+            "label": "Shop",
             "type": "tab"
         },
         {
-            "key": "field_itzenzo_thankyou_heading",
-            "label": "Thank You Heading",
-            "name": "itzenzo_thankyou_heading",
-            "type": "text",
-            "default_value": "Thank you for your order!"
+            "key": "field_shop_age_verification_enabled",
+            "label": "Age Verification",
+            "name": "age_verification_enabled",
+            "type": "true_false",
+            "instructions": "Enable the age verification gate for mature content products.",
+            "default_value": 1,
+            "ui": 1
         },
         {
-            "key": "field_itzenzo_thankyou_message",
-            "label": "Thank You Message",
-            "name": "itzenzo_thankyou_message",
+            "key": "field_shop_age_verification_message",
+            "label": "Age Verification Message",
+            "name": "age_verification_message",
             "type": "textarea",
-            "default_value": "Your payment has been processed. You'll receive a confirmation via email and a notification in Discord when your order ships.",
-            "rows": 3
+            "instructions": "Message displayed on the age verification modal.",
+            "default_value": "Some products in this category contain mature content. You must be 18 or older to view them.",
+            "rows": 3,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_shop_age_verification_enabled",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ]
+        },
+        {
+            "key": "field_shop_mature_category_slug",
+            "label": "Mature Category Slug",
+            "name": "mature_category_slug",
+            "type": "text",
+            "instructions": "The category slug that triggers the age verification gate.",
+            "default_value": "mature",
+            "required": 0
         }
     ],
     "location": [
@@ -279,7 +218,7 @@
             {
                 "param": "options_page",
                 "operator": "==",
-                "value": "itzenzo-settings"
+                "value": "shop-settings"
             }
         ]
     ],

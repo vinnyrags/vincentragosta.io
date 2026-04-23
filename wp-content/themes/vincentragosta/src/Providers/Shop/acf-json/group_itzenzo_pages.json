@@ -1,0 +1,93 @@
+{
+    "key": "group_itzenzo_pages",
+    "title": "itzenzo.tv Pages",
+    "fields": [
+        {
+            "key": "field_itzenzo_pages",
+            "label": "Pages",
+            "name": "itzenzo_pages",
+            "type": "repeater",
+            "instructions": "Each row represents a page on itzenzo.tv. Match the slug to the URL path (e.g., 'about', 'how-it-works', 'shipping', 'thank-you').",
+            "min": 0,
+            "max": 50,
+            "layout": "block",
+            "button_label": "Add Page",
+            "collapsed": "field_itzenzo_page_name",
+            "sub_fields": [
+                {
+                    "key": "field_itzenzo_page_name",
+                    "label": "Page Name",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "Display name for internal reference (e.g., 'About')."
+                },
+                {
+                    "key": "field_itzenzo_page_slug",
+                    "label": "Slug",
+                    "name": "slug",
+                    "type": "text",
+                    "instructions": "URL slug used to look up this page (e.g., 'about'). Must match the frontend route."
+                },
+                {
+                    "key": "field_itzenzo_page_hero_title",
+                    "label": "Hero Title",
+                    "name": "hero_title",
+                    "type": "text"
+                },
+                {
+                    "key": "field_itzenzo_page_hero_subtitle",
+                    "label": "Hero Subtitle",
+                    "name": "hero_subtitle",
+                    "type": "textarea",
+                    "rows": 2
+                },
+                {
+                    "key": "field_itzenzo_page_sections",
+                    "label": "Sections",
+                    "name": "sections",
+                    "type": "repeater",
+                    "instructions": "Add, remove, and reorder sections. Each section renders as a two-column row (title left, content right). Every other section gets an alternating squiggle background.",
+                    "min": 0,
+                    "max": 30,
+                    "layout": "block",
+                    "button_label": "Add Section",
+                    "collapsed": "field_itzenzo_page_section_title",
+                    "sub_fields": [
+                        {
+                            "key": "field_itzenzo_page_section_title",
+                            "label": "Title",
+                            "name": "title",
+                            "type": "text"
+                        },
+                        {
+                            "key": "field_itzenzo_page_section_content",
+                            "label": "Content",
+                            "name": "content",
+                            "type": "wysiwyg",
+                            "toolbar": "full",
+                            "media_upload": 0,
+                            "tabs": "visual"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "shop-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "itzenzoPages"
+}
