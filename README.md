@@ -1,8 +1,12 @@
 # vincentragosta.io
 
-WordPress parent-child theme built on Timber 2.x / Twig with a provider-based architecture, PHP-DI for dependency injection, and esbuild + Sass for asset compilation.
+WordPress site with a three-layer architecture: a mu-plugin framework ([Mythus](https://github.com/vinnyrags/mythus)), a parent theme ([IX](https://github.com/vinnyrags/IX)), and a child theme (this project), all built on Timber 2.x / Twig with PHP-DI for dependency injection.
 
-The **parent theme** (`wp-content/themes/ix`) provides reusable infrastructure — base classes, support managers, contracts, and shared features. The **child theme** (`wp-content/themes/child-theme`) is site-specific and extends the parent for the vincentragosta.io website.
+- **[Mythus](https://github.com/vinnyrags/mythus)** (`wp-content/mu-plugins/mythus/`) — theme-agnostic platform framework. Owns the provider pattern, DI container, contracts, and support managers.
+- **[IX](https://github.com/vinnyrags/IX)** (`wp-content/themes/ix/`) — Timber/Twig bridge parent theme. Extends Mythus with template resolution and reusable blog/project infrastructure.
+- **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends IX providers for the vincentragosta.io website.
+
+The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers product CPTs, REST endpoints (checkout, webhooks, stock), and ACF field groups that the bot and storefront consume.
 
 ## Prerequisites
 
@@ -24,13 +28,21 @@ make start     # start DDEV, restore DB snapshot, install deps, build assets
 |---------|-------------|
 | `make start` | Start DDEV, restore latest DB snapshot, install deps, build assets |
 | `make stop` | Snapshot database and stop DDEV |
-| `make install` | Install composer + npm dependencies for both themes |
+| `make install` | Install composer + npm dependencies for Mythus, IX, and the child theme |
 | `make build` | Build child theme assets (runs parent build first) |
 | `make watch` | Start watch mode for development |
-| `make test` | Run PHPUnit test suite for both themes |
-| `make update` | Update composer dependencies (root + both themes) |
-| `make clean` | Remove vendor, node_modules, and dist from both themes |
-| `make autoload` | Regenerate composer autoloaders for both themes |
+| `make test` | Run PHPUnit test suites for Mythus and both themes, plus JS tests |
+| `make update` | Update composer dependencies (root + Mythus + both themes) |
+| `make clean` | Remove vendor, node_modules, and dist from Mythus and both themes |
+| `make autoload` | Regenerate composer autoloaders for Mythus and both themes |
+| `make release` | Merge develop into main and push both to origin |
+| `make push-staging` / `pull-staging` | Sync local DB + uploads with staging |
+| `make push-production` / `pull-production` | Sync local DB + uploads with production |
+| `make pull-patterns` / `pull-patterns-staging` | Export block patterns from remote |
+| `make pull-products` / `pull-products-publish` | Sync Stripe products to local WordPress |
+| `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
+| `make nous-import FILE=... TITLE=... DATE=... TAGS=...` | Import a Nous Signal post from a PHP block markup file |
+| `make satis-refresh` / `satis-add` / `satis-remove` | Manage the private Satis Composer repository |
 
 From a theme directory: `composer test`, `npm run build`, `npm run start`.
 
@@ -107,11 +119,13 @@ ix/
 │   └── build-providers.js   # Canonical build script (child theme runs this too)
 └── tests/
 
-child-theme/
+vincentragosta/             # Child theme (wp-content/themes/vincentragosta/)
 ├── src/
 │   ├── Providers/
 │   │   ├── Theme/           # ThemeProvider + Features/ + Hooks/ + blocks/
-│   │   └── Project/         # ProjectProvider + blocks/ + config/ + acf-json/
+│   │   ├── Project/         # ProjectProvider + blocks/ + config/ + acf-json/
+│   │   ├── Blog/            # Child BlogProvider + NousSignal* hooks + blocks/
+│   │   └── Shop/            # Shop REST endpoints, ACF, Stripe integration (headless)
 │   ├── Services/            # Child-specific services
 │   └── Theme.php            # Extends parent Theme
 ├── views/                   # Twig templates (base, header, footer, pages)
