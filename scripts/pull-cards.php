@@ -97,7 +97,9 @@ while ($hasMore) {
         $rarity = $metadata['rarity'] ?? '';
         $variant = $metadata['variant'] ?? '';
         $artist = $metadata['artist'] ?? '';
-        $releaseYear = $metadata['release_year'] ?? '';
+        // Prefer the new release_date key; fall back to the legacy
+        // release_year value for Stripe products that predate the switch.
+        $releaseDate = $metadata['release_date'] ?? ($metadata['release_year'] ?? '');
         $stock = $metadata['stock'] ?? '';
         $cost = $metadata['cost'] ?? '';
         $language = $metadata['language'] ?? '';
@@ -168,7 +170,7 @@ while ($hasMore) {
                 'rarity'       => $rarity,
                 'variant'      => $variant,
                 'artist'       => $artist,
-                'release_year' => $releaseYear,
+                'release_date' => $releaseDate,
             ]);
 
             if (!empty($images)) {
@@ -215,7 +217,7 @@ while ($hasMore) {
                 'rarity'       => $rarity,
                 'variant'      => $variant ?: 'regular',
                 'artist'       => $artist,
-                'release_year' => $releaseYear,
+                'release_date' => $releaseDate,
             ]);
 
             if (!empty($images)) {
@@ -241,13 +243,6 @@ function maybeUpdateCardFields(int $postId, array $fields): void
     foreach ($fields as $key => $value) {
         if ($value === '' || $value === null) {
             continue;
-        }
-
-        if ($key === 'release_year') {
-            $value = (int) $value;
-            if ($value <= 0) {
-                continue;
-            }
         }
 
         update_field($key, $value, $postId);

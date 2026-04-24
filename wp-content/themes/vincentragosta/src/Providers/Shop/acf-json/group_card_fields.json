@@ -127,14 +127,13 @@
             "required": 0
         },
         {
-            "key": "field_card_release_year",
-            "label": "Release Year",
-            "name": "release_year",
-            "type": "number",
-            "instructions": "Four-digit release year.",
+            "key": "field_card_release_date",
+            "label": "Release Date",
+            "name": "release_date",
+            "type": "text",
+            "instructions": "Set release date in YYYY-MM-DD format. Auto-populated from the Pokemon TCG API.",
             "required": 0,
-            "min": 1990,
-            "max": 2099
+            "placeholder": "2016-02-22"
         },
         {
             "key": "field_card_rarity",
