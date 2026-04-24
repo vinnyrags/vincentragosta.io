@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging sync-cards enrich-singles backup-singles nous-import satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging sync-cards enrich-singles backup-singles seed-itzenzo-pages seed-itzenzo-pages-force seed-itzenzo-pages-staging nous-import satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -50,6 +50,9 @@ help:
 	@echo "  make pull-cards-publish - Sync Stripe card singles to local WordPress (auto-publish)"
 	@echo "  make pull-cards-staging - Sync Stripe card singles to staging (clean + publish)"
 	@echo "  make sync-cards         - Full card pipeline: push-cards + pull-cards-publish"
+	@echo "  make seed-itzenzo-pages - Seed the itzenzo.tv Pages ACF repeater (refuses to overwrite)"
+	@echo "  make seed-itzenzo-pages-force - Force-overwrite the Pages repeater"
+	@echo "  make seed-itzenzo-pages-staging - Force-overwrite staging Pages repeater"
 	@echo "  make nous-import FILE=... TITLE=... EXCERPT=... DATE=... TAGS=... - Import a Nous Signal post"
 	@echo "  make satis-refresh      - Rebuild Satis package repository on server"
 	@echo "  make satis-add URL=...  - Add a repository to Satis (rebuilds by default)"
@@ -354,6 +357,21 @@ pull-cards-staging:
 # Full card pipeline: Sheets -> Stripe -> local WordPress (published)
 sync-cards: push-cards pull-cards-publish
 	@echo "✓ Card pipeline complete"
+
+# Seed the itzenzo.tv Pages ACF repeater with canonical content
+seed-itzenzo-pages:
+	@echo "Seeding itzenzo.tv Pages (refuses to overwrite existing data)..."
+	ddev wp eval-file scripts/seed-itzenzo-pages.php
+
+# Force-overwrite the itzenzo.tv Pages ACF repeater
+seed-itzenzo-pages-force:
+	@echo "Seeding itzenzo.tv Pages (overwriting)..."
+	ddev exec "FORCE=1 wp eval-file scripts/seed-itzenzo-pages.php"
+
+# Seed the staging Pages ACF repeater (force-overwrite)
+seed-itzenzo-pages-staging:
+	@echo "Seeding staging itzenzo.tv Pages..."
+	ssh $(STAGING_HOST) "FORCE=1 wp eval-file $(STAGING_DIR)/scripts/seed-itzenzo-pages.php --path=$(STAGING_WP) --allow-root"
 
 # Import a Nous Signal post from a PHP block markup file
 nous-import:
