@@ -294,7 +294,13 @@ function maybeSyncCardTaxonomies(int $postId, string $game, string $setName, str
     }
 
     if ($setName !== '' || $setCode !== '') {
-        $slug = sanitize_title($setCode !== '' ? $setCode : $setName);
+        // Slug from set NAME (not set code) so two cards sharing a setName
+        // always land on the same term — prevents duplicates like `aor` +
+        // `xy7` both surfacing as "Ancient Origins" in the dropdown when
+        // some sheet rows use internal shorthand and others use the API's
+        // set.id. setCode stays available as displayable per-card metadata.
+        $slugSource = $setName !== '' ? $setName : $setCode;
+        $slug = sanitize_title($slugSource);
         $term = get_term_by('slug', $slug, 'card_set');
         if (!$term) {
             $result = wp_insert_term($setName ?: $setCode, 'card_set', ['slug' => $slug]);
