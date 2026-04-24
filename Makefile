@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging sync-cards enrich-singles backup-singles seed-itzenzo-pages seed-itzenzo-pages-force seed-itzenzo-pages-staging seed-itzenzo-pages-production nous-import satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging pull-cards-production sync-cards enrich-singles backup-singles seed-itzenzo-pages seed-itzenzo-pages-force seed-itzenzo-pages-staging seed-itzenzo-pages-production nous-import satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -49,6 +49,7 @@ help:
 	@echo "  make pull-cards         - Sync Stripe card singles to local WordPress (as drafts)"
 	@echo "  make pull-cards-publish - Sync Stripe card singles to local WordPress (auto-publish)"
 	@echo "  make pull-cards-staging - Sync Stripe card singles to staging (clean + publish)"
+	@echo "  make pull-cards-production - Sync Stripe card singles to production (publish, idempotent)"
 	@echo "  make sync-cards         - Full card pipeline: push-cards + pull-cards-publish"
 	@echo "  make seed-itzenzo-pages - Seed the itzenzo.tv Pages ACF repeater (refuses to overwrite)"
 	@echo "  make seed-itzenzo-pages-force - Force-overwrite the Pages repeater"
@@ -354,6 +355,12 @@ pull-cards-publish:
 pull-cards-staging:
 	@echo "Syncing Stripe card singles to staging WordPress..."
 	ssh $(STAGING_HOST) "touch $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean && wp eval-file $(STAGING_DIR)/scripts/pull-cards.php --path=$(STAGING_WP) --allow-root; rm -f $(STAGING_DIR)/scripts/.publish $(STAGING_DIR)/scripts/.clean"
+
+# Sync Stripe card singles to production WordPress (auto-publish, idempotent)
+# No --clean — we don't nuke existing card posts/attachments on production.
+pull-cards-production:
+	@echo "Syncing Stripe card singles to production WordPress..."
+	ssh $(PRODUCTION_HOST) "touch $(PRODUCTION_DIR)/scripts/.publish && wp eval-file $(PRODUCTION_DIR)/scripts/pull-cards.php --path=$(PRODUCTION_WP) --allow-root; rm -f $(PRODUCTION_DIR)/scripts/.publish"
 
 # Full card pipeline: Sheets -> Stripe -> local WordPress (published)
 sync-cards: push-cards pull-cards-publish
