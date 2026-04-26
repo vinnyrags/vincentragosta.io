@@ -153,7 +153,7 @@ $pages = [
             ],
             [
                 'title'   => 'How to request a refund',
-                'content' => '<p>The fastest path is a DM in Discord — open a ticket in <code>#start-here</code> or message the shop owner directly. You can also reply to your Stripe receipt email; both end up in the same place.</p><p>Tell us your order session ID (or the email you checked out with) and what\'s going on. We don\'t require photos for damage — but they help when there\'s a question.</p>',
+                'content' => '<p>The fastest path is a direct DM to the shop owner on Discord. You can also reply to your Stripe receipt email — both end up in the same inbox.</p><p>Tell us your order session ID (or the email you checked out with) and what\'s going on. We don\'t require photos for damage — but they help when there\'s a question.</p>',
             ],
             [
                 'title'   => 'Before your order ships',
