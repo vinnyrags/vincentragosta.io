@@ -24,29 +24,20 @@ make start     # start DDEV, restore DB snapshot, install deps, build assets
 
 ## Commands
 
-| Command | What it does |
-|---------|-------------|
-| `make start` | Start DDEV, restore latest DB snapshot, install deps, build assets |
-| `make stop` | Snapshot database and stop DDEV |
-| `make install` | Install composer + npm dependencies for Mythus, IX, and the child theme |
-| `make build` | Build child theme assets (runs parent build first) |
-| `make watch` | Start watch mode for development |
-| `make test` | Run PHPUnit test suites for Mythus and both themes, plus JS tests |
-| `make update` | Update composer dependencies (root + Mythus + both themes) |
-| `make clean` | Remove vendor, node_modules, and dist from Mythus and both themes |
-| `make autoload` | Regenerate composer autoloaders for Mythus and both themes |
-| `make release` | Merge develop into main and push both to origin |
-| `make push-staging` / `pull-staging` | Sync local DB + uploads with staging |
-| `make push-production` / `pull-production` | Sync local DB + uploads with production |
-| `make pull-patterns` / `pull-patterns-staging` | Export block patterns from remote |
-| `make pull-products` / `pull-products-publish` | Sync Stripe products to local WordPress |
-| `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
-| `make backup-singles` / `enrich-singles` | Back up and Pokemon-TCG-enrich the `Singles` tab in Google Sheets |
-| `make push-cards` / `pull-cards` / `pull-cards-publish` / `pull-cards-staging` | Card singles pipeline — Sheets → Stripe → WordPress |
-| `make sync-cards` | Full card pipeline: `push-cards` + `pull-cards-publish` |
-| `make migrate-card-images` / `migrate-card-images-staging` / `migrate-card-images-production` | Regenerate card sub-sizes as JPEG and delete orphan PNGs |
-| `make nous-import FILE=... TITLE=... DATE=... TAGS=...` | Import a Nous Signal post from a PHP block markup file |
-| `make satis-refresh` / `satis-add` / `satis-remove` | Manage the private Satis Composer repository |
+Run `make help` for the full list of Make targets, grouped by section (local
+development, deploy, DB sync, Stripe products, card singles, etc.). Each
+target's description is generated from its Makefile annotation, so this list
+stays in sync automatically.
+
+Day-to-day:
+
+```bash
+make start    # start DDEV, restore DB snapshot, install deps, build assets
+make watch    # rebuild assets on change
+make build    # one-shot build (parent theme then child)
+make test     # PHP + JS suites across Mythus, IX, and child
+make stop     # snapshot DB and stop DDEV
+```
 
 From a theme directory: `composer test`, `npm run build`, `npm run start`.
 

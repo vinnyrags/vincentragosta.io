@@ -264,30 +264,17 @@ The child theme runs the same script: `node ../ix/scripts/build-providers.js`. T
 
 ## Commands
 
-From the project root:
+From the project root, run `make help` for the full list of targets, grouped
+by section. The list is auto-generated from `## description` annotations on
+each target in the `Makefile`, so it stays in sync with what's actually
+available — when you add a new target, give it a `## description` and a
+section header (`##@ Section Name`) and it'll show up automatically.
 
-| Command | What it does |
-|---------|-------------|
-| `make start` | Start DDEV, restore latest DB snapshot, install deps, build assets |
-| `make stop` | Snapshot database and stop DDEV |
-| `make install` | Install composer + npm dependencies for Mythus and both themes |
-| `make build` | Build child theme assets (runs parent build first) |
-| `make watch` | Start watch mode for development |
-| `make test` | Run PHPUnit test suites for Mythus and both themes, plus JS tests |
-| `make update` | Update composer dependencies (root + Mythus + both themes) |
-| `make clean` | Remove vendor, node_modules, and dist from Mythus and both themes |
-| `make autoload` | Regenerate composer autoloaders for Mythus and both themes |
-| `make push-staging` | Push local DDEV database + uploads to staging server |
-| `make pull-staging` | Pull staging database + uploads to local DDEV |
-| `make push-production` | Push local DDEV database + uploads to production server |
-| `make pull-production` | Pull production database + uploads to local DDEV |
-| `make pull-patterns` | Export block patterns from production to PHP files |
-| `make pull-patterns-staging` | Export block patterns from staging to PHP files |
-| `make pull-products` | Sync Stripe products to local WordPress (as drafts) |
-| `make pull-products-publish` | Sync Stripe products to local WordPress (auto-publish) |
-| `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
-| `make migrate-card-images` | Regenerate card sub-sizes as JPEG and clean up orphan PNGs (local) |
-| `make migrate-card-images-staging` / `migrate-card-images-production` | Same migration on the remote environment |
+Common targets: `make start`, `make watch`, `make build`, `make test`,
+`make stop`, `make install`, `make autoload`, `make update`, `make clean`,
+`make release`. Environment sync: `make push-staging` / `pull-staging` /
+`push-production` / `pull-production`. Block patterns and Stripe products
+have their own sections in the help output.
 
 From a theme directory:
 
