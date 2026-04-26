@@ -5,7 +5,7 @@ IX_DIR := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR := $(CURDIR)/wp-content/mu-plugins/mythus
 
-.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging pull-cards-production sync-cards enrich-singles backup-singles seed-itzenzo-pages seed-itzenzo-pages-force seed-itzenzo-pages-staging seed-itzenzo-pages-production nous-import satis-refresh satis-add satis-remove
+.PHONY: help start stop install install-root install-mythus install-ix install-child build watch clean autoload test test-js update deploy-staging deploy-production release push-staging pull-staging push-production pull-production pull-patterns pull-patterns-staging pull-products pull-products-publish pull-products-staging push-cards pull-cards pull-cards-publish pull-cards-staging pull-cards-production sync-cards migrate-card-images migrate-card-images-staging migrate-card-images-production enrich-singles backup-singles seed-itzenzo-pages seed-itzenzo-pages-force seed-itzenzo-pages-staging seed-itzenzo-pages-production nous-import satis-refresh satis-add satis-remove
 
 # Server config
 STAGING_HOST := root@174.138.70.29
@@ -365,6 +365,21 @@ pull-cards-production:
 # Full card pipeline: Sheets -> Stripe -> local WordPress (published)
 sync-cards: push-cards pull-cards-publish
 	@echo "✓ Card pipeline complete"
+
+# One-shot migration: regenerate card sub-sizes as JPEG and delete orphan PNGs.
+# Run after deploying the PngSubsizesAsJpeg hook so existing card attachments
+# pick up the new format.
+migrate-card-images:
+	@echo "Migrating local card images to JPEG sub-sizes..."
+	ddev wp eval-file scripts/migrate-card-images-to-jpeg.php
+
+migrate-card-images-staging:
+	@echo "Migrating staging card images to JPEG sub-sizes..."
+	ssh $(STAGING_HOST) "wp eval-file $(STAGING_DIR)/scripts/migrate-card-images-to-jpeg.php --path=$(STAGING_WP) --allow-root"
+
+migrate-card-images-production:
+	@echo "Migrating production card images to JPEG sub-sizes..."
+	ssh $(PRODUCTION_HOST) "wp eval-file $(PRODUCTION_DIR)/scripts/migrate-card-images-to-jpeg.php --path=$(PRODUCTION_WP) --allow-root"
 
 # Seed the itzenzo.tv Pages ACF repeater with canonical content
 seed-itzenzo-pages:

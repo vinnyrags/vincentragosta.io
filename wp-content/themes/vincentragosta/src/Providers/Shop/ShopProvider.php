@@ -12,8 +12,10 @@ use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
+use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
 
@@ -32,6 +34,8 @@ class ShopProvider extends Provider
      */
     protected array $hooks = [
         StockStatusBadge::class,
+        CardImageSize::class,
+        PngSubsizesAsJpeg::class,
         CardRequestsMigration::class,
         CardRequestsAdminPage::class,
     ];

@@ -282,8 +282,52 @@ function maybeUpdateCardFeaturedImage(int $postId, string $imageUrl, string $tit
         return;
     }
 
+    convertCardAttachmentToJpeg($attachmentId);
+
     set_post_thumbnail($postId, $attachmentId);
     update_post_meta($attachmentId, '_stripe_source_url', $imageUrl);
+}
+
+/**
+ * Convert a freshly-sideloaded PNG attachment to JPEG in place.
+ *
+ * Pokemon TCG card art is opaque (no transparency to preserve) and PNG
+ * compresses it poorly. Storing originals as JPEG keeps the source-of-truth
+ * file ~5–10x smaller and means sub-sizes are generated from a JPEG source.
+ */
+function convertCardAttachmentToJpeg(int $attachmentId): void
+{
+    $file = get_attached_file($attachmentId);
+    if (!$file || !file_exists($file)) {
+        return;
+    }
+
+    if (get_post_mime_type($attachmentId) !== 'image/png') {
+        return;
+    }
+
+    $editor = wp_get_image_editor($file);
+    if (is_wp_error($editor)) {
+        return;
+    }
+
+    $editor->set_quality(85);
+    $jpegPath = preg_replace('/\.png$/i', '.jpg', $file);
+    $saved = $editor->save($jpegPath, 'image/jpeg');
+    if (is_wp_error($saved) || !is_array($saved)) {
+        return;
+    }
+
+    @unlink($file);
+    update_attached_file($attachmentId, $saved['path']);
+    wp_update_post([
+        'ID'             => $attachmentId,
+        'post_mime_type' => 'image/jpeg',
+    ]);
+
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    $meta = wp_generate_attachment_metadata($attachmentId, $saved['path']);
+    wp_update_attachment_metadata($attachmentId, $meta);
 }
 
 function maybeSyncCardTaxonomies(int $postId, string $game, string $setName, string $setCode): void
