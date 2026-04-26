@@ -2,12 +2,12 @@
 /**
  * Seed the itzenzo.tv Pages ACF repeater.
  *
- * Writes canonical copy for /about, the three how-it-works children
- * (livestream, shop, shipping), /gaming, /cards, /community, and
- * /thank-you into the `itzenzo_pages` repeater on the shop-settings
- * ACF options page. Once seeded, WordPress is the single source of
- * truth for this content — editors change it via WP admin; the Next.js
- * frontend reads it through WPGraphQL.
+ * Writes canonical copy for /about, the four how-it-works children
+ * (livestream, buying, shipping, refund-policy), /gaming, /cards,
+ * /community, and /thank-you into the `itzenzo_pages` repeater on the
+ * shop-settings ACF options page. Once seeded, WordPress is the single
+ * source of truth for this content — editors change it via WP admin;
+ * the Next.js frontend reads it through WPGraphQL.
  *
  * Usage:
  *   ddev wp eval-file scripts/seed-itzenzo-pages.php
@@ -101,7 +101,7 @@ $pages = [
             ],
             [
                 'title'   => 'Every card is Near Mint',
-                'content' => '<p>Unless the listing explicitly says otherwise, every card in this catalog is graded <strong>Near Mint</strong> by hand — edges, surface, and centering all passed a close inspection before listing. If a card slips through that doesn\'t match NM, we\'ll make it right.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
+                'content' => '<p>Unless the listing explicitly says otherwise, every card in this catalog is graded <strong>Near Mint</strong> by hand — edges, surface, and centering all passed a close inspection before listing. If a card slips through that doesn\'t match NM, we\'ll make it right — DM us a quick note and we\'ll usually issue a partial refund as store credit so you keep the card. See the <a href="/how-it-works/refund-policy">full refund policy</a> for the details.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
             ],
             [
                 'title'   => 'Request to see any card on stream',
@@ -138,6 +138,42 @@ $pages = [
             [
                 'title'   => 'Shipping Schedule',
                 'content' => '<p>Domestic orders ship every Monday. International orders ship at the end of each month. Your shipping coverage is checked automatically at checkout using your email — if you\'ve already paid for the period, your next order ships free.</p><p>The moment a shipping label is purchased, a tracking number is automatically posted to your Discord DMs along with a link to follow your package. No need to ask — it just shows up.</p><p>International buyers can DM anytime to ship sooner if you don\'t want to wait for the month-end batch.</p>',
+            ],
+        ],
+    ],
+    [
+        'name'          => 'How It Works — Refund Policy',
+        'slug'          => 'how-it-works-refund-policy',
+        'hero_title'    => 'Refund <strong>Policy</strong>',
+        'hero_subtitle' => 'How refunds work — what we cancel, what we keep shipping, and how to ask.',
+        'sections'      => [
+            [
+                'title'   => 'The short version',
+                'content' => '<p>If something\'s wrong with your order, we\'ll make it right. Reach out before your package ships and we\'ll cancel the order entirely. Reach out after, and we\'ll work through it — refund, replacement, partial credit, whatever fits the situation.</p><p>Refunds run through Stripe and land back on your original payment method in <strong>5–10 business days</strong>.</p>',
+            ],
+            [
+                'title'   => 'How to request a refund',
+                'content' => '<p>The fastest path is a DM in Discord — open a ticket in <code>#start-here</code> or message the shop owner directly. You can also reply to your Stripe receipt email; both end up in the same place.</p><p>Tell us your order session ID (or the email you checked out with) and what\'s going on. We don\'t require photos for damage — but they help when there\'s a question.</p>',
+            ],
+            [
+                'title'   => 'Before your order ships',
+                'content' => '<p>If you ask for a full refund before the shipping label is purchased, we cancel the order at every step:</p><ul><li>Stripe refunds your payment in full</li><li>The order is canceled in our shipping system so nothing prints or goes out the door</li><li>You get a Discord DM confirming the cancellation</li></ul><p>You don\'t need to do anything on your end — the package simply won\'t ship.</p>',
+            ],
+            [
+                'title'   => 'After your order ships',
+                'content' => '<p>Once a label has been purchased and your tracking number has been sent, the package is on its way and we can\'t recall it. You\'ll still get a refund if one\'s warranted — we just can\'t cancel the shipment itself.</p><p>If your package is lost, damaged in transit, or never arrives, DM us with the tracking number and we\'ll work it out together. We don\'t leave you holding a missing package.</p>',
+            ],
+            [
+                'title'   => 'Partial refunds for minor damage',
+                'content' => '<p>If a card arrives with a small ding, an off-center cut, or anything that doesn\'t match its <strong>Near Mint</strong> grade — message us. We typically issue a partial refund as store credit for the difference and let you keep the card. Faster than a return, and most buyers prefer it.</p><p>Partial refunds don\'t cancel the rest of the order — your other items still ship as planned.</p>',
+            ],
+            [
+                'title'   => 'Pack battles & live event purchases',
+                'content' => '<p>Pack battle buy-ins are refundable up until the battle starts on stream. Once packs are being opened, the buy-in is locked — the result is what it is, and we can\'t un-open the cards.</p><p>If you can\'t make a battle you signed up for, DM us before it runs and we\'ll refund or roll your entry to the next one.</p>',
+            ],
+            [
+                'title'   => 'When refunds appear',
+                'content' => '<p>Stripe processes refunds immediately on our end, but your bank or card issuer takes <strong>5–10 business days</strong> to post the credit back to your statement. International cards sometimes take longer.</p><p>If it\'s been more than two weeks and you don\'t see the refund, DM us with your refund ID (sent in your DM when the refund was issued) and we\'ll trace it.</p>',
             ],
         ],
     ],
