@@ -224,7 +224,7 @@ $pages = [
             ],
             [
                 'title'   => 'Joining in 30 seconds',
-                'content' => '<p>Click the invite at <a href="/discord">itzenzo.tv/discord</a>, land in <code>#start-here</code>, and follow the prompts to verify. You can browse the server as an unverified member — but chat, reactions, and purchases unlock after a one-click verification. No email or account linking required to join.</p>',
+                'content' => '<p>Click the invite at <a href="/discord">itzenzo.tv/discord</a>, land in <code>#welcome</code>, and follow the prompts to verify. You can browse the server as an unverified member — but chat, reactions, and purchases unlock after a one-click verification. No email or account linking required to join.</p>',
             ],
             [
                 'title'   => 'Channels at a glance',
@@ -248,7 +248,7 @@ $pages = [
             ],
             [
                 'title'   => 'After Dark',
-                'content' => '<p>After the main card night wraps, streams shift to After Dark — 18+ TCG products (anime cards and playmats with adult artwork). The <strong>Ena</strong> role gates the Discord channel and the stream moves to Twitch only. Verify via <code>#start-here</code> with a one-click age gate. Nothing about After Dark is visible to unverified members — it stays off your feed by default.</p>',
+                'content' => '<p>After the main card night wraps, streams shift to After Dark — 18+ TCG products (anime cards and playmats with adult artwork). The <strong>Ena</strong> role gates the Discord channel and the stream moves to Twitch only. Verify via <code>#welcome</code> with a one-click age gate. Nothing about After Dark is visible to unverified members — it stays off your feed by default.</p>',
             ],
         ],
     ],
