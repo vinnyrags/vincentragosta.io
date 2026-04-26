@@ -97,11 +97,11 @@ $pages = [
             ],
             [
                 'title'   => 'Card Singles Catalog',
-                'content' => '<p>Browse the full catalog of raw card singles at <a href="/cards">itzenzo.tv/cards</a>. Every card in the catalog is <strong>Near Mint</strong>, hand-inspected, and ready to ship. Same checkout flow as sealed product — add to cart, pay with Stripe.</p><p>Not sure about a card before buying? Hit the <strong>Request to See</strong> button on any card in the grid. Drop your email and we\'ll feature it during the next card night so you can see edges, surface, and holo shift in real time — no commitment.</p>',
+                'content' => '<p>Browse the full catalog of raw card singles at <a href="/cards">itzenzo.tv/cards</a>. Every card is hand-inspected and its condition is shown in the corner of the listing. Same checkout flow as sealed product — add to cart, pay with Stripe.</p><p>Not sure about a card before buying? Hit the <strong>Request to See</strong> button on any card in the grid. Drop your email and we\'ll feature it during the next card night so you can see edges, surface, and holo shift in real time — no commitment.</p>',
             ],
             [
-                'title'   => 'Every card is Near Mint',
-                'content' => '<p>Unless the listing explicitly says otherwise, every card in this catalog is graded <strong>Near Mint</strong> by hand — edges, surface, and centering all passed a close inspection before listing. Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and we\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
+                'title'   => 'Hand-inspected, condition on every listing',
+                'content' => '<p>Every card in the catalog is hand-inspected — edges, surface, and centering all reviewed before listing. The condition (NM, LP, MP, HP, or DMG) is shown in the corner of each card in the grid, so you know exactly what you\'re getting before you add it to your cart. Most cards are Near Mint; the rest are labeled accordingly.</p><p>Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and we\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
             ],
             [
                 'title'   => 'Request to see any card on stream',
@@ -208,8 +208,8 @@ $pages = [
     [
         'name'          => 'Cards',
         'slug'          => 'cards',
-        'hero_title'    => 'Raw Singles. <strong>Near Mint.</strong>',
-        'hero_subtitle' => 'Every card in the catalog is Near Mint, ready to ship, and free to request a closer look on stream before you buy.',
+        'hero_title'    => 'Raw Singles. <strong>Hand-Inspected.</strong>',
+        'hero_subtitle' => 'Each card\'s condition is shown right on the listing — and Request to See lets you inspect any card on stream before you buy.',
         'sections'      => [],
     ],
     [
