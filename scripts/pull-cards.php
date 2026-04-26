@@ -151,6 +151,16 @@ while ($hasMore) {
 
         if ($existing->have_posts()) {
             $postId = $existing->posts[0]->ID;
+            // Keep post_title in sync with the Stripe product name. Without
+            // this, sheet renames (e.g. fixing a wrong set or card number)
+            // propagate to ACF fields and the featured image but never
+            // reach the title — leaving alt-text and breadcrumbs stale.
+            if ($existing->posts[0]->post_title !== $name) {
+                wp_update_post([
+                    'ID'         => $postId,
+                    'post_title' => $name,
+                ]);
+            }
             update_field('stripe_price_id', $priceId, $postId);
             update_field('price', $displayPrice, $postId);
             update_field('sale_price', $saleDisplayPrice, $postId);
