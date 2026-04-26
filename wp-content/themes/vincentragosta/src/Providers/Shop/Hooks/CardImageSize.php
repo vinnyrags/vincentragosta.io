@@ -14,6 +14,12 @@ use Mythus\Contracts\Hook;
  * is narrower than 768px, leaving only medium (215x300) and the original.
  * Without this hook, the GraphQL query falls back to the full-resolution
  * original for every card in the grid — a flood of half-megabyte PNGs.
+ *
+ * Width is set well below the smallest card scan in the catalog so every
+ * card actually gets a sub-size generated — WordPress refuses to generate
+ * a sub-size when the source is not larger than the target in both
+ * dimensions, which would silently leave outlier scans (e.g. 600x825 POP
+ * Series scans) on the original PNG fallback.
  */
 class CardImageSize implements Hook
 {
@@ -24,6 +30,6 @@ class CardImageSize implements Hook
 
     public function addImageSize(): void
     {
-        add_image_size('card-grid', 600, 836, false);
+        add_image_size('card-grid', 500, 9999, false);
     }
 }
