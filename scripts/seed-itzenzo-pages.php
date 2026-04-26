@@ -101,7 +101,7 @@ $pages = [
             ],
             [
                 'title'   => 'Every card is Near Mint',
-                'content' => '<p>Unless the listing explicitly says otherwise, every card in this catalog is graded <strong>Near Mint</strong> by hand — edges, surface, and centering all passed a close inspection before listing. If a card slips through that doesn\'t match NM, we\'ll make it right — DM us a quick note and we\'ll usually issue a partial refund as store credit so you keep the card. See the <a href="/how-it-works/refund-policy">full refund policy</a> for the details.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
+                'content' => '<p>Unless the listing explicitly says otherwise, every card in this catalog is graded <strong>Near Mint</strong> by hand — edges, surface, and centering all passed a close inspection before listing. Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and we\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
             ],
             [
                 'title'   => 'Request to see any card on stream',
@@ -149,7 +149,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'The short version',
-                'content' => '<p>If something\'s wrong with your order, we\'ll make it right. Reach out before your package ships and we\'ll cancel the order entirely. Reach out after, and we\'ll work through it — refund, replacement, partial credit, whatever fits the situation.</p><p>Refunds run through Stripe and land back on your original payment method in <strong>5–10 business days</strong>.</p>',
+                'content' => '<p>If something\'s wrong with your order, reach out before your package ships and we\'ll cancel the order entirely. Once it\'s shipped, DM us and we\'ll work through it together.</p><p>Refunds run through Stripe and land back on your original payment method in <strong>5–10 business days</strong>.</p>',
             ],
             [
                 'title'   => 'How to request a refund',
@@ -164,8 +164,8 @@ $pages = [
                 'content' => '<p>Once a label has been purchased and your tracking number has been sent, the package is on its way and we can\'t recall it. You\'ll still get a refund if one\'s warranted — we just can\'t cancel the shipment itself.</p><p>If your package is lost, damaged in transit, or never arrives, DM us with the tracking number and we\'ll work it out together. We don\'t leave you holding a missing package.</p>',
             ],
             [
-                'title'   => 'Partial refunds for minor damage',
-                'content' => '<p>If a card arrives with a small ding, an off-center cut, or anything that doesn\'t match its <strong>Near Mint</strong> grade — message us. We typically issue a partial refund as store credit for the difference and let you keep the card. Faster than a return, and most buyers prefer it.</p><p>Partial refunds don\'t cancel the rest of the order — your other items still ship as planned.</p>',
+                'title'   => 'Concerned about a card before buying?',
+                'content' => '<p>Use the <strong>Request to See</strong> button on any card listing — we\'ll feature it on the next card night so you can inspect edges, surface, centering, and holo shift live on stream before you buy. No commitment, no awkward conversation later. If something looks off, just don\'t add it to your cart.</p><p>The on-stream review is the right place to settle condition questions, so we don\'t cover post-purchase partial refunds for condition concerns in this policy. Anything genuinely wrong with what you received still gets handled — just DM us and we\'ll work it out.</p>',
             ],
             [
                 'title'   => 'Pack battles & live event purchases',
