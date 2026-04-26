@@ -44,6 +44,7 @@ make start     # start DDEV, restore DB snapshot, install deps, build assets
 | `make backup-singles` / `enrich-singles` | Back up and Pokemon-TCG-enrich the `Singles` tab in Google Sheets |
 | `make push-cards` / `pull-cards` / `pull-cards-publish` / `pull-cards-staging` | Card singles pipeline — Sheets → Stripe → WordPress |
 | `make sync-cards` | Full card pipeline: `push-cards` + `pull-cards-publish` |
+| `make migrate-card-images` / `migrate-card-images-staging` / `migrate-card-images-production` | Regenerate card sub-sizes as JPEG and delete orphan PNGs |
 | `make nous-import FILE=... TITLE=... DATE=... TAGS=...` | Import a Nous Signal post from a PHP block markup file |
 | `make satis-refresh` / `satis-add` / `satis-remove` | Manage the private Satis Composer repository |
 

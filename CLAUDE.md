@@ -286,6 +286,8 @@ From the project root:
 | `make pull-products` | Sync Stripe products to local WordPress (as drafts) |
 | `make pull-products-publish` | Sync Stripe products to local WordPress (auto-publish) |
 | `make pull-products-staging` | Sync Stripe products to staging (clean + publish) |
+| `make migrate-card-images` | Regenerate card sub-sizes as JPEG and clean up orphan PNGs (local) |
+| `make migrate-card-images-staging` / `migrate-card-images-production` | Same migration on the remote environment |
 
 From a theme directory:
 
