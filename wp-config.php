@@ -58,11 +58,15 @@ define('WP_CONTENT_URL', WP_HOME . '/wp-content');
 // =====================================================================
 // Debugging Settings (defaults for development, overridden per environment)
 // =====================================================================
+// Default to debug OFF in production. wp-config-env.php (per-environment,
+// gitignored) overrides for local DDEV and staging where debug logging is
+// useful. Leaving debug enabled in production wrote stack traces to a
+// world-readable /wp-content/debug.log that could leak internal details.
 if ( ! defined( 'WP_DEBUG' ) ) {
-    define( 'WP_DEBUG', true );
+    define( 'WP_DEBUG', false );
 }
 if ( ! defined( 'WP_DEBUG_LOG' ) ) {
-    define( 'WP_DEBUG_LOG', true );
+    define( 'WP_DEBUG_LOG', false );
 }
 if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
     define( 'WP_DEBUG_DISPLAY', false );

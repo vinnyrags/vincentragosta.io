@@ -44,36 +44,21 @@ class CreateCheckoutEndpoint extends Endpoint
 
     public function getArgs(): array
     {
+        // Only items[] and email are actually consumed. Everything else
+        // (international, shipping_covered, country_known, discord_linked)
+        // used to be passed through from the cart but is now derived
+        // server-side via lookupShipping(). Keeping the API surface small
+        // makes it harder to accidentally re-trust those fields later.
         return [
             'items' => [
                 'required' => true,
                 'type'     => 'array',
-            ],
-            'international' => [
-                'required' => false,
-                'type'     => 'boolean',
-                'default'  => false,
             ],
             'email' => [
                 'required'          => false,
                 'type'              => 'string',
                 'default'           => '',
                 'sanitize_callback' => 'sanitize_email',
-            ],
-            'shipping_covered' => [
-                'required' => false,
-                'type'     => 'boolean',
-                'default'  => false,
-            ],
-            'country_known' => [
-                'required' => false,
-                'type'     => 'boolean',
-                'default'  => true,
-            ],
-            'discord_linked' => [
-                'required' => false,
-                'type'     => 'boolean',
-                'default'  => false,
             ],
         ];
     }
@@ -82,11 +67,19 @@ class CreateCheckoutEndpoint extends Endpoint
     {
         $items = $request->get_param('items');
 
-        $isInternational = (bool) $request->get_param('international');
-        $countryKnown = (bool) $request->get_param('country_known');
         $customerEmail = $request->get_param('email') ?: null;
-        $shippingCovered = (bool) $request->get_param('shipping_covered');
-        $discordLinked = (bool) $request->get_param('discord_linked');
+
+        // Shipping coverage and country must be authoritative — never trusted
+        // from the client. A hostile cart could otherwise pass shipping_covered=true
+        // to skip the shipping charge or international=false to pay the domestic
+        // rate while shipping abroad. We re-derive both server-side from the bot's
+        // shipping lookup, falling back to the safest default (charge full domestic
+        // shipping) if no email is provided or the bot is unreachable.
+        $lookup = $this->lookupShipping($customerEmail);
+        $isInternational = $lookup['international'];
+        $countryKnown    = $lookup['country_known'];
+        $shippingCovered = $lookup['covered'];
+        $discordLinked   = $lookup['known'];
 
         if (!is_array($items) || empty($items)) {
             return new WP_Error(
@@ -228,6 +221,58 @@ class CreateCheckoutEndpoint extends Endpoint
                 ['status' => 500]
             );
         }
+    }
+
+    /**
+     * Look up shipping coverage for the buyer via the Nous bot.
+     *
+     * Returns authoritative server-side answers for whether shipping is
+     * already paid for the period, whether the buyer is international, and
+     * whether their country is known. Any client-supplied flags are ignored.
+     *
+     * Falls back to safe defaults (uncovered, domestic, country unknown) when:
+     *   - no email is supplied,
+     *   - the bot is unreachable,
+     *   - the bot returns a malformed response.
+     *
+     * "Safe" here means the buyer is *charged* shipping — never skipped — so
+     * a missing lookup never costs us money.
+     *
+     * @return array{covered: bool, international: bool, country_known: bool, known: bool}
+     */
+    private function lookupShipping(?string $email): array
+    {
+        $defaults = [
+            'covered'       => false,
+            'international' => false,
+            'country_known' => false,
+            'known'         => false,
+        ];
+
+        if (!$email || !is_email($email)) {
+            return $defaults;
+        }
+
+        $response = wp_remote_get(
+            'http://127.0.0.1:3100/shipping/lookup?' . http_build_query(['email' => $email]),
+            ['timeout' => 5]
+        );
+
+        if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
+            return $defaults;
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+        if (!is_array($body)) {
+            return $defaults;
+        }
+
+        return [
+            'covered'       => (bool) ($body['covered']       ?? false),
+            'international' => (bool) ($body['international'] ?? false),
+            'country_known' => (bool) ($body['countryKnown']  ?? false),
+            'known'         => (bool) ($body['known']         ?? false),
+        ];
     }
 
     /**

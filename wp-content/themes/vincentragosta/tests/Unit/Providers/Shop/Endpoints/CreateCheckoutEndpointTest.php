@@ -56,16 +56,22 @@ class CreateCheckoutEndpointTest extends TestCase
         $this->assertTrue($args['items']['required']);
     }
 
-    public function testArgsIncludeInternationalFlag(): void
+    public function testArgsDoNotIncludeShippingFlagsOrCountryHints(): void
     {
+        // Shipping coverage, international, country_known, and discord_linked
+        // used to be accepted from the cart and passed straight through to
+        // Stripe. They're now derived server-side via lookupShipping() so
+        // a hostile client can't send shipping_covered=true to skip the
+        // shipping charge. The fields must NOT be on the API surface.
         $reflection = new \ReflectionClass(CreateCheckoutEndpoint::class);
         $method = $reflection->getMethod('getArgs');
 
         $endpoint = $reflection->newInstanceWithoutConstructor();
         $args = $method->invoke($endpoint);
 
-        $this->assertArrayHasKey('international', $args);
-        $this->assertFalse($args['international']['required']);
-        $this->assertFalse($args['international']['default']);
+        $this->assertArrayNotHasKey('international', $args);
+        $this->assertArrayNotHasKey('shipping_covered', $args);
+        $this->assertArrayNotHasKey('country_known', $args);
+        $this->assertArrayNotHasKey('discord_linked', $args);
     }
 }
