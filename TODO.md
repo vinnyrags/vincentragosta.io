@@ -14,18 +14,25 @@
 - sort by language as additional dropdown in products block
 - new image for one piece vol 5
 
-- consider reworking coupons to support multiple coupons at once (we actually may not want to do this)
 - can we change !capture command to !moment instead, and update all docs and discord messaging and tests accordingly
 - can we capitalize all GH repos (minus websites like itzenzo.tv and vincentragosta.io, but IX, Mythus and Akivili should all be capitalized)
 
-- if i dont ship orders for a particular week (for domestic lets say, this scenario can be applied to international too), will the system still reset on the following Monday, and charge the buyer again if they buy in for the new week, I also want to know if I wanted to waive shipping for the next week for someone, what command I would run to complete this. I am just confirming process with these questions, no need to change any code lets just have a conversation about this. is there an opportunity to setup a test 
-- refund should kill the shippingeasy order (if possible, and if this makes sense), we should create a critical path test for this and any other real world refund scenarios i could find myself in in this new critical path test. lets be sure to update messaging accordingly as well please
-- confirm all the work we have done is deployed to production
-
-- lets enter plan mode and work out an efficient and effective plan with the following criteria-- lets do a deep dive on the itzenzo.tv frontend code and look for opportunities to consolidate shared code, and just do a general sweep/optimzation of the current code base, css variables too, we should not be using hardcoded colors anywhere, same with font sizes, we should be referencing a clean and efficient design system (you can take cues from vincentragosta.io setup).
-- how is our makefile looking? it seems quite large and almost unmanageable, do you see opportunities for optimization?
+- if i dont ship orders for a particular week (for domestic lets say, this scenario can be applied to international too), will the system still reset on the following Monday, and charge the buyer again if they buy in for the new week, I also want to know if I wanted to waive shipping for the next week for someone, what command I would run to complete this. I am just confirming process with these questions, no need to change any code lets just have a conversation about this. is there an opportunity to setup a test
 - setup tests buying across single cards and box product in !test command
-- I think we should remove the Browse card singles button, it may be misleading to folks to see that button and think that is the livestream shop (box product), i wonder if we should add some messaging above the shop block itself saying you are viewing the livestream shop, there is a separate shop for singles. is there a way we can better represent this, even in the navigation? right now we have no HOME nav item, as one should assume to click the logo to get back to home (this may not be so obvious), should we consider creating a SHOP menu item (if not HOME), and it too was a dropdown, one for livestream and another for card singles?
+- how can I pull money from Stripe into my personal bank account, is this something I can fire off in discord at the end of the night, or perhaps it can be automated in !offline perhaps (having its own designated command, just automated in !offline). lets talk through this first before doing anything, we would also want to make sure we are updating documentation/readmes/discord messaging/shop storefront messaging accordingly.
+- setup donations link (stripe based), or section on the website, maybe in the footer?
+- can we confirm if we have shipping easy tests accounted for in our !test command please?
+
+- we need a list style (see refund policy page)
+- section nav should collapse at greater than 3 items (collapse to dropdown), I believe it is currently set to 5
+- consider moving the giveaway stuff to the website (as opposed to in discord), is it possible to build a duck race on my website? I am sure this is quite involved, but its a fairly simple concept
+- check over all discord messaging, make sure nothing is stale
+- for the pull boxes, the ability to enter their selection out of X amount of cards should be available, we should be capturing their selections in the queue, this also means we need to be keeping track of the count of the pull box (which we may already be doing)
+- grimmsnarl V sv116/sv122 needs to bump stock to 2, 
+
+- could we explore a potentially better mobile experience, currently its scroll-galore for both shops, the experience, while each card looks great, as a whole is completely unrealistic to vertically scroll through 1000+ cards or even 200+ boxes/packs on a mobile screen. wondering if we go back to two columns on mobile and display less information maybe? this still doesnt really solve the problem, but i guess its okay to infinitely scroll, having to have them search only on mobile is also not a good UI. its probably fine I think, we should just look into potentially having two cards per row displayed, title and price maybe only? let me know what you are thinking, dont implement anything yet lets talk through this. i also wonder if we can simplify the buttons on mobile, have a cart icon instead of add to cart, and just have "request" instead of request to see, and have the buttons be side by side instead of stacked.
+- all of my cards for sale are holographic cards (holographs), is there any conflicting rows in the google sheet that would say otherwise? I am mainly checking in the common/uncommon scenario, I dont believe anything with those names is correct, I have cards that are technically rarer than holo-rare, can i see a list of any offenders, please dont make any changes just yet I want to review the list (if any)
+- setup a nightly (daily) cron on vincentragosta.io that takes snapshot of db and saves the last three most recent in an appropriate directory, this way if anything catastrophic happens we have a backup.
 
 - does any documentation (readmes/akivili/itzenzo.tv pages/discord nous messaging across the various channels) need updating?
 
