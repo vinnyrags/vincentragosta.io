@@ -9,6 +9,8 @@ use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestStatusEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
@@ -49,6 +51,8 @@ class ShopProvider extends Provider
         CardRequestsListEndpoint::class,
         CardRequestStatusEndpoint::class,
         CreateCheckoutEndpoint::class,
+        CurrentPackBattleEndpoint::class,
+        PullBoxCheckoutEndpoint::class,
         ShippingLookupEndpoint::class,
         StockDecrementEndpoint::class,
         StripeWebhookEndpoint::class,

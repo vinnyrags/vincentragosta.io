@@ -3,6 +3,8 @@
 namespace ChildTheme\Tests\Unit\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use ChildTheme\Providers\Shop\ShopProvider;
@@ -42,6 +44,8 @@ class ShopProviderTest extends TestCase
 
         $this->assertContains(CreateCheckoutEndpoint::class, $routes);
         $this->assertContains(StripeWebhookEndpoint::class, $routes);
+        $this->assertContains(CurrentPackBattleEndpoint::class, $routes);
+        $this->assertContains(PullBoxCheckoutEndpoint::class, $routes);
     }
 
     public function testDeclaresHooks(): void

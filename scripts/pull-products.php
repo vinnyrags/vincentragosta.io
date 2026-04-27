@@ -89,8 +89,10 @@ while ($hasMore) {
         $defaultPrice = $stripeProduct->default_price;
         $metadata = $stripeProduct->metadata ? $stripeProduct->metadata->toArray() : [];
 
-        // Skip card singles — those are claimed by pull-cards.php.
-        if (($metadata['type'] ?? '') === 'card') {
+        // Skip card singles (claimed by pull-cards.php) and pull-box entries
+        // (managed by seed-pull-boxes.php — no WP product CPT representation).
+        $type = $metadata['type'] ?? '';
+        if ($type === 'card' || $type === 'pull_box') {
             $startingAfter = $productId;
             continue;
         }

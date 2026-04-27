@@ -1,0 +1,78 @@
+{
+    "key": "group_current_pack_battle",
+    "title": "Current Pack Battle (Live)",
+    "fields": [
+        {
+            "key": "field_cpb_status",
+            "label": "Status",
+            "name": "cpb_status",
+            "type": "select",
+            "instructions": "Live state of the homepage pack battle widget. The Nous Discord bot writes this on !battle start / close / cancel / winner — manual edits will be overwritten on the next battle event.",
+            "choices": {
+                "idle": "Idle (no widget shown)",
+                "open": "Open — entries available, buy link shown",
+                "in_progress": "Battle in progress — link hidden"
+            },
+            "default_value": "idle",
+            "ui": 0,
+            "return_format": "value"
+        },
+        {
+            "key": "field_cpb_product",
+            "label": "Linked Product",
+            "name": "cpb_product",
+            "type": "post_object",
+            "instructions": "Resolved automatically from the Stripe price ID supplied by the bot.",
+            "post_type": ["product"],
+            "return_format": "object",
+            "multiple": 0,
+            "allow_null": 1
+        },
+        {
+            "key": "field_cpb_battle_id",
+            "label": "Battle ID",
+            "name": "cpb_battle_id",
+            "type": "number",
+            "instructions": "SQLite row id from the Nous bot battles table. Used to construct the buy URL.",
+            "default_value": 0
+        },
+        {
+            "key": "field_cpb_buy_url",
+            "label": "Buy URL",
+            "name": "cpb_buy_url",
+            "type": "url",
+            "instructions": "Full URL the homepage 'Buy In' button points to. Cleared when status is in_progress or idle."
+        },
+        {
+            "key": "field_cpb_max_entries",
+            "label": "Max Entries",
+            "name": "cpb_max_entries",
+            "type": "number",
+            "default_value": 0
+        },
+        {
+            "key": "field_cpb_paid_entries",
+            "label": "Paid Entries",
+            "name": "cpb_paid_entries",
+            "type": "number",
+            "default_value": 0
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "shop-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "currentPackBattle"
+}

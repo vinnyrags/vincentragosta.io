@@ -1,0 +1,77 @@
+{
+    "key": "group_pull_boxes",
+    "title": "Pull Boxes",
+    "fields": [
+        {
+            "key": "field_pb_heading",
+            "label": "Section Heading",
+            "name": "pb_heading",
+            "type": "text",
+            "default_value": "Pull Boxes",
+            "instructions": "Heading shown above the pull-box cards on the itzenzo.tv homepage."
+        },
+        {
+            "key": "field_pb_v_price_id",
+            "label": "V Pull Box — Stripe Price ID ($1)",
+            "name": "pb_v_price_id",
+            "type": "text",
+            "instructions": "Stripe Price ID for the $1 V pull-box entry. Pull boxes are buy-in tickets; no WP product is created.",
+            "placeholder": "price_..."
+        },
+        {
+            "key": "field_pb_v_title",
+            "label": "V Pull Box — Card Title",
+            "name": "pb_v_title",
+            "type": "text",
+            "default_value": "$1 V Pulls"
+        },
+        {
+            "key": "field_pb_v_description",
+            "label": "V Pull Box — Description",
+            "name": "pb_v_description",
+            "type": "textarea",
+            "default_value": "Every entry pulls a Pokémon V card. Random shot at a common vintage card on the side.",
+            "rows": 2
+        },
+        {
+            "key": "field_pb_vmax_price_id",
+            "label": "VMAX Pull Box — Stripe Price ID ($2)",
+            "name": "pb_vmax_price_id",
+            "type": "text",
+            "instructions": "Stripe Price ID for the $2 VMAX pull-box entry.",
+            "placeholder": "price_..."
+        },
+        {
+            "key": "field_pb_vmax_title",
+            "label": "VMAX Pull Box — Card Title",
+            "name": "pb_vmax_title",
+            "type": "text",
+            "default_value": "$2 VMAX Pulls"
+        },
+        {
+            "key": "field_pb_vmax_description",
+            "label": "VMAX Pull Box — Description",
+            "name": "pb_vmax_description",
+            "type": "textarea",
+            "default_value": "Every entry pulls a Pokémon VMAX card. Random shot at a common or uncommon vintage card on the side.",
+            "rows": 2
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "shop-settings"
+            }
+        ]
+    ],
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "active": true,
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "pullBoxes"
+}

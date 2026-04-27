@@ -127,6 +127,7 @@ endef
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
 	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
+	seed-pull-boxes seed-pull-boxes-staging seed-pull-boxes-production \
 	nous-import \
 	satis-refresh satis-add satis-remove
 
@@ -398,6 +399,18 @@ seed-itzenzo-pages-staging: ## Force-overwrite staging Pages repeater
 seed-itzenzo-pages-production: ## Force-overwrite production Pages repeater
 	@echo "Seeding production itzenzo.tv Pages..."
 	$(call remote-wp-eval-with-env,PRODUCTION,seed-itzenzo-pages.php,FORCE=1)
+
+seed-pull-boxes: ## Create/find Pull Box Entry Stripe product + V/VMAX prices, write IDs to local WP
+	@echo "Seeding Pull Box Entry product + prices on Stripe..."
+	ddev wp eval-file scripts/seed-pull-boxes.php
+
+seed-pull-boxes-staging: ## Same on staging WordPress
+	@echo "Seeding Pull Box Entry on staging..."
+	$(call remote-wp-eval,STAGING,seed-pull-boxes.php)
+
+seed-pull-boxes-production: ## Same on production WordPress
+	@echo "Seeding Pull Box Entry on production..."
+	$(call remote-wp-eval,PRODUCTION,seed-pull-boxes.php)
 
 ##@ Nous import
 
