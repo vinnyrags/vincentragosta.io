@@ -168,8 +168,6 @@ class QueueEntryCreateEndpoint extends Endpoint
 
         $entry = $this->repository->findEntry($id);
 
-        do_action('shop_queue_entry_created', $entry, $session);
-
         return new WP_REST_Response([
             'entry'     => QueueRepository::serializeEntry($entry),
             'duplicate' => false,

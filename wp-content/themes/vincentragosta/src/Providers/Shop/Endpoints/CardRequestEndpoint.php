@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Shop\Endpoints;
 
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
+use ChildTheme\Providers\Shop\Support\QueueRepository;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -19,6 +20,10 @@ use WP_REST_Response;
  */
 class CardRequestEndpoint extends Endpoint
 {
+    public function __construct(private readonly QueueRepository $queueRepository)
+    {
+    }
+
     public function getRoute(): string
     {
         return '/card-request';
@@ -129,6 +134,8 @@ class CardRequestEndpoint extends Endpoint
         }
 
         $requestId = (int) $wpdb->insert_id;
+
+        $this->mirrorToQueue($card, $requestId, $email, $discord);
         $this->notifyBot($card, $requestId, $email, $discord, false);
 
         return new WP_REST_Response([
@@ -136,6 +143,40 @@ class CardRequestEndpoint extends Endpoint
             'status'  => 'pending',
             'message' => "Your request is in! We'll call you out when it's shown.",
         ]);
+    }
+
+    /**
+     * Mirror this RTS request into the unified queue so it shows up in the
+     * itzenzo.tv LIVE QUEUE section. Failure is logged, never thrown — the
+     * card request itself has already succeeded by the time this runs.
+     */
+    private function mirrorToQueue(\WP_Post $card, int $requestId, string $email, string $discord): void
+    {
+        try {
+            $session = $this->queueRepository->findActiveSession();
+            if (!$session) {
+                return;
+            }
+
+            $this->queueRepository->createEntry([
+                'session_id'      => (int) $session['id'],
+                'type'            => 'rts',
+                'source'          => 'shop',
+                'discord_handle'  => $discord !== '' ? $discord : null,
+                'customer_email'  => $email,
+                'display_name'    => $discord !== '' ? $discord : $email,
+                'detail_label'    => $card->post_title,
+                'detail_data'     => [
+                    'cardId'   => $card->ID,
+                    'cardSlug' => $card->post_name,
+                    'cardName' => $card->post_title,
+                ],
+                'external_ref'    => 'rts:' . $requestId,
+            ]);
+        } catch (\Throwable $e) {
+            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+            error_log('CardRequestEndpoint queue mirror failed: ' . $e->getMessage());
+        }
     }
 
     private function notifyBot(\WP_Post $card, int $requestId, string $email, string $discord, bool $duplicate): void

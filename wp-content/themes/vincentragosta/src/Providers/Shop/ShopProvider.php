@@ -25,6 +25,7 @@ use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
 use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
 use ChildTheme\Providers\Shop\Hooks\QueueMigration;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
@@ -53,6 +54,7 @@ class ShopProvider extends Provider
         ShopSettingsMenuLink::class,
         QueueMigration::class,
         QueueGraphQL::class,
+        QueueChangeWebhook::class,
     ];
 
     /**

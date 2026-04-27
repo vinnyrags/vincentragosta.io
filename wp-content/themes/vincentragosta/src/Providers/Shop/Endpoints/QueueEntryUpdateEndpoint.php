@@ -113,8 +113,6 @@ class QueueEntryUpdateEndpoint extends Endpoint
         $this->repository->updateEntry($id, $update);
         $updated = $this->repository->findEntry($id);
 
-        do_action('shop_queue_entry_updated', $updated, $entry);
-
         return new WP_REST_Response([
             'entry' => QueueRepository::serializeEntry($updated),
         ]);

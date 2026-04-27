@@ -65,7 +65,12 @@ class QueueRepository
             ['%s', '%s', '%s']
         );
 
-        return (int) $wpdb->insert_id;
+        $id = (int) $wpdb->insert_id;
+        $row = $this->findSession($id);
+        if ($row) {
+            do_action('shop_queue_session_created', $row);
+        }
+        return $id;
     }
 
     public function updateSession(int $id, array $data): bool
@@ -100,7 +105,14 @@ class QueueRepository
             return false;
         }
 
+        $before = $this->findSession($id);
         $result = $wpdb->update($table, $update, ['id' => $id], $format, ['%d']);
+        if ($result !== false) {
+            $after = $this->findSession($id);
+            if ($after) {
+                do_action('shop_queue_session_updated', $after, $before);
+            }
+        }
         return $result !== false;
     }
 
@@ -174,7 +186,12 @@ class QueueRepository
             ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
 
-        return (int) $wpdb->insert_id;
+        $id = (int) $wpdb->insert_id;
+        $row = $this->findEntry($id);
+        if ($row) {
+            do_action('shop_queue_entry_created', $row);
+        }
+        return $id;
     }
 
     public function updateEntry(int $id, array $data): bool
@@ -215,7 +232,14 @@ class QueueRepository
             return false;
         }
 
+        $before = $this->findEntry($id);
         $result = $wpdb->update($table, $update, ['id' => $id], $format, ['%d']);
+        if ($result !== false) {
+            $after = $this->findEntry($id);
+            if ($after) {
+                do_action('shop_queue_entry_updated', $after, $before);
+            }
+        }
         return $result !== false;
     }
 
