@@ -380,7 +380,7 @@
             "label": "V Pull Box — Description",
             "name": "pb_v_description",
             "type": "textarea",
-            "default_value": "Every entry pulls a Pokémon V card. Random shot at a common vintage card on the side.",
+            "default_value": "Every entry pulls a Pokémon V card. Random shot at a common vintage card inside.",
             "rows": 2
         },
         {
@@ -403,7 +403,7 @@
             "label": "VMAX Pull Box — Description",
             "name": "pb_vmax_description",
             "type": "textarea",
-            "default_value": "Every entry pulls a Pokémon VMAX card. Random shot at a common or uncommon vintage card on the side.",
+            "default_value": "Every entry pulls a Pokémon VMAX card. Random shot at a common or uncommon vintage card inside.",
             "rows": 2
         }
     ],
