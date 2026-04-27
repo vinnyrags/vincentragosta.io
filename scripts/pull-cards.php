@@ -163,6 +163,7 @@ while ($hasMore) {
             }
             update_field('stripe_price_id', $priceId, $postId);
             update_field('price', $displayPrice, $postId);
+            update_field('stock_quantity', $stock !== '' ? (int) $stock : 1, $postId);
             update_field('sale_price', $saleDisplayPrice, $postId);
             update_field('sale_price_id', $salePriceId, $postId);
             if ($cost !== '') {
