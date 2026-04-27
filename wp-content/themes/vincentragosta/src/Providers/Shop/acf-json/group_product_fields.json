@@ -54,16 +54,18 @@
             "type": "text",
             "instructions": "Optional stock-keeping unit for internal tracking.",
             "required": 0,
-            "placeholder": "PKM-BB-001"
+            "placeholder": "PKM-BB-001",
+            "show_in_graphql": 0
         },
         {
             "key": "field_product_cost",
             "label": "Cost Per Unit",
             "name": "cost",
             "type": "text",
-            "instructions": "Per-unit cost from supplier. Auto-populated by sync from Stripe cost metadata. Used for margin calculation.",
+            "instructions": "Per-unit cost from supplier. Auto-populated by sync from Stripe cost metadata. Used for margin calculation. Internal only — never exposed via WPGraphQL.",
             "required": 0,
-            "placeholder": "$130.00"
+            "placeholder": "$130.00",
+            "show_in_graphql": 0
         },
         {
             "key": "field_product_stock_quantity",
