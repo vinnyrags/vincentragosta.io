@@ -312,7 +312,18 @@ function convertCardAttachmentToJpeg(int $attachmentId): void
     }
 
     $editor->set_quality(85);
-    $jpegPath = preg_replace('/\.png$/i', '.jpg', $file);
+    // Use wp_unique_filename so concurrent conversions can't overwrite
+    // each other. Without this, two attachments with the same source
+    // basename (e.g. multiple sets each with #152) collide on the
+    // output path: the first card's PNG gets unlinked → wp_unique_filename
+    // for the next upload sees the slot is free and reuses it →
+    // conversion overwrites the existing JPEG → both attachments end
+    // up pointing at the same file showing whichever was processed
+    // last.
+    $dir = dirname($file);
+    $jpegBasename = preg_replace('/\.png$/i', '.jpg', basename($file));
+    $uniqueBasename = wp_unique_filename($dir, $jpegBasename);
+    $jpegPath = $dir . '/' . $uniqueBasename;
     $saved = $editor->save($jpegPath, 'image/jpeg');
     if (is_wp_error($saved) || !is_array($saved)) {
         return;
