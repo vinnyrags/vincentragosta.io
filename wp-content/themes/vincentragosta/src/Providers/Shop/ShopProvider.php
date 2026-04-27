@@ -11,6 +11,13 @@ use ChildTheme\Providers\Shop\Endpoints\CardRequestsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueEntryCreateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueEntryUpdateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueSessionCreateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueSessionEntriesEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueSessionsListEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueSnapshotEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
@@ -18,6 +25,8 @@ use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
+use ChildTheme\Providers\Shop\Hooks\QueueMigration;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
@@ -42,6 +51,8 @@ class ShopProvider extends Provider
         CardRequestsMigration::class,
         CardRequestsAdminPage::class,
         ShopSettingsMenuLink::class,
+        QueueMigration::class,
+        QueueGraphQL::class,
     ];
 
     /**
@@ -55,6 +66,13 @@ class ShopProvider extends Provider
         CreateCheckoutEndpoint::class,
         CurrentPackBattleEndpoint::class,
         PullBoxCheckoutEndpoint::class,
+        QueueEntryCreateEndpoint::class,
+        QueueEntryUpdateEndpoint::class,
+        QueueSessionCreateEndpoint::class,
+        QueueSessionEntriesEndpoint::class,
+        QueueSessionUpdateEndpoint::class,
+        QueueSessionsListEndpoint::class,
+        QueueSnapshotEndpoint::class,
         ShippingLookupEndpoint::class,
         StockDecrementEndpoint::class,
         StripeWebhookEndpoint::class,
