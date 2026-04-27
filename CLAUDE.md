@@ -12,7 +12,9 @@ This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a 
 
 The **Nous Discord bot** (order notifications, pack battles, stream alerts) lives in a separate repository ([Nous](https://github.com/vinnyrags/Nous)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/Nous.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code.
 
-The **itzenzo.tv storefront** ([itzenzo.tv](https://github.com/vinnyrags/itzenzo.tv)) is a headless Next.js frontend that uses this WordPress instance as its backend. The ShopProvider registers product CPTs, REST endpoints (checkout, webhooks, stock), and ACF field groups. WPGraphQL + WPGraphQL for ACF expose product data and site settings. The shop page on vincentragosta.io 301-redirects to `https://itzenzo.tv`. The ShopProvider is headless-only — no frontend blocks, cart assets, or shop UI are rendered by WordPress.
+The **itzenzo.tv storefront** ([itzenzo.tv](https://github.com/vinnyrags/itzenzo.tv)) is a headless Next.js frontend that uses this WordPress instance as its backend. The ShopProvider registers product CPTs, REST endpoints (checkout, webhooks, stock, **unified queue**), and ACF field groups. WPGraphQL + WPGraphQL for ACF expose product data, site settings, and the **live queue snapshot**. The shop page on vincentragosta.io 301-redirects to `https://itzenzo.tv`. The ShopProvider is headless-only — no frontend blocks, cart assets, or shop UI are rendered by WordPress.
+
+The **unified queue** (orders, pack battles, pull boxes, request-to-see card requests) lives in WordPress as the source of truth, with Nous and the itzenzo.tv homepage Live Queue section both subscribing. See [Unified Queue](#unified-queue) below for the data model, REST surface, GraphQL exposure, and the change-broadcast bridge.
 
 - **PHP 8.4+** with strict types
 - **PHP-DI 7.0** for dependency injection (autowiring-first, owned by Mythus)
@@ -246,6 +248,82 @@ Each provider gets a **PatternManager** instance during `setup()`. If the provid
 ```
 
 The export script automatically replaces hardcoded upload URLs with dynamic `content_url()` calls so media references work across environments.
+
+## Unified Queue
+
+The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests — so the same data feeds the Discord `!queue` command, the public itzenzo.tv homepage Live Queue section, and any future admin tooling.
+
+### Data model
+
+Two custom tables, created via `dbDelta()` in `Hooks/QueueMigration.php` with a version-keyed option (`shop_queue_schema_version`):
+
+- `wp_queue_sessions` — one row per livestream queue window. Columns: `id`, `status` (`open` / `closed` / `racing` / `complete`), `channel_message_id` (Discord embed pointer), `duck_race_winner_user_id`, `created_at`, `closed_at`. Indexed on `status` and `created_at`.
+- `wp_queue_entries` — one row per queued item. Columns: `id`, `session_id`, `type` (`order` / `pack_battle` / `pull_box` / `rts`), `source` (`discord` / `shop`), `status` (`queued` / `active` / `completed` / `skipped`), `discord_user_id`, `discord_handle`, `customer_email`, `order_number`, `display_name`, `detail_label`, `detail_data` (JSON), `stripe_session_id`, `external_ref` (idempotency key), `created_at`, `completed_at`. Indexed on `(session_id, status, created_at)`, `stripe_session_id`, `external_ref`, and `(type, source)`.
+
+**Position is computed at read time from `created_at` order — never stored.** This avoids the classic queue-shift race and keeps inserts cheap.
+
+All `$wpdb` access goes through `Support/QueueRepository.php`. Two serialization shapes:
+- `serializeEntry()` — public/homepage shape with `identifier { kind, label }` and `detail { label, data }` discriminated union by type.
+- `serializeEntryRaw()` — camelCase raw fields for Nous (which needs `discordUserId` for `<@id>` mentions).
+
+### REST surface
+
+Seven endpoints under `/wp-json/shop/v1/queue/*`, registered through the standard `RestManager` route map on `ShopProvider`:
+
+| Endpoint | Auth | Purpose |
+|----------|------|---------|
+| `GET /queue` | public | Snapshot of active session: session metadata, current `active` entry, top-N `upcoming`, total. ETag-cached, returns 304 on no change. |
+| `GET /queue/sessions` | public | Recent sessions list (for `!queue history`). |
+| `GET /queue/sessions/{id}/entries` | public | Full entries list + unique buyers (for duck race roster). Returns `serializeEntryRaw()` shape. |
+| `POST /queue/sessions` | bot-secret | Open a new session. Refuses if one is already open. |
+| `PATCH /queue/sessions/{id}` | bot-secret | Update status (`closed` / `racing` / `complete`), `channel_message_id`, `duck_race_winner_user_id`. |
+| `POST /queue/entries` | bot-secret | Create entry. Idempotent on `external_ref` — re-submitting the same key returns the existing entry with `duplicate: true`. |
+| `PATCH /queue/entries/{id}` | bot-secret | Update entry status / fields. |
+
+Bot-secret auth uses the existing `LIVESTREAM_SECRET` constant via `X-Bot-Secret` header (`hash_equals` comparison), matching the pattern in `CardRequestsListEndpoint`.
+
+### WPGraphQL exposure
+
+`Hooks/QueueGraphQL.php` registers four custom object types (`QueueEntryIdentifier`, `QueueEntryDetail`, `QueueEntry`, `QueueSession`, `LiveQueueSnapshot`) and a single root field:
+
+```graphql
+liveQueue(limit: Int): LiveQueueSnapshot
+```
+
+Returns the active session snapshot, or an empty payload (`session: null`) when no session is open. itzenzo.tv consumes this for the homepage initial render before subscribing to SSE for live updates.
+
+### Change broadcasting
+
+`QueueRepository.createSession()`, `updateSession()`, `createEntry()`, and `updateEntry()` each fire a corresponding action:
+
+- `shop_queue_session_created` (session row)
+- `shop_queue_session_updated` (after, before)
+- `shop_queue_entry_created` (entry row)
+- `shop_queue_entry_updated` (after, before)
+
+`Hooks/QueueChangeWebhook.php` subscribes to all four and POSTs `{ event, data, timestamp }` to `NOUS_BOT_URL/webhooks/queue-changed` with `X-Bot-Secret`. The post is `blocking: false` with a 2-second timeout — Nous outage cannot delay or fail a queue write. Event types emitted to Nous:
+
+- `entry.added` / `entry.advanced` / `entry.completed` / `entry.updated`
+- `session.opened` / `session.updated`
+
+Nous re-broadcasts each event to its connected SSE clients (the itzenzo.tv homepage). Phase summary: WP is canonical, Nous is the SSE broadcaster (PHP-FPM is bad at long-lived connections, Node is fine), itzenzo.tv hits Nous through a Next.js Route Handler proxy.
+
+### Producers (who calls the writes)
+
+Four code paths put rows into `wp_queue_entries`:
+
+1. **Orders** — Nous Stripe webhook → `addToQueue()` in `commands/queue.js` → `queueSource.addEntry({ type: 'order', source: 'shop' })`. One entry per line item.
+2. **Pack battles** — Nous Stripe webhook → `checkBattlePayment()` in `webhooks/stripe.js` after `confirmPayment` → `queueSource.addEntry({ type: 'pack_battle' })`. Idempotent on `stripe:<sid>:battle`.
+3. **Pull boxes** — Nous Stripe webhook → `recordPullPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: '$N tier' })`.
+4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `mirrorToQueue()` → `QueueRepository::createEntry({ type: 'rts' })`. Failure is logged, never thrown — the card request itself has already succeeded.
+
+All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `!queue` Discord embed renders.
+
+### Testing the queue path
+
+Bot-side: Nous's `!test` command opens with the active queue source (`config.QUEUE_SOURCE`) printed in the header, then probes it with `getActiveQueue()` before running the rest of the buyer-critical-path suite — fails loud if WP is unreachable.
+
+WP-side: unit tests at `tests/Unit/Providers/Shop/Support/QueueRepositoryTest.php` (serialization), `tests/Unit/Providers/Shop/Endpoints/QueueEndpointsTest.php` (route/methods/auth), and `tests/Unit/Providers/Shop/Hooks/QueueMigrationTest.php` (table naming).
 
 ## Build System
 
