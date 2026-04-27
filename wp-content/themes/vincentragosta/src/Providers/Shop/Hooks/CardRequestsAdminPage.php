@@ -21,7 +21,14 @@ class CardRequestsAdminPage implements Hook
 
     public function register(): void
     {
-        add_action('admin_menu', [$this, 'addMenu']);
+        // Priority 100 — must run after ACF Pro's priority-99 registration
+        // of the shop-settings parent menu. WordPress derives the page hook
+        // name from $admin_page_hooks[$parent_slug], which ACF only
+        // populates when it adds the parent. Registering before ACF would
+        // store the page under "admin_page_card-requests" while
+        // user_can_access_admin_page() looks up "itzenzo-tv_page_card-requests"
+        // at access time → 403.
+        add_action('admin_menu', [$this, 'addMenu'], 100);
         add_action('admin_init', [$this, 'handleActions']);
     }
 
