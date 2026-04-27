@@ -69,6 +69,16 @@ if ( ! defined( 'WP_DEBUG_DISPLAY' ) ) {
 }
 @ini_set( 'display_errors', 0 );
 
+// Lock down WP admin: even with admin credentials, the file editor and
+// plugin/theme installer cannot be used to inject code through the dashboard.
+// Defense-in-depth — protects against admin-credential compromise.
+if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
+    define( 'DISALLOW_FILE_EDIT', true );
+}
+if ( ! defined( 'DISALLOW_FILE_MODS' ) ) {
+    define( 'DISALLOW_FILE_MODS', true );
+}
+
 
 /* That's all, stop editing! Happy publishing. */
 

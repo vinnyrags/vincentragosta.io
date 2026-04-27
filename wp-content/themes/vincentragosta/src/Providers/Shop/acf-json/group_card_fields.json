@@ -54,16 +54,18 @@
             "type": "text",
             "instructions": "Optional stock-keeping unit for internal tracking.",
             "required": 0,
-            "placeholder": "PKM-BASE-4"
+            "placeholder": "PKM-BASE-4",
+            "show_in_graphql": 0
         },
         {
             "key": "field_card_cost",
             "label": "Cost Per Unit",
             "name": "cost",
             "type": "text",
-            "instructions": "Per-unit cost. Auto-populated by sync from Stripe cost metadata. Used for margin calculation.",
+            "instructions": "Per-unit cost. Auto-populated by sync from Stripe cost metadata. Used for margin calculation. Internal only — never exposed via WPGraphQL.",
             "required": 0,
-            "placeholder": "$2.00"
+            "placeholder": "$2.00",
+            "show_in_graphql": 0
         },
         {
             "key": "field_card_stock_quantity",
@@ -224,9 +226,10 @@
             "label": "Internal Notes",
             "name": "notes",
             "type": "textarea",
-            "instructions": "Internal notes only — not synced, not displayed on the storefront.",
+            "instructions": "Internal notes only — not synced, not displayed on the storefront. Never exposed via WPGraphQL.",
             "required": 0,
-            "rows": 3
+            "rows": 3,
+            "show_in_graphql": 0
         }
     ],
     "location": [
