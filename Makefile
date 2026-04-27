@@ -124,7 +124,7 @@ endef
 	push-cards pull-cards pull-cards-publish \
 	pull-cards-staging pull-cards-production sync-cards \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
-	enrich-singles backup-singles \
+	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
 	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
 	nous-import \
@@ -323,6 +323,14 @@ backup-singles: ## Duplicate the Singles tab as Singles_Backup_YYYY-MM-DD
 enrich-singles: ## Populate set/rarity/image data via Pokemon TCG API
 	@echo "Enriching Singles tab via Pokemon TCG API..."
 	cd ../Nous/scripts/shop && node enrich-singles.js
+
+lint-singles: ## Lint the Singles sheet for data-entry issues before pushing
+	@echo "Linting Singles tab..."
+	cd ../Nous/scripts/shop && node lint-singles.js $(ARGS)
+
+audit-alt-art: ## Audit alt-art rows for misrouted Pokemon TCG API IDs
+	@echo "Auditing alt-art rows in Singles tab..."
+	cd ../Nous/scripts/shop && node audit-alt-art-ids.js $(ARGS)
 
 # Pulls STRIPE_SECRET_KEY from local wp-config via DDEV so the target is
 # self-sufficient — no manual env var needed.
