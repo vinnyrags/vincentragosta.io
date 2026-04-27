@@ -41,11 +41,11 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'What is itzenzo.tv?',
-                'content' => '<p>itzenzo.tv is a trading card shop and livestream community. We sell sealed Pokemon, anime, and collectible card products — booster boxes, booster packs, elite trainer boxes, and more. Every card night is livestreamed, so you can watch your packs get opened in real time. It\'s part shop, part entertainment, and entirely built on community.</p>',
+                'content' => '<p>itzenzo.tv is a trading card shop and livestream community. I sell sealed Pokemon, anime, and collectible card products — booster boxes, booster packs, elite trainer boxes, and more. Every card night is livestreamed, so you can watch your packs get opened in real time. It\'s part shop, part entertainment, and entirely built on community.</p>',
             ],
             [
                 'title'   => 'Our Story',
-                'content' => '<p>This started as a COVID project on June 5th, 2021. What began as a way to stay busy turned into a real business — nearly three years of livestream card sales on TikTok and Twitch, hundreds of orders shipped, and a community that showed up night after night.</p><p>In late 2023, life got in the way and the shop went on a two-and-a-half year hiatus. The inventory sat in boxes, the streams stopped, and the Discord went quiet.</p><p>Now we\'re back. Same energy, same community, better infrastructure. The shop has moved to its own home at itzenzo.tv, the Discord bot handles everything from pack battles to shipping notifications, and the product pipeline is tighter than ever. If you were here before — welcome back. If you\'re new — you picked a good time.</p>',
+                'content' => '<p>This started as a COVID project on June 5th, 2021. What began as a way to stay busy turned into a real business — nearly three years of livestream card sales on TikTok and Twitch, hundreds of orders shipped, and a community that showed up night after night.</p><p>In late 2023, life got in the way and the shop went on a two-and-a-half year hiatus. The inventory sat in boxes, the streams stopped, and the Discord went quiet.</p><p>Now I\'m back. Same energy, same community, better infrastructure. The shop has moved to its own home at itzenzo.tv, the Discord bot handles everything from pack battles to shipping notifications, and the product pipeline is tighter than ever. If you were here before — welcome back. If you\'re new — you picked a good time.</p>',
             ],
             [
                 'title'   => 'Card Nights',
@@ -97,15 +97,15 @@ $pages = [
             ],
             [
                 'title'   => 'Card Singles Catalog',
-                'content' => '<p>Browse the full catalog of raw card singles at <a href="/cards">itzenzo.tv/cards</a>. Every card is hand-inspected and its condition is shown in the corner of the listing. Same checkout flow as sealed product — add to cart, pay with Stripe.</p><p>Not sure about a card before buying? Hit the <strong>Request to See</strong> button on any card in the grid. Drop your email and we\'ll feature it during the next card night so you can see edges, surface, and holo shift in real time — no commitment.</p>',
+                'content' => '<p>Browse the full catalog of raw card singles at <a href="/cards">itzenzo.tv/cards</a>. Every card is hand-inspected and its condition is shown in the corner of the listing. Same checkout flow as sealed product — add to cart, pay with Stripe.</p><p>Not sure about a card before buying? Hit the <strong>Request to See</strong> button on any card in the grid. Drop your email and I\'ll feature it during the next card night so you can see edges, surface, and holo shift in real time — no commitment.</p>',
             ],
             [
                 'title'   => 'Hand-inspected, condition on every listing',
-                'content' => '<p>Every card in the catalog is hand-inspected — edges, surface, and centering all reviewed before listing. The condition (NM, LP, MP, HP, or DMG) is shown in the corner of each card in the grid, so you know exactly what you\'re getting before you add it to your cart. Most cards are Near Mint; the rest are labeled accordingly.</p><p>Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and we\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
+                'content' => '<p>Every card in the catalog is hand-inspected — edges, surface, and centering all reviewed before listing. The condition (NM, LP, MP, HP, or DMG) is shown in the corner of each card in the grid, so you know exactly what you\'re getting before you add it to your cart. Most cards are Near Mint; the rest are labeled accordingly.</p><p>Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and I\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
             ],
             [
                 'title'   => 'Request to see any card on stream',
-                'content' => '<p>Not sure about a card? Hit the <strong>Request to See</strong> button right on the card in the grid. Drop your email (and Discord username if you have one), and we\'ll feature the card during the next card night so you can see edges, surface, and holo shift in real time.</p><p>You\'re not committing to buy — you\'re just asking for a closer look. If it checks out, add it to your cart right from the grid.</p>',
+                'content' => '<p>Not sure about a card? Hit the <strong>Request to See</strong> button right on the card in the grid. Drop your email (and Discord username if you have one), and I\'ll feature the card during the next card night so you can see edges, surface, and holo shift in real time.</p><p>You\'re not committing to buy — you\'re just asking for a closer look. If it checks out, add it to your cart right from the grid.</p>',
             ],
             [
                 'title'   => 'Card Shop (Discord)',
@@ -113,7 +113,7 @@ $pages = [
             ],
             [
                 'title'   => 'Sold out or moved on',
-                'content' => '<p>If a card is listed as sold, we keep the URL live for historical reference and any linkbacks. You can still hit Request to See if you\'re hoping a duplicate comes back into stock — it\'s useful signal for what to restock.</p>',
+                'content' => '<p>If a card is listed as sold, I keep the URL live for historical reference and any linkbacks. You can still hit Request to See if you\'re hoping a duplicate comes back into stock — it\'s useful signal for what to restock.</p>',
             ],
             [
                 'title'   => 'Discord Account Linking',
@@ -149,31 +149,31 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'The short version',
-                'content' => '<p>If something\'s wrong with your order, reach out before your package ships and we\'ll cancel the order entirely. Once it\'s shipped, DM us and we\'ll work through it together.</p><p>Refunds run through Stripe and land back on your original payment method in <strong>5–10 business days</strong>.</p>',
+                'content' => '<p>If something\'s wrong with your order, reach out before your package ships and I\'ll cancel the order entirely. Once it\'s shipped, DM me and I\'ll work through it with you.</p><p>Refunds run through Stripe and land back on your original payment method in <strong>5–10 business days</strong>.</p>',
             ],
             [
                 'title'   => 'How to request a refund',
-                'content' => '<p>The fastest path is a direct DM to the shop owner on Discord. You can also reply to your Stripe receipt email — both end up in the same inbox.</p><p>Tell us your order session ID (or the email you checked out with) and what\'s going on. We don\'t require photos for damage — but they help when there\'s a question.</p>',
+                'content' => '<p>The fastest path is a direct DM to me on Discord — <strong>@itzenzottv</strong>. You can also reply to your Stripe receipt email; both land in the same inbox.</p><p>Tell me your order session ID (or the email you checked out with) and what\'s going on. I don\'t require photos for damage — but they help when there\'s a question.</p>',
             ],
             [
                 'title'   => 'Before your order ships',
-                'content' => '<p>If you ask for a full refund before the shipping label is purchased, we cancel the order at every step:</p><ul><li>Stripe refunds your payment in full</li><li>The order is canceled in our shipping system so nothing prints or goes out the door</li><li>You get a Discord DM confirming the cancellation</li></ul><p>You don\'t need to do anything on your end — the package simply won\'t ship.</p>',
+                'content' => '<p>If you ask for a full refund before the shipping label is purchased, I cancel the order at every step:</p><ul><li>Stripe refunds your payment in full</li><li>The order is canceled in my shipping system so nothing prints or goes out the door</li><li>You get a Discord DM confirming the cancellation</li></ul><p>You don\'t need to do anything on your end — the package simply won\'t ship.</p>',
             ],
             [
                 'title'   => 'After your order ships',
-                'content' => '<p>Once a label has been purchased and your tracking number has been sent, the package is on its way and we can\'t recall it. You\'ll still get a refund if one\'s warranted — we just can\'t cancel the shipment itself.</p><p>If your package is lost, damaged in transit, or never arrives, DM us with the tracking number and we\'ll work it out together. We don\'t leave you holding a missing package.</p>',
+                'content' => '<p>Once a label has been purchased and your tracking number has been sent, the package is on its way and I can\'t recall it. You\'ll still get a refund if one\'s warranted — I just can\'t cancel the shipment itself.</p><p>If your package is lost, damaged in transit, or never arrives, DM me with the tracking number and I\'ll work it out with you. I don\'t leave you holding a missing package.</p>',
             ],
             [
                 'title'   => 'Concerned about a card before buying?',
-                'content' => '<p>Use the <strong>Request to See</strong> button on any card listing — we\'ll feature it on the next card night so you can inspect edges, surface, centering, and holo shift live on stream before you buy. No commitment, no awkward conversation later. If something looks off, just don\'t add it to your cart.</p><p>The on-stream review is the right place to settle condition questions, so we don\'t cover post-purchase partial refunds for condition concerns in this policy. Anything genuinely wrong with what you received still gets handled — just DM us and we\'ll work it out.</p>',
+                'content' => '<p>Use the <strong>Request to See</strong> button on any card listing — I\'ll feature it on the next card night so you can inspect edges, surface, centering, and holo shift live on stream before you buy. No commitment, no awkward conversation later. If something looks off, just don\'t add it to your cart.</p><p>The on-stream review is the right place to settle condition questions, so I don\'t cover post-purchase partial refunds for condition concerns in this policy. Anything genuinely wrong with what you received still gets handled — just DM me and I\'ll work it out.</p>',
             ],
             [
                 'title'   => 'Pack battles & live event purchases',
-                'content' => '<p>Pack battle buy-ins are refundable up until the battle starts on stream. Once packs are being opened, the buy-in is locked — the result is what it is, and we can\'t un-open the cards.</p><p>If you can\'t make a battle you signed up for, DM us before it runs and we\'ll refund or roll your entry to the next one.</p>',
+                'content' => '<p>Pack battle buy-ins are refundable up until the battle starts on stream. Once packs are being opened, the buy-in is locked — the result is what it is, and I can\'t un-open the cards.</p><p>If you can\'t make a battle you signed up for, DM me before it runs and I\'ll refund or roll your entry to the next one.</p>',
             ],
             [
                 'title'   => 'When refunds appear',
-                'content' => '<p>Stripe processes refunds immediately on our end, but your bank or card issuer takes <strong>5–10 business days</strong> to post the credit back to your statement. International cards sometimes take longer.</p><p>If it\'s been more than two weeks and you don\'t see the refund, DM us with your refund ID (sent in your DM when the refund was issued) and we\'ll trace it.</p>',
+                'content' => '<p>Stripe processes refunds immediately on my end, but your bank or card issuer takes <strong>5–10 business days</strong> to post the credit back to your statement. International cards sometimes take longer.</p><p>If it\'s been more than two weeks and you don\'t see the refund, DM me with your refund ID (sent in your DM when the refund was issued) and I\'ll trace it.</p>',
             ],
         ],
     ],
@@ -185,7 +185,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'The Three Realms',
-                'content' => '<p>We run three Minecraft worlds, each with its own vibe. Survival hardcore for the brave, Bedrock horror for the brave-and-curious, and a long-running creative realm for the builders. Realm codes are kept off the public internet — to join, head to <code>#minecraft</code> in Discord and react to the pinned message. The bot DMs you the invite for whichever realm you picked.</p>',
+                'content' => '<p>I run three Minecraft worlds, each with its own vibe. Survival hardcore for the brave, Bedrock horror for the brave-and-curious, and a long-running creative realm for the builders. Realm codes are kept off the public internet — to join, head to <code>#minecraft</code> in Discord and react to the pinned message. The bot DMs you the invite for whichever realm you picked.</p>',
             ],
             [
                 'title'   => 'Card Nights Gaming Crossover',
@@ -196,7 +196,7 @@ $pages = [
                 'content' => '<p>A regular fixture: streams with dad, friends from college, and longtime community members. Multi-generational, low-stakes, high-banter. These are some of the most-watched streams of the week, and the easiest entry point if you\'ve never hung out in the Discord before.</p>',
             ],
             [
-                'title'   => 'Other Games We Play',
+                'title'   => 'Games on Rotation',
                 'content' => '<p>Fortnite squads, Marvel Rivals, and a heavy gacha rotation — Honkai: Star Rail, Zenless Zone Zero, Genshin Impact, and Karuta inside Discord itself. Tournament weekends pop up periodically; community votes decide the game. If you want a game added to the rotation, suggest it in <code>#general-gaming</code>.</p>',
             ],
             [
