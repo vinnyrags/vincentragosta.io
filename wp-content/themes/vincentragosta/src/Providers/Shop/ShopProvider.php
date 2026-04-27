@@ -18,6 +18,7 @@ use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
 
@@ -40,6 +41,7 @@ class ShopProvider extends Provider
         PngSubsizesAsJpeg::class,
         CardRequestsMigration::class,
         CardRequestsAdminPage::class,
+        ShopSettingsMenuLink::class,
     ];
 
     /**

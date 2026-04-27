@@ -6,6 +6,7 @@ use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use ChildTheme\Providers\Shop\ShopProvider;
 use IX\Providers\Provider;
@@ -58,6 +59,7 @@ class ShopProviderTest extends TestCase
         $hooks = $property->getValue($provider);
 
         $this->assertContains(StockStatusBadge::class, $hooks);
+        $this->assertContains(ShopSettingsMenuLink::class, $hooks);
     }
 
     public function testRouteNamespace(): void
