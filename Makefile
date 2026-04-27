@@ -25,6 +25,15 @@ PRODUCTION_DIR  := /var/www/vincentragosta.io
 PRODUCTION_WP   := $(PRODUCTION_DIR)/wp
 PRODUCTION_URL  := https://vincentragosta.io
 
+# itzenzo.tv (Next.js headless storefront) — co-located on the same droplet.
+# Used by the post-pull image-cache flush. See akivili/business/itzenzo-tv.md
+# → "Runbook: flush Next.js image cache" for context.
+ITZENZO_PROD_DIR    := /var/www/itzenzo.tv
+ITZENZO_PROD_PM2    := itzenzo-tv
+ITZENZO_STAGING_DIR := /var/www/staging.itzenzo.tv
+ITZENZO_STAGING_PM2 := staging-itzenzo
+ITZENZO_NODE_PATH   := /root/.nvm/versions/node/v20.20.2/bin
+
 # ─── Macros ──────────────────────────────────────────────────────────────────
 # All `remote-*` macros take the env prefix in upper-case (STAGING|PRODUCTION)
 # as $(1); the macros look up $($(1)_HOST) etc. for the per-env values.
@@ -47,6 +56,15 @@ endef
 #   $(call remote-wp-eval-with-env, ENV, script, env-vars)
 define remote-wp-eval-with-env
 ssh $($(1)_HOST) "$(3) wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root"
+endef
+
+# Flush itzenzo.tv Next.js image proxy cache + zero-downtime pm2 reload.
+# Run this after any sync that mutates WP attachment bytes (cards, products),
+# otherwise the proxy will keep serving stale per-`(url, w, q)` AVIF/WebP
+# variants for up to 30 days. Cache regenerates lazily after the wipe.
+#   $(call flush-itzenzo-cache, ENV, ITZENZO_DIR, PM2_PROCESS)
+define flush-itzenzo-cache
+ssh $($(1)_HOST) 'export PATH=$(ITZENZO_NODE_PATH):$$PATH; rm -rf $(2)/.next/cache/images/* && pm2 reload $(3)'
 endef
 
 # Push local DDEV DB + uploads to a remote env.
@@ -293,6 +311,8 @@ pull-products-publish: ## Sync Stripe products to local WordPress (auto-publish)
 pull-products-staging: ## Sync Stripe products to staging (clean + publish)
 	@echo "Syncing Stripe products to staging WordPress..."
 	$(call remote-wp-eval-with-flags,STAGING,pull-products.php,.publish .clean)
+	@echo "Flushing staging itzenzo.tv image proxy cache..."
+	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
 
 ##@ Card singles
 
@@ -326,11 +346,15 @@ pull-cards-publish: ## Sync Stripe card singles to local WordPress (auto-publish
 pull-cards-staging: ## Sync Stripe card singles to staging (clean + publish)
 	@echo "Syncing Stripe card singles to staging WordPress..."
 	$(call remote-wp-eval-with-flags,STAGING,pull-cards.php,.publish .clean)
+	@echo "Flushing staging itzenzo.tv image proxy cache..."
+	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
 
 # No --clean on production — we don't nuke existing card posts/attachments.
 pull-cards-production: ## Sync Stripe card singles to production (publish, idempotent)
 	@echo "Syncing Stripe card singles to production WordPress..."
 	$(call remote-wp-eval-with-flags,PRODUCTION,pull-cards.php,.publish)
+	@echo "Flushing production itzenzo.tv image proxy cache..."
+	$(call flush-itzenzo-cache,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_PM2))
 
 sync-cards: push-cards pull-cards-publish ## Full card pipeline (Sheets → Stripe → local WP)
 	@echo "✓ Card pipeline complete"
