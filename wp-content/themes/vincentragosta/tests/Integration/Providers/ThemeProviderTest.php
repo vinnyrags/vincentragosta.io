@@ -11,8 +11,8 @@ use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
+use IX\Providers\Theme\Features\ButtonIconEnhancer;
 use IX\Providers\Theme\Hooks\AccordionIconEnhancer;
-use IX\Providers\Theme\Hooks\ButtonIconEnhancer;
 use IX\Providers\Theme\Hooks\FeaturedImageFocalPoint;
 use IX\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
@@ -85,14 +85,14 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(EnableSvgUploads::class, $enabled);
 
         // Child theme opt-in features
+        $this->assertContains(ButtonIconEnhancer::class, $enabled);
         $this->assertContains(ScrollReveal::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(9, $enabled);
+        $this->assertCount(10, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
-        $this->assertNotContains(ButtonIconEnhancer::class, $enabled);
         $this->assertNotContains(CoverBlockStyles::class, $enabled);
         $this->assertNotContains(SocialIconChoices::class, $enabled);
     }
@@ -110,7 +110,6 @@ class ThemeProviderTest extends BaseTestCase
 
         // Parent hooks (inherited)
         $this->assertContains(AccordionIconEnhancer::class, $hooks);
-        $this->assertContains(ButtonIconEnhancer::class, $hooks);
         $this->assertContains(FeaturedImageFocalPoint::class, $hooks);
         $this->assertContains(TermsQuerySupports::class, $hooks);
 
@@ -121,7 +120,10 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(SocialIconChoices::class, $hooks);
         $this->assertContains(AccentHighlight::class, $hooks);
         $this->assertContains(SearchSetup::class, $hooks);
-        $this->assertCount(11, $hooks);
+        $this->assertCount(10, $hooks);
+
+        // ButtonIconEnhancer is now a Feature, not a Hook
+        $this->assertNotContains(ButtonIconEnhancer::class, $hooks);
     }
 
     /**
@@ -155,16 +157,6 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertGreaterThan(
             0,
             has_filter('wp_resource_hints', [$this->provider, 'addResourceHints'])
-        );
-
-        $this->assertGreaterThan(
-            0,
-            has_action('enqueue_block_editor_assets', [$this->provider, 'enqueueButtonEditorAssets'])
-        );
-
-        $this->assertGreaterThan(
-            0,
-            has_action('enqueue_block_editor_assets', [$this->provider, 'localizeButtonIconData'])
         );
 
         // Core asset hooks (inherited from parent ThemeProvider)
