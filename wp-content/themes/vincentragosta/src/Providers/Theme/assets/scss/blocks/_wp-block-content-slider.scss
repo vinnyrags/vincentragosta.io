@@ -1,0 +1,10 @@
+// Child theme overrides for the parent content-slider carousel.
+// Arrow and accent colors only — quote/pullquote styles live in _wp-block-quote.scss.
+
+.wp-block-ix-content-slider {
+    --content-slider-accent: var(--wp--preset--color--accent-1);
+    --content-slider-arrow-bg: var(--color-button-bg);
+    --content-slider-arrow-color: var(--color-button-text);
+    --content-slider-arrow-hover-bg: var(--color-button-hover-bg);
+    --content-slider-arrow-hover-color: var(--color-button-hover-text);
+}

@@ -138,7 +138,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains('shutter-card', $blocks);
 
         // Inherited parent blocks
-        $this->assertContains('testimonials', $blocks);
+        $this->assertContains('content-slider', $blocks);
     }
 
     /**
@@ -209,14 +209,14 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that testimonials block directory exists in parent theme.
+     * Test that content-slider block directory exists in parent theme.
      */
-    public function testTestimonialsBlockDirectoryExistsInParent(): void
+    public function testContentSliderBlockDirectoryExistsInParent(): void
     {
         $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
 
-        $this->assertDirectoryExists($parentBlocksPath . '/testimonials');
-        $this->assertFileExists($parentBlocksPath . '/testimonials/block.json');
+        $this->assertDirectoryExists($parentBlocksPath . '/content-slider');
+        $this->assertFileExists($parentBlocksPath . '/content-slider/block.json');
     }
 
     /**

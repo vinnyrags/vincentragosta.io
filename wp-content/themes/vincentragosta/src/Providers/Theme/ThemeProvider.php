@@ -27,7 +27,7 @@ use IX\Services\IconServiceFactory;
  * Handles core theme setup and configuration.
  *
  * Extends the parent theme's Theme Provider to add site-specific functionality.
- * Inherits shutter-cards and testimonials blocks from parent. Child's block
+ * Inherits shutter-cards and content-slider blocks from parent. Child's block
  * directories override parent versions via getBlockSearchPaths().
  */
 class ThemeProvider extends BaseThemeProvider
