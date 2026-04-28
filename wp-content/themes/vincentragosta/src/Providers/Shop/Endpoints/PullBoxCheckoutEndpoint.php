@@ -41,6 +41,9 @@ class PullBoxCheckoutEndpoint extends Endpoint
         return true;
     }
 
+    /** Server-side ceiling on a single pull-box checkout. Mirrors Discord. */
+    private const MAX_QUANTITY = 20;
+
     public function getArgs(): array
     {
         return [
@@ -48,12 +51,21 @@ class PullBoxCheckoutEndpoint extends Endpoint
                 'required' => true,
                 'type'     => 'string',
             ],
+            'quantity' => [
+                'required' => false,
+                'type'     => 'integer',
+                'default'  => 1,
+            ],
         ];
     }
 
     public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $priceId = sanitize_text_field((string) $request->get_param('priceId'));
+        // Clamp to [1, MAX_QUANTITY] regardless of what the client sends —
+        // the modal already enforces this client-side, but the server must
+        // not trust it.
+        $quantity = max(1, min(self::MAX_QUANTITY, (int) $request->get_param('quantity')));
 
         $allowedPriceIds = $this->allowedPriceIds();
 
@@ -76,9 +88,22 @@ class PullBoxCheckoutEndpoint extends Endpoint
         $successUrl = ShopProvider::frontendUrl() . '/thank-you?session_id={CHECKOUT_SESSION_ID}';
         $cancelUrl  = ShopProvider::frontendUrl() . '/?cancelled=1';
 
+        // adjustable_quantity lets the buyer tweak +/- on the Stripe page
+        // too — same as Discord's pull-box flow does it. Belt and
+        // suspenders with the modal stepper on the homepage.
+        $lineItem = [
+            'price'    => $priceId,
+            'quantity' => $quantity,
+            'adjustable_quantity' => [
+                'enabled' => true,
+                'minimum' => 1,
+                'maximum' => self::MAX_QUANTITY,
+            ],
+        ];
+
         try {
             $session = $this->stripe->createCheckoutSession(
-                [['price' => $priceId, 'quantity' => 1]],
+                [$lineItem],
                 $successUrl,
                 $cancelUrl,
                 ['source' => 'pull_box', 'price_id' => $priceId],
