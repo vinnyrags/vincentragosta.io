@@ -6,6 +6,7 @@ namespace ChildTheme\Providers\Shop\Endpoints;
 
 use ChildTheme\Providers\Shop\Services\StripeService;
 use ChildTheme\Providers\Shop\ShopProvider;
+use ChildTheme\Providers\Shop\Support\QueueRepository;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -24,6 +25,7 @@ class PullBoxCheckoutEndpoint extends Endpoint
 {
     public function __construct(
         private readonly StripeService $stripe,
+        private readonly QueueRepository $queueRepository,
     ) {}
 
     public function getRoute(): string
@@ -82,6 +84,19 @@ class PullBoxCheckoutEndpoint extends Endpoint
                 'invalid_price_id',
                 'Price ID is not a configured pull box.',
                 ['status' => 400]
+            );
+        }
+
+        // Pull boxes are livestream entry tickets — they only make sense
+        // when a queue session is open. Without that, the buyer would
+        // pay but have nowhere to land and no slot in the duck race.
+        // Refuse the checkout up front with a message the frontend
+        // surfaces verbatim.
+        if (!$this->queueRepository->findActiveSession()) {
+            return new WP_Error(
+                'no_active_queue',
+                "Pull boxes are only available during livestream queues. The queue isn't open right now — check back during the next stream.",
+                ['status' => 503]
             );
         }
 
