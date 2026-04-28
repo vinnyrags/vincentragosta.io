@@ -13,6 +13,7 @@ use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryUpdateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueResetEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionEntriesEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
@@ -70,6 +71,7 @@ class ShopProvider extends Provider
         PullBoxCheckoutEndpoint::class,
         QueueEntryCreateEndpoint::class,
         QueueEntryUpdateEndpoint::class,
+        QueueResetEndpoint::class,
         QueueSessionCreateEndpoint::class,
         QueueSessionEntriesEndpoint::class,
         QueueSessionUpdateEndpoint::class,
