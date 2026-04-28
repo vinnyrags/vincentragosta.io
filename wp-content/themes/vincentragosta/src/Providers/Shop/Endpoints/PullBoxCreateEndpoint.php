@@ -77,11 +77,22 @@ class PullBoxCreateEndpoint extends Endpoint
             );
         }
 
+        // If the caller didn't supply a Stripe price ID, fall back to the
+        // configured tier price from the shop-settings options page.
+        // That way Nous's !pull doesn't have to know about ACF — it
+        // just specifies the tier and WP fills in the right Stripe ID.
+        $stripePriceId = $request->get_param('stripe_price_id');
+        if (!$stripePriceId) {
+            $stripePriceId = $tier === 'v'
+                ? (string) get_field('pb_v_price_id', 'option')
+                : (string) get_field('pb_vmax_price_id', 'option');
+        }
+
         $id = $this->repository->createBox([
             'name'               => $request->get_param('name'),
             'tier'               => $tier,
             'price_cents'        => (int) $request->get_param('price_cents'),
-            'stripe_price_id'    => $request->get_param('stripe_price_id'),
+            'stripe_price_id'    => $stripePriceId ?: null,
             'total_slots'        => $totalSlots,
             'discord_message_id' => $request->get_param('discord_message_id'),
         ]);
