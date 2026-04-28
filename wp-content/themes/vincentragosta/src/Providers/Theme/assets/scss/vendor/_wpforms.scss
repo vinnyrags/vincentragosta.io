@@ -10,6 +10,22 @@
   color: var(--wp--preset--color--accent-1);
 }
 
+// Float-label colors. IX provides float positioning + transitions;
+// the child theme owns the colors. Resting/dormant labels use the muted
+// text token so they follow light/dark mode; active labels go accent.
+.wpforms-field-label {
+  color: var(--color-text-muted);
+}
+
+.wpforms-field:focus-within .wpforms-field-label {
+  color: var(--wp--preset--color--accent-1);
+}
+
+.wpforms-field:has(input:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label,
+.wpforms-field:has(textarea:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label {
+  color: var(--color-text-muted);
+}
+
 // Error states
 .wpforms-field.wpforms-has-error {
   input, textarea { border-block-end-color: var(--wp--custom--color--error); }

@@ -1,5 +1,11 @@
 @use 'common/accessibility' as *;
 
+// Global focus outline color. IX provides the structural outline shape
+// (2px solid, 2px offset); this maps the color to the project palette.
+:focus-visible {
+  outline-color: var(--wp--preset--color--accent-1);
+}
+
 // ==========================================================================
 // Forced Colors (Windows High Contrast Mode)
 // ==========================================================================

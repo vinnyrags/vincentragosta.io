@@ -656,16 +656,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638"
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/a3cc8b044a6ea513310cbd48ef7333b384945638",
-                "reference": "a3cc8b044a6ea513310cbd48ef7333b384945638",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/141046a8f9477948ff284fa65be2095baafb94f2",
+                "reference": "141046a8f9477948ff284fa65be2095baafb94f2",
                 "shasum": ""
             },
             "require": {
@@ -715,7 +715,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -735,20 +735,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-09T11:45:10+00:00"
+            "time": "2026-04-10T16:19:22+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.33.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493"
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6d857f4d76bd4b343eac26d6b539585d2bc56493",
-                "reference": "6d857f4d76bd4b343eac26d6b539585d2bc56493",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/6a21eb99c6973357967f6ce3708cd55a6bec6315",
+                "reference": "6a21eb99c6973357967f6ce3708cd55a6bec6315",
                 "shasum": ""
             },
             "require": {
@@ -800,7 +800,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
             },
             "funding": [
                 {
@@ -820,7 +820,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-23T08:48:59+00:00"
+            "time": "2026-04-10T17:25:58+00:00"
         },
         {
             "name": "timber/timber",
@@ -828,12 +828,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "967541e931ec7372827a4376bfeb2a08e7716681"
+                "reference": "5fce3616b5a443419f6963d1a84e05cb77da35a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/967541e931ec7372827a4376bfeb2a08e7716681",
-                "reference": "967541e931ec7372827a4376bfeb2a08e7716681",
+                "url": "https://api.github.com/repos/timber/timber/zipball/5fce3616b5a443419f6963d1a84e05cb77da35a3",
+                "reference": "5fce3616b5a443419f6963d1a84e05cb77da35a3",
                 "shasum": ""
             },
             "require": {
@@ -870,8 +870,8 @@
                 "symplify/easy-coding-standard": "^13",
                 "szepeviktor/phpstan-wordpress": "^2",
                 "twig/cache-extra": "^3.17",
-                "wpackagist-plugin/advanced-custom-fields": "^6.5",
-                "wpackagist-plugin/co-authors-plus": "^3.6"
+                "wp-plugin/advanced-custom-fields": "^6.5",
+                "wp-plugin/co-authors-plus": "^3.6"
             },
             "suggest": {
                 "php-coveralls/php-coveralls": "^2.0 for code coverage",
@@ -938,7 +938,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-03-17T21:27:31+00:00"
+            "time": "2026-04-21T12:43:30+00:00"
         },
         {
             "name": "twig/twig",
@@ -1026,12 +1026,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "f6929d39c8f3c5f261ca1f4922bbcc9c66763f0a"
+                "reference": "83a8e6b51f67c33cfaaafc302d9321625c8a7cce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/f6929d39c8f3c5f261ca1f4922bbcc9c66763f0a",
-                "reference": "f6929d39c8f3c5f261ca1f4922bbcc9c66763f0a",
+                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/83a8e6b51f67c33cfaaafc302d9321625c8a7cce",
+                "reference": "83a8e6b51f67c33cfaaafc302d9321625c8a7cce",
                 "shasum": ""
             },
             "require": {
@@ -1073,7 +1073,7 @@
                 "source": "https://github.com/vinnyrags/IX/tree/main",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-04-18T03:52:01+00:00"
+            "time": "2026-04-28T06:01:41+00:00"
         },
         {
             "name": "vincentragosta/mythus",
