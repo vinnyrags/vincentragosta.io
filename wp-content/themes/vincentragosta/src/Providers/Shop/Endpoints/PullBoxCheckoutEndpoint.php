@@ -74,6 +74,21 @@ class PullBoxCheckoutEndpoint extends Endpoint
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_email',
             ],
+            // Optional Discord identity — when the bot calls this endpoint
+            // for a Discord buyer's slot pre-claim, these populate the
+            // slot rows' buyer label immediately so the on-stream embed
+            // and the homepage grid render the right handle without
+            // waiting for the post-payment webhook.
+            'discord_user_id' => [
+                'required'          => false,
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+            ],
+            'discord_handle' => [
+                'required'          => false,
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+            ],
         ];
     }
 
@@ -141,6 +156,8 @@ class PullBoxCheckoutEndpoint extends Endpoint
                 $slots,
                 [
                     'customer_email'    => (string) $request->get_param('customer_email') ?: null,
+                    'discord_user_id'   => (string) $request->get_param('discord_user_id') ?: null,
+                    'discord_handle'    => (string) $request->get_param('discord_handle') ?: null,
                     'stripe_session_id' => $stripeSessionPlaceholder,
                 ]
             );
