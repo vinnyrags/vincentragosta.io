@@ -419,24 +419,46 @@ class QueueRepository
 
     private static function identifierKind(array $row): string
     {
-        if (!empty($row['discord_handle']) || !empty($row['discord_user_id'])) {
+        if (!empty($row['discord_handle'])) {
             return 'discord_handle';
         }
-
+        // Numeric Discord IDs are internal — never surface them to the public
+        // homepage. Prefer email (redacted), then order number, then display
+        // name as the fallback chain.
+        if (!empty($row['customer_email'])) {
+            return 'customer_email';
+        }
         if (!empty($row['order_number'])) {
             return 'order_number';
         }
-
         return 'display_name';
     }
 
     private static function identifierLabel(array $row, string $kind): string
     {
         return match ($kind) {
-            'discord_handle' => '@' . ltrim((string) ($row['discord_handle'] ?? $row['discord_user_id']), '@'),
+            'discord_handle' => '@' . ltrim((string) $row['discord_handle'], '@'),
+            'customer_email' => self::redactEmail((string) $row['customer_email']),
             'order_number'   => 'Order #' . (string) $row['order_number'],
             default          => (string) ($row['display_name'] ?? 'Guest'),
         };
+    }
+
+    /**
+     * Public-safe email rendering — keep it recognizable to the buyer
+     * without leaking the full address to passers-by.
+     *   "buyer@example.com" → "b•••@example.com"
+     */
+    private static function redactEmail(string $email): string
+    {
+        if (!str_contains($email, '@')) {
+            return $email;
+        }
+        [$local, $domain] = explode('@', $email, 2);
+        if ($local === '') {
+            return $email;
+        }
+        return $local[0] . '•••@' . $domain;
     }
 
     private static function toIso8601(string $mysqlDatetime): string

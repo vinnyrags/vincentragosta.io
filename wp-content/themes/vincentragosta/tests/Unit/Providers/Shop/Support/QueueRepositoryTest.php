@@ -42,8 +42,19 @@ class QueueRepositoryTest extends TestCase
         $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $serialized['createdAt']);
     }
 
-    public function testIdentifierFallsBackToOrderNumberThenDisplayName(): void
+    public function testIdentifierFallbackChainPrefersEmailOverInternalDiscordId(): void
     {
+        // discord_user_id alone (no handle) — must NOT surface as @<numeric>;
+        // fall through to email if available so the public homepage doesn't
+        // leak internal Discord snowflakes.
+        $emailRow = $this->baseRow([
+            'discord_user_id' => '862139045974638612',
+            'customer_email'  => 'buyer@example.com',
+        ]);
+        $emailSerialized = QueueRepository::serializeEntry($emailRow);
+        $this->assertSame('customer_email', $emailSerialized['identifier']['kind']);
+        $this->assertSame('b•••@example.com', $emailSerialized['identifier']['label']);
+
         $orderRow = $this->baseRow(['order_number' => '1247']);
         $orderSerialized = QueueRepository::serializeEntry($orderRow);
         $this->assertSame('order_number', $orderSerialized['identifier']['kind']);
