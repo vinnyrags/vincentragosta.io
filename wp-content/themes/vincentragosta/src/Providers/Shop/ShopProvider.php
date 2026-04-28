@@ -10,7 +10,11 @@ use ChildTheme\Providers\Shop\Endpoints\CardRequestStatusEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxActiveEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxCreateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxUpdateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryUpdateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueResetEndpoint;
@@ -26,6 +30,7 @@ use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
 use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
 use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
 use ChildTheme\Providers\Shop\Hooks\QueueMigration;
@@ -56,6 +61,7 @@ class ShopProvider extends Provider
         QueueMigration::class,
         QueueGraphQL::class,
         QueueChangeWebhook::class,
+        PullBoxMigration::class,
     ];
 
     /**
@@ -68,7 +74,11 @@ class ShopProvider extends Provider
         CardRequestStatusEndpoint::class,
         CreateCheckoutEndpoint::class,
         CurrentPackBattleEndpoint::class,
+        PullBoxActiveEndpoint::class,
         PullBoxCheckoutEndpoint::class,
+        PullBoxClaimEndpoint::class,
+        PullBoxCreateEndpoint::class,
+        PullBoxUpdateEndpoint::class,
         QueueEntryCreateEndpoint::class,
         QueueEntryUpdateEndpoint::class,
         QueueResetEndpoint::class,
