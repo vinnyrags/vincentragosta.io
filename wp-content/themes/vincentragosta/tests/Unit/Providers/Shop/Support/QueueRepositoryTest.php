@@ -114,11 +114,30 @@ class QueueRepositoryTest extends TestCase
         $this->assertSame(['open', 'closed', 'racing', 'complete'], QueueRepository::SESSION_STATUSES);
     }
 
+    public function testSerializeIncludesQueueNumberWhenPresent(): void
+    {
+        $row = $this->baseRow(['queue_number' => 5]);
+        $serialized = QueueRepository::serializeEntry($row);
+        $this->assertSame(5, $serialized['queueNumber']);
+
+        $rawSerialized = QueueRepository::serializeEntryRaw($row);
+        $this->assertSame(5, $rawSerialized['queueNumber']);
+    }
+
+    public function testSerializeQueueNumberNullWhenAbsent(): void
+    {
+        $row = $this->baseRow([]);
+        unset($row['queue_number']);
+        $serialized = QueueRepository::serializeEntry($row);
+        $this->assertNull($serialized['queueNumber']);
+    }
+
     private function baseRow(array $overrides): array
     {
         return array_merge([
             'id'                => 1,
             'session_id'        => 1,
+            'queue_number'      => 1,
             'type'              => 'order',
             'source'            => 'shop',
             'status'            => 'queued',

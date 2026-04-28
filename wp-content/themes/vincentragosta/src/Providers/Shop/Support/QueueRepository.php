@@ -165,10 +165,22 @@ class QueueRepository
             $detailData = wp_json_encode($detailData);
         }
 
+        $sessionId = (int) $data['session_id'];
+
+        // Assign a permanent queue_number that follows the entry through
+        // its whole lifecycle (queued → active → completed). The homepage
+        // displays this as the "deli ticket" number — entry #5 stays #5
+        // whether it's currently up or already done.
+        $nextNumber = (int) $wpdb->get_var($wpdb->prepare(
+            "SELECT COALESCE(MAX(queue_number), 0) + 1 FROM {$table} WHERE session_id = %d",
+            $sessionId
+        ));
+
         $wpdb->insert(
             $table,
             [
-                'session_id'        => (int) $data['session_id'],
+                'session_id'        => $sessionId,
+                'queue_number'      => $nextNumber,
                 'type'              => (string) $data['type'],
                 'source'            => (string) $data['source'],
                 'status'            => $data['status'] ?? 'queued',
@@ -183,7 +195,7 @@ class QueueRepository
                 'external_ref'      => $data['external_ref'] ?? null,
                 'created_at'        => current_time('mysql'),
             ],
-            ['%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
+            ['%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']
         );
 
         $id = (int) $wpdb->insert_id;
@@ -317,20 +329,21 @@ class QueueRepository
         $identifierLabel = self::identifierLabel($row, $identifierKind);
 
         return [
-            'id'         => 'q_' . (int) $row['id'],
-            'position'   => $position,
-            'status'     => (string) $row['status'],
-            'type'       => (string) $row['type'],
-            'source'     => (string) $row['source'],
-            'identifier' => [
+            'id'          => 'q_' . (int) $row['id'],
+            'queueNumber' => isset($row['queue_number']) ? (int) $row['queue_number'] : null,
+            'position'    => $position,
+            'status'      => (string) $row['status'],
+            'type'        => (string) $row['type'],
+            'source'      => (string) $row['source'],
+            'identifier'  => [
                 'kind'  => $identifierKind,
                 'label' => $identifierLabel,
             ],
-            'detail'     => [
+            'detail'      => [
                 'label' => $row['detail_label'] !== null ? (string) $row['detail_label'] : null,
                 'data'  => $detailData,
             ],
-            'createdAt'  => self::toIso8601($row['created_at']),
+            'createdAt'   => self::toIso8601($row['created_at']),
         ];
     }
 
@@ -350,6 +363,7 @@ class QueueRepository
         return [
             'id'              => (int) $row['id'],
             'sessionId'       => (int) $row['session_id'],
+            'queueNumber'     => isset($row['queue_number']) ? (int) $row['queue_number'] : null,
             'position'        => $position,
             'type'            => (string) $row['type'],
             'source'          => (string) $row['source'],

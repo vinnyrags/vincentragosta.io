@@ -16,7 +16,7 @@ use Mythus\Contracts\Hook;
 class QueueMigration implements Hook
 {
     private const OPTION_KEY = 'shop_queue_schema_version';
-    private const SCHEMA_VERSION = '2';
+    private const SCHEMA_VERSION = '3';
 
     public function register(): void
     {
@@ -50,6 +50,7 @@ class QueueMigration implements Hook
         $entriesSql = "CREATE TABLE {$entriesTable} (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             session_id BIGINT UNSIGNED NOT NULL,
+            queue_number INT UNSIGNED NULL,
             type VARCHAR(20) NOT NULL,
             source VARCHAR(20) NOT NULL,
             status VARCHAR(20) NOT NULL DEFAULT 'queued',
@@ -66,6 +67,7 @@ class QueueMigration implements Hook
             completed_at DATETIME NULL,
             PRIMARY KEY  (id),
             KEY idx_session_status_created (session_id, status, created_at),
+            KEY idx_session_queue_number (session_id, queue_number),
             KEY idx_stripe_session (stripe_session_id),
             KEY idx_external_ref (external_ref),
             KEY idx_type_source (type, source)
@@ -75,7 +77,36 @@ class QueueMigration implements Hook
         dbDelta($sessionsSql);
         dbDelta($entriesSql);
 
+        // Backfill queue_number for existing rows that predate v3. Each
+        // session gets entries numbered 1..N in created_at order — the
+        // permanent "deli ticket" number that follows the entry through
+        // its whole lifecycle (queued → active → completed).
+        $this->backfillQueueNumbers($entriesTable);
+
         update_option(self::OPTION_KEY, self::SCHEMA_VERSION, false);
+    }
+
+    private function backfillQueueNumbers(string $entriesTable): void
+    {
+        global $wpdb;
+        $sessionIds = $wpdb->get_col(
+            "SELECT DISTINCT session_id FROM {$entriesTable} WHERE queue_number IS NULL"
+        );
+        foreach ($sessionIds as $sessionId) {
+            $entryIds = $wpdb->get_col($wpdb->prepare(
+                "SELECT id FROM {$entriesTable} WHERE session_id = %d AND queue_number IS NULL ORDER BY created_at ASC, id ASC",
+                (int) $sessionId
+            ));
+            foreach ($entryIds as $i => $entryId) {
+                $wpdb->update(
+                    $entriesTable,
+                    ['queue_number' => $i + 1],
+                    ['id' => (int) $entryId],
+                    ['%d'],
+                    ['%d']
+                );
+            }
+        }
     }
 
     public static function sessionsTable(): string

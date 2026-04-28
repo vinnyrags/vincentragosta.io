@@ -44,14 +44,15 @@ class QueueGraphQL implements Hook
         register_graphql_object_type('QueueEntry', [
             'description' => 'A single entry in the live queue.',
             'fields'      => [
-                'id'         => ['type' => ['non_null' => 'String'], 'description' => 'Stable opaque ID (e.g. q_42).'],
-                'position'   => ['type' => 'Int', 'description' => 'Logical position in the queue (1 = active).'],
-                'status'     => ['type' => ['non_null' => 'String'], 'description' => 'queued | active | completed | skipped'],
-                'type'       => ['type' => ['non_null' => 'String'], 'description' => 'order | pack_battle | pull_box | rts'],
-                'source'     => ['type' => ['non_null' => 'String'], 'description' => 'discord | shop'],
-                'identifier' => ['type' => ['non_null' => 'QueueEntryIdentifier']],
-                'detail'     => ['type' => ['non_null' => 'QueueEntryDetail']],
-                'createdAt'  => ['type' => ['non_null' => 'String'], 'description' => 'ISO 8601 timestamp.'],
+                'id'          => ['type' => ['non_null' => 'String'], 'description' => 'Stable opaque ID (e.g. q_42).'],
+                'queueNumber' => ['type' => 'Int', 'description' => 'Permanent "deli ticket" number assigned at insert. Stays with the entry through queued → active → completed. Use this for display.'],
+                'position'    => ['type' => 'Int', 'description' => 'Deprecated — transient slot position, not stable across status flips. Prefer queueNumber.'],
+                'status'      => ['type' => ['non_null' => 'String'], 'description' => 'queued | active | completed | skipped'],
+                'type'        => ['type' => ['non_null' => 'String'], 'description' => 'order | pack_battle | pull_box | rts'],
+                'source'      => ['type' => ['non_null' => 'String'], 'description' => 'discord | shop'],
+                'identifier'  => ['type' => ['non_null' => 'QueueEntryIdentifier']],
+                'detail'      => ['type' => ['non_null' => 'QueueEntryDetail']],
+                'createdAt'   => ['type' => ['non_null' => 'String'], 'description' => 'ISO 8601 timestamp.'],
             ],
         ]);
 
