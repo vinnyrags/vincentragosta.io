@@ -73,6 +73,7 @@ class QueueGraphQL implements Hook
                 'session'   => ['type' => 'QueueSession'],
                 'active'    => ['type' => 'QueueEntry'],
                 'upcoming'  => ['type' => ['list_of' => 'QueueEntry']],
+                'completed' => ['type' => ['list_of' => 'QueueEntry'], 'description' => 'Recent completed entries (chronological tail) for the "already opened on stream" timeline.'],
                 'total'     => ['type' => ['non_null' => 'Int']],
                 'updatedAt' => ['type' => ['non_null' => 'String']],
             ],
@@ -96,6 +97,7 @@ class QueueGraphQL implements Hook
                         'session'   => null,
                         'active'    => null,
                         'upcoming'  => [],
+                        'completed' => [],
                         'total'     => 0,
                         'updatedAt' => gmdate('Y-m-d\TH:i:s\Z'),
                     ];
@@ -115,10 +117,18 @@ class QueueGraphQL implements Hook
                     );
                 }
 
+                $completed = [];
+                foreach ($snapshot['completed'] as $row) {
+                    $completed[] = $this->reshapeEntryForGraphQL(
+                        QueueRepository::serializeEntry($row)
+                    );
+                }
+
                 return [
                     'session'   => QueueRepository::serializeSession($session),
                     'active'    => $active,
                     'upcoming'  => $upcoming,
+                    'completed' => $completed,
                     'total'     => $snapshot['total'],
                     'updatedAt' => gmdate('Y-m-d\TH:i:s\Z'),
                 ];

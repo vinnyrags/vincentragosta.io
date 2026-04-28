@@ -243,11 +243,19 @@ class QueueRepository
         return $result !== false;
     }
 
+    public const DEFAULT_COMPLETED_LIMIT = 5;
+
     /**
-     * Get a snapshot of the queue for a session: active entry + upcoming queued + total.
+     * Get a snapshot of the queue for a session: active entry + upcoming
+     * queued + recent completed + total. The completed list is bounded
+     * (most-recent-first) so the homepage can show a short "already
+     * opened on stream" timeline above NOW SERVING for narrative context.
      */
-    public function snapshot(int $sessionId, int $upcomingLimit = self::DEFAULT_UPCOMING_LIMIT): array
-    {
+    public function snapshot(
+        int $sessionId,
+        int $upcomingLimit = self::DEFAULT_UPCOMING_LIMIT,
+        int $completedLimit = self::DEFAULT_COMPLETED_LIMIT
+    ): array {
         global $wpdb;
         $table = QueueMigration::entriesTable();
 
@@ -268,6 +276,17 @@ class QueueRepository
             ARRAY_A
         );
 
+        $completed = $completedLimit > 0
+            ? $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT * FROM {$table} WHERE session_id = %d AND status = 'completed' ORDER BY completed_at DESC LIMIT %d",
+                    $sessionId,
+                    $completedLimit
+                ),
+                ARRAY_A
+            )
+            : [];
+
         $total = (int) $wpdb->get_var(
             $wpdb->prepare(
                 "SELECT COUNT(*) FROM {$table} WHERE session_id = %d AND status IN ('queued', 'active')",
@@ -276,9 +295,10 @@ class QueueRepository
         );
 
         return [
-            'active'   => $active ?: null,
-            'upcoming' => $upcoming ?: [],
-            'total'    => $total,
+            'active'    => $active ?: null,
+            'upcoming'  => $upcoming ?: [],
+            'completed' => $completed ?: [],
+            'total'     => $total,
         ];
     }
 

@@ -66,6 +66,7 @@ class QueueSnapshotEndpoint extends Endpoint
                 'session'   => null,
                 'active'    => null,
                 'upcoming'  => [],
+                'completed' => [],
                 'total'     => 0,
                 'updatedAt' => gmdate('Y-m-d\TH:i:s\Z'),
             ]), 'empty');
@@ -84,19 +85,28 @@ class QueueSnapshotEndpoint extends Endpoint
             $upcomingSerialized[] = QueueRepository::serializeEntry($row, $startPosition + $i);
         }
 
+        // Completed entries don't carry positions — they're a chronological
+        // tail used for narrative context ("already opened on stream").
+        $completedSerialized = [];
+        foreach ($snapshot['completed'] as $row) {
+            $completedSerialized[] = QueueRepository::serializeEntry($row);
+        }
+
         $payload = [
             'session'   => QueueRepository::serializeSession($session),
             'active'    => $activeSerialized,
             'upcoming'  => $upcomingSerialized,
+            'completed' => $completedSerialized,
             'total'     => $snapshot['total'],
             'updatedAt' => gmdate('Y-m-d\TH:i:s\Z'),
         ];
 
         $etagSeed = sprintf(
-            '%d:%s:%s:%d',
+            '%d:%s:%s:%s:%d',
             (int) $session['id'],
             $activeSerialized['id'] ?? 'none',
             implode(',', array_map(fn($e) => $e['id'], $upcomingSerialized)),
+            implode(',', array_map(fn($e) => $e['id'], $completedSerialized)),
             $snapshot['total']
         );
 
