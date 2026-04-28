@@ -30,6 +30,7 @@ use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
 use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
 use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
 use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
@@ -62,6 +63,7 @@ class ShopProvider extends Provider
         QueueGraphQL::class,
         QueueChangeWebhook::class,
         PullBoxMigration::class,
+        PullBoxGraphQL::class,
     ];
 
     /**
