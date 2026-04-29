@@ -94,6 +94,22 @@ class CreateCheckoutEndpoint extends Endpoint
         $lineItems = [];
         $productIds = [];
 
+        // Pre-flight: ask Stripe directly whether each priceId is still
+        // purchasable BEFORE decrementing stock. A stale catalog reference
+        // (Stripe product was archived/deleted between syncs) would
+        // otherwise force a stock decrement, a Stripe round-trip, then a
+        // restore — slow and pollutes Stripe's "incomplete sessions" view.
+        // The catch block on createCheckoutSession is still in place as a
+        // backstop for race conditions and webhook delivery gaps.
+        $priceIds = [];
+        foreach ($items as $item) {
+            $priceIds[] = sanitize_text_field($item['priceId'] ?? '');
+        }
+        $invalidPriceId = $this->stripe->findFirstInactivePriceId($priceIds);
+        if ($invalidPriceId !== null) {
+            return $this->unavailableItemResponse($invalidPriceId);
+        }
+
         foreach ($items as $item) {
             $priceId = sanitize_text_field($item['priceId'] ?? '');
             $quantity = (int) ($item['quantity'] ?? 0);
@@ -225,28 +241,11 @@ class CreateCheckoutEndpoint extends Endpoint
                 implode(',', array_map(static fn ($i) => (string) ($i['priceId'] ?? '?'), is_array($items) ? $items : []))
             ));
 
-            // Surface a useful message when Stripe rejects a specific price
-            // because its product is archived/deleted. Without this, a single
-            // stale catalog entry silently kills the entire cart and the
-            // buyer has no way to know which item to remove.
-            //
-            // Also auto-set stock=0 on the offending WP post so it falls out
-            // of future carts and the catalog doesn't keep tripping buyers.
-            $message = $e->getMessage();
-            if (preg_match('/Price `(price_[A-Za-z0-9]+)` is not available|No such price: `?(price_[A-Za-z0-9]+)`?/', $message, $m)) {
-                $badPriceId = $m[1] ?? ($m[2] ?? '');
-                $badPost = $this->repository->findByPriceId($badPriceId)
-                    ?? $this->cardRepository->findByPriceId($badPriceId);
-                $name = $badPost ? $badPost->title() : 'an item in your cart';
-                if ($badPost) {
-                    update_post_meta($badPost->id, 'stock_quantity', 0);
-                    clean_post_cache($badPost->id);
-                }
-                return new WP_Error(
-                    'item_unavailable',
-                    sprintf('%s is no longer available. Please remove it from your cart and try again.', $name),
-                    ['status' => 409, 'priceId' => $badPriceId]
-                );
+            // Backstop for Stripe rejecting an inactive price/product if
+            // pre-flight didn't catch it (network blip, race with a Stripe
+            // dashboard archive, etc.). The user-facing path is identical.
+            if (preg_match('/Price `(price_[A-Za-z0-9]+)` is not available|No such price: `?(price_[A-Za-z0-9]+)`?/', $e->getMessage(), $m)) {
+                return $this->unavailableItemResponse($m[1] ?? ($m[2] ?? ''));
             }
 
             return new WP_Error(
@@ -255,6 +254,29 @@ class CreateCheckoutEndpoint extends Endpoint
                 ['status' => 500]
             );
         }
+    }
+
+    /**
+     * Standard response for an item that's no longer purchasable —
+     * shared by the pre-flight Stripe price check and the post-Stripe
+     * catch block. Side effect: marks the offending WP post stock=0
+     * so it falls out of future carts and the catalog stops tripping
+     * buyers on the same item.
+     */
+    private function unavailableItemResponse(string $priceId): WP_Error
+    {
+        $badPost = $this->repository->findByPriceId($priceId)
+            ?? $this->cardRepository->findByPriceId($priceId);
+        $name = $badPost ? $badPost->title() : 'an item in your cart';
+        if ($badPost) {
+            update_post_meta($badPost->id, 'stock_quantity', 0);
+            clean_post_cache($badPost->id);
+        }
+        return new WP_Error(
+            'item_unavailable',
+            sprintf('%s is no longer available. Please remove it from your cart and try again.', $name),
+            ['status' => 409, 'priceId' => $priceId]
+        );
     }
 
     /**

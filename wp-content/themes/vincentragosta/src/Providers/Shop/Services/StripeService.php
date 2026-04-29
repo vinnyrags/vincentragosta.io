@@ -133,6 +133,49 @@ class StripeService
     }
 
     /**
+     * Find the first inactive (or missing) price in a list — used by
+     * CreateCheckoutEndpoint as a pre-flight check before decrementing
+     * stock or creating a Stripe session. Catching drift here means a
+     * buyer with a stale catalog reference gets a friendly "item is
+     * no longer available" instead of a generic checkout failure with
+     * a useless stock-decrement-then-restore round-trip.
+     *
+     * Uses expand=product so one API call per price covers both the
+     * price.active=false AND price.product.active=false cases (Stripe
+     * tracks them separately — a price can appear active even when
+     * its product is archived).
+     *
+     * Returns the offending priceId, or null if every price is active.
+     */
+    public function findFirstInactivePriceId(array $priceIds): ?string
+    {
+        foreach ($priceIds as $priceId) {
+            if (!is_string($priceId) || $priceId === '') {
+                continue;
+            }
+            try {
+                $price = $this->client->prices->retrieve($priceId, ['expand' => ['product']]);
+                if (!$price->active) {
+                    return $priceId;
+                }
+                if (isset($price->product->active) && !$price->product->active) {
+                    return $priceId;
+                }
+            } catch (\Stripe\Exception\InvalidRequestException $e) {
+                // Price doesn't exist at all — same outcome from the
+                // buyer's perspective, the item can't be purchased.
+                return $priceId;
+            } catch (\Throwable $e) {
+                // Network / auth / rate limit — don't mistake those for
+                // an inactive price. Let the main createCheckoutSession
+                // call surface the real error through the normal catch.
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Sync a product's stock count to Stripe metadata.
      *
      * Keeps Stripe metadata in sync with WordPress so pull-products
