@@ -1,7 +1,8 @@
 // ==========================================================================
-// Quote & Pullquote — Site-Specific Overrides
+// Quote & Pullquote (core/quote, core/pullquote)
 // ==========================================================================
-// Sets custom properties consumed by parent theme structural resets.
+// Self-contained — IX no longer ships any quote/pullquote styles. All
+// structural resets, vars, and the em-dash citation prefix live here.
 
 .wp-block-quote,
 .wp-block-pullquote {
@@ -11,6 +12,43 @@
     --quote-cite-font-size: 0.75em;
     --quote-border: 1px solid var(--quote-accent);
     --quote-border-left: 8px solid var(--quote-accent);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--quote-bg);
+    padding: 2rem;
+    border: var(--quote-border);
+    border-left: var(--quote-border-left);
+    margin: 0;
+    text-align: left;
+
+    p {
+        font-size: inherit;
+        line-height: inherit;
+        color: var(--quote-text);
+    }
+
+    cite {
+        display: block;
+        margin-top: 1rem;
+        font-size: var(--quote-cite-font-size);
+        font-style: normal;
+        text-transform: none;
+        color: var(--quote-accent);
+
+        &::before {
+            content: '\2014\00a0';
+        }
+    }
+}
+
+// Pullquote inner blockquote reset — neutralize WP defaults so the figure's
+// padding/border governs.
+.wp-block-pullquote blockquote {
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 // ==========================================================================
