@@ -18,6 +18,7 @@ use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use DI\Container;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
 use IX\Providers\Theme\Features\ScrollReveal;
+use IX\Providers\Theme\Features\WpFormsBaseStyles;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
 use IX\Providers\Theme\Features\WpFormsFloatingLabels;
 use IX\Providers\Theme\ThemeProvider as BaseThemeProvider;
@@ -41,6 +42,7 @@ class ThemeProvider extends BaseThemeProvider
     protected array $features = [
         ButtonIconEnhancer::class,
         ScrollReveal::class,
+        WpFormsBaseStyles::class,
         WpFormsBlockDetection::class,
         WpFormsFloatingLabels::class,
     ];

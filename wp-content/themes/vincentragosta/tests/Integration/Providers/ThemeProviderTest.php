@@ -25,6 +25,7 @@ use IX\Providers\Theme\Features\DisablePluginUpdates;
 use IX\Providers\Theme\Features\DisablePosts;
 use IX\Providers\Theme\Features\EnableSvgUploads;
 use IX\Providers\Theme\Features\ScrollReveal;
+use IX\Providers\Theme\Features\WpFormsBaseStyles;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
 use IX\Providers\Theme\Features\WpFormsFloatingLabels;
 use WorDBless\BaseTestCase;
@@ -87,9 +88,10 @@ class ThemeProviderTest extends BaseTestCase
         // Child theme opt-in features
         $this->assertContains(ButtonIconEnhancer::class, $enabled);
         $this->assertContains(ScrollReveal::class, $enabled);
+        $this->assertContains(WpFormsBaseStyles::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(10, $enabled);
+        $this->assertCount(11, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);

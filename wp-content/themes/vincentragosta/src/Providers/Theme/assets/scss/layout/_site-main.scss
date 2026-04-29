@@ -4,6 +4,23 @@
   padding-block-start: var(--header-height, 72px);
 }
 
+// Wire vincentragosta.io's spacing scale into the parent theme's
+// parameterized layout (see ix/.../common/_layout.scss). IX provides
+// the layout MECHANICS via .site-content + .is-root-container; consumers
+// own the VALUES. These were previously hardcoded inside IX itself
+// (padding-inline: --40, has-background padding-block: --70, etc.) —
+// the parent stripped those slug references in favor of the variables
+// here so child themes don't have to fight specificity to restyle.
+.site-content,
+.is-root-container {
+  --ix-root-padding-inline: var(--wp--preset--spacing--40);
+  --ix-root-padding-block-end: var(--wp--preset--spacing--50);
+  --ix-section-padding-block: var(--wp--preset--spacing--70);
+  --ix-section-margin-block: var(--wp--preset--spacing--70);
+  --ix-section-scroll-offset: var(--wp--preset--spacing--70);
+  --ix-first-child-margin: var(--wp--preset--spacing--50);
+}
+
 .error404 .site-content > .error-404 {
   margin-block-start: var(--wp--preset--spacing--70);
 }

@@ -1,9 +1,114 @@
 // ==========================================================================
-// Modal — color overrides for IX's structural modal rules.
-// IX ships positioning, scroll-lock, focus management, motion. This file
-// adds the colors using the project's semantic tokens so modals follow
-// light/dark mode automatically.
+// Modal — full ownership lives here.
+//
+// Two layered blocks:
+//   1. Structural — positioning, scroll-lock, panel sizing, animation,
+//      button shape, gaps. Migrated from IX in the layout-cleanup
+//      refactor; modals are vinrag-specific (cart age-gate, email
+//      capture) and the corresponding modal.js already lives in vinrag,
+//      so the SCSS sits next to the JS instead of in the parent theme.
+//   2. Brand colors — surface, borders, accent button gradients, focus
+//      outline. These layered on top of IX's structural rules before;
+//      now they layer on top of the structural rules immediately above.
+//
+// Order matters: structural rules first, color overrides after, so the
+// cascade matches the prior parent-then-child enqueue order.
 // ==========================================================================
+
+// ---------------------------------------------------------------------------
+// Structural (migrated from IX)
+// ---------------------------------------------------------------------------
+
+:root {
+  --modal-z-index: 10000;
+}
+
+// Scroll lock — applied to <html> while a modal is open
+.modal-open {
+  overflow: hidden;
+}
+
+// Overlay
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--modal-z-index);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+// Centered panel
+.modal__panel {
+  max-width: 420px;
+  width: 90vw;
+  padding: var(--wp--preset--spacing--50);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal__title {
+  font-size: var(--wp--preset--font-size--40);
+  margin: 0 0 var(--wp--preset--spacing--20);
+}
+
+.modal__message {
+  margin-block-end: var(--wp--preset--spacing--40);
+  line-height: 1.5;
+}
+
+.modal__body {
+  margin-block-end: var(--wp--preset--spacing--40);
+  line-height: 1.5;
+}
+
+.modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--20);
+}
+
+.modal__button {
+  padding: 0.75em;
+  border-radius: 4px;
+  font-size: var(--wp--preset--font-size--20);
+  cursor: pointer;
+  transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+  &:focus-visible {
+    outline: 2px solid;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.modal__button--primary {
+  border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.modal__button--secondary {
+  background: transparent;
+}
+
+// ---------------------------------------------------------------------------
+// Brand colors (vinrag-specific overrides; layer on top of the structural
+// rules above)
+// ---------------------------------------------------------------------------
 
 .modal__panel {
   background: var(--color-surface);

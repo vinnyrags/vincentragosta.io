@@ -1,16 +1,23 @@
 @use 'common/breakpoints' as *;
 
-// Override WordPress default :where(.wp-block-group.has-background) padding
-// with theme spacing variables. :is() beats :where() in specificity.
+// Inset content padding for any has-background container, anywhere in
+// the document. Replaces WP core's :where(.wp-block-group.has-background)
+// default padding (1.25em 2.375em); :is() beats :where() in specificity.
+//
+// This is the NESTED/inner case. Root-level containers also get a
+// vertical padding override via --ix-section-padding-block (set in
+// _site-main.scss; rule lives in IX's _layout.scss). This rule wins for
+// padding-inline; the parent rule wins for padding-block on root sections.
 :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
     padding-block: var(--wp--preset--spacing--50);
     padding-inline: var(--wp--preset--spacing--40);
 }
 
-// Top-level container blocks with backgrounds get extra vertical spacing.
-// .site-main targets the frontend; .is-root-container targets the block editor.
-:is(.site-content, .is-root-container) > :is(.wp-block-group, .wp-block-cover, .wp-block-columns).has-background {
-    padding-block: var(--wp--preset--spacing--70);
+// Default padding for individual columns with their own background.
+// (Migrated from IX in the layout-parameterization refactor — column
+// has-background is too brand-specific to live in the parent.)
+.wp-block-column.has-background {
+    padding: var(--wp--preset--spacing--40);
 }
 
 .is-style-dark {
