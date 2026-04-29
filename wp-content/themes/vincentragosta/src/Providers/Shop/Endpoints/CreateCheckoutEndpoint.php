@@ -215,6 +215,16 @@ class CreateCheckoutEndpoint extends Endpoint
             // Restore stock if session creation failed
             $this->restoreStock($productIds);
 
+            // Log the real exception so future failures are debuggable.
+            // Without this, the buyer sees a generic message and the cause
+            // is lost — making Stripe price/config drift hard to diagnose.
+            error_log(sprintf(
+                '[CreateCheckout] %s: %s | priceIds=%s',
+                get_class($e),
+                $e->getMessage(),
+                implode(',', array_map(static fn ($i) => (string) ($i['priceId'] ?? '?'), is_array($items) ? $items : []))
+            ));
+
             return new WP_Error(
                 'checkout_failed',
                 'Failed to create checkout session.',
