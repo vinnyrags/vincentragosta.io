@@ -225,6 +225,30 @@ class CreateCheckoutEndpoint extends Endpoint
                 implode(',', array_map(static fn ($i) => (string) ($i['priceId'] ?? '?'), is_array($items) ? $items : []))
             ));
 
+            // Surface a useful message when Stripe rejects a specific price
+            // because its product is archived/deleted. Without this, a single
+            // stale catalog entry silently kills the entire cart and the
+            // buyer has no way to know which item to remove.
+            //
+            // Also auto-set stock=0 on the offending WP post so it falls out
+            // of future carts and the catalog doesn't keep tripping buyers.
+            $message = $e->getMessage();
+            if (preg_match('/Price `(price_[A-Za-z0-9]+)` is not available|No such price: `?(price_[A-Za-z0-9]+)`?/', $message, $m)) {
+                $badPriceId = $m[1] ?? ($m[2] ?? '');
+                $badPost = $this->repository->findByPriceId($badPriceId)
+                    ?? $this->cardRepository->findByPriceId($badPriceId);
+                $name = $badPost ? $badPost->title() : 'an item in your cart';
+                if ($badPost) {
+                    update_post_meta($badPost->id, 'stock_quantity', 0);
+                    clean_post_cache($badPost->id);
+                }
+                return new WP_Error(
+                    'item_unavailable',
+                    sprintf('%s is no longer available. Please remove it from your cart and try again.', $name),
+                    ['status' => 409, 'priceId' => $badPriceId]
+                );
+            }
+
             return new WP_Error(
                 'checkout_failed',
                 'Failed to create checkout session.',
