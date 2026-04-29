@@ -27,6 +27,7 @@ use ChildTheme\Providers\Shop\Endpoints\QueueSnapshotEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
 use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
@@ -65,6 +66,7 @@ class ShopProvider extends Provider
         QueueChangeWebhook::class,
         PullBoxMigration::class,
         PullBoxGraphQL::class,
+        ActivityWebhook::class,
     ];
 
     /**

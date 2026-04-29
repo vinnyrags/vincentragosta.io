@@ -206,12 +206,29 @@ class PullBoxRepository
      * Confirm previously-pending slot claims after the Stripe payment
      * has succeeded. Looks up by stripe_session_id so the webhook can
      * upgrade exactly the rows it created at session-create time.
+     *
+     * Fires `shop_pull_box_slot_claimed` with the box, slot numbers, and
+     * buyer info so the Activity Feed bridge can broadcast the claim to
+     * the homepage.
      */
     public function confirmClaimsByStripeSession(string $stripeSessionId): int
     {
         global $wpdb;
         $table = PullBoxMigration::slotsTable();
-        return (int) $wpdb->update(
+
+        $rows = $wpdb->get_results(
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE stripe_session_id = %s AND claim_status = 'pending'",
+                $stripeSessionId
+            ),
+            ARRAY_A
+        );
+
+        if (empty($rows)) {
+            return 0;
+        }
+
+        $confirmed = (int) $wpdb->update(
             $table,
             [
                 'claim_status' => 'confirmed',
@@ -224,6 +241,20 @@ class PullBoxRepository
             ['%s', '%s'],
             ['%s', '%s']
         );
+
+        if ($confirmed > 0) {
+            $boxId = (int) $rows[0]['pull_box_id'];
+            $box = $this->findBox($boxId);
+            $slotNumbers = array_map(static fn ($r) => (int) $r['slot_number'], $rows);
+            $buyerInfo = [
+                'discord_user_id' => $rows[0]['discord_user_id'] ?? null,
+                'discord_handle'  => $rows[0]['discord_handle'] ?? null,
+                'customer_email'  => $rows[0]['customer_email'] ?? null,
+            ];
+            do_action('shop_pull_box_slot_claimed', $box, $slotNumbers, $buyerInfo);
+        }
+
+        return $confirmed;
     }
 
     public function releaseClaimsByStripeSession(string $stripeSessionId): int
