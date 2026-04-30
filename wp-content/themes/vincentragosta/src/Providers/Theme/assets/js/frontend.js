@@ -5,6 +5,5 @@
 
 import './header';
 import './dropdown';
-import './scroll-animation';
 import './wpforms-submit-icon';
 import './section-navigator';

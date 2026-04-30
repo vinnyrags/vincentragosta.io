@@ -124,6 +124,22 @@ class ThemeProvider extends BaseThemeProvider
         // Timber context for ACF options data
         add_filter('timber/context', [$this, 'addOptionsToContext']);
 
+        // Extend IX's ScrollReveal default selectors with vinrag-specific
+        // elements (footer contact + page-bar copy, blog pagination), and
+        // add the .blog-pagination ancestor exclude so paginated post-list
+        // children don't double-animate inside the pagination container.
+        add_filter(ScrollReveal::FILTER_SELECTORS, static function (array $selectors): array {
+            return array_merge($selectors, [
+                '.footer__contact-heading',
+                '.footer__contact-body',
+                '.footer__bar',
+                '.blog-pagination',
+            ]);
+        });
+        add_filter(ScrollReveal::FILTER_EXCLUDE_ANCESTORS, static function (array $excludes): array {
+            return array_merge($excludes, ['.blog-pagination']);
+        });
+
         // Re-enable post featured image block (disabled in parent)
         add_filter('theme/disabled_block_types', static function (array $blocks): array {
             return array_values(array_diff($blocks, ['core/post-featured-image', 'core/post-terms', 'core/post-title', 'core/quote', 'core/pullquote']));
