@@ -143,6 +143,21 @@ class QueueEntryCreateEndpoint extends Endpoint
             }
         }
 
+        // Guard the closed-session race: an admin may close the session
+        // between the bot's getActiveQueue() and this insert. An entry
+        // landing in a non-open session would be invisible on the live
+        // snapshot (snapshot only reads from open/racing sessions) and
+        // would mislead the bot/buyer about where the order ended up.
+        // Bot-side handling: log to #ops, manual queue insert or refund.
+        $sessionStatus = (string) ($session['status'] ?? '');
+        if (!in_array($sessionStatus, ['open', 'racing'], true)) {
+            return new WP_Error(
+                'session_not_open',
+                sprintf('Queue session %d is %s — cannot create new entries.', $sessionId, $sessionStatus ?: 'unknown'),
+                ['status' => 409, 'sessionId' => $sessionId, 'sessionStatus' => $sessionStatus]
+            );
+        }
+
         $detailData = $request->get_param('detail_data');
         if (is_string($detailData) && $detailData !== '') {
             $decoded = json_decode($detailData, true);
