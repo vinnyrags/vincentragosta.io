@@ -63,7 +63,11 @@ class CardRequestEndpoint extends Endpoint
     public function callback(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
         $cardId = (int) $request->get_param('card_id');
-        $email = $request->get_param('email');
+        // Normalize: every email-keyed lookup downstream is case-sensitive
+        // in MySQL `utf8mb4_bin` columns and SQLite TEXT, so a `User@Gmail.com`
+        // submission would otherwise create a separate identity from the
+        // same buyer's prior `user@gmail.com` purchases.
+        $email = strtolower(trim((string) $request->get_param('email')));
         $discord = trim((string) $request->get_param('discord_username'));
 
         if ($cardId < 1) {
