@@ -3,6 +3,7 @@
 namespace ChildTheme\Tests\Unit\Providers\Shop\Endpoints;
 
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryCreateEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\QueueEntryRefundEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueEntryUpdateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
@@ -35,6 +36,7 @@ class QueueEndpointsTest extends TestCase
             'session update'  => [QueueSessionUpdateEndpoint::class, '/queue/sessions/(?P<id>\d+)', ['PATCH', 'POST']],
             'entry create'    => [QueueEntryCreateEndpoint::class, '/queue/entries', 'POST'],
             'entry update'    => [QueueEntryUpdateEndpoint::class, '/queue/entries/(?P<id>\d+)', ['PATCH', 'POST']],
+            'entry refund'    => [QueueEntryRefundEndpoint::class, '/queue/entries/refund', ['POST']],
         ];
     }
 
@@ -53,6 +55,7 @@ class QueueEndpointsTest extends TestCase
             QueueSessionUpdateEndpoint::class,
             QueueEntryCreateEndpoint::class,
             QueueEntryUpdateEndpoint::class,
+            QueueEntryRefundEndpoint::class,
         ];
 
         if (!defined('LIVESTREAM_SECRET')) {
@@ -98,5 +101,27 @@ class QueueEndpointsTest extends TestCase
 
         $this->assertArrayHasKey('status', $args);
         $this->assertFalse($args['status']['required']);
+    }
+
+    public function testEntryRefundEndpointRequiresStripeSessionId(): void
+    {
+        $reflection = new ReflectionClass(QueueEntryRefundEndpoint::class);
+        $endpoint = $reflection->newInstanceWithoutConstructor();
+        $args = $reflection->getMethod('getArgs')->invoke($endpoint);
+
+        $this->assertArrayHasKey('stripe_session_id', $args);
+        $this->assertTrue($args['stripe_session_id']['required']);
+        $this->assertArrayHasKey('refund_amount', $args);
+        $this->assertFalse($args['refund_amount']['required']);
+        $this->assertArrayHasKey('reason', $args);
+        $this->assertFalse($args['reason']['required']);
+        $this->assertArrayHasKey('is_partial', $args);
+        $this->assertFalse($args['is_partial']['required']);
+    }
+
+    public function testEntryStatusesIncludeRefunded(): void
+    {
+        $statuses = \ChildTheme\Providers\Shop\Support\QueueRepository::ENTRY_STATUSES;
+        $this->assertContains('refunded', $statuses);
     }
 }

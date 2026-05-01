@@ -17,7 +17,7 @@ class QueueRepository
 {
     public const TYPES = ['order', 'pack_battle', 'pull_box', 'rts'];
     public const SOURCES = ['discord', 'shop'];
-    public const ENTRY_STATUSES = ['queued', 'active', 'completed', 'skipped'];
+    public const ENTRY_STATUSES = ['queued', 'active', 'completed', 'skipped', 'refunded'];
     public const SESSION_STATUSES = ['open', 'closed', 'racing', 'complete'];
 
     public const DEFAULT_UPCOMING_LIMIT = 10;
@@ -415,7 +415,7 @@ class QueueRepository
         } else {
             $rows = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM {$table} WHERE session_id = %d AND status != 'skipped' ORDER BY created_at ASC",
+                    "SELECT * FROM {$table} WHERE session_id = %d AND status NOT IN ('skipped', 'refunded') ORDER BY created_at ASC",
                     $sessionId
                 ),
                 ARRAY_A
@@ -428,7 +428,8 @@ class QueueRepository
     /**
      * Unique buyers in a session — Discord user ID preferred, falls back to email.
      * Returns array of ['buyer' => identifier] for compatibility with the existing
-     * Nous duck race shape.
+     * Nous duck race shape. Excludes refunded entries: a refunded buyer got their
+     * money back and can't be eligible for the race.
      */
     public function uniqueBuyers(int $sessionId): array
     {
@@ -440,7 +441,7 @@ class QueueRepository
                 "SELECT DISTINCT COALESCE(discord_user_id, customer_email) AS buyer
                  FROM {$table}
                  WHERE session_id = %d
-                   AND status != 'skipped'
+                   AND status NOT IN ('skipped', 'refunded')
                    AND COALESCE(discord_user_id, customer_email) IS NOT NULL
                  ORDER BY MIN(created_at) ASC",
                 $sessionId

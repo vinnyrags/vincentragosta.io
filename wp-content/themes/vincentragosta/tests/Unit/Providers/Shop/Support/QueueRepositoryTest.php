@@ -110,7 +110,7 @@ class QueueRepositoryTest extends TestCase
     {
         $this->assertSame(['order', 'pack_battle', 'pull_box', 'rts'], QueueRepository::TYPES);
         $this->assertSame(['discord', 'shop'], QueueRepository::SOURCES);
-        $this->assertSame(['queued', 'active', 'completed', 'skipped'], QueueRepository::ENTRY_STATUSES);
+        $this->assertSame(['queued', 'active', 'completed', 'skipped', 'refunded'], QueueRepository::ENTRY_STATUSES);
         $this->assertSame(['open', 'closed', 'racing', 'complete'], QueueRepository::SESSION_STATUSES);
     }
 
