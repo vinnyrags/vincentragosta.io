@@ -323,11 +323,20 @@ class CreateCheckoutEndpoint extends Endpoint
             return $defaults;
         }
 
+        $known = (bool) ($body['known'] ?? false);
+
+        // Defense in depth: shipping coverage requires Discord-link verification.
+        // The bot already gates this in /shipping/lookup, but if the bot ever
+        // regresses or a future caller bypasses the gate, refusing covered=true
+        // here without known=true keeps the free-shipping exploit closed.
+        $coveredRaw = (bool) ($body['covered'] ?? false);
+        $covered    = $known && $coveredRaw;
+
         return [
-            'covered'       => (bool) ($body['covered']       ?? false),
+            'covered'       => $covered,
             'international' => (bool) ($body['international'] ?? false),
             'country_known' => (bool) ($body['countryKnown']  ?? false),
-            'known'         => (bool) ($body['known']         ?? false),
+            'known'         => $known,
         ];
     }
 
