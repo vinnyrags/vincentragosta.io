@@ -262,6 +262,11 @@ class CreateCheckoutEndpoint extends Endpoint
      * catch block. Side effect: marks the offending WP post stock=0
      * so it falls out of future carts and the catalog stops tripping
      * buyers on the same item.
+     *
+     * The response carries priceId AND productName so the cart UI can
+     * remove only the offending item by priceId and name it precisely
+     * in the toast — buyers with multi-item carts no longer lose every
+     * item just because one drifted.
      */
     private function unavailableItemResponse(string $priceId): WP_Error
     {
@@ -275,7 +280,7 @@ class CreateCheckoutEndpoint extends Endpoint
         return new WP_Error(
             'item_unavailable',
             sprintf('%s is no longer available. Please remove it from your cart and try again.', $name),
-            ['status' => 409, 'priceId' => $priceId]
+            ['status' => 409, 'priceId' => $priceId, 'productName' => $name]
         );
     }
 
