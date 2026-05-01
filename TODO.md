@@ -23,16 +23,29 @@
 - setup donations link (stripe based), or section on the website, maybe in the footer?
 - can we confirm if we have shipping easy tests accounted for in our !test command please?
 
-- we need a list style (see refund policy page)
-- section nav should collapse at greater than 3 items (collapse to dropdown), I believe it is currently set to 5
 - consider moving the giveaway stuff to the website (as opposed to in discord), is it possible to build a duck race on my website? I am sure this is quite involved, but its a fairly simple concept
 - check over all discord messaging, make sure nothing is stale
-- for the pull boxes, the ability to enter their selection out of X amount of cards should be available, we should be capturing their selections in the queue, this also means we need to be keeping track of the count of the pull box (which we may already be doing)
-- grimmsnarl V sv116/sv122 needs to bump stock to 2, 
 
+- grimmsnarl V sv116/sv122 needs to bump stock to 2
+
+## CELEBRITYAUTOBIOGRAPHY
+- if you were to review the codebase as one of the developers over at arthouse interactive, with a watchful critique-ing eye, what would you see and notice in this code? is there areas in the code that could have been better implemented, are we using best practices? are we well documenting the code? based off of the answers/findings there and looking through that lens, can we better position ourselves to really wow the reviewer. dont implement anything lets just start the conversation.
+- need to double back on social icon focus outline not working
+
+- I swapped in the Celeb Auto segment key — I can see data flowing through Segment and Google Tag Assistant says the GA4 tag is firing, but I’m not seeing any real-time traffic in Google Analytics when I’m on the staging site. Do you by chance have something configured so GA4 doesn’t fire on staging?
+- I added in the API key and ID, and now the form doesn’t seem to be working, could you look into that?
+##
+
+- consider changing over discord system to terminal system, still emit messaging to discord but the commands will no longer fire from there
+- live feed should include tiktok and discord new followers/joins.
+- is there an opportunity to update makefile to take similar approach that we did in celebrityautobiography with the composer script for nested installs, wondering if that could be an optimization in vincentragosta.io as well (in composer and in makefile)
+- create frontend for akivili, can query anything in the repo/about me/the business, would be super cool! just a prompt to quick check things, only my laptop, bluetooth or wifi can access this website
+- need time tracking app for ARTHOUSE / FUELED, can you suggest software? and/or something cool we could even do custom in google sheets maybe?
 - could we explore a potentially better mobile experience, currently its scroll-galore for both shops, the experience, while each card looks great, as a whole is completely unrealistic to vertically scroll through 1000+ cards or even 200+ boxes/packs on a mobile screen. wondering if we go back to two columns on mobile and display less information maybe? this still doesnt really solve the problem, but i guess its okay to infinitely scroll, having to have them search only on mobile is also not a good UI. its probably fine I think, we should just look into potentially having two cards per row displayed, title and price maybe only? let me know what you are thinking, dont implement anything yet lets talk through this. i also wonder if we can simplify the buttons on mobile, have a cart icon instead of add to cart, and just have "request" instead of request to see, and have the buttons be side by side instead of stacked.
 - all of my cards for sale are holographic cards (holographs), is there any conflicting rows in the google sheet that would say otherwise? I am mainly checking in the common/uncommon scenario, I dont believe anything with those names is correct, I have cards that are technically rarer than holo-rare, can i see a list of any offenders, please dont make any changes just yet I want to review the list (if any)
 - setup a nightly (daily) cron on vincentragosta.io that takes snapshot of db and saves the last three most recent in an appropriate directory, this way if anything catastrophic happens we have a backup.
+- nightly cron on production that runs `node scripts/shop/audit-stripe-active.js --apply` to keep WP catalog and Stripe in sync — auto-stocks=0 + clears stale stripe IDs whenever a Stripe product becomes inactive between syncs. Posts a one-line summary to `#ops` Discord. Belt for the existing pre-flight + webhook layers; catches anything they miss.
+- when in sold out state (card single), we should also disable request to see
 
 - does any documentation (readmes/akivili/itzenzo.tv pages/discord nous messaging across the various channels) need updating?
 
@@ -40,7 +53,6 @@
 - switch stripe over to live mode
 - we made an update to social icons hook in theme provider in the child theme that we want to move to the parent theme (confirm this action beforehand even though I cant think of any reason why we wouldnt want all social links to open in a new tab)
 - if we were to review akivili in its entirety, everything in it vs the content/pages and content/projects, do you see opportunity to update the content on the current website with anything else that we have done and/or worked on that would better the cause on my website to get hired for web development business work, anything pertaining to server deployment stuff, any of the new make commands we have done, anything related to stripe? the card business? I was not sure I wanted to expose the shop in my global nav, to try to keep a clear separation ebtween the shop and the rest of my web development work, but maybe there is a fun and clever play we could even do-- I dont know about this but I could be persuaded if you make a compelling argument. I look forward to your assessment on this.
-- create starter repo that has project root plus child theme, rework claude.md to ensure no specific references to vincentragosta.io project, it will more than likely not have any information on me either, i.e, access to the content directory, docs directory or interviews directory, so if there are references to how I think or want claude to think/behave, then we should port that information over to claude.md.
 - consider cleaning up the file architecture of akivili
 - flash sale in discord/stripe, how can we integrate this into a livestream moment where an alarm goes off, and a random flash sale happens
 
