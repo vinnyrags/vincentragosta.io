@@ -1,0 +1,46 @@
+name: test
+
+# PHPUnit + WorDBless test suite for the child theme. The IX parent theme
+# and Mythus mu-plugin run their own CI in their respective Composer-package
+# repos — this workflow covers what's owned by this site repo.
+#
+# WorDBless simulates WP without a database, so we don't need MySQL services
+# or a WP install in CI. Just PHP + Composer.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: phpunit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    defaults:
+      run:
+        working-directory: wp-content/themes/vincentragosta
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Regenerate autoload
+        run: composer dump-autoload --classmap-authoritative
+
+      - name: Run PHPUnit
+        run: composer test
