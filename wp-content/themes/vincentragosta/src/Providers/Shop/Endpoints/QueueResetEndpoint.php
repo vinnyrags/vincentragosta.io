@@ -12,7 +12,7 @@ use WP_REST_Response;
 /**
  * Test-only: wipe all queue sessions and entries.
  *
- * Called by Nous's `!reset` command after the legacy SQLite tables are
+ * Called by Nous's `/reset` slash command after the legacy SQLite tables are
  * cleared, so the WP source-of-truth queue starts fresh too. Bot-secret
  * authenticated. Returns row counts so the calling command can report
  * what was cleared.

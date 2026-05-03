@@ -65,7 +65,7 @@ Flags:
 
 This creates/updates product CPT posts with correct price IDs, stock, images, and ACF fields from Stripe.
 
-The full sync pipeline (Google Sheets → Stripe → WordPress) is now handled via the bot's `!sync` command in Discord, or via the itzenzoTTV repo's scripts directly.
+The full sync pipeline (Google Sheets → Stripe → WordPress) is now handled via the bot's `/sync` command in Discord, or via the itzenzoTTV repo's scripts directly.
 
 ## Switching to Stripe Live Mode
 

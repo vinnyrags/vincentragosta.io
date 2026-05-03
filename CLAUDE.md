@@ -251,7 +251,7 @@ The export script automatically replaces hardcoded upload URLs with dynamic `con
 
 ## Unified Queue
 
-The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests — so the same data feeds the Discord `!queue` command, the public itzenzo.tv homepage Live Queue section, and any future admin tooling.
+The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests — so the same data feeds the Discord `/queue` slash command, the public itzenzo.tv homepage Live Queue section, and any future admin tooling.
 
 ### Data model
 
@@ -273,7 +273,7 @@ Seven endpoints under `/wp-json/shop/v1/queue/*`, registered through the standar
 | Endpoint | Auth | Purpose |
 |----------|------|---------|
 | `GET /queue` | public | Snapshot of active session: session metadata, current `active` entry, top-N `upcoming`, total. ETag-cached, returns 304 on no change. |
-| `GET /queue/sessions` | public | Recent sessions list (for `!queue history`). |
+| `GET /queue/sessions` | public | Recent sessions list (for `/queue history`). |
 | `GET /queue/sessions/{id}/entries` | public | Full entries list + unique buyers (for duck race roster). Returns `serializeEntryRaw()` shape. |
 | `POST /queue/sessions` | bot-secret | Open a new session. Refuses if one is already open. |
 | `PATCH /queue/sessions/{id}` | bot-secret | Update status (`closed` / `racing` / `complete`), `channel_message_id`, `duck_race_winner_user_id`. |
@@ -317,11 +317,11 @@ Four code paths put rows into `wp_queue_entries`:
 3. **Pull boxes** — Nous Stripe webhook → `recordPullPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: '$N tier' })`.
 4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `mirrorToQueue()` → `QueueRepository::createEntry({ type: 'rts' })`. Failure is logged, never thrown — the card request itself has already succeeded.
 
-All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `!queue` Discord embed renders.
+All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `/queue` Discord embed renders.
 
 ### Testing the queue path
 
-Bot-side: Nous's `!test` command opens with the active queue source (`config.QUEUE_SOURCE`) printed in the header, then probes it with `getActiveQueue()` before running the rest of the buyer-critical-path suite — fails loud if WP is unreachable.
+Bot-side: Nous's `npm run test:critical` (CLI replacement for the legacy `!test` Discord command) opens with the active queue source (`config.QUEUE_SOURCE`) printed in the header, then probes it with `getActiveQueue()` before running the rest of the buyer-critical-path suite — fails loud if WP is unreachable.
 
 WP-side: unit tests at `tests/Unit/Providers/Shop/Support/QueueRepositoryTest.php` (serialization), `tests/Unit/Providers/Shop/Endpoints/QueueEndpointsTest.php` (route/methods/auth), and `tests/Unit/Providers/Shop/Hooks/QueueMigrationTest.php` (table naming).
 
@@ -340,7 +340,7 @@ Manual sweep: `node Nous/scripts/shop/audit-stripe-active.js [--apply]` lists ev
 
 WP-side: `tests/Integration/Providers/Shop/CatalogStripeProductDeactivatedEndpointTest.php` (shape + permission only — behavior is verified end-to-end against prod because WorDBless mocks `update_post_meta`/`get_post_meta` in memory and direct `$wpdb` queries against `wp_postmeta` return zero rows in the test environment; this matches the convention used by `QueueResetEndpoint` and other endpoints that touch the DB through raw SQL).
 
-Bot-side: `Nous/tests/catalog-deactivate.test.js` (envelope shape, early-return guards on empty productId, error handling, log emission). The `!test` smoke flow has a probe step that POSTs a fake `stripeProductId` to the WP endpoint and asserts 200 + `matched=0` — catches a broken route or auth gate before a livestream relies on the real-time cleanup path.
+Bot-side: `Nous/tests/catalog-deactivate.test.js` (envelope shape, early-return guards on empty productId, error handling, log emission). The `npm run test:critical` smoke flow has a probe step that POSTs a fake `stripeProductId` to the WP endpoint and asserts 200 + `matched=0` — catches a broken route or auth gate before a livestream relies on the real-time cleanup path.
 
 ## Build System
 

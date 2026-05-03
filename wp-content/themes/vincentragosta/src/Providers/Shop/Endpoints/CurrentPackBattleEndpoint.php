@@ -13,7 +13,7 @@ use WP_REST_Response;
 /**
  * Writes the "current pack battle" state for the itzenzo.tv homepage widget.
  *
- * Called by the Nous Discord bot on !battle start, close, cancel, and winner
+ * Called by the Nous Discord bot on /battle start, close, cancel, and winner
  * declaration. itzenzo.tv reads the resulting ACF options group via WPGraphQL
  * and renders the homepage widget accordingly.
  *

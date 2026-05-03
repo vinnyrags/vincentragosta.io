@@ -11,7 +11,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 /**
- * List recent queue sessions (for `!queue history` and admin tooling).
+ * List recent queue sessions (for `/queue history` and admin tooling).
  * Public read, includes per-session totals.
  */
 class QueueSessionsListEndpoint extends Endpoint
