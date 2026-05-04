@@ -1,11 +1,22 @@
 name: test
 
-# PHPUnit + WorDBless test suite for the child theme. The IX parent theme
-# and Mythus mu-plugin run their own CI in their respective Composer-package
-# repos — this workflow covers what's owned by this site repo.
+# PHPUnit + WorDBless test suite for the child theme.
 #
-# WorDBless simulates WP without a database, so we don't need MySQL services
-# or a WP install in CI. Just PHP + Composer.
+# The child theme depends on private Composer packages (vincentragosta/ix
+# and vincentragosta/mythus, served from packages.vincentragosta.io)
+# plus wpengine/advanced-custom-fields-pro from connect.advancedcustomfields.com.
+# Both require auth — we consume it via the COMPOSER_AUTH secret, whose
+# value is the contents of /root/.composer-auth.json on the deploy server.
+#
+# Workflow strategy:
+#   1. composer install at repo ROOT — fires the post-install-cmd that
+#      runs reinstall-nested, which installs IX into wp-content/themes/ix
+#      and Mythus into wp-content/mu-plugins/mythus with their dev deps.
+#   2. composer install in the child theme directory — installs PHPUnit,
+#      WorDBless, and child-specific deps.
+#   3. composer test in the child theme directory.
+#
+# WorDBless simulates WP without a database, so no MySQL services needed.
 
 on:
   pull_request:
@@ -22,9 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
-    defaults:
-      run:
-        working-directory: wp-content/themes/vincentragosta
+    env:
+      COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
 
     steps:
       - uses: actions/checkout@v4
@@ -36,11 +46,17 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: Install dependencies
+      - name: Install root + nested (IX, Mythus) dependencies
         run: composer install --prefer-dist --no-progress --no-interaction
 
-      - name: Regenerate autoload
+      - name: Install child theme dependencies
+        working-directory: wp-content/themes/vincentragosta
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Regenerate child theme autoload
+        working-directory: wp-content/themes/vincentragosta
         run: composer dump-autoload --classmap-authoritative
 
       - name: Run PHPUnit
+        working-directory: wp-content/themes/vincentragosta
         run: composer test
