@@ -1,4 +1,5 @@
 ## HIGH PRIORITY
+- automate `make rebuild-staging-catalog` — currently a placeholder that prints manual steps. After live cutover, the manual procedure (wipe `stripe_product_id`/`stripe_price_id` post meta on staging, re-run `push-products.js`/`push-cards.js` against staging WP with `sk_test_*`) becomes routine. Wrap it in a single make target. Trigger: first time we hit a real cross-mode push need.
 - what are cool things we can do in twitch (obs) to prepare for our twitch stream (both gaming and card night)
 - draft we are back announcement
 - add tiktok feed to shop page via same plugin smashballoon that we use for instagram
@@ -29,13 +30,17 @@
 - grimmsnarl V sv116/sv122 needs to bump stock to 2
 
 ## CELEBRITYAUTOBIOGRAPHY
-- if you were to review the codebase as one of the developers over at arthouse interactive, with a watchful critique-ing eye, what would you see and notice in this code? is there areas in the code that could have been better implemented, are we using best practices? are we well documenting the code? based off of the answers/findings there and looking through that lens, can we better position ourselves to really wow the reviewer. dont implement anything lets just start the conversation.
-- need to double back on social icon focus outline not working
-
-- I swapped in the Celeb Auto segment key — I can see data flowing through Segment and Google Tag Assistant says the GA4 tag is firing, but I’m not seeing any real-time traffic in Google Analytics when I’m on the staging site. Do you by chance have something configured so GA4 doesn’t fire on staging?
-- I added in the API key and ID, and now the form doesn’t seem to be working, could you look into that?
+- can you write up a detailed plan for launching the staging site to production from all of the information you already know about this go-live, including the cloudflare engagement, monday afternoon we should just swap the document root, the plan should also account for that new information that comes in on monday.
 ##
 
+- on reset of the test, it should clear the messages in the test discord
+- this spacing .py-\[clamp\(4rem\,10vw\,10rem\)\] {
+  padding-block: clamp(4rem, 10vw, 10rem);
+  } on the livestream shop (itzenzo.tv homepage) needs to be moved to the queue container, and we revert back to the standard spacing for the livestream shop container, does this make sense?
+- 🛒 New Order!
+  L3 Smoke was purchased
+  5/4/2026, 10:58:31 AM keeps appearing in my order feed in my live discord, what can we do to either send this to the test discord or prevent this from displaying, its an annoyance I am sure to folks
+- all coupon posts to #announcements need to be removed
 - consider changing over discord system to terminal system, still emit messaging to discord but the commands will no longer fire from there
 - live feed should include tiktok and discord new followers/joins.
 - is there an opportunity to update makefile to take similar approach that we did in celebrityautobiography with the composer script for nested installs, wondering if that could be an optimization in vincentragosta.io as well (in composer and in makefile)

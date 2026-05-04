@@ -67,6 +67,42 @@ define flush-itzenzo-cache
 ssh $($(1)_HOST) 'export PATH=$(ITZENZO_NODE_PATH):$$PATH; rm -rf $(2)/.next/cache/images/* && pm2 reload $(3)'
 endef
 
+# Stripe mode-mismatch guard. When local DDEV's Stripe key mode differs from
+# the remote env's Stripe key mode, a DB push will replace remote's catalog
+# Stripe IDs with values from a different Stripe environment, silently
+# breaking every checkout (Stripe products are mode-specific — live ≠ test).
+# Override with ALLOW_STRIPE_MODE_MISMATCH=1 if you really mean it.
+#   $(call check-stripe-mode-match, ENV, env-display-name)
+define check-stripe-mode-match
+@LOCAL_MODE=$$(grep -E "define\s*\(\s*'STRIPE_SECRET_KEY'" wp-config-env.php 2>/dev/null | grep -oE "sk_(test|live)_" | head -1) ; \
+REMOTE_MODE=$$(ssh $($(1)_HOST) "grep -E \"define\s*\(\s*'STRIPE_SECRET_KEY'\" $($(1)_DIR)/wp-config-env.php 2>/dev/null" | grep -oE "sk_(test|live)_" | head -1) ; \
+if [ -n "$$LOCAL_MODE" ] && [ -n "$$REMOTE_MODE" ] && [ "$$LOCAL_MODE" != "$$REMOTE_MODE" ]; then \
+    if [ "$(ALLOW_STRIPE_MODE_MISMATCH)" != "1" ]; then \
+        echo "" ; \
+        echo "================================================================" ; \
+        echo "ABORT: Stripe key mode mismatch detected." ; \
+        echo "  Local:  $$LOCAL_MODE" ; \
+        echo "  $(2):  $$REMOTE_MODE" ; \
+        echo "" ; \
+        echo "Pushing this DB would replace $(2)'s Stripe product/price IDs" ; \
+        echo "with values from a different Stripe environment, silently" ; \
+        echo "breaking every checkout because Stripe products are mode-" ; \
+        echo "specific (live ≠ test)." ; \
+        echo "" ; \
+        echo "If you understand and really mean to do it:" ; \
+        echo "  ALLOW_STRIPE_MODE_MISMATCH=1 make push-$(2)" ; \
+        echo "" ; \
+        echo "More likely you want to refresh content WITHOUT touching the" ; \
+        echo "catalog Stripe linkage. See:" ; \
+        echo "  make rebuild-staging-catalog  (placeholder)" ; \
+        echo "  akivili/business/operations.md → Post-cutover staging refresh" ; \
+        echo "================================================================" ; \
+        exit 1 ; \
+    fi ; \
+    echo "⚠ Pushing despite Stripe mode mismatch (ALLOW_STRIPE_MODE_MISMATCH=1)." ; \
+fi
+endef
+
 # Push local DDEV DB + uploads to a remote env.
 #   $(call push-db-to-env, ENV, env-display-name)
 define push-db-to-env
@@ -272,17 +308,48 @@ release: ## Merge develop into main and push both branches to origin
 
 ##@ Database & uploads sync
 
-push-staging: ## Push local DB + uploads to staging
+push-staging: ## Push local DB + uploads to staging (aborts on Stripe mode mismatch)
+	$(call check-stripe-mode-match,STAGING,staging)
 	$(call push-db-to-env,STAGING,staging)
 
 pull-staging: ## Pull staging DB + uploads to local
 	$(call pull-db-from-env,STAGING,staging)
 
-push-production: ## Push local DB + uploads to production
+push-production: ## Push local DB + uploads to production (aborts on Stripe mode mismatch)
+	$(call check-stripe-mode-match,PRODUCTION,production)
 	$(call push-db-to-env,PRODUCTION,production)
 
 pull-production: ## Pull production DB + uploads to local
 	$(call pull-db-from-env,PRODUCTION,production)
+
+check-stripe-modes: ## Verify local + staging + production Stripe key modes match (non-destructive)
+	@echo "Checking staging..."
+	$(call check-stripe-mode-match,STAGING,staging)
+	@echo "Checking production..."
+	$(call check-stripe-mode-match,PRODUCTION,production)
+	@echo "✓ All Stripe key modes consistent."
+
+rebuild-staging-catalog: ## Repopulate staging Stripe IDs after a cross-mode push (placeholder)
+	@echo "" ; \
+	echo "================================================================" ; \
+	echo "rebuild-staging-catalog — manual procedure (not yet automated)" ; \
+	echo "================================================================" ; \
+	echo "" ; \
+	echo "After a cross-mode DB push (e.g., live-mode prod data flowed into" ; \
+	echo "test-mode staging), staging's catalog has wrong-mode Stripe IDs." ; \
+	echo "Repopulating requires:" ; \
+	echo "" ; \
+	echo "  1. Wipe staging's Stripe product/price meta:" ; \
+	echo "     ssh $(STAGING_HOST) \"wp --allow-root --path=$(STAGING_WP) \\\\" ; \
+	echo "       db query \\\"DELETE FROM wp_postmeta WHERE meta_key IN \\\\" ; \
+	echo "       ('stripe_product_id','stripe_price_id')\\\"\"" ; \
+	echo "" ; \
+	echo "  2. Re-run push-products.js / push-cards.js against staging WP" ; \
+	echo "     using a sk_test_* key, to populate fresh test-mode IDs." ; \
+	echo "" ; \
+	echo "Until this is automated (TODO), do it manually — see:" ; \
+	echo "  akivili/business/operations.md → Post-cutover staging refresh" ; \
+	echo "================================================================"
 
 ##@ Block patterns
 
