@@ -17,7 +17,7 @@ use Mythus\Contracts\Hook;
 class PullBoxMigration implements Hook
 {
     private const OPTION_KEY = 'shop_pull_box_schema_version';
-    private const SCHEMA_VERSION = '1';
+    private const SCHEMA_VERSION = '2';
 
     public function register(): void
     {
@@ -38,7 +38,6 @@ class PullBoxMigration implements Hook
         $boxesSql = "CREATE TABLE {$boxesTable} (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             name VARCHAR(255) NOT NULL,
-            tier VARCHAR(20) NOT NULL,
             price_cents INT UNSIGNED NOT NULL,
             stripe_price_id VARCHAR(255) NULL,
             total_slots INT UNSIGNED NOT NULL,
@@ -47,7 +46,6 @@ class PullBoxMigration implements Hook
             created_at DATETIME NOT NULL,
             closed_at DATETIME NULL,
             PRIMARY KEY  (id),
-            KEY idx_tier_status (tier, status),
             KEY idx_status_created (status, created_at)
         ) {$charsetCollate};";
 
@@ -71,6 +69,17 @@ class PullBoxMigration implements Hook
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta($boxesSql);
         dbDelta($slotsSql);
+
+        // Migrating from v1 (which had a `tier` column + idx_tier_status):
+        // dbDelta won't drop existing columns, so we explicitly drop the
+        // legacy tier column if it's still present. Idempotent — re-runs
+        // are safe because the SHOW COLUMNS check makes the DROP a no-op
+        // once the column is gone.
+        $columns = $wpdb->get_col("SHOW COLUMNS FROM {$boxesTable}", 0);
+        if (in_array('tier', $columns, true)) {
+            // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            $wpdb->query("ALTER TABLE {$boxesTable} DROP COLUMN tier");
+        }
 
         update_option(self::OPTION_KEY, self::SCHEMA_VERSION, false);
     }

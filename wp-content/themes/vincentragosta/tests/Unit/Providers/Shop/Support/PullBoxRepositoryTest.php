@@ -11,11 +11,10 @@ class PullBoxRepositoryTest extends TestCase
     {
         $row = [
             'id'                 => 7,
-            'name'               => 'Vintage VMAX Box',
-            'tier'               => 'vmax',
-            'price_cents'        => 200,
+            'name'               => 'Vintage Pull Box',
+            'price_cents'        => 500,
             'stripe_price_id'    => 'price_abc',
-            'total_slots'        => 100,
+            'total_slots'        => 50,
             'status'             => 'open',
             'discord_message_id' => '1234567890',
             'created_at'         => '2026-04-28 09:00:00',
@@ -27,9 +26,9 @@ class PullBoxRepositoryTest extends TestCase
         ]);
 
         $this->assertSame(7, $serialized['id']);
-        $this->assertSame('vmax', $serialized['tier']);
-        $this->assertSame(200, $serialized['priceCents']);
-        $this->assertSame(100, $serialized['totalSlots']);
+        $this->assertArrayNotHasKey('tier', $serialized);
+        $this->assertSame(500, $serialized['priceCents']);
+        $this->assertSame(50, $serialized['totalSlots']);
         $this->assertSame('open', $serialized['status']);
         $this->assertSame([
             ['slotNumber' => 17, 'claimStatus' => 'confirmed', 'displayLabel' => '@vinnyrags'],
@@ -67,9 +66,8 @@ class PullBoxRepositoryTest extends TestCase
         $this->assertSame('Guest', $serialized['displayLabel']);
     }
 
-    public function testTierAndStatusConstantsAreFrozen(): void
+    public function testStatusConstantsAreFrozen(): void
     {
-        $this->assertSame(['v', 'vmax'], PullBoxRepository::TIERS);
         $this->assertSame(['open', 'closed'], PullBoxRepository::BOX_STATUSES);
         $this->assertSame(['pending', 'confirmed'], PullBoxRepository::CLAIM_STATUSES);
     }

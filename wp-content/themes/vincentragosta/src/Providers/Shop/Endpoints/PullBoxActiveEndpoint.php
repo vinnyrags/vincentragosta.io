@@ -10,12 +10,12 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 /**
- * Public read of the currently-active pull box for a tier.
+ * Public read of the currently-active pull box.
  *
  * Returns the box metadata + every claimed slot's number + buyer
  * label, so the homepage modal can render a slot grid showing which
  * positions are taken (and by whom). Returns `null` when no box is
- * open for the requested tier.
+ * open. Single-box model — only one pull box runs at a time.
  */
 class PullBoxActiveEndpoint extends Endpoint
 {
@@ -40,21 +40,12 @@ class PullBoxActiveEndpoint extends Endpoint
 
     public function getArgs(): array
     {
-        return [
-            'tier' => [
-                'required'          => false,
-                'type'              => 'string',
-                'sanitize_callback' => 'sanitize_text_field',
-            ],
-        ];
+        return [];
     }
 
     public function callback(WP_REST_Request $request): WP_REST_Response
     {
-        $tier = (string) $request->get_param('tier');
-        $tier = in_array($tier, PullBoxRepository::TIERS, true) ? $tier : null;
-
-        $box = $this->repository->findActiveBox($tier);
+        $box = $this->repository->findActiveBox();
         if (!$box) {
             return new WP_REST_Response(['box' => null]);
         }

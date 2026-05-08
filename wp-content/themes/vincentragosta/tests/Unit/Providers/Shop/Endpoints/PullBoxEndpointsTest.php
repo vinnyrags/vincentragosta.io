@@ -70,15 +70,16 @@ class PullBoxEndpointsTest extends TestCase
         }
     }
 
-    public function testCreateRequiresNameTierPriceAndTotalSlots(): void
+    public function testCreateRequiresNamePriceAndTotalSlots(): void
     {
         $endpoint = (new ReflectionClass(PullBoxCreateEndpoint::class))->newInstanceWithoutConstructor();
         $args = (new ReflectionClass(PullBoxCreateEndpoint::class))->getMethod('getArgs')->invoke($endpoint);
 
-        foreach (['name', 'tier', 'price_cents', 'total_slots'] as $required) {
+        foreach (['name', 'price_cents', 'total_slots'] as $required) {
             $this->assertArrayHasKey($required, $args);
             $this->assertTrue($args[$required]['required'], "$required must be a required arg");
         }
+        $this->assertArrayNotHasKey('tier', $args, 'tier param has been removed from PullBoxCreateEndpoint');
     }
 
     public function testClaimRequiresSlotsArray(): void

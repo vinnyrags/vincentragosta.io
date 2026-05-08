@@ -9,9 +9,9 @@ use Mythus\Contracts\Hook;
 
 /**
  * Registers WPGraphQL types for slot-based pull boxes and an
- * `activePullBox(tier)` root query field. itzenzo.tv consumes this
- * for the homepage modal's initial slot grid (then stays current via
- * the SSE stream once Phase 4 wires up live broadcasts).
+ * `activePullBox` root query field. itzenzo.tv consumes this for the
+ * homepage modal's initial slot grid (then stays current via the SSE
+ * stream once Phase 4 wires up live broadcasts).
  */
 class PullBoxGraphQL implements Hook
 {
@@ -40,7 +40,6 @@ class PullBoxGraphQL implements Hook
             'fields'      => [
                 'id'               => ['type' => ['non_null' => 'Int']],
                 'name'             => ['type' => ['non_null' => 'String']],
-                'tier'             => ['type' => ['non_null' => 'String'], 'description' => 'v | vmax'],
                 'priceCents'       => ['type' => ['non_null' => 'Int']],
                 'stripePriceId'    => ['type' => 'String'],
                 'totalSlots'       => ['type' => ['non_null' => 'Int']],
@@ -54,20 +53,9 @@ class PullBoxGraphQL implements Hook
 
         register_graphql_field('RootQuery', 'activePullBox', [
             'type'        => 'PullBox',
-            'description' => 'The currently-open pull box for the requested tier, or null if none is open.',
-            'args'        => [
-                'tier' => [
-                    'type'        => ['non_null' => 'String'],
-                    'description' => 'v | vmax',
-                ],
-            ],
-            'resolve'     => function ($_root, array $args) {
-                $tier = (string) ($args['tier'] ?? '');
-                if (!in_array($tier, PullBoxRepository::TIERS, true)) {
-                    return null;
-                }
-
-                $box = $this->repository->findActiveBox($tier);
+            'description' => 'The currently-open pull box, or null if none is open.',
+            'resolve'     => function () {
+                $box = $this->repository->findActiveBox();
                 if (!$box) {
                     return null;
                 }

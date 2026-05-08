@@ -48,7 +48,6 @@ class ActivityWebhook implements Hook
             'meta'        => [
                 'boxId'   => (int) $box['id'],
                 'boxName' => $boxName,
-                'tier'    => (string) ($box['tier'] ?? ''),
                 'slots'   => array_map('intval', $slotNumbers),
                 'buyer'   => $buyer,
             ],

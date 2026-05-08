@@ -18,9 +18,9 @@ use WP_REST_Response;
  *
  * Pull boxes are livestream buy-ins, not catalog SKUs — no WP product, no
  * stock, no shipping line. Winners' cards go in the same weekly shipment as
- * any other order, so we always pass skipShipping=true. Only the Stripe
- * Price IDs configured on the shop-settings options page (V $1 / VMAX $2)
- * are accepted; any other price ID is rejected before we hit Stripe.
+ * any other order, so we always pass skipShipping=true. Only the single
+ * Stripe Price ID configured on the shop-settings options page is accepted;
+ * any other price ID is rejected before we hit Stripe.
  */
 class PullBoxCheckoutEndpoint extends Endpoint
 {
@@ -96,20 +96,20 @@ class PullBoxCheckoutEndpoint extends Endpoint
     {
         $priceId = sanitize_text_field((string) $request->get_param('priceId'));
 
-        $allowedPriceIds = $this->allowedPriceIds();
+        $allowedPriceId = (string) get_field('pb_price_id', 'option');
 
-        if (empty($allowedPriceIds)) {
+        if ($allowedPriceId === '') {
             return new WP_Error(
                 'pull_box_unconfigured',
-                'Pull box price IDs have not been configured in shop settings.',
+                'Pull box price ID has not been configured in shop settings.',
                 ['status' => 503]
             );
         }
 
-        if (!in_array($priceId, $allowedPriceIds, true)) {
+        if ($priceId !== $allowedPriceId) {
             return new WP_Error(
                 'invalid_price_id',
-                'Price ID is not a configured pull box.',
+                'Price ID is not the configured pull box.',
                 ['status' => 400]
             );
         }
@@ -125,10 +125,6 @@ class PullBoxCheckoutEndpoint extends Endpoint
             );
         }
 
-        // Resolve which tier this priceId maps to so we can find the
-        // matching active pull box.
-        $tier = $this->resolveTierForPriceId($priceId);
-
         // Slot-based flow: buyer picked specific slot numbers in the
         // homepage modal. We claim them in WP before creating the
         // Stripe session so two buyers can't double-claim the same slot.
@@ -136,15 +132,11 @@ class PullBoxCheckoutEndpoint extends Endpoint
         $slots = $this->parseSlots($rawSlots);
 
         if (!empty($slots)) {
-            if ($tier === null) {
-                return new WP_Error('invalid_price_id', 'Could not resolve tier for slot-based purchase.', ['status' => 400]);
-            }
-
-            $box = $this->pullBoxRepository->findActiveBox($tier);
+            $box = $this->pullBoxRepository->findActiveBox();
             if (!$box) {
                 return new WP_Error(
                     'no_active_pull_box',
-                    "No pull box for the {$tier} tier is open right now. The next box opens at the start of the stream.",
+                    "No pull box is open right now. The next box opens at the start of the stream.",
                     ['status' => 503]
                 );
             }
@@ -238,26 +230,6 @@ class PullBoxCheckoutEndpoint extends Endpoint
                 ['status' => 500]
             );
         }
-    }
-
-    /**
-     * @return string[]
-     */
-    private function allowedPriceIds(): array
-    {
-        $v    = (string) get_field('pb_v_price_id', 'option');
-        $vmax = (string) get_field('pb_vmax_price_id', 'option');
-
-        return array_values(array_filter([$v, $vmax]));
-    }
-
-    private function resolveTierForPriceId(string $priceId): ?string
-    {
-        $v    = (string) get_field('pb_v_price_id', 'option');
-        $vmax = (string) get_field('pb_vmax_price_id', 'option');
-        if ($priceId === $v) return 'v';
-        if ($priceId === $vmax) return 'vmax';
-        return null;
     }
 
     /**

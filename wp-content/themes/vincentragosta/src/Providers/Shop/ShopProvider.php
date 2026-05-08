@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop;
 
+use ChildTheme\Providers\Shop\Endpoints\BundleCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
@@ -71,6 +72,7 @@ class ShopProvider extends Provider
      * REST API endpoints.
      */
     protected array $routes = [
+        BundleCheckoutEndpoint::class,
         CancelCheckoutEndpoint::class,
         CardRequestEndpoint::class,
         CatalogStripeProductDeactivatedEndpoint::class,

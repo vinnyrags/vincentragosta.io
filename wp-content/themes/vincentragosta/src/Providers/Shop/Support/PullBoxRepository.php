@@ -18,7 +18,6 @@ use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
  */
 class PullBoxRepository
 {
-    public const TIERS = ['v', 'vmax'];
     public const BOX_STATUSES = ['open', 'closed'];
     public const CLAIM_STATUSES = ['pending', 'confirmed'];
 
@@ -29,25 +28,15 @@ class PullBoxRepository
      */
     public const PENDING_TTL_MINUTES = 30;
 
-    public function findActiveBox(?string $tier = null): ?array
+    public function findActiveBox(): ?array
     {
         global $wpdb;
         $table = PullBoxMigration::boxesTable();
 
-        if ($tier !== null) {
-            $row = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT * FROM {$table} WHERE status = 'open' AND tier = %s ORDER BY created_at DESC LIMIT 1",
-                    $tier
-                ),
-                ARRAY_A
-            );
-        } else {
-            $row = $wpdb->get_row(
-                "SELECT * FROM {$table} WHERE status = 'open' ORDER BY created_at DESC LIMIT 1",
-                ARRAY_A
-            );
-        }
+        $row = $wpdb->get_row(
+            "SELECT * FROM {$table} WHERE status = 'open' ORDER BY created_at DESC LIMIT 1",
+            ARRAY_A
+        );
 
         return $row ?: null;
     }
@@ -73,7 +62,6 @@ class PullBoxRepository
             $table,
             [
                 'name'               => (string) $data['name'],
-                'tier'               => (string) $data['tier'],
                 'price_cents'        => (int) $data['price_cents'],
                 'stripe_price_id'    => $data['stripe_price_id'] ?? null,
                 'total_slots'        => (int) $data['total_slots'],
@@ -81,7 +69,7 @@ class PullBoxRepository
                 'discord_message_id' => $data['discord_message_id'] ?? null,
                 'created_at'         => current_time('mysql'),
             ],
-            ['%s', '%s', '%d', '%s', '%d', '%s', '%s', '%s']
+            ['%s', '%d', '%s', '%d', '%s', '%s', '%s']
         );
 
         $id = (int) $wpdb->insert_id;
@@ -331,7 +319,6 @@ class PullBoxRepository
         return [
             'id'               => (int) $row['id'],
             'name'             => (string) $row['name'],
-            'tier'             => (string) $row['tier'],
             'priceCents'       => (int) $row['price_cents'],
             'stripePriceId'    => $row['stripe_price_id'] !== null ? (string) $row['stripe_price_id'] : null,
             'totalSlots'       => (int) $row['total_slots'],
