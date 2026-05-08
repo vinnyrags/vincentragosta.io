@@ -29,7 +29,6 @@ use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
-use ChildTheme\Providers\Shop\Hooks\CardRequestsTableDrop;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
 use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
@@ -58,7 +57,6 @@ class ShopProvider extends Provider
         StockStatusBadge::class,
         CardImageSize::class,
         PngSubsizesAsJpeg::class,
-        CardRequestsTableDrop::class,
         ShopSettingsMenuLink::class,
         ShopRedirect::class,
         QueueMigration::class,
