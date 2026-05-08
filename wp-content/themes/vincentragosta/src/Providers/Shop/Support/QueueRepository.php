@@ -142,6 +142,30 @@ class QueueRepository
         return $row ?: null;
     }
 
+    /**
+     * Find an unfinished entry (queued or active) for an external_ref.
+     *
+     * Used by RTS dedup: a buyer who already has a pending request for a
+     * card shouldn't get a second row, but once that request is shown
+     * (status=completed) or skipped, a fresh request for the same card
+     * is allowed.
+     */
+    public function findActiveEntryByExternalRef(string $externalRef): ?array
+    {
+        global $wpdb;
+        $table = QueueMigration::entriesTable();
+
+        $row = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$table} WHERE external_ref = %s AND status IN ('queued', 'active') ORDER BY id DESC LIMIT 1",
+                $externalRef
+            ),
+            ARRAY_A
+        );
+
+        return $row ?: null;
+    }
+
     public function findEntryByStripeSession(string $stripeSessionId): ?array
     {
         global $wpdb;

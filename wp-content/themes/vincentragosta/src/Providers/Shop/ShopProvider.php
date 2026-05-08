@@ -7,8 +7,6 @@ namespace ChildTheme\Providers\Shop;
 use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CardRequestStatusEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CardRequestsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxActiveEndpoint;
@@ -31,14 +29,14 @@ use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
-use ChildTheme\Providers\Shop\Hooks\CardRequestsAdminPage;
-use ChildTheme\Providers\Shop\Hooks\CardRequestsMigration;
+use ChildTheme\Providers\Shop\Hooks\CardRequestsTableDrop;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
 use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
 use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
 use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
 use ChildTheme\Providers\Shop\Hooks\QueueMigration;
+use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
@@ -60,9 +58,9 @@ class ShopProvider extends Provider
         StockStatusBadge::class,
         CardImageSize::class,
         PngSubsizesAsJpeg::class,
-        CardRequestsMigration::class,
-        CardRequestsAdminPage::class,
+        CardRequestsTableDrop::class,
         ShopSettingsMenuLink::class,
+        ShopRedirect::class,
         QueueMigration::class,
         QueueGraphQL::class,
         QueueChangeWebhook::class,
@@ -78,8 +76,6 @@ class ShopProvider extends Provider
         CancelCheckoutEndpoint::class,
         CardRequestEndpoint::class,
         CatalogStripeProductDeactivatedEndpoint::class,
-        CardRequestsListEndpoint::class,
-        CardRequestStatusEndpoint::class,
         CreateCheckoutEndpoint::class,
         CurrentPackBattleEndpoint::class,
         PullBoxActiveEndpoint::class,

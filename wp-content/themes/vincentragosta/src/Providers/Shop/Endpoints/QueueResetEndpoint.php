@@ -17,8 +17,8 @@ use WP_REST_Response;
  * authenticated. Returns row counts so the calling command can report
  * what was cleared.
  *
- * Does NOT touch wp_card_view_requests (RTS submissions) — those have
- * their own lifecycle and resetting them is a separate concern.
+ * RTS entries are queue rows (`type=rts`) and are wiped along with the
+ * rest — no separate carve-out needed.
  */
 class QueueResetEndpoint extends Endpoint
 {

@@ -6,7 +6,7 @@ WordPress site with a three-layer architecture: a mu-plugin framework ([Mythus](
 - **[IX](https://github.com/vinnyrags/IX)** (`wp-content/themes/ix/`) — Timber/Twig bridge parent theme. Extends Mythus with template resolution and reusable blog/project infrastructure.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends IX providers for the vincentragosta.io website.
 
-The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers the `product` and `card` CPTs, the card singles taxonomies (`card_game`, `card_set`), Stripe checkout/webhook endpoints, the `wp_card_view_requests` table that powers the storefront's "Request to See on Stream" flow, and ACF field groups that the bot and storefront consume.
+The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers the `product` and `card` CPTs, the card singles taxonomies (`card_game`, `card_set`), Stripe checkout/webhook endpoints, the unified queue (`wp_queue_sessions` / `wp_queue_entries`) that backs orders, pack battles, pull boxes, and "Request to See on Stream" submissions, and ACF field groups that the bot and storefront consume.
 
 ## Prerequisites
 

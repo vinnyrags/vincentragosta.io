@@ -280,7 +280,7 @@ Seven endpoints under `/wp-json/shop/v1/queue/*`, registered through the standar
 | `POST /queue/entries` | bot-secret | Create entry. Idempotent on `external_ref` — re-submitting the same key returns the existing entry with `duplicate: true`. |
 | `PATCH /queue/entries/{id}` | bot-secret | Update entry status / fields. |
 
-Bot-secret auth uses the existing `LIVESTREAM_SECRET` constant via `X-Bot-Secret` header (`hash_equals` comparison), matching the pattern in `CardRequestsListEndpoint`.
+Bot-secret auth uses the existing `LIVESTREAM_SECRET` constant via `X-Bot-Secret` header (`hash_equals` comparison).
 
 ### WPGraphQL exposure
 
@@ -315,7 +315,7 @@ Four code paths put rows into `wp_queue_entries`:
 1. **Orders** — Nous Stripe webhook → `addToQueue()` in `commands/queue.js` → `queueSource.addEntry({ type: 'order', source: 'shop' })`. One entry per line item.
 2. **Pack battles** — Nous Stripe webhook → `checkBattlePayment()` in `webhooks/stripe.js` after `confirmPayment` → `queueSource.addEntry({ type: 'pack_battle' })`. Idempotent on `stripe:<sid>:battle`.
 3. **Pull boxes** — Nous Stripe webhook → `recordPullPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: '$N tier' })`.
-4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `mirrorToQueue()` → `QueueRepository::createEntry({ type: 'rts' })`. Failure is logged, never thrown — the card request itself has already succeeded.
+4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `QueueRepository::createEntry({ type: 'rts', external_ref: 'rts:{cardId}:{email}' })`. Single write, no parallel ledger; idempotent on the external_ref (re-submission while the entry is still queued/active returns the existing row). Requires an active queue session — returns 503 if none exists, since the bot is supposed to keep one open between streams.
 
 All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `/queue` Discord embed renders.
 
@@ -329,7 +329,7 @@ WP-side: unit tests at `tests/Unit/Providers/Shop/Support/QueueRepositoryTest.ph
 
 A Stripe product getting archived (or deleted) while a WP catalog post still references it would silently kill that buyer's cart — Stripe rejects creating a session if any line item references an inactive product. Four layers prevent and recover from this:
 
-1. **Push scripts delete instead of archive** — `Nous/scripts/shop/push-products.js --clean` and `push-cards.js --clean` hard-delete prices+products by default (env-gated by `STRIPE_DELETE_WHEN_REMOVING`; flip to `false` for live mode where Stripe blocks deleting prices with payment history). Falls back to archive automatically when Stripe rejects delete.
+1. **Push scripts delete instead of archive** — `Nous/scripts/shop/push-products.js --clean` and `push-cards.js --clean` hard-delete prices+products in test mode and archive in live mode. Mode is auto-detected from the key prefix via `Nous/lib/stripe-mode.cjs`; `STRIPE_DELETE_WHEN_REMOVING=true|false` overrides. Live `--clean` is gated behind `--allow-live-clean` so an accidental run can't archive every active product. Falls back to archive automatically when Stripe rejects a delete.
 2. **Real-time webhook auto-cleanup** — Nous's stripe webhook handler subscribes to `product.updated` (active true→false), `product.deleted`, `price.updated`, and `price.deleted`. Each calls `notifyCatalogProductDeactivated()` which POSTs to `/shop/v1/catalog/stripe-product-deactivated` (`CatalogStripeProductDeactivatedEndpoint`). WP sets `stock=0` and clears the stale `stripe_price_id` / `stripe_product_id` meta on every referenced post. Idempotent. **Manual setup**: those four events must be enabled on the Stripe webhook endpoint in the Dashboard.
 3. **Pre-flight in `CreateCheckoutEndpoint`** — `StripeService::findFirstInactivePriceId()` runs before stock decrement. Inactive priceId returns a 409 `item_unavailable` naming the offending item and auto-sets stock=0 on it. Saves the stock-decrement-then-restore round-trip and avoids polluting Stripe's incomplete-sessions view.
 4. **Friendly catch (backstop)** — if a Stripe rejection slips past pre-flight (race with a dashboard archive, etc.), `unavailableItemResponse()` parses the priceId out of the exception message and returns the same 409 + auto-cleanup.
