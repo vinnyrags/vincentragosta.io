@@ -14,7 +14,7 @@ test.describe('Smoke tests', () => {
 
         expect(response.status()).toBe(200);
         await expect(page.locator('.project-card').first()).toBeVisible();
-        await expect(page.locator('.dropdown')).toBeVisible();
+        await expect(page.locator('[data-dropdown="sort"]')).toBeVisible();
     });
 
     test('contact page loads with WPForms container', async ({ page }) => {

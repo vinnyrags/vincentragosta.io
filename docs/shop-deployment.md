@@ -69,17 +69,118 @@ The full sync pipeline (Google Sheets → Stripe → WordPress) is now handled v
 
 ## Switching to Stripe Live Mode
 
-When the business officially launches:
+One-way switch. Live products and prices have different IDs than test, so every catalog row's `stripe_price_id` / `stripe_product_id` postmeta must be repopulated. The full checklist:
 
-1. Get live API keys from Stripe Dashboard (toggle to Live mode)
-2. Update `wp-config-env.php`:
-   - Replace `pk_test_`/`sk_test_` with `pk_live_`/`sk_live_`
-3. Create new webhooks in Stripe (live mode) — same endpoints, new signing secrets:
-   - WordPress: `https://vincentragosta.io/wp-json/shop/v1/webhook`
-   - Bot: `https://vincentragosta.io/bot/webhooks/stripe`
-4. Update `STRIPE_WEBHOOK_SECRET` in `wp-config-env.php`
-5. Update `STRIPE_BOT_WEBHOOK_SECRET` in `/opt/nous-bot/.env`
-6. Re-run `pull-products.php` to sync live mode products
+### 0. Before the switch — pin the test rig
+
+`bin/run-test-suite.mjs` (the `npm run test:critical` entrypoint) layers `Nous/.env.test` on top of `.env`. Add an explicit test key to `.env.test` so the suite stays on test Stripe regardless of what production runs:
+
+```env
+# Nous/.env.test
+STRIPE_SECRET_KEY=sk_test_…
+```
+
+The runner refuses to start with a live key (exit 2). Push scripts (`push-products.js`, `push-cards.js`) refuse `--clean` against live Stripe unless invoked with `--allow-live-clean`. See `Nous/lib/stripe-mode.cjs`.
+
+### 1. Get live API keys
+
+Stripe Dashboard → toggle Live mode → Developers → API keys. Note the publishable + secret key.
+
+### 2. Update keys everywhere
+
+Three files, mirror-image swap from `*_test_*` → `*_live_*`:
+
+```php
+// wp-config-env.php (local DDEV, staging, production — three copies)
+define('STRIPE_PUBLISHABLE_KEY', 'pk_live_…');
+define('STRIPE_SECRET_KEY',      'sk_live_…');
+define('STRIPE_WEBHOOK_SECRET',  'whsec_…'); // updated in step 3
+```
+
+```env
+# /opt/nous-bot/.env (production server)
+STRIPE_SECRET_KEY=sk_live_…
+STRIPE_BOT_WEBHOOK_SECRET=whsec_…  # updated in step 3
+```
+
+```env
+# itzenzo.tv server env (used by /thank-you email enrichment)
+STRIPE_SECRET_KEY=sk_live_…
+```
+
+`STRIPE_BOT_WEBHOOK_SECRET` defined in `wp-config-env.php` is currently unused on the WP side — kept for human reference. The real value lives in `/opt/nous-bot/.env`.
+
+### 3. Create live-mode webhooks
+
+In the Stripe Dashboard (Live mode) → Developers → Webhooks → Add endpoint. Two endpoints, each with its own signing secret:
+
+| Endpoint | URL | Events |
+|----------|-----|--------|
+| **WordPress** | `https://vincentragosta.io/wp-json/shop/v1/webhook` | `checkout.session.completed`, `checkout.session.expired`, `product.updated`, `product.deleted`, `price.updated`, `price.deleted` |
+| **Nous bot** | `https://vincentragosta.io/bot/webhooks/stripe` | `checkout.session.completed`, `checkout.session.expired`, `product.updated`, `product.deleted`, `price.updated`, `price.deleted` |
+
+Copy each new `whsec_…` into the corresponding env (WP `STRIPE_WEBHOOK_SECRET` / Nous `STRIPE_BOT_WEBHOOK_SECRET`).
+
+The four catalog-drift events (`product.updated`, `product.deleted`, `price.updated`, `price.deleted`) drive real-time auto-cleanup of stale catalog references — see CLAUDE.md → "Catalog Drift Defense". Forgetting them disables layer 2 of that defense (pre-flight in `CreateCheckoutEndpoint` still works).
+
+### 4. Restart services
+
+```bash
+ssh root@174.138.70.29
+systemctl restart nous-bot
+pm2 reload itzenzo-tv
+# WP picks up the constant on next request — no restart needed, but a cache flush helps
+wp cache flush --path=/var/www/vincentragosta.io --allow-root
+```
+
+### 5. Reseed the catalog (live-mode IDs)
+
+Stripe products and prices created in test mode do not exist in live mode. Recreate them, then write the new IDs back to WP:
+
+```bash
+# On a workstation with the live STRIPE_SECRET_KEY in env / wp-config-env.php
+cd Nous
+
+# Push catalog products (Sheets → Stripe). --allow-live-clean is required
+# because the script auto-defaults to archive in live mode and the guard
+# refuses --clean without explicit opt-in.
+node scripts/shop/push-products.js --clean --allow-live-clean
+node scripts/shop/push-cards.js     --clean --allow-live-clean
+
+# Seed the Pull Box Entry product + V/VMAX prices
+ssh root@174.138.70.29 'cd /var/www/vincentragosta.io && wp eval-file scripts/seed-pull-boxes.php --path=wp --allow-root'
+
+# Pull live IDs back to WP postmeta
+ssh root@174.138.70.29
+cd /var/www/vincentragosta.io
+touch scripts/.publish scripts/.clean
+wp eval-file scripts/pull-products.php --path=wp --allow-root
+wp eval-file scripts/pull-cards.php    --path=wp --allow-root
+rm -f scripts/.publish scripts/.clean
+```
+
+### 6. Verify
+
+```bash
+# Catalog drift sweep — confirms no WP postmeta still points at archived/test products
+node Nous/scripts/shop/audit-stripe-active.js
+
+# Smoke test
+# - hit /shop, add to cart, checkout (use a live test card if Stripe Dashboard supports test-in-live, else use a real card and refund)
+# - hit /cards/, request-to-see — confirm the card request flows through
+# - confirm webhook deliveries in Stripe Dashboard → Developers → Webhooks → Recent deliveries
+```
+
+### 7. Cross-mode push protection
+
+After local DDEV's `wp-config-env.php` flips to `sk_live_`, the Makefile guard (`make check-stripe-mode-match`) will block `make push-staging` / `make push-production` if the remote env is still on test (or vice versa) — this prevents a DB push from cross-pollinating live + test catalog IDs. Override only when intentional:
+
+```bash
+ALLOW_STRIPE_MODE_MISMATCH=1 make push-staging  # rarely correct
+make check-stripe-modes                          # non-destructive verify
+```
+
+Once everything is on live, `make push-staging` resumes working normally.
 
 ## Bot Service
 

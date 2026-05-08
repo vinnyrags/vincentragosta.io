@@ -2,6 +2,11 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Header interactions', () => {
     test.beforeEach(async ({ page }) => {
+        // Lock prefers-color-scheme to dark so the inline head script
+        // doesn't pre-apply light-mode based on the host machine — without
+        // this, a Mac in light mode would start the page in light-mode and
+        // the dark→light assertion below would inverse-fail.
+        await page.emulateMedia({ colorScheme: 'dark' });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
     });
