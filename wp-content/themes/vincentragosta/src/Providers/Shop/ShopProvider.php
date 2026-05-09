@@ -6,6 +6,7 @@ namespace ChildTheme\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\BundleCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\CardOfferEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
@@ -77,6 +78,7 @@ class ShopProvider extends Provider
     protected array $routes = [
         BundleCheckoutEndpoint::class,
         CancelCheckoutEndpoint::class,
+        CardOfferEndpoint::class,
         CardRequestEndpoint::class,
         CatalogStripeProductDeactivatedEndpoint::class,
         CreateCheckoutEndpoint::class,
