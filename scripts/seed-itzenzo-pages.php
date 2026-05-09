@@ -2,10 +2,11 @@
 /**
  * Seed the itzenzo.tv Pages ACF repeater.
  *
- * Writes canonical copy for /about, the four how-it-works children
- * (livestream, buying, shipping, refund-policy), /gaming, /cards,
- * /community, and /thank-you into the `itzenzo_pages` repeater on the
- * shop-settings ACF options page. Once seeded, WordPress is the single
+ * Writes canonical copy for /our-story (about), /the-stream (stream),
+ * the four how-it-works children (livestream, buying, shipping,
+ * refund-policy), /gaming, /cards, /the-discord (community), and
+ * /thank-you into the `itzenzo_pages` repeater on the shop-settings
+ * ACF options page. Once seeded, WordPress is the single
  * source of truth for this content — editors change it via WP admin;
  * the Next.js frontend reads it through WPGraphQL.
  *
@@ -48,6 +49,18 @@ $pages = [
                 'content' => '<p>This started as a COVID project on June 5th, 2021. What began as a way to stay busy turned into a real business — nearly three years of livestream card sales on TikTok and Twitch, hundreds of orders shipped, and a community that showed up night after night.</p><p>In late 2023, life got in the way and the shop went on a two-and-a-half year hiatus. The inventory sat in boxes, the streams stopped, and the Discord went quiet.</p><p>Now I\'m back. Same energy, same community, better infrastructure. The shop has moved to its own home at itzenzo.tv, the Discord bot handles everything from pack battles to shipping notifications, and the product pipeline is tighter than ever. If you were here before — welcome back. If you\'re new — you picked a good time.</p>',
             ],
             [
+                'title'   => 'About the Builder',
+                'content' => '<p>itzenzo.tv is built and operated by <a href="https://vincentragosta.io" target="_blank" rel="noopener noreferrer">Vincent Ragosta</a> — a full-stack engineer who\'s been collecting Pokemon cards since 1998, and started selling them live on stream when the world shut down in 2021.</p>',
+            ],
+        ],
+    ],
+    [
+        'name'          => 'Stream',
+        'slug'          => 'stream',
+        'hero_title'    => 'What\'s <strong>On Stream</strong>',
+        'hero_subtitle' => 'Card nights, gaming nights, and the schedule for what airs each night of the week.',
+        'sections'      => [
+            [
                 'title'   => 'Card Nights',
                 'content' => '<p>Monday through Thursday at 8PM EST. Each card night moves through Pokemon, anime, and gaming segments — with After Dark content later in the evening for 18+ viewers.</p>',
             ],
@@ -58,10 +71,6 @@ $pages = [
             [
                 'title'   => 'After Dark',
                 'content' => '<p>After the main card night wraps up, the stream shifts to After Dark — our 18+ segment featuring mature-content TCG products. This includes anime cards and playmats with suggestive or adult artwork, sold exclusively to age-verified buyers.</p><p>After Dark only runs on Twitch (with the mature tag enabled) and Instagram. TikTok and YouTube simulcasts end before the After Dark segment begins. In Discord, mature product drops appear in the age-gated channel — you\'ll need the Ena role (18+ verified) to access it.</p>',
-            ],
-            [
-                'title'   => 'About the Builder',
-                'content' => '<p>itzenzo.tv is built and operated by <a href="https://vincentragosta.io" target="_blank" rel="noopener noreferrer">Vincent Ragosta</a> — a full-stack engineer who\'s been collecting Pokemon cards since 1998, and started selling them live on stream when the world shut down in 2021.</p>',
             ],
         ],
     ],
