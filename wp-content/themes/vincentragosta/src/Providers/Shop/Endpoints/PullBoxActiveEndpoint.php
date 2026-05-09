@@ -45,7 +45,11 @@ class PullBoxActiveEndpoint extends Endpoint
 
     public function callback(WP_REST_Request $request): WP_REST_Response
     {
-        $box = $this->repository->findActiveBox();
+        // Auto-create from settings if no box is active. Means buyers
+        // hitting the slot picker between streams (or after a chase
+        // reset) always land on a fresh 0/N grid instead of a "no box
+        // open" empty state.
+        $box = $this->repository->findOrCreateActiveBox();
         if (!$box) {
             return new WP_REST_Response(['box' => null]);
         }

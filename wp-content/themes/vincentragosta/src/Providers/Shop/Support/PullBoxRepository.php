@@ -41,6 +41,88 @@ class PullBoxRepository
         return $row ?: null;
     }
 
+    /**
+     * Return the currently active pull box, or auto-create one from the
+     * Pull Box & Bundle settings (`pb_title`, `pb_total_slots`, `pb_price_id`)
+     * when none exists. Keeps the homepage slot picker always-on without
+     * requiring a per-stream `/pull open` ceremony.
+     *
+     * Returns null only when settings aren't configured (`pb_price_id`
+     * missing) — in that case the caller should surface a 503 to the
+     * buyer rather than auto-creating a half-configured box.
+     */
+    public function findOrCreateActiveBox(): ?array
+    {
+        $existing = $this->findActiveBox();
+        if ($existing) {
+            return $existing;
+        }
+
+        // Settings-driven auto-create. ACF reads return string for text
+        // fields and an int (or numeric string) for number fields.
+        $priceId = (string) get_field('pb_price_id', 'option');
+        if ($priceId === '') {
+            return null;
+        }
+        $title = (string) (get_field('pb_title', 'option') ?: 'Pull Box');
+        $totalSlots = (int) (get_field('pb_total_slots', 'option') ?: 50);
+
+        // Resolve unit price from the Stripe price record so the box's
+        // price_cents stays in sync with the configured Stripe price.
+        // Falls back to 500 ($5) when Stripe is unreachable so we don't
+        // block buyers on a transient error — the slot grid + checkout
+        // both ultimately re-validate against the live Stripe price.
+        $priceCents = $this->resolvePriceCentsFromStripe($priceId, 500);
+
+        $id = $this->createBox([
+            'name'            => $title,
+            'price_cents'     => $priceCents,
+            'stripe_price_id' => $priceId,
+            'total_slots'     => $totalSlots,
+        ]);
+
+        return $this->findBox($id);
+    }
+
+    /**
+     * Look up a Stripe price's unit_amount (cents). Returns the fallback
+     * when Stripe is unreachable so we never block buyers on a transient
+     * error. The atomic checkout still re-validates against Stripe so a
+     * stale cached value here can't cause overselling — it's purely cosmetic
+     * (drives the price_cents column used by the embed and the dollar tile).
+     */
+    private function resolvePriceCentsFromStripe(string $priceId, int $fallback): int
+    {
+        if (!defined('STRIPE_SECRET_KEY')) {
+            return $fallback;
+        }
+        try {
+            $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
+            $price = $stripe->prices->retrieve($priceId);
+            return (int) ($price->unit_amount ?? $fallback);
+        } catch (\Throwable $e) {
+            return $fallback;
+        }
+    }
+
+    /**
+     * Reset the pull box: close the current one (if any) and open a new
+     * one with the configured defaults. Returns the new box (or null if
+     * settings aren't configured to support auto-create).
+     */
+    public function resetActiveBox(): ?array
+    {
+        $existing = $this->findActiveBox();
+        if ($existing) {
+            $this->updateBox((int) $existing['id'], ['status' => 'closed']);
+            do_action('shop_pull_box_closed', $existing);
+        }
+
+        // findOrCreateActiveBox sees no active box now (since we just
+        // closed it) and auto-creates from settings.
+        return $this->findOrCreateActiveBox();
+    }
+
     public function findBox(int $id): ?array
     {
         global $wpdb;

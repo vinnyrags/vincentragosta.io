@@ -384,6 +384,15 @@
             "rows": 3
         },
         {
+            "key": "field_pb_total_slots",
+            "label": "Pull Box — Total Slots",
+            "name": "pb_total_slots",
+            "type": "number",
+            "default_value": 50,
+            "min": 1,
+            "instructions": "Number of slots in each pull box. The box auto-creates with this many slots when the chase prize is hit and the operator runs reset (Discord /pull reset or the admin button below)."
+        },
+        {
             "key": "field_bundle_stripe_price_id",
             "label": "English Bundle — Stripe Price ID",
             "name": "bundle_stripe_price_id",
