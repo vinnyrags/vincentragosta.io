@@ -342,6 +342,27 @@ WP-side: `tests/Integration/Providers/Shop/CatalogStripeProductDeactivatedEndpoi
 
 Bot-side: `Nous/tests/catalog-deactivate.test.js` (envelope shape, early-return guards on empty productId, error handling, log emission). The `npm run test:critical` smoke flow has a probe step that POSTs a fake `stripeProductId` to the WP endpoint and asserts 200 + `matched=0` — catches a broken route or auth gate before a livestream relies on the real-time cleanup path.
 
+## WordPress Object Cache (Redis)
+
+A persistent object cache (Redis) sits between WordPress and MySQL on the production droplet. Same Redis daemon serves both production WP (`/var/www/vincentragosta.io`) and staging WP (`/var/www/staging.vincentragosta.io`); they're isolated by Redis database number + cache-key salt:
+
+| Env | Redis DB | `WP_CACHE_KEY_SALT` |
+|---|---|---|
+| Production WP | 0 | `vincentragosta_` |
+| Staging WP | 1 | `staging_vincentragosta_` |
+
+**Daemon config** (`/etc/redis/redis.conf`): `maxmemory 256mb`, `maxmemory-policy allkeys-lru`, `save ""` (pure cache, no disk persistence). Reasoning: 256 MB is generous for our cache size (~5–10 MB warm), LRU evicts oldest keys under pressure so Redis can never OOM the box, and disabling save snapshots removes disk I/O we don't need from a pure cache.
+
+**Plugin**: [redis-cache](https://wordpress.org/plugins/redis-cache/) (Till Krüss). Activates `wp-content/object-cache.php` as a drop-in. Toggle with `wp redis enable` / `wp redis status` / `wp redis disable`. The drop-in overrides `wp_cache_flush()`, so every existing call to `wp cache flush` (including the one in the deploy hook) clears Redis along with in-memory caches.
+
+**wp-config.php** carries `WP_REDIS_HOST`, `WP_REDIS_PORT`, `WP_REDIS_DATABASE`, `WP_CACHE_KEY_SALT`, and `WP_CACHE = true` for each environment.
+
+**Invalidation contract.** ACF, WPGraphQL, Yoast, and anything else that uses standard WP APIs (`update_post_meta`, `update_option`, `set_transient`) honor the cache lifecycle correctly — the cache busts on writes automatically. `audit-stripe-active.js --apply` uses `wp post meta update` (WP API), so its writes are safe.
+
+**Two scenarios that bypass the cache** — both currently safe in this codebase, but watch for future code:
+1. **Raw `$wpdb` writes** — `Hooks/QueueRepository` and the pull-box repository write queue/pull-box state directly via `$wpdb`. Reads go through raw `$wpdb` too, so net-neutral. If new code reads queue data via `get_post_meta()` or similar WP APIs, those reads could be stale; route them through the existing repository helpers instead.
+2. **Direct DB mutations from SSH/wp-cli** — manual `wp db query "UPDATE wp_postmeta SET ..."` does not invalidate Redis. Run `wp cache flush` after.
+
 ## Build System
 
 A single `build-providers.js` script lives in `ix/scripts/`. It auto-discovers all providers with assets or blocks and compiles them.
@@ -500,3 +521,5 @@ These are patterns the codebase has evolved away from. Avoid reintroducing them:
 - **Timber/Twig in Mythus** — Mythus is theme-agnostic. Don't add Timber, Twig, or template-related code to Mythus. That belongs in the parent theme's Provider bridge
 - **Missing Mythus vendor** — The `mythus-loader.php` will `wp_die()` with instructions if `composer install` hasn't been run in the Mythus directory. Run `make install` to install all dependencies
 - **Stale IX/Mythus vendor after `composer update`** — When you run `composer update vincentragosta/ix` (or `vincentragosta/mythus`) from the project root, Composer extracts the new package contents into `wp-content/themes/ix/` (or `wp-content/mu-plugins/mythus/`) but does NOT run `composer install` *inside* that directory. The package's own `vendor/` is left in a partial-extract state — autoload files (`autoload_psr4.php` etc.) are missing — which breaks PHPUnit (the `IX\Tests\Support\HasContainer` trait fails to autoload) and any code path that touches the package's own dependencies. The root `composer.json` `post-install-cmd` and `post-update-cmd` scripts handle this automatically by running `@composer install --working-dir=wp-content/{mu-plugins/mythus,themes/ix}` after every parent install/update. If you ever see PHPUnit blow up with `Trait "IX\Tests\Support\HasContainer" not found`, the autoload didn't refresh — re-run `composer install` from the project root, or run the nested install manually: `composer install --working-dir=wp-content/themes/ix`
+- **Direct DB writes from SSH leave Redis stale** — `wp db query "UPDATE wp_postmeta ..."` and similar bypass `WP_Object_Cache` and don't trigger invalidation. After any direct DB mutation via SSH, run `wp cache flush --path=$WP_PATH --allow-root` so Redis re-reads from MySQL on the next request. Code that uses standard WP APIs (`update_post_meta`, `update_option`) is unaffected; this only matters for raw SQL.
+- **`apt install php-*` can swap PHP CLI version under you** — installing PHP packages (e.g. `php-redis`) pulls in the latest PHP as a transitive dependency and updates `/etc/alternatives/php` to point at it. PHP-FPM keeps running 8.4 (correct), but `wp` CLI starts using whatever the alternative now resolves to — which may lack `mysqli` and break wp-cli with a confusing "MySQL extension missing" error (the real failure is the wrong CLI version, not a missing extension). Fix: `update-alternatives --set php /usr/bin/php8.4`. Always check `php --version` after any `apt` operation that touches PHP packages.
