@@ -314,7 +314,7 @@ Four code paths put rows into `wp_queue_entries`:
 
 1. **Orders** — Nous Stripe webhook → `addToQueue()` in `commands/queue.js` → `queueSource.addEntry({ type: 'order', source: 'shop' })`. One entry per line item.
 2. **Pack battles** — Nous Stripe webhook → `checkBattlePayment()` in `webhooks/stripe.js` after `confirmPayment` → `queueSource.addEntry({ type: 'pack_battle' })`. Idempotent on `stripe:<sid>:battle`.
-3. **Pull boxes** — Nous Stripe webhook → `recordPullPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: '$N tier' })`.
+3. **Pull boxes** — Nous Stripe webhook → `recordPullBoxPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: 'Pull Box • slots N, M, ...' })`. Single-tier model (one box open at a time, $5 entry); the legacy V/VMAX tier split was collapsed.
 4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `QueueRepository::createEntry({ type: 'rts', external_ref: 'rts:{cardId}:{email}' })`. Single write, no parallel ledger; idempotent on the external_ref (re-submission while the entry is still queued/active returns the existing row). Requires an active queue session — returns 503 if none exists, since the bot is supposed to keep one open between streams.
 
 All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `/queue` Discord embed renders.
