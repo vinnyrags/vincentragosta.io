@@ -72,6 +72,67 @@ class PullBoxRepositoryTest extends TestCase
         $this->assertSame(['pending', 'confirmed'], PullBoxRepository::CLAIM_STATUSES);
     }
 
+    public function testFindOrCreateActiveBoxAndResetActiveBoxExist(): void
+    {
+        // Pin the perpetual-single-box surface — both methods are the
+        // entry points for the auto-create + chase-reset operator flow.
+        // findOrCreateActiveBox is what the homepage slot picker hits
+        // (via PullBoxActiveEndpoint) so it MUST NOT return null on a
+        // configured environment; resetActiveBox is what /pull reset
+        // and the WP admin button call.
+        $this->assertTrue(
+            method_exists(PullBoxRepository::class, 'findOrCreateActiveBox'),
+            'findOrCreateActiveBox is the auto-create entry point for the homepage slot picker'
+        );
+        $this->assertTrue(
+            method_exists(PullBoxRepository::class, 'resetActiveBox'),
+            'resetActiveBox is the chase-prize-hit entry point for /pull reset and the WP admin button'
+        );
+    }
+
+    public function testResetActiveBoxClosesThenCreatesViaSourceShape(): void
+    {
+        // The reset MUST close the existing box (if any) BEFORE calling
+        // findOrCreateActiveBox — otherwise the find half sees the
+        // not-yet-closed box and returns it instead of creating a new
+        // one. Pin the close-then-create order via source inspection
+        // since WorDBless can't simulate the $wpdb update + insert
+        // sequence meaningfully.
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../src/Providers/Shop/Support/PullBoxRepository.php'
+        );
+
+        // The reset method must call updateBox with status=closed THEN
+        // findOrCreateActiveBox, in that order.
+        $resetMatch = preg_match(
+            '/function resetActiveBox.*?updateBox.*?status.*?closed.*?findOrCreateActiveBox/s',
+            $source
+        );
+        $this->assertSame(
+            1,
+            $resetMatch,
+            'resetActiveBox must close the existing box before calling findOrCreateActiveBox'
+        );
+    }
+
+    public function testFindOrCreateBoxFallsBackToFiveDollarsWhenStripeUnreachable(): void
+    {
+        // When the Stripe price lookup fails (transient API outage),
+        // the box still gets created with a sensible default ($5 ==
+        // 500 cents) instead of blocking the buyer's slot picker. The
+        // atomic checkout still re-validates the live Stripe price, so
+        // a stale price_cents here can't cause overselling — it's
+        // purely cosmetic for the embed + dollar tile.
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../src/Providers/Shop/Support/PullBoxRepository.php'
+        );
+        $this->assertStringContainsString(
+            'resolvePriceCentsFromStripe($priceId, 500)',
+            $source,
+            'Fallback price must be 500 cents ($5) when Stripe is unreachable — anything else and the embed lies about the price during an outage'
+        );
+    }
+
     private function slotRow(array $overrides): array
     {
         return array_merge([
