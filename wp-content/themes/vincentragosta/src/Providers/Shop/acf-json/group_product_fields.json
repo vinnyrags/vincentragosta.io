@@ -98,6 +98,16 @@
             "min": 0,
             "max": 10,
             "preview_size": "medium"
+        },
+        {
+            "key": "field_product_skip_shipping_at_checkout",
+            "label": "Speculative — Skip Shipping at Checkout",
+            "name": "skip_shipping_at_checkout",
+            "type": "true_false",
+            "instructions": "Tick for individual booster packs and other speculative items the buyer opens on stream. The buy-in price covers only the item; shipping is collected later via end-of-stream DM. Leave unticked for sealed boxes, ETBs, lunchboxes, and accessories — those follow the standard at-checkout shipping flow.",
+            "default_value": 0,
+            "ui": 1,
+            "show_in_graphql": 1
         }
     ],
     "location": [

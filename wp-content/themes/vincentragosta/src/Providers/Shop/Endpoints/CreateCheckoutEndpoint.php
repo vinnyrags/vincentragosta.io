@@ -93,6 +93,15 @@ class CreateCheckoutEndpoint extends Endpoint
 
         $lineItems = [];
         $productIds = [];
+        // Speculative-purchase tracking. A product flagged
+        // skip_shipping_at_checkout is opened on stream (booster pack,
+        // mystery item) — buyer pays only the buy-in. If EVERY line
+        // item in the cart is speculative, the whole checkout skips
+        // shipping; if even one item is committed, shipping is included
+        // (and that one shipping payment covers the speculative items
+        // for the period too — see the held-inventory policy).
+        $allSpeculative = true;
+        $anySpeculative = false;
 
         // Pre-flight: ask Stripe directly whether each priceId is still
         // purchasable BEFORE decrementing stock. A stale catalog reference
@@ -194,6 +203,18 @@ class CreateCheckoutEndpoint extends Endpoint
             ];
 
             $productIds[] = $product->id . ':' . $quantity;
+
+            // Track per-item speculative status. The flag lives only on
+            // products (not cards) so we conditionally check it.
+            $isSpeculative = false;
+            if ($product instanceof \ChildTheme\Providers\Shop\ProductPost) {
+                $isSpeculative = (bool) get_post_meta($product->id, 'skip_shipping_at_checkout', true);
+            }
+            if ($isSpeculative) {
+                $anySpeculative = true;
+            } else {
+                $allSpeculative = false;
+            }
         }
 
         $successUrl = ShopProvider::frontendUrl() . '/thank-you?session_id={CHECKOUT_SESSION_ID}';
@@ -210,7 +231,22 @@ class CreateCheckoutEndpoint extends Endpoint
                 'product_ids' => implode(',', $productIds),
             ];
 
-            $skipShipping = $shippingCovered;
+            // Shipping decision:
+            //   - All-speculative cart → always skip (buyer pays only the
+            //     buy-in; held inventory + end-of-stream DM handles the
+            //     shipping settlement). Tag metadata.source='speculative'
+            //     so the bot's /offline scan picks this buyer up.
+            //   - Mixed or all-committed cart → existing flow (skip when
+            //     already covered for the period; charge otherwise).
+            $skipShipping = $allSpeculative ? true : $shippingCovered;
+            if ($allSpeculative && count($lineItems) > 0) {
+                $metadata['source'] = 'speculative';
+            } elseif ($anySpeculative) {
+                // Mixed cart — note this in metadata so the receipt /
+                // post-payment handler knows speculative items rode along
+                // with a committed shipping payment.
+                $metadata['speculative_mix'] = '1';
+            }
 
             $session = $this->stripe->createCheckoutSession(
                 $lineItems,
