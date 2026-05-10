@@ -4,9 +4,9 @@
  *
  * Writes canonical copy for /our-story (about), /the-stream (stream),
  * the four how-it-works children (livestream, buying, shipping,
- * refund-policy), /gaming, /cards, /the-discord (community), and
- * /thank-you into the `itzenzo_pages` repeater on the shop-settings
- * ACF options page. Once seeded, WordPress is the single
+ * refund-policy), /gaming, /cards, /collection, /the-discord
+ * (community), and /thank-you into the `itzenzo_pages` repeater on the
+ * shop-settings ACF options page. Once seeded, WordPress is the single
  * source of truth for this content — editors change it via WP admin;
  * the Next.js frontend reads it through WPGraphQL.
  *
@@ -224,6 +224,18 @@ $pages = [
         'hero_title'    => 'Raw Singles. <strong>Hand-Inspected.</strong>',
         'hero_subtitle' => 'Each card\'s condition is shown right on the listing — and Request to See lets you inspect any card on stream before you buy.',
         'sections'      => [],
+    ],
+    [
+        'name'          => 'Collection',
+        'slug'          => 'collection',
+        'hero_title'    => 'Vinny\'s <strong>Collection</strong>',
+        'hero_subtitle' => 'The cards behind the cards. Vintage WOTC, Japanese pulls, and the long shelves that started the shop. Not for sale by default — but every card has a price if the offer\'s right.',
+        'sections'      => [
+            [
+                'title'   => 'About this Collection',
+                'content' => '<p><strong>Vinny\'s personal collection.</strong> These cards aren\'t for sale on the storefront — but if you want one badly enough, <strong>Make an Offer</strong> and he\'ll get back to you. Use <strong>Request to See</strong> to have any card featured live during the next stream.</p>',
+            ],
+        ],
     ],
     [
         'name'          => 'Community',
