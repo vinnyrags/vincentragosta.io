@@ -34,6 +34,8 @@ use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
 use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
+use ChildTheme\Providers\Shop\Hooks\CardRequestEmailNotifier;
+use ChildTheme\Providers\Shop\Hooks\OfferEmailNotifier;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxAdminReset;
 use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
@@ -73,6 +75,8 @@ class ShopProvider extends Provider
         PullBoxGraphQL::class,
         PullBoxAdminReset::class,
         ActivityWebhook::class,
+        OfferEmailNotifier::class,
+        CardRequestEmailNotifier::class,
     ];
 
     /**

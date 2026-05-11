@@ -140,6 +140,19 @@ class CardRequestEndpoint extends Endpoint
             'external_ref'    => $externalRef,
         ]);
 
+        // Fire a sibling action to the queue write so notifiers
+        // (currently CardRequestEmailNotifier; future hooks can attach)
+        // can fan out without this endpoint owning email / Discord
+        // logic. Mirrors the shop_card_offer_submitted pattern in
+        // CardOfferEndpoint.
+        do_action('shop_card_request_submitted', [
+            'card_id'          => $cardId,
+            'card_title'       => $card->post_title,
+            'email'            => $email,
+            'discord_username' => $discord,
+            'entry_id'         => $entryId,
+        ]);
+
         return new WP_REST_Response([
             'id'      => $entryId,
             'status'  => 'pending',

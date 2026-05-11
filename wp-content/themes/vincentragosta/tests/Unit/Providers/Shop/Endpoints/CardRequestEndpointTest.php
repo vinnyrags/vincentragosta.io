@@ -110,4 +110,36 @@ class CardRequestEndpointTest extends TestCase
             'External_ref format must remain rts:{cardId}:{email} — changing this orphans all in-flight RTS entries'
         );
     }
+
+    public function testFiresShopCardRequestSubmittedAction(): void
+    {
+        // The notifier bridge (CardRequestEmailNotifier) subscribes
+        // to this action. Without the do_action firing, the email
+        // confirmation never sends. Pin via source inspection — the
+        // queue write should happen first, then the action — same
+        // ordering rule as the offer endpoint (queue/persistence
+        // before fan-out).
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../src/Providers/Shop/Endpoints/CardRequestEndpoint.php'
+        );
+        $this->assertStringContainsString(
+            "do_action('shop_card_request_submitted'",
+            $source,
+            'Endpoint must fire shop_card_request_submitted so the email notifier can attach'
+        );
+
+        // Ordering: createEntry → do_action. If the action fires
+        // before the entry is persisted, the email is sent claiming
+        // a queue spot that doesn't exist yet (subtle race against
+        // a downstream consumer who tries to look it up).
+        $createPos = strpos($source, 'createEntry(');
+        $actionPos = strpos($source, "do_action('shop_card_request_submitted'");
+        $this->assertNotFalse($createPos);
+        $this->assertNotFalse($actionPos);
+        $this->assertLessThan(
+            $actionPos,
+            $createPos,
+            'Queue entry must persist before firing the notifier action'
+        );
+    }
 }
