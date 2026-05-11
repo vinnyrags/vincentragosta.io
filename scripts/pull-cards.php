@@ -249,6 +249,16 @@ while ($hasMore) {
 
 echo "\nDone: {$created} created, {$updated} updated, {$skipped} skipped.\n";
 
+// Fire a single feed event when new cards landed in the catalog.
+// Updates aren't feed-worthy (stock changes, price tweaks) — only the
+// "actually new singles to browse" case triggers visitor pull.
+if ($created > 0) {
+    do_action('shop_cards_restocked', [
+        'created' => $created,
+        'updated' => $updated,
+    ]);
+}
+
 function maybeUpdateCardFields(int $postId, array $fields): void
 {
     foreach ($fields as $key => $value) {

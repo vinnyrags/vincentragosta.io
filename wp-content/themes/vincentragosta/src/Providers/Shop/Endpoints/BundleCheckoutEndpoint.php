@@ -106,6 +106,16 @@ class BundleCheckoutEndpoint extends Endpoint
                 false,
             );
 
+            // Fire after the Stripe session is in hand so a downstream
+            // listener can't see "stock decremented but checkout failed."
+            // Listeners decide whether the new stock count is feed-worthy
+            // (low or sold out) — the action itself stays general.
+            $remaining = (int) get_field('bundle_stock', 'option');
+            do_action('shop_bundle_purchased', [
+                'remaining' => $remaining,
+                'price_id'  => $configuredPriceId,
+            ]);
+
             return new WP_REST_Response(['url' => $session->url]);
         } catch (\Throwable $e) {
             // Roll the stock decrement back so the buyer doesn't see a

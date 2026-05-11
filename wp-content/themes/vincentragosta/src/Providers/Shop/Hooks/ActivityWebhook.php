@@ -25,17 +25,82 @@ use Mythus\Contracts\Hook;
  *   shop_pull_box_slot_claimed → activity.pull_box.claim
  *   shop_pull_box_created      → activity.pull_box.opened
  *   shop_pull_box_closed       → activity.pull_box.closed
+ *   shop_bundle_purchased      → activity.bundle.low | .sold_out (threshold-gated)
+ *   shop_cards_restocked       → activity.cards.restocked
  *
  * Intentionally NOT bridged: shop_pull_box_updated. It fires on every
  * stock decrement, which would flood the feed.
  */
 class ActivityWebhook implements Hook
 {
+    /**
+     * "Low stock" threshold for the homepage Bundle widget. Below this
+     * we surface a feed event to create urgency. Above it the purchase
+     * is silent — the widget already shows the count.
+     */
+    private const BUNDLE_LOW_THRESHOLD = 3;
+
     public function register(): void
     {
         add_action('shop_pull_box_slot_claimed', [$this, 'onPullBoxSlotClaimed'], 10, 3);
         add_action('shop_pull_box_created', [$this, 'onPullBoxCreated'], 10, 1);
         add_action('shop_pull_box_closed', [$this, 'onPullBoxClosed'], 10, 1);
+        add_action('shop_bundle_purchased', [$this, 'onBundlePurchased'], 10, 1);
+        add_action('shop_cards_restocked', [$this, 'onCardsRestocked'], 10, 1);
+    }
+
+    public function onBundlePurchased(array $payload): void
+    {
+        $remaining = (int) ($payload['remaining'] ?? 0);
+
+        if ($remaining === 0) {
+            $this->dispatch('activity.bundle.sold_out', [
+                'kind'        => 'bundle.sold_out',
+                'title'       => 'English Bundle sold out',
+                'description' => "That's the last of them — back when we restock.",
+                'color'       => 'rose',
+                'icon'        => '📦',
+                'meta'        => ['remaining' => 0],
+            ]);
+            return;
+        }
+
+        if ($remaining > 0 && $remaining <= self::BUNDLE_LOW_THRESHOLD) {
+            $this->dispatch('activity.bundle.low', [
+                'kind'        => 'bundle.low',
+                'title'       => 'English Bundle running low',
+                'description' => sprintf(
+                    'Only %d %s left at $5.99.',
+                    $remaining,
+                    $remaining === 1 ? 'bundle' : 'bundles'
+                ),
+                'color'       => 'amber',
+                'icon'        => '📦',
+                'meta'        => ['remaining' => $remaining],
+            ]);
+        }
+        // Above the threshold: silent. The widget already shows the count.
+    }
+
+    public function onCardsRestocked(array $payload): void
+    {
+        $created = (int) ($payload['created'] ?? 0);
+        if ($created < 1) {
+            return;
+        }
+
+        $this->dispatch('activity.cards.restocked', [
+            'kind'        => 'cards.restocked',
+            'title'       => 'New singles in the catalog',
+            'description' => sprintf(
+                '%d new card %s just hit /cards.',
+                $created,
+                $created === 1 ? 'single' : 'singles'
+            ),
+            'color'       => 'fuchsia',
+            'icon'        => '🃏',
+            'meta'        => ['created' => $created],
+        ]);
     }
 
     public function onPullBoxCreated(?array $box): void
