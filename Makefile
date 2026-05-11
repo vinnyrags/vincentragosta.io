@@ -159,7 +159,8 @@ endef
 	pull-patterns pull-patterns-staging \
 	pull-products pull-products-publish pull-products-staging \
 	push-cards pull-cards pull-cards-publish \
-	pull-cards-staging pull-cards-production sync-cards \
+	pull-cards-staging pull-cards-production \
+	sync-cards sync-cards-staging sync-cards-production \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
@@ -466,8 +467,27 @@ pull-cards-production: ## Sync Stripe card singles to production (publish, idemp
 	@echo "Flushing production itzenzo.tv image proxy cache..."
 	$(call flush-itzenzo-cache,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_PM2))
 
-sync-cards: push-cards pull-cards-publish ## Full card pipeline (Sheets → Stripe → local WP)
-	@echo "✓ Card pipeline complete"
+sync-cards: push-cards pull-cards-publish ## Full card pipeline → local WP (Sheets → Stripe → local DDEV)
+	@echo "✓ Card pipeline complete (local)"
+
+# `push-cards` reads STRIPE_SECRET_KEY from local DDEV's wp-config, so the
+# Stripe push targets whatever mode local is in. If local is in test mode
+# but the destination env is in live mode (or vice versa), the push and
+# pull would hit different Stripe environments and the catalog would land
+# with stale / missing product IDs. The mode-match guard fails fast.
+sync-cards-staging: ## Full card pipeline → staging WP (Sheets → Stripe → staging)
+	@echo "Pre-flight: checking local + staging Stripe key modes match..."
+	$(call check-stripe-mode-match,STAGING,staging)
+	@$(MAKE) --no-print-directory push-cards
+	@$(MAKE) --no-print-directory pull-cards-staging
+	@echo "✓ Card pipeline complete (staging)"
+
+sync-cards-production: ## Full card pipeline → production WP (Sheets → Stripe → production)
+	@echo "Pre-flight: checking local + production Stripe key modes match..."
+	$(call check-stripe-mode-match,PRODUCTION,production)
+	@$(MAKE) --no-print-directory push-cards
+	@$(MAKE) --no-print-directory pull-cards-production
+	@echo "✓ Card pipeline complete (production)"
 
 ##@ Card image migration
 
