@@ -73,6 +73,63 @@ class CardGraphQL implements Hook
         return ['joins' => $joins, 'where' => $where];
     }
 
+    /**
+     * SQL fragments that drive ORDER BY for `cardsByScope`. Kept
+     * separate from filter fragments so cardCount (which doesn't
+     * order) avoids the extra LEFT JOINs.
+     *
+     * Ordering must match what the headless storefront's CardToolbar
+     * does client-side after data lands — otherwise the SSR'd first
+     * batch of 20 cards renders in one order and then visibly
+     * reshuffles when prefetched batches arrive and the client
+     * re-sorts.
+     *
+     * For CATALOG (default sort = "set-asc" on /cards):
+     *   1. release_date ASC (oldest first), missing/empty values last
+     *   2. set_name ASC (alphabetical tiebreaker)
+     *   3. card_number numerically ascending. Numbers like "001/100"
+     *      get the leading int via SUBSTRING_INDEX('/', 1) — close
+     *      enough; promo codes like "SWSH021" cast to 0 and sort to
+     *      the top of their set, which is acceptable.
+     *
+     * For COLLECTION (default sort = "title-asc" on /collection):
+     *   - Just the post_title alphabetically. ID as tiebreaker for
+     *     stable pagination across batches.
+     *
+     * @return array{joins:string,orderBy:string}
+     */
+    private function scopeOrderFragments(string $scope): array
+    {
+        global $wpdb;
+
+        if ($scope === 'COLLECTION') {
+            return [
+                'joins'   => '',
+                'orderBy' => 'ORDER BY p.post_title ASC, p.ID ASC',
+            ];
+        }
+
+        // CATALOG: chain matches CardToolbar.compareBySet(direction='asc').
+        $joins = "
+            LEFT JOIN {$wpdb->postmeta} mr
+                ON mr.post_id = p.ID AND mr.meta_key = 'release_date'
+            LEFT JOIN {$wpdb->postmeta} msn
+                ON msn.post_id = p.ID AND msn.meta_key = 'set_name'
+            LEFT JOIN {$wpdb->postmeta} mcn
+                ON mcn.post_id = p.ID AND mcn.meta_key = 'card_number'
+        ";
+        $orderBy = "
+            ORDER BY
+                CASE WHEN mr.meta_value IS NULL OR mr.meta_value = '' THEN 1 ELSE 0 END,
+                mr.meta_value ASC,
+                msn.meta_value ASC,
+                CAST(SUBSTRING_INDEX(COALESCE(mcn.meta_value, ''), '/', 1) AS UNSIGNED) ASC,
+                p.ID ASC
+        ";
+
+        return ['joins' => $joins, 'orderBy' => $orderBy];
+    }
+
     public function registerTypes(): void
     {
         // Scope enum used by both `cardCount` and `cardsByScope` to keep
@@ -135,15 +192,17 @@ class CardGraphQL implements Hook
                 $limit  = max(1, min(200, (int) $args['limit']));
                 $offset = max(0, (int) $args['offset']);
                 $frag   = $this->scopeFragments($scope);
+                $order  = $this->scopeOrderFragments($scope);
 
                 $sql = "
                     SELECT p.ID
                     FROM {$wpdb->posts} p
                     {$frag['joins']}
+                    {$order['joins']}
                     WHERE p.post_type = 'card'
                       AND p.post_status = 'publish'
                       {$frag['where']}
-                    ORDER BY p.post_date DESC, p.ID DESC
+                    {$order['orderBy']}
                     LIMIT %d OFFSET %d
                 ";
 
