@@ -155,6 +155,7 @@ endef
 	build watch clean autoload test test-js update \
 	deploy-staging deploy-production release \
 	push-staging pull-staging push-production pull-production \
+	check-stripe-modes rebuild-local-catalog rebuild-staging-catalog refresh-from-production \
 	pull-patterns pull-patterns-staging \
 	pull-products pull-products-publish pull-products-staging \
 	push-cards pull-cards pull-cards-publish \
@@ -331,27 +332,58 @@ check-stripe-modes: ## Verify local + staging + production Stripe key modes matc
 	$(call check-stripe-mode-match,PRODUCTION,production)
 	@echo "✓ All Stripe key modes consistent."
 
-rebuild-staging-catalog: ## Repopulate staging Stripe IDs after a cross-mode push (placeholder)
-	@echo "" ; \
-	echo "================================================================" ; \
-	echo "rebuild-staging-catalog — manual procedure (not yet automated)" ; \
-	echo "================================================================" ; \
-	echo "" ; \
-	echo "After a cross-mode DB push (e.g., live-mode prod data flowed into" ; \
-	echo "test-mode staging), staging's catalog has wrong-mode Stripe IDs." ; \
-	echo "Repopulating requires:" ; \
-	echo "" ; \
-	echo "  1. Wipe staging's Stripe product/price meta:" ; \
-	echo "     ssh $(STAGING_HOST) \"wp --allow-root --path=$(STAGING_WP) \\\\" ; \
-	echo "       db query \\\"DELETE FROM wp_postmeta WHERE meta_key IN \\\\" ; \
-	echo "       ('stripe_product_id','stripe_price_id')\\\"\"" ; \
-	echo "" ; \
-	echo "  2. Re-run push-products.js / push-cards.js against staging WP" ; \
-	echo "     using a sk_test_* key, to populate fresh test-mode IDs." ; \
-	echo "" ; \
-	echo "Until this is automated (TODO), do it manually — see:" ; \
-	echo "  akivili/business/operations.md → Post-cutover staging refresh" ; \
-	echo "================================================================"
+rebuild-local-catalog: ## Delete + repopulate LOCAL catalog from test-mode Stripe (post-cross-mode pull)
+	@echo ">> Hard-deleting all card + product posts from local..."
+	@# pull-cards/pull-products match by stripe_product_id meta. After a
+	@# pull-production overwrites everything with live-mode IDs, just
+	@# wiping the meta makes pull-cards CREATE duplicates instead of
+	@# updating in place. Hard-delete every card + product post first
+	@# so the next pull starts from a clean slate. Stdin redirected to
+	@# /dev/null on each `wp post delete` so the outer `while read`
+	@# loop doesn't get its stdin slurped after the first iteration.
+	@for type in card product; do \
+		ddev wp post list --post_type=$$type --post_status=any --field=ID 2>/dev/null \
+			| /usr/bin/grep -E "^[0-9]+$$" \
+			| while read -r id; do \
+				ddev wp post delete "$$id" --force </dev/null >/dev/null 2>&1 || true; \
+			done; \
+	done
+	@echo ">> Re-pulling products from test-mode Stripe → local..."
+	@$(MAKE) --no-print-directory pull-products-publish
+	@echo ">> Re-pulling card singles from test-mode Stripe → local..."
+	@$(MAKE) --no-print-directory pull-cards-publish
+	@echo "✓ Local catalog rebuilt with fresh test-mode Stripe IDs."
+
+rebuild-staging-catalog: ## Wipe + repopulate STAGING catalog Stripe IDs from test-mode Stripe (post-cross-mode push)
+	@echo ">> Wiping stale Stripe IDs from staging postmeta..."
+	@ssh $(STAGING_HOST) "wp --allow-root --path=$(STAGING_WP) db query \"DELETE FROM wp_postmeta WHERE meta_key IN ('stripe_product_id','stripe_price_id','sale_price_id')\"" >/dev/null
+	@echo ">> Re-pulling products from test-mode Stripe → staging..."
+	@$(MAKE) --no-print-directory pull-products-staging
+	@echo ">> Re-pulling card singles from test-mode Stripe → staging..."
+	@$(MAKE) --no-print-directory pull-cards-staging
+	@echo "✓ Staging catalog rebuilt with fresh test-mode Stripe IDs."
+
+refresh-from-production: ## Refresh local + staging from production content (auto-rebuilds catalogs in test-mode)
+	@echo "==================================================================="
+	@echo "  refresh-from-production — propagating live prod content to test"
+	@echo "==================================================================="
+	@echo ""
+	@echo "[1/4] Pulling production → local DDEV..."
+	@$(MAKE) --no-print-directory pull-production
+	@echo ""
+	@echo "[2/4] Rebuilding LOCAL catalog (live-mode Stripe IDs → test-mode)..."
+	@$(MAKE) --no-print-directory rebuild-local-catalog
+	@echo ""
+	@echo "[3/4] Pushing now-test-mode local → staging..."
+	@$(MAKE) --no-print-directory push-staging
+	@echo ""
+	@echo "[4/4] Verifying staging catalog (defensive rebuild — should be a no-op)..."
+	@$(MAKE) --no-print-directory rebuild-staging-catalog
+	@echo ""
+	@echo "==================================================================="
+	@echo "  ✓ Local + staging now reflect production content."
+	@echo "  ✓ Both end up with fresh test-mode Stripe IDs (checkout works)."
+	@echo "==================================================================="
 
 ##@ Block patterns
 
