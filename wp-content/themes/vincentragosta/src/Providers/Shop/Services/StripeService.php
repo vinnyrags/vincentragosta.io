@@ -136,6 +136,13 @@ class StripeService
 
         if ($customerEmail) {
             $params['customer_email'] = $customerEmail;
+            // Send buyers a Stripe-generated email receipt for every
+            // purchase. Required to fulfill the "you'll get an email
+            // receipt directly from Stripe for every purchase" claim
+            // on /how-it-works/buying. receipt_email is a distinct
+            // Stripe field from customer_email — the first prefills
+            // the checkout page, the second triggers the receipt.
+            $params['receipt_email'] = $customerEmail;
         }
 
         return $this->client->checkout->sessions->create($params);
