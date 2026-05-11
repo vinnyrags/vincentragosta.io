@@ -35,8 +35,132 @@ class CardGraphQL implements Hook
         add_action('graphql_register_types', [$this, 'registerTypes']);
     }
 
+    /**
+     * SQL fragment for the WHERE/JOIN clauses that drive both the
+     * paginated `cardsByScope` field and the `cardCount` aggregate.
+     * Centralized so the count and the fetch can never drift out of
+     * sync — both filter on identical criteria.
+     *
+     * @return array{joins:string,where:string} Pre-built fragments to
+     *                                          inject into a SELECT.
+     */
+    private function scopeFragments(string $scope): array
+    {
+        global $wpdb;
+
+        // Catalog: in-stock + not in personal collection (the public
+        // /cards browse view). Collection: items flagged as personal
+        // collection (the /collection vault — not for sale, no stock
+        // requirement since the price + Add to Cart row is suppressed).
+        if ($scope === 'COLLECTION') {
+            $joins = "
+                INNER JOIN {$wpdb->postmeta} mpc
+                    ON mpc.post_id = p.ID AND mpc.meta_key = 'is_personal_collection'
+            ";
+            $where = "AND mpc.meta_value = '1'";
+        } else {
+            // CATALOG (default)
+            $joins = "
+                INNER JOIN {$wpdb->postmeta} ms
+                    ON ms.post_id = p.ID AND ms.meta_key = 'stock_quantity'
+                LEFT JOIN {$wpdb->postmeta} mpc
+                    ON mpc.post_id = p.ID AND mpc.meta_key = 'is_personal_collection'
+            ";
+            $where = "AND CAST(ms.meta_value AS UNSIGNED) > 0
+                      AND (mpc.meta_value IS NULL OR mpc.meta_value = '0' OR mpc.meta_value = '')";
+        }
+
+        return ['joins' => $joins, 'where' => $where];
+    }
+
     public function registerTypes(): void
     {
+        // Scope enum used by both `cardCount` and `cardsByScope` to keep
+        // the catalog/collection split consistent across the two queries.
+        register_graphql_enum_type('CardScope', [
+            'description' => 'Which slice of the cards CPT to query: CATALOG = in-stock + non-personal-collection (the /cards browse view); COLLECTION = personal-collection items (the /collection vault).',
+            'values' => [
+                'CATALOG'    => ['value' => 'CATALOG'],
+                'COLLECTION' => ['value' => 'COLLECTION'],
+            ],
+        ]);
+
+        register_graphql_field('RootQuery', 'cardCount', [
+            'type'        => ['non_null' => 'Int'],
+            'description' => 'Total number of cards matching the given scope. Used by the headless storefront to render the catalog count badge before the full card list has finished prefetching.',
+            'args'        => [
+                'scope' => [
+                    'type'        => ['non_null' => 'CardScope'],
+                    'description' => 'Which slice of the catalog to count.',
+                ],
+            ],
+            'resolve'     => function ($source, array $args) {
+                global $wpdb;
+                $scope = $args['scope'] === 'COLLECTION' ? 'COLLECTION' : 'CATALOG';
+                $frag  = $this->scopeFragments($scope);
+
+                $sql = "
+                    SELECT COUNT(*)
+                    FROM {$wpdb->posts} p
+                    {$frag['joins']}
+                    WHERE p.post_type = 'card'
+                      AND p.post_status = 'publish'
+                      {$frag['where']}
+                ";
+
+                return (int) $wpdb->get_var($sql);
+            },
+        ]);
+
+        register_graphql_field('RootQuery', 'cardsByScope', [
+            'type'        => ['list_of' => 'Card'],
+            'description' => 'Paginated list of cards matching the given scope. Returns up to `limit` cards starting at `offset`, ordered by post date descending (matches the existing /cards and /collection sort). Used by the headless storefront to background-prefetch the catalog in batches after the initial server render.',
+            'args'        => [
+                'scope' => [
+                    'type'        => ['non_null' => 'CardScope'],
+                    'description' => 'Which slice of the catalog to return.',
+                ],
+                'limit' => [
+                    'type'        => ['non_null' => 'Int'],
+                    'description' => 'Maximum number of cards to return per call. Capped to 200 server-side.',
+                ],
+                'offset' => [
+                    'type'        => ['non_null' => 'Int'],
+                    'description' => 'Number of cards to skip before starting the slice. Use 0 for the first batch, then loadedCount for each subsequent batch.',
+                ],
+            ],
+            'resolve'     => function ($source, array $args, $context) {
+                global $wpdb;
+                $scope  = $args['scope'] === 'COLLECTION' ? 'COLLECTION' : 'CATALOG';
+                $limit  = max(1, min(200, (int) $args['limit']));
+                $offset = max(0, (int) $args['offset']);
+                $frag   = $this->scopeFragments($scope);
+
+                $sql = "
+                    SELECT p.ID
+                    FROM {$wpdb->posts} p
+                    {$frag['joins']}
+                    WHERE p.post_type = 'card'
+                      AND p.post_status = 'publish'
+                      {$frag['where']}
+                    ORDER BY p.post_date DESC, p.ID DESC
+                    LIMIT %d OFFSET %d
+                ";
+
+                $ids = $wpdb->get_col($wpdb->prepare($sql, $limit, $offset));
+                if (!$ids) {
+                    return [];
+                }
+
+                $posts = array_map(
+                    static fn($id) => DataSource::resolve_post_object((int) $id, $context),
+                    $ids
+                );
+
+                return array_filter($posts);
+            },
+        ]);
+
         register_graphql_field('RootQuery', 'topPricedCards', [
             'type'        => ['list_of' => 'Card'],
             'description' => 'Top N in-stock cards sorted by price descending across the entire catalog. Excludes personal-collection cards (those live on /collection and are not for sale through the standard catalog). Used by the homepage CatalogTeaser and the thank-you page teaser to feature the most expensive available singles without paying the cost of fetching the entire catalog.',
