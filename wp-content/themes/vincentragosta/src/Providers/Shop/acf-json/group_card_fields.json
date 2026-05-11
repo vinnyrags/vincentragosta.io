@@ -226,7 +226,7 @@
             "label": "Personal Collection (Not For Sale)",
             "name": "is_personal_collection",
             "type": "true_false",
-            "instructions": "Tick to flag this card as part of Vinny's personal collection. It surfaces on /collection (not /cards), renders without an Add to Cart button, and accepts Make an Offer submissions. Stripe price fields are ignored.",
+            "instructions": "Tick to flag this card as part of the personal collection (not for sale). It surfaces on /collection (not /cards), renders without an Add to Cart button, and accepts Make an Offer submissions. Stripe price fields are ignored.",
             "default_value": 0,
             "ui": 1,
             "show_in_graphql": 1

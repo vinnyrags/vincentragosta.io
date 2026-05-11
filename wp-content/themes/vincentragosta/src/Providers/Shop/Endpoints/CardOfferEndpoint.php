@@ -15,7 +15,7 @@ use WP_REST_Response;
  * Personal collection cards (is_personal_collection=true) live on /collection
  * and are not for sale through the standard add-to-cart flow. Buyers who want
  * one badly enough can submit an offer with their email + amount + an optional
- * note; the offer is forwarded to Vinny via Nous (Discord DM, falling back to
+ * note; the offer is forwarded to the operator via Nous (Discord DM, falling back to
  * #ops if the DM fails).
  *
  * Routing is fire-and-forget — Nous outage degrades to "buyer sees a generic
@@ -162,7 +162,7 @@ class CardOfferEndpoint extends Endpoint
 
         return new WP_REST_Response([
             'status'  => 'received',
-            'message' => "Got it — Vinny will reach out at {$email}.",
+            'message' => "Got it — I'll reach out at {$email}.",
         ]);
     }
 
