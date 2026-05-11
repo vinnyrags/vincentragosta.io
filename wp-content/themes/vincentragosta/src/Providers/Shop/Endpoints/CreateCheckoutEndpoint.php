@@ -8,6 +8,7 @@ use ChildTheme\Providers\Shop\CardRepository;
 use ChildTheme\Providers\Shop\ProductRepository;
 use ChildTheme\Providers\Shop\Services\StripeService;
 use ChildTheme\Providers\Shop\ShopProvider;
+use ChildTheme\Providers\Shop\Support\TouAcceptance;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -87,6 +88,14 @@ class CreateCheckoutEndpoint extends Endpoint
                 'Cart is empty.',
                 ['status' => 400]
             );
+        }
+
+        // Validate ToS acceptance BEFORE stock decrement / Stripe call.
+        // A buyer who skipped the checkbox (or hit the endpoint directly)
+        // gets a 400 here and never touches stock or Stripe quota.
+        $touMetadata = TouAcceptance::validate($request);
+        if ($touMetadata instanceof WP_Error) {
+            return $touMetadata;
         }
 
         global $wpdb;
@@ -227,9 +236,10 @@ class CreateCheckoutEndpoint extends Endpoint
         $cancelUrl = rest_url('shop/v1/cancel-checkout?token=' . urlencode($cancelToken));
 
         try {
-            $metadata = [
-                'product_ids' => implode(',', $productIds),
-            ];
+            $metadata = array_merge(
+                ['product_ids' => implode(',', $productIds)],
+                $touMetadata
+            );
 
             // Shipping decision:
             //   - All-speculative cart → always skip (buyer pays only the

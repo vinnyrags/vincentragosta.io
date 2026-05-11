@@ -60,6 +60,15 @@ class StripeService
             'success_url' => $successUrl,
             'cancel_url'  => $cancelUrl,
             'metadata'    => $metadata,
+            // Mirror the same metadata onto the underlying PaymentIntent.
+            // Session metadata is NOT automatically copied to the PI;
+            // chargeback disputes are filed against the PI, not the
+            // Session, so we need both to keep ToS-acceptance fields
+            // (terms_version, terms_accepted_at, terms_accepted_ip,
+            // terms_accepted_ua) visible in Stripe's dispute portal.
+            'payment_intent_data' => [
+                'metadata' => $metadata,
+            ],
         ];
 
         if (!$discordLinked) {

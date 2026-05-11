@@ -105,6 +105,14 @@ class StockStateMachineTest extends BaseTestCase
     {
         $request = new WP_REST_Request('POST', '/shop/v1/checkout');
         $request->set_param('items', $items);
+        // Every checkout endpoint now gates on TouAcceptance::validate.
+        // These tests exercise stock-state behavior, not ToS validation —
+        // pass the current accepted version so the gate clears and the
+        // state-machine logic actually runs.
+        $request->set_param(
+            'terms_version',
+            \ChildTheme\Providers\Shop\Support\TouAcceptance::CURRENT_VERSION
+        );
         return $request;
     }
 

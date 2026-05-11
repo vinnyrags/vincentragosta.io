@@ -8,6 +8,7 @@ use ChildTheme\Providers\Shop\Services\StripeService;
 use ChildTheme\Providers\Shop\ShopProvider;
 use ChildTheme\Providers\Shop\Support\PullBoxRepository;
 use ChildTheme\Providers\Shop\Support\QueueRepository;
+use ChildTheme\Providers\Shop\Support\TouAcceptance;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -114,6 +115,12 @@ class PullBoxCheckoutEndpoint extends Endpoint
             );
         }
 
+        // Validate ToS acceptance BEFORE slot claim / Stripe call.
+        $touMetadata = TouAcceptance::validate($request);
+        if ($touMetadata instanceof WP_Error) {
+            return $touMetadata;
+        }
+
         // Pull boxes are livestream entry tickets — they only make sense
         // when a queue session is open. Without that, the buyer would
         // pay but have nowhere to land and no slot in the duck race.
@@ -166,18 +173,24 @@ class PullBoxCheckoutEndpoint extends Endpoint
             }
 
             $quantity = count($slots);
-            $metadata = [
-                'source'              => 'pull_box',
-                'price_id'            => $priceId,
-                'pull_box_id'         => (string) $box['id'],
-                'pull_box_slots'      => implode(',', $slots),
-                'wp_session_placeholder' => $stripeSessionPlaceholder,
-            ];
+            $metadata = array_merge(
+                [
+                    'source'              => 'pull_box',
+                    'price_id'            => $priceId,
+                    'pull_box_id'         => (string) $box['id'],
+                    'pull_box_slots'      => implode(',', $slots),
+                    'wp_session_placeholder' => $stripeSessionPlaceholder,
+                ],
+                $touMetadata
+            );
         } else {
             // Legacy quantity-only flow — the modal hasn't been shipped
             // for this client. Clamp and proceed without a slot claim.
             $quantity = max(1, min(self::MAX_QUANTITY, (int) $request->get_param('quantity')));
-            $metadata = ['source' => 'pull_box', 'price_id' => $priceId];
+            $metadata = array_merge(
+                ['source' => 'pull_box', 'price_id' => $priceId],
+                $touMetadata
+            );
         }
 
         $successUrl = ShopProvider::frontendUrl() . '/thank-you?session_id={CHECKOUT_SESSION_ID}';

@@ -6,6 +6,7 @@ namespace ChildTheme\Providers\Shop\Endpoints;
 
 use ChildTheme\Providers\Shop\Services\StripeService;
 use ChildTheme\Providers\Shop\ShopProvider;
+use ChildTheme\Providers\Shop\Support\TouAcceptance;
 use Mythus\Support\Rest\Endpoint;
 use WP_Error;
 use WP_REST_Request;
@@ -77,6 +78,12 @@ class BundleCheckoutEndpoint extends Endpoint
             );
         }
 
+        // Validate ToS acceptance BEFORE stock decrement / Stripe call.
+        $touMetadata = TouAcceptance::validate($request);
+        if ($touMetadata instanceof WP_Error) {
+            return $touMetadata;
+        }
+
         // ACF stores the number field's value in wp_options as a plain
         // numeric string (e.g. "60"). The atomic UPDATE casts to UNSIGNED
         // for the WHERE so two concurrent buyers can't both succeed when
@@ -98,7 +105,10 @@ class BundleCheckoutEndpoint extends Endpoint
                 [['price' => $configuredPriceId, 'quantity' => 1]],
                 $successUrl,
                 $cancelUrl,
-                ['source' => 'bundle', 'price_id' => $configuredPriceId],
+                array_merge(
+                    ['source' => 'bundle', 'price_id' => $configuredPriceId],
+                    $touMetadata
+                ),
                 false, // skipShipping — bundle is shipped, ride the same weekly batch as orders
                 false,
                 null,
