@@ -82,7 +82,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'Buying during a Livestream',
-                'content' => '<p>During a livestream, the Discord bot drops products, pull boxes, and pack battles in real time with Buy Now buttons. Clicking a button generates a personalized Stripe checkout: it knows your shipping status, applies the correct rate (or skips it if you\'re already covered), and prefills your email if you\'ve bought before.</p><p>Most livestream buyers actually check out from the website — the Discord buttons are an alternative path, not the only way in.</p>',
+                'content' => '<p>The main way to buy during a livestream is the website at <a href="https://itzenzo.tv">itzenzo.tv</a> — same shop, same checkout, same shipping math. Most viewers buy from the website while watching the stream.</p><p>Discord is the alternative path. The bot drops products, pull boxes, and pack battles in real time with Buy Now buttons in the server. Clicking a button generates a personalized Stripe checkout: it knows your shipping status, applies the correct rate (or skips it if you\'re already covered), and prefills your email if you\'ve bought before. Same Stripe destination as the website — just a different door.</p>',
             ],
             [
                 'title'   => 'Pack Battles',
@@ -90,7 +90,7 @@ $pages = [
             ],
             [
                 'title'   => 'Duck Races',
-                'content' => '<p>Every card product purchase automatically enters you in the nightly duck race for a free pack. One entry per buyer regardless of how many items you bought — the more you spend doesn\'t help your odds, but the more often you buy across nights does.</p><p>The race runs as an animation in Discord, takes about 12 seconds, and the winner is completely random.</p>',
+                'content' => '<p>Every card product purchase automatically enters you in the nightly duck race for a free pack. One entry per buyer regardless of how many items you bought — the more you spend doesn\'t help your odds, but the more often you buy across nights does.</p><p>The race runs as an animation in Discord, takes about 30 seconds, and the winner is completely random.</p><p><em>The duck race only runs on nights with at least 2 orders.</em> If only one buyer comes in for the night, there\'s no race — they just get the win quietly.</p>',
             ],
         ],
     ],
@@ -110,7 +110,7 @@ $pages = [
             ],
             [
                 'title'   => 'Hand-inspected, condition on every listing',
-                'content' => '<p>Every card in the catalog is hand-inspected — edges, surface, and centering all reviewed before listing. The condition (NM, LP, MP, HP, or DMG) is shown in the corner of each card in the grid, so you know exactly what you\'re getting before you add it to your cart. Most cards are Near Mint; the rest are labeled accordingly.</p><p>Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and I\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p><p>Graded and vintage cards are still sold ad-hoc in <code>#card-shop</code> on Discord via <code>!sell</code> — they don\'t live in this catalog.</p>',
+                'content' => '<p>Every card in the catalog is hand-inspected — edges, surface, and centering all reviewed before listing. The condition (NM, LP, MP, HP, or DMG) is shown in the corner of each card in the grid, so you know exactly what you\'re getting before you add it to your cart. Most cards are Near Mint; the rest are labeled accordingly.</p><p>Want a closer look at a specific card before buying? Hit <strong>Request to See</strong> on the listing and I\'ll feature it on the next card night so you can inspect it on stream — no commitment.</p>',
             ],
             [
                 'title'   => 'Request to see any card on stream',
