@@ -11,7 +11,6 @@ use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxActiveEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxConfirmEndpoint;
@@ -90,7 +89,6 @@ class ShopProvider extends Provider
         CatalogStripeProductDeactivatedEndpoint::class,
         CreateCheckoutEndpoint::class,
         CurrentPackBattleEndpoint::class,
-        PullBoxActiveEndpoint::class,
         PullBoxCheckoutEndpoint::class,
         PullBoxClaimEndpoint::class,
         PullBoxConfirmEndpoint::class,

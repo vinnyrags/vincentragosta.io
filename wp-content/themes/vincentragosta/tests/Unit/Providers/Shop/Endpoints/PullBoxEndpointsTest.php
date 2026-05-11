@@ -2,7 +2,6 @@
 
 namespace ChildTheme\Tests\Unit\Providers\Shop\Endpoints;
 
-use ChildTheme\Providers\Shop\Endpoints\PullBoxActiveEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxUpdateEndpoint;
@@ -29,17 +28,10 @@ class PullBoxEndpointsTest extends TestCase
     public function endpointShapes(): array
     {
         return [
-            'active' => [PullBoxActiveEndpoint::class, '/pull-boxes/active', 'GET'],
             'create' => [PullBoxCreateEndpoint::class, '/pull-boxes', 'POST'],
             'update' => [PullBoxUpdateEndpoint::class, '/pull-boxes/(?P<id>\d+)', ['PATCH', 'POST']],
             'claim'  => [PullBoxClaimEndpoint::class, '/pull-boxes/(?P<id>\d+)/claim', 'POST'],
         ];
-    }
-
-    public function testActiveIsPublic(): void
-    {
-        $endpoint = (new ReflectionClass(PullBoxActiveEndpoint::class))->newInstanceWithoutConstructor();
-        $this->assertTrue($endpoint->getPermission(new \WP_REST_Request('GET', '/shop/v1/pull-boxes/active')));
     }
 
     public function testWriteEndpointsRequireBotSecret(): void

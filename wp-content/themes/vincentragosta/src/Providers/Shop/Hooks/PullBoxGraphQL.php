@@ -53,9 +53,13 @@ class PullBoxGraphQL implements Hook
 
         register_graphql_field('RootQuery', 'activePullBox', [
             'type'        => 'PullBox',
-            'description' => 'The currently-open pull box, or null if none is open.',
+            'description' => 'The currently-open pull box, auto-creating one from settings if none is open. Returns null only when settings have no pb_price_id / pb_total_slots configured.',
             'resolve'     => function () {
-                $box = $this->repository->findActiveBox();
+                // findOrCreateActiveBox: a buyer hitting the slot picker
+                // between streams (or right after a chase reset) sees a
+                // fresh 0/N grid instead of "no box open", same as the
+                // legacy REST endpoint this query replaced.
+                $box = $this->repository->findOrCreateActiveBox();
                 if (!$box) {
                     return null;
                 }
