@@ -31,6 +31,7 @@ use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
+use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxAdminReset;
@@ -60,6 +61,7 @@ class ShopProvider extends Provider
     protected array $hooks = [
         StockStatusBadge::class,
         CardImageSize::class,
+        CardGraphQL::class,
         PngSubsizesAsJpeg::class,
         ShopSettingsMenuLink::class,
         ShopRedirect::class,
