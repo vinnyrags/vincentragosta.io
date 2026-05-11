@@ -13,20 +13,79 @@ use Mythus\Contracts\Hook;
  * happenings — siblings of the queue/session events that already
  * flow through QueueChangeWebhook.
  *
- * WP-side producers (right now): pull-box slot confirmation. Other
- * activity producers (battles, coupons, community goals, low-stock,
- * pull-box lifecycle) live in Nous and broadcast directly.
+ * WP-side producers: pull-box slot confirmation, plus pull-box
+ * lifecycle (open/close) — these used to broadcast only from Nous's
+ * `/pull` slash command, missing the WP-side paths (admin "Reset Pull
+ * Box" button, auto-create on first homepage hit).
  *
- * Non-blocking — Nous outage cannot delay or fail a slot confirmation.
+ * Non-blocking — Nous outage cannot delay or fail any of the underlying
+ * write paths.
  *
  * Action coverage:
  *   shop_pull_box_slot_claimed → activity.pull_box.claim
+ *   shop_pull_box_created      → activity.pull_box.opened
+ *   shop_pull_box_closed       → activity.pull_box.closed
+ *
+ * Intentionally NOT bridged: shop_pull_box_updated. It fires on every
+ * stock decrement, which would flood the feed.
  */
 class ActivityWebhook implements Hook
 {
     public function register(): void
     {
         add_action('shop_pull_box_slot_claimed', [$this, 'onPullBoxSlotClaimed'], 10, 3);
+        add_action('shop_pull_box_created', [$this, 'onPullBoxCreated'], 10, 1);
+        add_action('shop_pull_box_closed', [$this, 'onPullBoxClosed'], 10, 1);
+    }
+
+    public function onPullBoxCreated(?array $box): void
+    {
+        if (!$box) {
+            return;
+        }
+        $name = (string) ($box['name'] ?? 'Pull Box');
+        $slots = (int) ($box['total_slots'] ?? 0);
+        $priceCents = (int) ($box['price_cents'] ?? 0);
+        $priceLabel = $priceCents > 0
+            ? '$' . number_format($priceCents / 100, 2)
+            : '';
+
+        $description = $slots
+            ? sprintf('%s — %d slots%s', $name, $slots, $priceLabel ? " at {$priceLabel}" : '')
+            : $name;
+
+        $this->dispatch('activity.pull_box.opened', [
+            'kind'        => 'pull_box.opened',
+            'title'       => 'Pull box opened',
+            'description' => $description,
+            'color'       => 'sky',
+            'icon'        => '🎰',
+            'meta'        => [
+                'boxId'      => (int) ($box['id'] ?? 0),
+                'boxName'    => $name,
+                'totalSlots' => $slots,
+                'priceCents' => $priceCents,
+            ],
+        ]);
+    }
+
+    public function onPullBoxClosed(?array $box): void
+    {
+        if (!$box) {
+            return;
+        }
+        $name = (string) ($box['name'] ?? 'Pull Box');
+        $this->dispatch('activity.pull_box.closed', [
+            'kind'        => 'pull_box.closed',
+            'title'       => 'Pull box closed',
+            'description' => sprintf('%s — chase prize hit, fresh box opening shortly.', $name),
+            'color'       => 'sky',
+            'icon'        => '🎰',
+            'meta'        => [
+                'boxId'   => (int) ($box['id'] ?? 0),
+                'boxName' => $name,
+            ],
+        ]);
     }
 
     public function onPullBoxSlotClaimed(?array $box, array $slotNumbers, array $buyerInfo): void
