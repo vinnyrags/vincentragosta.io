@@ -28,6 +28,7 @@ use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSnapshotEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\ShippingStartCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
@@ -102,6 +103,7 @@ class ShopProvider extends Provider
         QueueSessionsListEndpoint::class,
         QueueSnapshotEndpoint::class,
         ShippingLookupEndpoint::class,
+        ShippingStartCheckoutEndpoint::class,
         StockDecrementEndpoint::class,
         StripeWebhookEndpoint::class,
     ];
