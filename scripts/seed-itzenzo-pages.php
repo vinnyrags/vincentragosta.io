@@ -62,15 +62,15 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'Card Nights',
-                'content' => '<p>Monday through Thursday at 8PM EST. Each card night moves through Pokemon, anime, and gaming segments — with After Dark content later in the evening for 18+ viewers.</p>',
+                'content' => '<p>Monday, Tuesday, and Wednesday at 8PM EST. Pokemon and anime, opened live — sealed product, pull boxes, and pack battles. Yu-Gi-Oh inventory is on the way; we\'ll roll it into the rotation as it lands.</p>',
             ],
             [
-                'title'   => 'Gaming Nights',
-                'content' => '<p>Friday through Sunday at 8PM EST. Fortnite squads with the community, Minecraft horror mods, Marvel Rivals, and whatever the community votes for. Family streams with dad are a regular occurrence. Join the Discord for the Minecraft server IP.</p>',
+                'title'   => 'Gaming',
+                'content' => '<p>We game most days — Fortnite squads with the community, Minecraft horror mods, Marvel Rivals, family streams with dad. Timing varies; there are always folks online. Drop into the Discord and check <strong>#looking-for-group</strong> for whatever\'s running.</p>',
             ],
             [
-                'title'   => 'After Dark',
-                'content' => '<p>After the main card night wraps up, the stream shifts to After Dark — our 18+ segment featuring mature-content TCG products. This includes anime cards and playmats with suggestive or adult artwork, sold exclusively to age-verified buyers.</p><p>After Dark only runs on Twitch (with the mature tag enabled) and Instagram. TikTok and YouTube simulcasts end before the After Dark segment begins. In Discord, mature product drops appear in the age-gated channel — you\'ll need the Ena role (18+ verified) to access it.</p>',
+                'title'   => 'After Dark — Coming Soon',
+                'content' => '<p>After Dark is the 18+ side of the shop — anime cards and playmats with mature artwork, sold to age-verified buyers only. The plumbing is built; we\'ll go live with this segment once setup wraps. The <strong>Ena</strong> role in Discord is your gate when it launches.</p>',
             ],
         ],
     ],
@@ -223,7 +223,12 @@ $pages = [
         'slug'          => 'cards',
         'hero_title'    => 'Raw Singles. <strong>Hand-Inspected.</strong>',
         'hero_subtitle' => 'Each card\'s condition is shown right on the listing — and Request to See lets you inspect any card on stream before you buy.',
-        'sections'      => [],
+        'sections'      => [
+            [
+                'title'   => 'Yu-Gi-Oh — Coming Soon',
+                'content' => '<p>Yu-Gi-Oh singles are joining the catalog soon. Pokemon and anime are live today — Yu-Gi-Oh inventory drops as it gets inspected and listed.</p>',
+            ],
+        ],
     ],
     [
         'name'          => 'Collection',
@@ -233,7 +238,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'About this Collection',
-                'content' => '<p><strong>My personal collection.</strong> These cards aren\'t for sale on the storefront — but if you want one badly enough, <strong>Make an Offer</strong> and I\'ll get back to you. Use <strong>Request to See</strong> to have any card featured live during the next stream.</p>',
+                'content' => '<p><strong>My personal collection.</strong> These cards aren\'t for sale on the storefront — but if you want one badly enough, <strong>Make an Offer</strong> and I\'ll get back to you. Use <strong>Request to See</strong> to have any card featured live during the next stream.</p><p><em>Yu-Gi-Oh additions are on the way — vintage WOTC and Japanese pulls land first.</em></p>',
             ],
         ],
     ],

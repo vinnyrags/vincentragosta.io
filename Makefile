@@ -163,6 +163,8 @@ endef
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
 	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
+	seed-stream-schedule seed-stream-schedule-force \
+	seed-stream-schedule-staging seed-stream-schedule-production \
 	seed-pull-boxes seed-pull-boxes-staging seed-pull-boxes-production \
 	nous-import \
 	satis-refresh satis-add satis-remove
@@ -466,6 +468,22 @@ seed-itzenzo-pages-staging: ## Force-overwrite staging Pages repeater
 seed-itzenzo-pages-production: ## Force-overwrite production Pages repeater
 	@echo "Seeding production itzenzo.tv Pages..."
 	$(call remote-wp-eval-with-env,PRODUCTION,seed-itzenzo-pages.php,FORCE=1)
+
+seed-stream-schedule: ## Seed Stream Schedule ACF repeater (refuses to overwrite)
+	@echo "Seeding itzenzo.tv stream schedule (refuses to overwrite existing data)..."
+	ddev wp eval-file scripts/seed-stream-schedule.php
+
+seed-stream-schedule-force: ## Force-overwrite local Stream Schedule repeater
+	@echo "Seeding itzenzo.tv stream schedule (overwriting)..."
+	ddev exec "FORCE=1 wp eval-file scripts/seed-stream-schedule.php"
+
+seed-stream-schedule-staging: ## Force-overwrite staging Stream Schedule repeater
+	@echo "Seeding staging itzenzo.tv stream schedule..."
+	$(call remote-wp-eval-with-env,STAGING,seed-stream-schedule.php,FORCE=1)
+
+seed-stream-schedule-production: ## Force-overwrite production Stream Schedule repeater
+	@echo "Seeding production itzenzo.tv stream schedule..."
+	$(call remote-wp-eval-with-env,PRODUCTION,seed-stream-schedule.php,FORCE=1)
 
 seed-pull-boxes: ## Create/find Pull Box Entry Stripe product + V/VMAX prices, write IDs to local WP
 	@echo "Seeding Pull Box Entry product + prices on Stripe..."
