@@ -17,6 +17,10 @@ $replacements = [
     'is queued for the next ship day and confirmed in Discord.'
         => 'is queued for the next ship day and confirmed by email — a Stripe receipt lands the moment payment clears, and a follow-up email confirms shipping when the label is printed. Linked Discord accounts also get the confirmation as a DM.',
 
+    // Production wpautop-emitted variant: paragraphs separated by literal \n
+    'and tracking DMs sent directly to you.</p>' . "\n" . '<p>You can buy without linking — the experience is just better when you do.'
+        => 'and tracking DMs sent directly to you.</p>' . "\n" . '<p>Discord linking is optional. Every order ships with email tracking by default — Discord just adds a faster real-time channel for status pings, queue callouts, and ship-day notifications. You can buy without linking; the experience is just richer when you do.',
+    // Seed-file variant (no whitespace between paragraphs) — covers fresh-env seeds
     'and tracking DMs sent directly to you.</p><p>You can buy without linking — the experience is just better when you do.'
         => 'and tracking DMs sent directly to you.</p><p>Discord linking is optional. Every order ships with email tracking by default — Discord just adds a faster real-time channel for status pings, queue callouts, and ship-day notifications. You can buy without linking; the experience is just richer when you do.',
 
