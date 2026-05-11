@@ -258,7 +258,7 @@ $pages = [
             ],
             [
                 'title'   => 'Channels at a glance',
-                'content' => '<p>The server is organized into seven categories so you can mute what you don\'t want and follow what you do:</p><ul><li><strong>INFO</strong> — announcements, server guide, rules, schedule.</li><li><strong>SHOP</strong> — flash sales, pull box drops, in-stock pings, ship-day updates.</li><li><strong>CARDS</strong> — pack battles, duck races, <code>#card-shop</code> for graded and vintage singles.</li><li><strong>GAMING</strong> — <code>#minecraft</code> realm invites, Fortnite squad calls, gacha chat, tournaments.</li><li><strong>COMMUNITY</strong> — general hangout, intros, off-topic, clips.</li><li><strong>AFTER DARK</strong> — 18+ only, unlocked with the Ena role after age verification.</li><li><strong>COMMAND CENTER</strong> — bot logs and command surface for power users.</li></ul>',
+                'content' => '<p>The server is organized into six categories so you can mute what you don\'t want and follow what you do:</p><ul><li><strong>INFO</strong> — announcements, server guide, rules, schedule.</li><li><strong>SHOP</strong> — flash sales, pull box drops, in-stock pings, ship-day updates.</li><li><strong>CARDS</strong> — pack battles, duck races, <code>#card-shop</code> for graded and vintage singles.</li><li><strong>GAMING</strong> — <code>#minecraft</code> realm invites, Fortnite squad calls, gacha chat, tournaments.</li><li><strong>COMMUNITY</strong> — general hangout, intros, off-topic, clips.</li><li><strong>AFTER DARK</strong> — 18+ only, unlocked with the Ena role after age verification.</li></ul>',
             ],
             [
                 'title'   => 'Roles — earn them by showing up',
@@ -270,7 +270,7 @@ $pages = [
             ],
             [
                 'title'   => 'Card nights in Discord',
-                'content' => '<p>Monday through Thursday, 8–10 PM EST, Discord lights up. The live queue posts in real time, pack battles and duck races run in their own channels, and the bot drops products as they hit the table. See <a href="/how-it-works/livestream">how livestream buying works</a> for the full flow.</p>',
+                'content' => '<p>Monday, Tuesday, and Wednesday at 8 PM EST, Discord lights up. The live queue posts in real time, pack battles and duck races run in their own channels, and the bot drops products as they hit the table. See <a href="/how-it-works/livestream">how livestream buying works</a> for the full flow.</p>',
             ],
             [
                 'title'   => 'The Discord card shop',
