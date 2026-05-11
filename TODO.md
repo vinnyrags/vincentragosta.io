@@ -2,7 +2,6 @@
 - finish sign up with carter pulse, need creator hub code
 
 ## ITZENZO.TV
-- production orphan-cleanup workflow for cards — when a row is deleted from the Singles Sheet, `push-cards.js` (without `--clean`) leaves the corresponding Stripe product active, and `pull-cards-production` (which doesn't carry a `.clean` flag, intentionally — payment history blocks live-mode delete) leaves the WP post around. Result: the deleted card stays purchasable. Manual cleanup is `wp post delete <id> --force` + `curl POST https://api.stripe.com/v1/products/<id> -d active=false`. Wrap this in a `make remove-card NAME=...` target (or per-stripe-id remover) that does both atomically. First applied this manually for Leafeon V $20 / `prod_UOF2KpPFAMm3G2` on 2026-05-04.
 - automate `make rebuild-staging-catalog` — currently a placeholder that prints manual steps. After live cutover, the manual procedure (wipe `stripe_product_id`/`stripe_price_id` post meta on staging, re-run `push-products.js`/`push-cards.js` against staging WP with `sk_test_*`) becomes routine. Wrap it in a single make target. Trigger: first time we hit a real cross-mode push need.
 
 - new image for one piece vol 5, change evolving skies ETB stock to 2

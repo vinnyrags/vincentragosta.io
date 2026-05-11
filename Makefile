@@ -160,7 +160,7 @@ endef
 	pull-products pull-products-publish pull-products-staging \
 	push-cards pull-cards pull-cards-publish \
 	pull-cards-staging pull-cards-production \
-	sync-cards sync-cards-staging sync-cards-production \
+	sync-cards sync-cards-staging sync-cards-production remove-card \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
@@ -488,6 +488,24 @@ sync-cards-production: ## Full card pipeline → production WP (Sheets → Strip
 	@$(MAKE) --no-print-directory push-cards
 	@$(MAKE) --no-print-directory pull-cards-production
 	@echo "✓ Card pipeline complete (production)"
+
+# Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
+# product (idempotent — already-archived returns 200) AND deletes the
+# WP post in one shot. Either STRIPE_ID or WP_ID is sufficient; the
+# other is auto-resolved from postmeta (key=stripe_product_id).
+# Stripe is archived first — a failed Stripe call leaves the WP post
+# intact so the operator can retry instead of dealing with a half-
+# cleaned state.
+remove-card: ## Remove an orphan card from production (archive Stripe + delete WP post atomically)
+	@if [ -z "$(STRIPE_ID)" ] && [ -z "$(WP_ID)" ]; then \
+		echo "Usage: make remove-card STRIPE_ID=prod_xxx [WP_ID=123]"; \
+		echo "   or: make remove-card WP_ID=123 [STRIPE_ID=prod_xxx]"; \
+		echo ""; \
+		echo "Either input is sufficient — the other is auto-resolved"; \
+		echo "from WP postmeta on production (key: stripe_product_id)."; \
+		exit 1; \
+	fi
+	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/remove-card.sh
 
 ##@ Card image migration
 
