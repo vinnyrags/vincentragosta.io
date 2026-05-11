@@ -102,7 +102,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'Buying from the Shop',
-                'content' => '<p>Browse products anytime at itzenzo.tv. Add what you want to your cart and check out via Stripe — no account required. Your email is saved locally so future visits skip the shipping prompt and apply your existing shipping coverage automatically.</p><p>Every order — whether placed from the website or during a livestream — is queued for the next ship day and confirmed in Discord.</p>',
+                'content' => '<p>Browse products anytime at itzenzo.tv. Add what you want to your cart and check out via Stripe — no account required. Your email is saved locally so future visits skip the shipping prompt and apply your existing shipping coverage automatically.</p><p>Every order — whether placed from the website or during a livestream — is queued for the next ship day and confirmed by email — a Stripe receipt lands the moment payment clears, and a follow-up email confirms shipping when the label is printed. Linked Discord accounts also get the confirmation as a DM.</p>',
             ],
             [
                 'title'   => 'Card Singles Catalog',
@@ -126,7 +126,7 @@ $pages = [
             ],
             [
                 'title'   => 'Discord Account Linking',
-                'content' => '<p>Enter your Discord username at checkout (or use the Buy Now buttons in Discord) to link your purchases to your Discord account. Linking unlocks: automatic role promotions as you hit purchase milestones, your name in the live queue and duck race rosters, and tracking DMs sent directly to you.</p><p>You can buy without linking — the experience is just better when you do.</p>',
+                'content' => '<p>Enter your Discord username at checkout (or use the Buy Now buttons in Discord) to link your purchases to your Discord account. Linking unlocks: automatic role promotions as you hit purchase milestones, your name in the live queue and duck race rosters, and tracking DMs sent directly to you.</p><p>Discord linking is optional. Every order ships with email tracking by default — Discord just adds a faster real-time channel for status pings, queue callouts, and ship-day notifications. You can buy without linking; the experience is just richer when you do.</p>',
             ],
             [
                 'title'   => 'Payment Security',
@@ -138,7 +138,7 @@ $pages = [
         'name'          => 'How It Works — Shipping',
         'slug'          => 'how-it-works-shipping',
         'hero_title'    => 'Shipping <strong>&amp; Delivery</strong>',
-        'hero_subtitle' => 'Flat-rate shipping, a predictable schedule, and tracking DMs that land the moment a label is printed.',
+        'hero_subtitle' => 'Flat-rate shipping, a predictable schedule, and tracking updates by email and Discord DM the moment a label is printed.',
         'sections'      => [
             [
                 'title'   => 'Why Flat-Rate Shipping?',
@@ -146,7 +146,7 @@ $pages = [
             ],
             [
                 'title'   => 'Shipping Schedule',
-                'content' => '<p>Domestic orders ship every Monday. International orders ship at the end of each month. Your shipping coverage is checked automatically at checkout using your email — if you\'ve already paid for the period, your next order ships free.</p><p>The moment a shipping label is purchased, a tracking number is automatically posted to your Discord DMs along with a link to follow your package. No need to ask — it just shows up.</p><p>International buyers can DM anytime to ship sooner if you don\'t want to wait for the month-end batch.</p>',
+                'content' => '<p>Domestic orders ship every Monday. International orders ship at the end of each month. Your shipping coverage is checked automatically at checkout using your email — if you\'ve already paid for the period, your next order ships free.</p><p>The moment a shipping label is purchased, a tracking number is automatically emailed to you and (if you&#8217;ve linked Discord) posted to your DMs, along with a link to follow your package. No need to ask — it just shows up.</p><p>International buyers can DM anytime to ship sooner if you don\'t want to wait for the month-end batch.</p>',
             ],
             [
                 'title'   => 'Held Inventory & Items Opened on Stream',
@@ -250,7 +250,7 @@ $pages = [
         'sections'      => [
             [
                 'title'   => 'A Discord-first community',
-                'content' => '<p>itzenzo.tv is a livestream shop, but the community lives in Discord. <strong>Over 1,000 members</strong> show up for card nights, pack battles, duck races, Minecraft realms, and weekend tournaments. Every live queue, flash sale, pack battle entry, and tracking DM flows through Discord — when you join the server, you join everything.</p>',
+                'content' => '<p>itzenzo.tv is a livestream shop, but the community lives in Discord. <strong>Over 1,000 members</strong> show up for card nights, pack battles, duck races, Minecraft realms, and weekend tournaments. Every live queue, flash sale, pack battle entry, and tracking update flows through email and Discord — when you join the server, you join everything.</p>',
             ],
             [
                 'title'   => 'Joining in 30 seconds',
