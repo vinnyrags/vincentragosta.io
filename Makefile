@@ -160,7 +160,7 @@ endef
 	pull-products pull-products-publish pull-products-staging \
 	push-cards pull-cards pull-cards-publish \
 	pull-cards-staging pull-cards-production \
-	sync-cards sync-cards-staging sync-cards-production remove-card \
+	sync-cards sync-cards-staging sync-cards-production remove-card update-stock \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
@@ -506,6 +506,29 @@ remove-card: ## Remove an orphan card from production (archive Stripe + delete W
 		exit 1; \
 	fi
 	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/remove-card.sh
+
+# Atomic stock adjustment for a single card or product. Updates
+# Stripe metadata.stock + WP stock_quantity + triggers Next.js ISR
+# revalidation. Either STRIPE_ID or WP_ID is sufficient; the other
+# is auto-resolved from postmeta. Does NOT touch the Google Sheet
+# — update that manually as source of truth so the next sync-cards-*
+# / sync-products doesn't revert this change.
+update-stock: ## Set stock for a card or product (Stripe + WP + Next.js revalidate)
+	@if [ -z "$(STOCK)" ]; then \
+		echo "Usage: make update-stock STRIPE_ID=prod_xxx STOCK=N"; \
+		echo "   or: make update-stock WP_ID=123 STOCK=N"; \
+		echo ""; \
+		echo "STOCK must be a non-negative integer."; \
+		echo "Either STRIPE_ID or WP_ID is sufficient — the other is auto-resolved."; \
+		echo "Does NOT touch the Google Sheet — update that manually as source of truth."; \
+		exit 1; \
+	fi
+	@if [ -z "$(STRIPE_ID)" ] && [ -z "$(WP_ID)" ]; then \
+		echo "Usage: make update-stock STRIPE_ID=prod_xxx STOCK=N"; \
+		echo "   or: make update-stock WP_ID=123 STOCK=N"; \
+		exit 1; \
+	fi
+	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' STOCK='$(STOCK)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/update-stock.sh
 
 ##@ Card image migration
 
