@@ -84,6 +84,22 @@ class BundleCheckoutEndpoint extends Endpoint
             return $touMetadata;
         }
 
+        // Pre-flight Stripe price check BEFORE stock decrement. Catches
+        // the mode-mismatch / archived-price case so we fail fast with a
+        // useful message instead of decrementing stock, throwing on
+        // Stripe, and rolling stock back. Same defense the cart uses.
+        if ($this->stripe->findFirstInactivePriceId([$configuredPriceId]) !== null) {
+            error_log(sprintf(
+                '[BundleCheckout] inactive priceId on pre-flight: %s',
+                $configuredPriceId
+            ));
+            return new WP_Error(
+                'bundle_unavailable',
+                "The English Bundle isn't available right now — the operator has been notified. Try again in a moment.",
+                ['status' => 503, 'priceId' => $configuredPriceId]
+            );
+        }
+
         // ACF stores the number field's value in wp_options as a plain
         // numeric string (e.g. "60"). The atomic UPDATE casts to UNSIGNED
         // for the WHERE so two concurrent buyers can't both succeed when
@@ -131,10 +147,29 @@ class BundleCheckoutEndpoint extends Endpoint
             // Roll the stock decrement back so the buyer doesn't see a
             // sold-out widget after a transient Stripe failure.
             $this->incrementBundleStock();
+
+            // Log the real exception so this never silently disappears.
+            error_log(sprintf(
+                '[BundleCheckout] %s: %s | priceId=%s',
+                get_class($e),
+                $e->getMessage(),
+                $configuredPriceId
+            ));
+
+            // Backstop for the inactive-price race (pre-flight passed
+            // but Stripe archived between then and now).
+            if (preg_match('/No such price: `?(price_[A-Za-z0-9]+)`?/', $e->getMessage())) {
+                return new WP_Error(
+                    'bundle_unavailable',
+                    "The English Bundle isn't available right now — the operator has been notified. Try again in a moment.",
+                    ['status' => 503, 'priceId' => $configuredPriceId]
+                );
+            }
+
             return new WP_Error(
                 'checkout_failed',
-                'Failed to create checkout session.',
-                ['status' => 500]
+                'Could not start checkout: ' . $e->getMessage(),
+                ['status' => 502]
             );
         }
     }

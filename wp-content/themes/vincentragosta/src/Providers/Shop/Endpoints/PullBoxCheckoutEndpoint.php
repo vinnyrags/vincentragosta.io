@@ -132,6 +132,23 @@ class PullBoxCheckoutEndpoint extends Endpoint
             );
         }
 
+        // Pre-flight Stripe price check BEFORE slot claim. Catches the
+        // mode-mismatch / archived-price case so we fail fast with a
+        // useful message instead of claiming slots, throwing on Stripe,
+        // and leaving the buyer with a generic 500 + stuck slot rows.
+        // Same defense the cart uses (CreateCheckoutEndpoint :126).
+        if ($this->stripe->findFirstInactivePriceId([$priceId]) !== null) {
+            error_log(sprintf(
+                '[PullBoxCheckout] inactive priceId on pre-flight: %s',
+                $priceId
+            ));
+            return new WP_Error(
+                'pull_box_unavailable',
+                "The pull box isn't available right now — the operator has been notified. Try again in a moment.",
+                ['status' => 503, 'priceId' => $priceId]
+            );
+        }
+
         // Slot-based flow: buyer picked specific slot numbers in the
         // homepage modal. We claim them in WP before creating the
         // Stripe session so two buyers can't double-claim the same slot.
@@ -237,10 +254,39 @@ class PullBoxCheckoutEndpoint extends Endpoint
 
             return new WP_REST_Response(['url' => $session->url]);
         } catch (\Throwable $e) {
+            // Log the real exception so this never silently disappears
+            // again. Mirrors the CreateCheckoutEndpoint pattern.
+            error_log(sprintf(
+                '[PullBoxCheckout] %s: %s | priceId=%s | slots=%s',
+                get_class($e),
+                $e->getMessage(),
+                $priceId,
+                empty($slots) ? '-' : implode(',', $slots)
+            ));
+
+            // Release any slots we claimed before the throw so the buyer
+            // can retry and other buyers see the slot as open. Without
+            // this, every Stripe failure burns slots until manual cleanup.
+            if (!empty($slots) && !empty($metadata['wp_session_placeholder'])) {
+                $this->pullBoxRepository->releaseClaimsByStripeSession(
+                    $metadata['wp_session_placeholder']
+                );
+            }
+
+            // Backstop for the inactive-price race (pre-flight passed but
+            // Stripe archived between then and now). Same outcome.
+            if (preg_match('/No such price: `?(price_[A-Za-z0-9]+)`?/', $e->getMessage())) {
+                return new WP_Error(
+                    'pull_box_unavailable',
+                    "The pull box isn't available right now — the operator has been notified. Try again in a moment.",
+                    ['status' => 503, 'priceId' => $priceId]
+                );
+            }
+
             return new WP_Error(
                 'checkout_failed',
-                'Failed to create checkout session.',
-                ['status' => 500]
+                'Could not start checkout: ' . $e->getMessage(),
+                ['status' => 502]
             );
         }
     }
