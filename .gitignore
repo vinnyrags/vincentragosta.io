@@ -8,6 +8,7 @@ scripts/.publish
 .idea
 .DS_Store
 .phpunit.result.cache
+.claude
 
 vendor
 !wp-content/themes/*/src/Providers/*/assets/**/vendor

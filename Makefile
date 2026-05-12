@@ -161,6 +161,7 @@ endef
 	push-cards pull-cards pull-cards-publish \
 	pull-cards-staging pull-cards-production \
 	sync-cards sync-cards-staging sync-cards-production remove-card update-stock \
+	release-stuck-pull-box-slots \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
@@ -529,6 +530,14 @@ update-stock: ## Set stock for a card or product (Stripe + WP + Next.js revalida
 		exit 1; \
 	fi
 	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' STOCK='$(STOCK)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/update-stock.sh
+
+# Manual safety valve for wp-pending-* slot rows that get stuck when a
+# pull-box checkout's Stripe call throws after the slot claim. The
+# endpoint now releases on failure automatically, so this should rarely
+# need running — keep it around for the older drift period and any
+# future races that escape the catch-block release.
+release-stuck-pull-box-slots: ## Release any wp-pending-* pull-box slot claims (idempotent; flushes Redis)
+	@ssh $(PRODUCTION_HOST) "WP_PATH='$(PRODUCTION_WP)' bash" < scripts/release-stuck-pull-box-slots.sh
 
 ##@ Card image migration
 
