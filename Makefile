@@ -160,7 +160,7 @@ endef
 	pull-products pull-products-publish pull-products-staging \
 	push-cards pull-cards pull-cards-publish \
 	pull-cards-staging pull-cards-production \
-	sync-cards sync-cards-staging sync-cards-production remove-card update-stock \
+	sync-cards sync-cards-staging sync-cards-production push-cards-production remove-card update-stock \
 	release-stuck-pull-box-slots \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles lint-singles audit-alt-art backup-singles \
@@ -483,11 +483,23 @@ sync-cards-staging: ## Full card pipeline → staging WP (Sheets → Stripe → 
 	@$(MAKE) --no-print-directory pull-cards-staging
 	@echo "✓ Card pipeline complete (staging)"
 
-sync-cards-production: ## Full card pipeline → production WP (Sheets → Stripe → production)
-	@echo "Pre-flight: checking local + production Stripe key modes match..."
-	$(call check-stripe-mode-match,PRODUCTION,production)
-	@$(MAKE) --no-print-directory push-cards
-	@$(MAKE) --no-print-directory pull-cards-production
+# Production-targeted variant of `push-cards`. Unlike `push-cards` —
+# which reads STRIPE_SECRET_KEY from local DDEV's wp-config — this
+# fetches the live key from production's /opt/nous-bot/.env via SSH,
+# so the operator doesn't have to swap local DDEV modes just to push
+# the Sheet to live Stripe. Same pattern as update-stock.sh's key
+# resolution. Production is ALWAYS in live mode by definition, so the
+# mode-match guard isn't applicable here.
+push-cards-production: ## Push Singles Sheet → live-mode Stripe (uses prod's live key, not local DDEV's)
+	@echo "Pulling live Stripe key from production droplet..."
+	@LIVE_KEY=$$(ssh $(PRODUCTION_HOST) "grep '^STRIPE_SECRET_KEY=' /opt/nous-bot/.env | cut -d= -f2-") ; \
+	if [ "$${LIVE_KEY:0:8}" != "sk_live_" ]; then \
+		echo "Error: expected sk_live_* from production, got: $${LIVE_KEY:0:12}..."; exit 1; \
+	fi ; \
+	echo "  ✓ Live key acquired" ; \
+	cd ../Nous/scripts/shop && STRIPE_SECRET_KEY="$$LIVE_KEY" node push-cards.js $(ARGS)
+
+sync-cards-production: push-cards-production pull-cards-production ## Full card pipeline → production WP (Sheets → live Stripe → production)
 	@echo "✓ Card pipeline complete (production)"
 
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
