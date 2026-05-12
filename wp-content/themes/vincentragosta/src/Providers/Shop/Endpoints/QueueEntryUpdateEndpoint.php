@@ -71,6 +71,10 @@ class QueueEntryUpdateEndpoint extends Endpoint
             'detail_data' => [
                 'required' => false,
             ],
+            'session_id' => [
+                'required' => false,
+                'type'     => 'integer',
+            ],
         ];
     }
 
@@ -104,6 +108,18 @@ class QueueEntryUpdateEndpoint extends Endpoint
                 }
             }
             $update['detail_data'] = $detailData;
+        }
+
+        // session_id lets the bot carry unfinished entries from a closing
+        // session into the new one during /offline. Validate the target
+        // session exists so a bot bug can't park entries against a phantom
+        // session_id.
+        if ($request->has_param('session_id')) {
+            $sessionId = (int) $request->get_param('session_id');
+            if ($sessionId < 1 || !$this->repository->findSession($sessionId)) {
+                return new WP_Error('invalid_session', 'Target session does not exist.', ['status' => 400]);
+            }
+            $update['session_id'] = $sessionId;
         }
 
         if (empty($update)) {

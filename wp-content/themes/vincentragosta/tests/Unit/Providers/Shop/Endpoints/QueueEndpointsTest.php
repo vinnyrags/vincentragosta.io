@@ -103,6 +103,34 @@ class QueueEndpointsTest extends TestCase
         $this->assertFalse($args['status']['required']);
     }
 
+    public function testEntryUpdateAcceptsSessionIdMigration(): void
+    {
+        // The /offline command needs to carry unfinished RTS entries
+        // forward when it closes one session and opens the next. Without
+        // session_id as an updatable field, those entries get orphaned
+        // in the closed session and disappear from /queue. The arg must
+        // be exposed AND validated as an integer.
+        $reflection = new ReflectionClass(QueueEntryUpdateEndpoint::class);
+        $endpoint = $reflection->newInstanceWithoutConstructor();
+        $args = $reflection->getMethod('getArgs')->invoke($endpoint);
+
+        $this->assertArrayHasKey('session_id', $args);
+        $this->assertFalse($args['session_id']['required']);
+        $this->assertSame('integer', $args['session_id']['type']);
+
+        // Pin the source — the callback must validate the target
+        // session exists (a bot bug otherwise could park entries
+        // against a phantom session_id and lose them forever).
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../src/Providers/Shop/Endpoints/QueueEntryUpdateEndpoint.php'
+        );
+        $this->assertStringContainsString(
+            "\$this->repository->findSession(\$sessionId)",
+            $source,
+            'Callback must verify target session exists before migrating an entry into it'
+        );
+    }
+
     public function testEntryRefundEndpointRequiresStripeSessionId(): void
     {
         $reflection = new ReflectionClass(QueueEntryRefundEndpoint::class);

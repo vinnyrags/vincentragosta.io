@@ -264,6 +264,15 @@ class QueueRepository
             $format[] = '%s';
         }
 
+        // session_id is updatable so /offline can carry unfinished entries
+        // forward across a session close → open cycle. Without this, RTS
+        // entries that didn't get served on stream get orphaned in the
+        // closed session and invisible to /queue forever.
+        if (isset($data['session_id'])) {
+            $update['session_id'] = (int) $data['session_id'];
+            $format[] = '%d';
+        }
+
         if (empty($update)) {
             return false;
         }
