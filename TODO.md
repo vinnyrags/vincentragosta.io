@@ -2,12 +2,13 @@
 - finish sign up with carter pulse, need creator hub code
 
 ## ITZENZO.TV
+- need to get tiktok shop up and running immediately
+- smoky added two request to see cards to the queue, when i went to waive his shipping, it said he needed to link an account
+- RTS does not work in discord queue
 - automate `make rebuild-staging-catalog` — currently a placeholder that prints manual steps. After live cutover, the manual procedure (wipe `stripe_product_id`/`stripe_price_id` post meta on staging, re-run `push-products.js`/`push-cards.js` against staging WP with `sk_test_*`) becomes routine. Wrap it in a single make target. Trigger: first time we hit a real cross-mode push need.
-
-- new image for one piece vol 5, change evolving skies ETB stock to 2
+- we should allow for the opportunity for folks to submit a note on purchase, idk if stripe has this sort of thing built in, and we can capture it for my review when looking at their order (maybe some flavor of displaying the note in the queue)
+- new image for one piece vol 5
 - if we look at the cache work we did for celebrityautobiography.com, are there any cues we can take from there and apply to either itzenzo.tv or vincentragosta.io frontend?
-- grimmsnarl V sv116/sv122 needs to bump stock to 2
-- nightly cron on production that runs `node scripts/shop/audit-stripe-active.js --apply` to keep WP catalog and Stripe in sync — auto-stocks=0 + clears stale stripe IDs whenever a Stripe product becomes inactive between syncs. Posts a one-line summary to `#ops` Discord. Belt for the existing pre-flight + webhook layers; catches anything they miss. is there an opportunity here to have staging be synced with production as well (ensuring staging always matches production)
 - could we explore a potentially better mobile experience, currently its scroll-galore for both shops, the experience, while each card looks great, as a whole is completely unrealistic to vertically scroll through 1000+ cards or even 200+ boxes/packs on a mobile screen. wondering if we go back to two columns on mobile and display less information maybe? this still doesnt really solve the problem, but i guess its okay to infinitely scroll, having to have them search only on mobile is also not a good UI. its probably fine I think, we should just look into potentially having two cards per row displayed, title and price maybe only? let me know what you are thinking, dont implement anything yet lets talk through this. i also wonder if we can simplify the buttons on mobile, have a cart icon instead of add to cart, and just have "request" instead of request to see, and have the buttons be side by side instead of stacked.
 - DISCORD: pull boxes are going to be 50 cards in the box, i noticed our discord messaging shows white boxes for each slot in the pull box, I am not sure we should do this, I like the idea of keeping the claims X out of X display, but wonder if it may be too much to have 125 boxes like we have 5 in our test currently
 - consider moving the giveaway stuff to the website (as opposed to in discord), is it possible to build a duck race on my website? I am sure this is quite involved, but its a fairly simple concept
