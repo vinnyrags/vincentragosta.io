@@ -154,4 +154,46 @@ class QueueRepositoryTest extends TestCase
             'completed_at'      => null,
         ], $overrides);
     }
+
+    public function testUniqueBuyersSqlGroupsByCustomerEmailWithFallback(): void
+    {
+        // Duck race roster bug discovered 2026-05-12: queue #1 showed
+        // "Duck race roster (1)" when three buyers had purchased. Root
+        // cause was an `ORDER BY MIN(created_at)` aggregate without a
+        // GROUP BY in uniqueBuyers — strict MySQL modes collapsed the
+        // whole result set into one row.
+        //
+        // Pin the fix via source inspection: WorDBless can't simulate
+        // $wpdb->get_results, so this is the cheapest reliable contract
+        // assertion. The two failure modes to catch:
+        //
+        //   1. Missing GROUP BY → broken aggregate, collapses to 1 row.
+        //   2. Wrong COALESCE order on the dedup key → buyers with both
+        //      a discord_user_id and an email get counted twice (once
+        //      per identifier) when they should dedup to one row.
+        $source = file_get_contents(
+            __DIR__ . '/../../../../../src/Providers/Shop/Support/QueueRepository.php'
+        );
+
+        // Dedup key must lead with customer_email — that's the most
+        // universal identifier (set on every checkout via Stripe). If
+        // it's flipped back to discord_user_id-first, a buyer who
+        // RTS-submitted (no user_id) + later checked out (with user_id)
+        // gets counted as two distinct duck race entries.
+        $this->assertMatchesRegularExpression(
+            '/GROUP\s+BY\s+COALESCE\(customer_email,\s*discord_user_id,\s*discord_handle\)/i',
+            $source,
+            'uniqueBuyers must GROUP BY customer_email as the canonical dedup key'
+        );
+
+        // Display column must prefer discord_user_id → discord_handle →
+        // customer_email so the embed renders mentions when possible,
+        // handles when only the username is known, and falls back to
+        // email only when nothing else exists.
+        $this->assertMatchesRegularExpression(
+            '/COALESCE\(MAX\(discord_user_id\),\s*MAX\(discord_handle\),\s*MAX\(customer_email\)\)/i',
+            $source,
+            'uniqueBuyers must prefer discord_user_id → discord_handle → customer_email for display'
+        );
+    }
 }

@@ -459,10 +459,20 @@ class QueueRepository
     }
 
     /**
-     * Unique buyers in a session — Discord user ID preferred, falls back to email.
-     * Returns array of ['buyer' => identifier] for compatibility with the existing
-     * Nous duck race shape. Excludes refunded entries: a refunded buyer got their
-     * money back and can't be eligible for the race.
+     * Unique buyers in a session, deduped by Stripe customer_email (the
+     * most universal key — set on every checkout regardless of Discord
+     * link). For each deduped buyer, returns the best DISPLAY key:
+     * discord_user_id (renders as @mention in the embed) → discord_handle
+     * (@plaintext handle) → customer_email (fallback). Excludes refunded
+     * and skipped entries.
+     *
+     * Returns array of ['buyer' => identifier] for compatibility with the
+     * existing Nous duck race shape.
+     *
+     * Previous version used a broken `ORDER BY MIN(created_at)` aggregate
+     * with no GROUP BY, which silently collapsed the whole result to one
+     * row in stricter MySQL modes. Discovered 2026-05-12 — queue #1 showed
+     * "Duck race roster (1)" when there were two distinct buyers.
      */
     public function uniqueBuyers(int $sessionId): array
     {
@@ -471,12 +481,14 @@ class QueueRepository
 
         $rows = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT DISTINCT COALESCE(discord_user_id, customer_email) AS buyer
+                "SELECT COALESCE(MAX(discord_user_id), MAX(discord_handle), MAX(customer_email)) AS buyer,
+                        MIN(created_at) AS first_seen
                  FROM {$table}
                  WHERE session_id = %d
                    AND status NOT IN ('skipped', 'refunded')
-                   AND COALESCE(discord_user_id, customer_email) IS NOT NULL
-                 ORDER BY MIN(created_at) ASC",
+                   AND COALESCE(customer_email, discord_user_id, discord_handle) IS NOT NULL
+                 GROUP BY COALESCE(customer_email, discord_user_id, discord_handle)
+                 ORDER BY first_seen ASC",
                 $sessionId
             ),
             ARRAY_A
