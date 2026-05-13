@@ -90,7 +90,7 @@ $pages = [
             ],
             [
                 'title'   => 'Duck Races',
-                'content' => '<p>Every card product purchase automatically enters you in the nightly duck race for a free pack. One entry per buyer regardless of how many items you bought — the more you spend doesn\'t help your odds, but the more often you buy across nights does.</p><p>The race runs as an animation in Discord, takes about 30 seconds, and the winner is completely random.</p><p><em>The duck race only runs on nights with at least 2 orders.</em> If only one buyer comes in for the night, there\'s no race — they just get the win quietly.</p>',
+                'content' => '<p>Every card product purchase automatically enters you in the nightly duck race. One entry per unique buyer regardless of how many items you bought — the more you spend doesn\'t help your odds, but the more often you buy across nights does. The winner takes home the night\'s prize — what it is varies stream to stream (a pack, a card from the catalog, a playmat, a coupon — operator\'s call based on the stash that night).</p><p>The race runs as an animation in Discord, takes about 30 seconds, and the winner is completely random.</p><p><em>The duck race only runs on nights with at least 2 orders.</em> If only one buyer comes in for the night, there\'s no race — they just get the win quietly.</p>',
             ],
         ],
     ],
