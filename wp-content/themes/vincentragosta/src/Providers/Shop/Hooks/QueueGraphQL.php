@@ -59,12 +59,33 @@ class QueueGraphQL implements Hook
         register_graphql_object_type('QueueSession', [
             'description' => 'A queue session — one livestream window.',
             'fields'      => [
-                'id'                    => ['type' => ['non_null' => 'Int']],
-                'status'                => ['type' => ['non_null' => 'String'], 'description' => 'open | closed | racing | complete'],
-                'channelMessageId'     => ['type' => 'String'],
-                'duckRaceWinnerUserId' => ['type' => 'String'],
-                'createdAt'            => ['type' => ['non_null' => 'String']],
-                'closedAt'             => ['type' => 'String'],
+                'id'                          => ['type' => ['non_null' => 'Int']],
+                'status'                      => ['type' => ['non_null' => 'String'], 'description' => 'open | closed | racing | complete'],
+                'channelMessageId'            => ['type' => 'String', 'description' => 'Discord message ID for the persistent #queue embed.'],
+                'duckRaceChannelMessageId'    => ['type' => 'String', 'description' => 'Discord message ID for the persistent #duck-race roster embed.'],
+                'duckRaceWinnerUserId'        => ['type' => 'String'],
+                'createdAt'                   => ['type' => ['non_null' => 'String']],
+                'closedAt'                    => ['type' => 'String'],
+            ],
+        ]);
+
+        register_graphql_object_type('DuckRaceRosterEntry', [
+            'description' => 'A single unique buyer in the duck race roster.',
+            'fields'      => [
+                'buyer'       => ['type' => ['non_null' => 'String'], 'description' => 'Display key: numeric Discord user ID (renders as @mention), @handle, or email — same shape as queue embed lines.'],
+                'firstSeenAt' => ['type' => ['non_null' => 'String'], 'description' => 'ISO 8601 timestamp of the buyers FIRST entry in this session — used for client-side ordering (first purchase first).'],
+            ],
+        ]);
+
+        register_graphql_object_type('DuckRaceSnapshot', [
+            'description' => 'Real-time snapshot of the duck race for the active queue session.',
+            'fields'      => [
+                'sessionId'    => ['type' => ['non_null' => 'Int']],
+                'status'       => ['type' => ['non_null' => 'String'], 'description' => 'Mirrors the session status: open | racing | complete | closed.'],
+                'roster'       => ['type' => ['list_of' => 'DuckRaceRosterEntry'], 'description' => 'Unique buyers, ordered by first-purchase-time ascending.'],
+                'rosterCount'  => ['type' => ['non_null' => 'Int']],
+                'winnerUserId' => ['type' => 'String', 'description' => 'Discord user ID of the winner — null until status=complete.'],
+                'updatedAt'    => ['type' => ['non_null' => 'String']],
             ],
         ]);
 
@@ -78,6 +99,36 @@ class QueueGraphQL implements Hook
                 'total'     => ['type' => ['non_null' => 'Int']],
                 'updatedAt' => ['type' => ['non_null' => 'String']],
             ],
+        ]);
+
+        register_graphql_field('RootQuery', 'liveDuckRace', [
+            'type'        => 'DuckRaceSnapshot',
+            'description' => 'Duck race roster + state for the currently-open queue session, or null when no session is open.',
+            'resolve'     => function () {
+                $session = $this->repository->findActiveSession();
+                if (!$session) {
+                    return null;
+                }
+
+                $sessionId = (int) $session['id'];
+                $buyers = $this->repository->uniqueBuyers($sessionId);
+
+                return [
+                    'sessionId'    => $sessionId,
+                    'status'       => (string) $session['status'],
+                    'roster'       => array_map(static function ($row) {
+                        return [
+                            'buyer'       => (string) $row['buyer'],
+                            'firstSeenAt' => QueueRepository::toIso8601((string) ($row['first_seen'] ?? '')),
+                        ];
+                    }, $buyers),
+                    'rosterCount'  => count($buyers),
+                    'winnerUserId' => $session['duck_race_winner_user_id'] !== null
+                        ? (string) $session['duck_race_winner_user_id']
+                        : null,
+                    'updatedAt'    => gmdate('Y-m-d\TH:i:s\Z'),
+                ];
+            },
         ]);
 
         register_graphql_field('RootQuery', 'liveQueue', [

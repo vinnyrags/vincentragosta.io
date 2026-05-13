@@ -16,7 +16,7 @@ use Mythus\Contracts\Hook;
 class QueueMigration implements Hook
 {
     private const OPTION_KEY = 'shop_queue_schema_version';
-    private const SCHEMA_VERSION = '3';
+    private const SCHEMA_VERSION = '4';
 
     public function register(): void
     {
@@ -35,10 +35,16 @@ class QueueMigration implements Hook
         $entriesTable = self::entriesTable();
         $charsetCollate = $wpdb->get_charset_collate();
 
+        // duck_race_channel_message_id is the Discord message ID of the
+        // persistent roster embed in the new #duck-race channel — separate
+        // from channel_message_id (which is the #queue channel's queue
+        // embed). Kept on the session row so both embeds are tied to
+        // their source-of-truth queue, not to bot-side state.
         $sessionsSql = "CREATE TABLE {$sessionsTable} (
             id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
             status VARCHAR(20) NOT NULL DEFAULT 'open',
             channel_message_id VARCHAR(50) NULL,
+            duck_race_channel_message_id VARCHAR(50) NULL,
             duck_race_winner_user_id VARCHAR(50) NULL,
             created_at DATETIME NOT NULL,
             closed_at DATETIME NULL,

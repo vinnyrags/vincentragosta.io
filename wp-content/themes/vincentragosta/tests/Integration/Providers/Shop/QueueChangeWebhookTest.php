@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Tests\Integration\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
+use ChildTheme\Providers\Shop\Support\QueueRepository;
 use WorDBless\BaseTestCase;
 
 /**
@@ -35,7 +36,12 @@ class QueueChangeWebhookTest extends BaseTestCase
 
         add_filter('pre_http_request', [$this, 'captureHttp'], 10, 3);
 
-        (new QueueChangeWebhook())->register();
+        // QueueRepository's uniqueBuyers() reads from $wpdb. WorDBless
+        // gives us a $wpdb stub that returns empty rows for queries
+        // against the queue tables (no real DB writes happen here), so
+        // the roster.updated dispatch fires with an empty roster — fine
+        // for the dispatch-shape tests in this file.
+        (new QueueChangeWebhook(new QueueRepository()))->register();
     }
 
     public function tear_down(): void
@@ -59,18 +65,33 @@ class QueueChangeWebhookTest extends BaseTestCase
     {
         do_action('shop_queue_entry_created', $this->sampleEntry());
 
-        $this->assertCount(1, $this->captured, 'expected exactly one HTTP call');
+        // Two dispatches per entry-create: entry.added (the entry shape)
+        // + roster.updated (the duck race roster snapshot). Both go to
+        // the same Nous endpoint with the same secret; the homepage
+        // Live Queue subscribes to entry.* and the Duck Race column
+        // subscribes to roster.updated.
+        $this->assertCount(2, $this->captured, 'expected entry.added + roster.updated HTTP calls');
 
-        $call = $this->captured[0];
-        $this->assertSame('http://nous.test/webhooks/queue-changed', $call['url']);
-        $this->assertSame('test-secret-queue', $call['args']['headers']['X-Bot-Secret']);
-        $this->assertFalse($call['args']['blocking'], 'should not block on Nous response');
+        $events = array_map(static fn($c) => json_decode($c['args']['body'], true)['event'], $this->captured);
+        $this->assertContains('entry.added', $events);
+        $this->assertContains('roster.updated', $events);
 
-        $body = json_decode($call['args']['body'], true);
+        $entryCall = $this->captured[array_search('entry.added', $events, true)];
+        $this->assertSame('http://nous.test/webhooks/queue-changed', $entryCall['url']);
+        $this->assertSame('test-secret-queue', $entryCall['args']['headers']['X-Bot-Secret']);
+        $this->assertFalse($entryCall['args']['blocking'], 'should not block on Nous response');
+
+        $body = json_decode($entryCall['args']['body'], true);
         $this->assertSame('entry.added', $body['event']);
         $this->assertSame('q_42', $body['data']['entry']['id']);
         $this->assertSame(42, $body['data']['rawEntry']['id']);
         $this->assertArrayHasKey('timestamp', $body);
+
+        $rosterCall = $this->captured[array_search('roster.updated', $events, true)];
+        $rosterBody = json_decode($rosterCall['args']['body'], true);
+        $this->assertSame(1, $rosterBody['data']['sessionId']);
+        $this->assertArrayHasKey('rosterCount', $rosterBody['data']);
+        $this->assertArrayHasKey('roster', $rosterBody['data']);
     }
 
     public function testEntryStatusToCompletedFiresCompletedEvent(): void

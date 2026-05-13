@@ -96,6 +96,11 @@ class QueueRepository
             $format[] = '%s';
         }
 
+        if (array_key_exists('duck_race_channel_message_id', $data)) {
+            $update['duck_race_channel_message_id'] = $data['duck_race_channel_message_id'];
+            $format[] = '%s';
+        }
+
         if (array_key_exists('duck_race_winner_user_id', $data)) {
             $update['duck_race_winner_user_id'] = $data['duck_race_winner_user_id'];
             $format[] = '%s';
@@ -418,12 +423,13 @@ class QueueRepository
     public static function serializeSession(array $row): array
     {
         return [
-            'id'                   => (int) $row['id'],
-            'status'               => (string) $row['status'],
-            'channelMessageId'     => $row['channel_message_id'] !== null ? (string) $row['channel_message_id'] : null,
-            'duckRaceWinnerUserId' => $row['duck_race_winner_user_id'] !== null ? (string) $row['duck_race_winner_user_id'] : null,
-            'createdAt'            => self::toIso8601($row['created_at']),
-            'closedAt'             => $row['closed_at'] !== null ? self::toIso8601($row['closed_at']) : null,
+            'id'                          => (int) $row['id'],
+            'status'                      => (string) $row['status'],
+            'channelMessageId'            => $row['channel_message_id'] !== null ? (string) $row['channel_message_id'] : null,
+            'duckRaceChannelMessageId'    => ($row['duck_race_channel_message_id'] ?? null) !== null ? (string) $row['duck_race_channel_message_id'] : null,
+            'duckRaceWinnerUserId'        => $row['duck_race_winner_user_id'] !== null ? (string) $row['duck_race_winner_user_id'] : null,
+            'createdAt'                   => self::toIso8601($row['created_at']),
+            'closedAt'                    => $row['closed_at'] !== null ? self::toIso8601($row['closed_at']) : null,
         ];
     }
 
@@ -541,7 +547,7 @@ class QueueRepository
         return $local[0] . '•••@' . $domain;
     }
 
-    private static function toIso8601(string $mysqlDatetime): string
+    public static function toIso8601(string $mysqlDatetime): string
     {
         // Stored times are in WP timezone (current_time('mysql') returns localized).
         // Convert to UTC ISO 8601 for API consumers.

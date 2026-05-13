@@ -57,6 +57,11 @@ class QueueSessionUpdateEndpoint extends Endpoint
                 'type'              => 'string',
                 'sanitize_callback' => 'sanitize_text_field',
             ],
+            'duck_race_channel_message_id' => [
+                'required'          => false,
+                'type'              => 'string',
+                'sanitize_callback' => 'sanitize_text_field',
+            ],
             'duck_race_winner_user_id' => [
                 'required'          => false,
                 'type'              => 'string',
@@ -83,6 +88,9 @@ class QueueSessionUpdateEndpoint extends Endpoint
         }
         if ($request->has_param('channel_message_id')) {
             $update['channel_message_id'] = $request->get_param('channel_message_id');
+        }
+        if ($request->has_param('duck_race_channel_message_id')) {
+            $update['duck_race_channel_message_id'] = $request->get_param('duck_race_channel_message_id');
         }
         if ($request->has_param('duck_race_winner_user_id')) {
             $update['duck_race_winner_user_id'] = (string) $request->get_param('duck_race_winner_user_id');
