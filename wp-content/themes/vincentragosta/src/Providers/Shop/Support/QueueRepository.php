@@ -485,6 +485,10 @@ class QueueRepository
         global $wpdb;
         $table = QueueMigration::entriesTable();
 
+        // Exclude `rts` entries — Request-to-See submissions are not
+        // purchases, so the buyer hasn't actually earned a duck race
+        // entry. A buyer who has BOTH an RTS row and an order row
+        // still appears once via the order row.
         $rows = $wpdb->get_results(
             $wpdb->prepare(
                 "SELECT COALESCE(MAX(discord_user_id), MAX(discord_handle), MAX(customer_email)) AS buyer,
@@ -492,6 +496,7 @@ class QueueRepository
                  FROM {$table}
                  WHERE session_id = %d
                    AND status NOT IN ('skipped', 'refunded')
+                   AND type != 'rts'
                    AND COALESCE(customer_email, discord_user_id, discord_handle) IS NOT NULL
                  GROUP BY COALESCE(customer_email, discord_user_id, discord_handle)
                  ORDER BY first_seen ASC",

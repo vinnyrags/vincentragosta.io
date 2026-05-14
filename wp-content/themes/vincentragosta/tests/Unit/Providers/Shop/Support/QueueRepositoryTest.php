@@ -195,5 +195,17 @@ class QueueRepositoryTest extends TestCase
             $source,
             'uniqueBuyers must prefer discord_user_id → discord_handle → customer_email for display'
         );
+
+        // RTS (Request-to-See) rows are not purchases — including them
+        // gives the buyer a duck race entry they didn't earn. Surfaced
+        // 2026-05-13 when an RTS-only buyer appeared on the roster
+        // alongside a real purchaser. Filter must be in the WHERE
+        // clause, not applied at render time, so the count + roster
+        // stay consistent across every caller.
+        $this->assertMatchesRegularExpression(
+            "/type\\s*!=\\s*'rts'/i",
+            $source,
+            'uniqueBuyers must exclude type=rts from the duck race roster'
+        );
     }
 }
