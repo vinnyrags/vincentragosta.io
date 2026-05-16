@@ -39,7 +39,7 @@ class TouAcceptance
      * The current terms version. Bump this AND the frontend
      * TERMS_VERSION constant whenever /legal/terms materially changes.
      */
-    public const CURRENT_VERSION = '1.2';
+    public const CURRENT_VERSION = '1.3';
 
     /**
      * Stripe metadata value limit (per key). Strings longer than this

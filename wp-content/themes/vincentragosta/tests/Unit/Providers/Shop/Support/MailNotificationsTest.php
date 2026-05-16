@@ -177,15 +177,15 @@ class MailNotificationsTest extends TestCase
 
     public function testCardRequestConfirmationMentionsTikTokStreamLink(): void
     {
-        // The email tells unlinked buyers where to watch — the TikTok
-        // URL is the relaunch streaming home. Pin so a future copy
+        // The email tells unlinked buyers where to watch — Whatnot is
+        // the live show venue post-2026-05-16. Pin so a future copy
         // change can't quietly drop it.
         MailNotifications::sendCardRequestConfirmation([
             'email'      => 'buyer@example.com',
             'card_title' => 'Pikachu',
         ]);
         $this->assertStringContainsString(
-            'tiktok.com/@itzenzoTTV',
+            'whatnot.com/user/itzenzottv',
             $this->captured[0]['message']
         );
     }

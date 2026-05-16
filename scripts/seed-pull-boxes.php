@@ -108,7 +108,7 @@ if ($product) {
     echo "  No existing product — creating Pull Box Entry...\n";
     $product = $stripe->products->create([
         'name'        => $PRODUCT_NAME,
-        'description' => 'Buy-in entry for the itzenzo.tv livestream pull box. Each entry pulls a card from the active pool.',
+        'description' => 'Buy-in entry for the itzenzoTTV pull box drops. Each entry pulls a card from the active pool during a live show.',
         'metadata'    => [
             'type' => 'pull_box',
         ],

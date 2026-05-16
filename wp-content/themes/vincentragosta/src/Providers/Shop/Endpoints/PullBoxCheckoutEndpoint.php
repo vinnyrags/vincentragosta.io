@@ -127,7 +127,7 @@ class PullBoxCheckoutEndpoint extends Endpoint
         if (!$this->queueRepository->findActiveSession()) {
             return new WP_Error(
                 'no_active_queue',
-                "Pull boxes are only available during livestream queues. The queue isn't open right now — check back during the next stream.",
+                "Pull boxes are only available during live shows. The queue isn't open right now — check back during the next live show.",
                 ['status' => 503]
             );
         }
@@ -160,7 +160,7 @@ class PullBoxCheckoutEndpoint extends Endpoint
             if (!$box) {
                 return new WP_Error(
                     'no_active_pull_box',
-                    "No pull box is open right now. The next box opens at the start of the stream.",
+                    "No pull box is open right now. The next box opens at the start of the next live show.",
                     ['status' => 503]
                 );
             }

@@ -2,17 +2,33 @@
 - finish sign up with carter pulse, need creator hub code
 
 ## ITZENZO.TV
-- need to get tiktok shop up and running immediately
-- smoky added two request to see cards to the queue, when i went to waive his shipping, it said he needed to link an account
-- RTS does not work in discord queue
+- we should create little dividers in between each activity feed item and lets reduce the font size of the items by 50% please 
+- reconsider the activity feed entirely (it is very noisy)
+- wire up Stripe `checkout.session.expired` webhook handler — when a buyer abandons a Stripe checkout (e.g. clicks back), stock stays held at the decremented count until manually fixed. Subscribe to the event on the existing Stripe webhook endpoint, parse the session's line_items, and restore stock_quantity by the held qty for each. Idempotent. Surfaced 2026-05-13 when a customer clicked back on the SAO Alicization Vol 2 listing and the stock had to be hand-restored via wp post meta update + /api/revalidate.
+- remove instagram link on /live #announcements post (just tiktok)
+- Yu-Gi-Oh singles are joining the catalog soon. Pokemon and anime are live today — Yu-Gi-Oh inventory drops as it gets inspected and listed., can we add japanese singles to this note as well on /cards
+- CI is still failing-- [vinnyrags/itzenzo.tv] test workflow run
+
+test: All jobs have failed
+
+View workflow run
+
+Status	Job	Annotations
+vitest
+test / vitest
+Failed in 1 minute
+
+- can we retroactively fill the activity feed from the first livestreams events
+- lets consider the info bubble (popover/title) to display the duck race information for example, maybe a little one liner but a more detailed description in the info bubble
 - automate `make rebuild-staging-catalog` — currently a placeholder that prints manual steps. After live cutover, the manual procedure (wipe `stripe_product_id`/`stripe_price_id` post meta on staging, re-run `push-products.js`/`push-cards.js` against staging WP with `sk_test_*`) becomes routine. Wrap it in a single make target. Trigger: first time we hit a real cross-mode push need.
-- we should allow for the opportunity for folks to submit a note on purchase, idk if stripe has this sort of thing built in, and we can capture it for my review when looking at their order (maybe some flavor of displaying the note in the queue)
-- new image for one piece vol 5
+- we should allow for the opportunity for folks to submit a note on purchase, idk if stripe has this sort of thing built in to its checkout flow, and we can capture it for my review when looking at their order (maybe some flavor of displaying the note in the queue), we definitely want to capture it somewhere in the appropriate DB
+
 - if we look at the cache work we did for celebrityautobiography.com, are there any cues we can take from there and apply to either itzenzo.tv or vincentragosta.io frontend?
-- could we explore a potentially better mobile experience, currently its scroll-galore for both shops, the experience, while each card looks great, as a whole is completely unrealistic to vertically scroll through 1000+ cards or even 200+ boxes/packs on a mobile screen. wondering if we go back to two columns on mobile and display less information maybe? this still doesnt really solve the problem, but i guess its okay to infinitely scroll, having to have them search only on mobile is also not a good UI. its probably fine I think, we should just look into potentially having two cards per row displayed, title and price maybe only? let me know what you are thinking, dont implement anything yet lets talk through this. i also wonder if we can simplify the buttons on mobile, have a cart icon instead of add to cart, and just have "request" instead of request to see, and have the buttons be side by side instead of stacked.
+
 - DISCORD: pull boxes are going to be 50 cards in the box, i noticed our discord messaging shows white boxes for each slot in the pull box, I am not sure we should do this, I like the idea of keeping the claims X out of X display, but wonder if it may be too much to have 125 boxes like we have 5 in our test currently
 - consider moving the giveaway stuff to the website (as opposed to in discord), is it possible to build a duck race on my website? I am sure this is quite involved, but its a fairly simple concept
 - setup donations link (stripe based), or section on the website, maybe in the footer?
+
 - can we confirm if we have shipping easy tests accounted for in our !test command please?
 - how can I pull money from Stripe into my personal bank account, is this something I can fire off in discord at the end of the night, or perhaps it can be automated in !offline perhaps (having its own designated command, just automated in !offline). lets talk through this first before doing anything, we would also want to make sure we are updating documentation/readmes/discord messaging/shop storefront messaging accordingly.
 - setup tests buying across single cards and box product in !test command
@@ -20,7 +36,9 @@
 - add tiktok feed to the about page on itzenzo.tv via same plugin smashballoon that we use for instagram
 - investigate top discord bots/apps we could add to server to make it more fun, or enhance my experience
 - can i stream tiktok studio from my ipad? I have access to my mac book pro, maybe I can work something off of that? ideally i just uses my ipad to simulcast to four different streaming platforms from just the one device, that would be completely optimal
-- can we research cheap shipping supplies, I have been going to staples for all of my shiping supplies and it has been expensive. I like the card mailers that had the bubble wrap inside of them.
+- can we research cheap shipping supplies, I have been going to staples for all of my shipping supplies and it has been expensive. I like the card mailers that had the bubble wrap inside of them.
+- SECURITY: run `apt-get update && apt-get upgrade -y` on production droplet (174.138.70.29) — Lynis audit on 2026-05-14 flagged warning PKGS-7392 (vulnerable packages). Quick fix, ~2 min. Tracked as 2026-05-14-001 in `akivili/business/security-scans/2026-05-14/SUMMARY.md` (target: 7 days).
+- SECURITY: add HTTP security response headers to itzenzo.tv and vincentragosta.io — Mozilla Observatory scored both D (30/100) on 2026-05-14 due to missing CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy. Add via nginx config; target Observatory grade B+ within 90 days. Tracked as 2026-05-14-002 in `akivili/business/security-scans/2026-05-14/SUMMARY.md`.
 
 ## AKIVILI
 - capitalize github name to Akivili

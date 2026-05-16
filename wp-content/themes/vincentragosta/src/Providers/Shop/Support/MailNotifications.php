@@ -69,7 +69,7 @@ class MailNotifications
         }
         $lines = array_merge($lines, [
             '',
-            'I review offers between streams and reply directly. If the number works, I send a Stripe checkout link for that exact amount. If not, I might counter or pass — either way you hear back.',
+            'I review offers between live shows and reply directly. If the number works, I send a Stripe checkout link for that exact amount. If not, I might counter or pass — either way you hear back.',
             '',
             'Reply to this email if you want to add context, or DM @itzenzottv on Discord.',
             '',
@@ -105,9 +105,9 @@ class MailNotifications
         $lines = [
             sprintf("Hey — your request to see %s is queued.", $cardTitle),
             '',
-            "We'll feature this card live on the next card night so you can see edges, surface, and holo shift before you buy. No commitment — just say 'pass' in chat or close the tab if it's not the one for you.",
+            "We'll feature this card live on our next show on Whatnot so you can see edges, surface, and holo shift before you buy. No commitment — just close the tab if it's not the one for you.",
             '',
-            'Card nights are Monday, Tuesday, and Wednesday at 8 PM EST. Watch live at https://tiktok.com/@itzenzoTTV.',
+            'Live shows run Monday, Tuesday, and Wednesday at 8 PM EST on Whatnot. Catch the show at https://whatnot.com/user/itzenzottv.',
             '',
             "We'll email you when the card is shown. If you want a louder ping, link your Discord account and we'll DM you the moment it hits the table.",
             '',
