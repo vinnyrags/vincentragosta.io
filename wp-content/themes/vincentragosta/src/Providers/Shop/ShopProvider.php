@@ -31,6 +31,7 @@ use ChildTheme\Providers\Shop\Endpoints\ShippingStartCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
+use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
 use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestEmailNotifier;
@@ -64,6 +65,7 @@ class ShopProvider extends Provider
         StockStatusBadge::class,
         CardImageSize::class,
         CardGraphQL::class,
+        CardAttachmentUniqueFilename::class,
         PngSubsizesAsJpeg::class,
         ShopSettingsMenuLink::class,
         ShopRedirect::class,
