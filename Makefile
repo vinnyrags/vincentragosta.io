@@ -169,6 +169,8 @@ endef
 	seed-stream-schedule seed-stream-schedule-force \
 	seed-stream-schedule-staging seed-stream-schedule-production \
 	seed-pull-boxes seed-pull-boxes-staging seed-pull-boxes-production \
+	export-inventory-production export-inventory-staging \
+	build-whatnot-csv whatnot-csv-production \
 	nous-import \
 	satis-refresh satis-add satis-remove
 
@@ -610,6 +612,35 @@ seed-pull-boxes-staging: ## Same on staging WordPress
 seed-pull-boxes-production: ## Same on production WordPress
 	@echo "Seeding Pull Box Entry on production..."
 	$(call remote-wp-eval,PRODUCTION,seed-pull-boxes.php)
+
+##@ Whatnot CSV pipeline
+
+# Two-step flow:
+#   1. `make export-inventory-production`  → dumps /tmp/inventory.json from prod
+#   2. `make build-whatnot-csv`            → reads /tmp/inventory.json,
+#                                            writes tmp/whatnot-full-import-<date>.csv
+# `make whatnot-csv-production` runs both. The operator then deletes existing
+# Whatnot listings via the Whatnot UI and uploads the resulting CSV.
+
+INVENTORY_JSON := /tmp/inventory.json
+NOUS_DIR       := $(realpath ../Nous)
+
+export-inventory-production: ## Export production WP inventory to /tmp/inventory.json
+	@echo "Exporting production inventory → $(INVENTORY_JSON)..."
+	@ssh $(PRODUCTION_HOST) "wp eval-file $(PRODUCTION_DIR)/scripts/export-inventory-json.php --path=$(PRODUCTION_WP) --allow-root" > $(INVENTORY_JSON)
+	@echo "✓ Wrote $(INVENTORY_JSON) ($$(wc -c < $(INVENTORY_JSON) | tr -d ' ') bytes, $$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(INVENTORY_JSON)) items)"
+
+export-inventory-staging: ## Export staging WP inventory to /tmp/inventory.json
+	@echo "Exporting staging inventory → $(INVENTORY_JSON)..."
+	@ssh $(STAGING_HOST) "wp eval-file $(STAGING_DIR)/scripts/export-inventory-json.php --path=$(STAGING_WP) --allow-root" > $(INVENTORY_JSON)
+	@echo "✓ Wrote $(INVENTORY_JSON) ($$(wc -c < $(INVENTORY_JSON) | tr -d ' ') bytes)"
+
+build-whatnot-csv: ## Build Whatnot bulk-import CSV from /tmp/inventory.json
+	@test -f $(INVENTORY_JSON) || { echo "Missing $(INVENTORY_JSON) — run 'make export-inventory-production' first"; exit 1; }
+	@test -d $(NOUS_DIR) || { echo "Nous repo not found at $(NOUS_DIR)"; exit 1; }
+	@cd $(NOUS_DIR) && node scripts/shop/build-whatnot-full-import.mjs
+
+whatnot-csv-production: export-inventory-production build-whatnot-csv ## One-shot: refresh from prod + build CSV
 
 ##@ Nous import
 
