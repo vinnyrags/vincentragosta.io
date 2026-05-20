@@ -232,6 +232,16 @@
             "show_in_graphql": 1
         },
         {
+            "key": "field_card_whatnot_url",
+            "label": "Whatnot URL",
+            "name": "whatnot_url",
+            "type": "url",
+            "instructions": "Per-card Whatnot listing URL. Leave blank to fall back to the shop URL. Populated from the Singles sheet via sync-whatnot-urls.mjs → push-whatnot-urls.mjs.",
+            "required": 0,
+            "placeholder": "https://whatnot.com/...",
+            "show_in_graphql": 1
+        },
+        {
             "key": "field_card_notes",
             "label": "Internal Notes",
             "name": "notes",
