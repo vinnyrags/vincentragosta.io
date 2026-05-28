@@ -163,7 +163,7 @@ endef
 	sync-cards sync-cards-staging sync-cards-production push-cards-production remove-card update-stock \
 	release-stuck-pull-box-slots \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
-	enrich-singles lint-singles audit-alt-art backup-singles \
+	enrich-singles enrich-singles-japanese lint-singles audit-alt-art backup-singles \
 	seed-itzenzo-pages seed-itzenzo-pages-force \
 	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
 	seed-stream-schedule seed-stream-schedule-force \
@@ -171,6 +171,9 @@ endef
 	seed-pull-boxes seed-pull-boxes-staging seed-pull-boxes-production \
 	export-inventory-production export-inventory-staging \
 	build-whatnot-csv whatnot-csv-production \
+	build-whatnot-auction-csv whatnot-auction-csv-production \
+	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
+	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
 	nous-import \
 	satis-refresh satis-add satis-remove
 
@@ -430,6 +433,10 @@ enrich-singles: ## Populate set/rarity/image data via Pokemon TCG API
 	@echo "Enriching Singles tab via Pokemon TCG API..."
 	cd ../Nous/scripts/shop && node enrich-singles.js
 
+enrich-singles-japanese: ## Enrich Japanese cards via TCGplayer (Pokemon TCG API is English-only)
+	@echo "Enriching Japanese Singles rows via TCGplayer pokemon-japan catalog..."
+	cd ../Nous/scripts/shop && node enrich-singles-japanese.mjs $(ARGS)
+
 lint-singles: ## Lint the Singles sheet for data-entry issues before pushing
 	@echo "Linting Singles tab..."
 	cd ../Nous/scripts/shop && node lint-singles.js $(ARGS)
@@ -638,9 +645,24 @@ export-inventory-staging: ## Export staging WP inventory to /tmp/inventory.json
 build-whatnot-csv: ## Build Whatnot bulk-import CSV from /tmp/inventory.json
 	@test -f $(INVENTORY_JSON) || { echo "Missing $(INVENTORY_JSON) — run 'make export-inventory-production' first"; exit 1; }
 	@test -d $(NOUS_DIR) || { echo "Nous repo not found at $(NOUS_DIR)"; exit 1; }
-	@cd $(NOUS_DIR) && node scripts/shop/build-whatnot-full-import.mjs
+	@cd $(NOUS_DIR) && node scripts/shop/build-whatnot-full-import.mjs $(ARGS)
 
-whatnot-csv-production: export-inventory-production build-whatnot-csv ## One-shot: refresh from prod + build CSV
+build-whatnot-auction-csv: ## Build Whatnot AUCTION CSV (Type=Auction, sorted ascending by Price, excludes permanent-BIN)
+	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--auction"
+
+build-whatnot-permanent-bin-csv: ## Build Whatnot BIN CSV with only the permanent-BIN product list (always-on shop)
+	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--permanent-bin-only"
+
+build-whatnot-post-stream-bin-csv: ## Build Whatnot BIN CSV for unsold auction items (tiered BIN markup on cards)
+	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--post-stream-bin"
+
+whatnot-csv-production: export-inventory-production build-whatnot-csv ## One-shot: refresh from prod + build BIN CSV (everything)
+
+whatnot-auction-csv-production: export-inventory-production build-whatnot-auction-csv ## One-shot: refresh from prod + build AUCTION CSV (for live shows)
+
+whatnot-permanent-bin-csv-production: export-inventory-production build-whatnot-permanent-bin-csv ## One-shot: refresh from prod + build PERMANENT-BIN CSV (post-show always-on shop)
+
+whatnot-post-stream-bin-csv-production: export-inventory-production build-whatnot-post-stream-bin-csv ## One-shot: refresh from prod + build POST-STREAM-BIN CSV (relist unsold auctions at BIN markup)
 
 ##@ Nous import
 
