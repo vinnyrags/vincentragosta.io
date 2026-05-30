@@ -46,6 +46,7 @@ use ChildTheme\Providers\Shop\Hooks\QueueMigration;
 use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
+use ChildTheme\Providers\Shop\Services\StripeService;
 use IX\Providers\Provider;
 
 /**
@@ -113,6 +114,28 @@ class ShopProvider extends Provider
     ];
 
     /**
+     * Stripe checkout/webhook endpoints gated behind STRIPE_ENABLED.
+     *
+     * Every endpoint here either constructs StripeService or creates a
+     * Stripe Checkout Session, so when Stripe is parked none of them may
+     * be reachable. CatalogStripeProductDeactivatedEndpoint and
+     * ShippingLookupEndpoint are intentionally excluded — neither touches
+     * Stripe, and both must keep working while parked (catalog-drift
+     * cleanup and shipping-cost lookup respectively).
+     *
+     * @var class-string[]
+     */
+    private const STRIPE_GATED_ROUTES = [
+        BundleCheckoutEndpoint::class,
+        CancelCheckoutEndpoint::class,
+        CreateCheckoutEndpoint::class,
+        PullBoxCheckoutEndpoint::class,
+        PullBoxConfirmEndpoint::class,
+        ShippingStartCheckoutEndpoint::class,
+        StripeWebhookEndpoint::class,
+    ];
+
+    /**
      * REST namespace.
      */
     protected string $routeNamespace = 'shop';
@@ -137,6 +160,30 @@ class ShopProvider extends Provider
         parent::register();
 
         $this->acfManager->registerSavePath();
+    }
+
+    /**
+     * Collect REST routes, gating Stripe endpoints behind STRIPE_ENABLED.
+     *
+     * Computed at runtime because a property default cannot call a
+     * function. When Stripe is parked the gated endpoints are marked
+     * disabled, so RestManager never registers them (WP returns a standard
+     * 404) and StripeService is never constructed — its missing-key guard
+     * never fires. When Stripe is enabled this is a no-op.
+     *
+     * @return array<class-string, bool>|array<int, class-string>
+     */
+    protected function collectRoutes(): array
+    {
+        $routes = parent::collectRoutes();
+
+        if (!StripeService::isEnabled()) {
+            foreach (self::STRIPE_GATED_ROUTES as $endpoint) {
+                $routes[$endpoint] = false;
+            }
+        }
+
+        return $routes;
     }
 
     /**

@@ -20,6 +20,20 @@ class StripeService
 {
     private StripeClient $client;
 
+    /**
+     * Whether the Stripe integration is enabled.
+     *
+     * Single source of truth is the STRIPE_ENABLED constant in
+     * wp-config-env.php (Whatnot pivot kill switch). Undefined defaults
+     * to ON for backward-compatibility — only an explicit `false` parks
+     * Stripe. Static so it can be checked before constructing the
+     * service (whose constructor throws when no key is configured).
+     */
+    public static function isEnabled(): bool
+    {
+        return !defined('STRIPE_ENABLED') || STRIPE_ENABLED === true;
+    }
+
     public function __construct()
     {
         if (!defined('STRIPE_SECRET_KEY') || STRIPE_SECRET_KEY === '') {
