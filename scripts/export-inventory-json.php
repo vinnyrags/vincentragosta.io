@@ -24,6 +24,9 @@ $card_meta_keys = [
     'price', 'stock_quantity', 'language', 'condition',
     'card_name', 'card_number', 'set_name', 'set_code',
     'game', 'rarity', 'variant', 'artist', 'release_date',
+    // Join key to the Singles sheet (col T) so the Whatnot builder can
+    // look up the sheet's BIN Price (col F) for Buy-it-Now listings.
+    'stripe_product_id',
 ];
 $product_meta_keys = ['price', 'stock_quantity', 'language'];
 
