@@ -511,6 +511,52 @@ push-cards-production: ## Push Singles Sheet → live-mode Stripe (uses prod's l
 sync-cards-production: push-cards-production pull-cards-production ## Full card pipeline → production WP (Sheets → live Stripe → production)
 	@echo "✓ Card pipeline complete (production)"
 
+##@ Card price sync (Sheets → WP, Stripe-free)
+
+# Direct Singles-sheet → WordPress price/stock refresh that bypasses Stripe
+# (parked under the Whatnot pivot, so the old Sheet → Stripe → WP chain no
+# longer refreshes prices). export-card-prices reads the sheet into JSON;
+# update-card-prices.php joins by stripe_product_id and writes price (col D) +
+# stock (col F), clears retired sale fields, and drafts red "do not sell" rows.
+# Dry-run by default; the *-apply targets write AND flush the itzenzo.tv cache
+# so the storefront serves the new prices. Production/staging targets need the
+# PHP script deployed (git push) since they run it via the remote scripts/ dir.
+
+CARD_PRICES_JSON := /tmp/card-prices.json
+
+export-card-prices: ## Read Singles sheet → $(CARD_PRICES_JSON) (price col D, stock col F, red flag)
+	@echo "Exporting card prices from Singles sheet → $(CARD_PRICES_JSON)..."
+	@cd ../Nous/scripts/shop && node export-card-prices.mjs > $(CARD_PRICES_JSON)
+	@echo "✓ Wrote $(CARD_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(CARD_PRICES_JSON)) rows)"
+
+update-card-prices: export-card-prices ## DRY-RUN: Singles prices → local WP (no writes)
+	@cp $(CARD_PRICES_JSON) scripts/.card-prices.json
+	@ddev exec "CARD_PRICES_JSON=/var/www/html/scripts/.card-prices.json wp eval-file scripts/update-card-prices.php"; rm -f scripts/.card-prices.json
+
+update-card-prices-apply: export-card-prices ## APPLY: Singles prices → local WP
+	@cp $(CARD_PRICES_JSON) scripts/.card-prices.json
+	@ddev exec "CARD_PRICES_JSON=/var/www/html/scripts/.card-prices.json APPLY=1 wp eval-file scripts/update-card-prices.php"; rm -f scripts/.card-prices.json
+
+update-card-prices-staging: export-card-prices ## DRY-RUN: Singles prices → staging WP
+	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
+	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
+
+update-card-prices-staging-apply: export-card-prices ## APPLY: Singles prices → staging WP (+ flush itzenzo cache)
+	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
+	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
+	@echo "Flushing staging itzenzo.tv cache..."
+	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
+
+update-card-prices-production: export-card-prices ## DRY-RUN: Singles prices → production WP
+	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
+
+update-card-prices-production-apply: export-card-prices ## APPLY: Singles prices → production WP (+ flush itzenzo cache)
+	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
+	@echo "Flushing production itzenzo.tv cache so new prices show..."
+	$(call flush-itzenzo-cache,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_PM2))
+
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
 # product (idempotent — already-archived returns 200) AND deletes the
 # WP post in one shot. Either STRIPE_ID or WP_ID is sufficient; the
