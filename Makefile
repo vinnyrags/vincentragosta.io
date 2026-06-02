@@ -33,6 +33,8 @@ ITZENZO_PROD_PM2    := itzenzo-tv
 ITZENZO_STAGING_DIR := /var/www/staging.itzenzo.tv
 ITZENZO_STAGING_PM2 := staging-itzenzo
 ITZENZO_NODE_PATH   := /root/.nvm/versions/node/v20.20.2/bin
+ITZENZO_PROD_URL    := https://itzenzo.tv
+ITZENZO_STAGING_URL := https://staging.itzenzo.tv
 
 # ─── Macros ──────────────────────────────────────────────────────────────────
 # All `remote-*` macros take the env prefix in upper-case (STAGING|PRODUCTION)
@@ -65,6 +67,17 @@ endef
 #   $(call flush-itzenzo-cache, ENV, ITZENZO_DIR, PM2_PROCESS)
 define flush-itzenzo-cache
 ssh $($(1)_HOST) 'export PATH=$(ITZENZO_NODE_PATH):$$PATH; rm -rf $(2)/.next/cache/images/* && pm2 reload $(3)'
+endef
+
+# Force on-demand ISR revalidation of the catalog pages on the itzenzo.tv
+# frontend. /cards, /collection and the homepage are ISR-cached (300s) and only
+# refresh per-request after the window OR when the per-checkout revalidate
+# webhook fires — a bulk price/stock sync triggers neither, so without this the
+# storefront keeps serving stale (sold-out / old-price) cards. The secret is
+# read from the frontend's .env on the droplet so it never leaves the server.
+#   $(call revalidate-itzenzo, ENV, ITZENZO_DIR, ITZENZO_URL)
+define revalidate-itzenzo
+ssh $($(1)_HOST) 'SECRET=$$(grep -E "^REVALIDATION_SECRET=" $(2)/.env.production | cut -d= -f2-); curl -s -X POST "$(3)/api/revalidate" -H "Content-Type: application/json" -d "{\"secret\":\"$$SECRET\",\"paths\":[\"/\",\"/cards\",\"/collection\",\"/livestream-shop\"]}" -w "\n"'
 endef
 
 # Stripe mode-mismatch guard. When local DDEV's Stripe key mode differs from
@@ -541,21 +554,21 @@ update-card-prices-staging: export-card-prices ## DRY-RUN: Singles prices → st
 	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
 	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
 
-update-card-prices-staging-apply: export-card-prices ## APPLY: Singles prices → staging WP (+ flush itzenzo cache)
+update-card-prices-staging-apply: export-card-prices ## APPLY: Singles prices → staging WP (+ revalidate itzenzo)
 	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
 	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
-	@echo "Flushing staging itzenzo.tv cache..."
-	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
+	@echo "Revalidating staging itzenzo.tv catalog pages so new prices/stock show..."
+	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
 
 update-card-prices-production: export-card-prices ## DRY-RUN: Singles prices → production WP
 	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
 	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
 
-update-card-prices-production-apply: export-card-prices ## APPLY: Singles prices → production WP (+ flush itzenzo cache)
+update-card-prices-production-apply: export-card-prices ## APPLY: Singles prices → production WP (+ revalidate itzenzo)
 	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
 	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
-	@echo "Flushing production itzenzo.tv cache so new prices show..."
-	$(call flush-itzenzo-cache,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_PM2))
+	@echo "Revalidating production itzenzo.tv catalog pages so new prices/stock show..."
+	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
 
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
 # product (idempotent — already-archived returns 200) AND deletes the

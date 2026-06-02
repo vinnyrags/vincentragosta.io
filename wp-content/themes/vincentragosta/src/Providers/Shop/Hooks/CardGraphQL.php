@@ -84,17 +84,17 @@ class CardGraphQL implements Hook
      * reshuffles when prefetched batches arrive and the client
      * re-sorts.
      *
-     * For CATALOG (default sort = "set-asc" on /cards):
-     *   1. release_date ASC (oldest first), missing/empty values last
-     *   2. set_name ASC (alphabetical tiebreaker)
-     *   3. card_number numerically ascending. Numbers like "001/100"
-     *      get the leading int via SUBSTRING_INDEX('/', 1) — close
-     *      enough; promo codes like "SWSH021" cast to 0 and sort to
-     *      the top of their set, which is acceptable.
+     * For CATALOG (default sort = "price-desc" on /cards):
+     *   - price DESC (most expensive first). The `price` ACF field is a
+     *     display string ("$650.00"), so strip "$" and thousands commas
+     *     before CAST — same trick as topPricedCards. p.ID is the stable
+     *     tiebreaker for offset pagination. Price-less cards COALESCE to 0
+     *     and sort last. Matches CardToolbar's priceValue() default.
      *
-     * For COLLECTION (default sort = "title-asc" on /collection):
-     *   - Just the post_title alphabetically. ID as tiebreaker for
-     *     stable pagination across batches.
+     * For COLLECTION (default sort = "price-desc" on /collection):
+     *   - price DESC (most valuable first), same CAST as CATALOG. Matches
+     *     CollectionToolbar's default + the homepage CollectionTeaser. p.ID
+     *     is the stable tiebreaker for batch pagination.
      *
      * @return array{joins:string,orderBy:string}
      */
@@ -103,27 +103,36 @@ class CardGraphQL implements Hook
         global $wpdb;
 
         if ($scope === 'COLLECTION') {
+            // Highest price first — matches CollectionToolbar's default and the
+            // homepage CollectionTeaser, so the most valuable pieces surface
+            // first. Same price-string CAST as CATALOG; price-less items
+            // COALESCE to 0 and sort last. p.ID is the stable paging tiebreaker.
             return [
-                'joins'   => '',
-                'orderBy' => 'ORDER BY p.post_title ASC, p.ID ASC',
+                'joins'   => "
+                    LEFT JOIN {$wpdb->postmeta} mp
+                        ON mp.post_id = p.ID AND mp.meta_key = 'price'
+                ",
+                'orderBy' => "
+                    ORDER BY
+                        CAST(REPLACE(REPLACE(COALESCE(mp.meta_value, '0'), '$', ''), ',', '') AS DECIMAL(10,2)) DESC,
+                        p.ID ASC
+                ",
             ];
         }
 
-        // CATALOG: chain matches CardToolbar.compareBySet(direction='asc').
+        // CATALOG: highest price first — matches CardToolbar's default
+        // "price-desc" sort. The `price` ACF field is a display string
+        // ("$650.00"), so strip "$" and thousands commas before CAST, same
+        // as topPricedCards. LEFT JOIN keeps price-less cards in the catalog
+        // (they COALESCE to 0 and sort last). p.ID is the stable tiebreaker
+        // so offset pagination across prefetch batches doesn't double or skip.
         $joins = "
-            LEFT JOIN {$wpdb->postmeta} mr
-                ON mr.post_id = p.ID AND mr.meta_key = 'release_date'
-            LEFT JOIN {$wpdb->postmeta} msn
-                ON msn.post_id = p.ID AND msn.meta_key = 'set_name'
-            LEFT JOIN {$wpdb->postmeta} mcn
-                ON mcn.post_id = p.ID AND mcn.meta_key = 'card_number'
+            LEFT JOIN {$wpdb->postmeta} mp
+                ON mp.post_id = p.ID AND mp.meta_key = 'price'
         ";
         $orderBy = "
             ORDER BY
-                CASE WHEN mr.meta_value IS NULL OR mr.meta_value = '' THEN 1 ELSE 0 END,
-                mr.meta_value ASC,
-                msn.meta_value ASC,
-                CAST(SUBSTRING_INDEX(COALESCE(mcn.meta_value, ''), '/', 1) AS UNSIGNED) ASC,
+                CAST(REPLACE(REPLACE(COALESCE(mp.meta_value, '0'), '$', ''), ',', '') AS DECIMAL(10,2)) DESC,
                 p.ID ASC
         ";
 
@@ -171,7 +180,7 @@ class CardGraphQL implements Hook
 
         register_graphql_field('RootQuery', 'cardsByScope', [
             'type'        => ['list_of' => 'Card'],
-            'description' => 'Paginated list of cards matching the given scope. Returns up to `limit` cards starting at `offset`, ordered by post date descending (matches the existing /cards and /collection sort). Used by the headless storefront to background-prefetch the catalog in batches after the initial server render.',
+            'description' => 'Paginated list of cards matching the given scope. Returns up to `limit` cards starting at `offset`, ordered by the scope default (CATALOG: price descending; COLLECTION: title ascending) so the SSR first batch matches the storefront CardToolbar default and the grid never reshuffles. Used by the headless storefront to background-prefetch the catalog in batches after the initial server render.',
             'args'        => [
                 'scope' => [
                     'type'        => ['non_null' => 'CardScope'],
