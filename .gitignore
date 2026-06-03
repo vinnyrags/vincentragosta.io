@@ -40,3 +40,5 @@ wp-content/plugins
 wp-content/uploads
 wp-content/debug.log
 GEMINI.md
+# Local DB backup snapshots (never commit — contains customer data)
+.db-backups/

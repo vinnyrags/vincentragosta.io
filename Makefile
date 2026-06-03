@@ -187,6 +187,7 @@ endef
 	build-whatnot-auction-csv whatnot-auction-csv-production \
 	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
 	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
+	build-whatnot-bin-show-csv whatnot-bin-show-csv-production \
 	nous-import \
 	satis-refresh satis-add satis-remove
 
@@ -743,6 +744,9 @@ build-whatnot-permanent-bin-csv: ## Build Whatnot BIN CSV with only the permanen
 build-whatnot-post-stream-bin-csv: ## Build Whatnot BIN CSV for unsold auction items (tiered BIN markup on cards)
 	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--post-stream-bin"
 
+build-whatnot-bin-show-csv: ## Build Whatnot BIN-SHOW CSV (cards as BIN @ auction price, quick-picks stay Auction)
+	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--bin-show"
+
 whatnot-csv-production: export-inventory-production build-whatnot-csv ## One-shot: refresh from prod + build BIN CSV (everything)
 
 whatnot-auction-csv-production: export-inventory-production build-whatnot-auction-csv ## One-shot: refresh from prod + build AUCTION CSV (for live shows)
@@ -750,6 +754,8 @@ whatnot-auction-csv-production: export-inventory-production build-whatnot-auctio
 whatnot-permanent-bin-csv-production: export-inventory-production build-whatnot-permanent-bin-csv ## One-shot: refresh from prod + build PERMANENT-BIN CSV (post-show always-on shop)
 
 whatnot-post-stream-bin-csv-production: export-inventory-production build-whatnot-post-stream-bin-csv ## One-shot: refresh from prod + build POST-STREAM-BIN CSV (relist unsold auctions at BIN markup)
+
+whatnot-bin-show-csv-production: export-inventory-production build-whatnot-bin-show-csv ## One-shot: refresh from prod + build BIN-SHOW CSV (BIN @ auction price + quick-pick auctions)
 
 ##@ Nous import
 
