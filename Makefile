@@ -570,6 +570,34 @@ update-card-prices-production-apply: export-card-prices ## APPLY: Singles prices
 	@echo "Revalidating production itzenzo.tv catalog pages so new prices/stock show..."
 	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
 
+# Collection-tab price sync (Stripe-free) — feeds the /collection vault display.
+# Price = AP Override (col G) else Auction Price (col E). Joins by WP Post ID
+# (col O) else card name+number among personal-collection cards.
+COLLECTION_PRICES_JSON := /tmp/collection-prices.json
+
+export-collection-prices: ## Read Collection tab → $(COLLECTION_PRICES_JSON) (override-else-auction price)
+	@echo "Exporting collection prices from Collection tab → $(COLLECTION_PRICES_JSON)..."
+	@cd ../Nous/scripts/shop && node export-collection-prices.mjs > $(COLLECTION_PRICES_JSON)
+	@echo "✓ Wrote $(COLLECTION_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(COLLECTION_PRICES_JSON)) rows)"
+
+update-collection-prices: export-collection-prices ## DRY-RUN: Collection prices → local WP
+	@cp $(COLLECTION_PRICES_JSON) scripts/.collection-prices.json
+	@ddev exec "COLLECTION_PRICES_JSON=/var/www/html/scripts/.collection-prices.json wp eval-file scripts/update-collection-prices.php"; rm -f scripts/.collection-prices.json scripts/.col-postids.json
+
+update-collection-prices-apply: export-collection-prices ## APPLY: Collection prices → local WP
+	@cp $(COLLECTION_PRICES_JSON) scripts/.collection-prices.json
+	@ddev exec "COLLECTION_PRICES_JSON=/var/www/html/scripts/.collection-prices.json APPLY=1 wp eval-file scripts/update-collection-prices.php"; rm -f scripts/.collection-prices.json scripts/.col-postids.json
+
+update-collection-prices-production: export-collection-prices ## DRY-RUN: Collection prices → production WP
+	@scp -q $(COLLECTION_PRICES_JSON) $(PRODUCTION_HOST):$(COLLECTION_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-collection-prices.php,COLLECTION_PRICES_JSON=$(COLLECTION_PRICES_JSON))
+
+update-collection-prices-production-apply: export-collection-prices ## APPLY: Collection prices → production WP (+ revalidate itzenzo)
+	@scp -q $(COLLECTION_PRICES_JSON) $(PRODUCTION_HOST):$(COLLECTION_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-collection-prices.php,COLLECTION_PRICES_JSON=$(COLLECTION_PRICES_JSON) APPLY=1)
+	@echo "Revalidating production itzenzo.tv so collection prices show..."
+	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
+
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
 # product (idempotent — already-archived returns 200) AND deletes the
 # WP post in one shot. Either STRIPE_ID or WP_ID is sufficient; the
