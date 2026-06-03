@@ -80,7 +80,8 @@ foreach ($cards as $c) {
     update_field('release_date', $c['release_date'] ?? '', $postId);
     update_field('artist', $c['artist'] ?? '', $postId);
     update_field('condition', 'near-mint', $postId);
-    update_field('is_personal_collection', false, $postId);
+    // IS_COLLECTION=1 marks these as personal-collection (vault) cards.
+    update_field('is_personal_collection', !empty(getenv('IS_COLLECTION')), $postId);
     if (($c['language'] ?? '') !== '') {
         update_field('language', $c['language'], $postId);
     }
