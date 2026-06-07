@@ -10,9 +10,9 @@ This is a WordPress site with three layers: **Mythus** (mu-plugin framework), a 
 - **Parent theme** (`wp-content/themes/ix/`) — the Timber/Twig bridge layer. Extends `Mythus\Provider` with template resolution, Twig filter registration, and theme-specific path overrides. Provides reusable features and hooks.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends parent providers for the vincentragosta.io website.
 
-The **Nous Discord bot** (order notifications, pack battles, stream alerts) lives in a separate repository ([Nous](https://github.com/vinnyrags/Nous)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/Nous.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code. (Nous's Stripe SDK I/O has been extracted into a workspace package, `@itzenzottv/stripe-bridge` at `Nous/packages/stripe-bridge` — dependency-injected wrappers for checkout, refunds, products/prices, coupons, customers, and webhook verify. The bot keeps domain logic only. Stripe is currently parked behind `STRIPE_ENABLED` per the Whatnot pivot.)
+The **Nous Discord bot** (community embeds, giveaways, stream announcements) lives in a separate repository ([Nous](https://github.com/vinnyrags/Nous)). It deploys independently to `/opt/nous-bot/` on the same server via its own bare repo at `/var/repo/Nous.git`. Bot code, configuration, and deployment are fully managed in that repo — this project has no bot-related code. (Nous's Stripe SDK I/O lives in a workspace package, `@itzenzottv/stripe-bridge` at `Nous/packages/stripe-bridge`, but Stripe is **retired**: `STRIPE_ENABLED=false` in `/opt/nous-bot/.env` since 2026-06-06, and the registered slash-command set is the Whatnot-era seven — `/live /offline /giveaway /spin /reset /op /nous`.)
 
-The **itzenzo.tv storefront** ([itzenzo.tv](https://github.com/vinnyrags/itzenzo.tv)) is a headless Next.js frontend that uses this WordPress instance as its backend. The ShopProvider registers product CPTs, REST endpoints (checkout, webhooks, stock, **unified queue**), and ACF field groups. WPGraphQL + WPGraphQL for ACF expose product data, site settings, and the **live queue snapshot**. The shop page on vincentragosta.io 301-redirects to `https://itzenzo.tv`. The ShopProvider is headless-only — no frontend blocks, cart assets, or shop UI are rendered by WordPress.
+The **itzenzo.tv storefront** ([itzenzo.tv](https://github.com/vinnyrags/itzenzo.tv)) is a headless Next.js frontend that uses this WordPress instance as its backend. The ShopProvider registers product/card CPTs, REST endpoints (stock, **unified queue**; the Stripe checkout/webhook routes are gated **off** — `define('STRIPE_ENABLED', false)` in `wp-config-env.php` on local, staging, and production since 2026-06-06), and ACF field groups. WPGraphQL + WPGraphQL for ACF expose product data, site settings, and the **live queue snapshot**. The shop page on vincentragosta.io 301-redirects to `https://itzenzo.tv`. The ShopProvider is headless-only — no frontend blocks, cart assets, or shop UI are rendered by WordPress.
 
 The **unified queue** (orders, pack battles, pull boxes, request-to-see card requests) lives in WordPress as the source of truth, with Nous and the itzenzo.tv homepage Live Queue section both subscribing. See [Unified Queue](#unified-queue) below for the data model, REST surface, GraphQL exposure, and the change-broadcast bridge.
 
@@ -251,100 +251,29 @@ The export script automatically replaces hardcoded upload URLs with dynamic `con
 
 ## Unified Queue
 
-The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests — so the same data feeds the Discord `/queue` slash command, the public itzenzo.tv homepage Live Queue section, and any future admin tooling.
+The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests — feeding the Discord `/queue` slash command and the itzenzo.tv homepage Live Queue section. WP custom tables (`wp_queue_sessions`, `wp_queue_entries`) are the source of truth; all access goes through `Support/QueueRepository.php`; REST endpoints live under `/wp-json/shop/v1/queue/*` (bot-secret auth via `X-Bot-Secret`); WPGraphQL exposes `liveQueue`; change actions POST to Nous, which re-broadcasts over SSE. **Parked post-Whatnot-pivot but fully operational.** Full data model, REST surface, producers, speculative shipping, and test map: [docs/unified-queue.md](docs/unified-queue.md).
 
-### Data model
+## Card Catalog Pipeline (Sheet → WP, Stripe-free)
 
-Two custom tables, created via `dbDelta()` in `Hooks/QueueMigration.php` with a version-keyed option (`shop_queue_schema_version`):
+**Stripe is retired (2026-06-04, Whatnot pivot).** The Singles Google Sheet is the source of truth; cards sync directly into WordPress — Stripe is no longer in the path.
 
-- `wp_queue_sessions` — one row per livestream queue window. Columns: `id`, `status` (`open` / `closed` / `racing` / `complete`), `channel_message_id` (Discord embed pointer), `duck_race_winner_user_id`, `created_at`, `closed_at`. Indexed on `status` and `created_at`.
-- `wp_queue_entries` — one row per queued item. Columns: `id`, `session_id`, `type` (`order` / `pack_battle` / `pull_box` / `rts`), `source` (`discord` / `shop`), `status` (`queued` / `active` / `completed` / `skipped`), `discord_user_id`, `discord_handle`, `customer_email`, `order_number`, `display_name`, `detail_label`, `detail_data` (JSON), `stripe_session_id`, `external_ref` (idempotency key), `created_at`, `completed_at`. Indexed on `(session_id, status, created_at)`, `stripe_session_id`, `external_ref`, and `(type, source)`.
+**Sheet col S is a generic join key**, resolved in this order: a numeric **WP post ID** (cards created Stripe-free; stamped by `backfill-card-postids.mjs`, name-sanity-checked on use), a legacy **`prod_…` Stripe product ID** (joins to `stripe_product_id` postmeta — an inert handle, no Stripe call), or — when col S is blank — a **`card_name`+`card_number`(+set)** fallback. `stripe_product_id` is never required; it's just one of the three handles.
 
-**Position is computed at read time from `created_at` order — never stored.** This avoids the classic queue-shift race and keeps inserts cheap.
+The post-show flow:
 
-All `$wpdb` access goes through `Support/QueueRepository.php`. Two serialization shapes:
-- `serializeEntry()` — public/homepage shape with `identifier { kind, label }` and `detail { label, data }` discriminated union by type.
-- `serializeEntryRaw()` — camelCase raw fields for Nous (which needs `discordUserId` for `<@id>` mentions).
+1. **Stock/price edits** — write the Singles sheet (stock col F, auction col D, BIN col E, AP override col G). Match rows by stable key (col S product ID or col R TCG-API ID), never by remembered row number. `make backup-singles` first.
+2. **Sold cards** — `node Nous/scripts/shop/move-zero-stock-to-sold.mjs --apply` moves stock-0 rows to the Sold tab; then `make remove-card WP_ID=…` (or `STRIPE_ID=…` as a lookup key) per card — deletes the WP post, flushes Redis, revalidates itzenzo.tv.
+3. **Sheet → WP sync** — `make sync-cards-production` is the one-shot: creates brand-new sheet rows as WP card posts (`create-cards-production-apply`), stamps WP post IDs into blank col S cells (`backfill-card-ids-production`, from production inventory — prod IDs are canonical), then refreshes price/stock on everything (`update-card-prices-production-apply`), revalidating itzenzo.tv. Dry-run the halves first with `make create-cards-production` and `make update-card-prices-production`. Card creation dedupes by `card_name`+`card_number` only (not set), so a re-added card that ever existed in WP gets skipped. A sheet row with no WP card at all (blank set/image → never created) shows as "no WP card" — enrich it (`make enrich-singles`) so it can be created.
+4. **One-off stock fix** — `make update-stock WP_ID=… STOCK=N` (WP + revalidate; does NOT touch the sheet — update the sheet too or the next sync reverts it).
+5. **Whatnot CSVs** — `make whatnot-bin-show-csv-production` (and siblings) export WP inventory → CSV. Filename date stamp is UTC.
 
-### REST surface
+`sync-cards*`, `remove-card`, `update-stock`, and `refresh-from-production` are the **Stripe-free reimplementations** of the old target names — same entry points, no Stripe in the path. `stripe_product_id` everywhere is just the sheet↔WP join key.
 
-Seven endpoints under `/wp-json/shop/v1/queue/*`, registered through the standard `RestManager` route map on `ShopProvider`:
+**Pure Stripe-I/O targets are quarantined.** `push-cards`, `push-cards-production`, `pull-cards*`, `pull-products*`, and `rebuild-*-catalog` have no Stripe-free meaning (moving data to/from Stripe *is* their function) — they refuse to run unless `CONFIRM_STRIPE=1` is passed and exist only for the documented reversal path.
 
-| Endpoint | Auth | Purpose |
-|----------|------|---------|
-| `GET /queue` | public | Snapshot of active session: session metadata, current `active` entry, top-N `upcoming`, total. ETag-cached, returns 304 on no change. |
-| `GET /queue/sessions` | public | Recent sessions list (for `/queue history`). |
-| `GET /queue/sessions/{id}/entries` | public | Full entries list + unique buyers (for duck race roster). Returns `serializeEntryRaw()` shape. |
-| `POST /queue/sessions` | bot-secret | Open a new session. Refuses if one is already open. |
-| `PATCH /queue/sessions/{id}` | bot-secret | Update status (`closed` / `racing` / `complete`), `channel_message_id`, `duck_race_winner_user_id`. |
-| `POST /queue/entries` | bot-secret | Create entry. Idempotent on `external_ref` — re-submitting the same key returns the existing entry with `duplicate: true`. |
-| `PATCH /queue/entries/{id}` | bot-secret | Update entry status / fields. |
+## Catalog Drift Defense — *retired*
 
-Bot-secret auth uses the existing `LIVESTREAM_SECRET` constant via `X-Bot-Secret` header (`hash_equals` comparison).
-
-### WPGraphQL exposure
-
-`Hooks/QueueGraphQL.php` registers four custom object types (`QueueEntryIdentifier`, `QueueEntryDetail`, `QueueEntry`, `QueueSession`, `LiveQueueSnapshot`) and a single root field:
-
-```graphql
-liveQueue(limit: Int): LiveQueueSnapshot
-```
-
-Returns the active session snapshot, or an empty payload (`session: null`) when no session is open. itzenzo.tv consumes this for the homepage initial render before subscribing to SSE for live updates.
-
-### Change broadcasting
-
-`QueueRepository.createSession()`, `updateSession()`, `createEntry()`, and `updateEntry()` each fire a corresponding action:
-
-- `shop_queue_session_created` (session row)
-- `shop_queue_session_updated` (after, before)
-- `shop_queue_entry_created` (entry row)
-- `shop_queue_entry_updated` (after, before)
-
-`Hooks/QueueChangeWebhook.php` subscribes to all four and POSTs `{ event, data, timestamp }` to `NOUS_BOT_URL/webhooks/queue-changed` with `X-Bot-Secret`. The post is `blocking: false` with a 2-second timeout — Nous outage cannot delay or fail a queue write. Event types emitted to Nous:
-
-- `entry.added` / `entry.advanced` / `entry.completed` / `entry.updated`
-- `session.opened` / `session.updated`
-
-Nous re-broadcasts each event to its connected SSE clients (the itzenzo.tv homepage). Phase summary: WP is canonical, Nous is the SSE broadcaster (PHP-FPM is bad at long-lived connections, Node is fine), itzenzo.tv hits Nous through a Next.js Route Handler proxy.
-
-### Producers (who calls the writes)
-
-Four code paths put rows into `wp_queue_entries`:
-
-1. **Orders** — Nous Stripe webhook → `addToQueue()` in `commands/queue.js` → `queueSource.addEntry({ type: 'order', source: 'shop' })`. One entry per line item.
-2. **Pack battles** — Nous Stripe webhook → `checkBattlePayment()` in `webhooks/stripe.js` after `confirmPayment` → `queueSource.addEntry({ type: 'pack_battle' })`. Idempotent on `stripe:<sid>:battle`.
-3. **Pull boxes** — Nous Stripe webhook → `recordPullBoxPurchase()` in `commands/pull.js` → `queueSource.addEntry({ type: 'pull_box', detailLabel: 'Pull Box • slots N, M, ...' })`. Perpetual single-box model — the box auto-creates from settings (`pb_price_id`, `pb_total_slots`) on first access, and operator runs `/pull reset` (Discord) or clicks the WP admin "Reset Pull Box" button when the chase prize hits. Pull-box checkouts skip shipping at checkout; settlement runs at `/offline` — see "Speculative shipping" below.
-4. **Request-to-see** — WP `CardRequestEndpoint::callback()` → `QueueRepository::createEntry({ type: 'rts', external_ref: 'rts:{cardId}:{email}' })`. Single write, no parallel ledger; idempotent on the external_ref (re-submission while the entry is still queued/active returns the existing row). Requires an active queue session — returns 503 if none exists, since the bot is supposed to keep one open between streams.
-
-### Speculative shipping
-
-Pull boxes, individual booster packs (product CPT with `skip_shipping_at_checkout = true`), and pack-battle entries are **speculative** — the buyer pays only the buy-in at checkout, no shipping line. The `/offline` command runs a settlement scan: buyers with held items since their last DM AND no shipping payment for the current period get a Discord DM with a Stripe shipping link. Dedup via the `speculative_shipping_dms` table — only fresh purchases since the last DM trigger a new one. Unlinked-Discord buyers surface in `#ops` for manual follow-up. The `purchases.source` column carries `'pull_box' | 'speculative' | 'pack_battle'` to drive the dedup query. Buyer-facing policy lives at `/how-it-works/shipping` on itzenzo.tv (4-week hold before cards return to pulling pool).
-
-All four feed the same `wp_queue_entries` table, the same actions fire, the same SSE events reach the homepage, and the same `/queue` Discord embed renders.
-
-### Testing the queue path
-
-Bot-side: Nous's `npm run test:critical` (CLI replacement for the legacy `!test` Discord command) opens with the active queue source (`config.QUEUE_SOURCE`) printed in the header, then probes it with `getActiveQueue()` before running the rest of the buyer-critical-path suite — fails loud if WP is unreachable.
-
-WP-side: unit tests at `tests/Unit/Providers/Shop/Support/QueueRepositoryTest.php` (serialization), `tests/Unit/Providers/Shop/Endpoints/QueueEndpointsTest.php` (route/methods/auth), and `tests/Unit/Providers/Shop/Hooks/QueueMigrationTest.php` (table naming).
-
-## Catalog Drift Defense
-
-A Stripe product getting archived (or deleted) while a WP catalog post still references it would silently kill that buyer's cart — Stripe rejects creating a session if any line item references an inactive product. Four layers prevent and recover from this:
-
-1. **Push scripts delete instead of archive** — `Nous/scripts/shop/push-products.js --clean` and `push-cards.js --clean` hard-delete prices+products in test mode and archive in live mode. Mode is auto-detected from the key prefix via `Nous/lib/stripe-mode.cjs`; `STRIPE_DELETE_WHEN_REMOVING=true|false` overrides. Live `--clean` is gated behind `--allow-live-clean` so an accidental run can't archive every active product. Falls back to archive automatically when Stripe rejects a delete.
-2. **Real-time webhook auto-cleanup** — Nous's stripe webhook handler subscribes to `product.updated` (active true→false), `product.deleted`, `price.updated`, and `price.deleted`. Each calls `notifyCatalogProductDeactivated()` which POSTs to `/shop/v1/catalog/stripe-product-deactivated` (`CatalogStripeProductDeactivatedEndpoint`). WP sets `stock=0` and clears the stale `stripe_price_id` / `stripe_product_id` meta on every referenced post. Idempotent. **Manual setup**: those four events must be enabled on the Stripe webhook endpoint in the Dashboard.
-3. **Pre-flight in `CreateCheckoutEndpoint`** — `StripeService::findFirstInactivePriceId()` runs before stock decrement. Inactive priceId returns a 409 `item_unavailable` naming the offending item and auto-sets stock=0 on it. Saves the stock-decrement-then-restore round-trip and avoids polluting Stripe's incomplete-sessions view.
-4. **Friendly catch (backstop)** — if a Stripe rejection slips past pre-flight (race with a dashboard archive, etc.), `unavailableItemResponse()` parses the priceId out of the exception message and returns the same 409 + auto-cleanup.
-
-Manual sweep: `node Nous/scripts/shop/audit-stripe-active.js [--apply]` lists every WP post pointing at an inactive Stripe product. Cron candidate (`TODO.md` HIGH PRIORITY).
-
-### Testing the catalog drift path
-
-WP-side: `tests/Integration/Providers/Shop/CatalogStripeProductDeactivatedEndpointTest.php` (shape + permission only — behavior is verified end-to-end against prod because WorDBless mocks `update_post_meta`/`get_post_meta` in memory and direct `$wpdb` queries against `wp_postmeta` return zero rows in the test environment; this matches the convention used by `QueueResetEndpoint` and other endpoints that touch the DB through raw SQL).
-
-Bot-side: `Nous/tests/catalog-deactivate.test.js` (envelope shape, early-return guards on empty productId, error handling, log emission). The `npm run test:critical` smoke flow has a probe step that POSTs a fake `stripeProductId` to the WP endpoint and asserts 200 + `matched=0` — catches a broken route or auth gate before a livestream relies on the real-time cleanup path.
+The four-layer Stripe-drift defense (push-script delete-not-archive, webhook auto-cleanup, checkout pre-flight, friendly-catch backstop) is moot now that checkout is gated off everywhere. [docs/catalog-drift-defense.md](docs/catalog-drift-defense.md) is kept as historical reference for the reversal path.
 
 ## WordPress Object Cache (Redis)
 
