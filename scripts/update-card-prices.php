@@ -2,14 +2,21 @@
 /**
  * Update card price/stock in WordPress directly from the Singles sheet.
  *
- * Stripe-free replacement for the price half of pull-cards.php. Stripe is
- * parked (Whatnot pivot), so the old Sheet → Stripe → WP chain no longer
- * refreshes card `price`/`stock_quantity`. This reads a JSON exported from the
- * sheet by Nous/scripts/shop/export-card-prices.mjs and applies it to existing
- * `card` posts, joined by `stripe_product_id` meta (still stable in both
- * places). It does NOT create cards or touch images/taxonomies — those already
- * exist from the original pipeline; only price, stock, sale fields and (for red
- * "do not sell" rows) post status change.
+ * Stripe-free Sheet → WP sync (Stripe retired — Whatnot pivot). Reads a JSON
+ * exported by Nous/scripts/shop/export-card-prices.mjs and applies it to
+ * existing `card` posts. It does NOT create cards or touch images/taxonomies —
+ * create-cards-from-sheet.php owns creation; only price, stock, sale fields
+ * and (for red "do not sell" rows) post status change here.
+ *
+ * Join resolution, per row (col S is the sheet's generic join key):
+ *   1. numeric joinKey  → WP post ID directly (cards created Stripe-free;
+ *      stamped into col S by backfill-card-postids.mjs). Sanity-checked
+ *      against card_name so a drifted ID can't update the wrong card.
+ *   2. `prod_…` joinKey → `stripe_product_id` postmeta (legacy cards from the
+ *      retired Stripe pipeline — the meta survives as an inert join handle).
+ *   3. blank/failed     → card_name + card_number, with a normalized set-name
+ *      tiebreak when multiple match. Ambiguous rows are skipped with a
+ *      warning rather than guessed.
  *
  * Per card it will:
  *   - set `price` (col D) and `stock_quantity` (col F) when they differ,
@@ -46,7 +53,89 @@ if (!is_array($entries)) {
 
 $apply = !empty(getenv('APPLY'));
 echo ($apply ? 'APPLYING' : 'DRY RUN (no writes — set APPLY=1 to write)') . "\n";
-echo 'Source: ' . $jsonPath . ' (' . count($entries) . " rows with a Stripe product id)\n\n";
+echo 'Source: ' . $jsonPath . ' (' . count($entries) . " sheet rows)\n\n";
+
+/**
+ * Loose set-name comparison: the sheet and WP format set names differently
+ * for older cards ("Brilliant Stars Trainer Gallery" vs "SWSH09: Brilliant
+ * Stars Trainer Gallery"), so exact equality is too strict. Case-insensitive
+ * containment in either direction.
+ */
+function cardSetMatches(string $a, string $b): bool
+{
+    $a = strtolower(trim($a));
+    $b = strtolower(trim($b));
+    if ($a === '' || $b === '') {
+        return false;
+    }
+    return str_contains($a, $b) || str_contains($b, $a);
+}
+
+/**
+ * Resolve a sheet row to a card post. Returns WP_Post or null.
+ */
+function resolveCardPost(array $e): ?WP_Post
+{
+    $key = trim((string) ($e['joinKey'] ?? ''));
+
+    // 1. Numeric col S → direct post ID, with a card_name sanity check so an
+    //    ID that drifted (e.g. local/staging DB divergence) can't update the
+    //    wrong card — fall through to the name join instead.
+    if ($key !== '' && ctype_digit($key)) {
+        $post = get_post((int) $key);
+        if ($post && $post->post_type === 'card') {
+            $wpName = (string) get_field('card_name', $post->ID);
+            if ($wpName === '' || strcasecmp($wpName, (string) $e['name']) === 0) {
+                return $post;
+            }
+            echo "  [id mismatch] col S {$key} is \"{$wpName}\", sheet says \"{$e['name']}\" — falling back to name join\n";
+        }
+    }
+
+    // 2. Legacy Stripe product ID → postmeta join.
+    if ($key !== '' && str_starts_with($key, 'prod_')) {
+        $q = new WP_Query([
+            'post_type'      => 'card',
+            'post_status'    => ['publish', 'draft', 'pending'],
+            'posts_per_page' => 1,
+            'no_found_rows'  => true,
+            'meta_query'     => [['key' => 'stripe_product_id', 'value' => $key]],
+        ]);
+        if ($q->have_posts()) {
+            return $q->posts[0];
+        }
+    }
+
+    // 3. Fallback: card_name + card_number, set as tiebreak.
+    if (($e['name'] ?? '') === '') {
+        return null;
+    }
+    $q = new WP_Query([
+        'post_type'      => 'card',
+        'post_status'    => ['publish', 'draft', 'pending'],
+        'posts_per_page' => 5,
+        'no_found_rows'  => true,
+        'meta_query'     => [
+            'relation' => 'AND',
+            ['key' => 'card_name', 'value' => $e['name']],
+            ['key' => 'card_number', 'value' => (string) ($e['number'] ?? '')],
+        ],
+    ]);
+    $hits = $q->posts;
+    if (count($hits) > 1 && ($e['set'] ?? '') !== '') {
+        $hits = array_values(array_filter(
+            $hits,
+            fn($p) => cardSetMatches((string) get_field('set_name', $p->ID), (string) $e['set'])
+        ));
+    }
+    if (count($hits) === 1) {
+        return $hits[0];
+    }
+    if (count($hits) > 1) {
+        echo "  [ambiguous] {$e['name']} #{$e['number']} matches " . count($hits) . " WP cards — skipped\n";
+    }
+    return null;
+}
 
 $changed = 0;
 $unchanged = 0;
@@ -55,26 +144,14 @@ $salesCleared = 0;
 $drafted = 0;
 
 foreach ($entries as $e) {
-    $pid = $e['stripeProductId'] ?? '';
-    if ($pid === '') {
-        continue;
-    }
+    $post = resolveCardPost($e);
 
-    $q = new WP_Query([
-        'post_type'      => 'card',
-        'post_status'    => ['publish', 'draft', 'pending'],
-        'posts_per_page' => 1,
-        'no_found_rows'  => true,
-        'meta_query'     => [['key' => 'stripe_product_id', 'value' => $pid]],
-    ]);
-
-    if (!$q->have_posts()) {
+    if (!$post) {
         $unmatched++;
-        echo "  [no WP card] {$pid} — " . ($e['name'] ?? '') . "\n";
+        echo '  [no WP card] ' . trim((string) ($e['joinKey'] ?? '')) . ' — ' . ($e['name'] ?? '') . ' #' . ($e['number'] ?? '') . "\n";
         continue;
     }
 
-    $post = $q->posts[0];
     $postId = $post->ID;
     $changes = [];
 

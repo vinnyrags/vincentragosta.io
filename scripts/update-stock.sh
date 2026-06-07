@@ -1,27 +1,26 @@
 #!/usr/bin/env bash
 #
-# Atomically set stock for a card or product across Stripe + WordPress
-# + Next.js cache.
+# Set stock for a card or product in WordPress + Next.js cache (Stripe-free).
 #
 # Invoked only via `make update-stock` — the Makefile target pipes
 # this script over SSH with STRIPE_ID / WP_ID / STOCK / WP_PATH in
 # the env. The script never runs on the operator's laptop.
 #
+# Stripe retired 2026-06-04 (Whatnot pivot): the old metadata.stock
+# write is gone. STRIPE_ID is still accepted, but purely as a lookup
+# key — the stripe_product_id postmeta remains a stable join handle
+# between the Singles sheet (col S) and WP posts.
+#
 # Flow:
-#   1. Resolve missing input (STRIPE_ID or WP_ID) from postmeta.
-#   2. Update Stripe metadata.stock.
-#   3. Update WP stock_quantity (only if step 2 succeeded).
-#   4. Revalidate the relevant itzenzo.tv path (/cards for cards,
+#   1. Resolve WP_ID (directly, or from STRIPE_ID via postmeta).
+#   2. Update WP stock_quantity.
+#   3. Revalidate the relevant itzenzo.tv path (/cards for cards,
 #      / for sealed products) so the storefront reflects the new
 #      stock immediately instead of waiting up to 10s for ISR.
 #
-# Stripe is updated first so a Stripe failure leaves WP untouched
-# and the operator can retry cleanly without drift.
-#
 # Does NOT touch the Google Sheet. The Sheet is the operator's
 # manual source of truth; update it separately so the next
-# `make sync-cards-*` / `make sync-products` doesn't revert this
-# change.
+# `make update-card-prices-*-apply` doesn't revert this change.
 
 set -euo pipefail
 
@@ -41,23 +40,19 @@ if ! [[ "$STOCK" =~ ^[0-9]+$ ]]; then
 fi
 
 if [[ -z "$STRIPE_ID" && -z "$WP_ID" ]]; then
-    echo "ABORT: provide STRIPE_ID or WP_ID."
+    echo "ABORT: provide WP_ID (or STRIPE_ID as a lookup key)."
     exit 1
 fi
 
-# Resolve the missing half from postmeta. Both card and product post
-# types use the stripe_product_id meta key.
-if [[ -z "$STRIPE_ID" && -n "$WP_ID" ]]; then
-    STRIPE_ID=$(wp post meta get "$WP_ID" stripe_product_id --path="$WP_PATH" --allow-root 2>/dev/null || true)
-fi
+# Resolve WP_ID from the stripe_product_id join key if not given directly.
+# Both card and product post types use the stripe_product_id meta key.
 if [[ -z "$WP_ID" && -n "$STRIPE_ID" ]]; then
     WP_ID=$(wp post list --post_type=card,product --meta_key=stripe_product_id --meta_value="$STRIPE_ID" --field=ID --path="$WP_PATH" --allow-root 2>/dev/null | head -1 || true)
 fi
 
-if [[ -z "$STRIPE_ID" || -z "$WP_ID" ]]; then
-    echo "ABORT: could not resolve both STRIPE_ID and WP_ID."
-    echo "  STRIPE_ID: ${STRIPE_ID:-(missing)}"
-    echo "  WP_ID:     ${WP_ID:-(missing)}"
+if [[ -z "$WP_ID" ]]; then
+    echo "ABORT: could not resolve a WP post."
+    echo "  STRIPE_ID: ${STRIPE_ID:-(not given)}"
     exit 1
 fi
 
@@ -71,30 +66,8 @@ CURRENT_STOCK=$(wp post meta get "$WP_ID" stock_quantity --path="$WP_PATH" --all
 echo "Updating stock:"
 echo "  WP post ID:   $WP_ID ($POST_TYPE)"
 echo "  WP title:     $TITLE"
-echo "  Stripe ID:    $STRIPE_ID"
 echo "  Stock:        ${CURRENT_STOCK:-?} → $STOCK"
 echo ""
-
-STRIPE_KEY=$(grep '^STRIPE_SECRET_KEY=' /opt/nous-bot/.env | cut -d= -f2- || true)
-if [[ -z "$STRIPE_KEY" ]]; then
-    echo "ABORT: could not read STRIPE_SECRET_KEY from /opt/nous-bot/.env"
-    exit 1
-fi
-
-echo ">> Updating Stripe metadata.stock..."
-RESP_FILE=$(mktemp)
-HTTP_STATUS=$(curl -s -o "$RESP_FILE" -w '%{http_code}' \
-    -X POST "https://api.stripe.com/v1/products/$STRIPE_ID" \
-    -u "$STRIPE_KEY:" \
-    -d "metadata[stock]=$STOCK")
-if [[ "$HTTP_STATUS" != "200" ]]; then
-    echo "   Stripe responded $HTTP_STATUS:"
-    cat "$RESP_FILE"
-    rm -f "$RESP_FILE"
-    exit 1
-fi
-rm -f "$RESP_FILE"
-echo "   ✓ Stripe metadata.stock = $STOCK"
 
 echo ">> Updating WP stock_quantity..."
 wp post meta update "$WP_ID" stock_quantity "$STOCK" --path="$WP_PATH" --allow-root >/dev/null
