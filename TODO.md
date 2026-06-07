@@ -2,15 +2,17 @@
 - finish sign up with carter pulse, need creator hub code
 
 ## ITZENZO.TV
-- remove all whatnot orders and upload new CSV
-- should consider reworking the homepage to have a sneakpeak to card catalog, collection and livestream shop, each of which should have a link (like the card catalog does to their own designated pages). we sould need to create a livestream shop page to match this.
-- on the collection, cards and newly created livestream page, we should consider pagination over the load more, while still keeping the filterss and dynamic search. after thinking about it, having 750+ images displaying on a page at any given time is just a mess. lets make sure our pagination has the ability to jump to a page.
+- clean up claude.md files system/project wide, how can we optimize these files
+- clean up memory, remove bits that are unuseful (do an audit please)
+- my collection cards should have sme frontend as card singles on homepage and on their respective pages, i noticed the second row with english and not for sale is still present
+- what happens when i delete all items from shop and get ready to upload auction csv, will we lose all of our permanent shop items?
+- remove stripe integration from site and discord, go into plan mode to see what this would look like, we should delegate it to a plugin
 - we need to create a request to see and make an offer queue on the homepage under our whatnot callout, and potentially even under our show schedule/bundle callouts as well.
 - lets remove the callout about yu-gi-oh please on the cards/collection page (lets keep things lightweight and limit a ton of text), our cleanup on the homepage is already a big step in the right direction from what it was.
 
 - the following items were purchased, we should update our system to reflect this: One Piece Illustration Box Vol. 6, Lapras #10/62 — Fossil, Haunter #29/102 — Base Set, Growlithe #28/102 — Base Set, Grimer #57/82 — Team Rocket, Bulbasaur #44/102 — Base Set #1 (sold two of these), Surfing Pikachu V #8 — Celebrations, Machamp #59/108 — Evolutions, Eevee VMAX #SWSH087 — SWSH: Sword & Shield Promo Cards
-- lets work on a request to see/make an offer queue that I can watch in real time during my whatnot stream. For the moment lets disable 
-- we should create little dividers in between each activity feed item and lets reduce the font size of the items by 50% please 
+- lets work on a request to see/make an offer queue that I can watch in real time during my whatnot stream. For the moment lets disable
+- we should create little dividers in between each activity feed item and lets reduce the font size of the items by 50% please
 - reconsider the activity feed entirely (it is very noisy)
 - wire up Stripe `checkout.session.expired` webhook handler — when a buyer abandons a Stripe checkout (e.g. clicks back), stock stays held at the decremented count until manually fixed. Subscribe to the event on the existing Stripe webhook endpoint, parse the session's line_items, and restore stock_quantity by the held qty for each. Idempotent. Surfaced 2026-05-13 when a customer clicked back on the SAO Alicization Vol 2 listing and the stock had to be hand-restored via wp post meta update + /api/revalidate.
 - remove instagram link on /live #announcements post (just tiktok)
