@@ -1,7 +1,9 @@
 <?php
 /**
- * Update sealed-product price in WordPress directly from the Products sheet tab.
- * Stripe-free sibling of update-card-prices.php for the `product` CPT.
+ * Update sealed-product price + stock in WordPress directly from the Products
+ * sheet tab. Stripe-free sibling of update-card-prices.php for the `product`
+ * CPT. The Products tab is the source of truth for both price (col B) and
+ * stock (col D); WP — and the Whatnot CSV built from WP inventory — follow it.
  *
  * The Products tab has no Stripe/WP id column, so we join by product NAME →
  * post_title: exact match first (WP_Query handles HTML-entity titles like
@@ -10,8 +12,9 @@
  * (e.g. sheet "Pokemon Astral Radiance" → WP "Pokemon Astral Radiance Booster
  * Pack"). Ambiguous (multi-hit) or missing names are reported, never guessed.
  *
- * Only updates `price` on existing products — never creates/deletes. Dry-run by
- * default; APPLY=1 writes.
+ * Updates `price` and `stock_quantity` on existing products — never
+ * creates/deletes. Stock 0 is honored (product drops from the CSV but the WP
+ * post stays for later restock). Dry-run by default; APPLY=1 writes.
  *
  * Usage:  PRODUCT_PRICES_JSON=/tmp/product-prices.json ddev wp eval-file scripts/update-product-prices.php
  *  apply: PRODUCT_PRICES_JSON=... APPLY=1 ddev wp eval-file scripts/update-product-prices.php
@@ -79,8 +82,7 @@ $unmatched = [];
 
 foreach ($entries as $e) {
     $name = $e['name'] ?? '';
-    $price = $e['price'] ?? '';
-    if ($name === '' || $price === '') {
+    if ($name === '') {
         continue;
     }
     $id = $findId($name);
@@ -88,13 +90,33 @@ foreach ($entries as $e) {
         $unmatched[] = $name;
         continue;
     }
-    $cur = (string) get_field('price', $id);
-    if ($cur !== $price) {
-        $changed++;
-        echo "  #{$id} {$name}: {$cur} → {$price}\n";
-        if ($apply) {
-            update_field('price', $price, $id);
+
+    $changes = [];
+
+    $price = $e['price'] ?? '';
+    if ($price !== '') {
+        $cur = (string) get_field('price', $id);
+        if ($cur !== $price) {
+            $changes[] = "price {$cur} → {$price}";
+            if ($apply) {
+                update_field('price', $price, $id);
+            }
         }
+    }
+
+    if (array_key_exists('stock', $e) && $e['stock'] !== null) {
+        $cur = (int) get_field('stock_quantity', $id);
+        if ($cur !== (int) $e['stock']) {
+            $changes[] = "stock {$cur} → {$e['stock']}";
+            if ($apply) {
+                update_field('stock_quantity', (int) $e['stock'], $id);
+            }
+        }
+    }
+
+    if ($changes) {
+        $changed++;
+        echo "  #{$id} {$name}: " . implode(', ', $changes) . "\n";
     } else {
         $unchanged++;
     }

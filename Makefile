@@ -181,6 +181,9 @@ endef
 	export-card-prices update-card-prices update-card-prices-apply \
 	update-card-prices-staging update-card-prices-staging-apply \
 	update-card-prices-production update-card-prices-production-apply \
+	export-product-prices update-product-prices update-product-prices-apply \
+	update-product-prices-staging update-product-prices-staging-apply \
+	update-product-prices-production update-product-prices-production-apply \
 	release-stuck-pull-box-slots \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles enrich-singles-japanese lint-singles audit-alt-art backup-singles \
@@ -685,6 +688,52 @@ update-collection-prices-production-apply: export-collection-prices ## APPLY: Co
 	@scp -q $(COLLECTION_PRICES_JSON) $(PRODUCTION_HOST):$(COLLECTION_PRICES_JSON)
 	$(call remote-wp-eval-with-env,PRODUCTION,update-collection-prices.php,COLLECTION_PRICES_JSON=$(COLLECTION_PRICES_JSON) APPLY=1)
 	@echo "Revalidating production itzenzo.tv so collection prices show..."
+	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
+
+##@ Product price/stock sync (Sheets → WP, Stripe-free)
+
+# Direct Products-tab → WordPress price + stock refresh for the `product` CPT
+# (sealed boxes, ETBs, etc.). The Products tab is the source of truth: col B
+# (price) and col D (stock) drive WP, and the Whatnot CSV is built from WP
+# inventory — so Sheet → WP → CSV. export-product-prices reads the tab into
+# JSON; update-product-prices.php joins by product NAME → post_title and writes
+# price + stock_quantity (stock 0 drops the item from the CSV but keeps the WP
+# post for restock). Dry-run by default; *-apply writes AND revalidates
+# itzenzo.tv. Production targets need the PHP script deployed (git push).
+
+PRODUCT_PRICES_JSON := /tmp/product-prices.json
+
+export-product-prices: ## Read Products tab → $(PRODUCT_PRICES_JSON) (price col B, stock col D)
+	@echo "Exporting product prices/stock from Products tab → $(PRODUCT_PRICES_JSON)..."
+	@cd ../Nous/scripts/shop && node export-product-prices.mjs > $(PRODUCT_PRICES_JSON)
+	@echo "✓ Wrote $(PRODUCT_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(PRODUCT_PRICES_JSON)) products)"
+
+update-product-prices: export-product-prices ## DRY-RUN: Products price/stock → local WP
+	@cp $(PRODUCT_PRICES_JSON) scripts/.product-prices.json
+	@ddev exec "PRODUCT_PRICES_JSON=/var/www/html/scripts/.product-prices.json wp eval-file scripts/update-product-prices.php"; rm -f scripts/.product-prices.json
+
+update-product-prices-apply: export-product-prices ## APPLY: Products price/stock → local WP
+	@cp $(PRODUCT_PRICES_JSON) scripts/.product-prices.json
+	@ddev exec "PRODUCT_PRICES_JSON=/var/www/html/scripts/.product-prices.json APPLY=1 wp eval-file scripts/update-product-prices.php"; rm -f scripts/.product-prices.json
+
+update-product-prices-staging: export-product-prices ## DRY-RUN: Products price/stock → staging WP
+	@scp -q $(PRODUCT_PRICES_JSON) $(STAGING_HOST):$(PRODUCT_PRICES_JSON)
+	$(call remote-wp-eval-with-env,STAGING,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON))
+
+update-product-prices-staging-apply: export-product-prices ## APPLY: Products price/stock → staging WP (+ revalidate itzenzo)
+	@scp -q $(PRODUCT_PRICES_JSON) $(STAGING_HOST):$(PRODUCT_PRICES_JSON)
+	$(call remote-wp-eval-with-env,STAGING,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON) APPLY=1)
+	@echo "Revalidating staging itzenzo.tv so product prices/stock show..."
+	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
+
+update-product-prices-production: export-product-prices ## DRY-RUN: Products price/stock → production WP
+	@scp -q $(PRODUCT_PRICES_JSON) $(PRODUCTION_HOST):$(PRODUCT_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON))
+
+update-product-prices-production-apply: export-product-prices ## APPLY: Products price/stock → production WP (+ revalidate itzenzo)
+	@scp -q $(PRODUCT_PRICES_JSON) $(PRODUCTION_HOST):$(PRODUCT_PRICES_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON) APPLY=1)
+	@echo "Revalidating production itzenzo.tv so product prices/stock show..."
 	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
 
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
