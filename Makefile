@@ -197,7 +197,7 @@ endef
 	build-whatnot-auction-csv whatnot-auction-csv-production \
 	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
 	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
-	build-whatnot-bin-show-csv whatnot-bin-show-csv-production \
+	build-whatnot-bin-show-csv whatnot-bin-show-csv-production whatnot-show-prep \
 	nous-import \
 	satis-refresh satis-add satis-remove
 
@@ -889,6 +889,26 @@ whatnot-permanent-bin-csv-production: export-inventory-production build-whatnot-
 whatnot-post-stream-bin-csv-production: export-inventory-production build-whatnot-post-stream-bin-csv ## One-shot: refresh from prod + build POST-STREAM-BIN CSV (relist unsold auctions at BIN markup)
 
 whatnot-bin-show-csv-production: export-inventory-production build-whatnot-bin-show-csv ## One-shot: refresh from prod + build BIN-SHOW CSV (BIN @ auction price + quick-pick auctions)
+
+# Full twice-weekly pre-show pipeline, Sheet → WP → CSV (the sheet is the
+# single source of truth). Runs after the interactive inventory pass (decrement
+# sold, move-zero-stock-to-sold, remove sold WP posts, add/enrich new rows):
+#   1. sync-cards-production  — create new card posts + stamp col-S IDs +
+#                               push card price/stock from the Singles tab
+#   2. update-product-prices-production-apply — push product price + stock from
+#                               the Products tab (sealed boxes, ETBs)
+#   3. whatnot-bin-show-csv-production — fresh prod inventory → BIN-SHOW CSV
+# Each step revalidates itzenzo.tv. The CSV lands in tmp/whatnot-bin-show-
+# import-<UTC-date>.csv. (Sold-card REMOVAL from WP is still part of the
+# interactive pass — see CLAUDE.md "Card Catalog Pipeline".)
+whatnot-show-prep: ## Pre-show one-shot: sync cards + products (Sheet→WP) then build BIN-SHOW CSV
+	@echo "==================================================================="
+	@echo "  whatnot-show-prep — Sheet → WP → CSV (run after the sheet pass)"
+	@echo "==================================================================="
+	@$(MAKE) --no-print-directory sync-cards-production
+	@$(MAKE) --no-print-directory update-product-prices-production-apply
+	@$(MAKE) --no-print-directory whatnot-bin-show-csv-production
+	@echo "✓ Show prep complete — CSV ready in tmp/whatnot-bin-show-import-<date>.csv"
 
 ##@ Nous import
 
