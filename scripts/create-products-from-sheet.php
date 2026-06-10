@@ -99,6 +99,7 @@ if (!$apply) {
 
 function productExistsByTitle(string $name): bool
 {
+    // Exact title match first (WP_Query normalizes entity-encoded titles).
     $q = new WP_Query([
         'post_type'      => 'product',
         'post_status'    => ['publish', 'draft', 'pending', 'trash'],
@@ -107,7 +108,25 @@ function productExistsByTitle(string $name): bool
         'no_found_rows'  => true,
         'title'          => $name,
     ]);
-    return !empty($q->posts);
+    if (!empty($q->posts)) {
+        return true;
+    }
+    // Unique-prefix fallback — same as update-product-prices.php — so a sheet
+    // name that is a shortened form of the WP title (e.g. sheet "Pokemon Astral
+    // Radiance" → WP "Pokemon Astral Radiance Booster Pack") isn't recreated.
+    $all = new WP_Query([
+        'post_type'      => 'product',
+        'post_status'    => ['publish', 'draft', 'pending', 'trash'],
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ]);
+    foreach ($all->posts as $id) {
+        if (strpos(get_the_title($id), $name . ' ') === 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function syncProductCategory(int $postId, string $category): void
