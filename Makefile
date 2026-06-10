@@ -184,6 +184,9 @@ endef
 	export-product-prices update-product-prices update-product-prices-apply \
 	update-product-prices-staging update-product-prices-staging-apply \
 	update-product-prices-production update-product-prices-production-apply \
+	export-new-products create-products create-products-apply \
+	create-products-staging create-products-staging-apply \
+	create-products-production create-products-production-apply \
 	release-stuck-pull-box-slots \
 	migrate-card-images migrate-card-images-staging migrate-card-images-production \
 	enrich-singles enrich-singles-japanese lint-singles audit-alt-art backup-singles \
@@ -734,6 +737,51 @@ update-product-prices-production-apply: export-product-prices ## APPLY: Products
 	@scp -q $(PRODUCT_PRICES_JSON) $(PRODUCTION_HOST):$(PRODUCT_PRICES_JSON)
 	$(call remote-wp-eval-with-env,PRODUCTION,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON) APPLY=1)
 	@echo "Revalidating production itzenzo.tv so product prices/stock show..."
+	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
+
+##@ Product create (Sheets → WP, Stripe-free)
+
+# Brand-new Products-tab rows → WP `product` posts (sealed boxes, ETBs,
+# collections). Sibling of the card-create flow. export-new-products reads the
+# whole tab; create-products-from-sheet.php dedupes by post_title and skips
+# rows with no image (col G) — so only new, imaged products get created with
+# price (B), stock (D), category (C), language (H) + a sideloaded featured
+# image. Dry-run by default; -apply writes (+ revalidates itzenzo on remote).
+# After creating, run update-product-prices-* to keep price/stock in sync.
+
+NEW_PRODUCTS_JSON := /tmp/new-products.json
+
+export-new-products: ## Read Products tab → $(NEW_PRODUCTS_JSON) (name/price/category/stock/image)
+	@echo "Exporting products from Products tab → $(NEW_PRODUCTS_JSON)..."
+	@cd ../Nous/scripts/shop && node export-new-products.mjs > $(NEW_PRODUCTS_JSON)
+	@echo "✓ Wrote $(NEW_PRODUCTS_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(NEW_PRODUCTS_JSON)) rows)"
+
+create-products: export-new-products ## DRY-RUN: new Products-tab rows → local WP product posts
+	@cp $(NEW_PRODUCTS_JSON) scripts/.new-products.json
+	@ddev exec "NEW_PRODUCTS_JSON=/var/www/html/scripts/.new-products.json wp eval-file scripts/create-products-from-sheet.php"; rm -f scripts/.new-products.json
+
+create-products-apply: export-new-products ## APPLY: new Products-tab rows → local WP product posts
+	@cp $(NEW_PRODUCTS_JSON) scripts/.new-products.json
+	@ddev exec "NEW_PRODUCTS_JSON=/var/www/html/scripts/.new-products.json APPLY=1 wp eval-file scripts/create-products-from-sheet.php"; rm -f scripts/.new-products.json
+
+create-products-staging: export-new-products ## DRY-RUN: new products → staging WP
+	@scp -q $(NEW_PRODUCTS_JSON) $(STAGING_HOST):$(NEW_PRODUCTS_JSON)
+	$(call remote-wp-eval-with-env,STAGING,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON))
+
+create-products-staging-apply: export-new-products ## APPLY: new products → staging WP (+ revalidate itzenzo)
+	@scp -q $(NEW_PRODUCTS_JSON) $(STAGING_HOST):$(NEW_PRODUCTS_JSON)
+	$(call remote-wp-eval-with-env,STAGING,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON) APPLY=1)
+	@echo "Revalidating staging itzenzo.tv so new products show..."
+	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
+
+create-products-production: export-new-products ## DRY-RUN: new products → production WP
+	@scp -q $(NEW_PRODUCTS_JSON) $(PRODUCTION_HOST):$(NEW_PRODUCTS_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON))
+
+create-products-production-apply: export-new-products ## APPLY: new products → production WP (+ revalidate itzenzo)
+	@scp -q $(NEW_PRODUCTS_JSON) $(PRODUCTION_HOST):$(NEW_PRODUCTS_JSON)
+	$(call remote-wp-eval-with-env,PRODUCTION,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON) APPLY=1)
+	@echo "Revalidating production itzenzo.tv so new products show..."
 	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
 
 # Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
