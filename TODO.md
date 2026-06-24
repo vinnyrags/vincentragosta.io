@@ -1,8 +1,7 @@
 ## ADMIN
-- finish sign up with carter pulse, need creator hub code
 
 ## ITZENZO.TV
-- clean up claude.md files system/project wide, how can we optimize these files
+- clean up claude.md files system/project wide, how can we optimize these files, what are the best practices we can do across projects and with regards to a "global" claude.md file. what does the community at large do in 2026 when it comes to claude.md files. lets work up an implementation plan in plan mode for this.
 - clean up memory, remove bits that are unuseful (do an audit please)
 - my collection cards should have sme frontend as card singles on homepage and on their respective pages, i noticed the second row with english and not for sale is still present
 - what happens when i delete all items from shop and get ready to upload auction csv, will we lose all of our permanent shop items?
