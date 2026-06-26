@@ -214,6 +214,15 @@ help: ## Show available targets, grouped by section
 		/^[a-zA-Z][a-zA-Z0-9_-]*:.*?## / {printf "  \033[36m%-32s\033[0m %s\n", $$1, $$2}' \
 		$(MAKEFILE_LIST)
 
+##@ Setup
+
+setup: ## First-run: DDEV config (if needed), start, then pull production content
+	@test -f auth.json || { echo "✗ auth.json missing (needed for ACF Pro)"; exit 1; }
+	@test -d .ddev || ddev config --project-type=wordpress --docroot="" --project-name=vincentragosta.io
+	@$(MAKE) start
+	@$(MAKE) pull-production
+	@echo "✓ Setup complete — $(LOCAL_URL)"
+
 ##@ Local development
 
 start: ## Start DDEV, restore latest DB snapshot, install deps, build assets

@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-> **About this document.** This file is a guide, not a contract. It documents how things work and why they ended up that way, but nothing here is beyond question. If a pattern described below doesn't fit the problem at hand, or if there's a better approach, say so — pushing back on assumptions in this document is encouraged. The architecture is still evolving, and this file should evolve with it. When a change to the codebase shifts a pattern or introduces a new convention, suggest updating CLAUDE.md to reflect it. Never update this file automatically — always prompt first so the change can be reviewed and discussed.
+> **About this document.** A guide, not a contract — push back when a pattern here doesn't fit or there's a better approach. The architecture is still evolving; when a change shifts a convention, suggest updating this file, but never edit it automatically — prompt first.
 
 ## Project Overview
 
