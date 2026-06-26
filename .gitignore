@@ -1,4 +1,5 @@
 .ddev
+wp-config-ddev.php
 auth.json
 wp-config-env.php
 TODO.md
