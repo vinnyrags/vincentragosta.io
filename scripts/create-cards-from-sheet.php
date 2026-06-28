@@ -45,7 +45,7 @@ foreach ($cards as $c) {
         continue;
     }
 
-    if (cardExistsByNameNumber($name, $number)) {
+    if (cardExists($name, $number, $c['variant'] ?? '')) {
         $skipped++;
         continue;
     }
@@ -105,21 +105,48 @@ if (!$apply) {
     echo "\nRe-run with APPLY=1 to write. Image sideload makes the apply slower (one download per card).\n";
 }
 
-function cardExistsByNameNumber(string $name, string $number): bool
+/**
+ * A card already exists when WP holds one with the same name, same number
+ * NUMERATOR (so "42" matches "42/82"), AND the same edition (First Edition vs
+ * not). Edition-aware so a 1st-Ed printing is created even when its Unlimited
+ * twin already exists at the same name+number. Reads edition from the variant
+ * and set name on both sides.
+ */
+function cardExists(string $name, string $number, string $variant): bool
 {
+    $wantNum = cardNumerator($number);
+    $wantEd  = cardIsFirstEd($variant);
     $q = new WP_Query([
         'post_type'      => 'card',
-        'post_status'    => ['publish', 'draft', 'pending', 'trash'],
-        'posts_per_page' => 1,
+        'post_status'    => ['publish', 'draft', 'pending', 'trash', 'private', 'future'],
+        'posts_per_page' => -1,
         'fields'         => 'ids',
         'no_found_rows'  => true,
-        'meta_query'     => [
-            'relation' => 'AND',
-            ['key' => 'card_name', 'value' => $name],
-            ['key' => 'card_number', 'value' => $number],
-        ],
+        'meta_query'     => [['key' => 'card_name', 'value' => $name]],
     ]);
-    return !empty($q->posts);
+    foreach ($q->posts as $id) {
+        if (cardNumerator((string) get_post_meta($id, 'card_number', true)) !== $wantNum) {
+            continue;
+        }
+        $ed = cardIsFirstEd(
+            (string) get_post_meta($id, 'variant', true) . ' ' . (string) get_post_meta($id, 'set_name', true)
+        );
+        if ($ed === $wantEd) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function cardNumerator(string $s): string
+{
+    $s = strtolower(trim(explode('/', trim($s))[0]));
+    return ltrim($s, '0') !== '' ? ltrim($s, '0') : $s;
+}
+
+function cardIsFirstEd(string $s): bool
+{
+    return (bool) preg_match('/1st|first\s*ed/i', $s);
 }
 
 function sideloadFeaturedImage(int $postId, string $imageUrl, string $title): void
