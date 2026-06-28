@@ -201,7 +201,7 @@ endef
 	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
 	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
 	build-whatnot-bin-show-csv whatnot-bin-show-csv-production whatnot-show-prep \
-	nous-import \
+	nous-import nous-import-production \
 	satis-refresh satis-add satis-remove
 
 .DEFAULT_GOAL := help
@@ -974,6 +974,12 @@ nous-import: ## Import a Nous Signal post (FILE=, TITLE=, EXCERPT=, DATE=, TAGS=
 	$(if $(TITLE),,$(error TITLE is required))
 	$(if $(DATE),,$(error DATE is required (YYYY-MM-DD)))
 	@bash scripts/nous-import.sh "$(FILE)" "$(TITLE)" "$(EXCERPT)" "$(DATE)" "$(TAGS)"
+
+nous-import-production: ## Publish a Nous Signal post LIVE to production (FILE=, TITLE=, EXCERPT=, DATE=, TAGS=) — additive, non-destructive
+	$(if $(FILE),,$(error Usage: make nous-import-production FILE=path/to/post.php TITLE="Post Title" EXCERPT="..." DATE="YYYY-MM-DD" TAGS="tag1,tag2"))
+	$(if $(TITLE),,$(error TITLE is required))
+	$(if $(DATE),,$(error DATE is required (YYYY-MM-DD)))
+	@PROD_HOST='$(PRODUCTION_HOST)' PROD_WP='$(PRODUCTION_WP)' bash scripts/nous-import-prod.sh "$(FILE)" "$(TITLE)" "$(EXCERPT)" "$(DATE)" "$(TAGS)"
 
 ##@ Satis package repository
 
