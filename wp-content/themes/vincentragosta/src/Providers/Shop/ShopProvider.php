@@ -152,7 +152,7 @@ class ShopProvider extends Provider
         // the toolbar's client-side search/filter covers everything.
         add_filter('graphql_connection_max_query_amount', static function ($amount, $source, $args, $context, $info) {
             if (isset($info->fieldName) && $info->fieldName === 'cards') {
-                return 1000;
+                return 3000;
             }
             return $amount;
         }, 10, 5);
