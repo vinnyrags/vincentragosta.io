@@ -63,7 +63,9 @@ foreach ($cards as $c) {
     $postId = wp_insert_post([
         'post_type'   => 'card',
         'post_title'  => $title,
-        'post_status' => 'publish',
+        // Default publish (Pokémon flow). Pass POST_STATUS=draft to stage cards
+        // without surfacing them on itzenzo.tv (storefront query is status:PUBLISH).
+        'post_status' => getenv('POST_STATUS') ?: 'publish',
     ], true);
     if (is_wp_error($postId)) {
         echo "      ! create failed: {$postId->get_error_message()}\n";
