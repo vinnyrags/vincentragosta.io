@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39ebf176686c191c7b97941c0f03b349",
+    "content-hash": "77d1b84b7c21dabbe21250385c850147",
     "packages": [
         {
             "name": "composer/installers",
@@ -1077,27 +1077,26 @@
         },
         {
             "name": "vincentragosta/mythus",
-            "version": "dev-main",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/mythus.git",
-                "reference": "26210bedad5a72eb747532538be052263ac14bfd"
+                "reference": "686c4e6e7d52b01442250a43c2a6666b8ac5f152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vinnyrags/mythus/zipball/26210bedad5a72eb747532538be052263ac14bfd",
-                "reference": "26210bedad5a72eb747532538be052263ac14bfd",
-                "shasum": ""
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/mythus/vincentragosta-mythus-686c4e6e7d52b01442250a43c2a6666b8ac5f152-zip-208ebf.zip",
+                "reference": "686c4e6e7d52b01442250a43c2a6666b8ac5f152",
+                "shasum": "0f111aa69c537e42fffb3e720d57114a685c098f"
             },
             "require": {
-                "php": ">=8.4",
+                "php": ">=8.3",
                 "php-di/php-di": "^7.0"
             },
             "require-dev": {
                 "automattic/wordbless": "^0.4.2",
                 "phpunit/phpunit": "^9.6"
             },
-            "default-branch": true,
             "type": "wordpress-muplugin",
             "autoload": {
                 "psr-4": {
@@ -1125,10 +1124,10 @@
             ],
             "description": "WordPress platform framework — provider pattern, DI container integration, and support managers",
             "support": {
-                "source": "https://github.com/vinnyrags/mythus/tree/main",
+                "source": "https://github.com/vinnyrags/mythus/tree/v1.1.0",
                 "issues": "https://github.com/vinnyrags/mythus/issues"
             },
-            "time": "2026-03-21T04:03:25+00:00"
+            "time": "2026-07-14T22:24:32+00:00"
         },
         {
             "name": "wpackagist-plugin/instagram-feed",
@@ -1277,8 +1276,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "vincentragosta/ix": 20,
-        "vincentragosta/mythus": 20
+        "vincentragosta/ix": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

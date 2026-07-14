@@ -35,6 +35,7 @@ use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
 use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
 use ChildTheme\Providers\Shop\Hooks\CardRequestEmailNotifier;
+use ChildTheme\Providers\Shop\Hooks\ItzenzoCacheInvalidation;
 use ChildTheme\Providers\Shop\Hooks\OfferEmailNotifier;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxAdminReset;
@@ -77,6 +78,7 @@ class ShopProvider extends Provider
         PullBoxGraphQL::class,
         PullBoxAdminReset::class,
         ActivityWebhook::class,
+        ItzenzoCacheInvalidation::class,
         OfferEmailNotifier::class,
         CardRequestEmailNotifier::class,
     ];
