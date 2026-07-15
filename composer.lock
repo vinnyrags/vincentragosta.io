@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77d1b84b7c21dabbe21250385c850147",
+    "content-hash": "f65ca1a56d8f2b3c109bd1e753ae27d6",
     "packages": [
         {
             "name": "composer/installers",
@@ -1077,17 +1077,17 @@
         },
         {
             "name": "vincentragosta/mythus",
-            "version": "v1.1.0",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/mythus.git",
-                "reference": "686c4e6e7d52b01442250a43c2a6666b8ac5f152"
+                "reference": "e6c8a89819317de13754a0a96bc5e5edbe76dcdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.vincentragosta.io/dist/vincentragosta/mythus/vincentragosta-mythus-686c4e6e7d52b01442250a43c2a6666b8ac5f152-zip-208ebf.zip",
-                "reference": "686c4e6e7d52b01442250a43c2a6666b8ac5f152",
-                "shasum": "0f111aa69c537e42fffb3e720d57114a685c098f"
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/mythus/vincentragosta-mythus-e6c8a89819317de13754a0a96bc5e5edbe76dcdc-zip-c41e8d.zip",
+                "reference": "e6c8a89819317de13754a0a96bc5e5edbe76dcdc",
+                "shasum": "11110a4d38f5192c60aff03475035be19786dd5a"
             },
             "require": {
                 "php": ">=8.3",
@@ -1124,10 +1124,10 @@
             ],
             "description": "WordPress platform framework — provider pattern, DI container integration, and support managers",
             "support": {
-                "source": "https://github.com/vinnyrags/mythus/tree/v1.1.0",
+                "source": "https://github.com/vinnyrags/mythus/tree/v1.2.0",
                 "issues": "https://github.com/vinnyrags/mythus/issues"
             },
-            "time": "2026-07-14T22:24:32+00:00"
+            "time": "2026-07-15T03:07:15+00:00"
         },
         {
             "name": "wpackagist-plugin/instagram-feed",
