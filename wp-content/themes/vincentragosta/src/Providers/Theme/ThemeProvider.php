@@ -17,6 +17,7 @@ use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use DI\Container;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
+use IX\Providers\Theme\Features\ContentPartial\ContentPartial;
 use IX\Providers\Theme\Features\ScrollReveal;
 use IX\Providers\Theme\Features\WpFormsBaseStyles;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
@@ -40,6 +41,9 @@ class ThemeProvider extends BaseThemeProvider
      * or opt out of parent features via ClassName::class => false.
      */
     protected array $features = [
+        // vincentragosta.io builds its header/footer directly in views/*.twig, so it
+        // opts out of the platform's default-on content-partial CPT (IX v1.5.0+).
+        ContentPartial::class => false,
         ButtonIconEnhancer::class,
         ScrollReveal::class,
         WpFormsBaseStyles::class,
