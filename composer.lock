@@ -1026,12 +1026,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "9d5f6beae8a55560d67c6806c64e2741fde5e747"
+                "reference": "bcbc30ec6bebb78dd2fff5a5e3c878223edf9f38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/9d5f6beae8a55560d67c6806c64e2741fde5e747",
-                "reference": "9d5f6beae8a55560d67c6806c64e2741fde5e747",
+                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/bcbc30ec6bebb78dd2fff5a5e3c878223edf9f38",
+                "reference": "bcbc30ec6bebb78dd2fff5a5e3c878223edf9f38",
                 "shasum": ""
             },
             "require": {
@@ -1070,10 +1070,10 @@
             ],
             "description": "A foundational WordPress parent theme with Timber support",
             "support": {
-                "source": "https://github.com/vinnyrags/IX/tree/v1.5.0",
+                "source": "https://github.com/vinnyrags/IX/tree/v1.6.0",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-07-17T18:28:47+00:00"
+            "time": "2026-07-18T05:10:17+00:00"
         },
         {
             "name": "vincentragosta/mythus",
