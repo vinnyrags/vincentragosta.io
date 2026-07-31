@@ -11,9 +11,11 @@ use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
+use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
 use IX\Providers\Theme\Hooks\AccordionIconEnhancer;
 use IX\Providers\Theme\Hooks\FeaturedImageFocalPoint;
+use IX\Providers\Theme\Hooks\HeadingBlockStyles;
 use IX\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
 use IX\Providers\Provider;
@@ -113,6 +115,7 @@ class ThemeProviderTest extends BaseTestCase
         // Parent hooks (inherited)
         $this->assertContains(AccordionIconEnhancer::class, $hooks);
         $this->assertContains(FeaturedImageFocalPoint::class, $hooks);
+        $this->assertContains(HeadingBlockStyles::class, $hooks);
         $this->assertContains(TermsQuerySupports::class, $hooks);
 
         // Child hooks
@@ -120,9 +123,10 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(CoverBlockStyles::class, $hooks);
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
+        $this->assertContains(SocialIconOverride::class, $hooks);
         $this->assertContains(AccentHighlight::class, $hooks);
         $this->assertContains(SearchSetup::class, $hooks);
-        $this->assertCount(10, $hooks);
+        $this->assertCount(11, $hooks);
 
         // ButtonIconEnhancer is now a Feature, not a Hook
         $this->assertNotContains(ButtonIconEnhancer::class, $hooks);
