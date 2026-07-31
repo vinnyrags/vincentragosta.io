@@ -128,6 +128,10 @@ class ThemeProvider extends BaseThemeProvider
         // Timber context for ACF options data
         add_filter('timber/context', [$this, 'addOptionsToContext']);
 
+        // Timber context for the primary nav menu (with its full child tree),
+        // rendered as a grouped mega-menu overlay in views/header.twig.
+        add_filter('timber/context', [$this, 'addMenusToContext']);
+
         // Extend IX's ScrollReveal default selectors with vinrag-specific
         // elements (footer contact + page-bar copy, blog pagination), and
         // add the .blog-pagination ancestor exclude so paginated post-list
@@ -222,6 +226,116 @@ class ThemeProvider extends BaseThemeProvider
         ];
 
         return $context;
+    }
+
+    /**
+     * CSS class (set on a menu item's "CSS Classes" field) that flags it to be
+     * populated with the latest posts of a given type — e.g. `nav-dynamic-post`
+     * or `nav-dynamic-project`. The suffix must be a registered post type.
+     */
+    private const DYNAMIC_MENU_CLASS_PREFIX = 'nav-dynamic-';
+
+    /** How many recent posts a dynamic menu item lists. */
+    private const DYNAMIC_MENU_COUNT = 5;
+
+    /**
+     * Add the primary nav menu (with its full child tree) to the Timber
+     * context so header.twig can render a grouped mega-menu. Resolved by
+     * theme location; returns null when no menu is assigned to 'primary'.
+     *
+     * Also resolves "dynamic" menu items (flagged with a `nav-dynamic-{type}`
+     * CSS class) into a map of menu-item-ID => latest posts, which header.twig
+     * appends beneath the item's static children. This keeps feeds like Nous
+     * Signal / Projects always current without manual menu upkeep.
+     *
+     * @param array<string, mixed> $context Timber context.
+     * @return array<string, mixed>
+     */
+    public function addMenusToContext(array $context): array
+    {
+        if (!class_exists(\Timber\Timber::class)) {
+            return $context;
+        }
+
+        $menu = \Timber\Timber::get_menu_by('location', 'primary');
+
+        $context['primary_menu']          = $menu;
+        $context['dynamic_menu_children'] = $menu ? $this->resolveDynamicMenuChildren($menu) : [];
+
+        return $context;
+    }
+
+    /**
+     * Build a map of top-level menu-item ID => latest posts, for any item
+     * flagged with a `nav-dynamic-{post_type}` CSS class.
+     *
+     * @param \Timber\Menu $menu The primary menu.
+     * @return array<int, array<int, array{title: string, link: string}>>
+     */
+    private function resolveDynamicMenuChildren(\Timber\Menu $menu): array
+    {
+        $map = [];
+
+        foreach ($menu->items as $item) {
+            $postType = $this->dynamicPostTypeForMenuItem((int) $item->id);
+
+            if ($postType !== null) {
+                $map[(int) $item->id] = $this->latestPostsForMenu($postType);
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Read a menu item's assigned CSS classes and return the post type it
+     * should be populated with, or null when it isn't a dynamic item.
+     */
+    private function dynamicPostTypeForMenuItem(int $menuItemId): ?string
+    {
+        $classes = get_post_meta($menuItemId, '_menu_item_classes', true);
+
+        if (!is_array($classes)) {
+            return null;
+        }
+
+        foreach ($classes as $class) {
+            if (!is_string($class) || !str_starts_with($class, self::DYNAMIC_MENU_CLASS_PREFIX)) {
+                continue;
+            }
+
+            $postType = substr($class, strlen(self::DYNAMIC_MENU_CLASS_PREFIX));
+
+            return ($postType !== '' && post_type_exists($postType)) ? $postType : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Fetch the latest published posts of a type as lightweight menu-child
+     * data (title + permalink).
+     *
+     * @return array<int, array{title: string, link: string}>
+     */
+    private function latestPostsForMenu(string $postType): array
+    {
+        $posts = get_posts([
+            'post_type'        => $postType,
+            'post_status'      => 'publish',
+            'posts_per_page'   => self::DYNAMIC_MENU_COUNT,
+            'orderby'          => 'date',
+            'order'            => 'DESC',
+            'suppress_filters' => false,
+        ]);
+
+        return array_map(
+            static fn(\WP_Post $post): array => [
+                'title' => get_the_title($post),
+                'link'  => (string) get_permalink($post),
+            ],
+            $posts
+        );
     }
 
 }

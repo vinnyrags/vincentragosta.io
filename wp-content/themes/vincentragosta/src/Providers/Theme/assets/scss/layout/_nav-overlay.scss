@@ -5,18 +5,24 @@ html.nav-overlay-open {
   overflow: hidden;
 }
 
+// Slide-down mega-menu panel — anchored beneath the header, not full-screen.
+// Ported from itzenzo.tv's nav-overlay. Keeps the opacity/visibility transition
+// so header.js can await `transitionend` on `opacity` when closing.
 .nav-overlay {
   position: fixed;
-  inset: var(--header-height) 0 0;
+  inset-block-start: var(--header-height);
+  inset-inline: 0;
   z-index: 999;
   background: var(--header-bg);
-  display: flex;
-  align-items: safe center;
-  justify-content: center;
+  border-block-end: 1px solid var(--header-border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  max-height: calc(100vh - var(--header-height));
   overflow-y: auto;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease, background-color 0.3s ease;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease,
+    background-color 0.3s ease;
 
   &[hidden] {
     display: none;
@@ -25,77 +31,105 @@ html.nav-overlay-open {
   &.is-open {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
   }
 
+  // Constrained content strip, centered under the header.
   &__content {
-    width: 100%;
-    padding: var(--wp--preset--spacing--50);
+    max-width: 80rem;
+    margin-inline: auto;
+    padding: 2.5rem var(--wp--preset--spacing--50);
   }
 
-  &__list {
+  // Column grid — one column per top-level menu item (count injected as
+  // `--nav-cols` in header.twig). Collapses to a single column on mobile.
+  &__columns {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--nav-cols, 4), minmax(0, 1fr));
+    gap: 2rem;
+
+    @include media-down(md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.75rem 1.25rem;
+    }
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    min-width: 0;
+  }
+
+  // Column heading — shared by non-link section labels (parents with children)
+  // and leaf links (top-level items with no children), so the row reads as one
+  // consistent strip of small uppercase labels.
+  &__heading {
+    display: block;
+    font-size: var(--wp--preset--font-size--10);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--header-text) 60%, transparent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    // Leaf links read as primary actions — full-strength foreground color.
+    &--link {
+      color: var(--header-text);
+      cursor: pointer;
+    }
+
+    &--link:hover,
+    &.is-active {
+      color: var(--wp--preset--color--accent-1);
+    }
+
+    &--link:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+  }
+
+  // Child links beneath each parent column.
+  &__sub {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--wp--preset--spacing--40);
-
-    li {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-
-      @for $i from 1 through 10 {
-        &:nth-child(#{$i}) {
-          transition-delay: #{($i - 1) * 0.07}s;
-        }
-      }
-    }
-
-    .is-open & li {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    gap: 0.625rem;
 
     a {
+      display: block;
+      font-size: var(--wp--preset--font-size--20);
       color: var(--header-text);
       text-decoration: none;
-      font-size: var(--wp--preset--font-size--60);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-weight: 400;
       transition: color 0.2s ease;
 
-      @include media(md) {
-        font-size: var(--wp--preset--font-size--70);
-      }
-
-      &[aria-current="page"] {
-        color: var(--wp--preset--color--accent-1);
-      }
-
-      &:hover {
+      &:hover,
+      &.is-active {
         color: var(--wp--preset--color--accent-1);
       }
 
       &:focus-visible {
         outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: 4px;
+        border-radius: 2px;
       }
     }
   }
 }
 
-// Reduced motion: disable all overlay transitions
+// Reduced motion: no slide/fade. header.js skips the transitionend wait when
+// reduced motion is preferred, so dropping the transition is safe for close.
 @include reduced-motion {
   .nav-overlay {
     transition: none;
-  }
-
-  .nav-overlay__list li {
-    transition: none;
-    opacity: 1;
     transform: none;
   }
 }

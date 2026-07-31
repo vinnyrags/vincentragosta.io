@@ -77,13 +77,42 @@
         hidden
     >
         <div class="nav-overlay__content">
-            {{ function('wp_nav_menu', {
-                theme_location: 'primary',
-                container: false,
-                menu_class: 'nav-overlay__list',
-                depth: 1,
-                fallback_cb: false
-            }) }}
+            {% if primary_menu and primary_menu.items %}
+                <ul class="nav-overlay__columns" style="--nav-cols: {{ primary_menu.items|length }}">
+                    {% for item in primary_menu.items %}
+                        {% set dynamic_children = dynamic_menu_children[item.id] ?? [] %}
+                        <li class="nav-overlay__column">
+                            {% if item.children or dynamic_children %}
+                                <span class="nav-overlay__heading">{{ item.title }}</span>
+                                <ul class="nav-overlay__sub">
+                                    {% for child in item.children %}
+                                        <li>
+                                            <a
+                                                href="{{ child.link }}"
+                                                class="{{ child.current ? 'is-active' }}"
+                                                {{ child.current ? 'aria-current="page"' }}
+                                                {% if child.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
+                                            >{{ child.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                    {% for child in dynamic_children %}
+                                        <li>
+                                            <a href="{{ child.link }}">{{ child.title }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <a
+                                    href="{{ item.link }}"
+                                    class="nav-overlay__heading nav-overlay__heading--link {{ (item.current or item.current_item_ancestor) ? 'is-active' }}"
+                                    {{ item.current ? 'aria-current="page"' }}
+                                    {% if item.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
+                                >{{ item.title }}</a>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </nav>
 </header>
