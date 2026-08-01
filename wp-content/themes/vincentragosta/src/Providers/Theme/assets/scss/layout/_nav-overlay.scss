@@ -69,7 +69,8 @@ html.nav-overlay-open {
     // of the site accent. The `nous-signal-nav-item` class is added to the menu
     // item by the Blog provider and carried onto the column in header.twig.
     &.nous-signal-nav-item .nav-overlay__sub a {
-      &:hover {
+      &:hover,
+      &.is-active {
         color: var(--wp--preset--color--nous-red);
       }
 
@@ -98,7 +99,8 @@ html.nav-overlay-open {
       cursor: pointer;
     }
 
-    &--link:hover {
+    &--link:hover,
+    &--link.is-active {
       color: var(--wp--preset--color--accent-1);
     }
 
@@ -125,7 +127,8 @@ html.nav-overlay-open {
       text-decoration: none;
       transition: color 0.2s ease;
 
-      &:hover {
+      &:hover,
+      &.is-active {
         color: var(--wp--preset--color--accent-1);
       }
 

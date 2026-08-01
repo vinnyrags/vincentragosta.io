@@ -95,9 +95,14 @@
                                 <span class="nav-overlay__heading">{{ item.title }}</span>
                                 <ul class="nav-overlay__sub">
                                     {% for child in item.children %}
+                                        {# Default WP current-menu-item active state,
+                                           but never for in-page anchor links (#section). #}
+                                        {% set child_active = child.current and '#' not in child.link %}
                                         <li>
                                             <a
                                                 href="{{ child.link }}"
+                                                class="{{ child_active ? 'is-active' }}"
+                                                {{ child_active ? 'aria-current="page"' }}
                                                 {% if child.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
                                             >{{ child.title }}</a>
                                         </li>
@@ -109,9 +114,11 @@
                                     {% endfor %}
                                 </ul>
                             {% else %}
+                                {% set item_active = (item.current or item.current_item_ancestor) and '#' not in item.link %}
                                 <a
                                     href="{{ item.link }}"
-                                    class="nav-overlay__heading nav-overlay__heading--link"
+                                    class="nav-overlay__heading nav-overlay__heading--link {{ item_active ? 'is-active' }}"
+                                    {{ item_active ? 'aria-current="page"' }}
                                     {% if item.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
                                 >{{ item.title }}</a>
                             {% endif %}
