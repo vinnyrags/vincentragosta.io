@@ -34,11 +34,13 @@ html.nav-overlay-open {
     transform: translateY(0);
   }
 
-  // Constrained content strip, centered under the header.
+  // Content strip flush with the site content edge — same max-width and
+  // horizontal gutter as the header container / page content, so the columns
+  // line up with the logo and page content edges.
   &__content {
-    max-width: 80rem;
+    max-width: var(--wp--style--global--content-size, 1440px);
     margin-inline: auto;
-    padding: 2.5rem var(--wp--preset--spacing--50);
+    padding: 2.5rem var(--wp--preset--spacing--40);
   }
 
   // Column grid — one column per top-level menu item (count injected as
@@ -62,6 +64,19 @@ html.nav-overlay-open {
     flex-direction: column;
     gap: 0.875rem;
     min-width: 0;
+
+    // Nous Signal identity — the flagged column's links hover/focus red instead
+    // of the site accent. The `nous-signal-nav-item` class is added to the menu
+    // item by the Blog provider and carried onto the column in header.twig.
+    &.nous-signal-nav-item .nav-overlay__sub a {
+      &:hover {
+        color: var(--wp--preset--color--nous-red);
+      }
+
+      &:focus-visible {
+        outline-color: var(--wp--preset--color--nous-red);
+      }
+    }
   }
 
   // Column heading — shared by non-link section labels (parents with children)
@@ -83,8 +98,7 @@ html.nav-overlay-open {
       cursor: pointer;
     }
 
-    &--link:hover,
-    &.is-active {
+    &--link:hover {
       color: var(--wp--preset--color--accent-1);
     }
 
@@ -111,8 +125,7 @@ html.nav-overlay-open {
       text-decoration: none;
       transition: color 0.2s ease;
 
-      &:hover,
-      &.is-active {
+      &:hover {
         color: var(--wp--preset--color--accent-1);
       }
 
@@ -125,10 +138,36 @@ html.nav-overlay-open {
   }
 }
 
+// Dimming backdrop behind the mega-menu. Insets from the header height so the
+// header strip stays undimmed; sits below the panel (z-index 999) and above page
+// content. Shown via html.nav-overlay-open; click-to-close wired in header.js.
+.nav-overlay__backdrop {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: 998;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+// Tie visibility to the panel's own open state (the backdrop follows the panel
+// in the DOM) so the two fade in and out together — driving it off
+// html.nav-overlay-open instead would leave the backdrop lingering after close.
+.nav-overlay.is-open ~ .nav-overlay__backdrop {
+  opacity: 1;
+  visibility: visible;
+}
+
+.light-mode .nav-overlay__backdrop {
+  background: rgba(0, 0, 0, 0.25);
+}
+
 // Reduced motion: no slide/fade. header.js skips the transitionend wait when
 // reduced motion is preferred, so dropping the transition is safe for close.
 @include reduced-motion {
-  .nav-overlay {
+  .nav-overlay,
+  .nav-overlay__backdrop {
     transition: none;
     transform: none;
   }

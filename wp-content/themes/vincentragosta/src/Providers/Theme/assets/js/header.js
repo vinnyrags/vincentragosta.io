@@ -163,6 +163,14 @@ export function initMenuToggle() {
         }
     });
 
+    // Close overlay when the dimming backdrop is clicked
+    const backdrop = document.querySelector('.nav-overlay__backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            toggleOverlay(menuToggle, overlay, false);
+        });
+    }
+
     // Close menu on Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {

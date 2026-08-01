@@ -81,7 +81,16 @@
                 <ul class="nav-overlay__columns" style="--nav-cols: {{ primary_menu.items|length }}">
                     {% for item in primary_menu.items %}
                         {% set dynamic_children = dynamic_menu_children[item.id] ?? [] %}
-                        <li class="nav-overlay__column">
+                        {# Carry the menu item's custom CSS classes onto the column
+                           (e.g. nous-signal-nav-item) as styling hooks. Drop WP's
+                           generated structural (menu-item*/page*) and state
+                           (current-*) classes — the header has no active state
+                           and the column doesn't need the menu plumbing classes. #}
+                        {% set column_classes = item.classes|filter(c =>
+                            c and 'current' not in c and 'menu-item' not in c
+                            and 'page-item' not in c and 'page_item' not in c
+                        )|join(' ') %}
+                        <li class="nav-overlay__column {{ column_classes }}">
                             {% if item.children or dynamic_children %}
                                 <span class="nav-overlay__heading">{{ item.title }}</span>
                                 <ul class="nav-overlay__sub">
@@ -89,8 +98,6 @@
                                         <li>
                                             <a
                                                 href="{{ child.link }}"
-                                                class="{{ child.current ? 'is-active' }}"
-                                                {{ child.current ? 'aria-current="page"' }}
                                                 {% if child.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
                                             >{{ child.title }}</a>
                                         </li>
@@ -104,8 +111,7 @@
                             {% else %}
                                 <a
                                     href="{{ item.link }}"
-                                    class="nav-overlay__heading nav-overlay__heading--link {{ (item.current or item.current_item_ancestor) ? 'is-active' }}"
-                                    {{ item.current ? 'aria-current="page"' }}
+                                    class="nav-overlay__heading nav-overlay__heading--link"
                                     {% if item.target == '_blank' %}target="_blank" rel="noopener noreferrer"{% endif %}
                                 >{{ item.title }}</a>
                             {% endif %}
@@ -115,4 +121,8 @@
             {% endif %}
         </div>
     </nav>
+
+    {# Dimming backdrop behind the mega-menu (below the header strip). Shown via
+       html.nav-overlay-open; clicking it closes the menu (header.js). #}
+    <div class="nav-overlay__backdrop" aria-hidden="true"></div>
 </header>
