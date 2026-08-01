@@ -35,7 +35,6 @@ class BlogProvider extends BaseBlogProvider
         add_filter('body_class', [$this, 'addNousSignalBodyClass']);
         add_action('admin_menu', [$this, 'renamePostsMenu']);
         add_action('init', [$this, 'unregisterCategories']);
-        add_filter('nav_menu_css_class', [$this, 'addNousSignalNavClass'], 10, 2);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAccentOverride']);
 
         parent::register();
@@ -97,28 +96,6 @@ class BlogProvider extends BaseBlogProvider
     public function unregisterCategories(): void
     {
         unregister_taxonomy_for_object_type('category', BlogPost::POST_TYPE);
-    }
-
-    /**
-     * Add a CSS class to the nav menu item that links to the configured blog page.
-     *
-     * @param string[] $classes
-     * @param \WP_Post $menuItem
-     * @return string[]
-     */
-    public function addNousSignalNavClass(array $classes, $menuItem): array
-    {
-        if (!function_exists('get_field')) {
-            return $classes;
-        }
-
-        $blogPageId = get_field('blog_page', 'option');
-
-        if ($blogPageId && (int) $menuItem->object_id === (int) $blogPageId) {
-            $classes[] = 'nous-signal-nav-item';
-        }
-
-        return $classes;
     }
 
     /**

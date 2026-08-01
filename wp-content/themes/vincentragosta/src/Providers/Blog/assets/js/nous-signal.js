@@ -106,18 +106,6 @@
   }
 
   /**
-   * Nav hover flash: hovering over the Nous Signal nav item
-   * triggers the resistance flash (global, all pages).
-   */
-  function initNavHoverFlash(flash) {
-    var navItem = document.querySelector('.nous-signal-nav-item a');
-
-    if (!navItem) return;
-
-    navItem.addEventListener('mouseenter', flash);
-  }
-
-  /**
    * Console easter egg — greet curious devs.
    */
   function initConsoleEasterEgg() {
@@ -139,17 +127,11 @@
     var isSignalPage = document.body.classList.contains('nous-signal-page');
 
     if (isDesktop()) {
-      var flash = createResistanceFlash();
-
-      // Global
-      if (flash) {
-        initNavHoverFlash(flash);
-      }
-
       // Blog pages only
       if (isSignalPage) {
         initDecryptReveal();
 
+        var flash = createResistanceFlash();
         if (flash) {
           initLightModeResistance(flash);
         }
