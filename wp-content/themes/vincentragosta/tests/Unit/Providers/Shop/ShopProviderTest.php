@@ -2,10 +2,9 @@
 
 namespace ChildTheme\Tests\Unit\Providers\Shop;
 
-use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
+use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use ChildTheme\Providers\Shop\ShopProvider;
@@ -43,10 +42,16 @@ class ShopProviderTest extends TestCase
         $provider = $reflection->newInstanceWithoutConstructor();
         $routes = $property->getValue($provider);
 
-        $this->assertContains(CreateCheckoutEndpoint::class, $routes);
-        $this->assertContains(StripeWebhookEndpoint::class, $routes);
+        // Kept: headless data + queue/pull-box endpoints.
         $this->assertContains(CurrentPackBattleEndpoint::class, $routes);
-        $this->assertContains(PullBoxCheckoutEndpoint::class, $routes);
+        $this->assertContains(PullBoxClaimEndpoint::class, $routes);
+        $this->assertContains(StockDecrementEndpoint::class, $routes);
+
+        // Retired: Stripe checkout/webhook routes must be gone entirely.
+        foreach ($routes as $route) {
+            $this->assertStringNotContainsString('Checkout', $route, 'Checkout endpoints are retired');
+            $this->assertNotSame('ChildTheme\\Providers\\Shop\\Endpoints\\StripeWebhookEndpoint', $route);
+        }
     }
 
     public function testDeclaresHooks(): void

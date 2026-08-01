@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop;
 
-use ChildTheme\Providers\Shop\Endpoints\BundleCheckoutEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CancelCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardOfferEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CreateCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxConfirmEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCreateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxResetEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxUpdateEndpoint;
@@ -26,11 +21,7 @@ use ChildTheme\Providers\Shop\Endpoints\QueueSessionEntriesEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSessionsListEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\QueueSnapshotEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\ShippingLookupEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\ShippingStartCheckoutEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\StripeWebhookEndpoint;
-use ChildTheme\Providers\Shop\Hooks\ActivityWebhook;
 use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
 use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
@@ -40,22 +31,21 @@ use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
 use ChildTheme\Providers\Shop\Hooks\PullBoxAdminReset;
 use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
 use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
-use ChildTheme\Providers\Shop\Hooks\QueueChangeWebhook;
 use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
 use ChildTheme\Providers\Shop\Hooks\QueueMigration;
 use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
 use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
-use ChildTheme\Providers\Shop\Services\StripeService;
 use IX\Providers\Provider;
 
 /**
  * Shop Provider.
  *
- * Registers the product post type, REST endpoints for Stripe checkout
- * and stock management, and ACF field groups. The frontend storefront
- * has moved to itzenzo.tv (Next.js) — this provider serves as the
- * headless backend only.
+ * Registers the product/card post types, ACF field groups, and the
+ * headless REST surface: product/card data, the unified queue, and the
+ * pull-box slot data endpoints. Stripe checkout and its webhooks are
+ * retired — this provider is the headless backend for itzenzo.tv
+ * (Next.js) only, with no checkout path.
  */
 class ShopProvider extends Provider
 {
@@ -72,11 +62,9 @@ class ShopProvider extends Provider
         ShopRedirect::class,
         QueueMigration::class,
         QueueGraphQL::class,
-        QueueChangeWebhook::class,
         PullBoxMigration::class,
         PullBoxGraphQL::class,
         PullBoxAdminReset::class,
-        ActivityWebhook::class,
         OfferEmailNotifier::class,
         CardRequestEmailNotifier::class,
     ];
@@ -85,16 +73,11 @@ class ShopProvider extends Provider
      * REST API endpoints.
      */
     protected array $routes = [
-        BundleCheckoutEndpoint::class,
-        CancelCheckoutEndpoint::class,
         CardOfferEndpoint::class,
         CardRequestEndpoint::class,
         CatalogStripeProductDeactivatedEndpoint::class,
-        CreateCheckoutEndpoint::class,
         CurrentPackBattleEndpoint::class,
-        PullBoxCheckoutEndpoint::class,
         PullBoxClaimEndpoint::class,
-        PullBoxConfirmEndpoint::class,
         PullBoxCreateEndpoint::class,
         PullBoxResetEndpoint::class,
         PullBoxUpdateEndpoint::class,
@@ -107,32 +90,7 @@ class ShopProvider extends Provider
         QueueSessionUpdateEndpoint::class,
         QueueSessionsListEndpoint::class,
         QueueSnapshotEndpoint::class,
-        ShippingLookupEndpoint::class,
-        ShippingStartCheckoutEndpoint::class,
         StockDecrementEndpoint::class,
-        StripeWebhookEndpoint::class,
-    ];
-
-    /**
-     * Stripe checkout/webhook endpoints gated behind STRIPE_ENABLED.
-     *
-     * Every endpoint here either constructs StripeService or creates a
-     * Stripe Checkout Session, so when Stripe is parked none of them may
-     * be reachable. CatalogStripeProductDeactivatedEndpoint and
-     * ShippingLookupEndpoint are intentionally excluded — neither touches
-     * Stripe, and both must keep working while parked (catalog-drift
-     * cleanup and shipping-cost lookup respectively).
-     *
-     * @var class-string[]
-     */
-    private const STRIPE_GATED_ROUTES = [
-        BundleCheckoutEndpoint::class,
-        CancelCheckoutEndpoint::class,
-        CreateCheckoutEndpoint::class,
-        PullBoxCheckoutEndpoint::class,
-        PullBoxConfirmEndpoint::class,
-        ShippingStartCheckoutEndpoint::class,
-        StripeWebhookEndpoint::class,
     ];
 
     /**
@@ -160,30 +118,6 @@ class ShopProvider extends Provider
         parent::register();
 
         $this->acfManager->registerSavePath();
-    }
-
-    /**
-     * Collect REST routes, gating Stripe endpoints behind STRIPE_ENABLED.
-     *
-     * Computed at runtime because a property default cannot call a
-     * function. When Stripe is parked the gated endpoints are marked
-     * disabled, so RestManager never registers them (WP returns a standard
-     * 404) and StripeService is never constructed — its missing-key guard
-     * never fires. When Stripe is enabled this is a no-op.
-     *
-     * @return array<class-string, bool>|array<int, class-string>
-     */
-    protected function collectRoutes(): array
-    {
-        $routes = parent::collectRoutes();
-
-        if (!StripeService::isEnabled()) {
-            foreach (self::STRIPE_GATED_ROUTES as $endpoint) {
-                $routes[$endpoint] = false;
-            }
-        }
-
-        return $routes;
     }
 
     /**

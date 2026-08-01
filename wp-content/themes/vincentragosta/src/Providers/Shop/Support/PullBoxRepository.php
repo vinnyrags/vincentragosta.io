@@ -67,11 +67,9 @@ class PullBoxRepository
         $title = (string) (get_field('pb_title', 'option') ?: 'Pull Box');
         $totalSlots = (int) (get_field('pb_total_slots', 'option') ?: 50);
 
-        // Resolve unit price from the Stripe price record so the box's
-        // price_cents stays in sync with the configured Stripe price.
-        // Falls back to 500 ($5) when Stripe is unreachable so we don't
-        // block buyers on a transient error — the slot grid + checkout
-        // both ultimately re-validate against the live Stripe price.
+        // Resolve the box unit price. Stripe is retired, so this is the
+        // configured/default price in cents (500 == $5). The value is
+        // cosmetic — it drives the embed and the dollar tile only.
         $priceCents = $this->resolvePriceCentsFromStripe($priceId, 500);
 
         $id = $this->createBox([
@@ -85,24 +83,16 @@ class PullBoxRepository
     }
 
     /**
-     * Look up a Stripe price's unit_amount (cents). Returns the fallback
-     * when Stripe is unreachable so we never block buyers on a transient
-     * error. The atomic checkout still re-validates against Stripe so a
-     * stale cached value here can't cause overselling — it's purely cosmetic
-     * (drives the price_cents column used by the embed and the dollar tile).
+     * Resolve the box unit price in cents. Stripe is retired, so this
+     * always returns the configured/default fallback ($5 == 500 cents).
+     * The value is purely cosmetic — it drives the price_cents column
+     * used by the embed and the dollar tile. Kept as a seam so a future
+     * price source (e.g. an ACF price field) can slot in without
+     * touching findOrCreateActiveBox.
      */
     private function resolvePriceCentsFromStripe(string $priceId, int $fallback): int
     {
-        if (!defined('STRIPE_SECRET_KEY')) {
-            return $fallback;
-        }
-        try {
-            $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
-            $price = $stripe->prices->retrieve($priceId);
-            return (int) ($price->unit_amount ?? $fallback);
-        } catch (\Throwable $e) {
-            return $fallback;
-        }
+        return $fallback;
     }
 
     /**

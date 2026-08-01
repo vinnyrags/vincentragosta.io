@@ -15,13 +15,11 @@ use WP_REST_Response;
  * Personal collection cards (is_personal_collection=true) live on /collection
  * and are not for sale through the standard add-to-cart flow. Buyers who want
  * one badly enough can submit an offer with their email + amount + an optional
- * note; the offer is forwarded to the operator via Nous (Discord DM, falling back to
- * #ops if the DM fails).
+ * note. The offer fires the `shop_card_offer_submitted` action, which the
+ * OfferEmailNotifier subscribes to and emails to the operator.
  *
- * Routing is fire-and-forget — Nous outage degrades to "buyer sees a generic
- * success message but the DM doesn't land." If we ever need durable storage,
- * add a wp_card_offers table behind this same endpoint without changing the
- * frontend contract.
+ * If we ever need durable storage, add a wp_card_offers table behind this
+ * same endpoint without changing the frontend contract.
  */
 class CardOfferEndpoint extends Endpoint
 {
@@ -136,8 +134,8 @@ class CardOfferEndpoint extends Endpoint
             );
         }
 
-        // Fire the action FIRST so the Activity Feed bridge can broadcast
-        // the event regardless of whether Nous is reachable.
+        // Fire the action so the OfferEmailNotifier emails the offer to the
+        // operator (and any other subscribers can broadcast the event).
         do_action('shop_card_offer_submitted', [
             'card_id'          => $cardId,
             'card_title'       => $card->post_title,
@@ -146,18 +144,6 @@ class CardOfferEndpoint extends Endpoint
             'offer_amount'     => $offerAmount,
             'offer_raw'        => $offerRaw,
             'message'          => $message,
-        ]);
-
-        $this->dispatchToNous([
-            'cardId'         => $cardId,
-            'cardTitle'      => $card->post_title,
-            'cardSlug'       => $card->post_name,
-            'cardPermalink'  => get_permalink($card->ID),
-            'email'          => $email,
-            'discordUsername' => $discord,
-            'offerAmount'    => $offerAmount,
-            'offerRaw'       => $offerRaw,
-            'message'        => $message,
         ]);
 
         return new WP_REST_Response([
@@ -182,30 +168,5 @@ class CardOfferEndpoint extends Endpoint
             return null;
         }
         return '$' . number_format($value, 2, '.', ',');
-    }
-
-    private function dispatchToNous(array $payload): void
-    {
-        $endpoint = defined('NOUS_BOT_URL') ? NOUS_BOT_URL : 'http://127.0.0.1:3100';
-        $url = rtrim($endpoint, '/') . '/webhooks/card-offer-received';
-
-        $secret = defined('LIVESTREAM_SECRET') ? LIVESTREAM_SECRET : '';
-        if ($secret === '') {
-            return;
-        }
-
-        wp_remote_post($url, [
-            'timeout'  => 2,
-            'blocking' => false,
-            'headers'  => [
-                'Content-Type' => 'application/json',
-                'X-Bot-Secret' => $secret,
-            ],
-            'body'     => wp_json_encode([
-                'event'     => 'card.offer_received',
-                'data'      => $payload,
-                'timestamp' => gmdate('Y-m-d\TH:i:s\Z'),
-            ]),
-        ]);
     }
 }

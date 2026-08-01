@@ -115,21 +115,24 @@ class PullBoxRepositoryTest extends TestCase
         );
     }
 
-    public function testFindOrCreateBoxFallsBackToFiveDollarsWhenStripeUnreachable(): void
+    public function testFindOrCreateBoxUsesFiveDollarDefaultPrice(): void
     {
-        // When the Stripe price lookup fails (transient API outage),
-        // the box still gets created with a sensible default ($5 ==
-        // 500 cents) instead of blocking the buyer's slot picker. The
-        // atomic checkout still re-validates the live Stripe price, so
-        // a stale price_cents here can't cause overselling — it's
-        // purely cosmetic for the embed + dollar tile.
+        // Stripe is retired — the box price resolves to the static
+        // default ($5 == 500 cents). The value is purely cosmetic (drives
+        // the embed + dollar tile), so a fixed default is fine.
         $source = file_get_contents(
             __DIR__ . '/../../../../../src/Providers/Shop/Support/PullBoxRepository.php'
         );
         $this->assertStringContainsString(
             'resolvePriceCentsFromStripe($priceId, 500)',
             $source,
-            'Fallback price must be 500 cents ($5) when Stripe is unreachable — anything else and the embed lies about the price during an outage'
+            'Default box price must be 500 cents ($5)'
+        );
+        // No Stripe SDK call may remain in the price resolution path.
+        $this->assertStringNotContainsString(
+            '\\Stripe\\StripeClient',
+            $source,
+            'Stripe is retired — no StripeClient call may remain in PullBoxRepository'
         );
     }
 

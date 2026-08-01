@@ -10,13 +10,11 @@ use Mythus\Contracts\Hook;
 /**
  * Sends a buyer confirmation email when a Make-an-Offer form is
  * submitted on /collection. Listens to the shop_card_offer_submitted
- * action that CardOfferEndpoint already fires for the Activity Feed
- * + Nous webhook — adding email parity for buyers who don't use
- * Discord (or just want a paper trail).
+ * action that CardOfferEndpoint fires — the email is now the sole
+ * notification path for an offer (the Nous outbound webhook is retired).
  *
  * Non-blocking: MailNotifications swallows send failures internally,
- * so a bouncing email never breaks the offer submission flow. The
- * operator-side Discord DM via Nous continues regardless.
+ * so a bouncing email never breaks the offer submission flow.
  */
 class OfferEmailNotifier implements Hook
 {

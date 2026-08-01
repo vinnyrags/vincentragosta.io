@@ -10,10 +10,12 @@ use ReflectionMethod;
 
 /**
  * Structural tests for CardOfferEndpoint. The runtime branches
- * (validation, personal-collection gate, normalize amount, dispatch to
- * Nous) need ACF + wp_remote_post which WorDBless doesn't simulate, so
- * the public contract is pinned via reflection + source-shape inspection.
- * Behavior is exercised end-to-end against the live deploy.
+ * (validation, personal-collection gate, normalize amount) need ACF
+ * which WorDBless doesn't simulate, so the public contract is pinned via
+ * reflection + source-shape inspection. Behavior is exercised end-to-end
+ * against the live deploy. The Nous outbound webhook is retired — the
+ * offer email (OfferEmailNotifier on shop_card_offer_submitted) is the
+ * sole notification path.
  */
 class CardOfferEndpointTest extends TestCase
 {
@@ -92,53 +94,34 @@ class CardOfferEndpointTest extends TestCase
 
     public function testFiresShopCardOfferSubmittedAction(): void
     {
-        // The Activity Feed bridge subscribes to this action. It MUST fire
-        // before the Nous dispatch so the homepage feed updates even when
-        // Nous is down.
+        // OfferEmailNotifier subscribes to this action to email the offer
+        // to the operator — it's now the sole notification path.
         $source = file_get_contents(
             __DIR__ . '/../../../../../src/Providers/Shop/Endpoints/CardOfferEndpoint.php'
         );
         $this->assertStringContainsString(
             "do_action('shop_card_offer_submitted'",
             $source,
-            'Endpoint must fire shop_card_offer_submitted so the Activity Feed bridge can broadcast'
-        );
-
-        // Ordering: action must come BEFORE dispatchToNous so a Nous
-        // outage doesn't suppress the Activity Feed event.
-        $actionPos = strpos($source, "do_action('shop_card_offer_submitted'");
-        $dispatchPos = strpos($source, '$this->dispatchToNous(');
-        $this->assertNotFalse($actionPos);
-        $this->assertNotFalse($dispatchPos);
-        $this->assertLessThan(
-            $dispatchPos,
-            $actionPos,
-            'Activity Feed action must fire before the Nous dispatch'
+            'Endpoint must fire shop_card_offer_submitted so OfferEmailNotifier can email the offer'
         );
     }
 
-    public function testNousDispatchIsFireAndForget(): void
+    public function testNousOutboundWebhookIsRetired(): void
     {
-        // Match the QueueChangeWebhook pattern: blocking=false, short
-        // timeout, X-Bot-Secret header. A Nous outage cannot block the
-        // buyer's response.
+        // The Nous outbound webhook is permanently gone. Guard against a
+        // regression that reintroduces the dispatch.
         $source = file_get_contents(
             __DIR__ . '/../../../../../src/Providers/Shop/Endpoints/CardOfferEndpoint.php'
         );
-        $this->assertStringContainsString(
-            "'blocking' => false",
+        $this->assertStringNotContainsString(
+            'dispatchToNous',
             $source,
-            'Nous POST must be non-blocking — Nous outage cannot delay the buyer response'
+            'The Nous outbound dispatch is retired and must not return'
         );
-        $this->assertStringContainsString(
-            "'X-Bot-Secret'",
-            $source,
-            'Nous POST must include the X-Bot-Secret header for auth'
-        );
-        $this->assertStringContainsString(
+        $this->assertStringNotContainsString(
             '/webhooks/card-offer-received',
             $source,
-            'Endpoint URL pin — changing this orphans the Nous-side handler'
+            'The Nous webhook URL is retired and must not return'
         );
     }
 

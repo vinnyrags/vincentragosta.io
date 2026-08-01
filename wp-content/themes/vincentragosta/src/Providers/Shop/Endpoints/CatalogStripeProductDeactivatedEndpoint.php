@@ -19,10 +19,9 @@ use WP_REST_Response;
  * the stale stripe_price_id / stripe_product_id meta. Idempotent —
  * re-running with the same ID is a no-op.
  *
- * Pairs with the pre-flight check in CreateCheckoutEndpoint:
- *   - Pre-flight catches drift at checkout time (synchronous, slow path)
- *   - This endpoint catches drift at Stripe-side change time (async,
- *     real-time, eliminates the time gap that pre-flight has to cover)
+ * Retained as a DB-only catalog-drift backstop. The former checkout
+ * pre-flight counterpart is retired along with the checkout path; this
+ * endpoint catches drift at Stripe-side change time (async, real-time).
  */
 class CatalogStripeProductDeactivatedEndpoint extends Endpoint
 {

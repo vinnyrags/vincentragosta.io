@@ -11,10 +11,10 @@ use WP_REST_Request;
 use WP_REST_Response;
 
 /**
- * Decrements stock for a product by Stripe price ID.
+ * Decrements stock for a product by price ID (the sheet↔WP join key).
  *
  * Called by Nous when the owner joins a pack battle
- * (consumes inventory without a Stripe payment).
+ * (consumes inventory).
  *
  * Secured with a shared secret from wp-config-env.php.
  */
@@ -111,19 +111,6 @@ class StockDecrementEndpoint extends Endpoint
         $newStock = max(0, $oldStock - $quantity);
         update_post_meta($product->id, 'stock_quantity', $newStock);
         clean_post_cache($product->id);
-
-        // Keep Stripe metadata in sync
-        $stripeProductId = $product->stripeProductId();
-        if ($stripeProductId && defined('STRIPE_SECRET_KEY') && STRIPE_SECRET_KEY !== '') {
-            try {
-                $stripe = new \Stripe\StripeClient(STRIPE_SECRET_KEY);
-                $stripe->products->update($stripeProductId, [
-                    'metadata' => ['stock' => (string) $newStock],
-                ]);
-            } catch (\Throwable $e) {
-                error_log("Failed to sync stock to Stripe: {$e->getMessage()}");
-            }
-        }
 
         return new WP_REST_Response([
             'product'   => $product->title(),

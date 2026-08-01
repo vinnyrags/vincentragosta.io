@@ -16,8 +16,7 @@
   ],
   "require": {
     "php": ">=8.4",
-    "timber/timber": "2.x-dev",
-    "stripe/stripe-php": "^20.0"
+    "timber/timber": "2.x-dev"
   },
   "require-dev": {
     "automattic/wordbless": "^0.4.2"
