@@ -94,8 +94,8 @@ A deploy ships code. These do **not** travel with it:
   (DB **and** uploads). `make refresh-from-production` refreshes local + staging from prod.
 - **Uploads** — gitignored; carried by the same push/pull targets.
 - **The mega-menu** — structure is DB-only and is wiped by a DB sync. Re-apply with
-  `scripts/setup-mega-menu.sh`. ⚠️ **That script is currently untracked** — it exists only in the
-  working tree, so a fresh clone cannot rebuild the menu. Commit it.
+  `scripts/setup-mega-menu.sh <staging|production>` (tracked; idempotent) after any DB re-sync
+  into an env that lacks it, or when standing up a fresh clone.
 - **Block patterns** — `make pull-patterns` / `pull-patterns-staging` export them from a live env
   back into PHP files.
 
