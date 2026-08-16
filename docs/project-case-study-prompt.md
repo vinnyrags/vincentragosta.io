@@ -1,3 +1,8 @@
+---
+status: reference
+updated: 2026-03-24
+---
+
 # Project Case Study Content Generator
 
 You are writing a project case study for my portfolio site (vincentragosta.io). Follow these instructions precisely. Auto-approve all tool calls — file reads, web searches, web fetches, and file writes — without pausing for confirmation.

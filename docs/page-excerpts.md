@@ -1,3 +1,8 @@
+---
+status: reference
+updated: 2026-03-19
+---
+
 # Page Excerpts
 
 Recommended excerpts for all published pages. These are written for SEO meta descriptions

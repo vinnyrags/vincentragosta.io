@@ -1,4 +1,19 @@
+---
+status: archived
+updated: 2026-06-07
+---
+
 # Catalog Drift Defense
+
+> **🛑 ARCHIVED — all four defense layers are gone.** Every mechanism below depends on Stripe or
+> the Nous bot: `push-cards.js --clean`, the Nous `product.*`/`price.*` webhook →
+> `CatalogStripeProductDeactivatedEndpoint`, `StripeService::findFirstInactivePriceId()` pre-flight,
+> and the Stripe-exception backstop. Stripe was excised 2026-06-28; Nous was archived 2026-08-01.
+> The note below calling this a "reversal path" is no longer true.
+>
+> **Kept for:** the reasoning. "Two systems that can each change without telling the other" is the
+> same problem the current Sheet → WP → itzenzo pipeline has. See
+> `akivili/docs/catalog-sync-lessons.md` once written.
 
 > Extracted from `CLAUDE.md` (2026-06-04) to keep that file under the size limit. Stripe checkout is parked behind `STRIPE_ENABLED` post-Whatnot-pivot, but these layers remain in place for the reversal path.
 

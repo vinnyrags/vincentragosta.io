@@ -1,4 +1,15 @@
+---
+status: archived
+updated: 2026-05-08
+---
+
 # Shop Deployment Guide
+
+> **🛑 ARCHIVED — do not follow.** Describes Stripe Checkout deployment with Stripe in **test
+> mode**, and points at the `itzenzoTTV` GitHub repo, which was deleted. Stripe was excised
+> 2026-06-28 and the pipeline rebuilt Sheet → WP direct on 2026-06-07.
+> **Current truth:** this repo's Makefile (`make help`) — 11 legacy targets carry an explicit
+> `(RETIRED — Stripe)` label.
 
 Deploying the card shop to staging and production. The shop uses Stripe Checkout for payments. The Nous bot (Discord notifications, role promotion, livestream commands) is now managed separately in the [itzenzoTTV](https://github.com/vinnyrags/itzenzoTTV) repository.
 

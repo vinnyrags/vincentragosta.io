@@ -1,4 +1,17 @@
+---
+status: active
+updated: 2026-04-16
+---
+
 # Digital Ocean Server Setup
+
+> **Answers:** how droplet `174.138.70.29` (vincentragosta.io + ellenharvey) was built — nginx,
+> PHP-FPM, MariaDB, TLS, deploy hook.
+> **Trust:** the box is live and this is still its only setup record. But it predates three
+> changes: WP salts moved out of VCS (2026-08-13), the 30s FastCGI micro-cache convention, and
+> deploy-kit. This droplet is **not yet on deploy-kit** — that's a tracked follow-up.
+> **⚠️ Known gap:** no MTA on this box, so `wp_mail()` fails silently — password resets and form
+> notifications do not send. Verified 2026-08-14, unfixed.
 
 ## Server Details
 

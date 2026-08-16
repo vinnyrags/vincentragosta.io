@@ -1,3 +1,8 @@
+---
+status: historical
+updated: 2026-06-07
+---
+
 # Unified Queue
 
 > Extracted from `CLAUDE.md` (2026-06-04) to keep that file under the size limit. Post-Whatnot-pivot this machinery is parked but fully operational — see `akivili/business/whatnot-first-strategy.md`.
