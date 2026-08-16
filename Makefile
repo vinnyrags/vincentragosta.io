@@ -8,6 +8,25 @@ CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR      := $(CURDIR)/wp-content/mu-plugins/mythus
 UPLOADS_DIR     := $(CURDIR)/wp-content/uploads
 
+# The nous repo (TCG shop/ops automation) sits alongside this one and owns the
+# Sheet-side scripts this Makefile shells into. Lower-case `nous` is the real
+# directory name -- `../Nous` only ever resolved because macOS is case-insensitive,
+# and would break on Linux or CI. Defined once here; every target uses $(NOUS_SHOP).
+NOUS_DIR        := $(realpath $(CURDIR)/../nous)
+NOUS_SHOP       := $(NOUS_DIR)/scripts/shop
+
+# $(realpath) yields an empty string when the path is missing, which would turn
+# `cd $(NOUS_SHOP)` into `cd /scripts/shop` and fail somewhere confusing. Fail here
+# instead, naming the actual problem.
+define require-nous
+	@test -n "$(NOUS_DIR)" -a -d "$(NOUS_SHOP)" || { \
+		echo "✗ nous repo not found at $(CURDIR)/../nous"; \
+		echo "  This Makefile shells into it for the Sheet-side scripts."; \
+		echo "  Clone it alongside this repo, or fix NOUS_DIR at the top of the Makefile."; \
+		exit 1; \
+	}
+endef
+
 COMPOSER_DIRS := $(MYTHUS_DIR) $(IX_DIR) $(CHILD_THEME_DIR)
 NPM_DIRS      := $(IX_DIR) $(CHILD_THEME_DIR)
 
@@ -367,23 +386,28 @@ pull-patterns-staging: ## Export block patterns from staging to PHP files
 
 backup-singles: ## Duplicate the Singles tab as Singles_Backup_YYYY-MM-DD
 	@echo "Backing up Singles tab..."
-	cd ../Nous/scripts/shop && node backup-singles.js
+	$(require-nous)
+	cd $(NOUS_SHOP) && node backup-singles.js
 
 enrich-singles: ## Populate set/rarity/image data via Pokemon TCG API
 	@echo "Enriching Singles tab via Pokemon TCG API..."
-	cd ../Nous/scripts/shop && node enrich-singles.js
+	$(require-nous)
+	cd $(NOUS_SHOP) && node enrich-singles.js
 
 enrich-singles-japanese: ## Enrich Japanese cards via TCGplayer (Pokemon TCG API is English-only)
 	@echo "Enriching Japanese Singles rows via TCGplayer pokemon-japan catalog..."
-	cd ../Nous/scripts/shop && node enrich-singles-japanese.mjs $(ARGS)
+	$(require-nous)
+	cd $(NOUS_SHOP) && node enrich-singles-japanese.mjs $(ARGS)
 
 lint-singles: ## Lint the Singles sheet for data-entry issues before pushing
 	@echo "Linting Singles tab..."
-	cd ../Nous/scripts/shop && node lint-singles.js $(ARGS)
+	$(require-nous)
+	cd $(NOUS_SHOP) && node lint-singles.js $(ARGS)
 
 audit-alt-art: ## Audit alt-art rows for misrouted Pokemon TCG API IDs
 	@echo "Auditing alt-art rows in Singles tab..."
-	cd ../Nous/scripts/shop && node audit-alt-art-ids.js $(ARGS)
+	$(require-nous)
+	cd $(NOUS_SHOP) && node audit-alt-art-ids.js $(ARGS)
 
 ##@ Card sync (Sheets → WP, Stripe-free)
 
@@ -410,7 +434,8 @@ sync-cards-production: create-cards-production-apply backfill-card-ids-productio
 # inventory only — production post IDs are canonical; staging/local IDs
 # diverge and must never be written to the sheet.
 backfill-card-ids-production: export-inventory-production ## Backfill Singles col S with WP post IDs (blank rows only)
-	@cd ../Nous/scripts/shop && node backfill-card-postids.mjs --apply --inventory=$(INVENTORY_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node backfill-card-postids.mjs --apply --inventory=$(INVENTORY_JSON)
 
 ##@ Card create (Sheets → WP, Stripe-free)
 
@@ -424,7 +449,8 @@ NEW_CARDS_JSON := /tmp/new-cards.json
 
 export-new-cards: ## Read Singles sheet → $(NEW_CARDS_JSON) (enriched rows with no Stripe ID)
 	@echo "Exporting new card rows from Singles sheet → $(NEW_CARDS_JSON)..."
-	@cd ../Nous/scripts/shop && node export-new-cards.mjs > $(NEW_CARDS_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node export-new-cards.mjs > $(NEW_CARDS_JSON)
 	@echo "✓ Wrote $(NEW_CARDS_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(NEW_CARDS_JSON)) rows)"
 
 create-cards: export-new-cards ## DRY-RUN: new sheet rows → local WP card posts
@@ -470,7 +496,8 @@ CARD_PRICES_JSON := /tmp/card-prices.json
 
 export-card-prices: ## Read Singles sheet → $(CARD_PRICES_JSON) (price col D, stock col F, red flag)
 	@echo "Exporting card prices from Singles sheet → $(CARD_PRICES_JSON)..."
-	@cd ../Nous/scripts/shop && node export-card-prices.mjs > $(CARD_PRICES_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node export-card-prices.mjs > $(CARD_PRICES_JSON)
 	@echo "✓ Wrote $(CARD_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(CARD_PRICES_JSON)) rows)"
 
 update-card-prices: export-card-prices ## DRY-RUN: Singles prices → local WP (no writes)
@@ -508,7 +535,8 @@ COLLECTION_PRICES_JSON := /tmp/collection-prices.json
 
 export-collection-prices: ## Read Collection tab → $(COLLECTION_PRICES_JSON) (override-else-auction price)
 	@echo "Exporting collection prices from Collection tab → $(COLLECTION_PRICES_JSON)..."
-	@cd ../Nous/scripts/shop && node export-collection-prices.mjs > $(COLLECTION_PRICES_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node export-collection-prices.mjs > $(COLLECTION_PRICES_JSON)
 	@echo "✓ Wrote $(COLLECTION_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(COLLECTION_PRICES_JSON)) rows)"
 
 update-collection-prices: export-collection-prices ## DRY-RUN: Collection prices → local WP
@@ -544,7 +572,8 @@ PRODUCT_PRICES_JSON := /tmp/product-prices.json
 
 export-product-prices: ## Read Products tab → $(PRODUCT_PRICES_JSON) (price col B, stock col D)
 	@echo "Exporting product prices/stock from Products tab → $(PRODUCT_PRICES_JSON)..."
-	@cd ../Nous/scripts/shop && node export-product-prices.mjs > $(PRODUCT_PRICES_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node export-product-prices.mjs > $(PRODUCT_PRICES_JSON)
 	@echo "✓ Wrote $(PRODUCT_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(PRODUCT_PRICES_JSON)) products)"
 
 update-product-prices: export-product-prices ## DRY-RUN: Products price/stock → local WP
@@ -589,7 +618,8 @@ NEW_PRODUCTS_JSON := /tmp/new-products.json
 
 export-new-products: ## Read Products tab → $(NEW_PRODUCTS_JSON) (name/price/category/stock/image)
 	@echo "Exporting products from Products tab → $(NEW_PRODUCTS_JSON)..."
-	@cd ../Nous/scripts/shop && node export-new-products.mjs > $(NEW_PRODUCTS_JSON)
+	$(require-nous)
+	@cd $(NOUS_SHOP) && node export-new-products.mjs > $(NEW_PRODUCTS_JSON)
 	@echo "✓ Wrote $(NEW_PRODUCTS_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(NEW_PRODUCTS_JSON)) rows)"
 
 create-products: export-new-products ## DRY-RUN: new Products-tab rows → local WP product posts
@@ -723,7 +753,6 @@ seed-stream-schedule-production: ## Force-overwrite production Stream Schedule r
 # Whatnot listings via the Whatnot UI and uploads the resulting CSV.
 
 INVENTORY_JSON := /tmp/inventory.json
-NOUS_DIR       := $(realpath ../Nous)
 
 export-inventory-production: ## Export production WP inventory to /tmp/inventory.json
 	@echo "Exporting production inventory → $(INVENTORY_JSON)..."
@@ -737,7 +766,7 @@ export-inventory-staging: ## Export staging WP inventory to /tmp/inventory.json
 
 build-whatnot-csv: ## Build Whatnot bulk-import CSV from /tmp/inventory.json
 	@test -f $(INVENTORY_JSON) || { echo "Missing $(INVENTORY_JSON) — run 'make export-inventory-production' first"; exit 1; }
-	@test -d $(NOUS_DIR) || { echo "Nous repo not found at $(NOUS_DIR)"; exit 1; }
+	$(require-nous)
 	@cd $(NOUS_DIR) && node scripts/shop/build-whatnot-full-import.mjs $(ARGS)
 
 build-whatnot-auction-csv: ## Build Whatnot AUCTION CSV (Type=Auction, sorted ascending by Price, excludes permanent-BIN)
