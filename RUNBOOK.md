@@ -2,8 +2,9 @@
 
 Operating this project: where things live, how to deploy, what to purge, what bites.
 
-**Architecture, provider pattern, block system, testing, and the Card Catalog Pipeline live in
-[`CLAUDE.md`](CLAUDE.md) — this file does not repeat them.** For the full target list run
+**Architecture, provider pattern, block system, and testing live in [`CLAUDE.md`](CLAUDE.md) — this
+file does not repeat them.** The Card Catalog Pipeline was **retired 2026-08-16**; the shop is no
+longer operating and the Whatnot pipeline lives entirely in `nous`, touching no WordPress. For the full target list run
 `make help`; it is generated from the Makefile's own `##` annotations, so it never drifts.
 
 **Stack** WordPress · Mythus mu-plugin · IX parent + `vincentragosta` child · Timber/Twig · PHP 8.4 · DDEV
@@ -101,35 +102,29 @@ A deploy ships code. These do **not** travel with it:
 
 ## Traps
 
-1. **The nous path is defined once, at the top of the Makefile.** `NOUS_DIR` /
-   `NOUS_SHOP` point at `../nous` (lowercase — fixed 2026-08-16; it previously read `../Nous` and
-   worked only because macOS is case-insensitive). Every Sheet-side target goes through
-   `$(NOUS_SHOP)` and is guarded by `require-nous`, which fails loudly if the repo is missing —
-   `$(realpath)` returns empty for a missing path, which would otherwise become `cd /scripts/shop`.
-   The archived Discord bot at `_archived/nous` is a *different* repo — don't confuse them.
-2. **The sheet↔WP join key is col Q** ("WP Join Key"). Resolved 2026-08-16 by reading the code
-   rather than either doc: `backfill-card-postids` reads `v[16]` and writes `Singles!Q<row>`;
-   `export-card-prices`, `export-new-cards` and `build-whatnot-full-import` all read index 16.
-   Index 16 = Q. The Makefile's five "col S" comments and four nous script headers were stale by two
-   columns — a leftover from an older, wider schema — and have been corrected. `CLAUDE.md` was right
-   all along. Card number is **col F**, set name **col G**.
-3. **`backfill-card-ids-production` must run from production inventory only.** Staging and local
-   post IDs diverge; writing them back to the sheet corrupts the join key for every environment.
-4. **`make update-stock` does not touch the sheet.** The next sync reverts it. Update the sheet too.
-5. **Card creation dedupes on `card_name` + `card_number` only — not set.** A re-added card that
-   ever existed in WP is silently skipped.
-6. **Retired Stripe targets fail safe.** `push-cards*`, `pull-cards*`, `pull-products*`,
-   `rebuild-*-catalog` refuse to run without `CONFIRM_STRIPE=1`. If you find yourself typing that,
-   stop — the current pipeline is Sheet → WP direct and has no Stripe leg.
-7. **This box cannot send email.** No MTA, no SMTP plugin, so `wp_mail()` fails silently —
-   password resets, form notifications, admin notices. Verified 2026-08-14, unfixed. Do not promise
-   a client a password-reset link from here.
-8. **WP salts moved out of VCS on 2026-08-13.** Real salts live in each environment's gitignored
-   `wp-config-env.php`; the tracked `wp-config.php` carries guarded placeholders. To verify a box
-   is actually patched, compare `php -r 'require "wp-config-env.php"; echo AUTH_KEY;'` against
-   `wp eval 'echo AUTH_KEY;'` — checking only that the placeholder is absent gives a false pass.
-9. **`composer update vincentragosta/ix` wipes `ix/node_modules`.** Run `npm install` inside the
-   `ix` copy afterwards to restore build/test tooling.
+1. **A success banner is not proof.** `make deploy-production` ends with an unconditional
+   `✓ Production deployed`, which prints even when the push moved nothing. Confirm the real
+   ref-update line and re-verify on the box.
+2. **This box cannot send email.** No MTA, no SMTP plugin, so `wp_mail()` fails silently —
+   password resets, form notifications, admin notices. Verified 2026-08-14, unfixed.
+3. **WP salts moved out of VCS on 2026-08-13.** Real salts live in each environment's gitignored
+   `wp-config-env.php`; the tracked `wp-config.php` carries guarded placeholders and **must require
+   the env file above the salt block** (PHP is first-wins). Verify a box by proving the env value
+   *won* — compare `php -r 'require "wp-config-env.php"; echo AUTH_KEY;'` against
+   `wp eval 'echo AUTH_KEY;'`. Checking only that the placeholder is gone gives a false pass.
+4. **`composer update vincentragosta/ix` wipes `ix/node_modules`.** Run `npm install` inside the
+   `ix` copy afterwards to restore build and test tooling.
+5. **Root `composer update` without local ACF auth wipes the mythus mu-plugin.** Update the child
+   vendor instead. Deploys are unaffected.
+6. **The mega-menu is DB-only** and is wiped by a DB sync. Re-apply with
+   `scripts/setup-mega-menu.sh <staging|production>` (tracked, idempotent).
+
+> **Retired 2026-08-16 — traps that no longer apply.** The catalog-pipeline traps that used to live
+> here (join-key column, `backfill-card-ids-production` running from production only, `update-stock`
+> not writing back to the sheet, card-creation dedupe rules, the quarantined Stripe targets) went
+> with the pipeline itself. The shop is no longer operating; the Whatnot pipeline lives in `nous`
+> and touches no WordPress. Kept as a note so a returning reader knows they were removed
+> deliberately rather than lost.
 
 ## See also
 

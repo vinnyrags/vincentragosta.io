@@ -8,25 +8,6 @@ CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR      := $(CURDIR)/wp-content/mu-plugins/mythus
 UPLOADS_DIR     := $(CURDIR)/wp-content/uploads
 
-# The nous repo (TCG shop/ops automation) sits alongside this one and owns the
-# Sheet-side scripts this Makefile shells into. Lower-case `nous` is the real
-# directory name -- `../Nous` only ever resolved because macOS is case-insensitive,
-# and would break on Linux or CI. Defined once here; every target uses $(NOUS_SHOP).
-NOUS_DIR        := $(realpath $(CURDIR)/../nous)
-NOUS_SHOP       := $(NOUS_DIR)/scripts/shop
-
-# $(realpath) yields an empty string when the path is missing, which would turn
-# `cd $(NOUS_SHOP)` into `cd /scripts/shop` and fail somewhere confusing. Fail here
-# instead, naming the actual problem.
-define require-nous
-	@test -n "$(NOUS_DIR)" -a -d "$(NOUS_SHOP)" || { \
-		echo "✗ nous repo not found at $(CURDIR)/../nous"; \
-		echo "  This Makefile shells into it for the Sheet-side scripts."; \
-		echo "  Clone it alongside this repo, or fix NOUS_DIR at the top of the Makefile."; \
-		exit 1; \
-	}
-endef
-
 COMPOSER_DIRS := $(MYTHUS_DIR) $(IX_DIR) $(CHILD_THEME_DIR)
 NPM_DIRS      := $(IX_DIR) $(CHILD_THEME_DIR)
 
@@ -146,42 +127,44 @@ endef
 # ─── Phony targets ───────────────────────────────────────────────────────────
 
 .PHONY: help \
-	start stop \
-	install install-root install-mythus install-ix install-child \
-	build watch clean autoload test test-js update \
-	deploy-staging deploy-production release \
-	push-staging pull-staging push-production pull-production \
+	start \
+	stop \
+	install \
+	install-root \
+	install-mythus \
+	install-ix \
+	install-child \
+	build \
+	watch \
+	clean \
+	autoload \
+	test \
+	test-js \
+	update \
+	deploy-staging \
+	deploy-production \
+	release \
+	push-staging \
+	pull-staging \
+	push-production \
+	pull-production \
 	refresh-from-production \
-	pull-patterns pull-patterns-staging \
-	sync-cards sync-cards-staging sync-cards-production remove-card update-stock \
-	export-new-cards create-cards create-cards-apply \
-	create-cards-staging create-cards-staging-apply \
-	create-cards-production create-cards-production-apply \
-	backfill-card-ids-production \
-	export-card-prices update-card-prices update-card-prices-apply \
-	update-card-prices-staging update-card-prices-staging-apply \
-	update-card-prices-production update-card-prices-production-apply \
-	export-product-prices update-product-prices update-product-prices-apply \
-	update-product-prices-staging update-product-prices-staging-apply \
-	update-product-prices-production update-product-prices-production-apply \
-	export-new-products create-products create-products-apply \
-	create-products-staging create-products-staging-apply \
-	create-products-production create-products-production-apply \
-	release-stuck-pull-box-slots \
-	migrate-card-images migrate-card-images-staging migrate-card-images-production \
-	enrich-singles enrich-singles-japanese lint-singles audit-alt-art backup-singles \
-	seed-itzenzo-pages seed-itzenzo-pages-force \
-	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
-	seed-stream-schedule seed-stream-schedule-force \
-	seed-stream-schedule-staging seed-stream-schedule-production \
-	export-inventory-production export-inventory-staging \
-	build-whatnot-csv whatnot-csv-production \
-	build-whatnot-auction-csv whatnot-auction-csv-production \
-	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
-	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
-	build-whatnot-bin-show-csv whatnot-bin-show-csv-production whatnot-show-prep \
-	nous-import nous-import-production nous-post \
-	satis-refresh satis-add satis-remove
+	pull-patterns \
+	pull-patterns-staging \
+	seed-itzenzo-pages \
+	seed-itzenzo-pages-force \
+	seed-itzenzo-pages-staging \
+	seed-itzenzo-pages-production \
+	seed-stream-schedule \
+	seed-stream-schedule-force \
+	seed-stream-schedule-staging \
+	seed-stream-schedule-production \
+	nous-import \
+	nous-import-production \
+	nous-post \
+	satis-refresh \
+	satis-add \
+	satis-remove
 
 .DEFAULT_GOAL := help
 
@@ -382,333 +365,6 @@ pull-patterns-staging: ## Export block patterns from staging to PHP files
 	REMOTE_URL="$(STAGING_URL)" \
 	$(CHILD_THEME_DIR)/scripts/export-patterns.sh
 
-##@ Card singles
-
-backup-singles: ## Duplicate the Singles tab as Singles_Backup_YYYY-MM-DD
-	@echo "Backing up Singles tab..."
-	$(require-nous)
-	cd $(NOUS_SHOP) && node backup-singles.js
-
-enrich-singles: ## Populate set/rarity/image data via Pokemon TCG API
-	@echo "Enriching Singles tab via Pokemon TCG API..."
-	$(require-nous)
-	cd $(NOUS_SHOP) && node enrich-singles.js
-
-enrich-singles-japanese: ## Enrich Japanese cards via TCGplayer (Pokemon TCG API is English-only)
-	@echo "Enriching Japanese Singles rows via TCGplayer pokemon-japan catalog..."
-	$(require-nous)
-	cd $(NOUS_SHOP) && node enrich-singles-japanese.mjs $(ARGS)
-
-lint-singles: ## Lint the Singles sheet for data-entry issues before pushing
-	@echo "Linting Singles tab..."
-	$(require-nous)
-	cd $(NOUS_SHOP) && node lint-singles.js $(ARGS)
-
-audit-alt-art: ## Audit alt-art rows for misrouted Pokemon TCG API IDs
-	@echo "Auditing alt-art rows in Singles tab..."
-	$(require-nous)
-	cd $(NOUS_SHOP) && node audit-alt-art-ids.js $(ARGS)
-
-##@ Card sync (Sheets → WP, Stripe-free)
-
-# The Stripe-free card pipeline: the Singles sheet is the source of truth and
-# syncs straight into WordPress. `sync-cards*` is the one-shot operator entry
-# point — it creates any brand-new sheet rows as WP card posts, then refreshes
-# price/stock on everything else. The old Sheets → Stripe → WP targets of the
-# same names are retired (see the guard above).
-#
-# Sold cards are NOT handled here: move stock-0 rows to the Sold tab
-# (move-zero-stock-to-sold.mjs --apply) and `make remove-card WP_ID=…` each.
-
-sync-cards: create-cards-apply update-card-prices-apply ## Sheet → local WP: create new cards + refresh price/stock
-	@echo "✓ Card sync complete (local, Stripe-free)"
-
-sync-cards-staging: create-cards-staging-apply update-card-prices-staging-apply ## Sheet → staging WP: create new cards + refresh price/stock
-	@echo "✓ Card sync complete (staging, Stripe-free)"
-
-sync-cards-production: create-cards-production-apply backfill-card-ids-production update-card-prices-production-apply ## Sheet → production WP: create new cards + stamp col-S IDs + refresh price/stock
-	@echo "✓ Card sync complete (production, Stripe-free)"
-
-# Stamp WP post IDs into blank Singles col Q cells so every row has an exact
-# join key (legacy rows keep their inert prod_… handles). Runs from PRODUCTION
-# inventory only — production post IDs are canonical; staging/local IDs
-# diverge and must never be written to the sheet.
-backfill-card-ids-production: export-inventory-production ## Backfill Singles col Q with WP post IDs (blank rows only)
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node backfill-card-postids.mjs --apply --inventory=$(INVENTORY_JSON)
-
-##@ Card create (Sheets → WP, Stripe-free)
-
-# Brand-new sheet rows (name + set + image present, col Q join key blank) →
-# WP card posts with full metadata + sideloaded featured image + taxonomy.
-# Dedupe is by card_name + card_number ONLY (not set) — a re-added card that
-# ever existed in WP is skipped; backfill its col Q from the WP card's meta
-# so update-card-prices picks it up instead. Dry-run by default.
-
-NEW_CARDS_JSON := /tmp/new-cards.json
-
-export-new-cards: ## Read Singles sheet → $(NEW_CARDS_JSON) (enriched rows with no Stripe ID)
-	@echo "Exporting new card rows from Singles sheet → $(NEW_CARDS_JSON)..."
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node export-new-cards.mjs > $(NEW_CARDS_JSON)
-	@echo "✓ Wrote $(NEW_CARDS_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(NEW_CARDS_JSON)) rows)"
-
-create-cards: export-new-cards ## DRY-RUN: new sheet rows → local WP card posts
-	@cp $(NEW_CARDS_JSON) scripts/.new-cards.json
-	@ddev exec "NEW_CARDS_JSON=/var/www/html/scripts/.new-cards.json wp eval-file scripts/create-cards-from-sheet.php"; rm -f scripts/.new-cards.json
-
-create-cards-apply: export-new-cards ## APPLY: new sheet rows → local WP card posts
-	@cp $(NEW_CARDS_JSON) scripts/.new-cards.json
-	@ddev exec "NEW_CARDS_JSON=/var/www/html/scripts/.new-cards.json APPLY=1 wp eval-file scripts/create-cards-from-sheet.php"; rm -f scripts/.new-cards.json
-
-create-cards-staging: export-new-cards ## DRY-RUN: new sheet rows → staging WP card posts
-	@scp -q $(NEW_CARDS_JSON) $(STAGING_HOST):$(NEW_CARDS_JSON)
-	$(call remote-wp-eval-with-env,STAGING,create-cards-from-sheet.php,NEW_CARDS_JSON=$(NEW_CARDS_JSON))
-
-create-cards-staging-apply: export-new-cards ## APPLY: new sheet rows → staging WP (+ revalidate itzenzo)
-	@scp -q $(NEW_CARDS_JSON) $(STAGING_HOST):$(NEW_CARDS_JSON)
-	$(call remote-wp-eval-with-env,STAGING,create-cards-from-sheet.php,NEW_CARDS_JSON=$(NEW_CARDS_JSON) APPLY=1)
-	@echo "Revalidating staging itzenzo.tv catalog pages so new cards show..."
-	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
-
-create-cards-production: export-new-cards ## DRY-RUN: new sheet rows → production WP card posts
-	@scp -q $(NEW_CARDS_JSON) $(PRODUCTION_HOST):$(NEW_CARDS_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,create-cards-from-sheet.php,NEW_CARDS_JSON=$(NEW_CARDS_JSON))
-
-create-cards-production-apply: export-new-cards ## APPLY: new sheet rows → production WP (+ revalidate itzenzo)
-	@scp -q $(NEW_CARDS_JSON) $(PRODUCTION_HOST):$(NEW_CARDS_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,create-cards-from-sheet.php,NEW_CARDS_JSON=$(NEW_CARDS_JSON) APPLY=1)
-	@echo "Revalidating production itzenzo.tv catalog pages so new cards show..."
-	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
-
-##@ Card price sync (Sheets → WP, Stripe-free)
-
-# Direct Singles-sheet → WordPress price/stock refresh that bypasses Stripe
-# (parked under the Whatnot pivot, so the old Sheet → Stripe → WP chain no
-# longer refreshes prices). export-card-prices reads the sheet into JSON;
-# update-card-prices.php joins by stripe_product_id and writes price (col D) +
-# stock (col F), clears retired sale fields, and drafts red "do not sell" rows.
-# Dry-run by default; the *-apply targets write AND flush the itzenzo.tv cache
-# so the storefront serves the new prices. Production/staging targets need the
-# PHP script deployed (git push) since they run it via the remote scripts/ dir.
-
-CARD_PRICES_JSON := /tmp/card-prices.json
-
-export-card-prices: ## Read Singles sheet → $(CARD_PRICES_JSON) (price col D, stock col F, red flag)
-	@echo "Exporting card prices from Singles sheet → $(CARD_PRICES_JSON)..."
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node export-card-prices.mjs > $(CARD_PRICES_JSON)
-	@echo "✓ Wrote $(CARD_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(CARD_PRICES_JSON)) rows)"
-
-update-card-prices: export-card-prices ## DRY-RUN: Singles prices → local WP (no writes)
-	@cp $(CARD_PRICES_JSON) scripts/.card-prices.json
-	@ddev exec "CARD_PRICES_JSON=/var/www/html/scripts/.card-prices.json wp eval-file scripts/update-card-prices.php"; rm -f scripts/.card-prices.json
-
-update-card-prices-apply: export-card-prices ## APPLY: Singles prices → local WP
-	@cp $(CARD_PRICES_JSON) scripts/.card-prices.json
-	@ddev exec "CARD_PRICES_JSON=/var/www/html/scripts/.card-prices.json APPLY=1 wp eval-file scripts/update-card-prices.php"; rm -f scripts/.card-prices.json
-
-update-card-prices-staging: export-card-prices ## DRY-RUN: Singles prices → staging WP
-	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
-	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
-
-update-card-prices-staging-apply: export-card-prices ## APPLY: Singles prices → staging WP (+ revalidate itzenzo)
-	@scp -q $(CARD_PRICES_JSON) $(STAGING_HOST):$(CARD_PRICES_JSON)
-	$(call remote-wp-eval-with-env,STAGING,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
-	@echo "Revalidating staging itzenzo.tv catalog pages so new prices/stock show..."
-	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
-
-update-card-prices-production: export-card-prices ## DRY-RUN: Singles prices → production WP
-	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON))
-
-update-card-prices-production-apply: export-card-prices ## APPLY: Singles prices → production WP (+ revalidate itzenzo)
-	@scp -q $(CARD_PRICES_JSON) $(PRODUCTION_HOST):$(CARD_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-card-prices.php,CARD_PRICES_JSON=$(CARD_PRICES_JSON) APPLY=1)
-	@echo "Revalidating production itzenzo.tv catalog pages so new prices/stock show..."
-	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
-
-# Collection-tab price sync (Stripe-free) — feeds the /collection vault display.
-# Price = AP Override (col G) else Auction Price (col E). Joins by WP Post ID
-# (col O) else card name+number among personal-collection cards.
-COLLECTION_PRICES_JSON := /tmp/collection-prices.json
-
-export-collection-prices: ## Read Collection tab → $(COLLECTION_PRICES_JSON) (override-else-auction price)
-	@echo "Exporting collection prices from Collection tab → $(COLLECTION_PRICES_JSON)..."
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node export-collection-prices.mjs > $(COLLECTION_PRICES_JSON)
-	@echo "✓ Wrote $(COLLECTION_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(COLLECTION_PRICES_JSON)) rows)"
-
-update-collection-prices: export-collection-prices ## DRY-RUN: Collection prices → local WP
-	@cp $(COLLECTION_PRICES_JSON) scripts/.collection-prices.json
-	@ddev exec "COLLECTION_PRICES_JSON=/var/www/html/scripts/.collection-prices.json wp eval-file scripts/update-collection-prices.php"; rm -f scripts/.collection-prices.json scripts/.col-postids.json
-
-update-collection-prices-apply: export-collection-prices ## APPLY: Collection prices → local WP
-	@cp $(COLLECTION_PRICES_JSON) scripts/.collection-prices.json
-	@ddev exec "COLLECTION_PRICES_JSON=/var/www/html/scripts/.collection-prices.json APPLY=1 wp eval-file scripts/update-collection-prices.php"; rm -f scripts/.collection-prices.json scripts/.col-postids.json
-
-update-collection-prices-production: export-collection-prices ## DRY-RUN: Collection prices → production WP
-	@scp -q $(COLLECTION_PRICES_JSON) $(PRODUCTION_HOST):$(COLLECTION_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-collection-prices.php,COLLECTION_PRICES_JSON=$(COLLECTION_PRICES_JSON))
-
-update-collection-prices-production-apply: export-collection-prices ## APPLY: Collection prices → production WP (+ revalidate itzenzo)
-	@scp -q $(COLLECTION_PRICES_JSON) $(PRODUCTION_HOST):$(COLLECTION_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-collection-prices.php,COLLECTION_PRICES_JSON=$(COLLECTION_PRICES_JSON) APPLY=1)
-	@echo "Revalidating production itzenzo.tv so collection prices show..."
-	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
-
-##@ Product price/stock sync (Sheets → WP, Stripe-free)
-
-# Direct Products-tab → WordPress price + stock refresh for the `product` CPT
-# (sealed boxes, ETBs, etc.). The Products tab is the source of truth: col B
-# (price) and col D (stock) drive WP, and the Whatnot CSV is built from WP
-# inventory — so Sheet → WP → CSV. export-product-prices reads the tab into
-# JSON; update-product-prices.php joins by product NAME → post_title and writes
-# price + stock_quantity (stock 0 drops the item from the CSV but keeps the WP
-# post for restock). Dry-run by default; *-apply writes AND revalidates
-# itzenzo.tv. Production targets need the PHP script deployed (git push).
-
-PRODUCT_PRICES_JSON := /tmp/product-prices.json
-
-export-product-prices: ## Read Products tab → $(PRODUCT_PRICES_JSON) (price col B, stock col D)
-	@echo "Exporting product prices/stock from Products tab → $(PRODUCT_PRICES_JSON)..."
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node export-product-prices.mjs > $(PRODUCT_PRICES_JSON)
-	@echo "✓ Wrote $(PRODUCT_PRICES_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(PRODUCT_PRICES_JSON)) products)"
-
-update-product-prices: export-product-prices ## DRY-RUN: Products price/stock → local WP
-	@cp $(PRODUCT_PRICES_JSON) scripts/.product-prices.json
-	@ddev exec "PRODUCT_PRICES_JSON=/var/www/html/scripts/.product-prices.json wp eval-file scripts/update-product-prices.php"; rm -f scripts/.product-prices.json
-
-update-product-prices-apply: export-product-prices ## APPLY: Products price/stock → local WP
-	@cp $(PRODUCT_PRICES_JSON) scripts/.product-prices.json
-	@ddev exec "PRODUCT_PRICES_JSON=/var/www/html/scripts/.product-prices.json APPLY=1 wp eval-file scripts/update-product-prices.php"; rm -f scripts/.product-prices.json
-
-update-product-prices-staging: export-product-prices ## DRY-RUN: Products price/stock → staging WP
-	@scp -q $(PRODUCT_PRICES_JSON) $(STAGING_HOST):$(PRODUCT_PRICES_JSON)
-	$(call remote-wp-eval-with-env,STAGING,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON))
-
-update-product-prices-staging-apply: export-product-prices ## APPLY: Products price/stock → staging WP (+ revalidate itzenzo)
-	@scp -q $(PRODUCT_PRICES_JSON) $(STAGING_HOST):$(PRODUCT_PRICES_JSON)
-	$(call remote-wp-eval-with-env,STAGING,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON) APPLY=1)
-	@echo "Revalidating staging itzenzo.tv so product prices/stock show..."
-	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
-
-update-product-prices-production: export-product-prices ## DRY-RUN: Products price/stock → production WP
-	@scp -q $(PRODUCT_PRICES_JSON) $(PRODUCTION_HOST):$(PRODUCT_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON))
-
-update-product-prices-production-apply: export-product-prices ## APPLY: Products price/stock → production WP (+ revalidate itzenzo)
-	@scp -q $(PRODUCT_PRICES_JSON) $(PRODUCTION_HOST):$(PRODUCT_PRICES_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,update-product-prices.php,PRODUCT_PRICES_JSON=$(PRODUCT_PRICES_JSON) APPLY=1)
-	@echo "Revalidating production itzenzo.tv so product prices/stock show..."
-	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
-
-##@ Product create (Sheets → WP, Stripe-free)
-
-# Brand-new Products-tab rows → WP `product` posts (sealed boxes, ETBs,
-# collections). Sibling of the card-create flow. export-new-products reads the
-# whole tab; create-products-from-sheet.php dedupes by post_title and skips
-# rows with no image (col G) — so only new, imaged products get created with
-# price (B), stock (D), category (C), language (H) + a sideloaded featured
-# image. Dry-run by default; -apply writes (+ revalidates itzenzo on remote).
-# After creating, run update-product-prices-* to keep price/stock in sync.
-
-NEW_PRODUCTS_JSON := /tmp/new-products.json
-
-export-new-products: ## Read Products tab → $(NEW_PRODUCTS_JSON) (name/price/category/stock/image)
-	@echo "Exporting products from Products tab → $(NEW_PRODUCTS_JSON)..."
-	$(require-nous)
-	@cd $(NOUS_SHOP) && node export-new-products.mjs > $(NEW_PRODUCTS_JSON)
-	@echo "✓ Wrote $(NEW_PRODUCTS_JSON) ($$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(NEW_PRODUCTS_JSON)) rows)"
-
-create-products: export-new-products ## DRY-RUN: new Products-tab rows → local WP product posts
-	@cp $(NEW_PRODUCTS_JSON) scripts/.new-products.json
-	@ddev exec "NEW_PRODUCTS_JSON=/var/www/html/scripts/.new-products.json wp eval-file scripts/create-products-from-sheet.php"; rm -f scripts/.new-products.json
-
-create-products-apply: export-new-products ## APPLY: new Products-tab rows → local WP product posts
-	@cp $(NEW_PRODUCTS_JSON) scripts/.new-products.json
-	@ddev exec "NEW_PRODUCTS_JSON=/var/www/html/scripts/.new-products.json APPLY=1 wp eval-file scripts/create-products-from-sheet.php"; rm -f scripts/.new-products.json
-
-create-products-staging: export-new-products ## DRY-RUN: new products → staging WP
-	@scp -q $(NEW_PRODUCTS_JSON) $(STAGING_HOST):$(NEW_PRODUCTS_JSON)
-	$(call remote-wp-eval-with-env,STAGING,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON))
-
-create-products-staging-apply: export-new-products ## APPLY: new products → staging WP (+ revalidate itzenzo)
-	@scp -q $(NEW_PRODUCTS_JSON) $(STAGING_HOST):$(NEW_PRODUCTS_JSON)
-	$(call remote-wp-eval-with-env,STAGING,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON) APPLY=1)
-	@echo "Revalidating staging itzenzo.tv so new products show..."
-	$(call revalidate-itzenzo,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_URL))
-
-create-products-production: export-new-products ## DRY-RUN: new products → production WP
-	@scp -q $(NEW_PRODUCTS_JSON) $(PRODUCTION_HOST):$(NEW_PRODUCTS_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON))
-
-create-products-production-apply: export-new-products ## APPLY: new products → production WP (+ revalidate itzenzo)
-	@scp -q $(NEW_PRODUCTS_JSON) $(PRODUCTION_HOST):$(NEW_PRODUCTS_JSON)
-	$(call remote-wp-eval-with-env,PRODUCTION,create-products-from-sheet.php,NEW_PRODUCTS_JSON=$(NEW_PRODUCTS_JSON) APPLY=1)
-	@echo "Revalidating production itzenzo.tv so new products show..."
-	$(call revalidate-itzenzo,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_URL))
-
-# Atomic orphan-cleanup for a removed Sheet row: archives the Stripe
-# product (idempotent — already-archived returns 200) AND deletes the
-# WP post in one shot. Either STRIPE_ID or WP_ID is sufficient; the
-# other is auto-resolved from postmeta (key=stripe_product_id).
-# Stripe-free since 2026-06-06: deletes the WP post, flushes Redis, and
-# revalidates itzenzo.tv /cards. STRIPE_ID is accepted purely as a lookup
-# key (stripe_product_id postmeta = sheet col Q join handle).
-remove-card: ## Remove a card from production (delete WP post + flush + revalidate, Stripe-free)
-	@if [ -z "$(STRIPE_ID)" ] && [ -z "$(WP_ID)" ]; then \
-		echo "Usage: make remove-card WP_ID=123"; \
-		echo "   or: make remove-card STRIPE_ID=prod_xxx   (lookup key only — no Stripe call)"; \
-		exit 1; \
-	fi
-	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/remove-card.sh
-
-# Stock adjustment for a single card or product: WP stock_quantity +
-# Next.js ISR revalidation (Stripe-free since 2026-06-06; STRIPE_ID is a
-# lookup key only). Does NOT touch the Google Sheet — update that
-# manually as source of truth so the next update-card-prices-*-apply
-# doesn't revert this change.
-update-stock: ## Set stock for a card or product (WP + Next.js revalidate, Stripe-free)
-	@if [ -z "$(STOCK)" ]; then \
-		echo "Usage: make update-stock STRIPE_ID=prod_xxx STOCK=N"; \
-		echo "   or: make update-stock WP_ID=123 STOCK=N"; \
-		echo ""; \
-		echo "STOCK must be a non-negative integer."; \
-		echo "Either STRIPE_ID or WP_ID is sufficient — the other is auto-resolved."; \
-		echo "Does NOT touch the Google Sheet — update that manually as source of truth."; \
-		exit 1; \
-	fi
-	@if [ -z "$(STRIPE_ID)" ] && [ -z "$(WP_ID)" ]; then \
-		echo "Usage: make update-stock STRIPE_ID=prod_xxx STOCK=N"; \
-		echo "   or: make update-stock WP_ID=123 STOCK=N"; \
-		exit 1; \
-	fi
-	@ssh $(PRODUCTION_HOST) "STRIPE_ID='$(STRIPE_ID)' WP_ID='$(WP_ID)' STOCK='$(STOCK)' WP_PATH='$(PRODUCTION_WP)' bash" < scripts/update-stock.sh
-
-# Manual safety valve for wp-pending-* slot rows that get stuck when a
-# pull-box checkout's Stripe call throws after the slot claim. The
-# endpoint now releases on failure automatically, so this should rarely
-# need running — keep it around for the older drift period and any
-# future races that escape the catch-block release.
-release-stuck-pull-box-slots: ## Release any wp-pending-* pull-box slot claims (idempotent; flushes Redis)
-	@ssh $(PRODUCTION_HOST) "WP_PATH='$(PRODUCTION_WP)' bash" < scripts/release-stuck-pull-box-slots.sh
-
-##@ Card image migration
-
-migrate-card-images: ## Regenerate local card sub-sizes as JPEG
-	@echo "Migrating local card images to JPEG sub-sizes..."
-	ddev wp eval-file scripts/migrate-card-images-to-jpeg.php
-
-migrate-card-images-staging: ## Regenerate staging card sub-sizes as JPEG
-	@echo "Migrating staging card images to JPEG sub-sizes..."
-	$(call remote-wp-eval,STAGING,migrate-card-images-to-jpeg.php)
-
-migrate-card-images-production: ## Regenerate production card sub-sizes as JPEG
-	@echo "Migrating production card images to JPEG sub-sizes..."
-	$(call remote-wp-eval,PRODUCTION,migrate-card-images-to-jpeg.php)
-
 ##@ itzenzo.tv Pages seed
 
 seed-itzenzo-pages: ## Seed Pages ACF repeater (refuses to overwrite)
@@ -742,74 +398,6 @@ seed-stream-schedule-staging: ## Force-overwrite staging Stream Schedule repeate
 seed-stream-schedule-production: ## Force-overwrite production Stream Schedule repeater
 	@echo "Seeding production itzenzo.tv stream schedule..."
 	$(call remote-wp-eval-with-env,PRODUCTION,seed-stream-schedule.php,FORCE=1)
-
-##@ Whatnot CSV pipeline
-
-# Two-step flow:
-#   1. `make export-inventory-production`  → dumps /tmp/inventory.json from prod
-#   2. `make build-whatnot-csv`            → reads /tmp/inventory.json,
-#                                            writes tmp/whatnot-full-import-<date>.csv
-# `make whatnot-csv-production` runs both. The operator then deletes existing
-# Whatnot listings via the Whatnot UI and uploads the resulting CSV.
-
-INVENTORY_JSON := /tmp/inventory.json
-
-export-inventory-production: ## Export production WP inventory to /tmp/inventory.json
-	@echo "Exporting production inventory → $(INVENTORY_JSON)..."
-	@ssh $(PRODUCTION_HOST) "wp eval-file $(PRODUCTION_DIR)/scripts/export-inventory-json.php --path=$(PRODUCTION_WP) --allow-root" > $(INVENTORY_JSON)
-	@echo "✓ Wrote $(INVENTORY_JSON) ($$(wc -c < $(INVENTORY_JSON) | tr -d ' ') bytes, $$(python3 -c 'import json,sys; print(len(json.load(open(sys.argv[1]))))' $(INVENTORY_JSON)) items)"
-
-export-inventory-staging: ## Export staging WP inventory to /tmp/inventory.json
-	@echo "Exporting staging inventory → $(INVENTORY_JSON)..."
-	@ssh $(STAGING_HOST) "wp eval-file $(STAGING_DIR)/scripts/export-inventory-json.php --path=$(STAGING_WP) --allow-root" > $(INVENTORY_JSON)
-	@echo "✓ Wrote $(INVENTORY_JSON) ($$(wc -c < $(INVENTORY_JSON) | tr -d ' ') bytes)"
-
-build-whatnot-csv: ## Build Whatnot bulk-import CSV from /tmp/inventory.json
-	@test -f $(INVENTORY_JSON) || { echo "Missing $(INVENTORY_JSON) — run 'make export-inventory-production' first"; exit 1; }
-	$(require-nous)
-	@cd $(NOUS_DIR) && node scripts/shop/build-whatnot-full-import.mjs $(ARGS)
-
-build-whatnot-auction-csv: ## Build Whatnot AUCTION CSV (Type=Auction, sorted ascending by Price, excludes permanent-BIN)
-	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--auction"
-
-build-whatnot-permanent-bin-csv: ## Build Whatnot BIN CSV with only the permanent-BIN product list (always-on shop)
-	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--permanent-bin-only"
-
-build-whatnot-post-stream-bin-csv: ## Build Whatnot BIN CSV for unsold auction items (tiered BIN markup on cards)
-	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--post-stream-bin"
-
-build-whatnot-bin-show-csv: ## Build Whatnot BIN-SHOW CSV (cards as BIN @ auction price, quick-picks stay Auction)
-	@$(MAKE) --no-print-directory build-whatnot-csv ARGS="--bin-show"
-
-whatnot-csv-production: export-inventory-production build-whatnot-csv ## One-shot: refresh from prod + build BIN CSV (everything)
-
-whatnot-auction-csv-production: export-inventory-production build-whatnot-auction-csv ## One-shot: refresh from prod + build AUCTION CSV (for live shows)
-
-whatnot-permanent-bin-csv-production: export-inventory-production build-whatnot-permanent-bin-csv ## One-shot: refresh from prod + build PERMANENT-BIN CSV (post-show always-on shop)
-
-whatnot-post-stream-bin-csv-production: export-inventory-production build-whatnot-post-stream-bin-csv ## One-shot: refresh from prod + build POST-STREAM-BIN CSV (relist unsold auctions at BIN markup)
-
-whatnot-bin-show-csv-production: export-inventory-production build-whatnot-bin-show-csv ## One-shot: refresh from prod + build BIN-SHOW CSV (BIN @ auction price + quick-pick auctions)
-
-# Full twice-weekly pre-show pipeline, Sheet → WP → CSV (the sheet is the
-# single source of truth). Runs after the interactive inventory pass (decrement
-# sold, move-zero-stock-to-sold, remove sold WP posts, add/enrich new rows):
-#   1. sync-cards-production  — create new card posts + stamp col-S IDs +
-#                               push card price/stock from the Singles tab
-#   2. update-product-prices-production-apply — push product price + stock from
-#                               the Products tab (sealed boxes, ETBs)
-#   3. whatnot-bin-show-csv-production — fresh prod inventory → BIN-SHOW CSV
-# Each step revalidates itzenzo.tv. The CSV lands in tmp/whatnot-bin-show-
-# import-<UTC-date>.csv. (Sold-card REMOVAL from WP is still part of the
-# interactive pass — see CLAUDE.md "Card Catalog Pipeline".)
-whatnot-show-prep: ## Pre-show one-shot: sync cards + products (Sheet→WP) then build BIN-SHOW CSV
-	@echo "==================================================================="
-	@echo "  whatnot-show-prep — Sheet → WP → CSV (run after the sheet pass)"
-	@echo "==================================================================="
-	@$(MAKE) --no-print-directory sync-cards-production
-	@$(MAKE) --no-print-directory update-product-prices-production-apply
-	@$(MAKE) --no-print-directory whatnot-bin-show-csv-production
-	@echo "✓ Show prep complete — CSV ready in tmp/whatnot-bin-show-import-<date>.csv"
 
 ##@ Nous import
 

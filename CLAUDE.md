@@ -253,31 +253,34 @@ Each provider gets a **PatternManager** instance during `setup()`. If the provid
 
 The export script automatically replaces hardcoded upload URLs with dynamic `content_url()` calls so media references work across environments.
 
-## Unified Queue
+## Unified Queue — *parked*
 
 The Shop provider owns a single ledger of every "thing waiting to happen on stream" — orders, pack battle entries, pull box entries, and request-to-see card requests. WP custom tables (`wp_queue_sessions`, `wp_queue_entries`) are the source of truth; all access goes through `Support/QueueRepository.php`; REST endpoints live under `/wp-json/shop/v1/queue/*` (bot-secret auth via `X-Bot-Secret`); WPGraphQL exposes `liveQueue`. The change-broadcast to Nous (SSE) was **removed 2026-08-01** with the bot's retirement (its former consumers — the Discord `/queue` command and the itzenzo.tv homepage Live Queue — are both gone); the queue data + REST/GraphQL surface remain, **parked post-Whatnot-pivot**. Full data model, REST surface, producers, speculative shipping, and test map: [docs/unified-queue.md](docs/unified-queue.md).
 
-## Card Catalog Pipeline (Sheet → WP, Stripe-free)
+## Card Catalog Pipeline — *retired 2026-08-16*
 
-**Stripe is retired (2026-06-04, Whatnot pivot).** The Singles Google Sheet is the source of truth; cards sync directly into WordPress — Stripe is no longer in the path.
+**The online shop is no longer operating. All live commerce is on Whatnot, and that pipeline does
+not touch WordPress at all** — it runs Google Sheet → Whatnot import CSV, entirely inside the
+`nous` repo (`build-whatnot.mjs` reads the "Product Pricing" sheet directly).
 
-**Sheet col Q ("WP Join Key") is a generic join key**, resolved in this order: a numeric **WP post ID** (cards created Stripe-free; stamped by `backfill-card-postids.mjs`, name-sanity-checked on use), a legacy **`prod_…` Stripe product ID** (joins to `stripe_product_id` postmeta — an inert handle, no Stripe call), or — when col Q is blank — a **`card_name`+`card_number`(+set)** fallback. `stripe_product_id` is never required; it's just one of the three handles.
+Removed from this repo: the eight Makefile sections that made up the Sheet → WP → itzenzo.tv
+pipeline (`Card singles`, `Card sync`, `Card create`, `Card price sync`, `Product price/stock sync`,
+`Product create`, `Card image migration`, `Whatnot CSV pipeline`) — roughly 60 targets — plus their
+18 supporting scripts and the `NOUS_DIR`/`NOUS_SHOP` plumbing that shelled into nous. The matching
+47 scripts were removed from `nous` in the same pass.
 
-The post-show flow:
+**What remains and still works:**
 
-1. **Stock/price edits** — write the Singles sheet (stock col D, auction col C, AP override col E; card number col F, set name col G). Match rows by stable key (col Q join key or col P TCG-API ID), never by remembered row number. `make backup-singles` first. **Sheet schema note:** the live Singles tab is `A name · B collectr · C auction · D stock · E AP override · F card number · G set · H set code · I variant · … · P TCG-API ID · Q WP join key`. Scripts that hardcode column indices must match this.
-2. **Sold cards** — `node Nous/scripts/shop/move-zero-stock-to-sold.mjs --apply` moves stock-0 rows to the Sold tab; then `make remove-card WP_ID=…` (or `STRIPE_ID=…` as a lookup key) per card — deletes the WP post, flushes Redis, revalidates itzenzo.tv.
-3. **Sheet → WP sync** — `make sync-cards-production` is the one-shot: creates brand-new sheet rows as WP card posts (`create-cards-production-apply`), stamps WP post IDs into blank col Q cells (`backfill-card-ids-production`, from production inventory — prod IDs are canonical), then refreshes price/stock on everything (`update-card-prices-production-apply`), revalidating itzenzo.tv. Dry-run the halves first with `make create-cards-production` and `make update-card-prices-production`. Card creation dedupes by `card_name`+`card_number` only (not set), so a re-added card that ever existed in WP gets skipped. A sheet row with no WP card at all (blank set/image → never created) shows as "no WP card" — enrich it (`make enrich-singles`) so it can be created.
-4. **One-off stock fix** — `make update-stock WP_ID=… STOCK=N` (WP + revalidate; does NOT touch the sheet — update the sheet too or the next sync reverts it).
-5. **Whatnot CSVs** — `make whatnot-bin-show-csv-production` (and siblings) export WP inventory → CSV. Filename date stamp is UTC.
+- The `card` and `product` **custom post types, their ACF fields, and all existing data are
+  untouched.** itzenzo.tv keeps reading them over WPGraphQL and renders exactly as before — the
+  catalog is simply frozen at its last sync rather than gone.
+- `Shop` provider code (`CardPost`, `CardRepository`, `ProductPost`, the REST endpoints) is
+  unchanged; it serves reads.
+- `stripe_product_id` / `stripe_price_id` postmeta survive as inert historical identifiers.
 
-`sync-cards*`, `remove-card`, `update-stock`, and `refresh-from-production` are the **Stripe-free reimplementations** of the old target names — same entry points, no Stripe in the path. `stripe_product_id` everywhere is just the sheet↔WP join key.
-
-**There is no Stripe I/O left in this repo.** The pure Stripe-I/O targets — `push-cards`, `push-cards-production`, `pull-cards*`, `pull-products*`, `rebuild-*-catalog`, `seed-pull-boxes*` — were **deleted 2026-08-16**, along with their scripts, the `CONFIRM_STRIPE` guard, and `check-stripe-modes`. They were quarantined-but-runnable for a while; that's over. Recovery is git history only. The `stripe_product_id` / `stripe_price_id` postmeta **survives on purpose** as an inert join-key handle (see above) — the name is historical, nothing reads it back to Stripe.
-
-## Catalog Drift Defense — *removed*
-
-The four-layer Stripe-drift defense (push-script delete-not-archive, webhook auto-cleanup, checkout pre-flight, friendly-catch backstop) is gone, not merely dormant: `CatalogStripeProductDeactivatedEndpoint` and its test were deleted 2026-08-16, and the Nous bot that drove the webhook leg was archived 2026-08-01. [docs/catalog-drift-defense.md](docs/catalog-drift-defense.md) is `status: archived` and describes code that no longer exists. The reasoning generalized — join keys, failure ordering, silent drops — is in `akivili/docs/catalog-sync-lessons.md`, which is the one worth reading before the next integration.
+**If the shop is ever revived**, this is a rebuild, not a revert: the sheet schema, the join-key
+model, and the failure modes worth designing around are written up in
+`akivili/docs/catalog-sync-lessons.md`. Git history holds the old implementation.
 
 ## WordPress Object Cache (Redis)
 
