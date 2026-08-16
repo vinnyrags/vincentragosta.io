@@ -107,10 +107,12 @@ A deploy ships code. These do **not** travel with it:
    `$(NOUS_SHOP)` and is guarded by `require-nous`, which fails loudly if the repo is missing —
    `$(realpath)` returns empty for a missing path, which would otherwise become `cd /scripts/shop`.
    The archived Discord bot at `_archived/nous` is a *different* repo — don't confuse them.
-2. **Sheet column: `CLAUDE.md` says col Q, the Makefile says col S.** `CLAUDE.md` documents the
-   join key as **col Q "WP Join Key"**; four Makefile comments and the `backfill-card-ids-production`
-   help text say **col S**. One is stale. Verify against the live Singles tab before trusting either,
-   then fix the loser.
+2. **The sheet↔WP join key is col Q** ("WP Join Key"). Resolved 2026-08-16 by reading the code
+   rather than either doc: `backfill-card-postids` reads `v[16]` and writes `Singles!Q<row>`;
+   `export-card-prices`, `export-new-cards` and `build-whatnot-full-import` all read index 16.
+   Index 16 = Q. The Makefile's five "col S" comments and four nous script headers were stale by two
+   columns — a leftover from an older, wider schema — and have been corrected. `CLAUDE.md` was right
+   all along. Card number is **col F**, set name **col G**.
 3. **`backfill-card-ids-production` must run from production inventory only.** Staging and local
    post IDs diverge; writing them back to the sheet corrupts the join key for every environment.
 4. **`make update-stock` does not touch the sheet.** The next sync reverts it. Update the sheet too.

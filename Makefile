@@ -429,20 +429,20 @@ sync-cards-staging: create-cards-staging-apply update-card-prices-staging-apply 
 sync-cards-production: create-cards-production-apply backfill-card-ids-production update-card-prices-production-apply ## Sheet → production WP: create new cards + stamp col-S IDs + refresh price/stock
 	@echo "✓ Card sync complete (production, Stripe-free)"
 
-# Stamp WP post IDs into blank Singles col S cells so every row has an exact
+# Stamp WP post IDs into blank Singles col Q cells so every row has an exact
 # join key (legacy rows keep their inert prod_… handles). Runs from PRODUCTION
 # inventory only — production post IDs are canonical; staging/local IDs
 # diverge and must never be written to the sheet.
-backfill-card-ids-production: export-inventory-production ## Backfill Singles col S with WP post IDs (blank rows only)
+backfill-card-ids-production: export-inventory-production ## Backfill Singles col Q with WP post IDs (blank rows only)
 	$(require-nous)
 	@cd $(NOUS_SHOP) && node backfill-card-postids.mjs --apply --inventory=$(INVENTORY_JSON)
 
 ##@ Card create (Sheets → WP, Stripe-free)
 
-# Brand-new sheet rows (name + set + image present, col S Stripe ID blank) →
+# Brand-new sheet rows (name + set + image present, col Q join key blank) →
 # WP card posts with full metadata + sideloaded featured image + taxonomy.
 # Dedupe is by card_name + card_number ONLY (not set) — a re-added card that
-# ever existed in WP is skipped; backfill its col S from the WP card's meta
+# ever existed in WP is skipped; backfill its col Q from the WP card's meta
 # so update-card-prices picks it up instead. Dry-run by default.
 
 NEW_CARDS_JSON := /tmp/new-cards.json
@@ -656,7 +656,7 @@ create-products-production-apply: export-new-products ## APPLY: new products →
 # other is auto-resolved from postmeta (key=stripe_product_id).
 # Stripe-free since 2026-06-06: deletes the WP post, flushes Redis, and
 # revalidates itzenzo.tv /cards. STRIPE_ID is accepted purely as a lookup
-# key (stripe_product_id postmeta = sheet col S join handle).
+# key (stripe_product_id postmeta = sheet col Q join handle).
 remove-card: ## Remove a card from production (delete WP post + flush + revalidate, Stripe-free)
 	@if [ -z "$(STRIPE_ID)" ] && [ -z "$(WP_ID)" ]; then \
 		echo "Usage: make remove-card WP_ID=123"; \
