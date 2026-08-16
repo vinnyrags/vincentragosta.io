@@ -1,5 +1,9 @@
 # CLAUDE.md
 
+> **Read [`RUNBOOK.md`](RUNBOOK.md) before any deploy, infra, cache, or seed work.**
+> Do not rely on memory for hosts, paths, or commands. This file covers architecture and the
+> Card Catalog Pipeline; the runbook covers environments, deploy, caches, and traps.
+
 > **About this document.** A guide, not a contract — push back when a pattern here doesn't fit or there's a better approach. The architecture is still evolving; when a change shifts a convention, suggest updating this file, but never edit it automatically — prompt first.
 
 ## Project Overview
