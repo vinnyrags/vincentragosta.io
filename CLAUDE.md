@@ -273,11 +273,11 @@ The post-show flow:
 
 `sync-cards*`, `remove-card`, `update-stock`, and `refresh-from-production` are the **Stripe-free reimplementations** of the old target names — same entry points, no Stripe in the path. `stripe_product_id` everywhere is just the sheet↔WP join key.
 
-**Pure Stripe-I/O targets are quarantined.** `push-cards`, `push-cards-production`, `pull-cards*`, `pull-products*`, and `rebuild-*-catalog` have no Stripe-free meaning (moving data to/from Stripe *is* their function) — they refuse to run unless `CONFIRM_STRIPE=1` is passed and exist only for the documented reversal path.
+**There is no Stripe I/O left in this repo.** The pure Stripe-I/O targets — `push-cards`, `push-cards-production`, `pull-cards*`, `pull-products*`, `rebuild-*-catalog`, `seed-pull-boxes*` — were **deleted 2026-08-16**, along with their scripts, the `CONFIRM_STRIPE` guard, and `check-stripe-modes`. They were quarantined-but-runnable for a while; that's over. Recovery is git history only. The `stripe_product_id` / `stripe_price_id` postmeta **survives on purpose** as an inert join-key handle (see above) — the name is historical, nothing reads it back to Stripe.
 
-## Catalog Drift Defense — *retired*
+## Catalog Drift Defense — *removed*
 
-The four-layer Stripe-drift defense (push-script delete-not-archive, webhook auto-cleanup, checkout pre-flight, friendly-catch backstop) is moot now that checkout is gated off everywhere. [docs/catalog-drift-defense.md](docs/catalog-drift-defense.md) is kept as historical reference for the reversal path.
+The four-layer Stripe-drift defense (push-script delete-not-archive, webhook auto-cleanup, checkout pre-flight, friendly-catch backstop) is gone, not merely dormant: `CatalogStripeProductDeactivatedEndpoint` and its test were deleted 2026-08-16, and the Nous bot that drove the webhook leg was archived 2026-08-01. [docs/catalog-drift-defense.md](docs/catalog-drift-defense.md) is `status: archived` and describes code that no longer exists. The reasoning generalized — join keys, failure ordering, silent drops — is in `akivili/docs/catalog-sync-lessons.md`, which is the one worth reading before the next integration.
 
 ## WordPress Object Cache (Redis)
 
