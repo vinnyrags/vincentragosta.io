@@ -161,7 +161,7 @@ endef
 	build-whatnot-permanent-bin-csv whatnot-permanent-bin-csv-production \
 	build-whatnot-post-stream-bin-csv whatnot-post-stream-bin-csv-production \
 	build-whatnot-bin-show-csv whatnot-bin-show-csv-production whatnot-show-prep \
-	nous-import nous-import-production \
+	nous-import nous-import-production nous-post \
 	satis-refresh satis-add satis-remove
 
 .DEFAULT_GOAL := help
@@ -795,6 +795,10 @@ nous-import-production: ## Publish a Nous Signal post LIVE to production (FILE=,
 	$(if $(TITLE),,$(error TITLE is required))
 	$(if $(DATE),,$(error DATE is required (YYYY-MM-DD)))
 	@PROD_HOST='$(PRODUCTION_HOST)' PROD_WP='$(PRODUCTION_WP)' bash scripts/nous-import-prod.sh "$(FILE)" "$(TITLE)" "$(EXCERPT)" "$(DATE)" "$(TAGS)"
+
+nous-post: ## Auto-generate + publish Nous Signal post(s): DATE=YYYY-MM-DD (one day) or FROM= TO= (range). DRY_RUN=1 to preview only.
+	$(if $(or $(DATE),$(FROM)),,$(error Usage: make nous-post DATE=YYYY-MM-DD   |   make nous-post FROM=YYYY-MM-DD TO=YYYY-MM-DD   (DRY_RUN=1 to preview)))
+	@bash scripts/nous-post.sh "$(or $(DATE),$(FROM))" "$(or $(TO),$(DATE),$(FROM))"
 
 ##@ Satis package repository
 
