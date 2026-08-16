@@ -101,10 +101,12 @@ A deploy ships code. These do **not** travel with it:
 
 ## Traps
 
-1. **`../Nous` is not a typo, but it is a lie.** The Makefile sets `NOUS_DIR := $(realpath ../Nous)`
-   and several targets `cd ../Nous/scripts/shop`. The repo was renamed to lowercase `nous`; this
-   resolves only because macOS is case-insensitive. It will break on a case-sensitive filesystem
-   (CI, Linux). The archived Discord bot at `_archived/nous` is a *different* repo — don't confuse them.
+1. **The nous path is defined once, at the top of the Makefile.** `NOUS_DIR` /
+   `NOUS_SHOP` point at `../nous` (lowercase — fixed 2026-08-16; it previously read `../Nous` and
+   worked only because macOS is case-insensitive). Every Sheet-side target goes through
+   `$(NOUS_SHOP)` and is guarded by `require-nous`, which fails loudly if the repo is missing —
+   `$(realpath)` returns empty for a missing path, which would otherwise become `cd /scripts/shop`.
+   The archived Discord bot at `_archived/nous` is a *different* repo — don't confuse them.
 2. **Sheet column: `CLAUDE.md` says col Q, the Makefile says col S.** `CLAUDE.md` documents the
    join key as **col Q "WP Join Key"**; four Makefile comments and the `backfill-card-ids-production`
    help text say **col S**. One is stale. Verify against the live Singles tab before trusting either,
