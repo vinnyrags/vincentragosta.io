@@ -80,42 +80,6 @@ define revalidate-itzenzo
 ssh $($(1)_HOST) 'SECRET=$$(grep -E "^REVALIDATION_SECRET=" $(2)/.env.production | cut -d= -f2-); curl -s -X POST "$(3)/api/revalidate" -H "Content-Type: application/json" -d "{\"secret\":\"$$SECRET\",\"paths\":[\"/\",\"/cards\",\"/collection\",\"/livestream-shop\"]}" -w "\n"'
 endef
 
-# Stripe mode-mismatch guard. When local DDEV's Stripe key mode differs from
-# the remote env's Stripe key mode, a DB push will replace remote's catalog
-# Stripe IDs with values from a different Stripe environment, silently
-# breaking every checkout (Stripe products are mode-specific — live ≠ test).
-# Override with ALLOW_STRIPE_MODE_MISMATCH=1 if you really mean it.
-#   $(call check-stripe-mode-match, ENV, env-display-name)
-define check-stripe-mode-match
-@LOCAL_MODE=$$(grep -E "define\s*\(\s*'STRIPE_SECRET_KEY'" wp-config-env.php 2>/dev/null | grep -oE "sk_(test|live)_" | head -1) ; \
-REMOTE_MODE=$$(ssh $($(1)_HOST) "grep -E \"define\s*\(\s*'STRIPE_SECRET_KEY'\" $($(1)_DIR)/wp-config-env.php 2>/dev/null" | grep -oE "sk_(test|live)_" | head -1) ; \
-if [ -n "$$LOCAL_MODE" ] && [ -n "$$REMOTE_MODE" ] && [ "$$LOCAL_MODE" != "$$REMOTE_MODE" ]; then \
-    if [ "$(ALLOW_STRIPE_MODE_MISMATCH)" != "1" ]; then \
-        echo "" ; \
-        echo "================================================================" ; \
-        echo "ABORT: Stripe key mode mismatch detected." ; \
-        echo "  Local:  $$LOCAL_MODE" ; \
-        echo "  $(2):  $$REMOTE_MODE" ; \
-        echo "" ; \
-        echo "Pushing this DB would replace $(2)'s Stripe product/price IDs" ; \
-        echo "with values from a different Stripe environment, silently" ; \
-        echo "breaking every checkout because Stripe products are mode-" ; \
-        echo "specific (live ≠ test)." ; \
-        echo "" ; \
-        echo "If you understand and really mean to do it:" ; \
-        echo "  ALLOW_STRIPE_MODE_MISMATCH=1 make push-$(2)" ; \
-        echo "" ; \
-        echo "More likely you want to refresh content WITHOUT touching the" ; \
-        echo "catalog Stripe linkage. See:" ; \
-        echo "  make rebuild-staging-catalog  (placeholder)" ; \
-        echo "  akivili/business/operations.md → Post-cutover staging refresh" ; \
-        echo "================================================================" ; \
-        exit 1 ; \
-    fi ; \
-    echo "⚠ Pushing despite Stripe mode mismatch (ALLOW_STRIPE_MODE_MISMATCH=1)." ; \
-fi
-endef
-
 # Push local DDEV DB + uploads to a remote env.
 #   $(call push-db-to-env, ENV, env-display-name)
 define push-db-to-env
@@ -168,12 +132,9 @@ endef
 	build watch clean autoload test test-js update \
 	deploy-staging deploy-production release \
 	push-staging pull-staging push-production pull-production \
-	check-stripe-modes rebuild-local-catalog rebuild-staging-catalog refresh-from-production \
+	refresh-from-production \
 	pull-patterns pull-patterns-staging \
-	pull-products pull-products-publish pull-products-staging \
-	push-cards pull-cards pull-cards-publish \
-	pull-cards-staging pull-cards-production \
-	sync-cards sync-cards-staging sync-cards-production push-cards-production remove-card update-stock \
+	sync-cards sync-cards-staging sync-cards-production remove-card update-stock \
 	export-new-cards create-cards create-cards-apply \
 	create-cards-staging create-cards-staging-apply \
 	create-cards-production create-cards-production-apply \
@@ -194,7 +155,6 @@ endef
 	seed-itzenzo-pages-staging seed-itzenzo-pages-production \
 	seed-stream-schedule seed-stream-schedule-force \
 	seed-stream-schedule-staging seed-stream-schedule-production \
-	seed-pull-boxes seed-pull-boxes-staging seed-pull-boxes-production \
 	export-inventory-production export-inventory-staging \
 	build-whatnot-csv whatnot-csv-production \
 	build-whatnot-auction-csv whatnot-auction-csv-production \
@@ -352,32 +312,12 @@ release: ## Merge develop into main and push both branches to origin
 	git checkout develop
 	@echo "✓ Both branches pushed to origin"
 
-# ---------------------------------------------------------------------------
-# Stripe retired 2026-06-04 (Whatnot pivot). Targets marked (RETIRED — Stripe)
-# push/pull the old Sheets → Stripe → WP chain and mutate live Stripe state.
-# They are kept only for the documented reversal path (akivili
-# business/whatnot-first-strategy.md) and refuse to run without
-# CONFIRM_STRIPE=1. Current card pipeline: "Card Catalog Pipeline" in
-# CLAUDE.md — update-card-prices-*, create-cards-from-sheet.php, and the
-# Whatnot CSV targets, none of which touch Stripe.
-define stripe-retired-guard
-	@if [ "$(CONFIRM_STRIPE)" != "1" ]; then \
-		echo "✋ '$@' is RETIRED — it touches Stripe (retired 2026-06-04, Whatnot pivot)."; \
-		echo "   The card catalog now syncs Sheet → WP directly:"; \
-		echo "     make update-card-prices-production[-apply]    price/stock"; \
-		echo "     scripts/create-cards-from-sheet.php           new cards"; \
-		echo "   Re-run with CONFIRM_STRIPE=1 only if you really mean to touch Stripe."; \
-		exit 1; \
-	fi
-endef
-
 ##@ Database & uploads sync
 
-# The pre-retirement Stripe mode-mismatch guard is gone from the push
-# targets: with checkout disabled everywhere, stripe_product_id postmeta is
-# just a sheet↔WP join key — pushing a DB across key modes can't break a
-# checkout that no longer exists. `make check-stripe-modes` remains as a
-# read-only diagnostic.
+# `stripe_product_id` postmeta survives as one of the sheet↔WP join-key
+# handles (see "Card Catalog Pipeline" in CLAUDE.md). It is an inert
+# identifier — nothing reads it back to Stripe, and no Stripe I/O remains
+# in this repo.
 push-staging: ## Push local DB + uploads to staging
 	$(call push-db-to-env,STAGING,staging)
 
@@ -389,46 +329,6 @@ push-production: ## Push local DB + uploads to production
 
 pull-production: ## Pull production DB + uploads to local
 	$(call pull-db-from-env,PRODUCTION,production)
-
-check-stripe-modes: ## Verify local + staging + production Stripe key modes match (non-destructive)
-	@echo "Checking staging..."
-	$(call check-stripe-mode-match,STAGING,staging)
-	@echo "Checking production..."
-	$(call check-stripe-mode-match,PRODUCTION,production)
-	@echo "✓ All Stripe key modes consistent."
-
-rebuild-local-catalog: ## (RETIRED — Stripe) Delete + repopulate LOCAL catalog from test-mode Stripe
-	$(stripe-retired-guard)
-	@echo ">> Hard-deleting all card + product posts from local..."
-	@# pull-cards/pull-products match by stripe_product_id meta. After a
-	@# pull-production overwrites everything with live-mode IDs, just
-	@# wiping the meta makes pull-cards CREATE duplicates instead of
-	@# updating in place. Hard-delete every card + product post first
-	@# so the next pull starts from a clean slate. Stdin redirected to
-	@# /dev/null on each `wp post delete` so the outer `while read`
-	@# loop doesn't get its stdin slurped after the first iteration.
-	@for type in card product; do \
-		ddev wp post list --post_type=$$type --post_status=any --field=ID 2>/dev/null \
-			| /usr/bin/grep -E "^[0-9]+$$" \
-			| while read -r id; do \
-				ddev wp post delete "$$id" --force </dev/null >/dev/null 2>&1 || true; \
-			done; \
-	done
-	@echo ">> Re-pulling products from test-mode Stripe → local..."
-	@$(MAKE) --no-print-directory pull-products-publish
-	@echo ">> Re-pulling card singles from test-mode Stripe → local..."
-	@$(MAKE) --no-print-directory pull-cards-publish
-	@echo "✓ Local catalog rebuilt with fresh test-mode Stripe IDs."
-
-rebuild-staging-catalog: ## (RETIRED — Stripe) Wipe + repopulate STAGING catalog Stripe IDs from test-mode Stripe
-	$(stripe-retired-guard)
-	@echo ">> Wiping stale Stripe IDs from staging postmeta..."
-	@ssh $(STAGING_HOST) "wp --allow-root --path=$(STAGING_WP) db query \"DELETE FROM wp_postmeta WHERE meta_key IN ('stripe_product_id','stripe_price_id','sale_price_id')\"" >/dev/null
-	@echo ">> Re-pulling products from test-mode Stripe → staging..."
-	@$(MAKE) --no-print-directory pull-products-staging
-	@echo ">> Re-pulling card singles from test-mode Stripe → staging..."
-	@$(MAKE) --no-print-directory pull-cards-staging
-	@echo "✓ Staging catalog rebuilt with fresh test-mode Stripe IDs."
 
 # Pre-retirement this had two extra steps that rebuilt the local + staging
 # catalogs from test-mode Stripe (live↔test product IDs are mode-specific and
@@ -463,26 +363,6 @@ pull-patterns-staging: ## Export block patterns from staging to PHP files
 	REMOTE_URL="$(STAGING_URL)" \
 	$(CHILD_THEME_DIR)/scripts/export-patterns.sh
 
-##@ Stripe products (RETIRED)
-
-pull-products: ## (RETIRED — Stripe) Sync Stripe products to local WordPress (as drafts)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe products to WordPress..."
-	ddev wp eval-file scripts/pull-products.php
-
-pull-products-publish: ## (RETIRED — Stripe) Sync Stripe products to local WordPress (auto-publish)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe products to WordPress (auto-publish)..."
-	@touch scripts/.publish
-	@ddev wp eval-file scripts/pull-products.php; rm -f scripts/.publish
-
-pull-products-staging: ## (RETIRED — Stripe) Sync Stripe products to staging (clean + publish)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe products to staging WordPress..."
-	$(call remote-wp-eval-with-flags,STAGING,pull-products.php,.publish .clean)
-	@echo "Flushing staging itzenzo.tv image proxy cache..."
-	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
-
 ##@ Card singles
 
 backup-singles: ## Duplicate the Singles tab as Singles_Backup_YYYY-MM-DD
@@ -504,59 +384,6 @@ lint-singles: ## Lint the Singles sheet for data-entry issues before pushing
 audit-alt-art: ## Audit alt-art rows for misrouted Pokemon TCG API IDs
 	@echo "Auditing alt-art rows in Singles tab..."
 	cd ../Nous/scripts/shop && node audit-alt-art-ids.js $(ARGS)
-
-# Pulls STRIPE_SECRET_KEY from local wp-config via DDEV so the target is
-# self-sufficient — no manual env var needed.
-push-cards: ## (RETIRED — Stripe) Push card singles from Google Sheets to Stripe
-	$(stripe-retired-guard)
-	@echo "Pushing cards from Google Sheets to Stripe..."
-	@STRIPE_SECRET_KEY=$$(ddev wp eval "echo STRIPE_SECRET_KEY;" 2>/dev/null | tail -1); \
-	if [ -z "$$STRIPE_SECRET_KEY" ]; then \
-		echo "Error: could not read STRIPE_SECRET_KEY from DDEV. Is DDEV running?"; exit 1; \
-	fi; \
-	cd ../Nous/scripts/shop && STRIPE_SECRET_KEY="$$STRIPE_SECRET_KEY" node push-cards.js $(ARGS)
-
-pull-cards: ## (RETIRED — Stripe) Sync Stripe card singles to local WordPress (as drafts)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe card singles to WordPress..."
-	ddev wp eval-file scripts/pull-cards.php
-
-pull-cards-publish: ## (RETIRED — Stripe) Sync Stripe card singles to local WordPress (auto-publish)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe card singles to WordPress (auto-publish)..."
-	@touch scripts/.publish
-	@ddev wp eval-file scripts/pull-cards.php; rm -f scripts/.publish
-
-pull-cards-staging: ## (RETIRED — Stripe) Sync Stripe card singles to staging (clean + publish)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe card singles to staging WordPress..."
-	$(call remote-wp-eval-with-flags,STAGING,pull-cards.php,.publish .clean)
-	@echo "Flushing staging itzenzo.tv image proxy cache..."
-	$(call flush-itzenzo-cache,STAGING,$(ITZENZO_STAGING_DIR),$(ITZENZO_STAGING_PM2))
-
-# No --clean on production — we don't nuke existing card posts/attachments.
-pull-cards-production: ## (RETIRED — Stripe) Sync Stripe card singles to production (publish, idempotent)
-	$(stripe-retired-guard)
-	@echo "Syncing Stripe card singles to production WordPress..."
-	$(call remote-wp-eval-with-flags,PRODUCTION,pull-cards.php,.publish)
-	@echo "Flushing production itzenzo.tv image proxy cache..."
-	$(call flush-itzenzo-cache,PRODUCTION,$(ITZENZO_PROD_DIR),$(ITZENZO_PROD_PM2))
-
-# Production-targeted variant of `push-cards`. Unlike `push-cards` —
-# which reads STRIPE_SECRET_KEY from local DDEV's wp-config — this
-# fetches the live key from production's /opt/nous-bot/.env via SSH,
-# so the operator doesn't have to swap local DDEV modes just to push
-# the Sheet to live Stripe. Production is ALWAYS in live mode by
-# definition, so the mode-match guard isn't applicable here.
-push-cards-production: ## (RETIRED — Stripe) Push Singles Sheet → live-mode Stripe
-	$(stripe-retired-guard)
-	@echo "Pulling live Stripe key from production droplet..."
-	@LIVE_KEY=$$(ssh $(PRODUCTION_HOST) "grep '^STRIPE_SECRET_KEY=' /opt/nous-bot/.env | cut -d= -f2-") ; \
-	if [ "$${LIVE_KEY:0:8}" != "sk_live_" ]; then \
-		echo "Error: expected sk_live_* from production, got: $${LIVE_KEY:0:12}..."; exit 1; \
-	fi ; \
-	echo "  ✓ Live key acquired" ; \
-	cd ../Nous/scripts/shop && STRIPE_SECRET_KEY="$$LIVE_KEY" node push-cards.js $(ARGS)
 
 ##@ Card sync (Sheets → WP, Stripe-free)
 
@@ -885,18 +712,6 @@ seed-stream-schedule-staging: ## Force-overwrite staging Stream Schedule repeate
 seed-stream-schedule-production: ## Force-overwrite production Stream Schedule repeater
 	@echo "Seeding production itzenzo.tv stream schedule..."
 	$(call remote-wp-eval-with-env,PRODUCTION,seed-stream-schedule.php,FORCE=1)
-
-seed-pull-boxes: ## Create/find Pull Box Entry Stripe product + V/VMAX prices, write IDs to local WP
-	@echo "Seeding Pull Box Entry product + prices on Stripe..."
-	ddev wp eval-file scripts/seed-pull-boxes.php
-
-seed-pull-boxes-staging: ## Same on staging WordPress
-	@echo "Seeding Pull Box Entry on staging..."
-	$(call remote-wp-eval,STAGING,seed-pull-boxes.php)
-
-seed-pull-boxes-production: ## Same on production WordPress
-	@echo "Seeding Pull Box Entry on production..."
-	$(call remote-wp-eval,PRODUCTION,seed-pull-boxes.php)
 
 ##@ Whatnot CSV pipeline
 

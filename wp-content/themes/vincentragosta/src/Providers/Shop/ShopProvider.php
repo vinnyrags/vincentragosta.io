@@ -6,7 +6,6 @@ namespace ChildTheme\Providers\Shop;
 
 use ChildTheme\Providers\Shop\Endpoints\CardOfferEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CatalogStripeProductDeactivatedEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
 use ChildTheme\Providers\Shop\Endpoints\PullBoxCreateEndpoint;
@@ -75,7 +74,6 @@ class ShopProvider extends Provider
     protected array $routes = [
         CardOfferEndpoint::class,
         CardRequestEndpoint::class,
-        CatalogStripeProductDeactivatedEndpoint::class,
         CurrentPackBattleEndpoint::class,
         PullBoxClaimEndpoint::class,
         PullBoxCreateEndpoint::class,

@@ -161,7 +161,7 @@ function sideloadFeaturedImage(int $postId, string $imageUrl, string $title): vo
 }
 
 /**
- * Mirror of pull-cards.php::maybeSyncCardTaxonomies — create/assign the
+ * Mirror of the retired pull-cards.php maybeSyncCardTaxonomies — create/assign the
  * card_game and card_set terms from the card's game + set_name/set_code meta.
  */
 function syncCardTaxonomies(int $postId, string $game, string $setName, string $setCode): void
