@@ -50,12 +50,44 @@ EXCERPT="$(printf '%s' "$B_EXCERPT" | base64 -d)"
 TAGS="$(printf '%s' "$B_TAGS"     | base64 -d)"
 CONTENT="$(cat "$RFILE")"
 
+# Resolve the publish timestamp in SITE-LOCAL time.
+#
+# Posts are conventionally dated noon on their own day, but WordPress silently
+# downgrades post_status publish -> future when the timestamp is ahead of site
+# time. A same-day post imported before noon would therefore be SCHEDULED, not
+# published, and the caller's HTTP verification would see a 404. Clamp anything
+# still in the future back to "now".
+#
+# post_date_gmt is passed explicitly because WP does NOT recompute it from
+# post_date on a later `wp post update` — and the GMT column is the one the
+# future-check actually reads, so a stale value keeps re-flipping the post back
+# to `future` no matter how many times you set the status to publish.
+wpdate() {   # arg: PHP expression echoing a Y-m-d H:i:s string
+    wp eval "$1" --path="$WP" --allow-root 2>/dev/null \
+      | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}' | head -1
+}
+
+NOW_LOCAL="$(wpdate 'echo current_time("mysql");' || true)"
+POST_LOCAL="${PDATE} 12:00:00"
+if [ -n "$NOW_LOCAL" ] && [ "$POST_LOCAL" \> "$NOW_LOCAL" ]; then
+    echo "  ↻ ${POST_LOCAL} is ahead of site time (${NOW_LOCAL}) — clamping so it publishes now."
+    POST_LOCAL="$NOW_LOCAL"
+fi
+
+POST_GMT="$(wpdate "echo get_gmt_from_date('${POST_LOCAL}');" || true)"
+if [ -z "$POST_GMT" ]; then
+    echo "Error: could not resolve GMT time for ${POST_LOCAL} on remote" >&2
+    rm -f "$RFILE"
+    exit 1
+fi
+
 POST_ID=$(wp post create \
     --post_type=post \
     --post_status=publish \
     --post_title="$TITLE" \
     --post_excerpt="$EXCERPT" \
-    --post_date="${PDATE} 12:00:00" \
+    --post_date="$POST_LOCAL" \
+    --post_date_gmt="$POST_GMT" \
     --post_content="$CONTENT" \
     --path="$WP" --allow-root --porcelain 2>/dev/null | grep -E '^[0-9]+$' || true)
 

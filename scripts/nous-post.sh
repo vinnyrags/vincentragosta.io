@@ -19,6 +19,9 @@
 #     the bad file is quarantined, the run continues to the next date.
 #   - De-dupe: a date already present in content/posts is skipped (real runs).
 #   - Every published post ID is logged, so a bad post is one `wp post delete <id>` away.
+#   - Publish verification: a date counts as LIVE only if the production permalink returns
+#     HTTP 200. Anything else is recorded as FAIL and the run exits non-zero — `wp post create`
+#     succeeding is not proof the post is reachable (see the post_date trap in nous-import-prod.sh).
 set -uo pipefail
 
 # ---- config --------------------------------------------------------------------------
@@ -208,10 +211,22 @@ while :; do
   PROD_HOST="$PROD_HOST" PROD_WP="$STAGING_WP" bash "$IMPORTER" "$DEST" "$TITLE" "$EXCERPT" "$d" "$TAGS" >/dev/null 2>&1 || true
   ssh "$PROD_HOST" "wp cache flush --path=$PROD_WP --allow-root >/dev/null 2>&1; wp cache flush --path=$STAGING_WP --allow-root >/dev/null 2>&1" || true
 
+  # The HTTP check is the ONLY proof the post is actually reachable — `wp post
+  # create` exiting 0 is not. A post WordPress downgraded to `future`, a bad
+  # permalink, or a cache miss all return non-200 here, and none of them are a
+  # successful run. Gate the summary on this, not on the publish exit code.
   CODE="$(curl -s -o /dev/null -w '%{http_code}' "$PROD_URL/$SLUG/")"
-  echo "  ✓ published ID ${PID:-?} — $PROD_URL/$SLUG/  (HTTP $CODE)"
-  SUMMARY+=("LIVE  ${d}  ${SLUG}  id=${PID:-?}  http=${CODE}")
-  created=$((created+1))
+  if [ "$CODE" = "200" ]; then
+    echo "  ✓ published ID ${PID:-?} — $PROD_URL/$SLUG/  (HTTP $CODE)"
+    SUMMARY+=("LIVE  ${d}  ${SLUG}  id=${PID:-?}  http=${CODE}")
+    created=$((created+1))
+  else
+    echo "  ✗ created ID ${PID:-?} but $PROD_URL/$SLUG/ returned HTTP $CODE — NOT live."
+    echo "      inspect: ssh $PROD_HOST \"wp post get ${PID:-<id>} --fields=post_status,post_date,post_date_gmt --path=$PROD_WP --allow-root\""
+    echo "      if post_status is 'future', pass BOTH --post_date and --post_date_gmt (in the past) to publish it."
+    SUMMARY+=("FAIL(http ${CODE})  ${d}  ${SLUG}  id=${PID:-?}")
+    failed=$((failed+1))
+  fi
 
   [ "$d" = "$TO" ] && break
   d="$(next_day "$d")"
@@ -221,4 +236,6 @@ echo "════════════════════════�
 echo "Summary — created:$created  skipped:$skipped  failed:$failed"
 printf '  %s\n' "${SUMMARY[@]}"
 [ "$failed" -gt 0 ] && echo "  (failed/quarantined drafts are in $PREVIEW for inspection)"
+# Exit non-zero on any failure so `make nous-post` reports it instead of looking clean.
+[ "$failed" -gt 0 ] && exit 1
 exit 0
