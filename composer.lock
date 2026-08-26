@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f65ca1a56d8f2b3c109bd1e753ae27d6",
+    "content-hash": "0bc2d29f31c1bd0a23798f5654e0752e",
     "packages": [
         {
             "name": "composer/installers",
@@ -1026,17 +1026,17 @@
         },
         {
             "name": "vincentragosta/ix",
-            "version": "dev-main",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "4d5f41b2e8bfb5ba15fb9f0825a816e9cb708255"
+                "reference": "958a42287f80cf62bb31d6fe8212164ea3839298"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vinnyrags/IX/zipball/4d5f41b2e8bfb5ba15fb9f0825a816e9cb708255",
-                "reference": "4d5f41b2e8bfb5ba15fb9f0825a816e9cb708255",
-                "shasum": ""
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/ix/vincentragosta-ix-958a42287f80cf62bb31d6fe8212164ea3839298-zip-228afd.zip",
+                "reference": "958a42287f80cf62bb31d6fe8212164ea3839298",
+                "shasum": "55032067e586046796cbcfe9cbfb10de4941d579"
             },
             "require": {
                 "enshrined/svg-sanitize": "^0.22.0",
@@ -1046,7 +1046,6 @@
             "require-dev": {
                 "automattic/wordbless": "^0.4.2"
             },
-            "default-branch": true,
             "type": "wordpress-theme",
             "autoload": {
                 "psr-4": {
@@ -1074,10 +1073,10 @@
             ],
             "description": "A foundational WordPress parent theme with Timber support",
             "support": {
-                "source": "https://github.com/vinnyrags/IX/tree/v1.6.1",
+                "source": "https://github.com/vinnyrags/IX/tree/v1.7.0",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-08-01T04:36:08+00:00"
+            "time": "2026-08-25T01:07:35+00:00"
         },
         {
             "name": "vincentragosta/mythus",
@@ -1279,9 +1278,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "vincentragosta/ix": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
