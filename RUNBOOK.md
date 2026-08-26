@@ -35,6 +35,24 @@ Node for the PM2 processes: `/root/.nvm/versions/node/v20.20.2/bin`.
 This droplet also hosts **ellenharvey**. It is **not** on deploy-kit — extending deploy-kit to
 vincentragosta.io and ellenharvey is a tracked follow-up.
 
+> ⚠️ **This zone's DNS carries a client's live preview link. Read before moving it to Cloudflare.**
+>
+> `ellenharvey.vincentragosta.io` is an **A record to `174.138.70.29` inside the `vincentragosta.io`
+> zone** — which sits on **DigitalOcean DNS** (`ns1–3.digitalocean.com`) as of 2026-08-26. It is not
+> a stray subdomain: it is the preview URL Ellen Harvey is **actively reviewing** ahead of her site's
+> go-live, and it is the only way she can see the rebuild.
+>
+> When this zone moves to Cloudflare:
+> - **The `ellenharvey` record must survive the import.** Verify it explicitly rather than trusting
+>   the scan — if it's dropped, her preview goes dark and she has no way to tell it's our fault.
+> - **Leave it unproxied (grey cloud).** That vhost terminates its own Let's Encrypt cert and runs
+>   `blog_public=0`; proxying changes how both behave, and search-visibility is load-bearing here —
+>   the staging copy must stay out of the index until cutover.
+>
+> Ellen's own domain, `ellenharvey.net`, is unrelated to this zone and goes in a **separate Cloudflare
+> account in her name** — deliberately not this one. See `ellenharvey/RUNBOOK.md` and
+> `akivili/engagements/ellen-harvey-engagement.md`.
+
 Remote-only wp-cli takes the core path explicitly:
 
 ```bash
