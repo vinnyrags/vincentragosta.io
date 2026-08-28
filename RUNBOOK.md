@@ -30,6 +30,32 @@ Staging and production are **two vhosts on the same droplet**. So is itzenzo.tv.
 | itzenzo prod | `/var/www/itzenzo.tv` | `itzenzo-tv` | https://itzenzo.tv |
 | itzenzo staging | `/var/www/staging.itzenzo.tv` | `staging-itzenzo` | https://staging.itzenzo.tv |
 
+> 🚨 **OPEN TODO — `staging.itzenzo.tv` is publicly indexable. Found 2026-08-27.**
+>
+> It returns **200** with **no `X-Robots-Tag`**, **no robots meta tag**, and **no `robots.txt`** — the
+> Next.js catch-all serves app HTML for `/robots.txt`. Nothing prevents Google crawling and indexing a
+> staging copy of the storefront: duplicate content competing with `itzenzo.tv`, plus whatever test
+> data staging happens to be holding.
+>
+> Contrast `staging.vincentragosta.io`, which is correctly protected by
+> `add_header X-Robots-Tag "noindex, nofollow, noarchive" always;` in its vhost.
+>
+> **Fix:** add the same header to the `staging.itzenzo.tv` server block. It proxies to PM2, so the
+> nginx layer is the right place and it takes about two minutes. A `robots.txt` route in the Next.js
+> app is the belt-and-braces half.
+>
+> **Also note** — and this is why it went unnoticed — **modern WordPress and Next.js both ignore any
+> "discourage search engines" setting when generating `robots.txt`.** WordPress's `do_robots()` reads
+> `blog_public` and then never branches on it, so a private WP site serves the same permissive
+> robots.txt as a public one. The `X-Robots-Tag` header is the only layer that reliably holds. Do not
+> treat `blog_public=0` as sufficient anywhere.
+>
+> `staging.vincentragosta.io` has a lesser version of the same bug: a bare
+> `location = /robots.txt` with no `try_files` makes it serve an HTML 404 from disk instead of letting
+> WordPress answer. Cosmetic there, since the header covers it, but worth fixing when nearby.
+>
+> **`itzenzo.tv` has no `RUNBOOK.md`**, which is why this note lives here rather than in that repo.
+
 Node for the PM2 processes: `/root/.nvm/versions/node/v20.20.2/bin`.
 
 This droplet also hosts **ellenharvey**. It is **not** on deploy-kit — extending deploy-kit to
