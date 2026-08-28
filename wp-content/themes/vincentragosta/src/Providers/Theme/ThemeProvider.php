@@ -15,6 +15,7 @@ use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
+use ChildTheme\Providers\Theme\Hooks\MailIdentity;
 use DI\Container;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
 use IX\Providers\Theme\Features\ContentPartial\ContentPartial;
@@ -65,6 +66,7 @@ class ThemeProvider extends BaseThemeProvider
         SearchSetup::class,
         SocialIconChoices::class,
         SocialIconOverride::class,
+        MailIdentity::class,
     ];
 
     /**

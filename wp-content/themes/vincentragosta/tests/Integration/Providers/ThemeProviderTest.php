@@ -10,6 +10,7 @@ use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
+use ChildTheme\Providers\Theme\Hooks\MailIdentity;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
@@ -20,6 +21,7 @@ use IX\Providers\Theme\Hooks\TermsQuerySupports;
 use ChildTheme\Tests\Support\HasContainer;
 use IX\Providers\Provider;
 use Mythus\Support\Feature\FeatureManager;
+use IX\Providers\Theme\Features\DisableAuthorArchives;
 use IX\Providers\Theme\Features\DisableBlocks;
 use IX\Providers\Theme\Features\DisableComments;
 use IX\Providers\Theme\Features\DisableDefaultPatterns;
@@ -80,6 +82,7 @@ class ThemeProviderTest extends BaseTestCase
         $enabled = $manager->getEnabled();
 
         // Parent theme features (inherited)
+        $this->assertContains(DisableAuthorArchives::class, $enabled);
         $this->assertContains(DisableBlocks::class, $enabled);
         $this->assertContains(DisableComments::class, $enabled);
         $this->assertContains(DisableDefaultPatterns::class, $enabled);
@@ -93,7 +96,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(WpFormsBaseStyles::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(11, $enabled);
+        $this->assertCount(12, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
@@ -126,7 +129,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(SocialIconOverride::class, $hooks);
         $this->assertContains(AccentHighlight::class, $hooks);
         $this->assertContains(SearchSetup::class, $hooks);
-        $this->assertCount(11, $hooks);
+        $this->assertContains(MailIdentity::class, $hooks);
+        $this->assertCount(12, $hooks);
 
         // ButtonIconEnhancer is now a Feature, not a Hook
         $this->assertNotContains(ButtonIconEnhancer::class, $hooks);

@@ -30,19 +30,22 @@ Staging and production are **two vhosts on the same droplet**. So is itzenzo.tv.
 | itzenzo prod | `/var/www/itzenzo.tv` | `itzenzo-tv` | https://itzenzo.tv |
 | itzenzo staging | `/var/www/staging.itzenzo.tv` | `staging-itzenzo` | https://staging.itzenzo.tv |
 
-> 🚨 **OPEN TODO — `staging.itzenzo.tv` is publicly indexable. Found 2026-08-27.**
+> ✅ **RESOLVED 2026-08-28 — `staging.itzenzo.tv` is no longer indexable.** (Found 2026-08-27.)
 >
-> It returns **200** with **no `X-Robots-Tag`**, **no robots meta tag**, and **no `robots.txt`** — the
-> Next.js catch-all serves app HTML for `/robots.txt`. Nothing prevents Google crawling and indexing a
+> It returned **200** with **no `X-Robots-Tag`**, **no robots meta tag**, and **no `robots.txt`** — the
+> Next.js catch-all serves app HTML for `/robots.txt`. Nothing prevented Google crawling and indexing a
 > staging copy of the storefront: duplicate content competing with `itzenzo.tv`, plus whatever test
 > data staging happens to be holding.
 >
-> Contrast `staging.vincentragosta.io`, which is correctly protected by
-> `add_header X-Robots-Tag "noindex, nofollow, noarchive" always;` in its vhost.
+> **Fix applied:** `add_header X-Robots-Tag "noindex, nofollow, noarchive" always;` in the
+> `staging.itzenzo.tv` server block, **and repeated inside `location /_next/static`** — that block
+> sets its own `add_header` (`Cache-Control`), and a location with any `add_header` of its own
+> discards every header inherited from the server block. Both now verified in the live response.
+> Production `itzenzo.tv` deliberately still has no such header.
 >
-> **Fix:** add the same header to the `staging.itzenzo.tv` server block. It proxies to PM2, so the
-> nginx layer is the right place and it takes about two minutes. A `robots.txt` route in the Next.js
-> app is the belt-and-braces half.
+> **Still open (app-side, itzenzo.tv repo):** a real `robots.txt` route in Next.js as the
+> belt-and-braces half. Staging `/robots.txt` is still a 34KB HTML 404 from the catch-all; the header
+> is what holds today.
 >
 > **Also note** — and this is why it went unnoticed — **modern WordPress and Next.js both ignore any
 > "discourage search engines" setting when generating `robots.txt`.** WordPress's `do_robots()` reads
@@ -50,9 +53,16 @@ Staging and production are **two vhosts on the same droplet**. So is itzenzo.tv.
 > robots.txt as a public one. The `X-Robots-Tag` header is the only layer that reliably holds. Do not
 > treat `blog_public=0` as sufficient anywhere.
 >
-> `staging.vincentragosta.io` has a lesser version of the same bug: a bare
-> `location = /robots.txt` with no `try_files` makes it serve an HTML 404 from disk instead of letting
-> WordPress answer. Cosmetic there, since the header covers it, but worth fixing when nearby.
+> `staging.vincentragosta.io` had a lesser version of the same bug — a bare `location = /robots.txt`
+> with no `try_files` served an HTML 404 from disk instead of letting WordPress answer. **Also fixed
+> 2026-08-28**; it now returns the Yoast-generated body at `200 text/plain`.
+>
+> **Production `vincentragosta.io` had the same robots.txt bug — also fixed 2026-08-28.** There it
+> was not cosmetic: the `Sitemap:` pointer and `Disallow: /wp/wp-admin/` were never served. Now
+> `200 text/plain`. Note that `robots.txt` and `sitemap_index.xml` both return
+> `X-Robots-Tag: noindex, follow` — that is **Yoast**, it predates the change, and it does not affect
+> the directives inside. The homepage has no `X-Robots-Tag` and no meta robots tag; production is
+> indexable. See `akivili/docs/fleet-nginx-security-sweep.md`.
 >
 > **`itzenzo.tv` has no `RUNBOOK.md`**, which is why this note lives here rather than in that repo.
 
@@ -149,8 +159,43 @@ A deploy ships code. These do **not** travel with it:
 1. **A success banner is not proof.** `make deploy-production` ends with an unconditional
    `✓ Production deployed`, which prints even when the push moved nothing. Confirm the real
    ref-update line and re-verify on the box.
-2. **This box cannot send email.** No MTA, no SMTP plugin, so `wp_mail()` fails silently —
-   password resets, form notifications, admin notices. Verified 2026-08-14, unfixed.
+2. **Mail: the CLI is not the web. Test as `www-data` or you will get a false green.**
+   *(Trap rewritten 2026-08-28. It previously read "cannot send email … verified 2026-08-14,
+   unfixed" — wrong. Then it was corrected to "works, wrong From" — also wrong, because that was
+   tested over SSH as root.)*
+   `msmtp-mta` relays through Gmail (`/etc/msmtprc`, account `itzenzottv@gmail.com`,
+   `from noreply@itzenzo.tv`), installed 2026-05-11. **`/etc/msmtprc` shipped as mode `600`,
+   owned by `root`.** PHP-FPM runs as `www-data`, so every *web-initiated* email failed with
+   `sendmail: account default not found: no configuration file available` — while every
+   `wp-cli`-over-SSH send succeeded, because root can read the file. Password resets, form
+   notifications and admin notices were all silently dead; `wp_mail()` from the CLI returned `true`
+   the whole time.
+   **Fixed 2026-08-28** — `chgrp www-data /etc/msmtprc && chmod 640`, and the same for
+   `/var/log/msmtp.log` at `660` so msmtp can append to its own log as `www-data`. msmtp refuses a
+   config that is group- or world-*writable*; group-readable is fine. Verified end to end: the real
+   `wp-login.php?action=lostpassword` POST now produces an `exitcode=EX_OK` msmtp entry, and a
+   www-data-context test message reached the inbox.
+   **Tradeoff, stated plainly:** the Gmail App Password is now readable by `www-data`, so a PHP RCE
+   could read it. That is inherent to `msmtp` + PHP `mail()` (an SMTP plugin or a provider API key
+   in `wp-config.php` has the same exposure). Rotate the App Password if this box is ever
+   compromised.
+   **Still wrong: the From address.** WordPress sends as `wordpress@vincentragosta.io`, which is not
+   a verified Gmail "Send mail as" alias, so **Gmail rewrites it** — mail arrives as
+   `WordPress <itzenzottv@gmail.com>`, with `X-Google-Original-From` preserving the original. It
+   authenticates (`dkim/spf/dmarc=pass`, all on `gmail.com`) and inboxes, so nothing bounces. A
+   password-reset link arriving from a stranger's Gmail reads as phishing — worth fixing. Verify
+   `noreply@vincentragosta.io` as a Send-mail-as alias (improvmx MX receives the confirmation code),
+   then set `wp_mail_from` / `wp_mail_from_name`. Do **not** make the global From
+   `noreply@itzenzo.tv` — the Shop provider's `MailNotifications` sets that per-send on purpose.
+   **How to test properly:**
+   ```bash
+   sudo -u www-data /usr/sbin/sendmail -t -i <<< $'To: you@example.com\nSubject: t\n\nbody'
+   ```
+   Never conclude mail works from a root `wp eval` — that is the one context that was working while
+   the site was broken.
+   ⚠️ **This relay is personal-account infrastructure. Do not replicate it to client droplets** —
+   see `akivili/docs/fleet-nginx-security-sweep.md` for why it fails outright on `ellenharvey.net`
+   (`p=reject; aspf=s`) and `viewfromthebridgeplay.com` (no SPF, `p=quarantine`).
 3. **WP salts moved out of VCS on 2026-08-13.** Real salts live in each environment's gitignored
    `wp-config-env.php`; the tracked `wp-config.php` carries guarded placeholders and **must require
    the env file above the salt block** (PHP is first-wins). Verify a box by proving the env value
@@ -162,6 +207,15 @@ A deploy ships code. These do **not** travel with it:
    vendor instead. Deploys are unaffected.
 6. **The mega-menu is DB-only** and is wiped by a DB sync. Re-apply with
    `scripts/setup-mega-menu.sh <staging|production>` (tracked, idempotent).
+7. **`sites-enabled/vincentragosta.io` is a real file, not a symlink** — the only vhost on this box
+   that isn't. Editing `sites-available/vincentragosta.io` changes a file nginx never reads:
+   `nginx -t` passes, the reload succeeds, and nothing about the live site changes. This cost a full
+   debug cycle on 2026-08-28. The two copies had also drifted (the live one carried two
+   `wp-hardening.conf` includes the other lacked). They were re-synced that day, but they are still
+   **two files that can drift again** — consider replacing the regular file with a symlink.
+   Resolve before editing any vhost on any droplet: `readlink -f /etc/nginx/sites-enabled/<name>`.
+   Six of eight ARTHOUSE vhosts have the same layout; `deploy-kit/provision/harden.sh` documents it.
+   Prove the change landed with `curl`, not with `nginx -t`.
 
 > **Retired 2026-08-16 — traps that no longer apply.** The catalog-pipeline traps that used to live
 > here (join-key column, `backfill-card-ids-production` running from production only, `update-stock`
