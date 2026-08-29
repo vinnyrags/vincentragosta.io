@@ -100,7 +100,7 @@ class MailNotificationsTest extends TestCase
             'offer_amount' => '$500.00',
         ]);
         $this->assertContains(
-            'From: itzenzoTTV <noreply@itzenzo.tv>',
+            'From: Vincent Ragosta <noreply@vincentragosta.io>',
             $this->captured[0]['headers']
         );
     }
@@ -160,7 +160,7 @@ class MailNotificationsTest extends TestCase
             'card_title' => 'Pikachu',
         ]);
         $this->assertContains(
-            'From: itzenzoTTV <noreply@itzenzo.tv>',
+            'From: Vincent Ragosta <noreply@vincentragosta.io>',
             $this->captured[0]['headers']
         );
     }

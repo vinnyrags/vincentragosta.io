@@ -24,12 +24,33 @@ namespace ChildTheme\Providers\Shop\Support;
 class MailNotifications
 {
     /**
-     * The From: header every shop-driven email uses. Matches the alias
-     * verified in Gmail "Send mail as" + the `from` line in
-     * /etc/msmtprc on the droplet. If you bump this, update both
-     * places + the seed-itzenzo-pages.php content referring to it.
+     * The From: header every shop-driven email uses.
+     *
+     * This was `itzenzoTTV <noreply@itzenzo.tv>` until 2026-08-28, chosen so
+     * shop mail wore the shop's own identity. It had to change when the
+     * droplet moved from the Gmail relay to Resend.
+     *
+     * Gmail tolerated it by silently REWRITING the From to the authenticated
+     * account. Resend does not, and is right not to — it refuses any sender on
+     * a domain the account has not verified:
+     *
+     *     550 This API key is not authorized to send emails from itzenzo.tv
+     *
+     * So every send from this class failed outright after the cutover. Nothing
+     * noticed, because the itzenzoTTV storefront is retired and the Next.js app
+     * no longer submits to the endpoints that fire these — verified 2026-08-28,
+     * no reference to card-offer, card-request or shop/v1 anywhere in it.
+     *
+     * Restoring the itzenzoTTV identity means verifying itzenzo.tv as a sending
+     * domain in Resend. That is a deliberate NO for now: the free tier allows
+     * three domains, and vincentragosta.io plus ellenharvey.net plus
+     * viewfromthebridgeplay.com already claim all three. Spending a slot on a
+     * parked storefront would force the paid plan for a live client site.
+     *
+     * If the shop is ever revived: verify itzenzo.tv in Resend, then change this
+     * one constant back. Nothing else here depends on the domain.
      */
-    private const FROM_HEADER = 'From: itzenzoTTV <noreply@itzenzo.tv>';
+    private const FROM_HEADER = 'From: Vincent Ragosta <noreply@vincentragosta.io>';
 
     /**
      * Send a confirmation email to a buyer who just submitted a
