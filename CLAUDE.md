@@ -282,20 +282,59 @@ pipeline (`Card singles`, `Card sync`, `Card create`, `Card price sync`, `Produc
 model, and the failure modes worth designing around are written up in
 `akivili/docs/catalog-sync-lessons.md`. Git history holds the old implementation.
 
-## WordPress Object Cache (Redis)
+## Caching — two layers
 
-A persistent object cache (Redis) sits between WordPress and MySQL on the production droplet. Same Redis daemon serves both production WP (`/var/www/vincentragosta.io`) and staging WP (`/var/www/staging.vincentragosta.io`); they're isolated by Redis database number + cache-key salt:
+Production runs **both** an nginx FastCGI page cache and a Redis object cache. They are
+**complementary, not alternatives**: the page cache stores finished HTML for anonymous GETs; the
+object cache stores query results for everything the page cache deliberately skips.
 
-| Env | Redis DB | `WP_CACHE_KEY_SALT` |
-|---|---|---|
-| Production WP | 0 | `vincentragosta_` |
-| Staging WP | 1 | `staging_vincentragosta_` |
+**Staging has neither.** It is a content and feature environment — determinism there is worth more
+than mirroring production's performance profile.
+
+### FastCGI micro-cache (added 2026-08-28, production only)
+
+Zone `VINRAG`, **30s TTL**, maps in `conf.d/wp-fastcgi-cache.conf`. Short TTL by design: content
+changes appear on their own, so there is no purge step and no stale-content class of bug. Inspect
+with the `X-FastCGI-Cache` header (HIT / MISS / BYPASS / EXPIRED).
+
+Skipped: POST/PUT/DELETE, `/wp-admin/`, `wp-*.php`, feeds, sitemaps, **any query string**, and the
+`wordpress_logged_in` / `comment_author` / `wp-postpass` cookies.
+
+> **Why Redis is still needed alongside it.** The skip map opens with `POST 1`, and **WPGraphQL lives
+> at `/wp/graphql` and is queried over POST by itzenzo.tv** — so that traffic can never be
+> page-cached, no matter how the cache is tuned. Redis is the only layer serving it.
+
+> **A missing `X-FastCGI-Cache` header is not a missing skip.** POST responses carry no header at
+> all. Prove behaviour with two different POSTs returning two different responses.
+
+### Redis object cache — production only
+
+| Env | Redis DB | `WP_CACHE_KEY_SALT` | State |
+|---|---|---|---|
+| Production WP | 0 | `vincentragosta_` | **active** |
+| Staging WP | — | — | **removed 2026-08-28**, deliberately |
+
+> ☠️ **An earlier version of this table claimed staging used db 1 with salt
+> `staging_vincentragosta_`. Neither constant was ever defined in staging's `wp-config-env.php`** —
+> while the redis-cache plugin *was* active there. So staging connected to the default database:
+> **db 0, production's, with no salt separating them.**
+>
+> Not theoretical: on 2026-08-28 a `wp cache flush` run against *staging* flushed **production's**
+> object cache, 5,629 keys down to 35. Harmless in itself, but it proves staging could read and
+> write production's cached objects.
+>
+> **If Redis is ever wanted on staging again, define `WP_REDIS_DATABASE` and `WP_CACHE_KEY_SALT`
+> FIRST, then enable the drop-in.** Drop-in first means production collision.
 
 **Daemon config** (`/etc/redis/redis.conf`): `maxmemory 256mb`, `maxmemory-policy allkeys-lru`, `save ""` (pure cache, no disk persistence). Reasoning: 256 MB is generous for our cache size (~5–10 MB warm), LRU evicts oldest keys under pressure so Redis can never OOM the box, and disabling save snapshots removes disk I/O we don't need from a pure cache.
 
 **Plugin**: [redis-cache](https://wordpress.org/plugins/redis-cache/) (Till Krüss). Activates `wp-content/object-cache.php` as a drop-in. Toggle with `wp redis enable` / `wp redis status` / `wp redis disable`. The drop-in overrides `wp_cache_flush()`, so every existing call to `wp cache flush` (including the one in the deploy hook) clears Redis along with in-memory caches.
 
-**wp-config.php** carries `WP_REDIS_HOST`, `WP_REDIS_PORT`, `WP_REDIS_DATABASE`, `WP_CACHE_KEY_SALT`, and `WP_CACHE = true` for each environment.
+**`wp-config-env.php`** carries `WP_REDIS_DATABASE` and `WP_CACHE_KEY_SALT` — **production only**.
+
+> **`WP_CACHE` is not defined anywhere**, contrary to an earlier version of this file. That is
+> correct and should stay that way: `WP_CACHE` gates *page* caching via `advanced-cache.php`, not the
+> object cache, which loads regardless. Do not "fix" it by defining it.
 
 **Invalidation contract.** ACF, WPGraphQL, Yoast, and anything else that uses standard WP APIs (`update_post_meta`, `update_option`, `set_transient`) honor the cache lifecycle correctly — the cache busts on writes automatically. `audit-stripe-active.js --apply` uses `wp post meta update` (WP API), so its writes are safe.
 
