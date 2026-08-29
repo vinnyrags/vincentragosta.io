@@ -68,26 +68,46 @@ Staging and production are **two vhosts on the same droplet**. So is itzenzo.tv.
 
 Node for the PM2 processes: `/root/.nvm/versions/node/v20.20.2/bin`.
 
-This droplet also hosts **ellenharvey**. It is **not** on deploy-kit — extending deploy-kit to
-vincentragosta.io and ellenharvey is a tracked follow-up.
+This droplet is **not** on deploy-kit — extending deploy-kit to it is a tracked follow-up.
 
-> ⚠️ **This zone's DNS carries a client's live preview link. Read before moving it to Cloudflare.**
+> **It no longer hosts ellenharvey.** The pre-launch preview at `ellenharvey.vincentragosta.io` was
+> fully removed 2026-08-28 once her site went live on her own droplet: docroot, `ellenharvey`
+> database, `/var/repo/ellenharvey.git`, vhost, TLS cert and the DNS A record are all gone. A
+> verified backup sits in `_archived/ellenharvey-preview-2026-08-28/`. See `ellenharvey/RUNBOOK.md`.
 >
-> `ellenharvey.vincentragosta.io` is an **A record to `174.138.70.29` inside the `vincentragosta.io`
-> zone** — which sits on **DigitalOcean DNS** (`ns1–3.digitalocean.com`) as of 2026-08-26. It is not
-> a stray subdomain: it is the preview URL Ellen Harvey is **actively reviewing** ahead of her site's
-> go-live, and it is the only way she can see the rebuild.
->
-> When this zone moves to Cloudflare:
-> - **The `ellenharvey` record must survive the import.** Verify it explicitly rather than trusting
->   the scan — if it's dropped, her preview goes dark and she has no way to tell it's our fault.
-> - **Leave it unproxied (grey cloud).** That vhost terminates its own Let's Encrypt cert and runs
->   `blog_public=0`; proxying changes how both behave, and search-visibility is load-bearing here —
->   the staging copy must stay out of the index until cutover.
->
-> Ellen's own domain, `ellenharvey.net`, is unrelated to this zone and goes in a **separate Cloudflare
-> account in her name** — deliberately not this one. See `ellenharvey/RUNBOOK.md` and
-> `akivili/engagements/ellen-harvey-engagement.md`.
+> Her own domain lives in a **separate Cloudflare account in her name** — deliberately not this one.
+
+## DNS — Cloudflare, moved 2026-08-28
+
+Moved off DigitalOcean DNS (`ns1–3.digitalocean.com`) to Cloudflare
+(`dane.ns.cloudflare.com`, `mary.ns.cloudflare.com`). Registrar is **GoDaddy** — nameservers only,
+no registrar transfer. **The DigitalOcean zone was deliberately left intact as the rollback**: put
+the three DO nameservers back and the old zone serves again, unchanged.
+
+| Record | Proxy | Why |
+|---|---|---|
+| `@`, `www`, `staging` | 🟠 **Proxied** | CDN, DDoS absorption, WAF. Cert renewal via HTTP-01 works behind the proxy — proven on AVFTB, which is proxied and uses `authenticator = nginx`. |
+| `packages` | ⚪ **DNS only** | The satis Composer registry. **Every deploy on the fleet resolves this**, so it stays direct — no proxy in the deploy path. |
+| `send`, `rsend` | ⚪ **DNS only** | Resend's SPF and bounce path. Cloudflare's proxy only handles HTTP/HTTPS; proxying these breaks SPF alignment and bounce handling, and all outbound mail starts failing DMARC. |
+| MX ×2, 3× TXT | ⚪ n/a | Not proxiable. |
+
+**SSL/TLS mode must stay Full (strict).** Flexible makes Cloudflare talk to the origin over plain
+HTTP, which both is insecure and puts WordPress into an infinite redirect loop.
+
+> ☠️ **Do NOT firewall the origin to Cloudflare IPs only.** Cloudflare's onboarding recommends it,
+> and it would sever `packages.vincentragosta.io` — which is grey by design — from Composer on every
+> droplet in the fleet. That advice assumes every record is proxied. Ours are not.
+
+> ⚠️ **Cloudflare's import scan missed three records** on this zone: `packages`, `send` and `rsend`.
+> Two of the three would have broken silently — deploys fleet-wide, and mail authentication. Treat
+> the scan as a draft and diff it against the live zone record by record. Full method and the
+> `itzenzo.tv` plan: `akivili/docs/cloudflare-dns-migration.md`.
+
+> ⚠️ **MySQL root is unreachable on this droplet.** No passwordless socket auth, no `/root/.my.cnf`,
+> and `/etc/mysql/debian.cnf` is the obsolete stub with no password (MariaDB 10.11). Per-site work
+> still functions because each site's `wp-config-env.php` holds credentials with `ALL PRIVILEGES` on
+> its own schema — that is how the `ellenharvey` database was dropped. But **creating a database, or
+> dropping a MySQL user, currently has no working path.** Discovered 2026-08-28; unresolved.
 
 Remote-only wp-cli takes the core path explicitly:
 
@@ -193,6 +213,14 @@ A deploy ships code. These do **not** travel with it:
    ```
    Never conclude mail works from a root `wp eval` — that is the one context that was working while
    the site was broken.
+   **The Resend account** is Vincent's, registered to `ops@vincentragosta.io` (improvmx alias →
+   his Gmail). Free tier is **3 domains / 3,000 a month / 100 a day, shared account-wide**. The
+   domain cap is the binding constraint, not volume: `vincentragosta.io` uses one, and
+   `ellenharvey.net` + `viewfromthebridgeplay.com` would take the other two. A fourth client means
+   paying (~$20/mo) or that client owning their own account — decide before assuming a slot is free.
+   Keys are named `<domain> — msmtp (droplet <ip>)` so a compromised key names the box to go fix.
+   Ellen's is deliberately going in **her own** account, not this one.
+
    ⚠️ **This relay is personal-account infrastructure. Do not replicate it to client droplets** —
    see `akivili/docs/fleet-nginx-security-sweep.md` for why it fails outright on `ellenharvey.net`
    (`p=reject; aspf=s`) and `viewfromthebridgeplay.com` (no SPF, `p=quarantine`).
