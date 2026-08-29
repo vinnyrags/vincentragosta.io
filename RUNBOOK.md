@@ -140,12 +140,36 @@ Three stale local branches exist (`chore/retire-stripe-nous-shop`,
 
 ## Caches
 
-**Redis object cache**, one daemon serving both WP environments, isolated by DB number + key salt:
+Two independent layers, and they are **complementary, not alternatives**:
 
-| Env | Redis DB | `WP_CACHE_KEY_SALT` |
+| Layer | What it stores | Where it applies |
 |---|---|---|
-| production | 0 | `vincentragosta_` |
-| staging | 1 | `staging_vincentragosta_` |
+| **nginx FastCGI micro-cache** | the finished HTML response | **production only**, anonymous GETs |
+| **Redis object cache** | DB query results / WP objects | **production only**, every PHP execution |
+
+### Redis object cache — production only
+
+| Env | Redis DB | `WP_CACHE_KEY_SALT` | State |
+|---|---|---|---|
+| production | 0 | `vincentragosta_` | **active** — drop-in present, plugin active |
+| staging | — | — | **removed 2026-08-28**, deliberately |
+
+> ⚠️ **The old version of this table was fiction, and it was dangerous.** It claimed staging used
+> db 1 with salt `staging_vincentragosta_`. **Neither constant was ever defined in staging's
+> `wp-config-env.php`** — so the redis-cache plugin, which *was* active there, connected to the
+> default database: **db 0, production's, with no key salt to separate them.**
+>
+> This is not theoretical. On 2026-08-28 a `wp cache flush` run against *staging* flushed
+> **production's** object cache — 5,629 keys to 35. Harmless (an object cache repopulates), but it
+> proves staging could read and write production's cached objects.
+>
+> Staging's plugin is now deactivated, which closes it. **If Redis is ever wanted on staging again,
+> define `WP_REDIS_DATABASE` and `WP_CACHE_KEY_SALT` FIRST, then enable the drop-in.** Drop-in first
+> means production collision.
+
+> **`WP_CACHE` is not defined anywhere**, contrary to an earlier version of this file. That is fine:
+> `WP_CACHE` gates *page* caching via `advanced-cache.php`, not the object cache, which loads
+> regardless. Do not "fix" it by defining it.
 
 Config (`/etc/redis/redis.conf`): `maxmemory 256mb`, `allkeys-lru`, `save ""` — pure cache, no disk
 persistence. The [redis-cache](https://wordpress.org/plugins/redis-cache/) drop-in overrides
@@ -154,8 +178,28 @@ persistence. The [redis-cache](https://wordpress.org/plugins/redis-cache/) drop-
 **Direct DB mutation does not invalidate Redis.** After any `wp db query "UPDATE …"` from SSH, run
 `wp cache flush`.
 
-This site is recorded as **page-uncached** (no nginx FastCGI micro-cache, unlike the ARTHOUSE
-droplets) — worth re-verifying before assuming a stale page is a cache problem.
+### FastCGI micro-cache — added 2026-08-28, production only
+
+Zone `VINRAG`, **30s TTL**, maps in `conf.d/wp-fastcgi-cache.conf`. Short TTL by design: content
+changes appear on their own within 30 seconds, so there is no purge step and no stale-content class
+of bug. Observe it with the `X-FastCGI-Cache` response header (HIT / MISS / BYPASS / EXPIRED).
+
+**Staging deliberately has no page cache**, unlike the ARTHOUSE sites which cache both environments.
+Their staging is pre-show verification for live ticketed sites, where prod parity catches a bad
+`skip_cache` map before it leaks a logged-in render. This staging is a content and feature
+environment, where 30s of staleness costs iteration clarity and buys nothing.
+
+**Why Redis stays even with page caching.** The skip map begins `POST 1`, and
+**WPGraphQL lives at `/wp/graphql` and is queried over POST by itzenzo.tv** — so that traffic can
+never be page-cached, no matter how the cache is tuned. Redis is the only layer serving it. Verified
+2026-08-28: two different GraphQL queries returned two different responses through the live cache.
+
+Skips verified on the live site: logged-in cookie, `/wp/wp-admin/`, `wp-login.php`, any query string,
+sitemaps, and POST. Anonymous pages go MISS → HIT.
+
+> **A missing `X-FastCGI-Cache` header is not a missing skip.** POST responses carry no header at
+> all; that is not evidence the skip failed. Prove it behaviourally — send two different POSTs and
+> confirm two different responses.
 
 **itzenzo.tv is ISR**, not WP-cached. Catalog changes reach it through the `revalidate-itzenzo`
 step baked into the `-apply` targets. If prices look stale on itzenzo.tv but right in WP, the
