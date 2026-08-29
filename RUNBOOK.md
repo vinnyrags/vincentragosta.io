@@ -258,12 +258,19 @@ A deploy ships code. These do **not** travel with it:
    Never conclude mail works from a root `wp eval` — that is the one context that was working while
    the site was broken.
    **The Resend account** is Vincent's, registered to `ops@vincentragosta.io` (improvmx alias →
-   his Gmail). Free tier is **3 domains / 3,000 a month / 100 a day, shared account-wide**. The
-   domain cap is the binding constraint, not volume: `vincentragosta.io` uses one, and
-   `ellenharvey.net` + `viewfromthebridgeplay.com` would take the other two. A fourth client means
-   paying (~$20/mo) or that client owning their own account — decide before assuming a slot is free.
+   his Gmail). Free tier is **3 domains / 3,000 a month / 100 a day, shared account-wide**.
+
+   **Scope decided 2026-08-28: this account holds `vincentragosta.io` and `itzenzo.tv` ONLY.**
+   Client domains do not go in it. Ellen gets her own Resend account (she is creating it), and any
+   ARTHOUSE sending belongs to ARTHOUSE. Same reasoning as her Cloudflare and DigitalOcean accounts:
+   a provider lapsing in someone else's account fails *silently*, and that is the exact shape of the
+   developer-goes-dark problem she already lived through once.
+
+   That leaves a spare slot rather than a shortage, which reverses an earlier decision — see the
+   note on `MailNotifications::FROM_HEADER`. Verifying `itzenzo.tv` here would let shop mail wear
+   the itzenzoTTV identity again.
+
    Keys are named `<domain> — msmtp (droplet <ip>)` so a compromised key names the box to go fix.
-   Ellen's is deliberately going in **her own** account, not this one.
 
    ⚠️ **This relay is personal-account infrastructure. Do not replicate it to client droplets** —
    see `akivili/docs/fleet-nginx-security-sweep.md` for why it fails outright on `ellenharvey.net`
