@@ -294,11 +294,26 @@ than mirroring production's performance profile.
 ### FastCGI micro-cache (added 2026-08-28, production only)
 
 Zone `VINRAG`, **30s TTL**, maps in `conf.d/wp-fastcgi-cache.conf`. Short TTL by design: content
-changes appear on their own, so there is no purge step and no stale-content class of bug. Inspect
-with the `X-FastCGI-Cache` header (HIT / MISS / BYPASS / EXPIRED).
+changes appear on their own within 30s, so **routine** operation needs no purge step. Inspect with
+the `X-FastCGI-Cache` header (HIT / MISS / BYPASS / EXPIRED).
 
 Skipped: POST/PUT/DELETE, `/wp-admin/`, `wp-*.php`, feeds, sitemaps, **any query string**, and the
 `wordpress_logged_in` / `comment_author` / `wp-postpass` cookies.
+
+> ☠️ **The cache depends on a droplet-level `fastcgi_cache_key` that lives outside this repo.**
+> Without it, `fastcgi_cache` collides every response onto one key and **the whole site serves a
+> single page for every URL** — 404 paths included, which then return `200`. It reads as "internal
+> links redirect to the homepage."
+>
+> **`nginx -t` does not catch this.** A missing key is a *warning*; the test still prints
+> `test is successful`. That is why it ran unnoticed 2026-08-28 → 2026-08-30 on production.
+>
+> Check with `nginx -t 2>&1 | grep 'no "fastcgi_cache_key"'` (must be empty), and prove it by
+> fetching two paths **without a query string** — the skip map's `~*\?(.+)$ 1` means any
+> cache-buster bypasses the cache and gives a false pass. Recovery requires **purging
+> `/var/cache/nginx/fastcgi-vinrag/*`**; poisoned entries survive a reload.
+>
+> Full write-up, including the earlier wrong diagnosis it produced: [`RUNBOOK.md`](RUNBOOK.md).
 
 > **Why Redis is still needed alongside it.** The skip map opens with `POST 1`, and **WPGraphQL lives
 > at `/wp/graphql` and is queried over POST by itzenzo.tv** — so that traffic can never be

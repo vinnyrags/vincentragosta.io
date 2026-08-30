@@ -184,6 +184,45 @@ Zone `VINRAG`, **30s TTL**, maps in `conf.d/wp-fastcgi-cache.conf`. Short TTL by
 changes appear on their own within 30 seconds, so there is no purge step and no stale-content class
 of bug. Observe it with the `X-FastCGI-Cache` response header (HIT / MISS / BYPASS / EXPIRED).
 
+> ### ☠️ `fastcgi_cache` without `fastcgi_cache_key` serves ONE page for the whole site
+>
+> **This happened here, 2026-08-28 → 2026-08-30.** The micro-cache shipped without a droplet-level
+> `fastcgi_cache_key`. This droplet never had one; the four ARTHOUSE boxes do, which is why only
+> this site broke.
+>
+> **Why it went unnoticed for two days: `nginx -t` passes.** A missing key is a *warning*, not an
+> error, and the success line prints anyway:
+>
+> ```
+> [warn] no "fastcgi_cache_key" for "fastcgi_cache" in /etc/nginx/nginx.conf:61
+> nginx: configuration file /etc/nginx/nginx.conf test is successful
+> ```
+>
+> **Symptom:** every URL returns the same page — whichever was cached first — including 404 paths,
+> which return `200`. Internal links look like they "redirect to the homepage". One file in
+> `/var/cache/nginx/fastcgi-vinrag` was serving the entire site.
+>
+> **Check (never trust the success line or the exit status):**
+>
+> ```bash
+> nginx -t 2>&1 | grep 'no "fastcgi_cache_key"'    # must output NOTHING
+> ```
+>
+> **Prove it behaviourally, and WITHOUT a query string.** The skip map includes `~*\?(.+)$ 1`, so
+> any cache-buster bypasses the cache and gives a false pass — a `?cb=` probe is exactly what hid
+> this fault:
+>
+> ```bash
+> for p in / /contact/ /projects/; do curl -s "https://vincentragosta.io$p" | grep -oE '<title>[^<]*'; done
+> ```
+>
+> Three different titles, and **run it twice** so the second pass is a `HIT` — the collision only
+> shows on cached responses.
+>
+> **Recovery:** add the key to `nginx.conf`'s `http` block, **purge `/var/cache/nginx/fastcgi-vinrag/*`**
+> (poisoned entries survive a reload), then `systemctl reload nginx`. Fixed 2026-08-30; the key now
+> sits in `nginx.conf`'s http block and `deploy-kit`'s `provision-base.sh` installs and asserts it.
+
 **Staging deliberately has no page cache**, unlike the ARTHOUSE sites which cache both environments.
 Their staging is pre-show verification for live ticketed sites, where prod parity catches a bad
 `skip_cache` map before it leaks a logged-in render. This staging is a content and feature
