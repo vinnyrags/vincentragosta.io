@@ -1,0 +1,179 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Projects</title><link rel="stylesheet" href="base.css">
+<style>
+.hero { padding: 96px 0 0; position: relative; }
+.crumb { font-family: var(--mono); font-size: 12px; color: var(--dim); display: flex; gap: 10px; }
+.crumb b { color: var(--muted); font-weight: 400; }
+.h1 { font-size: 150px; font-weight: 500; letter-spacing: -0.055em; line-height: .9; margin-top: 36px; }
+.h1 .it { font-size: 1.1em; }
+.hero-row { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 44px; }
+.hero-row p { font-size: 20px; line-height: 1.55; color: var(--muted); max-width: 560px; }
+.hero-row p b { color: var(--text); font-weight: 500; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 16px; background: var(--panel); margin-top: 72px; }
+.stats > div { padding: 28px 28px 30px; border-right: 1px solid var(--line); }
+.stats > div:last-child { border: 0; }
+.stats .k { font-family: var(--mono); font-size: 11.5px; color: var(--dim); letter-spacing: .06em; }
+.stats .n { font-size: 52px; font-weight: 500; letter-spacing: -0.04em; margin-top: 18px; }
+.stats .n small { font-size: 20px; color: var(--muted); letter-spacing: -0.02em; margin-left: 4px; }
+.stats .d { color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+
+.toolbar { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; margin-top: 110px; padding: 16px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.pills { display: flex; gap: 8px; }
+.tr { display: flex; gap: 10px; align-items: center; }
+.seg { display: flex; border: 1px solid var(--line-2); border-radius: 8px; padding: 3px; gap: 2px; }
+.seg span { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border-radius: 5px; color: var(--dim); }
+.seg .on { background: var(--panel-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--line-2); }
+
+.sechead { display: flex; justify-content: space-between; align-items: flex-end; margin: 96px 0 36px; }
+.sechead p { color: var(--muted); font-size: 16px; line-height: 1.55; max-width: 380px; text-align: right; }
+
+.cs-top { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cs-bot { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px; }
+.pc .img { aspect-ratio: 1200/630; background-size: cover; background-position: center; position: relative; border-bottom: 1px solid var(--line); }
+.pc .body { padding: 20px 20px 22px; display: flex; justify-content: space-between; align-items: flex-start; }
+.pc h4 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
+.pc .sub { font-family: var(--mono); font-size: 11.5px; color: var(--dim); margin-top: 6px; }
+.pc .chips { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+.pc.lg .body { padding: 24px 24px 26px; }
+.pc.lg h4 { font-size: 28px; }
+.pc.sm h4 { font-size: 18px; }
+.pc.sm .body { padding: 16px 16px 18px; }
+.pc.feat { border-color: rgba(212,255,58,.45); box-shadow: 0 0 0 1px rgba(212,255,58,.2), 0 0 60px -10px rgba(212,255,58,.25); }
+.badge { position: absolute; left: 16px; top: 16px; font-family: var(--mono); font-size: 11.5px; background: rgba(8,9,10,.85); border: 1px solid var(--line-2); color: var(--text); border-radius: 20px; padding: 5px 11px 5px 10px; display: flex; gap: 8px; align-items: center; backdrop-filter: blur(6px); }
+.yr { position: absolute; right: 16px; top: 16px; font-family: var(--mono); font-size: 11px; color: #d8d8da; background: rgba(8,9,10,.7); border-radius: 5px; padding: 3px 7px; }
+
+/* index */
+.index { border-top: 1px solid var(--line-2); position: relative; }
+.ix-head, .ix-row { display: grid; grid-template-columns: 90px 1.35fr 1fr 1.1fr 1.25fr 44px; align-items: center; }
+.ix-head { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.ix-year { display: flex; align-items: baseline; gap: 14px; padding: 34px 0 12px; border-bottom: 1px solid var(--line); }
+.ix-year b { font-size: 40px; font-weight: 500; letter-spacing: -0.04em; }
+.ix-year span { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.ix-row { padding: 17px 0; border-bottom: 1px solid var(--line); font-size: 15px; color: #c9cacd; position: relative; }
+.ix-row .num { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.ix-row .t { font-size: 19px; color: var(--text); font-weight: 500; letter-spacing: -0.015em; display: flex; align-items: center; gap: 10px; }
+.ix-row .c { color: var(--muted); }
+.ix-row .s { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.ix-row .go { color: var(--dim); text-align: right; font-size: 15px; }
+.cs { font-family: var(--mono); font-size: 10.5px; color: var(--lime); border: 1px solid rgba(212,255,58,.35); border-radius: 4px; padding: 1px 6px; font-weight: 400; letter-spacing: 0; }
+.ix-row.hover { background: linear-gradient(90deg, rgba(212,255,58,.06), rgba(212,255,58,0) 70%); }
+.ix-row.hover::before { content: ""; position: absolute; left: -16px; top: 0; bottom: 0; width: 2px; background: var(--lime); }
+.ix-row.hover .t, .ix-row.hover .go { color: var(--lime); }
+.peek { position: absolute; width: 300px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-2); box-shadow: 0 30px 60px -10px rgba(0,0,0,.8); transform: rotate(-2deg); z-index: 3; background: var(--panel); }
+.peek img { display: block; width: 100%; }
+.peek div { font-family: var(--mono); font-size: 11px; color: var(--muted); padding: 9px 12px; display: flex; justify-content: space-between; }
+.more { display: flex; justify-content: center; margin-top: 36px; }
+.more .btn { height: 48px; padding: 0 22px; font-size: 15px; }
+.more .btn span { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+</style></head><body>
+<div class="gridbg" style="position:relative;overflow:hidden">
+  <div class="glow" style="width:900px;height:700px;right:-200px;top:40px"></div>
+  <div class="wrap" style="position:relative">
+    <header class="nav">
+  <a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta <span class="ver">v11.0</span></a>
+  <nav class="menu"><a>Meet me</a><a class="on">Projects</a><a>The Framework</a><a>Nous Signal</a><a>Contact</a></nav>
+  <div class="navr"><div class="search">Search… <span class="kbd">⌘K</span></div><a class="btn primary">Start a project →</a></div>
+</header>
+    <section class="hero">
+      <div class="crumb"><span>~/</span><b>projects</b><span>·</span><span>index.php</span></div>
+      <h1 class="h1">Everything<br>I've <span class="it">shipped</span><span class="lime">.</span></h1>
+      <div class="hero-row">
+        <p><b>68 projects across eight years</b> — Broadway campaigns at agency scale, independent clients on my own framework, and a headless storefront for my own business.</p>
+        <div class="pill"><span class="dot"></span>&nbsp;Booking projects for Q1 2027</div>
+      </div>
+      <div class="stats">
+        <div><div class="k">PROJECTS</div><div class="n">68</div><div class="d">Shipped since 2018</div></div>
+        <div><div class="k">BROADWAY</div><div class="n">39<small>shows</small></div><div class="d">Ticketing, groups, multisite</div></div>
+        <div><div class="k">CASE STUDIES</div><div class="n">6</div><div class="d">Full write-ups, 2026 builds</div></div>
+        <div><div class="k">SPAN</div><div class="n">2018<small>– now</small></div><div class="d">Agency scale to independent</div></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <div class="pills">
+      <span class="pill on">All <span class="n">68</span></span>
+      <span class="pill">Broadway <span class="n">39</span></span>
+      <span class="pill">Ticketing <span class="n">35</span></span>
+      <span class="pill">Agency <span class="n">22</span></span>
+      <span class="pill">Arts &amp; Culture <span class="n">20</span></span>
+      <span class="pill">Brand <span class="n">16</span></span>
+      <span class="pill">Entertainment <span class="n">47</span></span>
+    </div>
+    <div class="tr">
+      <span class="pill">Sort: Newest ↓</span>
+      <div class="seg"><span class="on">▦ Grid</span><span>☰ Index</span></div>
+    </div>
+  </div>
+
+  <div class="sechead">
+    <div><div class="eyebrow">01 / Case studies</div><h2 class="h2" style="margin-top:22px">Featured <span class="it">builds</span></h2></div>
+    <p>The full story — brief, architecture, and outcome — for the projects built on my own stack.</p>
+  </div>
+
+  <div class="cs-top">
+    <a class="card pc lg feat"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-cba.png)"><span class="badge"><span class="dot"></span>Live · Off-Broadway</span></div>
+      <div class="body"><div><h4>Celebrity Autobiography</h4><div class="sub">ARTHOUSE Interactive · 2026</div><div class="chips"><span class="chip">Broadway</span><span class="chip">Mythus + IX</span><span class="chip">Custom theme</span></div></div><span class="arrow on">↗</span></div></a>
+    <a class="card pc lg"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-itzenzo.png)"><span class="badge">Headless</span></div>
+      <div class="body"><div><h4>itzenzo.tv</h4><div class="sub">itzenzoTTV · 2026</div><div class="chips"><span class="chip">Commerce</span><span class="chip">Next.js 16</span><span class="chip">WPGraphQL</span></div></div><span class="arrow">↗</span></div></a>
+  </div>
+  <div class="cs-bot">
+    <a class="card pc sm"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-avftb.jpg)"><span class="yr">2026</span></div><div class="body"><div><h4>A View From The Bridge</h4><div class="chips"><span class="chip">Ticketing</span><span class="chip">ACF</span></div></div><span class="arrow">↗</span></div></a>
+    <a class="card pc sm"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-mbf.png)"><span class="yr">2026</span></div><div class="body"><div><h4>Matchbook Festival</h4><div class="chips"><span class="chip">Arts</span><span class="chip">Ena</span></div></div><span class="arrow">↗</span></div></a>
+    <a class="card pc sm"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-shucked.png)"><span class="yr">2026</span></div><div class="body"><div><h4>Shucked</h4><div class="chips"><span class="chip">Broadway</span><span class="chip">Redis</span></div></div><span class="arrow">↗</span></div></a>
+    <a class="card pc sm"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-ellen.png)"><span class="yr">2026</span></div><div class="body"><div><h4>Ellen Harvey</h4><div class="chips"><span class="chip">Arts</span><span class="chip">Portfolio</span></div></div><span class="arrow">↗</span></div></a>
+  </div>
+
+  <div class="sechead">
+    <div><div class="eyebrow">02 / The archive</div><h2 class="h2" style="margin-top:22px">The <span class="it">full</span> index</h2></div>
+    <p>Every project, newest first. Agency work from Situation Interactive, King &amp; Partners and Experience Interaction, alongside my own clients.</p>
+  </div>
+
+  <div class="index">
+    <div class="ix-head"><span>#</span><span>PROJECT</span><span>CLIENT</span><span>DISCIPLINE</span><span>STACK</span><span></span></div>
+    <div class="ix-year"><b>2026</b><span>8 projects</span></div>
+<div class="ix-row"><span class="num">068</span><span class="t">Celebrity Autobiography <span class="cs">CASE STUDY</span></span><span class="c">ARTHOUSE Interactive</span><span class="c">Broadway</span><span class="s">Mythus · IX · PHP 8.4</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">067</span><span class="t">itzenzo.tv <span class="cs">CASE STUDY</span></span><span class="c">itzenzoTTV</span><span class="c">Commerce · Headless</span><span class="s">Next.js · WPGraphQL</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">066</span><span class="t">A View From The Bridge <span class="cs">CASE STUDY</span></span><span class="c">ARTHOUSE Interactive</span><span class="c">Ticketing</span><span class="s">Mythus · IX · ACF</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">065</span><span class="t">Matchbook Festival <span class="cs">CASE STUDY</span></span><span class="c">ARTHOUSE Interactive</span><span class="c">Arts &amp; Culture</span><span class="s">Mythus · IX · Ena</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">064</span><span class="t">Shucked <span class="cs">CASE STUDY</span></span><span class="c">ARTHOUSE Interactive</span><span class="c">Broadway</span><span class="s">nginx · Redis · DO</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">063</span><span class="t">Ellen Harvey <span class="cs">CASE STUDY</span></span><span class="c">Independent</span><span class="c">Arts &amp; Culture</span><span class="s">Mythus · IX · DDEV</span><span class="go">↗</span></div>
+<div class="ix-row hover"><span class="num">062</span><span class="t">Roundabout Theatre</span><span class="c">Situation Interactive</span><span class="c">Broadway · Arts</span><span class="s">Gutenberg · theme.json</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">061</span><span class="t">The A&amp;B Supplies</span><span class="c">A&amp;B Supplies Inc.</span><span class="c">Brand</span><span class="s">WooCommerce</span><span class="go">↗</span></div>
+<div class="ix-year"><b>2025</b><span>3 projects</span></div>
+<div class="ix-row"><span class="num">060</span><span class="t">Smash</span><span class="c">Situation Interactive</span><span class="c">Broadway · Ticketing</span><span class="s">WordPress · Gravity Forms</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">059</span><span class="t">Purpose</span><span class="c">Situation Interactive</span><span class="c">Broadway · Ticketing</span><span class="s">WordPress · Gravity Forms</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">058</span><span class="t">Rob Lake Ticket Calendar</span><span class="c">Situation Interactive</span><span class="c">Ticketing</span><span class="s">FullCalendar</span><span class="go">↗</span></div>
+<div class="ix-year"><b>2024</b><span>7 projects</span></div>
+<div class="ix-row"><span class="num">057</span><span class="t">Maybe Happy Ending</span><span class="c">Situation Interactive</span><span class="c">Broadway · Ticketing</span><span class="s">Telecharge API</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">056</span><span class="t">Outsiders</span><span class="c">Situation Interactive</span><span class="c">Broadway · Ticketing</span><span class="s">Telecharge API</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">055</span><span class="t">Criterion Ticketing</span><span class="c">Situation Interactive</span><span class="c">Ticketing</span><span class="s">TypeScript · Vue.js</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">054</span><span class="t">Tenement</span><span class="c">Situation Interactive</span><span class="c">Arts &amp; Culture</span><span class="s">Blackbaud Altru API</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">053</span><span class="t">Royal Literary Fund</span><span class="c">Situation Interactive</span><span class="c">Arts &amp; Culture</span><span class="s">WordPress · Gravity Forms</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">052</span><span class="t">Mindplay</span><span class="c">Situation Interactive</span><span class="c">Broadway · Ticketing</span><span class="s">WordPress</span><span class="go">↗</span></div>
+<div class="ix-row"><span class="num">051</span><span class="t">ADL</span><span class="c">Situation Interactive</span><span class="c">Brand</span><span class="s">Drupal 10 · Twig</span><span class="go">↗</span></div>
+    <div class="peek" id="peek" style="left:1080px;top:0;width:250px"><img src="https://vincentragosta.io/wp-content/uploads/2026/03/mk_rtc_01_1340_c.jpg"><div><span>roundabouttheatre.org</span><span>2026</span></div></div>
+  </div>
+  <div class="more"><a class="btn">Show 50 more <span>2023 → 2018</span></a></div>
+
+  <section class="cta">
+  <svg class="v" viewBox="0 0 380 520"><path d="M0 0h90l100 300L290 0h90L230 520h-80z" fill="rgba(212,255,58,.06)" stroke="rgba(212,255,58,.35)"/></svg>
+  <div class="eyebrow" style="position:relative">03 / Contact</div>
+  <h3 style="margin-top:28px;position:relative">Have a project?<br><span class="it">Let's</span> <span class="lime">ship it.</span></h3>
+  <div class="row" style="position:relative"><p>Looking for a senior-level technical partner, not just a pair of hands? Tell me what you're building.</p>
+  <div style="display:flex;gap:10px"><a class="btn" style="height:54px;padding:0 22px;font-size:16px">View résumé</a><a class="btn primary" style="height:54px;padding:0 22px;font-size:16px">Start a project →</a></div></div>
+  <div class="meta"><span>Brooklyn, NY</span><span>Independent practice · WordPress · Headless</span><span>Open to new work</span></div>
+</section>
+<footer>
+  <div class="foot">
+    <div><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta</a><p class="about">Senior WordPress engineering from Brooklyn, built on a framework refined over six years.</p></div>
+    <div><h5>MEET ME</h5><ul><li>Overview</li><li>My approach</li><li>Career</li><li>Skills</li><li>AI integration</li></ul></div>
+    <div><h5>WORK</h5><ul><li>Projects</li><li>The framework</li><li>Tech stack</li><li>Testing</li><li>Security</li></ul></div>
+    <div><h5>ELSEWHERE</h5><ul><li>Nous Signal</li><li>Résumé</li><li>Contact</li><li>Privacy policy</li></ul></div>
+  </div>
+  <div class="wordmark">vincentragosta</div>
+  <div class="legal"><span>© 2026 Vincent Ragosta</span><span>Built on WordPress · Powered by the framework</span></div>
+</footer>
+</div>
+<script>document.fonts.ready.then(()=>{const r=document.querySelector(".ix-row.hover");const p=document.getElementById("peek");p.style.top=(r.offsetTop-120)+"px";});</script></body></html>

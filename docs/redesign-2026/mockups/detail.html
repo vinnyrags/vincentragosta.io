@@ -1,0 +1,236 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Celebrity Autobiography</title><link rel="stylesheet" href="base.css">
+<style>
+.top { padding-top: 72px; display: flex; justify-content: space-between; align-items: center; }
+.crumb { font-family: var(--mono); font-size: 12px; color: var(--dim); display: flex; gap: 10px; }
+.crumb b { color: var(--muted); font-weight: 400; }
+.back { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.h1 { font-size: 136px; font-weight: 500; letter-spacing: -0.055em; line-height: .9; margin-top: 44px; }
+.h1 .it { font-size: 1.1em; }
+.intro { display: grid; grid-template-columns: 1fr 560px; gap: 80px; margin-top: 48px; align-items: end; }
+.intro .lead { font-size: 21px; line-height: 1.55; color: var(--muted); }
+.intro .lead b { color: var(--text); font-weight: 500; }
+.intro .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.status { display: inline-flex; gap: 10px; align-items: center; border: 1px solid var(--line-2); border-radius: 30px; padding: 5px 14px 5px 6px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+.status .live { background: rgba(212,255,58,.12); color: var(--lime); border-radius: 20px; padding: 3px 10px; display: flex; gap: 7px; align-items: center; }
+
+.meta { display: grid; grid-template-columns: 1.2fr 1fr .6fr 1.6fr 1.3fr; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); margin-top: 64px; }
+.meta > div { padding: 24px 26px; border-right: 1px solid var(--line); }
+.meta > div:last-child { border: 0; }
+.meta .k { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; }
+.meta .v { font-size: 17px; margin-top: 12px; line-height: 1.4; }
+.meta .v.l { color: var(--lime); }
+
+.browser { margin-top: 20px; border: 1px solid var(--line-2); border-radius: 18px; overflow: hidden; background: var(--panel); box-shadow: 0 0 0 1px rgba(212,255,58,.08), 0 40px 120px -40px rgba(212,255,58,.25); }
+.bar { height: 46px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+.bar i { width: 11px; height: 11px; border-radius: 50%; background: #2a2c30; display: inline-block; }
+.url { margin-left: 16px; flex: 1; height: 28px; border-radius: 7px; background: var(--bg); border: 1px solid var(--line); font-family: var(--mono); font-size: 12px; color: var(--muted); display: flex; align-items: center; padding: 0 12px; gap: 8px; }
+.shot { aspect-ratio: 1200/630; background: url(https://vincentragosta.io/wp-content/uploads/2026/08/img-cba.png) center/cover; }
+
+.body { display: grid; grid-template-columns: 340px 1fr; gap: 96px; margin-top: 120px; }
+.toc { position: sticky; top: 24px; align-self: start; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 26px; }
+.toc .k { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; margin-bottom: 14px; }
+.toc a { display: flex; justify-content: space-between; padding: 12px 0; border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); }
+.toc a span { font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.toc a.on { color: var(--text); }
+.toc a.on span { color: var(--lime); }
+.toc .prog { height: 2px; background: var(--line); border-radius: 2px; margin: 18px 0 22px; }
+.toc .prog div { width: 38%; height: 100%; background: var(--lime); border-radius: 2px; }
+.toc .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.sec { padding-bottom: 96px; }
+.sec + .sec { padding-top: 96px; border-top: 1px solid var(--line); }
+.sec h2 { font-size: 54px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.04; margin-top: 22px; max-width: 820px; }
+.sec h2 .it { font-size: 1.08em; }
+.sec p { font-size: 18px; line-height: 1.7; color: var(--muted); margin-top: 24px; max-width: 760px; }
+.sec p em { font-family: var(--serif); font-size: 1.15em; color: #c9cacd; }
+.sec p b { color: var(--text); font-weight: 500; }
+
+.pull { margin-top: 44px; padding: 34px 36px; border-left: 2px solid var(--lime); background: linear-gradient(90deg, rgba(212,255,58,.06), transparent 80%); border-radius: 0 14px 14px 0; font-family: var(--serif); font-style: italic; font-size: 32px; line-height: 1.3; color: #d9dadc; max-width: 820px; }
+
+.feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 44px; }
+.feat { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 24px; }
+.feat .n { font-family: var(--mono); font-size: 11px; color: var(--dim); }
+.feat h4 { font-size: 19px; font-weight: 500; margin-top: 30px; letter-spacing: -0.015em; }
+.feat p { font-size: 14.5px; margin-top: 10px; line-height: 1.55; }
+.feat .ic { width: 38px; height: 38px; border-radius: 9px; border: 1px solid var(--line-2); display: grid; place-items: center; margin-top: 18px; color: var(--lime); font-family: var(--mono); font-size: 13px; }
+
+.stack { margin-top: 44px; border: 1px solid var(--line); border-radius: 16px; padding: 26px; background-color: var(--panel);
+  background-image: radial-gradient(#26282c 1px, transparent 1px); background-size: 18px 18px; }
+.stack .k { font-family: var(--mono); font-size: 11.5px; color: var(--dim); letter-spacing: .06em; margin-bottom: 18px; }
+.layer { border: 1px solid var(--line-2); border-radius: 12px; background: var(--panel); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.layer + .layer { margin-top: 12px; position: relative; }
+.layer + .layer::before { content: ""; position: absolute; left: 50%; top: -13px; height: 12px; border-left: 1px dashed #3a3c40; }
+.layer small { font-family: var(--mono); font-size: 11.5px; color: var(--dim); display: block; }
+.layer b { font-size: 18px; font-weight: 500; display: block; margin-top: 4px; }
+.layer.hl { border-color: rgba(212,255,58,.55); box-shadow: 0 0 40px -12px rgba(212,255,58,.35); }
+.layer.hl b { color: var(--lime); }
+.layer .chips { display: flex; gap: 6px; }
+
+.term { margin-top: 44px; border: 1px solid var(--line-2); border-radius: 14px; background: #0c0d0f; overflow: hidden; }
+.term .bar { height: 40px; }
+.term .bar span { font-family: var(--mono); font-size: 12px; color: var(--dim); margin-left: 12px; }
+.term pre { font-family: var(--mono); font-size: 13.5px; line-height: 2; padding: 18px 22px 22px; color: #a9abb0; }
+.term .ok { color: var(--lime); }
+.term .p { color: var(--text); }
+
+.results { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 44px; }
+.res { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 24px 26px; }
+.res .k { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; }
+.res .ft { display: flex; align-items: center; gap: 14px; margin-top: 16px; font-size: 20px; letter-spacing: -0.02em; }
+.res .ft s { color: var(--dim); text-decoration-color: #4a4c50; }
+.res .ft .to { color: var(--lime); font-family: var(--mono); font-size: 14px; }
+
+.next { margin-top: 40px; display: grid; grid-template-columns: 1fr 560px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: var(--panel); }
+.next .l { padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
+.next .l .k { font-family: var(--mono); font-size: 12px; color: var(--dim); display: flex; justify-content: space-between; }
+.next h3 { font-size: 96px; font-weight: 500; letter-spacing: -0.05em; line-height: .95; }
+.next .r { background: url(https://vincentragosta.io/wp-content/uploads/2026/08/img-itzenzo.png) center/cover; min-height: 340px; border-left: 1px solid var(--line); }
+.rel { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+.pc .img { aspect-ratio: 1200/630; background-size: cover; background-position: center; border-bottom: 1px solid var(--line); }
+.pc .b { padding: 18px 20px 20px; display: flex; justify-content: space-between; align-items: flex-start; }
+.pc h4 { font-size: 20px; font-weight: 500; letter-spacing: -0.02em; }
+.pc .sub { font-family: var(--mono); font-size: 11.5px; color: var(--dim); margin-top: 6px; }
+.sechead { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; }
+</style></head><body>
+<div class="gridbg" style="position:relative;overflow:hidden">
+  <div class="glow" style="width:1000px;height:800px;right:-300px;top:-100px"></div>
+  <div class="wrap" style="position:relative">
+    <header class="nav">
+  <a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta <span class="ver">v11.0</span></a>
+  <nav class="menu"><a>Meet me</a><a class="on">Projects</a><a>The Framework</a><a>Nous Signal</a><a>Contact</a></nav>
+  <div class="navr"><div class="search">Search… <span class="kbd">⌘K</span></div><a class="btn primary">Start a project →</a></div>
+</header>
+    <div class="top">
+      <div class="crumb"><span>~/</span><span>projects</span><span>/</span><span>broadway</span><span>/</span><b>celebrity-autobiography</b></div>
+      <a class="back">← All projects</a>
+    </div>
+    <h1 class="h1">Celebrity<br><span class="it">Autobiography</span><span class="lime">.</span></h1>
+    <div class="intro">
+      <div>
+        <div class="status"><span class="live"><span class="dot"></span>live</span>celebrityautobiography.com</div>
+        <div class="chips" style="margin-top:22px"><span class="chip">Broadway</span><span class="chip">Entertainment</span><span class="chip">Case study</span></div>
+      </div>
+      <p class="lead"><b>A single long-scroll landing page for the Off-Broadway hit</b> — a server-rendered talent grid with modal bios, a self-organizing performance calendar, and TheaterEvent schema, built on my three-layer WordPress stack.</p>
+    </div>
+    <div class="meta">
+      <div><div class="k">CLIENT</div><div class="v">ARTHOUSE Interactive</div></div>
+      <div><div class="k">ROLE</div><div class="v">Design + full-stack</div></div>
+      <div><div class="k">YEAR</div><div class="v">2026</div></div>
+      <div><div class="k">STACK</div><div class="v">Mythus · IX · Timber/Twig · PHP 8.4</div></div>
+      <div><div class="k">LIVE SITE</div><div class="v l">celebrityautobiography.com ↗</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="browser">
+    <div class="bar"><i></i><i></i><i></i><div class="url"><span class="dot" style="width:5px;height:5px"></span>https://celebrityautobiography.com</div><span class="chip">1 / 4</span></div>
+    <div class="shot"></div>
+  </div>
+
+  <div class="body">
+    <aside class="toc">
+      <div class="k">IN THIS CASE STUDY</div>
+      <a class="on">Background <span>01</span></a>
+      <a>Implementation <span>02</span></a>
+      <a>Infrastructure <span>03</span></a>
+      <a>Results <span>04</span></a>
+      <div class="prog"><div></div></div>
+      <div class="k">BUILT WITH</div>
+      <div class="chips"><span class="chip">WordPress</span><span class="chip">Mythus</span><span class="chip">IX</span><span class="chip">Timber/Twig</span><span class="chip">PHP 8.4</span><span class="chip">Composer</span><span class="chip">DDEV</span><span class="chip">DigitalOcean</span><span class="chip">GTM / GA4</span></div>
+    </aside>
+
+    <main>
+      <section class="sec">
+        <div class="eyebrow">01 / Background</div>
+        <h2>A long-running comedy institution needed a site that could <span class="it">keep pace</span> with a live show.</h2>
+        <p><em>Celebrity Autobiography</em> — the Drama Desk–winning show where stars perform verbatim from the memoirs of the rich and famous — came to ARTHOUSE Interactive for a marketing site that could sell tickets, rotate an ever-changing celebrity lineup, and publish new performance dates without a developer in the loop.</p>
+        <p>The existing presence was on GoDaddy Managed WordPress: a closed hosting environment with <b>no staging, no deploy workflow, and no room to grow.</b></p>
+        <div class="pull">“The brief: a fast, accessible single page with a self-serve calendar and cast grid, handed back to the marketing team for day-to-day updates.”</div>
+      </section>
+
+      <section class="sec">
+        <div class="eyebrow">02 / Implementation</div>
+        <h2>A provider-based build, engineered <span class="it">accessibility-first.</span></h2>
+        <p>The site runs on my standard freelance architecture — the Mythus mu-plugin framework and IX parent theme, with a project-specific child theme on Timber/Twig and PHP 8.4.</p>
+        <div class="stack">
+          <div class="k">ARCHITECTURE.SVG — THIS PROJECT</div>
+          <div class="layer hl"><div><small>layer 03 · this build</small><b>celebrityautobiography child theme</b></div><div class="chips"><span class="chip">Talent grid</span><span class="chip">Calendar</span><span class="chip">JSON-LD</span></div></div>
+          <div class="layer"><div><small>layer 02</small><b>IX parent theme</b></div><div class="chips"><span class="chip">Design system</span><span class="chip">Components</span></div></div>
+          <div class="layer"><div><small>layer 01 · core</small><b>Mythus mu-plugin</b></div><div class="chips"><span class="chip">PHP 8.4</span><span class="chip">DI container</span><span class="chip">Tests</span></div></div>
+        </div>
+        <div class="feats">
+          <div class="feat"><div class="n">FEATURE 01</div><div class="ic">▦</div><h4>Talent grid</h4><p>Server-rendered cast with each performer's bio in an accessible modal.</p></div>
+          <div class="feat"><div class="n">FEATURE 02</div><div class="ic">◫</div><h4>Self-organizing calendar</h4><p>Add a show date and custom date-grouping logic files it under the right month tab.</p></div>
+          <div class="feat"><div class="n">FEATURE 03</div><div class="ic">{ }</div><h4>TheaterEvent schema</h4><p>Every performance carries JSON-LD structured data for rich search results.</p></div>
+        </div>
+        <p>Accessibility was a first-class constraint, not a pass at the end: roving-tabindex tablists, a two-tier focus system, and accessible modal bios throughout.</p>
+      </section>
+
+      <section class="sec">
+        <div class="eyebrow">03 / Infrastructure</div>
+        <h2>Off Managed WordPress, onto a <span class="it">real</span> deploy pipeline.</h2>
+        <p>I migrated the property off GoDaddy onto a self-managed DigitalOcean droplet — nginx + PHP-FPM, a real staging environment, and a bare-repo post-receive hook that builds on every push.</p>
+        <div class="term">
+          <div class="bar"><i></i><i></i><i></i><span>~/projects/celebrityautobiography — deploy</span></div>
+<pre><span class="p">$ git push production main</span>
+→ post-receive hook            <span class="ok">✓ received</span>
+→ composer install --no-dev    <span class="ok">✓ framework loaded</span>
+→ npm run build                <span class="ok">✓ assets compiled</span>
+→ wp cache flush               <span class="ok">✓ done</span>
+<span class="ok">● live</span> — celebrityautobiography.com</pre>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="eyebrow">04 / Results</div>
+        <h2>A site the client runs <span class="it">on their own</span> — and a relationship that continues.</h2>
+        <div class="results">
+          <div class="res"><div class="k">HOSTING</div><div class="ft"><s>GoDaddy Managed</s><span class="to">→</span>DigitalOcean</div></div>
+          <div class="res"><div class="k">DEPLOYS</div><div class="ft"><s>Manual, no staging</s><span class="to">→</span>git push</div></div>
+          <div class="res"><div class="k">NEW SHOW DATES</div><div class="ft"><s>Developer</s><span class="to">→</span>Self-serve</div></div>
+          <div class="res"><div class="k">ENGAGEMENT</div><div class="ft"><s>One-off build</s><span class="to">→</span>Ongoing</div></div>
+        </div>
+        <p>The marketing team now adds performance dates and rotates the celebrity lineup without developer involvement. The launch turned into an ongoing engagement — post-launch maintenance and incremental feature work.</p>
+      </section>
+    </main>
+  </div>
+
+  <a class="next">
+    <div class="l"><div class="k"><span>NEXT PROJECT · 067</span><span>Commerce · Headless</span></div>
+      <div><h3>itzenzo<span class="it">.tv</span></h3><div style="display:flex;gap:8px;margin-top:24px"><span class="chip">Next.js 16</span><span class="chip">React 19</span><span class="chip">WPGraphQL</span></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted);font-size:16px">Headless storefront for my own TCG business</span><span class="arrow on" style="width:52px;height:52px;font-size:20px">→</span></div>
+    </div>
+    <div class="r"></div>
+  </a>
+
+  <div class="sechead" style="margin-top:96px">
+    <div><div class="eyebrow">Related</div><h2 class="h2" style="margin-top:22px;font-size:56px">More <span class="it">Broadway</span></h2></div>
+    <a class="btn">All projects →</a>
+  </div>
+  <div class="rel" style="margin-top:32px">
+    <a class="card pc"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-shucked.png)"></div><div class="b"><div><h4>Shucked</h4><div class="sub">ARTHOUSE Interactive · 2026</div></div><span class="arrow">↗</span></div></a>
+    <a class="card pc"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/08/img-avftb.jpg)"></div><div class="b"><div><h4>A View From The Bridge</h4><div class="sub">ARTHOUSE Interactive · 2026</div></div><span class="arrow">↗</span></div></a>
+    <a class="card pc"><div class="img" style="background-image:url(https://vincentragosta.io/wp-content/uploads/2026/03/MHE_OG_Image.jpg)"></div><div class="b"><div><h4>Maybe Happy Ending</h4><div class="sub">Situation Interactive · 2024</div></div><span class="arrow">↗</span></div></a>
+  </div>
+
+  <section class="cta">
+  <svg class="v" viewBox="0 0 380 520"><path d="M0 0h90l100 300L290 0h90L230 520h-80z" fill="rgba(212,255,58,.06)" stroke="rgba(212,255,58,.35)"/></svg>
+  <div class="eyebrow" style="position:relative">05 / Contact</div>
+  <h3 style="margin-top:28px;position:relative">Have a project?<br><span class="it">Let's</span> <span class="lime">ship it.</span></h3>
+  <div class="row" style="position:relative"><p>Looking for a senior-level technical partner, not just a pair of hands? Tell me what you're building.</p>
+  <div style="display:flex;gap:10px"><a class="btn" style="height:54px;padding:0 22px;font-size:16px">View résumé</a><a class="btn primary" style="height:54px;padding:0 22px;font-size:16px">Start a project →</a></div></div>
+  <div class="meta"><span>Brooklyn, NY</span><span>Independent practice · WordPress · Headless</span><span>Open to new work</span></div>
+</section>
+<footer>
+  <div class="foot">
+    <div><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta</a><p class="about">Senior WordPress engineering from Brooklyn, built on a framework refined over six years.</p></div>
+    <div><h5>MEET ME</h5><ul><li>Overview</li><li>My approach</li><li>Career</li><li>Skills</li><li>AI integration</li></ul></div>
+    <div><h5>WORK</h5><ul><li>Projects</li><li>The framework</li><li>Tech stack</li><li>Testing</li><li>Security</li></ul></div>
+    <div><h5>ELSEWHERE</h5><ul><li>Nous Signal</li><li>Résumé</li><li>Contact</li><li>Privacy policy</li></ul></div>
+  </div>
+  <div class="wordmark">vincentragosta</div>
+  <div class="legal"><span>© 2026 Vincent Ragosta</span><span>Built on WordPress · Powered by the framework</span></div>
+</footer>
+</div>
+</body></html>
