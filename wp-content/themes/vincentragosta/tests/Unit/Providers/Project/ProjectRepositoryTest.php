@@ -4,6 +4,7 @@ namespace ChildTheme\Tests\Unit\Providers\Project;
 
 use ChildTheme\Providers\Project\ProjectPost;
 use ChildTheme\Providers\Project\ProjectRepository;
+use ChildTheme\Tests\Mocks\MockProjectPost;
 use IX\Providers\Project\ProjectRepository as BaseProjectRepository;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -100,5 +101,35 @@ class ProjectRepositoryTest extends TestCase
         $reflection = new ReflectionClass($this->repository);
         $this->assertTrue($reflection->hasMethod('relatedRandom'));
         $this->assertTrue($reflection->getMethod('relatedRandom')->isPublic());
+    }
+
+    public function testCaseStudiesAndGroupedMethodsArePublic(): void
+    {
+        $reflection = new ReflectionClass($this->repository);
+
+        foreach (['caseStudies', 'allGroupedByYear'] as $name) {
+            $method = $reflection->getMethod($name);
+            $this->assertTrue($method->isPublic(), "{$name} should be public");
+            $this->assertEquals('array', (string) $method->getReturnType());
+        }
+    }
+
+    public function testGroupByYearOrdersYearsDescendingAndKeepsInputOrder(): void
+    {
+        $a = MockProjectPost::create(['ID' => 1])->setMockMeta([ProjectPost::FIELD_YEAR => '2024']);
+        $b = MockProjectPost::create(['ID' => 2])->setMockMeta([ProjectPost::FIELD_YEAR => '2026']);
+        $c = MockProjectPost::create(['ID' => 3])->setMockMeta([ProjectPost::FIELD_YEAR => '2024']);
+        $d = MockProjectPost::create(['ID' => 4])->setMockMeta([ProjectPost::FIELD_YEAR => '2018']);
+
+        $groups = ProjectRepository::groupByYear([$a, $b, $c, $d]);
+
+        $this->assertSame(['2026', '2024', '2018'], array_map('strval', array_keys($groups)));
+        $this->assertSame([2], array_map(fn($p) => $p->ID, $groups[2026]));
+        $this->assertSame([1, 3], array_map(fn($p) => $p->ID, $groups[2024]));
+    }
+
+    public function testGroupByYearHandlesEmptyInput(): void
+    {
+        $this->assertSame([], ProjectRepository::groupByYear([]));
     }
 }

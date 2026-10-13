@@ -29,7 +29,10 @@ $creativeWork = [
     '@context' => 'https://schema.org',
     '@type' => 'CreativeWork',
     'name' => $timber_post->title(),
-    'description' => wp_strip_all_tags($timber_post->post_excerpt ?: wp_trim_words(wp_strip_all_tags($timber_post->post_content), 30)),
+    // Projects have no post content; the lead field carries the summary.
+    'description' => wp_strip_all_tags($timber_post->post_excerpt ?: wp_trim_words(wp_strip_all_tags(
+        method_exists($timber_post, 'lead') ? $timber_post->lead() : ''
+    ), 30)),
     'url' => get_permalink($timber_post->ID),
     'creator' => (new SchemaBuilderService())->person(),
 ];

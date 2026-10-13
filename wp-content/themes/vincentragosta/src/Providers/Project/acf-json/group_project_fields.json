@@ -1,0 +1,312 @@
+{
+    "key": "group_project_fields",
+    "title": "Project",
+    "fields": [
+        {
+            "key": "field_project_tab_overview",
+            "label": "Overview",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_lead",
+            "label": "Lead",
+            "name": "project_lead",
+            "type": "wysiwyg",
+            "instructions": "Opening paragraph under the title — what was built, in one or two sentences.",
+            "required": 1,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "tabs": "all",
+            "toolbar": "basic",
+            "media_upload": 0,
+            "delay": 0
+        },
+        {
+            "key": "field_project_lead_note",
+            "label": "Lead note",
+            "name": "project_lead_note",
+            "type": "textarea",
+            "instructions": "Muted line under the lead (e.g. engagement context: \"Design and full-stack development for …\").",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_project_tab_sections",
+            "label": "Sections",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_sections",
+            "label": "Sections",
+            "name": "project_sections",
+            "type": "repeater",
+            "instructions": "The case study body, in order. New projects start with Background / Implementation / Results.",
+            "required": 1,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "block",
+            "min": 1,
+            "max": 0,
+            "button_label": "Add section",
+            "collapsed": "field_project_section_label",
+            "pagination": 0,
+            "sub_fields": [
+                {
+                    "key": "field_project_section_label",
+                    "label": "Label",
+                    "name": "label",
+                    "type": "text",
+                    "instructions": "Short section name — shown as the eyebrow and in the contents card (e.g. Background).",
+                    "required": 1,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "show_in_graphql": 1,
+                    "parent_repeater": "field_project_sections"
+                },
+                {
+                    "key": "field_project_section_heading",
+                    "label": "Heading",
+                    "name": "heading",
+                    "type": "text",
+                    "instructions": "One-sentence headline for the section.",
+                    "required": 1,
+                    "wrapper": {
+                        "width": "70",
+                        "class": "",
+                        "id": ""
+                    },
+                    "show_in_graphql": 1,
+                    "parent_repeater": "field_project_sections"
+                },
+                {
+                    "key": "field_project_section_body",
+                    "label": "Body",
+                    "name": "body",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 1,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "show_in_graphql": 1,
+                    "parent_repeater": "field_project_sections",
+                    "tabs": "all",
+                    "toolbar": "basic",
+                    "media_upload": 0,
+                    "delay": 0
+                },
+                {
+                    "key": "field_project_section_note",
+                    "label": "Note",
+                    "name": "note",
+                    "type": "textarea",
+                    "instructions": "Optional closing takeaway, rendered as a callout.",
+                    "required": 0,
+                    "rows": 2,
+                    "new_lines": "",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "show_in_graphql": 1,
+                    "parent_repeater": "field_project_sections"
+                }
+            ]
+        },
+        {
+            "key": "field_project_tab_details",
+            "label": "Details",
+            "name": "",
+            "type": "tab",
+            "placement": "top",
+            "endpoint": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_client",
+            "label": "Client",
+            "name": "project_client",
+            "type": "text",
+            "instructions": "Who the work was for — agency or end client (e.g. ARTHOUSE Interactive, Situation Interactive).",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_role",
+            "label": "Role",
+            "name": "project_role",
+            "type": "text",
+            "instructions": "Your role on the project (e.g. Design + full-stack, Lead developer).",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_year",
+            "label": "Year",
+            "name": "project_year",
+            "type": "number",
+            "instructions": "Year shipped. Drives ordering and the year groups on the projects index.",
+            "required": 1,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "min": 2000,
+            "max": 2100,
+            "step": 1
+        },
+        {
+            "key": "field_project_live_url",
+            "label": "Live site",
+            "name": "project_live_url",
+            "type": "url",
+            "instructions": "Public URL of the shipped site, if it is still live.",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "75",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_technologies",
+            "label": "Technologies",
+            "name": "project_technologies",
+            "type": "textarea",
+            "instructions": "Comma-separated; rendered as chips (e.g. WordPress, Mythus, IX, PHP 8.4).",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "rows": 2,
+            "new_lines": ""
+        },
+        {
+            "key": "field_project_stack_summary",
+            "label": "Stack summary",
+            "name": "project_stack_summary",
+            "type": "text",
+            "instructions": "Short stack line for the projects index (2–3 items, e.g. Mythus · IX · PHP 8.4).",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "maxlength": 60
+        },
+        {
+            "key": "field_project_case_study",
+            "label": "Case study",
+            "name": "project_case_study",
+            "type": "true_false",
+            "instructions": "Feature this project as a case study on the projects page.",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "25",
+                "class": "",
+                "id": ""
+            },
+            "ui": 1,
+            "ui_on_text": "Yes",
+            "ui_off_text": "No",
+            "default_value": 0
+        },
+        {
+            "key": "field_project_status_label",
+            "label": "Status label",
+            "name": "project_status_label",
+            "type": "text",
+            "instructions": "Optional badge on the featured card (e.g. Live · Off-Broadway).",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "75",
+                "class": "",
+                "id": ""
+            }
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "project"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "acf_after_title",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": [
+        "the_content"
+    ],
+    "active": true,
+    "description": "Project detail page content and metadata (2026 redesign). Projects have no block editor — the detail page renders entirely from these fields.",
+    "show_in_rest": 0,
+    "show_in_graphql": 1,
+    "graphql_field_name": "projectFields",
+    "modified": 1791922526
+}

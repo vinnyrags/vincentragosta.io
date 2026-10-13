@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Providers\Project\Hooks\CategoryTermLinkRewrite;
-use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
+use ChildTheme\Providers\Project\Hooks\ProjectSearchIndex;
+use ChildTheme\Providers\Project\Hooks\ProjectSectionDefaults;
 use IX\Providers\Project\ProjectProvider as BaseProjectProvider;
 
 /**
  * Project Provider.
  *
  * Extends the parent ProjectProvider with site-specific functionality:
- * hooks, default content, and child-themed block/single assets.
+ * hooks (section defaults, search indexing, category links) and child-themed block/single assets.
  */
 class ProjectProvider extends BaseProjectProvider
 {
@@ -21,7 +22,8 @@ class ProjectProvider extends BaseProjectProvider
      */
     protected array $hooks = [
         CategoryTermLinkRewrite::class,
-        ProjectYearExtractor::class,
+        ProjectSectionDefaults::class,
+        ProjectSearchIndex::class,
     ];
 
     /**
@@ -29,8 +31,6 @@ class ProjectProvider extends BaseProjectProvider
      */
     public function register(): void
     {
-        add_filter('default_content', [$this, 'setDefaultContent'], 10, 2);
-
         parent::register();
 
         $this->acfManager->registerSavePath();
@@ -54,30 +54,5 @@ class ProjectProvider extends BaseProjectProvider
     public function enqueueBlockAssets(): void
     {
         $this->enqueueStyle('vincentragosta-projects-block', 'projects.css');
-    }
-
-    /**
-     * Pre-fill the editor with default block content for new projects.
-     *
-     * @param string $content Default post content.
-     * @param \WP_Post $post The post being created.
-     * @return string
-     */
-    public function setDefaultContent(string $content, \WP_Post $post): string
-    {
-        if ($post->post_type !== ProjectPost::POST_TYPE) {
-            return $content;
-        }
-
-        $this->setup();
-        $filepath = $this->configPath . '/default-content.html';
-
-        if (!file_exists($filepath)) {
-            return $content;
-        }
-
-        $template = file_get_contents($filepath);
-
-        return $template !== false ? $template : $content;
     }
 }

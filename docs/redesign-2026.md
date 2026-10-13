@@ -20,6 +20,7 @@ starting new files.
 | Light mode | Dropped. Dark only. |
 | Rollout | Big-bang: build on `develop`, preview on staging, cut over once. |
 | Scope of code | Child theme only. IX stays pinned (v1.7.2) — it is shared with the ARTHOUSE client sites. |
+| Project detail | **ACF only, no block editor** (decided 2026-10-13). All 68 projects share one structure — intro + Background / Implementation / Results — so the page renders entirely from fields + `single-project.twig`. Reverses the 2026-03 ACF→blocks move (`b23ee3e`) for projects only; pages stay CMS-first. |
 | Content delivery | Scripted cutover (`scripts/redesign/`). **Never `make push-production`** — the same DB holds itzenzo.tv's products and unified queue. |
 
 ## Branching during the build
@@ -79,9 +80,21 @@ production during the cutover rehearsal):
 - [x] **1 — Foundation:** tokens (palette re-valued under existing slugs, new font families + display
   sizes), remove light mode, self-host fonts, style vocabulary (`eyebrow`, `chips`, `panel`,
   `stat-strip`, `terminal`, serif-italic accent format), new header + footer.
-- [ ] **2 — Project data model:** ACF `group_project_fields` (`client`, `role`, `project_year`,
-  `technologies`, `stack_summary`, `live_url`, `case_study`, `status_label`), `ProjectPost` getters,
-  retire `ProjectYearExtractor`, migration scripts with dry-run CSV.
+- [ ] **2 — Project data model:** ACF group "Project" (`group_project_fields`) in three tabs —
+  Overview (`project_lead`, `project_lead_note`), Sections (`project_sections` repeater: label,
+  heading, body, note; new projects pre-filled with Background / Implementation / Results), Details
+  (`project_client`, `project_role`, `project_year`, `project_live_url`, `project_technologies`,
+  `project_stack_summary`, `project_case_study`, `project_status_label`). Block editor removed
+  from the post type (`default-content.html` + `project-details` patterns deleted).
+  `ProjectYearExtractor` retired. Relevanssi indexes the project text fields
+  (`ProjectSearchIndex`). `scripts/redesign/migrate-project-fields.php` parses all 68 projects via
+  `parse_blocks` (dry-run CSV; all 68 parse cleanly). Fields are `project_`-prefixed because four
+  projects carry stale `client`/`role`/`year`/`technologies`/`external_url` meta from a deleted
+  group — content wins where they disagree.
+  **Wicked split into two projects** (`split-wicked.php`): the existing post/URL becomes
+  *Wicked The Musical (2025)* (live site, 2025 key art) and a new *Wicked The Musical (2018)*
+  (`/projects/wicked-the-musical-2018/`, classic key art, no live URL). Copy is the original
+  write-up divided by era — review the seams. 69 projects total.
 - [ ] **3 — Projects archive:** stats, category pills, featured case studies, year-grouped index,
   Grid/Index toggle (`?view=`), show-more.
 - [ ] **4 — Project detail:** field-driven header + meta strip, browser-frame hero, sticky TOC
@@ -95,16 +108,21 @@ production during the cutover rehearsal):
 ## Cutover checklist (production)
 
 1. `mysqldump` the production DB.
-2. `migrate-project-fields.php` and `seed-content-partials.php` on production (both additive; the
-   old theme ignores the fields and the partials). Seeding before the deploy means the new header
-   and footer exist the moment the new code goes live — without them the site renders no chrome.
+2. `migrate-project-fields.php` and `seed-content-partials.php` on production — both additive; the
+   old theme ignores the fields and the partials, and seeding first means the new header/footer
+   exist the moment the new code goes live.
 3. `make deploy-production` — confirm the ref-update line, not the banner.
-4. `strip-legacy-project-header.php` + `cutover.php` on production.
-5. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`, twice;
+4. `split-wicked.php` — **after** the deploy: it publishes the new Wicked (2018) post, which the
+   old theme would list with an empty page. It downloads the 2025 key art from the live Wicked
+   site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
+   Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
+5. Clear legacy project `post_content` (after a JSON backup — the fields now hold it) +
+   `cutover.php` on production; reindex Relevanssi.
+6. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`, twice;
    check `X-FastCGI-Cache`.
-6. Smoke-test itzenzo.tv (GraphQL/REST).
-7. **Rollback:** push the previous `main` sha to production and restore the dump; per-project JSON
-   backups from step 4 allow a partial content restore.
+7. Smoke-test itzenzo.tv (GraphQL/REST).
+8. **Rollback:** push the previous `main` sha to production and restore the dump; per-project JSON
+   backups from step 5 allow a partial content restore.
 
 ## Post-launch
 

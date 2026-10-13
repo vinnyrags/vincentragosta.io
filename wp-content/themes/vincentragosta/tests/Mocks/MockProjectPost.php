@@ -64,6 +64,15 @@ class MockProjectPost extends ProjectPost
     }
 
     /**
+     * Override getField for testing — reads the same mock meta, so ACF-backed
+     * accessors can be exercised without ACF or a database.
+     */
+    public function getField(string $key): mixed
+    {
+        return $this->mockMeta[$key] ?? '';
+    }
+
+    /**
      * Override link() for testing.
      */
     public function link(): string

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Project;
 
-use ChildTheme\Providers\Project\Hooks\ProjectYearExtractor;
 use IX\Providers\Project\ProjectRepository as BaseProjectRepository;
 
 /**
@@ -25,7 +24,7 @@ class ProjectRepository extends BaseProjectRepository
     {
         return $this->query([
             'posts_per_page' => -1,
-            'meta_key'       => ProjectYearExtractor::META_KEY,
+            'meta_key'       => ProjectPost::FIELD_YEAR,
             'orderby'        => 'meta_value_num',
             'order'          => 'DESC',
         ]);
@@ -40,9 +39,60 @@ class ProjectRepository extends BaseProjectRepository
     {
         return $this->query([
             'posts_per_page' => $limit,
-            'meta_key'       => ProjectYearExtractor::META_KEY,
+            'meta_key'       => ProjectPost::FIELD_YEAR,
             'orderby'        => 'meta_value_num',
             'order'          => 'DESC',
         ]);
+    }
+
+    /**
+     * Get case-study projects ordered by project year (descending).
+     *
+     * @return ProjectPost[]
+     */
+    public function caseStudies(): array
+    {
+        return $this->query([
+            'posts_per_page' => -1,
+            'meta_key'       => ProjectPost::FIELD_YEAR,
+            'orderby'        => 'meta_value_num',
+            'order'          => 'DESC',
+            'meta_query'     => [
+                [
+                    'key'   => ProjectPost::FIELD_CASE_STUDY,
+                    'value' => '1',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Get all projects grouped by year, newest year first.
+     *
+     * @return array<string, ProjectPost[]>
+     */
+    public function allGroupedByYear(): array
+    {
+        return self::groupByYear($this->allByYear());
+    }
+
+    /**
+     * Group projects by sort year, newest year first. Order within a year is
+     * preserved from the input.
+     *
+     * @param ProjectPost[] $projects
+     * @return array<string, ProjectPost[]>
+     */
+    public static function groupByYear(array $projects): array
+    {
+        $groups = [];
+
+        foreach ($projects as $project) {
+            $groups[$project->sortYear()][] = $project;
+        }
+
+        krsort($groups, SORT_NUMERIC);
+
+        return $groups;
     }
 }
