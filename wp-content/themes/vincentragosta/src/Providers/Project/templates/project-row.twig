@@ -1,0 +1,23 @@
+{# One row of the projects index. #}
+<li
+    class="project-row"
+    data-project-item
+    data-title="{{ (project.title ~ ' ' ~ project.client ~ ' ' ~ project.technologies|join(' '))|lower|e('html_attr') }}"
+    data-date="{{ project.sortYear }}"
+    data-category="{{ project.categorySlugs }}"
+>
+    <a class="project-row__link" href="{{ project.link }}">
+        <span class="project-row__num" aria-hidden="true">{{ '%03d'|format(number) }}</span>
+        <span class="project-row__title">
+            {{ project.title }}
+            {% if project.isCaseStudy %}<span class="project-row__tag">Case study</span>{% endif %}
+        </span>
+        <span class="project-row__client">{{ project.client }}</span>
+        <span class="project-row__discipline">{{ project.categories|slice(0, 2)|map(c => c.name)|join(' · ') }}</span>
+        <span class="project-row__stack">{{ project.stackSummary }}</span>
+        <span class="project-row__go" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></span>
+    </a>
+    {% if project.thumbnail %}
+        <img class="project-row__peek" src="{{ project.thumbnail.src | resize(480) }}" alt="" loading="lazy" aria-hidden="true" />
+    {% endif %}
+</li>

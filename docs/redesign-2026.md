@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status:** Phase 1 complete (2026-10-13), awaiting commit approval. Next: Phase 2 (project data model).
+**Status:** Phases 0–2 complete and on staging (2026-10-13; `87b7148`, `3c622bd`). Staging has the partials seeded, project fields migrated, Wicked split, and projects reindexed. Next: Phase 3 (projects archive).
 
 ## Reference
 
@@ -80,7 +80,7 @@ production during the cutover rehearsal):
 - [x] **1 — Foundation:** tokens (palette re-valued under existing slugs, new font families + display
   sizes), remove light mode, self-host fonts, style vocabulary (`eyebrow`, `chips`, `panel`,
   `stat-strip`, `terminal`, serif-italic accent format), new header + footer.
-- [ ] **2 — Project data model:** ACF group "Project" (`group_project_fields`) in three tabs —
+- [x] **2 — Project data model:** ACF group "Project" (`group_project_fields`) in three tabs —
   Overview (`project_lead`, `project_lead_note`), Sections (`project_sections` repeater: label,
   heading, body, note; new projects pre-filled with Background / Implementation / Results), Details
   (`project_client`, `project_role`, `project_year`, `project_live_url`, `project_technologies`,
@@ -95,8 +95,14 @@ production during the cutover rehearsal):
   *Wicked The Musical (2025)* (live site, 2025 key art) and a new *Wicked The Musical (2018)*
   (`/projects/wicked-the-musical-2018/`, classic key art, no live URL). Copy is the original
   write-up divided by era — review the seams. 69 projects total.
-- [ ] **3 — Projects archive:** stats, category pills, featured case studies, year-grouped index,
-  Grid/Index toggle (`?view=`), show-more.
+- [x] **3 — Projects archive:** the projects block in "all" mode renders the archive from
+  `ProjectArchive` (stats: projects / case studies / distinct clients / earliest year; category
+  pills for categories with ≥ 2 projects; case studies; year groups). Sticky toolbar: pills,
+  search, Index/Grid toggle; index collapses after 20 rows ("Show N more"); `?category=` and
+  `?view=` deep-link. Featured cards hide while filtering. "latest"/"curated" modes (homepage)
+  keep a card grid. Page hero (eyebrow, H1, intro) is page content shipped as
+  `scripts/redesign/content/pages/projects.html`, applied by `apply-page-content.php` (backs up
+  current content first). Sort dropdown dropped — the index is newest-first by design.
 - [ ] **4 — Project detail:** field-driven header + meta strip, browser-frame hero, sticky TOC
   (section-navigator refactor), content patterns, next/related.
 - [ ] **5 — Homepage + remaining pages:** homepage per mockup; token/hero pass on Meet me, Framework,
@@ -117,7 +123,10 @@ production during the cutover rehearsal):
    site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
    Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
 5. Clear legacy project `post_content` (after a JSON backup — the fields now hold it) +
-   `cutover.php` on production; reindex Relevanssi.
+   `apply-page-content.php` (page content files; backs up each page first) + `cutover.php` on production; reindex Relevanssi. Free Relevanssi has no WP-CLI command — reindex
+   projects with `wp eval` looping `relevanssi_index_doc($id, true, relevanssi_get_custom_fields(), true)`
+   over published project IDs (proven on staging 2026-10-13: 69 reindexed, the content-less
+   Wicked (2018) post matches on its fields).
 6. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`, twice;
    check `X-FastCGI-Cache`.
 7. Smoke-test itzenzo.tv (GraphQL/REST).

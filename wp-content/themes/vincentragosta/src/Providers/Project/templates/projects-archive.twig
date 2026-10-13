@@ -1,0 +1,104 @@
+{#
+    Projects archive — the projects block in "all" mode.
+    View model: ChildTheme\Providers\Project\ProjectArchive::toArray().
+    Behavior (filters, view toggle, show more, URL state): blocks/projects/view.js.
+#}
+{% if archive.stats %}
+    <dl class="projects-stats">
+        {% for stat in archive.stats %}
+            <div class="projects-stats__item">
+                <dt>{{ stat.label }}</dt>
+                <dd>
+                    <span class="projects-stats__value">{{ stat.value }}{% if stat.suffix %}<small>{{ stat.suffix }}</small>{% endif %}</span>
+                    <span class="projects-stats__detail">{{ stat.detail }}</span>
+                </dd>
+            </div>
+        {% endfor %}
+    </dl>
+{% endif %}
+
+<div class="projects-toolbar">
+    <div class="projects-toolbar__filters" role="group" aria-label="Filter by category">
+        <button type="button" class="projects-pill" data-category-filter="all" aria-pressed="true">
+            All <span class="projects-pill__count">{{ archive.total }}</span>
+        </button>
+        {% for category in archive.categories %}
+            <button type="button" class="projects-pill" data-category-filter="{{ category.slug }}" aria-pressed="false">
+                {{ category.name }} <span class="projects-pill__count">{{ category.count }}</span>
+            </button>
+        {% endfor %}
+    </div>
+    <div class="projects-toolbar__controls">
+        <div class="projects-search">
+            <label class="screen-reader-text" for="projects-search-input">Search projects</label>
+            <input id="projects-search-input" type="search" class="projects-search__input" placeholder="Search projects…" />
+        </div>
+        <div class="projects-view" role="group" aria-label="View">
+            <button type="button" class="projects-view__option" data-view-toggle="index" aria-pressed="true">Index</button>
+            <button type="button" class="projects-view__option" data-view-toggle="grid" aria-pressed="false">Grid</button>
+        </div>
+    </div>
+</div>
+
+{% if archive.case_studies %}
+    <section class="projects-featured" data-featured aria-labelledby="projects-featured-heading">
+        <div class="projects-section-head">
+            <p class="is-style-eyebrow">01 / Case studies</p>
+            <h2 id="projects-featured-heading">Featured <em class="serif-accent">builds</em></h2>
+            <p class="projects-section-head__lede">The full story — brief, architecture, and outcome — for the projects built on my own stack.</p>
+        </div>
+        <div class="projects-featured__top">
+            {% for project in archive.case_studies|slice(0, 2) %}
+                {% include 'project-card.twig' with { project: project, size: 'lg', highlight: loop.first, filterable: false } only %}
+            {% endfor %}
+        </div>
+        {% if archive.case_studies|length > 2 %}
+            <div class="projects-featured__rest">
+                {% for project in archive.case_studies|slice(2) %}
+                    {% include 'project-card.twig' with { project: project, size: 'sm', filterable: false } only %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </section>
+{% endif %}
+
+<section class="projects-all" aria-labelledby="projects-all-heading">
+    <div class="projects-section-head">
+        <p class="is-style-eyebrow">{{ archive.case_studies ? '02' : '01' }} / The archive</p>
+        <h2 id="projects-all-heading">The <em class="serif-accent">full</em> index</h2>
+        <p class="projects-section-head__lede">Every project, newest first — agency work alongside my own clients.</p>
+    </div>
+
+    <div class="projects-index" data-view-panel="index">
+        <div class="projects-index__head" aria-hidden="true">
+            <span>#</span><span>Project</span><span>Client</span><span>Discipline</span><span>Stack</span><span></span>
+        </div>
+        {% set number = archive.total %}
+        {% for group in archive.groups %}
+            <section class="projects-index__year" data-year-group aria-labelledby="projects-year-{{ group.year }}">
+                <h3 class="projects-index__year-label" id="projects-year-{{ group.year }}">
+                    {{ group.year }} <span data-year-count>{{ group.projects|length }} {{ group.projects|length == 1 ? 'project' : 'projects' }}</span>
+                </h3>
+                <ol class="projects-index__rows" role="list">
+                    {% for project in group.projects %}
+                        {% include 'project-row.twig' with { project: project, number: number } only %}
+                        {% set number = number - 1 %}
+                    {% endfor %}
+                </ol>
+            </section>
+        {% endfor %}
+        <div class="projects-index__more">
+            <button type="button" class="projects-more" data-show-more hidden>Show <span data-show-more-count></span> more</button>
+        </div>
+    </div>
+
+    <div class="projects-grid" data-view-panel="grid">
+        {% for group in archive.groups %}
+            {% for project in group.projects %}
+                {% include 'project-card.twig' with { project: project } only %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <p class="projects-empty" data-empty hidden aria-live="polite">No projects match your filters.</p>
+</section>

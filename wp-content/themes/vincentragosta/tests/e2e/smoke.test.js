@@ -24,12 +24,35 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.site-footer .footer-cta')).toHaveCount(0);
     });
 
-    test('projects page loads with project cards and sort dropdown', async ({ page }) => {
+    test('projects page loads the archive: stats, filters, featured, index', async ({ page }) => {
         const response = await page.goto('/projects/');
 
         expect(response.status()).toBe(200);
-        await expect(page.locator('.project-card').first()).toBeVisible();
-        await expect(page.locator('[data-dropdown="sort"]')).toBeVisible();
+        await expect(page.locator('.projects-stats')).toBeVisible();
+        await expect(page.locator('[data-category-filter="all"]')).toHaveAttribute('aria-pressed', 'true');
+        await expect(page.locator('.projects-featured .project-card').first()).toBeVisible();
+        await expect(page.locator('.project-row').first()).toBeVisible();
+    });
+
+    test('projects category filter narrows the index and updates the URL', async ({ page }) => {
+        await page.goto('/projects/');
+        const visibleRows = page.locator('.project-row:not([aria-hidden]):not([data-collapsed])');
+        const before = await page.locator('.project-row:not([aria-hidden])').count();
+
+        await page.locator('[data-category-filter]:not([data-category-filter="all"])').first().click();
+
+        await expect(page).toHaveURL(/\?category=/);
+        await expect(page.locator('.projects-featured')).toBeHidden();
+        expect(await page.locator('.project-row:not([aria-hidden])').count()).toBeLessThan(before);
+        await expect(visibleRows.first()).toBeVisible();
+    });
+
+    test('projects view toggle switches to the card grid via ?view=grid', async ({ page }) => {
+        await page.goto('/projects/?view=grid');
+
+        await expect(page.locator('.projects-grid .project-card').first()).toBeVisible();
+        await expect(page.locator('.projects-index')).toBeHidden();
+        await expect(page.locator('[data-view-toggle="grid"]')).toHaveAttribute('aria-pressed', 'true');
     });
 
     test('contact page loads with WPForms container', async ({ page }) => {

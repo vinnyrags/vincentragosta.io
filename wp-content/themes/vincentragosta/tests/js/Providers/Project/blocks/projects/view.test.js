@@ -1,377 +1,242 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import {
-    sortProjects,
-    filterProjects,
-    filterByCategory,
+    isFiltered,
+    readUrlState,
+    writeUrlState,
+    applyFilters,
+    applyRowLimit,
+    updateYearGroups,
+    setView,
+    render,
+    initArchive,
 } from '../../../../../../src/Providers/Project/blocks/projects/view.js';
 
 /**
- * Build a projects grid with cards
+ * Build an archive block: pills, featured section, year groups of rows,
+ * a card grid with the same projects, show-more and empty state.
+ * @param {Array<{year: string, items: Array<[string, string]>}>} groups - [title, categories]
  */
-function createProjectsGrid(projects) {
-    const grid = document.createElement('div');
-    grid.classList.add('projects-grid');
+function createArchive(groups) {
+    const item = (title, categories) =>
+        `data-project-item data-title="${title.toLowerCase()}" data-category="${categories}"`;
 
-    projects.forEach(({ title, date, category }) => {
-        const card = document.createElement('div');
-        card.classList.add('project-card');
-        card.dataset.title = title;
-        card.dataset.date = date;
-        if (category) card.dataset.category = category;
-        card.textContent = title;
-        grid.appendChild(card);
-    });
+    const rows = groups
+        .map(
+            (g) => `
+            <section data-year-group>
+                <h3>${g.year} <span data-year-count></span></h3>
+                <ol>${g.items.map(([t, c]) => `<li class="project-row" ${item(t, c)}><a href="#">${t}</a></li>`).join('')}</ol>
+            </section>`
+        )
+        .join('');
 
-    document.body.appendChild(grid);
-    return grid;
+    const cards = groups
+        .flatMap((g) => g.items)
+        .map(([t, c]) => `<article class="project-card" ${item(t, c)}></article>`)
+        .join('');
+
+    document.body.innerHTML = `
+        <div class="wp-block-ix-projects is-archive" data-view="index">
+            <button data-category-filter="all" aria-pressed="true"></button>
+            <button data-category-filter="broadway" aria-pressed="false"></button>
+            <button data-category-filter="brand" aria-pressed="false"></button>
+            <input class="projects-search__input" />
+            <button data-view-toggle="index" aria-pressed="true"></button>
+            <button data-view-toggle="grid" aria-pressed="false"></button>
+            <section data-featured><article class="project-card"></article></section>
+            <div data-view-panel="index">${rows}<button data-show-more hidden><span data-show-more-count></span></button></div>
+            <div data-view-panel="grid">${cards}</div>
+            <p data-empty hidden></p>
+        </div>`;
+
+    return document.querySelector('.wp-block-ix-projects');
 }
 
-function getCardTitles(grid) {
-    return Array.from(grid.querySelectorAll('.project-card')).map((c) => c.dataset.title);
-}
+const FIXTURE = [
+    { year: '2026', items: [['Celebrity Autobiography', 'broadway entertainment'], ['itzenzo.tv', 'brand']] },
+    { year: '2024', items: [['Outsiders', 'broadway ticketing']] },
+    { year: '2018', items: [['Wolfmoon Bourbon', 'brand agency']] },
+];
 
-function getVisibleCards(grid) {
-    return Array.from(grid.querySelectorAll('.project-card:not([aria-hidden="true"])'));
-}
+const state = (overrides = {}) => ({ category: 'all', query: '', view: 'index', expanded: false, ...overrides });
+const visible = (block, selector) =>
+    Array.from(block.querySelectorAll(selector)).filter((el) => !el.hasAttribute('aria-hidden'));
 
-describe('sortProjects', () => {
-    const projects = [
-        { title: 'Charlie', date: '2024-03-15' },
-        { title: 'Alpha', date: '2024-01-10' },
-        { title: 'Bravo', date: '2024-02-20' },
-    ];
-
-    it('sorts by title ascending', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'asc');
-
-        expect(getCardTitles(grid)).toEqual(['Alpha', 'Bravo', 'Charlie']);
+describe('isFiltered', () => {
+    it('is false for the default state', () => {
+        expect(isFiltered(state())).toBe(false);
     });
 
-    it('sorts by title descending', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'desc');
-
-        expect(getCardTitles(grid)).toEqual(['Charlie', 'Bravo', 'Alpha']);
-    });
-
-    it('sorts by date ascending', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'date', 'asc');
-
-        const titles = getCardTitles(grid);
-        expect(titles).toEqual(['Alpha', 'Bravo', 'Charlie']);
-    });
-
-    it('sorts by date descending', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'date', 'desc');
-
-        const titles = getCardTitles(grid);
-        expect(titles).toEqual(['Charlie', 'Bravo', 'Alpha']);
-    });
-
-    it('removes is-visible class from cards after sorting', () => {
-        const grid = createProjectsGrid(projects);
-        grid.querySelectorAll('.project-card').forEach((c) => c.classList.add('is-visible'));
-
-        sortProjects(grid, 'title', 'asc');
-
-        grid.querySelectorAll('.project-card').forEach((card) => {
-            expect(card.classList.contains('is-visible')).toBe(false);
-        });
-    });
-
-    it('handles missing data attributes gracefully', () => {
-        const grid = createProjectsGrid([
-            { title: '', date: '' },
-            { title: 'Zulu', date: '2024-06-01' },
-            { title: 'Alpha', date: '' },
-        ]);
-
-        sortProjects(grid, 'title', 'asc');
-
-        const titles = getCardTitles(grid);
-        expect(titles[0]).toBe('');
-        expect(titles[1]).toBe('Alpha');
-        expect(titles[2]).toBe('Zulu');
-    });
-
-    it('maintains all cards in the grid after sorting', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'asc');
-
-        expect(grid.querySelectorAll('.project-card')).toHaveLength(3);
-    });
-
-    it('can sort the same grid multiple times', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'asc');
-        expect(getCardTitles(grid)).toEqual(['Alpha', 'Bravo', 'Charlie']);
-
-        sortProjects(grid, 'title', 'desc');
-        expect(getCardTitles(grid)).toEqual(['Charlie', 'Bravo', 'Alpha']);
-
-        sortProjects(grid, 'date', 'asc');
-        expect(getCardTitles(grid)).toEqual(['Alpha', 'Bravo', 'Charlie']);
+    it('is true for a category or a non-blank query', () => {
+        expect(isFiltered(state({ category: 'brand' }))).toBe(true);
+        expect(isFiltered(state({ query: 'wicked' }))).toBe(true);
+        expect(isFiltered(state({ query: '   ' }))).toBe(false);
     });
 });
 
-describe('filterProjects', () => {
-    const projects = [
-        { title: 'alpha project', date: '2024-01-10', category: 'web' },
-        { title: 'bravo project', date: '2024-02-20', category: 'branding' },
-        { title: 'charlie delta', date: '2024-03-15', category: 'web' },
-    ];
-
-    it('filters cards by partial title match', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'alpha');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('alpha project');
-    });
-
-    it('shows all cards when query is empty', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'alpha');
-        filterProjects(grid, '');
-
-        expect(getVisibleCards(grid)).toHaveLength(3);
-    });
-
-    it('is case insensitive', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'BRAVO');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('bravo project');
-    });
-
-    it('matches multiple cards with shared term', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'project');
-
-        expect(getVisibleCards(grid)).toHaveLength(2);
-    });
-
-    it('hides all cards when query matches nothing', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'zzzzz');
-
-        expect(getVisibleCards(grid)).toHaveLength(0);
-    });
-
-    it('removes is-visible from hidden cards', () => {
-        const grid = createProjectsGrid(projects);
-        grid.querySelectorAll('.project-card').forEach((c) => c.classList.add('is-visible'));
-
-        filterProjects(grid, 'charlie');
-
-        const hidden = grid.querySelectorAll('.project-card[aria-hidden="true"]');
-        hidden.forEach((card) => {
-            expect(card.classList.contains('is-visible')).toBe(false);
+describe('URL state', () => {
+    it('reads a known category and view', () => {
+        expect(readUrlState('?category=broadway&view=grid', ['all', 'broadway'])).toEqual({
+            category: 'broadway',
+            view: 'grid',
         });
     });
 
-    it('works with whitespace-only query (shows all)', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, '   ');
-
-        expect(getVisibleCards(grid)).toHaveLength(3);
-    });
-
-    it('works correctly after sorting', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'desc');
-        filterProjects(grid, 'delta');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('charlie delta');
-    });
-});
-
-describe('filterByCategory', () => {
-    const projects = [
-        { title: 'alpha', date: '2024-01-10', category: 'web' },
-        { title: 'bravo', date: '2024-02-20', category: 'branding' },
-        { title: 'charlie', date: '2024-03-15', category: 'web' },
-        { title: 'delta', date: '2024-04-01' }, // no category
-    ];
-
-    it('filters cards to show only matching category', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterByCategory(grid, 'web');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(2);
-        expect(visible[0].dataset.title).toBe('alpha');
-        expect(visible[1].dataset.title).toBe('charlie');
-    });
-
-    it('shows all cards when category is "all"', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterByCategory(grid, 'web');
-        filterByCategory(grid, 'all');
-
-        expect(getVisibleCards(grid)).toHaveLength(4);
-    });
-
-    it('hides cards with no category when a specific category is selected', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterByCategory(grid, 'branding');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('bravo');
-    });
-
-    it('hides all cards when category matches nothing', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterByCategory(grid, 'nonexistent');
-
-        expect(getVisibleCards(grid)).toHaveLength(0);
-    });
-
-    it('removes is-visible from hidden cards', () => {
-        const grid = createProjectsGrid(projects);
-        grid.querySelectorAll('.project-card').forEach((c) => c.classList.add('is-visible'));
-
-        filterByCategory(grid, 'branding');
-
-        const hidden = grid.querySelectorAll('.project-card[aria-hidden="true"]');
-        hidden.forEach((card) => {
-            expect(card.classList.contains('is-visible')).toBe(false);
+    it('falls back to defaults for unknown values', () => {
+        expect(readUrlState('?category=nope&view=list', ['all', 'broadway'])).toEqual({
+            category: 'all',
+            view: 'index',
         });
     });
 
-    it('works correctly after sorting', () => {
-        const grid = createProjectsGrid(projects);
-
-        sortProjects(grid, 'title', 'desc');
-        filterByCategory(grid, 'web');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(2);
-    });
-
-    it('matches cards with multiple space-separated categories', () => {
-        const grid = createProjectsGrid([
-            { title: 'alpha', date: '2024-01-10', category: 'broadway ticketing' },
-            { title: 'bravo', date: '2024-02-20', category: 'branding' },
-            { title: 'charlie', date: '2024-03-15', category: 'broadway entertainment' },
-        ]);
-
-        filterByCategory(grid, 'ticketing');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('alpha');
-    });
-
-    it('matches any category in a multi-category card', () => {
-        const grid = createProjectsGrid([
-            { title: 'alpha', date: '2024-01-10', category: 'broadway ticketing entertainment' },
-            { title: 'bravo', date: '2024-02-20', category: 'branding' },
-        ]);
-
-        filterByCategory(grid, 'broadway');
-        expect(getVisibleCards(grid)).toHaveLength(1);
-
-        filterByCategory(grid, 'ticketing');
-        expect(getVisibleCards(grid)).toHaveLength(1);
-
-        filterByCategory(grid, 'entertainment');
-        expect(getVisibleCards(grid)).toHaveLength(1);
-
-        filterByCategory(grid, 'branding');
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('bravo');
+    it('writes non-defaults and drops defaults, keeping other params', () => {
+        expect(writeUrlState('https://x.test/projects/?utm=1', { category: 'brand', view: 'grid' })).toBe(
+            'https://x.test/projects/?utm=1&category=brand&view=grid'
+        );
+        expect(
+            writeUrlState('https://x.test/projects/?category=brand&view=grid', { category: 'all', view: 'index' })
+        ).toBe('https://x.test/projects/');
     });
 });
 
-describe('filter composition', () => {
-    const projects = [
-        { title: 'alpha web', date: '2024-01-10', category: 'web' },
-        { title: 'bravo brand', date: '2024-02-20', category: 'branding' },
-        { title: 'charlie web', date: '2024-03-15', category: 'web' },
-    ];
-
-    it('search + category: both must match for card to be visible', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterByCategory(grid, 'web');
-        filterProjects(grid, 'charlie');
-
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('charlie web');
+describe('applyFilters', () => {
+    let block;
+    beforeEach(() => {
+        block = createArchive(FIXTURE);
     });
 
-    it('card hidden by category stays hidden even if search matches', () => {
-        const grid = createProjectsGrid(projects);
+    it('filters rows and cards together by category', () => {
+        applyFilters(block, state({ category: 'brand' }));
 
-        filterByCategory(grid, 'web');
-        filterProjects(grid, 'bravo');
-
-        // bravo matches search but is branding category — stays hidden
-        expect(getVisibleCards(grid)).toHaveLength(0);
+        expect(visible(block, '.project-row').map((r) => r.dataset.title)).toEqual(['itzenzo.tv', 'wolfmoon bourbon']);
+        expect(visible(block, '.project-card[data-project-item]')).toHaveLength(2);
     });
 
-    it('clearing search restores category-filtered view', () => {
-        const grid = createProjectsGrid(projects);
+    it('combines search with category', () => {
+        applyFilters(block, state({ category: 'brand', query: 'wolf' }));
 
-        filterByCategory(grid, 'web');
-        filterProjects(grid, 'alpha');
-        filterProjects(grid, '');
+        expect(visible(block, '.project-row').map((r) => r.dataset.title)).toEqual(['wolfmoon bourbon']);
+    });
+});
 
-        // search cleared, category still active — both web cards visible
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(2);
+describe('applyRowLimit', () => {
+    let block;
+    beforeEach(() => {
+        block = createArchive(FIXTURE);
     });
 
-    it('clearing category restores search-filtered view', () => {
-        const grid = createProjectsGrid(projects);
-
-        filterProjects(grid, 'alpha');
-        filterByCategory(grid, 'branding');
-        filterByCategory(grid, 'all');
-
-        // category cleared, search still active — only alpha matches
-        const visible = getVisibleCards(grid);
-        expect(visible).toHaveLength(1);
-        expect(visible[0].dataset.title).toBe('alpha web');
+    it('collapses rows past the limit when unfiltered', () => {
+        expect(applyRowLimit(block, state(), 2)).toBe(2);
+        expect(block.querySelectorAll('.project-row[data-collapsed]')).toHaveLength(2);
     });
 
-    it('clearing both filters shows all cards', () => {
-        const grid = createProjectsGrid(projects);
+    it('shows everything once expanded or filtered', () => {
+        expect(applyRowLimit(block, state({ expanded: true }), 2)).toBe(0);
+        expect(applyRowLimit(block, state({ category: 'brand' }), 2)).toBe(0);
+        expect(block.querySelectorAll('.project-row[data-collapsed]')).toHaveLength(0);
+    });
+});
 
-        filterByCategory(grid, 'web');
-        filterProjects(grid, 'charlie');
-        filterByCategory(grid, 'all');
-        filterProjects(grid, '');
+describe('updateYearGroups', () => {
+    it('hides empty groups and recounts matches', () => {
+        const block = createArchive(FIXTURE);
+        applyFilters(block, state({ category: 'broadway' }));
 
-        expect(getVisibleCards(grid)).toHaveLength(3);
+        updateYearGroups(block);
+
+        const groups = block.querySelectorAll('[data-year-group]');
+        expect([...groups].map((g) => g.hidden)).toEqual([false, false, true]);
+        expect(groups[0].querySelector('[data-year-count]').textContent).toBe('1 project');
+    });
+
+    it('hides a group whose rows are all collapsed', () => {
+        const block = createArchive(FIXTURE);
+        applyRowLimit(block, state(), 2);
+
+        updateYearGroups(block);
+
+        const groups = block.querySelectorAll('[data-year-group]');
+        expect([...groups].map((g) => g.hidden)).toEqual([false, true, true]);
+    });
+});
+
+describe('setView', () => {
+    it('sets data-view and toggle pressed states', () => {
+        const block = createArchive(FIXTURE);
+
+        setView(block, 'grid');
+
+        expect(block.dataset.view).toBe('grid');
+        expect(block.querySelector('[data-view-toggle="grid"]').getAttribute('aria-pressed')).toBe('true');
+        expect(block.querySelector('[data-view-toggle="index"]').getAttribute('aria-pressed')).toBe('false');
+    });
+});
+
+describe('render', () => {
+    it('hides featured while filtering and shows the empty state with no matches', () => {
+        const block = createArchive(FIXTURE);
+
+        render(block, state({ query: 'no such project' }));
+
+        expect(block.querySelector('[data-featured]').hidden).toBe(true);
+        expect(block.querySelector('[data-empty]').hidden).toBe(false);
+    });
+
+    it('shows featured and the show-more count when unfiltered', () => {
+        const block = createArchive(FIXTURE);
+
+        render(block, state());
+
+        expect(block.querySelector('[data-featured]').hidden).toBe(false);
+        expect(block.querySelector('[data-empty]').hidden).toBe(true);
+        expect(block.querySelector('[data-show-more]').hidden).toBe(true); // 4 rows < 20
+    });
+
+    it('marks the active category pill', () => {
+        const block = createArchive(FIXTURE);
+
+        render(block, state({ category: 'brand' }));
+
+        expect(block.querySelector('[data-category-filter="brand"]').getAttribute('aria-pressed')).toBe('true');
+        expect(block.querySelector('[data-category-filter="all"]').getAttribute('aria-pressed')).toBe('false');
+    });
+});
+
+describe('initArchive', () => {
+    it('applies ?category and ?view from the URL on load', () => {
+        window.history.replaceState(null, '', '/projects/?category=brand&view=grid');
+        const block = createArchive(FIXTURE);
+
+        initArchive(block);
+
+        expect(block.dataset.view).toBe('grid');
+        expect(visible(block, '.project-card[data-project-item]')).toHaveLength(2);
+        window.history.replaceState(null, '', '/');
+    });
+
+    it('pill clicks filter and update the URL', () => {
+        window.history.replaceState(null, '', '/projects/');
+        const block = createArchive(FIXTURE);
+        initArchive(block);
+
+        block.querySelector('[data-category-filter="broadway"]').click();
+
+        expect(window.location.search).toBe('?category=broadway');
+        expect(visible(block, '.project-row')).toHaveLength(2);
+        window.history.replaceState(null, '', '/');
+    });
+
+    it('search input filters without touching the URL', () => {
+        window.history.replaceState(null, '', '/projects/');
+        const block = createArchive(FIXTURE);
+        initArchive(block);
+        const input = block.querySelector('.projects-search__input');
+
+        input.value = 'outsiders';
+        input.dispatchEvent(new Event('input'));
+
+        expect(visible(block, '.project-row').map((r) => r.dataset.title)).toEqual(['outsiders']);
+        expect(window.location.search).toBe('');
+        window.history.replaceState(null, '', '/');
     });
 });

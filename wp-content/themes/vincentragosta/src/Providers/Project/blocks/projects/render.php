@@ -1,8 +1,13 @@
 <?php
 /**
  * Server-side rendering for the Projects block.
+ *
+ * "all" mode renders the projects archive (stats, filters, featured case
+ * studies, year-grouped index / card grid). "latest" and "curated" render a
+ * plain card grid (used on the homepage).
  */
 
+use ChildTheme\Providers\Project\ProjectArchive;
 use ChildTheme\Providers\Project\ProjectRepository;
 use ChildTheme\Theme;
 use Timber\Timber;
@@ -11,35 +16,21 @@ $mode = get_field('display_mode') ?: 'latest';
 $selected_ids = get_field('selected_projects') ?: [];
 
 $repository = Theme::container()->get(ProjectRepository::class);
-
-if ($mode === 'all') {
-    $projects = $repository->allByYear();
-} elseif ($mode === 'curated' && !empty($selected_ids)) {
-    $projects = $repository->findMany($selected_ids);
-} else {
-    $projects = $repository->latestByYear();
-}
-
-// Collect unique categories for the filter dropdown (only in "all" mode).
-$categories = [];
-if ($mode === 'all') {
-    foreach ($projects as $project) {
-        foreach ($project->categories() as $term) {
-            if (!isset($categories[$term->slug])) {
-                $categories[$term->slug] = $term->name;
-            }
-        }
-    }
-    ksort($categories);
-}
-
 $context = Timber::context();
-$context['projects'] = $projects;
-$context['show_sort'] = ($mode === 'all');
-$context['categories'] = $categories;
+
+if ($mode === 'all') {
+    $archive = new ProjectArchive($repository->allByYear(), $repository->caseStudies());
+    $context['archive'] = $archive->toArray();
+} elseif ($mode === 'curated' && !empty($selected_ids)) {
+    $context['projects'] = $repository->findMany($selected_ids);
+} else {
+    $context['projects'] = $repository->latestByYear();
+}
 
 // Get block wrapper attributes (alignment comes from block supports).
-$wrapper_attributes = get_block_wrapper_attributes();
+$wrapper_attributes = get_block_wrapper_attributes(
+    $mode === 'all' ? ['class' => 'is-archive', 'data-view' => 'index'] : []
+);
 
 echo '<div ' . $wrapper_attributes . '>';
 Timber::render(__DIR__ . '/grid.twig', $context);

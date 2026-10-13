@@ -1,7 +1,23 @@
-<div class="project-card" data-title="{{ project.title | lower }}" data-date="{{ project.sortYear }}" data-category="{{ project.categorySlugs }}">
+{#
+    Project card.
+    size: 'lg' | 'sm' | null (default). Featured cards pass a size; grid cards don't.
+    highlight: lime-ringed card (the lead case study).
+    filterable: false for featured cards, which hide as a group while filtering.
+#}
+{% set size = size ?? null %}
+{% set filterable = filterable ?? true %}
+<article
+    class="project-card{{ size ? ' project-card--' ~ size }}{{ highlight|default(false) ? ' is-highlighted' }}"
+    {% if filterable %}
+        data-project-item
+        data-title="{{ (project.title ~ ' ' ~ project.client ~ ' ' ~ project.technologies|join(' '))|lower|e('html_attr') }}"
+        data-date="{{ project.sortYear }}"
+        data-category="{{ project.categorySlugs }}"
+    {% endif %}
+>
     <a href="{{ project.link }}" class="project-card__image" tabindex="-1" aria-hidden="true">
         {% if project.thumbnail %}
-            <img src="{{ project.thumbnail.src | resize(800) }}"
+            <img src="{{ project.thumbnail.src | resize(size == 'lg' ? 1200 : 800) }}"
                  alt=""
                  width="{{ project.thumbnail.width }}"
                  height="{{ project.thumbnail.height }}"
@@ -9,10 +25,28 @@
         {% else %}
             <div class="project-card__no-image"></div>
         {% endif %}
+        {% if project.statusLabel %}
+            <span class="project-card__badge"><span class="project-card__dot" aria-hidden="true"></span>{{ project.statusLabel }}</span>
+        {% endif %}
+        {% if size == 'sm' and project.year %}
+            <span class="project-card__year">{{ project.year }}</span>
+        {% endif %}
     </a>
     <div class="project-card__content">
-        <h3 class="project-card__title">
-            <a href="{{ project.link }}">{{ project.title }}</a>
-        </h3>
+        <div class="project-card__text">
+            <h3 class="project-card__title">
+                <a href="{{ project.link }}">{{ project.title }}</a>
+            </h3>
+            {% if size != 'sm' and (project.client or project.year) %}
+                <p class="project-card__meta">{{ [project.client, project.year]|filter(v => v)|join(' · ') }}</p>
+            {% endif %}
+            {% set chips = size == 'lg' ? project.technologies|slice(0, 3) : project.categories|slice(0, 2)|map(c => c.name) %}
+            {% if chips %}
+                <ul class="project-card__chips" role="list">
+                    {% for chip in chips %}<li>{{ chip }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        <span class="project-card__arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></span>
     </div>
-</div>
+</article>
