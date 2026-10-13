@@ -39,7 +39,6 @@
 // separators, links, pills, highlights) inherit the red automatically.
 .is-style-nous-accent {
   --wp--preset--color--accent-1: var(--wp--preset--color--nous-red);
-  --wp--custom--color--accent-1-dark: var(--wp--preset--color--nous-red);
 }
 
 // Numbered List style — vertical list with large faded counter numbers.
@@ -84,5 +83,73 @@
         @include media(md) {
             padding-top: var(--wp--preset--spacing--65);
         }
+    }
+}
+
+// Panel style — the bordered surface card used across the redesign
+// (framework intro, testimonials, stat cells). Larger radius than Dark.
+.is-style-panel {
+    background-color: var(--color-surface);
+    color: var(--color-surface-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--lg);
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+// Stat Strip style — a single bordered strip of equal cells divided by
+// rules. Direct children are cells; inside each, a paragraph (label),
+// a large heading (value), and a muted paragraph (detail).
+.is-style-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--lg);
+    background: var(--color-surface);
+    overflow: hidden;
+
+    @include media(lg) {
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    }
+
+    > * {
+        margin: 0 !important;
+        padding: 1.75rem;
+        border-inline-end: 1px solid var(--color-border);
+        border-block-end: 1px solid var(--color-border);
+
+        @include media(lg) {
+            border-block-end: 0;
+
+            &:last-child {
+                border-inline-end: 0;
+            }
+        }
+    }
+
+    // Override core/columns flex layout when the style is on Columns
+    &.wp-block-columns {
+        flex-wrap: wrap;
+    }
+
+    :where(p):first-child {
+        margin: 0;
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 11.5px;
+        letter-spacing: var(--wp--custom--tracking--label);
+        text-transform: uppercase;
+        color: var(--color-text-dim);
+    }
+
+    :where(h2, h3, h4) {
+        margin-block: 1.125rem 0;
+        font-size: var(--wp--preset--font-size--70);
+        letter-spacing: -0.04em;
+    }
+
+    :where(h2, h3, h4) + p {
+        margin-block-start: 0.5rem;
+        font-size: var(--wp--preset--font-size--20);
+        color: var(--color-text-muted);
     }
 }

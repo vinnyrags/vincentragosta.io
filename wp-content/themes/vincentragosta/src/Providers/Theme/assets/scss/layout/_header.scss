@@ -1,13 +1,30 @@
 @use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
-// Header CSS custom properties for theme switching
-:root {
-  --header-bg: var(--wp--preset--color--contrast);
-  --header-text: var(--wp--preset--color--base);
-  --header-border: var(--wp--preset--color--grey-2);
-  --header-toggle-bg: var(--wp--preset--color--base);
-  --header-toggle-icon: var(--wp--preset--color--contrast);
+// ==========================================================================
+// Header — wrapper for the `header` content partial.
+// The partial's blocks: .header__bar (group) > .header__brand (site title +
+// version chip) | .header__nav (core/navigation) | .header__actions
+// (core/search + CTA buttons). Styles target those classes + core markup.
+// ==========================================================================
+
+// "V" mark drawn on the site-title link: a black glyph on the accent color,
+// so it follows per-page accent overrides (e.g. Nous Signal red).
+$v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M1 1l7 12 7-12' fill='none' stroke='black' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+@mixin brand-mark {
+  content: '';
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background:
+    $v-glyph center / 16px 14px no-repeat,
+    var(--wp--preset--color--accent-1);
+  // The glyph is drawn black-on-lime; keep it crisp in forced colors.
+  @include forced-colors {
+    border: 1px solid CanvasText;
+  }
 }
 
 .header {
@@ -15,405 +32,321 @@
   inset-block-start: 0;
   inset-inline: 0;
   z-index: 1000;
-  background: color-mix(in srgb, var(--header-bg) 85%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-block-end: 1px solid var(--header-border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-block-end: 1px solid var(--color-border);
 
-  // When the nav overlay is open, revert to solid background so the
-  // backdrop-filter stacking context doesn't clip the overlay (z-index: 999).
-  .nav-overlay-open & {
-    background: var(--header-bg);
+  // backdrop-filter makes the header the containing block for fixed-position
+  // descendants, which would trap core/navigation's overlay inside the bar.
+  // Drop it while the overlay is open (core adds .has-modal-open to <html>).
+  .has-modal-open & {
+    background: var(--color-bg);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
-  // Mobile button size — smaller to fit logo + 3 buttons in one row
-  --header-btn-size: 40px;
-
-  @include media(md) {
-    --header-btn-size: var(--wp--custom--icon-size--lg);
-  }
-
   &__container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: var(--wp--preset--spacing--20);
     max-width: var(--wp--style--global--content-size, 1440px);
     margin-inline: auto;
-    padding: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
-
-    @include media(md) {
-      justify-content: space-between;
-    }
+    padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--40);
   }
 
-  // Mode toggle button — on mobile, moves into the right-side group via order
-  &__mode-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    color: var(--header-text);
-    border: 1px solid var(--wp--preset--color--grey-4);
-    border-radius: 50%;
-    width: var(--header-btn-size);
-    height: var(--header-btn-size);
-    cursor: pointer;
-    transition: border-color 0.3s ease, color 0.3s ease;
-    order: 1;
-    flex-shrink: 0;
-
-    @include media(md) {
-      order: 0;
-    }
-
-    &:hover {
-      border-color: var(--header-text);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--wp--preset--color--accent-1);
-      outline-offset: 2px;
-    }
-  }
-
-  // Mode icon container — relative so absolute-positioned icons stack
-  &__mode-icon-wrapper {
+  &__bar {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--wp--custom--icon-size--sm);
-    height: var(--wp--custom--icon-size--sm);
-  }
+    gap: var(--wp--preset--spacing--30);
+    min-height: 56px;
 
-  // Mode icons — both always in DOM, crossfade via opacity + rotation
-  &__mode-icon {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-
-    svg {
-      width: var(--wp--custom--icon-size--sm);
-      height: var(--wp--custom--icon-size--sm);
-    }
-
-    // In dark mode (default): sun visible, moon hidden
-    &--sun {
-      opacity: 1;
-      transform: rotate(0deg);
-    }
-
-    &--moon {
-      opacity: 0;
-      transform: rotate(-90deg);
+    @include media(xl) {
+      min-height: 64px;
     }
   }
 
-  // Logo — leads on mobile (order: 0, pushed left), absolutely centered on desktop.
-  &__logo {
-    margin: 0;
+  // ---------------------------------------------------------------- Brand
+  &__brand {
+    gap: 12px;
     min-width: 0;
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    font-weight: 400;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    white-space: nowrap;
-    order: 0;
-    flex-grow: 1;
+  }
 
-    @include media(md) {
-      flex-grow: 0;
-      position: absolute;
-      inset-inline-start: 50%;
-      transform: translateX(-50%);
-    }
+  &__site-title {
+    margin: 0;
+    font-size: var(--wp--preset--font-size--20);
+    font-weight: 500;
+    white-space: nowrap;
 
     a {
-      color: var(--header-text);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--color-text);
       text-decoration: none;
-      transition: opacity 0.2s ease, color 0.3s ease;
 
-      &:hover {
-        opacity: 0.7;
+      &::before {
+        @include brand-mark;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover::before {
+        transform: rotate(-6deg);
       }
 
       &:focus-visible {
         outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: 4px;
+        border-radius: var(--wp--custom--radius--sm);
       }
     }
   }
 
-  // Right-side actions group (search + hamburger)
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: var(--wp--preset--spacing--20);
-    order: 2;
+  &__version {
+    display: none;
+    margin: 0;
+    padding: 1px 6px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 4px;
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--color-text-dim);
 
-    @include media(md) {
-      gap: var(--wp--preset--spacing--30);
+    @include media(sm) {
+      display: block;
     }
   }
 
-  // Expandable search form
-  &__search {
-    position: relative;
-    width: var(--header-btn-size);
-    height: var(--header-btn-size);
-
-    .nav-overlay-open & {
-      visibility: hidden;
-    }
-  }
-
-  // Mobile: dropdown panel below header
-  &__search-input {
-    position: fixed;
-    inset-inline: 0;
-    inset-block-start: var(--header-height);
-    width: 100%;
-    height: 0;
-    padding: 0 var(--wp--preset--spacing--40);
-    border: none;
-    border-block-end: 1px solid transparent;
-    outline: none;
-    background: var(--header-bg);
-    color: var(--header-text);
-    font-family: inherit;
-    font-size: var(--wp--preset--font-size--30);
-    opacity: 0;
-    overflow: hidden;
-    transition: height 0.3s ease, opacity 0.3s ease, padding 0.3s ease,
-                border-color 0.3s ease;
-    z-index: 999;
-
-    &::placeholder {
-      color: var(--wp--preset--color--grey-3);
+  // ----------------------------------------------------------- Navigation
+  // Centered absolutely at lg+ so it sits on the page axis regardless of the
+  // brand / actions widths. Below lg the core overlay toggle takes over.
+  &__nav {
+    // Overlay toggle is the last item on the right below lg
+    @media (max-width: 991.98px) {
+      order: 3;
     }
 
-    .is-open & {
-      height: 56px;
-      padding-block: var(--wp--preset--spacing--20);
-      border-color: var(--wp--preset--color--accent-1);
-      opacity: 1;
-    }
-
-    &:not(.is-open &) {
-      pointer-events: none;
-    }
-  }
-
-  // Desktop: inline expansion from button
-  @include media(md) {
-    &__search-input {
+    @include media(lg) {
       position: absolute;
-      inset-block: 0;
-      inset-inline-end: 0;
-      inset-inline-start: auto;
-      width: var(--header-btn-size);
-      height: 100%;
-      padding: 0;
-      padding-inline-end: var(--header-btn-size);
-      border: 1px solid var(--wp--preset--color--grey-4);
-      border-radius: 9999px;
-      background: transparent;
-      font-size: var(--wp--preset--font-size--20);
-      overflow: visible;
-      z-index: auto;
+      inset-inline-start: 50%;
+      width: max-content;
+      transform: translateX(-50%);
+    }
 
-      .is-open & {
-        width: calc(200px + var(--header-btn-size));
-        height: 100%;
-        padding-block: 0;
-        padding-inline-start: var(--wp--preset--spacing--30);
+    .wp-block-navigation__container {
+      flex-wrap: nowrap;
+      gap: clamp(1.25rem, 2.2vw, 2rem);
+    }
+
+    .wp-block-navigation-item {
+      white-space: nowrap;
+    }
+
+    .wp-block-navigation-item__content {
+      position: relative;
+      color: var(--color-text-muted);
+      font-size: var(--wp--preset--font-size--20);
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        inset-block-end: -8px;
+        height: 1px;
+        background: var(--wp--preset--color--accent-1);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+
+      &:hover {
+        color: var(--color-text);
+
+        &::after {
+          transform: scaleX(1);
+        }
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 4px;
+        border-radius: 2px;
+      }
+    }
+
+    .current-menu-item > .wp-block-navigation-item__content,
+    [aria-current='page'] {
+      color: var(--color-text);
+
+      &::after {
+        transform: scaleX(1);
+      }
+    }
+
+    // Overlay open/close toggles
+    .wp-block-navigation__responsive-container-open,
+    .wp-block-navigation__responsive-container-close {
+      color: var(--color-text);
+    }
+
+    .wp-block-navigation__responsive-container-open {
+      width: 38px;
+      height: 38px;
+      justify-content: center;
+      align-items: center;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--wp--custom--radius--md);
+      background: var(--color-surface);
+
+      &:hover {
         border-color: var(--wp--preset--color--accent-1);
       }
-    }
-  }
 
-  // Search toggle button (always visible, circular)
-  &__search-toggle {
-    position: absolute;
-    inset-block: 0;
-    inset-inline-end: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--header-btn-size);
-    height: var(--header-btn-size);
-    color: var(--header-text);
-    background: transparent;
-    border: 1px solid var(--wp--preset--color--grey-4);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 1;
-    transition: border-color 0.3s ease, color 0.3s ease;
-
-    &:hover {
-      border-color: var(--header-text);
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 2px;
+      }
     }
 
-    &:focus-visible {
-      outline: 2px solid var(--wp--preset--color--accent-1);
-      outline-offset: 2px;
-    }
+    // Mobile overlay panel. Matches core's
+    // `.wp-block-navigation:not(.has-background) … .is-menu-open` specificity + 1.
+    &:not(.has-background) .wp-block-navigation__responsive-container.is-menu-open {
+      // The desktop nav is centered (layout justifyContent); left-align the overlay.
+      --navigation-layout-justification-setting: flex-start;
+      --navigation-layout-justify: flex-start;
+      background: var(--color-bg);
+      color: var(--color-text);
+      padding: calc(var(--header-height, 72px) + var(--wp--preset--spacing--40)) var(--wp--preset--spacing--40) var(--wp--preset--spacing--40);
 
-    .is-open & {
-      border-color: transparent;
+      .wp-block-navigation__responsive-container-content,
+      .wp-block-navigation__container,
+      .wp-block-navigation-item {
+        align-items: flex-start;
+        text-align: start;
+      }
 
-      @include media(md) {
-        border-color: transparent;
+      .wp-block-navigation__container {
+        gap: var(--wp--preset--spacing--30);
+      }
+
+      .wp-block-navigation-item__content {
+        font-size: var(--wp--preset--font-size--60);
+        letter-spacing: var(--wp--custom--tracking--heading);
+        color: var(--color-text);
+
+        &::after {
+          display: none;
+        }
       }
     }
   }
 
-  &__search-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  // Core collapses navigation at 600px; this header needs the overlay until lg
+  // (inline nav + search + CTA don't fit below ~992px).
+  @media (min-width: 600px) and (max-width: 991.98px) {
+    &__nav {
+      .wp-block-navigation__responsive-container-open:not(.always-shown) {
+        display: flex;
+      }
 
-    svg {
-      width: calc((var(--wp--custom--icon-size--sm) + var(--wp--custom--icon-size--md)) / 2);
-      height: calc((var(--wp--custom--icon-size--sm) + var(--wp--custom--icon-size--md)) / 2);
+      .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+        display: none;
+      }
     }
   }
 
-  // Menu toggle / hamburger (right)
-  &__menu-toggle {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    background: var(--header-toggle-bg);
-    border: none;
-    border-radius: 50%;
-    padding: 0;
-    cursor: pointer;
-    width: var(--header-btn-size);
-    height: var(--header-btn-size);
-    transition: background-color 0.3s ease;
+  // -------------------------------------------------------------- Actions
+  & &__actions {
+    gap: var(--wp--preset--spacing--20);
 
-    &:hover {
-      background-color: var(--wp--preset--color--accent-1);
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--wp--preset--color--accent-1);
-      outline-offset: 2px;
+    // Below lg: brand left, then actions + overlay toggle grouped right
+    @media (max-width: 991.98px) {
+      margin-inline-start: auto;
     }
   }
 
-  &__menu-line {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background-color: var(--header-toggle-icon);
-    transition: transform 0.3s ease, opacity 0.3s ease, background-color 0.3s ease;
+  // `.header &` lifts specificity over core's block layout display rules.
+  & &__search {
+    display: none;
+    margin: 0;
+
+    @include media(lg) {
+      display: block;
+      width: 200px;
+    }
+
+    .wp-block-search__inside-wrapper {
+      position: relative;
+      border: 1px solid var(--color-border-strong);
+      border-radius: var(--wp--custom--radius--md);
+      background: transparent;
+      padding: 0;
+      transition: border-color 0.2s ease;
+
+      // Keyboard-shortcut hint. Empty alt text keeps it out of the accessibility tree.
+      &::after {
+        content: '⌘K' / '';
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 8px;
+        margin-block: auto;
+        height: fit-content;
+        padding: 1px 5px;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 4px;
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 10px;
+        color: var(--color-text-dim);
+        pointer-events: none;
+      }
+
+      &:focus-within {
+        border-color: var(--wp--preset--color--accent-1);
+
+        &::after {
+          display: none;
+        }
+      }
+    }
+
+    .wp-block-search__input {
+      height: 36px;
+      padding: 0 40px 0 12px;
+      border: 0;
+      background: transparent;
+      color: var(--color-text);
+      font-family: inherit;
+      font-size: 13px;
+
+      &::placeholder {
+        color: var(--color-text-dim);
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  & &__cta {
+    display: none;
+    margin: 0;
+
+    @include media(md) {
+      display: flex;
+    }
+
+    .wp-block-button__link {
+      padding: 9px 16px;
+      white-space: nowrap;
+    }
   }
 }
 
-// Hamburger to X animation
-.header__menu-toggle[aria-expanded="true"] {
-  .header__menu-line:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-  }
-  .header__menu-line:nth-child(2) {
-    opacity: 0;
-  }
-  .header__menu-line:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-  }
-}
-
-// Reduced motion: disable transitions for users who prefer reduced motion
 @include reduced-motion {
-  .header,
-  .header__mode-toggle,
-  .header__mode-icon,
-  .header__search,
-  .header__search-input,
-  .header__search-toggle,
-  .header__logo a,
-  .header__menu-toggle,
-  .header__menu-line {
+  .header__site-title a::before,
+  .header__nav .wp-block-navigation-item__content,
+  .header__nav .wp-block-navigation-item__content::after,
+  .header__search .wp-block-search__inside-wrapper {
     transition: none;
-  }
-}
-
-// Header light-mode overrides
-// Uses html.light-mode (0,1,1) to beat :root (0,1,0)
-// regardless of stylesheet load order.
-html.light-mode {
-  --header-bg: var(--wp--preset--color--base);
-  --header-text: var(--wp--preset--color--contrast);
-  --header-border: var(--wp--preset--color--grey-5);
-  --header-toggle-bg: var(--wp--preset--color--contrast);
-  --header-toggle-icon: var(--wp--preset--color--base);
-
-  .header__mode-toggle,
-  .header__search-toggle {
-    border-color: var(--wp--preset--color--grey-5);
-
-    &:hover {
-      border-color: var(--wp--preset--color--contrast);
-    }
-  }
-
-  @include media(md) {
-    .header__search-input {
-      border-color: var(--wp--preset--color--grey-5);
-    }
-  }
-
-  .header__search.is-open .header__search-input {
-    border-color: var(--wp--preset--color--accent-1);
-  }
-
-  .header__search.is-open .header__search-toggle {
-    border-color: transparent;
-  }
-
-  .header__search-input::placeholder {
-    color: var(--wp--preset--color--grey-5);
-  }
-}
-
-// ==========================================================================
-// Forced Colors (Windows High Contrast Mode)
-// ==========================================================================
-
-@include forced-colors {
-  .header__mode-toggle,
-  .header__search-toggle {
-    border: 1px solid ButtonText;
-  }
-
-  .header__menu-toggle {
-    border: 1px solid ButtonText;
-  }
-
-  .header__menu-line {
-    background: ButtonText;
-  }
-}
-
-// Sun/moon icon animation — sun rotates out, moon rotates in
-.light-mode .header__mode-icon {
-  &--sun {
-    opacity: 0;
-    transform: rotate(90deg);
-  }
-
-  &--moon {
-    opacity: 1;
-    transform: rotate(0deg);
   }
 }

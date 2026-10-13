@@ -4,12 +4,4 @@
     <meta charset="{{ site.charset }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="author" href="{{ site.theme.link }}/humans.txt" />
-    <script>
-        (function() {
-            var saved = localStorage.getItem('theme-mode');
-            if (saved === 'light' || (!saved && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-                document.documentElement.classList.add('light-mode');
-            }
-        })();
-    </script>
     {{function('wp_head')}}

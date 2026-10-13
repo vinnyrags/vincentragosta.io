@@ -1,55 +1,10 @@
-<footer class="footer">
-    <div class="footer__inner">
-        {# Contact Section #}
-        <section class="footer__contact" aria-labelledby="footer-contact-heading">
-            <div class="footer__contact-heading">
-                <h2 class="footer__heading" id="footer-contact-heading">Let's start a <strong>conversation</strong></h2>
-                {% if options.contact_page_url %}
-                    <a href="{{ options.contact_page_url }}" class="wp-element-button button has-icon">
-                        Get in touch today
-                        <span class="button__icon arrow" aria-hidden="true">
-                            {{ icon('arrow') | raw }}
-                        </span>
-                    </a>
-                {% endif %}
-            </div>
-            {% if options.footer_description %}
-                <div class="footer__contact-body">
-                    <div class="footer__description">{{ options.footer_description | raw }}</div>
-                </div>
-            {% endif %}
-        </section>
-
-        <hr class="footer__separator" aria-hidden="true">
-
-        {# Bar: Copyright, Nav, Social #}
-        <div class="footer__bar">
-            <div class="footer__meta">
-                <p class="footer__copyright">&copy; {{ "now"|date('Y') }} Vincent Ragosta</p>
-                <nav class="footer__nav" aria-label="Footer navigation">
-                    {{ function('wp_nav_menu', {
-                        theme_location: 'footer',
-                        container: false,
-                        menu_class: 'footer__nav-list',
-                        depth: 1,
-                        fallback_cb: false
-                    }) }}
-                </nav>
-            </div>
-
-            {% if options.social_icons %}
-                <nav class="footer__social-nav" aria-label="Social media links">
-                    <ul role="list">
-                        {% for social in options.social_icons %}
-                            <li>
-                                <a href="{{ social.url }}" class="footer__social-link" aria-label="{{ social.platform }} (opens in new tab)" target="_blank" rel="noopener noreferrer">
-                                    {{ icon(social.icon) | raw }}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            {% endif %}
+{# Site footer — rendered from the resolved `footer` content partial
+   (Appearance → Partials; per-page override under "Header & Footer").
+   No partial (or mode = Disabled) renders no footer. #}
+{% if footer_partial %}
+    <footer class="footer site-footer site-footer--{{ footer_partial.slug }}" data-partial-id="{{ footer_partial.id }}">
+        <div class="footer__inner">
+            {{ footer_partial.content | raw }}
         </div>
-    </div>
-</footer>
+    </footer>
+{% endif %}

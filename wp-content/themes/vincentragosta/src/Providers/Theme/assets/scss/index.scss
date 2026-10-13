@@ -1,5 +1,5 @@
 // ThemeService styles entry point
-@use 'light-mode';
+@use 'common/tokens';
 @use 'focus';
 @use 'button-icon';
 
@@ -15,7 +15,6 @@
 // Layout
 @use 'layout/footer';
 @use 'layout/header';
-@use 'layout/nav-overlay';
 @use 'layout/site-main';
 
 // Vendor
@@ -43,6 +42,7 @@
 
 // Utilities
 @use 'utilities/text';
+@use 'utilities/backdrop';
 
 // Print
 @use 'print';

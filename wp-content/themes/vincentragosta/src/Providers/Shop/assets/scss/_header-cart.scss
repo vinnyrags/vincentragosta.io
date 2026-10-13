@@ -51,12 +51,3 @@
   border-radius: 50%;
   line-height: 1;
 }
-
-// Light mode
-.light-mode .header__cart-toggle {
-  color: var(--wp--preset--color--contrast);
-
-  &:hover {
-    border-color: var(--wp--preset--color--contrast);
-  }
-}

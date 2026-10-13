@@ -5,6 +5,7 @@ namespace ChildTheme\Tests\Integration\Providers;
 use ChildTheme\Providers\Project\ProjectPost;
 use DI\Container;
 use ChildTheme\Providers\Theme\ThemeProvider;
+use IX\Providers\Theme\Features\ContentPartial\ContentPartial;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
@@ -89,6 +90,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(DisablePluginUpdates::class, $enabled);
         $this->assertContains(DisablePosts::class, $enabled);
         $this->assertContains(EnableSvgUploads::class, $enabled);
+        // Header/footer render from content partials (no longer opted out)
+        $this->assertContains(ContentPartial::class, $enabled);
 
         // Child theme opt-in features
         $this->assertContains(ButtonIconEnhancer::class, $enabled);
@@ -96,7 +99,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(WpFormsBaseStyles::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(12, $enabled);
+        $this->assertCount(13, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
@@ -163,10 +166,9 @@ class ThemeProviderTest extends BaseTestCase
             has_action('wp_enqueue_scripts', [$this->provider, 'enqueueAssets'])
         );
 
-        // Preconnects now use wp_resource_hints filter instead of wp_head
-        $this->assertGreaterThan(
-            0,
-            has_filter('wp_resource_hints', [$this->provider, 'addResourceHints'])
+        $this->assertSame(
+            1,
+            has_action('wp_head', [$this->provider, 'preloadFonts'])
         );
 
         // Core asset hooks (inherited from parent ThemeProvider)
@@ -230,32 +232,33 @@ class ThemeProviderTest extends BaseTestCase
     }
 
     /**
-     * Test that addResourceHints adds preconnect URLs.
+     * Test that preloadFonts prints a woff2 preload link for each listed font.
      */
-    public function testAddResourceHintsAddsPreconnectUrls(): void
+    public function testPreloadFontsPrintsWoff2PreloadLinks(): void
     {
-        $urls = $this->provider->addResourceHints([], 'preconnect');
+        ob_start();
+        $this->provider->preloadFonts();
+        $html = (string) ob_get_clean();
 
-        $this->assertCount(2, $urls);
+        $this->assertSame(count(ThemeProvider::PRELOAD_FONTS), substr_count($html, 'rel="preload"'));
 
-        // Check for fonts.googleapis.com
-        $this->assertContains(['href' => 'https://fonts.googleapis.com'], $urls);
+        foreach (ThemeProvider::PRELOAD_FONTS as $file) {
+            $this->assertStringContainsString($file, $html);
+        }
 
-        // Check for fonts.gstatic.com with crossorigin
-        $this->assertContains([
-            'href' => 'https://fonts.gstatic.com',
-            'crossorigin' => 'anonymous',
-        ], $urls);
+        $this->assertStringContainsString('as="font" type="font/woff2" crossorigin', $html);
     }
 
     /**
-     * Test that addResourceHints doesn't add URLs for other relation types.
+     * Test that every preloaded font file exists on disk.
      */
-    public function testAddResourceHintsIgnoresOtherRelationTypes(): void
+    public function testPreloadFontFilesExist(): void
     {
-        $urls = $this->provider->addResourceHints([], 'dns-prefetch');
+        $fontsDir = dirname(__DIR__, 3) . '/src/Providers/Theme/assets/fonts/';
 
-        $this->assertEmpty($urls);
+        foreach (ThemeProvider::PRELOAD_FONTS as $file) {
+            $this->assertFileExists($fontsDir . $file);
+        }
     }
 
     /**

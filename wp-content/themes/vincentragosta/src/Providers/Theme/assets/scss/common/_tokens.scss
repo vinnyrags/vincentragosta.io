@@ -1,0 +1,62 @@
+@use 'common/accessibility' as *;
+@use 'common/bg-overlay' as *;
+
+// ==========================================================================
+// Semantic Color Tokens
+// ==========================================================================
+// The site is dark-only. Components read these semantic variables rather
+// than palette presets so the palette can be re-valued in theme.json
+// without touching component styles.
+// ==========================================================================
+
+:root {
+  // Primary backgrounds and text
+  --color-bg: var(--wp--preset--color--contrast);
+  --color-text: var(--wp--preset--color--base);
+
+  // Secondary/muted colors
+  --color-text-muted: var(--wp--preset--color--grey-3);
+  --color-text-dim: var(--wp--preset--color--grey-5);
+  --color-border: var(--wp--preset--color--grey-2);
+  --color-border-strong: var(--wp--preset--color--grey-4);
+
+  // Surface colors (cards, panels)
+  --color-surface: var(--wp--preset--color--grey-1);
+  --color-surface-2: var(--wp--preset--color--panel-2);
+  --color-surface-text: var(--wp--preset--color--base);
+
+  // Buttons — lime primary, inverting to light on hover
+  --color-button-bg: var(--wp--preset--color--accent-1);
+  --color-button-text: var(--wp--preset--color--contrast);
+  --color-button-hover-bg: var(--wp--preset--color--base);
+  --color-button-hover-text: var(--wp--preset--color--contrast);
+
+  // Text on accent-1 backgrounds (e.g. skip-link, dropdown hover, accordion icon)
+  --color-on-accent: var(--wp--preset--color--contrast);
+
+  // Accent glow used by featured cards, highlighted layers, and heroes
+  --color-accent-glow: rgb(212 255 58 / 0.14);
+  --color-accent-line: rgb(212 255 58 / 0.45);
+}
+
+// ==========================================================================
+// High Contrast Overrides
+// ==========================================================================
+// Push semantic tokens toward stronger contrast when the user prefers it.
+// Because the entire theme reads from these custom properties, a single
+// override block cascades everywhere.
+
+@include high-contrast {
+  :root {
+    --color-text-muted: var(--wp--preset--color--base);
+    --color-text-dim: var(--wp--preset--color--grey-3);
+    --color-border: var(--wp--preset--color--grey-3);
+    --color-border-strong: var(--wp--preset--color--grey-3);
+  }
+}
+
+// Group blocks with SVG background-image patterns keep their overlay
+// pseudo-element so existing content renders unchanged.
+.wp-block-group[style*="background-image"] {
+  @include bg-pattern-overlay;
+}

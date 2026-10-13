@@ -20,6 +20,13 @@ function runAxe(page) {
 }
 
 test.describe('Accessibility audits (WCAG 2.1 AA)', () => {
+    // Audit the settled render. With motion enabled, axe can sample elements
+    // mid scroll-reveal / fade-up and report near-invisible text as contrast
+    // failures; reduced motion disables those transitions (IX scroll-reveal).
+    test.beforeEach(async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+    });
+
     test('homepage has no accessibility violations', async ({ page }) => {
         await page.goto('/');
         await page.waitForLoadState('networkidle');

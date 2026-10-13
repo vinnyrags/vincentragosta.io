@@ -5,3 +5,15 @@
     background: none;
     color: var(--wp--preset--color--accent-1);
 }
+
+// Serif accent — the italic serif word inside display headings
+// ("Selected *projects*"). Applied via the Serif accent toolbar button.
+// Slightly upsized because the serif runs optically smaller than the sans.
+.serif-accent {
+    font-family: var(--wp--preset--font-family--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.08em;
+    letter-spacing: -0.01em;
+    color: var(--color-text-muted);
+}

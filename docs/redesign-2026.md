@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status:** Phase 0 complete (2026-10-13). Next: Phase 1 (foundation).
+**Status:** Phase 1 complete (2026-10-13), awaiting commit approval. Next: Phase 2 (project data model).
 
 ## Reference
 
@@ -32,6 +32,10 @@ starting new files.
 
 ## Phase 0 findings
 
+**Staging refreshed from production 2026-10-13** (`make refresh-from-production`): 68 projects,
+20 primary-menu items, latest content 2026-08-17 — identical to production. The mega-menu came
+across intact (production has it), so `setup-mega-menu.sh` did not need re-running.
+
 Preset classes used in existing content (local DB, content current through 2026-08-13; re-check on
 production during the cutover rehearsal):
 
@@ -41,10 +45,38 @@ production during the cutover rehearsal):
 - **Style variants:** `is-style-muted` (1638), `subheading` (18), `pills` (12), `animated` (8),
   `numbered-list` (2), `nous-accent` (2), `dark` (2), `focal-top` (53, IX) — all must keep working.
 
+## Phase 1 notes
+
+- **Dim grey re-valued for WCAG AA.** The mockup's `#5d6066` is 3.16:1 on the page background;
+  `grey-5` is now `#7d8086` (≥ 4.6:1 on every surface) and `grey-3` (muted) `#9a9ca3`.
+- **Header and footer are IX content partials** (Appearance → Partials), fully block-authored like
+  celebrityautobiography. `views/header.twig` / `footer.twig` are thin wrappers; ContentPartial is
+  no longer opted out. Re-enabled core blocks: navigation(-link/-submenu), site-title, search.
+  - **Header partial:** site title (CSS draws the V mark) + version chip, `core/navigation`
+    (`wp_navigation` "Primary Navigation"; core overlay below 992px), `core/search` (⌘K focuses it),
+    CTA button.
+  - **Footer partial:** CTA panel (Panel style), link columns, outline wordmark (html block,
+    `aria-hidden`), bar (copyright, `core/social-links`, colophon). Static © year — update in the CMS
+    each January.
+  - **Footer — Compact:** same minus the CTA panel; `/contact/` uses it via the page's
+    Header & Footer override (its form already does the CTA's job).
+  - **Seeded by** `scripts/redesign/seed-content-partials.php` from `scripts/redesign/content/partials/*.html`
+    (idempotent; FORCE=1 overwrites, DRY_RUN=1 previews). Safe to run before the code deploy.
+  - **Dropped:** the classic-menu mega-menu overlay and its dynamic latest-projects/posts feeds, and
+    the custom expanding search. Classic `primary`/`footer` menu locations stay registered but render
+    nowhere; `scripts/setup-mega-menu.sh` and the RUNBOOK's mega-menu re-apply step become obsolete
+    at launch. Site Settings `footer_description`, `contact_page`, `social_icons` no longer feed the
+    chrome (content now lives in the partials).
+- **Fonts:** Inter Tight 400/500/600, Instrument Serif 400 + italic, JetBrains Mono 400/500 —
+  latin-subset woff2 from Fontsource (OFL, licenses alongside), ~150 KB total; Inter Tight 400/500
+  preloaded. Google Fonts removed.
+- **E2E accessibility audits run with reduced motion** so axe checks the settled render; the
+  pre-redesign suite already flaked on mid-animation contrast.
+
 ## Phases
 
 - [x] **0 — Setup:** this doc, mockup source, preset-class audit.
-- [ ] **1 — Foundation:** tokens (palette re-valued under existing slugs, new font families + display
+- [x] **1 — Foundation:** tokens (palette re-valued under existing slugs, new font families + display
   sizes), remove light mode, self-host fonts, style vocabulary (`eyebrow`, `chips`, `panel`,
   `stat-strip`, `terminal`, serif-italic accent format), new header + footer.
 - [ ] **2 — Project data model:** ACF `group_project_fields` (`client`, `role`, `project_year`,
@@ -55,14 +87,17 @@ production during the cutover rehearsal):
 - [ ] **4 — Project detail:** field-driven header + meta strip, browser-frame hero, sticky TOC
   (section-navigator refactor), content patterns, next/related.
 - [ ] **5 — Homepage + remaining pages:** homepage per mockup; token/hero pass on Meet me, Framework,
-  Contact, Privacy, Nous Signal.
+  Contact, Privacy, Nous Signal. **Privacy policy copy must be rewritten**: it discloses Fira Code
+  loading from Google Fonts and a light/dark-mode preference — both removed in Phase 1.
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
 ## Cutover checklist (production)
 
 1. `mysqldump` the production DB.
-2. `migrate-project-fields.php` on production (additive; old theme ignores the fields).
+2. `migrate-project-fields.php` and `seed-content-partials.php` on production (both additive; the
+   old theme ignores the fields and the partials). Seeding before the deploy means the new header
+   and footer exist the moment the new code goes live — without them the site renders no chrome.
 3. `make deploy-production` — confirm the ref-update line, not the banner.
 4. `strip-legacy-project-header.php` + `cutover.php` on production.
 5. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`, twice;
@@ -73,6 +108,7 @@ production during the cutover rehearsal):
 
 ## Post-launch
 
-- Delete `scripts/redesign/` and `docs/redesign-2026/mockups/`.
+- Delete `scripts/redesign/`, `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`;
+  propose removing the RUNBOOK's mega-menu re-apply step.
 - Update the README Project section (currently documents methods and a block name that don't exist).
 - Propose CLAUDE.md updates for review.

@@ -8,3 +8,24 @@ p.is-style-muted {
     font-size: var(--wp--preset--font-size--30);
     color: var(--color-text-muted);
 }
+
+// Eyebrow style — mono section label with a short accent rule
+// ("— 01 / Recent work"). Sits above display headings.
+p.is-style-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 12px;
+    letter-spacing: var(--wp--custom--tracking--label);
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+
+    &::before {
+        content: '';
+        flex-shrink: 0;
+        width: 18px;
+        height: 1px;
+        background: var(--wp--preset--color--accent-1);
+    }
+}

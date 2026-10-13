@@ -7,7 +7,8 @@ namespace ChildTheme\Providers\Theme\Hooks;
 use Mythus\Hooks\BlockStyles;
 
 /**
- * Registers custom block styles for text blocks (core/paragraph, core/list, core/code, core/table).
+ * Registers custom block styles for text blocks (core/paragraph, core/list, core/code,
+ * core/preformatted, core/table, core/button, core/heading).
  *
  * Also removes the bundled core block theme stylesheet and dequeues
  * specific core block styles that conflict with theme styles.
@@ -45,13 +46,23 @@ class TextBlockStyles extends BlockStyles
             'label' => __('Muted', 'vincentragosta'),
         ];
 
+        $terminalStyle = [
+            'name'  => 'terminal',
+            'label' => __('Terminal', 'vincentragosta'),
+        ];
+
         return [
-            'core/paragraph' => [$mutedStyle],
+            'core/paragraph' => [
+                $mutedStyle,
+                ['name' => 'eyebrow', 'label' => __('Eyebrow', 'vincentragosta')],
+            ],
             'core/list' => [
                 $mutedStyle,
                 ['name' => 'pills', 'label' => __('Pills', 'vincentragosta')],
+                ['name' => 'chips', 'label' => __('Chips', 'vincentragosta')],
             ],
-            'core/code' => [$mutedStyle],
+            'core/code' => [$mutedStyle, $terminalStyle],
+            'core/preformatted' => [$terminalStyle],
             'core/table' => [$mutedStyle],
             'core/button' => [$mutedStyle],
             'core/heading' => [

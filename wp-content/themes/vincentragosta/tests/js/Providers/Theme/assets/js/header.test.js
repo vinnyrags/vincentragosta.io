@@ -1,270 +1,103 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
-    STORAGE_KEY,
-    LIGHT_MODE_CLASS,
-    prefersLightMode,
-    updateModeToggleState,
-    updateMenuToggleState,
-    getFocusableElements,
-    toggleOverlay,
-    initModeToggle,
+    setHeaderHeight,
+    isSearchShortcut,
+    focusSearch,
+    initSearchShortcut,
 } from '../../../../../../src/Providers/Theme/assets/js/header.js';
 
-describe('prefersLightMode', () => {
-    it('returns true when localStorage has "light"', () => {
-        localStorage.setItem(STORAGE_KEY, 'light');
+const searchHeader = () => {
+    document.body.innerHTML = `
+        <header class="header">
+            <form class="wp-block-search">
+                <input class="wp-block-search__input" type="search" value="query" />
+            </form>
+        </header>`;
+    return document.querySelector('.wp-block-search__input');
+};
 
-        expect(prefersLightMode()).toBe(true);
+describe('setHeaderHeight', () => {
+    it('sets --header-height from the header element', () => {
+        document.body.innerHTML = '<header class="header"></header>';
+        Object.defineProperty(document.querySelector('.header'), 'offsetHeight', { value: 82 });
+
+        setHeaderHeight();
+
+        expect(document.documentElement.style.getPropertyValue('--header-height')).toBe('82px');
     });
 
-    it('returns false when localStorage has "dark"', () => {
-        localStorage.setItem(STORAGE_KEY, 'dark');
+    it('sets --header-height to 0 when the page has no header', () => {
+        document.body.innerHTML = '';
 
-        expect(prefersLightMode()).toBe(false);
-    });
+        setHeaderHeight();
 
-    it('falls back to matchMedia when no saved preference', () => {
-        window.matchMedia = vi.fn().mockImplementation((query) => ({
-            matches: query === '(prefers-color-scheme: light)',
-            media: query,
-            addEventListener: vi.fn(),
-            removeEventListener: vi.fn(),
-        }));
-
-        expect(prefersLightMode()).toBe(true);
-    });
-
-    it('returns false when matchMedia prefers dark and no saved preference', () => {
-        window.matchMedia = vi.fn().mockReturnValue({
-            matches: false,
-            media: '',
-            addEventListener: vi.fn(),
-            removeEventListener: vi.fn(),
-        });
-
-        expect(prefersLightMode()).toBe(false);
+        expect(document.documentElement.style.getPropertyValue('--header-height')).toBe('0px');
     });
 });
 
-describe('updateModeToggleState', () => {
-    it('sets aria-pressed to true and label for light mode', () => {
-        const toggle = document.createElement('button');
+describe('isSearchShortcut', () => {
+    const key = (init) => new KeyboardEvent('keydown', init);
 
-        updateModeToggleState(toggle, true);
-
-        expect(toggle.getAttribute('aria-pressed')).toBe('true');
-        expect(toggle.getAttribute('aria-label')).toBe('Switch to dark mode');
+    it('matches Cmd+K', () => {
+        expect(isSearchShortcut(key({ key: 'k', metaKey: true }))).toBe(true);
     });
 
-    it('sets aria-pressed to false and label for dark mode', () => {
-        const toggle = document.createElement('button');
-
-        updateModeToggleState(toggle, false);
-
-        expect(toggle.getAttribute('aria-pressed')).toBe('false');
-        expect(toggle.getAttribute('aria-label')).toBe('Switch to light mode');
-    });
-});
-
-describe('updateMenuToggleState', () => {
-    it('sets aria-expanded to true and label when open', () => {
-        const toggle = document.createElement('button');
-
-        updateMenuToggleState(toggle, true);
-
-        expect(toggle.getAttribute('aria-expanded')).toBe('true');
-        expect(toggle.getAttribute('aria-label')).toBe('Close menu');
+    it('matches Ctrl+K and uppercase K', () => {
+        expect(isSearchShortcut(key({ key: 'K', ctrlKey: true }))).toBe(true);
     });
 
-    it('sets aria-expanded to false and label when closed', () => {
-        const toggle = document.createElement('button');
-
-        updateMenuToggleState(toggle, false);
-
-        expect(toggle.getAttribute('aria-expanded')).toBe('false');
-        expect(toggle.getAttribute('aria-label')).toBe('Open menu');
+    it('ignores plain K and other modifier combinations', () => {
+        expect(isSearchShortcut(key({ key: 'k' }))).toBe(false);
+        expect(isSearchShortcut(key({ key: 'k', metaKey: true, shiftKey: true }))).toBe(false);
+        expect(isSearchShortcut(key({ key: 'k', ctrlKey: true, altKey: true }))).toBe(false);
+        expect(isSearchShortcut(key({ key: 'j', metaKey: true }))).toBe(false);
     });
 });
 
-describe('getFocusableElements', () => {
-    it('finds links and buttons', () => {
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <a href="/home">Home</a>
-            <button>Click me</button>
-            <a href="/about">About</a>
-        `;
-        document.body.appendChild(container);
+describe('focusSearch', () => {
+    it('focuses the header search input and reports success', () => {
+        const input = searchHeader();
 
-        const elements = getFocusableElements(container);
-
-        expect(elements).toHaveLength(3);
+        expect(focusSearch()).toBe(true);
+        expect(document.activeElement).toBe(input);
     });
 
-    it('excludes disabled buttons', () => {
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <button>Enabled</button>
-            <button disabled>Disabled</button>
-        `;
-        document.body.appendChild(container);
+    it('returns false when the header has no search block', () => {
+        document.body.innerHTML = '<header class="header"></header>';
 
-        const elements = getFocusableElements(container);
-
-        expect(elements).toHaveLength(1);
-        expect(elements[0].textContent).toBe('Enabled');
-    });
-
-    it('excludes elements with tabindex="-1"', () => {
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <a href="/home">Home</a>
-            <div tabindex="-1">Not focusable</div>
-            <div tabindex="0">Focusable</div>
-        `;
-        document.body.appendChild(container);
-
-        const elements = getFocusableElements(container);
-
-        expect(elements).toHaveLength(2);
-    });
-
-    it('returns empty array for container with no focusable elements', () => {
-        const container = document.createElement('div');
-        container.innerHTML = '<p>No focusable elements</p>';
-        document.body.appendChild(container);
-
-        const elements = getFocusableElements(container);
-
-        expect(elements).toHaveLength(0);
+        expect(focusSearch()).toBe(false);
     });
 });
 
-describe('toggleOverlay', () => {
-    function createOverlayFixture() {
-        const toggle = document.createElement('button');
-        toggle.setAttribute('aria-expanded', 'false');
+describe('initSearchShortcut', () => {
+    it('Cmd+K focuses search and prevents the browser default', () => {
+        const input = searchHeader();
+        initSearchShortcut();
 
-        const overlay = document.createElement('div');
-        overlay.id = 'nav-overlay';
-        overlay.setAttribute('hidden', '');
-        overlay.innerHTML = `
-            <a href="/home">Home</a>
-            <a href="/about">About</a>
-        `;
+        const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true, cancelable: true });
+        document.dispatchEvent(event);
 
-        document.body.appendChild(toggle);
-        document.body.appendChild(overlay);
-
-        return { toggle, overlay };
-    }
-
-    it('opens overlay: removes hidden, adds is-open, adds nav-overlay-open to html', () => {
-        const { toggle, overlay } = createOverlayFixture();
-
-        toggleOverlay(toggle, overlay, true);
-
-        expect(overlay.hasAttribute('hidden')).toBe(false);
-        expect(overlay.classList.contains('is-open')).toBe(true);
-        expect(document.documentElement.classList.contains('nav-overlay-open')).toBe(true);
+        expect(document.activeElement).toBe(input);
+        expect(event.defaultPrevented).toBe(true);
     });
 
-    it('updates toggle ARIA when opening', () => {
-        const { toggle, overlay } = createOverlayFixture();
+    it('leaves the browser default alone when there is no search block', () => {
+        document.body.innerHTML = '<header class="header"></header>';
+        initSearchShortcut();
 
-        toggleOverlay(toggle, overlay, true);
+        const event = new KeyboardEvent('keydown', { key: 'k', ctrlKey: true, cancelable: true });
+        document.dispatchEvent(event);
 
-        expect(toggle.getAttribute('aria-expanded')).toBe('true');
-        expect(toggle.getAttribute('aria-label')).toBe('Close menu');
+        expect(event.defaultPrevented).toBe(false);
     });
 
-    it('focuses first link when opening', () => {
-        const { toggle, overlay } = createOverlayFixture();
-        const firstLink = overlay.querySelector('a');
-        const focusSpy = vi.spyOn(firstLink, 'focus');
+    it('Escape blurs the focused search input', () => {
+        const input = searchHeader();
+        initSearchShortcut();
+        input.focus();
 
-        toggleOverlay(toggle, overlay, true);
+        input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
 
-        expect(focusSpy).toHaveBeenCalledWith({ preventScroll: true });
-    });
-
-    it('closes overlay: removes is-open, removes nav-overlay-open', () => {
-        const { toggle, overlay } = createOverlayFixture();
-
-        // Open first
-        toggleOverlay(toggle, overlay, true);
-
-        // Mock reduced motion for synchronous hidden
-        window.matchMedia = vi.fn().mockReturnValue({
-            matches: true,
-            media: '',
-            addEventListener: vi.fn(),
-            removeEventListener: vi.fn(),
-        });
-
-        toggleOverlay(toggle, overlay, false);
-
-        expect(overlay.classList.contains('is-open')).toBe(false);
-        expect(document.documentElement.classList.contains('nav-overlay-open')).toBe(false);
-        expect(overlay.hasAttribute('hidden')).toBe(true);
-    });
-
-    it('updates toggle ARIA when closing', () => {
-        const { toggle, overlay } = createOverlayFixture();
-        toggleOverlay(toggle, overlay, true);
-
-        window.matchMedia = vi.fn().mockReturnValue({
-            matches: true,
-            media: '',
-            addEventListener: vi.fn(),
-            removeEventListener: vi.fn(),
-        });
-
-        toggleOverlay(toggle, overlay, false);
-
-        expect(toggle.getAttribute('aria-expanded')).toBe('false');
-        expect(toggle.getAttribute('aria-label')).toBe('Open menu');
-    });
-});
-
-describe('initModeToggle', () => {
-    it('toggles light-mode class on click', () => {
-        const modeToggle = document.createElement('button');
-        modeToggle.classList.add('header__mode-toggle');
-        document.body.appendChild(modeToggle);
-
-        initModeToggle();
-        modeToggle.click();
-
-        expect(document.documentElement.classList.contains(LIGHT_MODE_CLASS)).toBe(true);
-    });
-
-    it('persists preference to localStorage on click', () => {
-        const modeToggle = document.createElement('button');
-        modeToggle.classList.add('header__mode-toggle');
-        document.body.appendChild(modeToggle);
-
-        initModeToggle();
-        modeToggle.click();
-
-        expect(localStorage.getItem(STORAGE_KEY)).toBe('light');
-    });
-
-    it('toggles back to dark on second click', () => {
-        const modeToggle = document.createElement('button');
-        modeToggle.classList.add('header__mode-toggle');
-        document.body.appendChild(modeToggle);
-
-        initModeToggle();
-        modeToggle.click(); // light
-        modeToggle.click(); // dark
-
-        expect(document.documentElement.classList.contains(LIGHT_MODE_CLASS)).toBe(false);
-        expect(localStorage.getItem(STORAGE_KEY)).toBe('dark');
-    });
-
-    it('does nothing when toggle element is missing', () => {
-        // No .header__mode-toggle in DOM
-        expect(() => initModeToggle()).not.toThrow();
+        expect(document.activeElement).not.toBe(input);
     });
 });

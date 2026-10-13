@@ -7,10 +7,11 @@ namespace ChildTheme\Providers\Theme\Hooks;
 use Mythus\Contracts\Hook;
 
 /**
- * Registers the Accent Highlight rich text format in the block editor.
+ * Registers the accent rich text formats in the block editor.
  *
- * Adds a toolbar button that wraps selected text in a <mark> with the
- * .accent-highlight class, styled via var(--wp--preset--color--accent-1).
+ * Adds two toolbar buttons: Accent (<mark class="accent-highlight">, styled
+ * via var(--wp--preset--color--accent-1)) and Serif accent
+ * (<em class="serif-accent">, the italic serif word in display headings).
  */
 class AccentHighlight implements Hook
 {

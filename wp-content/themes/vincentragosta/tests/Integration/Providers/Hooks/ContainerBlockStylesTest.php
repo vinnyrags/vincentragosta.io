@@ -80,4 +80,27 @@ class ContainerBlockStylesTest extends BaseTestCase
         $this->assertArrayHasKey('numbered-list', $styles);
         $this->assertEquals('Numbered List', $styles['numbered-list']['label']);
     }
+
+    public function testPanelAndStatStripStylesAreRegisteredForGroup(): void
+    {
+        $this->hook->registerStyles();
+
+        $styles = \WP_Block_Styles_Registry::get_instance()
+            ->get_registered_styles_for_block('core/group');
+
+        $this->assertArrayHasKey('panel', $styles);
+        $this->assertEquals('Panel', $styles['panel']['label']);
+        $this->assertArrayHasKey('stat-strip', $styles);
+        $this->assertEquals('Stat Strip', $styles['stat-strip']['label']);
+    }
+
+    public function testStatStripStyleIsRegisteredForColumns(): void
+    {
+        $this->hook->registerStyles();
+
+        $styles = \WP_Block_Styles_Registry::get_instance()
+            ->get_registered_styles_for_block('core/columns');
+
+        $this->assertArrayHasKey('stat-strip', $styles);
+    }
 }

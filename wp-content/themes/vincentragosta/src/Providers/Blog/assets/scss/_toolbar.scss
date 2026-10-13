@@ -40,7 +40,7 @@
   width: 100%;
   padding: var(--wp--preset--spacing--20);
   font-size: inherit;
-  font-family: var(--wp--preset--font-family--fira-code);
+  font-family: var(--wp--preset--font-family--mono);
   color: var(--color-text);
   background: transparent;
   border: none;
@@ -80,7 +80,7 @@
 
 .blog-grid__search-all {
   color: var(--wp--preset--color--nous-red);
-  font-family: var(--wp--preset--font-family--fira-code);
+  font-family: var(--wp--preset--font-family--mono);
   font-size: var(--wp--preset--font-size--10);
   text-decoration: none;
   letter-spacing: 0.05em;
@@ -105,7 +105,7 @@
   text-align: center;
   color: var(--color-text-muted);
   font-size: var(--wp--preset--font-size--30);
-  font-family: var(--wp--preset--font-family--fira-code);
+  font-family: var(--wp--preset--font-family--mono);
 }
 
 // Show empty message when all cards are hidden.

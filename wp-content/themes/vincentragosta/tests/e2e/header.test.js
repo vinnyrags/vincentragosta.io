@@ -1,73 +1,67 @@
 const { test, expect } = require('@playwright/test');
 
+// The header is the `header` content partial: core/site-title, core/navigation
+// (with its own mobile overlay), core/search, and a CTA button.
+const OPEN = '.header .wp-block-navigation__responsive-container-open';
+const OVERLAY = '.header .wp-block-navigation__responsive-container';
+
 test.describe('Header interactions', () => {
     test.beforeEach(async ({ page }) => {
-        // Lock prefers-color-scheme to dark so the inline head script
-        // doesn't pre-apply light-mode based on the host machine — without
-        // this, a Mac in light mode would start the page in light-mode and
-        // the dark→light assertion below would inverse-fail.
-        await page.emulateMedia({ colorScheme: 'dark' });
         await page.goto('/');
         await page.waitForLoadState('networkidle');
     });
 
-    test('dark/light mode toggle switches class and persists', async ({ page }) => {
-        const modeToggle = page.locator('.header__mode-toggle');
-        await expect(modeToggle).toBeVisible();
+    test('desktop shows inline nav, search, and CTA without the overlay toggle', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
 
-        // Click toggle to switch to light mode
-        await modeToggle.click();
-        await expect(page.locator('html')).toHaveClass(/light-mode/);
-
-        // Verify persistence across reload
-        await page.reload();
-        await page.waitForLoadState('networkidle');
-        await expect(page.locator('html')).toHaveClass(/light-mode/);
-
-        // Toggle back to dark mode
-        await page.locator('.header__mode-toggle').click();
-        await expect(page.locator('html')).not.toHaveClass(/light-mode/);
+        await expect(page.locator('.header .wp-block-navigation-item__content').first()).toBeVisible();
+        await expect(page.locator('.header .wp-block-search__input')).toBeVisible();
+        await expect(page.locator('.header__cta .wp-block-button__link')).toBeVisible();
+        await expect(page.locator(OPEN)).toBeHidden();
     });
 
-    test('hamburger menu opens overlay and Escape closes it', async ({ page }) => {
-        // Set mobile viewport to trigger hamburger menu
-        await page.setViewportSize({ width: 375, height: 812 });
-        await page.reload();
-        await page.waitForLoadState('networkidle');
+    test('Cmd/Ctrl+K focuses search and Escape blurs it', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        const input = page.locator('.header .wp-block-search__input');
 
-        const menuToggle = page.locator('.header__menu-toggle');
-        await expect(menuToggle).toBeVisible();
+        await page.keyboard.press('ControlOrMeta+k');
+        await expect(input).toBeFocused();
 
-        // Open menu
-        await menuToggle.click();
-        await expect(page.locator('#nav-overlay')).toBeVisible();
-        await expect(menuToggle).toHaveAttribute('aria-expanded', 'true');
-
-        // Close with Escape
         await page.keyboard.press('Escape');
-        await expect(menuToggle).toHaveAttribute('aria-expanded', 'false');
+        await expect(input).not.toBeFocused();
     });
 
-    test('focus is trapped within open overlay', async ({ page }) => {
+    test('tablet collapses navigation into the overlay toggle', async ({ page }) => {
+        await page.setViewportSize({ width: 820, height: 1000 });
+
+        await expect(page.locator(OPEN)).toBeVisible();
+        await expect(page.locator('.header .wp-block-navigation-item__content').first()).toBeHidden();
+    });
+
+    test('mobile overlay opens, shows links, and Escape closes it', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
-        await page.reload();
-        await page.waitForLoadState('networkidle');
 
-        const menuToggle = page.locator('.header__menu-toggle');
-        await menuToggle.click();
-        await expect(page.locator('#nav-overlay')).toBeVisible();
+        await page.locator(OPEN).click();
+        await expect(page.locator(`${OVERLAY}.is-menu-open`)).toBeVisible();
+        await expect(page.locator(`${OVERLAY} .wp-block-navigation-item__content`).first()).toBeVisible();
 
-        // Tab through all focusable elements — should cycle back
-        const overlay = page.locator('#nav-overlay');
-        const links = overlay.locator('a[href]');
-        const linkCount = await links.count();
+        await page.keyboard.press('Escape');
+        await expect(page.locator(`${OVERLAY}.is-menu-open`)).toHaveCount(0);
+    });
 
-        // Tab past all links — focus should wrap to menu toggle
-        for (let i = 0; i <= linkCount; i++) {
+    test('focus stays inside the open overlay', async ({ page }) => {
+        await page.setViewportSize({ width: 375, height: 812 });
+
+        await page.locator(OPEN).click();
+        const overlay = page.locator(`${OVERLAY}.is-menu-open`);
+        await expect(overlay).toBeVisible();
+
+        const linkCount = await overlay.locator('a[href]').count();
+        for (let i = 0; i <= linkCount + 1; i++) {
             await page.keyboard.press('Tab');
         }
 
-        // After wrapping, focus should be on the menu toggle
-        await expect(menuToggle).toBeFocused();
+        const focusInside = await overlay.evaluate((el) => el.contains(document.activeElement));
+        expect(focusInside).toBe(true);
     });
 });

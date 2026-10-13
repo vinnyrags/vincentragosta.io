@@ -40,7 +40,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--wp--preset--font-family--fira-code);
+    font-family: var(--wp--preset--font-family--mono);
     font-size: 0.85rem;
     color: var(--wp--preset--color--nous-red);
     background: rgba(0, 0, 0, 0.85);
@@ -68,12 +68,12 @@
     justify-content: space-between;
     padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--30);
     background: var(--wp--preset--color--grey-2);
-    font-family: var(--wp--preset--font-family--fira-code);
+    font-family: var(--wp--preset--font-family--mono);
   }
 
   // Signal ID stamp
   &__id {
-    font-family: var(--wp--preset--font-family--fira-code);
+    font-family: var(--wp--preset--font-family--mono);
     font-size: var(--wp--preset--font-size--10);
     font-weight: 500;
     letter-spacing: 0.08em;
@@ -94,7 +94,7 @@
   // Priority and consumption meta
   &__priority,
   &__consumption {
-    font-family: var(--wp--preset--font-family--fira-code);
+    font-family: var(--wp--preset--font-family--mono);
     font-size: var(--wp--preset--font-size--10);
     font-weight: 500;
     letter-spacing: 0.05em;

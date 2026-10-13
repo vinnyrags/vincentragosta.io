@@ -86,7 +86,7 @@ class BlogProvider extends BaseBlogProvider
 
         wp_add_inline_style(
             'wp-edit-blocks',
-            'body { --wp--preset--color--accent-1: var(--wp--preset--color--nous-red, #ff3333); --wp--custom--color--accent-1-dark: #cc2929; }'
+            'body { --wp--preset--color--accent-1: var(--wp--preset--color--nous-red, #ff3333); }'
         );
     }
 

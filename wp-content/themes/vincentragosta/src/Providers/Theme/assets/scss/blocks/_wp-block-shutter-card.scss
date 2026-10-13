@@ -21,23 +21,6 @@
   --shutter-card-toggle-hover-border: var(--wp--preset--color--accent-1);
 }
 
-.light-mode {
-  --shutter-card-bg: var(--wp--preset--color--base);
-  --shutter-card-border: var(--wp--preset--color--grey-3);
-  --shutter-card-text: var(--wp--preset--color--contrast);
-  --shutter-card-id: var(--wp--preset--color--grey-3);
-  --shutter-card-inactive-bg: var(--wp--preset--color--grey-3);
-  --shutter-card-inactive-text: var(--wp--preset--color--contrast);
-  --shutter-card-toggle-bg: var(--wp--preset--color--contrast);
-  --shutter-card-toggle-icon: var(--wp--preset--color--base);
-  --shutter-card-toggle-border: var(--wp--preset--color--contrast);
-  --shutter-card-toggle-inactive-icon: var(--wp--preset--color--contrast);
-  --shutter-card-toggle-inactive-border: var(--wp--preset--color--contrast);
-  --shutter-card-toggle-hover-bg: var(--wp--preset--color--accent-1);
-  --shutter-card-toggle-hover-icon: var(--wp--preset--color--base);
-  --shutter-card-toggle-hover-border: var(--wp--preset--color--base);
-}
-
 // ==========================================================================
 // Theming — layered on top of parent's structural styles
 // ==========================================================================
@@ -60,7 +43,7 @@
 
   &__title {
     font-size: var(--wp--preset--font-size--60);
-    font-family: var(--wp--preset--font-family--reckless-neue);
+    font-family: var(--wp--preset--font-family--sans);
     margin-block-start: calc(var(--wp--preset--spacing--20) - var(--wp--preset--spacing--40));
   }
 

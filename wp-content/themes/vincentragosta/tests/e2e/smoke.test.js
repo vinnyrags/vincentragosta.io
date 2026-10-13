@@ -9,6 +9,21 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.footer')).toBeVisible();
     });
 
+    test('header and footer render from the default content partials', async ({ page }) => {
+        await page.goto('/');
+
+        await expect(page.locator('header.site-header--header')).toHaveCount(1);
+        await expect(page.locator('footer.site-footer--footer')).toHaveCount(1);
+        await expect(page.locator('.site-footer .footer-cta')).toHaveCount(1);
+    });
+
+    test('contact page uses the compact footer partial (no CTA panel)', async ({ page }) => {
+        await page.goto('/contact/');
+
+        await expect(page.locator('footer.site-footer--footer-compact')).toHaveCount(1);
+        await expect(page.locator('.site-footer .footer-cta')).toHaveCount(0);
+    });
+
     test('projects page loads with project cards and sort dropdown', async ({ page }) => {
         const response = await page.goto('/projects/');
 

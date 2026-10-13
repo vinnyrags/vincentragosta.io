@@ -70,14 +70,6 @@
         }
     }
 
-    .light-mode & {
-        &__section--background::before,
-        &__section--results::before,
-        &__related::before {
-            background-color: rgba(255, 255, 255, 0.85);
-        }
-    }
-
     &__section-inner {
         max-width: var(--wp--custom--layout--narrow);
         margin-inline: auto;
@@ -93,7 +85,7 @@
     }
 
     &__section-heading {
-        font-family: var(--wp--preset--font-family--reckless-neue);
+        font-family: var(--wp--preset--font-family--sans);
         font-weight: 400;
         margin: 0;
 
@@ -142,7 +134,7 @@
     }
 
     &__related-heading {
-        font-family: var(--wp--preset--font-family--reckless-neue);
+        font-family: var(--wp--preset--font-family--sans);
         font-weight: 400;
     }
 

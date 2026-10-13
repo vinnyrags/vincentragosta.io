@@ -190,11 +190,6 @@
   }
 }
 
-// Light mode
-.light-mode .shop-cart-drawer__panel {
-  background: var(--color-bg);
-}
-
 // Reduced motion
 @include reduced-motion {
   .shop-cart-drawer__backdrop,

@@ -8,3 +8,52 @@
     font-size: var(--wp--preset--font-size--10);
     color: var(--color-text-muted);
 }
+
+// Terminal style — a window-chrome panel for build logs and deploy output.
+// Lines containing "✓" can be wrapped in <mark> (Accent format) to go lime.
+:is(.wp-block-code, .wp-block-preformatted).is-style-terminal {
+    position: relative;
+    padding: 58px 22px 22px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 14px;
+    background: #0c0d0f;
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 13.5px;
+    line-height: 2;
+    color: var(--color-text-muted);
+    white-space: pre-wrap;
+    overflow-x: auto;
+
+    // Title bar: traffic-light dots + rule
+    &::before {
+        content: '';
+        position: absolute;
+        inset-block-start: 15px;
+        inset-inline-start: 16px;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--color-border-strong);
+        box-shadow: 18px 0 0 var(--color-border-strong), 36px 0 0 var(--color-border-strong);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        inset-block-start: 40px;
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    code {
+        font: inherit;
+        color: inherit;
+    }
+
+    mark,
+    .accent-highlight {
+        background: none;
+        color: var(--wp--preset--color--accent-1);
+    }
+}

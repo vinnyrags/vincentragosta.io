@@ -1,0 +1,38 @@
+// ==========================================================================
+// Hero backdrop — faint 80px grid masked to an ellipse, plus a lime glow.
+// Add `has-grid-backdrop` (Advanced → Additional CSS class) to a hero group.
+// ==========================================================================
+
+.has-grid-backdrop {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    &::before {
+        inset: 0;
+        background-image:
+            linear-gradient(var(--color-border) 1px, transparent 1px),
+            linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+        background-size: 80px 80px;
+        opacity: 0.45;
+        mask-image: radial-gradient(ellipse at 60% 30%, #000 0%, transparent 75%);
+    }
+
+    &::after {
+        inset-block-start: 5%;
+        inset-inline-end: -15%;
+        width: min(900px, 80vw);
+        aspect-ratio: 9 / 7;
+        border-radius: 50%;
+        background: radial-gradient(circle, var(--color-accent-glow), transparent 65%);
+        filter: blur(60px);
+    }
+}

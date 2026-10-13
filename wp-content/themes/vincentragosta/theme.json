@@ -11,10 +11,9 @@
         "narrow": "1200px",
         "wide": "1600px"
       },
-      "borderRadius": "10px",
+      "borderRadius": "16px",
       "color": {
         "error": "#e74c3c",
-        "accent1Dark": "#3d8500",
         "brandTwitch": "#9146ff",
         "brandYoutube": "#ff0000",
         "brandTiktok": "#00f2ea",
@@ -26,6 +25,18 @@
         "sm": "16px",
         "md": "36px",
         "lg": "48px"
+      },
+      "radius": {
+        "sm": "5px",
+        "md": "8px",
+        "lg": "16px",
+        "xl": "24px"
+      },
+      "tracking": {
+        "display": "-0.045em",
+        "heading": "-0.03em",
+        "tight": "-0.015em",
+        "label": "0.06em"
       }
     },
     "spacing": {
@@ -70,43 +81,48 @@
     "color": {
       "palette": [
         {
-          "color": "#FFFFFF",
+          "color": "#ededee",
           "name": "Base",
           "slug": "base"
         },
         {
-          "color": "#151515",
+          "color": "#08090a",
           "name": "Contrast",
           "slug": "contrast"
         },
         {
-          "color": "#ceff00",
+          "color": "#d4ff3a",
           "name": "Accent 1",
           "slug": "accent-1"
         },
         {
-          "color": "#1c1c1f",
-          "name": "Grey 1",
+          "color": "#101113",
+          "name": "Grey 1 (panel)",
           "slug": "grey-1"
         },
         {
-          "color": "#313135",
-          "name": "Grey 2",
+          "color": "#141518",
+          "name": "Panel 2",
+          "slug": "panel-2"
+        },
+        {
+          "color": "#1f2124",
+          "name": "Grey 2 (line)",
           "slug": "grey-2"
         },
         {
-          "color": "#afafb6",
-          "name": "Grey 3",
+          "color": "#9a9ca3",
+          "name": "Grey 3 (muted)",
           "slug": "grey-3"
         },
         {
-          "color": "#494950",
-          "name": "Grey 4",
+          "color": "#2a2c30",
+          "name": "Grey 4 (line strong)",
           "slug": "grey-4"
         },
         {
-          "color": "#95959d",
-          "name": "Grey 5",
+          "color": "#7d8086",
+          "name": "Grey 5 (dim)",
           "slug": "grey-5"
         },
         {
@@ -120,154 +136,170 @@
       "fontSizes": [
         {
           "fluid": false,
-          "name": "14px",
-          "size": "0.875rem",
+          "name": "13px",
+          "size": "0.8125rem",
           "slug": "10"
         },
         {
           "fluid": false,
-          "name": "16px",
-          "size": "1rem",
+          "name": "15px",
+          "size": "0.9375rem",
           "slug": "20"
         },
         {
           "fluid": {
-            "max": "1.375rem",
-            "min": "1.125rem"
+            "min": "1.0625rem",
+            "max": "1.1875rem"
           },
-          "name": "18px / 22px",
-          "size": "1.375rem",
+          "name": "17px / 19px",
+          "size": "1.1875rem",
           "slug": "30"
         },
         {
           "fluid": {
-            "max": "1.875rem",
-            "min": "1.25rem"
+            "min": "1.125rem",
+            "max": "1.3125rem"
           },
-          "name": "20px / 30px",
-          "size": "1.875rem",
+          "name": "18px / 21px",
+          "size": "1.3125rem",
           "slug": "40"
         },
         {
           "fluid": {
-            "max": "2.25rem",
-            "min": "1.5rem"
+            "min": "1.5rem",
+            "max": "2rem"
           },
-          "name": "24px / 36px",
-          "size": "2.25rem",
+          "name": "24px / 32px",
+          "size": "2rem",
           "slug": "50"
         },
         {
           "fluid": {
-            "max": "2.75rem",
-            "min": "2rem"
+            "min": "2rem",
+            "max": "3.375rem"
           },
-          "name": "32px / 44px",
-          "size": "2.75rem",
+          "name": "32px / 54px",
+          "size": "3.375rem",
           "slug": "60"
         },
         {
           "fluid": {
-            "max": "4.5rem",
-            "min": "3.125rem"
+            "min": "2.75rem",
+            "max": "4.5rem"
           },
-          "name": "50px / 72px",
-          "size": "3.125rem",
+          "name": "44px / 72px",
+          "size": "4.5rem",
           "slug": "70"
+        },
+        {
+          "fluid": {
+            "min": "3.5rem",
+            "max": "6rem"
+          },
+          "name": "56px / 96px",
+          "size": "6rem",
+          "slug": "80"
+        },
+        {
+          "fluid": {
+            "min": "4rem",
+            "max": "8.5rem"
+          },
+          "name": "64px / 136px",
+          "size": "8.5rem",
+          "slug": "90"
+        },
+        {
+          "fluid": {
+            "min": "4.5rem",
+            "max": "9.375rem"
+          },
+          "name": "72px / 150px",
+          "size": "9.375rem",
+          "slug": "100"
         }
       ],
       "fontFamilies": [
         {
-          "name": "Fira Code",
-          "slug": "fira-code",
-          "fontFamily": "'Fira Code', monospace"
-        },
-        {
-          "fontFamily": "\"Reckless Neue\", Georgia, Times, serif",
-          "name": "Reckless Neue",
-          "slug": "reckless-neue",
+          "name": "Sans (Inter Tight)",
+          "slug": "sans",
+          "fontFamily": "\"Inter Tight\", system-ui, -apple-system, \"Helvetica Neue\", Arial, sans-serif",
           "fontFace": [
             {
-              "fontFamily": "Reckless Neue",
+              "fontFamily": "Inter Tight",
               "fontWeight": "400",
               "fontStyle": "normal",
-              "fontStretch": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin.woff2",
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin.woff"
+                "file:./src/Providers/Theme/assets/fonts/inter-tight/inter-tight-400.woff2"
               ]
             },
             {
-              "fontFamily": "Reckless Neue",
-              "fontWeight": "400",
-              "fontStyle": "italic",
-              "fontStretch": "normal",
-              "src": [
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin-italic.woff2",
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-thin-italic.woff"
-              ]
-            },
-            {
-              "fontFamily": "Reckless Neue",
-              "fontWeight": "700",
+              "fontFamily": "Inter Tight",
+              "fontWeight": "500",
               "fontStyle": "normal",
-              "fontStretch": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light.woff2",
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light.woff"
+                "file:./src/Providers/Theme/assets/fonts/inter-tight/inter-tight-500.woff2"
               ]
             },
             {
-              "fontFamily": "Reckless Neue",
-              "fontWeight": "700",
-              "fontStyle": "italic",
-              "fontStretch": "normal",
+              "fontFamily": "Inter Tight",
+              "fontWeight": "600",
+              "fontStyle": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light-italic.woff2",
-                "file:./src/Providers/Theme/assets/fonts/reckless-neue/reckless-neue-light-italic.woff"
+                "file:./src/Providers/Theme/assets/fonts/inter-tight/inter-tight-600.woff2"
               ]
             }
           ]
         },
         {
-          "fontFamily": "\"Roobert\", \"Helvetica Neue\", Arial, sans-serif",
-          "name": "Roobert",
-          "slug": "roobert",
+          "name": "Serif (Instrument Serif)",
+          "slug": "serif",
+          "fontFamily": "\"Instrument Serif\", Georgia, \"Times New Roman\", serif",
           "fontFace": [
             {
-              "fontFamily": "Roobert",
+              "fontFamily": "Instrument Serif",
               "fontWeight": "400",
               "fontStyle": "normal",
-              "fontStretch": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-light.otf"
+                "file:./src/Providers/Theme/assets/fonts/instrument-serif/instrument-serif-400.woff2"
               ]
             },
             {
-              "fontFamily": "Roobert",
+              "fontFamily": "Instrument Serif",
               "fontWeight": "400",
               "fontStyle": "italic",
-              "fontStretch": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-light-italic.otf"
+                "file:./src/Providers/Theme/assets/fonts/instrument-serif/instrument-serif-400-italic.woff2"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "name": "Mono (JetBrains Mono)",
+          "slug": "mono",
+          "fontFamily": "\"JetBrains Mono\", ui-monospace, SFMono-Regular, Menlo, monospace",
+          "fontFace": [
             {
-              "fontFamily": "Roobert",
-              "fontWeight": "700",
+              "fontFamily": "JetBrains Mono",
+              "fontWeight": "400",
               "fontStyle": "normal",
-              "fontStretch": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-medium.otf"
+                "file:./src/Providers/Theme/assets/fonts/jetbrains-mono/jetbrains-mono-400.woff2"
               ]
             },
             {
-              "fontFamily": "Roobert",
-              "fontWeight": "700",
-              "fontStyle": "italic",
-              "fontStretch": "normal",
+              "fontFamily": "JetBrains Mono",
+              "fontWeight": "500",
+              "fontStyle": "normal",
+              "fontDisplay": "swap",
               "src": [
-                "file:./src/Providers/Theme/assets/fonts/roobert/roobert-medium-italic.otf"
+                "file:./src/Providers/Theme/assets/fonts/jetbrains-mono/jetbrains-mono-500.woff2"
               ]
             }
           ]
@@ -284,18 +316,17 @@
       "blockGap": "var:preset|spacing|40"
     },
     "typography": {
-      "fontFamily": "var:preset|font-family|roobert",
-      "fontSize": "var:preset|font-size|40",
+      "fontFamily": "var:preset|font-family|sans",
+      "fontSize": "var:preset|font-size|30",
       "fontWeight": "400",
-      "letterSpacing": "-0.3px",
-      "lineHeight": "1.5"
+      "letterSpacing": "-0.005em",
+      "lineHeight": "1.55"
     },
     "blocks": {
       "core/button": {
         "typography": {
           "fontSize": "var:preset|font-size|20",
-          "fontWeight": "700",
-          "textTransform": "uppercase"
+          "fontWeight": "500"
         }
       },
       "core/columns": {
@@ -341,46 +372,52 @@
     "elements": {
       "button": {
         "border": {
-          "radius": "9999px"
+          "radius": "var(--wp--custom--radius--md)",
+          "width": "1px",
+          "style": "solid",
+          "color": "var:preset|color|accent-1"
         },
         "color": {
-          "background": "var:preset|color|base",
+          "background": "var:preset|color|accent-1",
           "text": "var:preset|color|contrast"
         },
         "spacing": {
           "padding": {
-            "top": "var:preset|spacing|30",
-            "right": "var:preset|spacing|40",
-            "bottom": "var:preset|spacing|30",
-            "left": "var:preset|spacing|40"
+            "top": "0.625rem",
+            "right": "1.125rem",
+            "bottom": "0.625rem",
+            "left": "1.125rem"
           }
         },
         ":focus": {
           "outline": {
             "offset": "2px",
-            "color": "var:preset|color|accent-1"
+            "color": "var:preset|color|accent-1",
+            "width": "2px",
+            "style": "solid"
           }
         },
         ":hover": {
-          "border": {
-            "color": "transparent"
-          },
           "color": {
-            "background": "var:preset|color|accent-1",
+            "background": "var:preset|color|base",
             "text": "var:preset|color|contrast"
+          },
+          "border": {
+            "color": "var:preset|color|base"
           }
         },
         "typography": {
           "fontSize": "var:preset|font-size|20",
-          "fontWeight": "700",
-          "textTransform": "uppercase"
+          "fontWeight": "500",
+          "letterSpacing": "-0.005em"
         }
       },
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|reckless-neue",
-          "fontWeight": "400",
-          "lineHeight": "1",
+          "fontFamily": "var:preset|font-family|sans",
+          "fontWeight": "500",
+          "lineHeight": "1.02",
+          "letterSpacing": "var(--wp--custom--tracking--heading)",
           "fontSize": "var:preset|font-size|60"
         },
         "color": {
@@ -395,6 +432,29 @@
           "color": {
             "text": "var:preset|color|accent-1"
           }
+        }
+      },
+      "h1": {
+        "typography": {
+          "fontSize": "var:preset|font-size|90",
+          "lineHeight": "0.92",
+          "letterSpacing": "var(--wp--custom--tracking--display)"
+        }
+      },
+      "h2": {
+        "typography": {
+          "fontSize": "var:preset|font-size|70",
+          "lineHeight": "1",
+          "letterSpacing": "var(--wp--custom--tracking--display)"
+        }
+      },
+      "caption": {
+        "typography": {
+          "fontFamily": "var:preset|font-family|mono",
+          "fontSize": "var:preset|font-size|10"
+        },
+        "color": {
+          "text": "var:preset|color|grey-5"
         }
       }
     }

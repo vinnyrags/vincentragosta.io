@@ -98,7 +98,7 @@
 
   &__title {
     font-size: var(--wp--preset--font-size--60);
-    font-family: var(--wp--preset--font-family--reckless-neue);
+    font-family: var(--wp--preset--font-family--sans);
     font-weight: 400;
     line-height: 1.2;
     margin: var(--wp--preset--spacing--20) 0 0;
@@ -225,26 +225,6 @@
 // ==========================================================================
 // Light Mode
 // ==========================================================================
-
-.light-mode .wp-block-ix-projects {
-  .project-card {
-    color: var(--wp--preset--color--contrast);
-  }
-
-  .project-card__image::after {
-    background: radial-gradient(
-      ellipse at center,
-      rgba(255, 255, 255, 0.05) 0%,
-      rgba(255, 255, 255, 0.2) 100%
-    );
-  }
-
-  .project-card__title a {
-    &::after {
-      background-color: var(--wp--preset--color--accent-1);
-    }
-  }
-}
 
 // ==========================================================================
 // Reduced Motion
