@@ -1,0 +1,44 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Instagram Feed (Smash Balloon) — site-specific styling
+// ==========================================================================
+// Columns, count, and spacing come from the feed's own settings (see
+// scripts/redesign/update-instagram-feed.php); this only gives the tiles the
+// panel treatment: rounded, bordered, with an accent rule on hover.
+// ==========================================================================
+
+#sb_instagram {
+  padding-block-end: 0 !important;
+
+  .sbi_photo_wrap {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--lg);
+    background: var(--color-surface);
+    transition: border-color 0.2s ease;
+
+    &:hover,
+    &:focus-within {
+      border-color: var(--color-accent-line);
+    }
+  }
+
+  .sbi_photo img {
+    transition: transform 0.4s ease;
+  }
+
+  .sbi_photo_wrap:hover .sbi_photo img {
+    transform: scale(1.03);
+  }
+}
+
+@include reduced-motion {
+  #sb_instagram :is(.sbi_photo_wrap, .sbi_photo img) {
+    transition: none;
+  }
+
+  #sb_instagram .sbi_photo_wrap:hover .sbi_photo img {
+    transform: none;
+  }
+}

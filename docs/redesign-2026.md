@@ -157,6 +157,11 @@ production during the cutover rehearsal):
    site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
    Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
 4a. **Contact form copy:** `update-contact-form.php` (WPForms #60 placeholders + submit text; dry-run first).
+4c. **Instagram:** reconnect the vincent.ragosta source by hand (**Instagram Feed → Settings → Manage
+   Sources** — delete the broken source, then **Add Source**; the feed *builder's* Add Source freezes
+   on a broken source). Production's token stopped decrypting after the 2026-08-13 salt rotation.
+   Then `update-instagram-feed.php` (4 tiles, no captions/likes, GDPR mode **on** so images are
+   served from uploads, never Instagram's CDN — keeps the privacy policy accurate).
 4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
    `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
    `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links
