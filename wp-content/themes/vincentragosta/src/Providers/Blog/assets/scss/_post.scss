@@ -1,0 +1,267 @@
+@use 'common/typography' as *;
+@use 'common/breakpoints' as *;
+@use 'common/detail' as *;
+
+// ==========================================================================
+// Nous Signal transmission (single-post.twig). Header, contents card, and
+// prose share the project detail's components (common/_detail.scss);
+// accent-1 is nous-red on these pages.
+// ==========================================================================
+
+.site-content.nous-post {
+  // Own the vertical rhythm (IX's section margins are sized for block pages).
+  > * {
+    margin-block: 0;
+  }
+
+  > * + * {
+    margin-block-start: clamp(4rem, 9vw, 7.5rem);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Header
+// --------------------------------------------------------------------------
+
+.nous-post__header {
+  @include detail-header;
+}
+
+.nous-post__inner {
+  @include detail-inner;
+}
+
+.nous-post__top {
+  @include detail-top;
+}
+
+.nous-post__crumb ol {
+  @include detail-crumb;
+}
+
+.nous-post__back {
+  @include detail-back;
+}
+
+.nous-post__title {
+  @include detail-title;
+}
+
+.nous-post__intro {
+  @include detail-intro;
+}
+
+.nous-post__signal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  margin: 0;
+  @include meta-text;
+  color: var(--color-text-dim);
+}
+
+.nous-post__number {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--color-accent-line);
+  border-radius: 999px;
+  color: var(--wp--preset--color--accent-1);
+
+  &::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--wp--preset--color--accent-1);
+    box-shadow: 0 0 10px var(--wp--preset--color--accent-1);
+  }
+}
+
+.nous-post__lead {
+  @include detail-lead;
+}
+
+.nous-post__meta {
+  @include detail-meta;
+
+  .is-accent {
+    color: var(--wp--preset--color--accent-1);
+  }
+}
+
+.nous-post__share {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+
+  &::after {
+    content: ' ⧉';
+    color: var(--color-text-dim);
+  }
+
+  &:hover {
+    color: var(--wp--preset--color--accent-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 3px;
+  }
+}
+
+// --------------------------------------------------------------------------
+// Body — contents card + the post content
+// --------------------------------------------------------------------------
+
+.nous-post__body {
+  @include detail-body;
+}
+
+.nous-post__aside {
+  @include detail-aside;
+}
+
+.nous-post__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  a {
+    display: block;
+    padding: 3px 7px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--wp--custom--radius--sm);
+    @include meta-text(label);
+    color: var(--color-text-muted);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--color-accent-line);
+      color: var(--wp--preset--color--accent-1);
+    }
+  }
+}
+
+.nous-post__content {
+  @include detail-prose;
+  counter-reset: signal-section;
+
+  // Sections and the closing panel sit further apart than paragraphs; two
+  // Sections in a row add their own rule (the Section style).
+  > .wp-block-group {
+    margin-block-start: var(--wp--preset--spacing--60);
+  }
+
+  h2 {
+    counter-increment: signal-section;
+    max-width: 820px;
+    margin-block-start: 0;
+    color: var(--color-text);
+    font-size: var(--wp--preset--font-size--60);
+    line-height: 1.06;
+    letter-spacing: -0.04em;
+    scroll-margin-block-start: calc(var(--header-height, 72px) + 24px);
+
+    &::before {
+      content: counter(signal-section, decimal-leading-zero);
+      display: block;
+      margin-block-end: 0;
+      padding-block-end: 1rem;
+      @include meta-text;
+      letter-spacing: 0;
+      color: var(--wp--preset--color--accent-1);
+    }
+  }
+
+  h2 + p {
+    margin-block-start: 1.5rem;
+  }
+}
+
+.nous-post__sign {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-block-start: var(--wp--preset--spacing--50);
+  @include meta-text;
+  color: var(--color-text-dim);
+
+  &::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--wp--preset--color--accent-1);
+  }
+}
+
+// --------------------------------------------------------------------------
+// Previous / next
+// --------------------------------------------------------------------------
+
+.nous-post__pn {
+  display: grid;
+  gap: var(--wp--preset--spacing--30);
+
+  @include media(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.nous-pn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--wp--custom--radius--lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+
+  &--next {
+    text-align: end;
+  }
+
+  &:hover {
+    border-color: var(--color-accent-line);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 3px;
+  }
+
+  &__label {
+    @include label-text(meta);
+    color: var(--color-text-dim);
+  }
+
+  &__title {
+    font-size: var(--wp--preset--font-size--60);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+  }
+
+  &__excerpt {
+    color: var(--color-text-muted);
+    font-size: var(--wp--preset--font-size--20);
+    line-height: 1.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nous-pn {
+    transition: none;
+  }
+}

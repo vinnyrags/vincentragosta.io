@@ -208,6 +208,31 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.nous-row:visible')).toHaveCount(0);
     });
 
+    test('nous post renders its header, contents, and the way back to the archive', async ({ page }) => {
+        const errors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                errors.push(msg.text());
+            }
+        });
+
+        await page.goto('/nous-signal/');
+        await page.locator('.nous-row__link').first().click();
+        await page.waitForLoadState('networkidle');
+
+        await expect(page.locator('body')).toHaveClass(/nous-signal-page/);
+        await expect(page.locator('.nous-post__title')).toBeVisible();
+        await expect(page.locator('.nous-post__number')).toContainText('signal №');
+        await expect(page.locator('.nous-post__back')).toHaveAttribute('href', /\/nous-signal\/$/);
+        expect(await page.locator('.nous-post .toc [data-toc-link]').count()).toBeGreaterThan(0);
+        await expect(page.locator('.nous-post__content a:has-text("Back To Nous")')).toHaveCount(0);
+        await expect(page.locator('.nous-pn[rel="prev"]')).toBeVisible();
+
+        await page.locator('.nous-post__back').click();
+        await expect(page).toHaveURL(/\/nous-signal\/$/);
+        expect(errors).toEqual([]);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {

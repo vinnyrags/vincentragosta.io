@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Blog;
 
+use ChildTheme\Support\TitleSplitter;
 use IX\Providers\Blog\BlogPost;
 
 /**
@@ -37,5 +38,15 @@ class NousPost extends BlogPost
     public function publishedOn(): string
     {
         return substr((string) $this->post_date, 0, 10);
+    }
+
+    /**
+     * Title split for the display heading (see TitleSplitter).
+     *
+     * @return array{lead: string, accent: string, suffix: string}
+     */
+    public function titleParts(): array
+    {
+        return TitleSplitter::split(html_entity_decode((string) $this->title(), ENT_QUOTES));
     }
 }

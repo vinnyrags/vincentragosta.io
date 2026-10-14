@@ -1,48 +1,34 @@
 /**
- * Nous Signal — Frontend interactivity
+ * Nous Signal — frontend behavior.
  *
  * Global: console easter egg.
- * Blog pages only: decrypt reveal.
+ * Transmissions: the "Copy link" share button ([data-copy-link]).
  */
 (function () {
   'use strict';
 
   /**
-   * Decrypt reveal: cards show a brief [DECRYPTING...] flash
-   * before content appears on scroll into view.
+   * Copy the post URL; the button confirms with its data-copied-label, then
+   * reverts. Without the Clipboard API the button is removed.
    */
-  function initDecryptReveal() {
-    var cards = document.querySelectorAll('[data-nous-decrypt]');
+  function initCopyLink() {
+    document.querySelectorAll('[data-copy-link]').forEach(function (button) {
+      if (!navigator.clipboard) {
+        button.closest('div').remove();
+        return;
+      }
 
-    if (!cards.length) return;
+      var label = button.textContent;
 
-    var STAGGER_DELAY = 150; // ms between each card
-    var DECRYPT_DURATION = 600;
-
-    var observer = new IntersectionObserver(
-      function (entries) {
-        var visible = entries.filter(function (e) { return e.isIntersecting; });
-
-        visible.forEach(function (entry, index) {
-          var card = entry.target;
-          var delay = index * STAGGER_DELAY;
-
+      button.addEventListener('click', function () {
+        navigator.clipboard.writeText(button.dataset.copyLink).then(function () {
+          button.textContent = button.dataset.copiedLabel || 'Copied';
           setTimeout(function () {
-            card.classList.add('is-decrypting');
-
-            setTimeout(function () {
-              card.classList.remove('is-decrypting');
-              card.classList.add('is-decrypted');
-            }, DECRYPT_DURATION);
-          }, delay);
-
-          observer.unobserve(card);
+            button.textContent = label;
+          }, 2000);
         });
-      },
-      { threshold: 0.15 }
-    );
-
-    cards.forEach(function (card) { observer.observe(card); });
+      });
+    });
   }
 
   /**
@@ -55,34 +41,10 @@
     );
   }
 
-  /**
-   * Desktop-only check — flash effects are disabled on mobile.
-   */
-  function isDesktop() {
-    return window.matchMedia('(min-width: 992px)').matches;
-  }
-
-  // Boot
-  function init() {
-    var isSignalPage = document.body.classList.contains('nous-signal-page');
-
-    if (isDesktop()) {
-      // Blog pages only
-      if (isSignalPage) {
-        initDecryptReveal();
-      }
-    } else if (isSignalPage) {
-      // On mobile, skip decrypt animation — show cards immediately
-      document.querySelectorAll('[data-nous-decrypt]').forEach(function (card) {
-        card.classList.add('is-decrypted');
-      });
-    }
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', initCopyLink);
   } else {
-    init();
+    initCopyLink();
   }
 
   initConsoleEasterEgg();

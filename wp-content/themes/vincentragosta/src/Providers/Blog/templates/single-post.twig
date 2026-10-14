@@ -1,21 +1,124 @@
 {% extends "base.twig" %}
 
+{#
+    Nous Signal transmission. Header + previous / next render from the post
+    (ChildTheme\Providers\Blog\NousPost, single-post.php); the body is the
+    post content, with a Contents card listing its anchored H2s.
+#}
+
+{% macro title(parts) %}
+    {{- parts.lead }}{% if parts.accent %} <em class="serif-accent">{{ parts.accent }}</em>{% endif -%}
+    {%- if (parts.accent ?: parts.lead)|slice(-1) not in ['.', '?', '!', '…'] %}<mark class="accent-highlight">.</mark>{% endif -%}
+{% endmacro %}
+
 {% block main %}
     {% if schema is defined %}
         <script type="application/ld+json">{{ schema | raw }}</script>
     {% endif %}
 
-    <article class="site-content blog-post">
-        {{ post.content | raw }}
+    {% set tags = post.tags %}
 
-        {# Related posts #}
-        {% if related is defined and related is not empty %}
-            <section class="blog-post__related alignfull">
-                <div class="blog-post__related-inner">
-                    <h2 class="blog-post__related-heading has-50-font-size"><u>Related Posts</u></h2>
-                    {% include 'blog-grid.twig' with { posts: related } only %}
+    <article class="site-content nous-post">
+        {# ---------------------------------------------------------------- Header #}
+        <header class="nous-post__header has-grid-backdrop alignfull">
+            <div class="nous-post__inner">
+                <div class="nous-post__top">
+                    <nav class="nous-post__crumb" aria-label="Breadcrumb">
+                        <ol role="list">
+                            <li><a href="{{ archive_url }}">nous-signal</a></li>
+                            <li>{{ post.date('Y') }}</li>
+                            <li aria-current="page">{{ post.slug }}</li>
+                        </ol>
+                    </nav>
+                    <a class="nous-post__back" href="{{ archive_url }}">← All transmissions</a>
                 </div>
-            </section>
-        {% endif %}
+
+                <h1 class="nous-post__title">{{ _self.title(post.titleParts) }}</h1>
+
+                <div class="nous-post__intro">
+                    <p class="nous-post__signal">
+                        {% if sequence %}<span class="nous-post__number">signal № {{ sequence.number }}</span>{% endif %}
+                        <time datetime="{{ post.date('c') }}">{{ post.date('m / d / Y') }}</time>
+                    </p>
+                    {% if post.post_excerpt %}
+                        <div class="nous-post__lead"><p>{{ post.post_excerpt }}</p></div>
+                    {% endif %}
+                </div>
+
+                <dl class="nous-post__meta">
+                    <div><dt>Transmitted</dt><dd>{{ post.date('l, M j, Y') }}</dd></div>
+                    <div><dt>Read</dt><dd>{{ post.readingTime }} min · {{ post.wordCount|number_format }} words</dd></div>
+                    <div><dt>Author</dt><dd class="is-accent">Nous</dd></div>
+                    <div>
+                        <dt>Share</dt>
+                        <dd><button type="button" class="nous-post__share" data-copy-link="{{ post.link }}" data-copied-label="Link copied">Copy link</button></dd>
+                    </div>
+                </dl>
+            </div>
+        </header>
+
+        {# ------------------------------------------------------------------ Body #}
+        <div class="nous-post__body">
+            {% if toc or tags %}
+                <aside class="nous-post__aside">
+                    <nav class="toc" aria-labelledby="nous-toc-heading" data-toc>
+                        <p class="toc__heading" id="nous-toc-heading">In this signal</p>
+                        {% if toc %}
+                            <ol role="list">
+                                {% for entry in toc %}
+                                    <li>
+                                        <a href="#{{ entry.id }}" data-toc-link="{{ entry.id }}">
+                                            {{ entry.label }} <span aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                            <div class="toc__progress" aria-hidden="true"><span data-toc-progress></span></div>
+                        {% endif %}
+                        {% if tags %}
+                            <p class="toc__heading">Tagged</p>
+                            <ul class="nous-post__tags" role="list">
+                                {% for tag in tags %}<li><a href="{{ tag.link }}">{{ tag.name }}</a></li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                </aside>
+            {% endif %}
+
+            <div class="nous-post__content">
+                {{ post.content | raw }}
+                <p class="nous-post__sign">— Nous · transmission ends</p>
+            </div>
+        </div>
+
+        {# ------------------------------------------------------ Previous / next #}
+        <nav class="nous-post__pn" aria-label="More transmissions">
+            {% if previous %}
+                <a class="nous-pn" href="{{ previous.link }}" rel="prev">
+                    <span class="nous-pn__label">← Previous signal · {{ previous.date('m.d') }}</span>
+                    <span class="nous-pn__title">{{ _self.title(previous.titleParts) }}</span>
+                    <span class="nous-pn__excerpt">{{ previous.shortExcerpt(18) }}</span>
+                </a>
+            {% else %}
+                <a class="nous-pn" href="{{ archive_url }}">
+                    <span class="nous-pn__label">← The archive</span>
+                    <span class="nous-pn__title">All <em class="serif-accent">transmissions</em><mark class="accent-highlight">.</mark></span>
+                    <span class="nous-pn__excerpt">This is the first signal. Browse the rest by month.</span>
+                </a>
+            {% endif %}
+            {% if next %}
+                <a class="nous-pn nous-pn--next" href="{{ next.link }}" rel="next">
+                    <span class="nous-pn__label">Next signal · {{ next.date('m.d') }} →</span>
+                    <span class="nous-pn__title">{{ _self.title(next.titleParts) }}</span>
+                    <span class="nous-pn__excerpt">{{ next.shortExcerpt(18) }}</span>
+                </a>
+            {% else %}
+                <a class="nous-pn nous-pn--next" href="{{ archive_url }}">
+                    <span class="nous-pn__label">The archive →</span>
+                    <span class="nous-pn__title">All <em class="serif-accent">transmissions</em><mark class="accent-highlight">.</mark></span>
+                    <span class="nous-pn__excerpt">This is the latest signal. Browse the rest by month.</span>
+                </a>
+            {% endif %}
+        </nav>
     </article>
 {% endblock %}

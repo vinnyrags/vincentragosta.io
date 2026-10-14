@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework, Nous Signal signed off and on staging. Remaining: Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
+**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework, Nous Signal, Nous post signed off and on staging. Remaining: 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
 
 ## Reference
 
@@ -173,7 +173,19 @@ production during the cutover rehearsal):
     style **Screen**. **Accent is now derived everywhere:** `--color-accent-glow/-line` and 18
     hardcoded lime tints use `accent-1`, so Nous pages go fully red (footer V is a mask). The old
     card grid + decrypt CSS stays until the Nous post template replaces "Related posts".
-  - [ ] Nous post · [ ] 404
+  - [x] Nous post — signed off 2026-10-14. `single-post.twig` renders the header (breadcrumb,
+    "← All transmissions", split title via `src/Support/TitleSplitter.php`, signal № from
+    `NousSequence`, excerpt as lead, meta strip with Copy link), a Contents card ("In this signal" +
+    tag links into the archive's `?tag=` filter), the body, a sign-off, and prev/next (the ends
+    link back to the archive). Header/meta/body styles shared with the project detail via
+    `common/_detail.scss`. **Migration:** `scripts/redesign/migrate-nous-posts.php` — exact
+    signature match (all 168 matched, 0 skipped; text verified word-for-word), strips the legacy
+    header group, turns each section into a `section` group with an anchored, un-underlined H2, and
+    the last ("What This Means") into an accent Panel; JSON backup first, `wp_slash` on write,
+    re-runs skip. The old card grid, decrypt effect and their templates/styles are removed. The
+    Contents card's link styles now target only its `ol`. **Open:** 166 posts mark Nous's "I" with
+    the Accent format — reads as a red bar; keep, restyle, or strip.
+  - [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -194,6 +206,9 @@ production during the cutover rehearsal):
    on a broken source). Production's token stopped decrypting after the 2026-08-13 salt rotation.
    Then `update-instagram-feed.php` (4 tiles, no captions/likes, GDPR mode **on** so images are
    served from uploads, never Instagram's CDN — keeps the privacy policy accurate).
+4d. **Nous posts:** `migrate-nous-posts.php` — **after** the deploy (the old theme still renders
+   the legacy header). `DRY_RUN=1` first: expect 168 × migrate, 0 skips; then the real run
+   (JSON backup of every post to `BACKUP_DIR`).
 4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
    `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
    `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links
@@ -283,7 +298,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
    month pills with counts (replace the month dropdown), month-grouped text index (date, title,
    excerpt, read time = words ÷ 230 in PHP), "Show N more"; update its Vitest tests. **Known bug:**
    the page scrolls sideways at 390px today (renders 506px wide) — fix it here.
-3. **Nous post (single post, 168 posts)** — mockup `nous-post.html`. Rewrite
+3. ~~**Nous post (single post, 168 posts)**~~ — done 2026-10-14. — mockup `nous-post.html`. Rewrite
    `src/Providers/Blog/templates/single-post.twig` (model on `single-project.twig`): breadcrumb,
    split title (move `ProjectPost::splitTitle()` to a shared helper, e.g. `src/Support/TitleSplitter.php`),
    "signal № N" (chronological index, in a `NousPost` model + unit test), lead = excerpt, meta strip,

@@ -1,6 +1,7 @@
 @use 'common/typography' as *;
 @use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
+@use 'common/detail' as *;
 
 // ==========================================================================
 // Project detail (single-project.twig) — rendered from ACF fields.
@@ -28,78 +29,27 @@
 // --------------------------------------------------------------------------
 
 .project-detail__header {
-  // IX sizes .alignfull as calc(100% + 2 × root padding); keep padding inside it.
-  box-sizing: border-box;
-  padding: clamp(2.5rem, 6vw, 4.5rem) var(--ix-root-padding-inline, 1.5rem) 1.25rem;
+  @include detail-header;
 }
 
 .project-detail__inner {
-  max-width: var(--wp--style--global--content-size, 1440px);
-  margin-inline: auto;
+  @include detail-inner;
 }
 
 .project-detail__top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--wp--preset--spacing--30);
-  @include meta-text;
+  @include detail-top;
 }
 
 .project-detail__crumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--color-text-dim);
-
-  li + li::before {
-    content: '/';
-    margin-inline-end: 10px;
-  }
-
-  li:first-child::before {
-    content: '~/ ';
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-
-    &:hover {
-      color: var(--color-text);
-    }
-  }
-
-  [aria-current] {
-    color: var(--color-text-muted);
-  }
+  @include detail-crumb;
 }
 
 .project-detail__back {
-  color: var(--color-text-muted);
-  text-decoration: none;
-
-  &:hover {
-    color: var(--wp--preset--color--accent-1);
-  }
+  @include detail-back;
 }
 
 .project-detail__title {
-  margin: 2.75rem 0 0;
-  // Scales with the viewport so long words ("Autobiography") fit on a phone;
-  // caps at the display-100 preset size.
-  font-size: clamp(2.5rem, 10.5vw, 9.375rem);
-  line-height: 0.92;
-  letter-spacing: -0.055em;
-  overflow-wrap: break-word;
-
-  .serif-accent {
-    font-size: 1.1em;
-  }
+  @include detail-title;
 }
 
 .project-detail__title-suffix {
@@ -112,15 +62,7 @@
 }
 
 .project-detail__intro {
-  display: grid;
-  gap: var(--wp--preset--spacing--50);
-  margin-block-start: 3rem;
-
-  @include media(lg) {
-    grid-template-columns: 1fr minmax(0, 560px);
-    align-items: end;
-    gap: 5rem;
-  }
+  @include detail-intro;
 }
 
 .project-detail__badges {
@@ -189,23 +131,7 @@
 }
 
 .project-detail__lead {
-  font-size: var(--wp--preset--font-size--40);
-  line-height: 1.55;
-  color: var(--color-text);
-
-  p {
-    margin: 0;
-  }
-
-  p + p {
-    margin-block-start: 0.75em;
-  }
-
-  a {
-    color: inherit;
-    text-decoration-color: var(--wp--preset--color--accent-1);
-    text-underline-offset: 3px;
-  }
+  @include detail-lead;
 }
 
 .project-detail__lead-note {
@@ -214,74 +140,7 @@
 }
 
 .project-detail__meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin: 4rem 0 0;
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  border-radius: var(--wp--custom--radius--lg);
-  background: var(--color-surface);
-
-  @include media(lg) {
-    display: flex;
-  }
-
-  > div {
-    padding: 1.5rem 1.6rem;
-
-    @include media(lg) {
-      flex: 1 1 0;
-      min-width: 0;
-    }
-
-    border-block-end: 1px solid var(--color-border);
-    border-inline-end: 1px solid var(--color-border);
-
-    // The live-site domain is the longest value — give it room to stay on one line.
-    &:has(a) {
-      grid-column: 1 / -1;
-
-      @include media(lg) {
-        flex-grow: 1.7;
-      }
-    }
-
-    @include media(lg) {
-      border-block-end: 0;
-
-      &:last-child {
-        border-inline-end: 0;
-      }
-    }
-  }
-
-  dt {
-    @include label-text;
-    color: var(--color-text-dim);
-  }
-
-  dd {
-    margin: 0.75rem 0 0;
-    font-size: var(--wp--preset--font-size--30);
-    line-height: 1.4;
-  }
-
-  a {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--wp--preset--color--accent-1);
-    text-decoration: none;
-    overflow-wrap: anywhere;
-
-    @include media(lg) {
-      overflow-wrap: normal;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  @include detail-meta;
 }
 
 // --------------------------------------------------------------------------
@@ -343,21 +202,11 @@
 // --------------------------------------------------------------------------
 
 .project-detail__body {
-  display: grid;
-  gap: var(--wp--preset--spacing--60);
-
-  @include media(lg) {
-    grid-template-columns: 300px minmax(0, 1fr);
-    gap: 6rem;
-  }
+  @include detail-body;
 }
 
 .project-detail__aside {
-  @include media(lg) {
-    position: sticky;
-    inset-block-start: calc(var(--header-height, 72px) + 24px);
-    align-self: start;
-  }
+  @include detail-aside;
 }
 
 .project-section {
@@ -382,37 +231,7 @@
   }
 
   &__body {
-    max-width: var(--wp--custom--measure);
-    margin-block-start: 1.5rem;
-    color: var(--color-text-muted);
-    font-size: var(--wp--preset--font-size--30);
-    line-height: 1.7;
-
-    > * {
-      margin: 0;
-    }
-
-    > * + * {
-      margin-block-start: 1.25em;
-    }
-
-    em {
-      font-family: var(--wp--preset--font-family--serif);
-      font-size: 1.15em;
-      color: var(--color-text);
-    }
-
-    a {
-      color: var(--color-text);
-      text-decoration-color: var(--wp--preset--color--accent-1);
-      text-underline-offset: 3px;
-    }
-
-    code {
-      font-family: var(--wp--preset--font-family--mono);
-      font-size: 0.88em;
-      color: var(--color-text);
-    }
+    @include detail-prose;
   }
 
   &__note {
