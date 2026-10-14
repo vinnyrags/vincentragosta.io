@@ -27,6 +27,13 @@ class BlogProvider extends BaseBlogProvider
     ];
 
     /**
+     * Child blocks (merged with the parent's).
+     */
+    protected array $blocks = [
+        'nous-log',
+    ];
+
+    /**
      * Register the blog provider with site-specific additions.
      */
     public function register(): void

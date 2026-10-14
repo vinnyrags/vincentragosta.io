@@ -101,3 +101,12 @@
   96% { opacity: 0.98; }
   97% { opacity: 1; }
 }
+
+// Glitch is decorative motion — hold it still for reduced-motion users.
+@media (prefers-reduced-motion: reduce) {
+  .nous-glitch,
+  .nous-glitch::before,
+  .nous-glitch::after {
+    animation: none;
+  }
+}

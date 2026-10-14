@@ -1,0 +1,97 @@
+// ==========================================================================
+// Nous Signal Log block (vincentragosta/nous-log)
+// ==========================================================================
+
+.nous-log {
+  height: 100%;
+  font-size: var(--wp--preset--font-size--20);
+
+  &__head {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.6rem 1.75rem 1rem;
+    border-block-end: 1px solid rgb(255 51 51 / 0.2);
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 11px;
+    letter-spacing: var(--wp--custom--tracking--label);
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  &__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__row {
+    border-block-end: 1px solid rgb(255 51 51 / 0.12);
+
+    a {
+      display: grid;
+      grid-template-columns: 4.25rem 1fr auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.05rem 1.75rem;
+      color: var(--color-text);
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background: rgb(255 51 51 / 0.06);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--nous-red);
+        outline-offset: -2px;
+      }
+    }
+
+    &.is-new a {
+      background: rgb(255 51 51 / 0.08);
+    }
+  }
+
+  &__id,
+  &__status {
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 11.5px;
+    color: var(--color-text-dim);
+  }
+
+  &__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .is-new & {
+      color: var(--wp--preset--color--nous-red);
+    }
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+
+  &__empty {
+    padding: 1.6rem 1.75rem;
+    color: var(--color-text-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nous-log__row a {
+    transition: none;
+  }
+}

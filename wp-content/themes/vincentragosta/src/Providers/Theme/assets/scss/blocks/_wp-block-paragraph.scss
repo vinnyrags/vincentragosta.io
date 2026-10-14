@@ -33,7 +33,14 @@ p.is-style-eyebrow {
 // Status style — a pill: lime "Available"-style chip (the <strong>) + muted
 // mono text. "<strong>Available</strong> Independent practice · Brooklyn, NY".
 p.is-style-status {
-    display: inline-flex;
+    // Shrink-wrapped flex box. Constrained layouts centre children with auto
+    // margins, which only block-level boxes honour — so align the pill to the
+    // centred content column explicitly (it would otherwise stay pinned to the
+    // container edge on screens wider than the content size).
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: max(0px, calc((100% - var(--wp--style--global--content-size, 1440px)) / 2)) auto !important;
     flex-wrap: wrap;
     align-items: center;
     gap: 10px;

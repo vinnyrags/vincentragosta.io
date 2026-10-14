@@ -1,0 +1,16 @@
+<div class="nous-log__head" aria-hidden="true"><span>Log</span><span>Status</span></div>
+{% if rows %}
+    <ol class="nous-log__rows" role="list" aria-label="Latest transmissions">
+        {% for row in rows %}
+            <li class="nous-log__row{{ row.new ? ' is-new' }}">
+                <a href="{{ row.link }}">
+                    <span class="nous-log__id">TX·{{ row.number }}</span>
+                    <span class="nous-log__title">{{ row.title }}</span>
+                    <span class="nous-log__status">{% if row.new %}<span class="nous-log__dot" aria-hidden="true"></span>new{% else %}read{% endif %}</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p class="nous-log__empty">No transmissions yet.</p>
+{% endif %}

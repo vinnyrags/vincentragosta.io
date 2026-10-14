@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "vincentragosta/nous-log",
+  "title": "Nous Signal Log",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "The latest Nous Signal transmissions as a log (newest marked new).",
+  "keywords": ["nous", "signal", "log", "posts"],
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "textdomain": "vincentragosta",
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "render.php"
+  }
+}

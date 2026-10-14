@@ -166,20 +166,48 @@
     }
 }
 
-// Pipeline style (core/columns) — process stages in one bordered strip. Each
-// column gets a check + rule + stage number drawn by CSS; content is a
-// heading (stage), a bold subtitle paragraph, and a description paragraph.
-.wp-block-columns.is-style-pipeline {
-    gap: 0 !important;
-    counter-reset: pipeline-stage;
+// Pipeline style (core/group) — process stages as a CI-style panel.
+// Content: a paragraph (the top bar: label text + a <mark> status, e.g.
+// "pipeline · client-project.yml" + "● 5 / 5 stages passing"), then a Columns
+// block with one column per stage: heading (stage), a bold subtitle paragraph,
+// a description paragraph. Check, rule, and stage number are drawn by CSS.
+// Add the class `is-accent` to a column to highlight that stage.
+.wp-block-group.is-style-pipeline {
     overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--wp--custom--radius--lg);
     background: var(--color-surface);
 
-    > .wp-block-column {
+    > * {
+        margin: 0 !important;
+    }
+
+    // Top bar
+    > p:first-child {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem 1rem;
+        padding: 0.9rem 1.6rem;
+        border-block-end: 1px solid var(--color-border);
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 12.5px;
+        color: var(--color-text-dim);
+
+        mark {
+            background: none;
+            color: var(--wp--preset--color--accent-1);
+        }
+    }
+
+    > .wp-block-columns {
+        gap: 0 !important;
+        counter-reset: pipeline-stage;
+    }
+
+    > .wp-block-columns > .wp-block-column {
         position: relative;
-        padding: 4.25rem 1.6rem 1.75rem;
+        padding: 4.6rem 1.6rem 2.25rem;
         border-block-end: 1px solid var(--color-border);
         counter-increment: pipeline-stage;
 
@@ -217,7 +245,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            background: linear-gradient(var(--color-border-strong), var(--color-border-strong)) left center / calc(100% - 2.5rem) 1px no-repeat;
+            background: linear-gradient(90deg, var(--color-accent-line), var(--color-border) 70%) left center / calc(100% - 2.5rem) 1px no-repeat;
             font-family: var(--wp--preset--font-family--mono);
             font-size: 11.5px;
             color: var(--color-text-dim);
@@ -227,13 +255,14 @@
             margin-block: 0;
         }
 
-        > * + * {
-            margin-block-start: 0.75rem;
-        }
-
         :where(h3) {
             font-size: var(--wp--preset--font-size--50);
-            letter-spacing: var(--wp--custom--tracking--heading);
+            font-weight: 400;
+            letter-spacing: var(--wp--custom--tracking--tight);
+        }
+
+        :where(h3) + p {
+            margin-block-start: 1.25rem;
         }
 
         :where(p) {
@@ -242,9 +271,27 @@
             line-height: 1.6;
         }
 
+        :where(p) + :where(p) {
+            margin-block-start: 1rem;
+        }
+
         :where(p strong) {
             color: var(--color-text);
             font-weight: 500;
+        }
+
+        // Highlighted stage
+        &.is-accent {
+            background: linear-gradient(180deg, rgb(212 255 58 / 0.07), transparent 65%);
+
+            &::before {
+                border-color: var(--wp--preset--color--accent-1);
+                background:
+                    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3 4.7-5' fill='none' stroke='%2308090a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+                    center / 12px no-repeat,
+                    var(--wp--preset--color--accent-1);
+                box-shadow: 0 0 14px rgb(212 255 58 / 0.45);
+            }
         }
     }
 }
@@ -389,5 +436,106 @@
                 line-height: 1.3;
             }
         }
+    }
+}
+
+// Transmission style (core/group) — the Nous Signal panel: red-tinted border
+// and glow, scanlines, accent switched to nous-red. Intended content: a
+// two-column Columns block (copy | Nous Signal Log). Inside, the eyebrow
+// paragraph becomes a red "incoming" label.
+.wp-block-group.is-style-transmission {
+    --wp--preset--color--accent-1: var(--wp--preset--color--nous-red);
+    --color-accent-line: rgb(255 51 51 / 0.45);
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid rgb(255 51 51 / 0.35);
+    border-radius: var(--wp--custom--radius--xl);
+    background:
+        radial-gradient(ellipse at 15% 0%, rgb(255 51 51 / 0.16), transparent 60%),
+        var(--color-surface);
+
+    // scanlines
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: repeating-linear-gradient(0deg, transparent 0 2px, rgb(255 255 255 / 0.018) 2px 4px);
+        pointer-events: none;
+    }
+
+    > .wp-block-columns {
+        gap: 0 !important;
+        margin: 0;
+
+        > .wp-block-column:first-child {
+            padding: clamp(2rem, 5vw, 3.5rem);
+        }
+
+        > .wp-block-column:last-child {
+            border-block-start: 1px solid rgb(255 51 51 / 0.2);
+
+            @include media(md) {
+                border-block-start: 0;
+                border-inline-start: 1px solid rgb(255 51 51 / 0.2);
+            }
+        }
+    }
+
+    .is-style-eyebrow {
+        color: var(--wp--preset--color--nous-red);
+
+        &::before {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--wp--preset--color--nous-red);
+        }
+    }
+
+    :where(h2) {
+        margin-block: 1.5rem 0;
+        font-size: var(--wp--preset--font-size--80);
+        line-height: 1;
+        letter-spacing: var(--wp--custom--tracking--display);
+    }
+
+    :where(p:not(.is-style-eyebrow)) {
+        max-width: 560px;
+        color: var(--color-text-muted);
+        line-height: 1.6;
+    }
+
+    .serif-accent {
+        color: var(--color-text);
+    }
+
+    .wp-block-button.is-style-outline .wp-block-button__link {
+        border-color: rgb(255 51 51 / 0.6);
+        color: var(--color-text);
+
+        &:hover {
+            border-color: var(--wp--preset--color--nous-red);
+            background: rgb(255 51 51 / 0.12);
+        }
+    }
+}
+
+// Transmission heading glitch: offset the red/cyan slices so the white word
+// shows through (the base .nous-glitch layers sit flush when motion is off).
+.wp-block-group.is-style-transmission .nous-glitch {
+    &::before {
+        clip-path: inset(0 0 52% 0);
+        transform: translate(-3px, -2px);
+        opacity: 0.9;
+    }
+
+    &::after {
+        clip-path: inset(56% 0 0 0);
+        transform: translate(3px, 2px);
+        opacity: 0.85;
     }
 }

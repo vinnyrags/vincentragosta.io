@@ -15,9 +15,12 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('h1')).toContainText('Building digital experiences');
         await expect(page.locator('.is-style-stat-strip > *')).toHaveCount(4);
         await expect(page.locator('.projects-featured__top .project-card')).toHaveCount(2);
-        await expect(page.locator('.is-style-pipeline > .wp-block-column')).toHaveCount(5);
+        await expect(page.locator('.is-style-pipeline > .wp-block-columns > .wp-block-column')).toHaveCount(5);
+        await expect(page.locator('.is-style-pipeline .wp-block-column.is-accent')).toHaveCount(1);
         await expect(page.locator('.is-style-layers > .wp-block-group.is-accent')).toHaveCount(1);
         await expect(page.locator('.is-style-testimonials .wp-block-quote')).toHaveCount(5);
+        await expect(page.locator('.is-style-transmission .nous-log__row')).toHaveCount(5);
+        await expect(page.locator('.is-style-transmission .nous-log__row.is-new')).toHaveCount(1);
     });
 
     test('header and footer render from the default content partials', async ({ page }) => {

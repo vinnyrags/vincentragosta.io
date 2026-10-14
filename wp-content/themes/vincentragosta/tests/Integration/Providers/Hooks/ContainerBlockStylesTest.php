@@ -111,6 +111,8 @@ class ContainerBlockStylesTest extends BaseTestCase
 
         $this->assertArrayHasKey('layers', $registry->get_registered_styles_for_block('core/group'));
         $this->assertArrayHasKey('testimonials', $registry->get_registered_styles_for_block('core/group'));
-        $this->assertArrayHasKey('pipeline', $registry->get_registered_styles_for_block('core/columns'));
+        $this->assertArrayHasKey('transmission', $registry->get_registered_styles_for_block('core/group'));
+        $this->assertArrayHasKey('pipeline', $registry->get_registered_styles_for_block('core/group'));
+        $this->assertArrayNotHasKey('pipeline', $registry->get_registered_styles_for_block('core/columns'));
     }
 }
