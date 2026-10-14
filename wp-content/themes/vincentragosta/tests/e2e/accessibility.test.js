@@ -62,4 +62,13 @@ test.describe('Accessibility audits (WCAG 2.1 AA)', () => {
 
         expect(results.violations).toEqual([]);
     });
+
+    test('meet me page has no accessibility violations', async ({ page }) => {
+        await page.goto('/meet-me/');
+        await page.waitForLoadState('networkidle');
+
+        const results = await runAxe(page);
+
+        expect(results.violations).toEqual([]);
+    });
 });

@@ -1,3 +1,5 @@
+@use 'common/breakpoints' as *;
+
 // ==========================================================================
 // List Block Styles (core/list)
 // ==========================================================================
@@ -82,4 +84,95 @@
             color: var(--wp--preset--color--accent-1);
         }
     }
+}
+
+// Rows style — numbered key points. Each item is "<strong>Title</strong>
+// Description": a lime counter, the bold title, and a muted description in a
+// three-column row.
+.wp-block-list.is-style-rows {
+    margin: var(--wp--preset--spacing--50) 0 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: row;
+    border-block-start: 1px solid var(--color-border);
+
+    li {
+        counter-increment: row;
+        display: grid;
+        grid-template-columns: 3rem 1fr;
+        gap: var(--wp--preset--spacing--20) var(--wp--preset--spacing--40);
+        padding-block: var(--wp--preset--spacing--40);
+        border-block-end: 1px solid var(--color-border);
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--color-text-muted);
+
+        @include media(lg) {
+            grid-template-columns: 4rem minmax(0, 18rem) 1fr;
+            align-items: baseline;
+        }
+
+        &::before {
+            content: counter(row, decimal-leading-zero);
+            grid-row: span 2;
+            font-family: var(--wp--preset--font-family--mono);
+            font-size: 12px;
+            color: var(--wp--preset--color--accent-1);
+
+            @include media(lg) {
+                grid-row: auto;
+            }
+        }
+
+        strong {
+            font-size: 1.25em;
+            font-weight: 500;
+            letter-spacing: var(--wp--custom--tracking--tight);
+            color: var(--color-text);
+        }
+    }
+}
+
+// Arrows / Checks styles — ruled point lists. Each item is
+// "<strong>Lead-in</strong> — detail". Arrows mark neutral points; Checks
+// mark commitments (the accent ✓).
+.wp-block-list:is(.is-style-arrows, .is-style-checks) {
+    margin-inline: 0;
+    margin-block-end: 0;
+    padding: 0;
+    list-style: none;
+    border-block-start: 1px solid var(--color-border);
+
+    li {
+        position: relative;
+        padding-block: var(--wp--preset--spacing--30);
+        padding-inline-start: 1.75rem;
+        border-block-end: 1px solid var(--color-border);
+        font-size: 1rem;
+        line-height: 1.55;
+        color: var(--color-text-muted);
+
+        &::before {
+            position: absolute;
+            inset-inline-start: 0;
+            inset-block-start: calc(var(--wp--preset--spacing--30) + 0.2em);
+            font-family: var(--wp--preset--font-family--mono);
+            font-size: 12px;
+        }
+
+        strong {
+            font-weight: 500;
+            color: var(--color-text);
+        }
+    }
+}
+
+.wp-block-list.is-style-arrows li::before {
+    content: '→';
+    color: var(--color-text-dim);
+}
+
+.wp-block-list.is-style-checks li::before {
+    content: '✓';
+    color: var(--wp--preset--color--accent-1);
 }

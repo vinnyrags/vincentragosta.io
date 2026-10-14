@@ -34,12 +34,15 @@ class ContainerBlockStyles extends BlockStyles
                 ['name' => 'numbered-list', 'label' => __('Numbered List', 'vincentragosta')],
                 ['name' => 'nous-accent', 'label' => __('Nous Accent', 'vincentragosta')],
                 ['name' => 'transmission', 'label' => __('Transmission', 'vincentragosta')],
+                ['name' => 'window', 'label' => __('Window', 'vincentragosta')],
+                ['name' => 'timeline', 'label' => __('Timeline', 'vincentragosta')],
             ],
             'core/columns' => [
                 $statStripStyle,
             ],
             'core/column' => [
                 $darkStyle,
+                ['name' => 'sticky', 'label' => __('Sticky', 'vincentragosta')],
             ],
         ];
     }

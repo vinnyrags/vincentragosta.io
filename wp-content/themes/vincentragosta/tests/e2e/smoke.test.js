@@ -110,6 +110,26 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.wpforms-container')).toBeVisible();
     });
 
+    test('meet me page renders its CMS sections without console errors', async ({ page }) => {
+        const errors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                errors.push(msg.text());
+            }
+        });
+
+        const response = await page.goto('/meet-me/');
+        await page.waitForLoadState('networkidle');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('h1')).toContainText('Building websites');
+        await expect(page.locator('.is-style-window .is-style-spec')).toBeVisible();
+        await expect(page.locator('.is-style-stat-strip')).toBeVisible();
+        await expect(page.locator('.is-style-timeline > .wp-block-columns')).toHaveCount(4);
+        await expect(page.locator('.is-style-paper img')).toBeVisible();
+        expect(errors).toEqual([]);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {

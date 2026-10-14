@@ -2,26 +2,26 @@
 
 namespace ChildTheme\Tests\Integration\Providers\Hooks;
 
-use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\MediaBlockStyles;
 use Mythus\Contracts\Hook;
 use Mythus\Contracts\Registrable;
 use WorDBless\BaseTestCase;
 
 /**
- * Integration tests for the CoverBlockStyles hook.
+ * Integration tests for the MediaBlockStyles hook.
  */
-class CoverBlockStylesTest extends BaseTestCase
+class MediaBlockStylesTest extends BaseTestCase
 {
-    private CoverBlockStyles $feature;
+    private MediaBlockStyles $feature;
 
     public function set_up(): void
     {
         parent::set_up();
-        $this->feature = new CoverBlockStyles();
+        $this->feature = new MediaBlockStyles();
     }
 
     /**
-     * Test that CoverBlockStyles implements Registrable.
+     * Test that MediaBlockStyles implements Registrable.
      */
     public function testImplementsRegistrable(): void
     {
@@ -29,7 +29,7 @@ class CoverBlockStylesTest extends BaseTestCase
     }
 
     /**
-     * Test that CoverBlockStyles implements Hook (always-active).
+     * Test that MediaBlockStyles implements Hook (always-active).
      */
     public function testImplementsHook(): void
     {
@@ -69,5 +69,18 @@ class CoverBlockStylesTest extends BaseTestCase
         $this->assertIsArray($styles);
         $this->assertArrayHasKey('animated', $styles);
         $this->assertEquals('Animated Background', $styles['animated']['label']);
+    }
+
+    /**
+     * Test that the paper style is registered for core/image.
+     */
+    public function testPaperStyleIsRegisteredForImage(): void
+    {
+        $this->feature->registerStyles();
+
+        $styles = \WP_Block_Styles_Registry::get_instance()->get_registered_styles_for_block('core/image');
+
+        $this->assertArrayHasKey('paper', $styles);
+        $this->assertEquals('Paper', $styles['paper']['label']);
     }
 }

@@ -9,7 +9,7 @@ use IX\Providers\Theme\Features\ContentPartial\ContentPartial;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\DistAssetVersioning;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
-use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\MediaBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\MailIdentity;
@@ -104,7 +104,7 @@ class ThemeProviderTest extends BaseTestCase
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
-        $this->assertNotContains(CoverBlockStyles::class, $enabled);
+        $this->assertNotContains(MediaBlockStyles::class, $enabled);
         $this->assertNotContains(SocialIconChoices::class, $enabled);
     }
 
@@ -127,7 +127,7 @@ class ThemeProviderTest extends BaseTestCase
 
         // Child hooks
         $this->assertContains(ContainerBlockStyles::class, $hooks);
-        $this->assertContains(CoverBlockStyles::class, $hooks);
+        $this->assertContains(MediaBlockStyles::class, $hooks);
         $this->assertContains(TextBlockStyles::class, $hooks);
         $this->assertContains(SocialIconChoices::class, $hooks);
         $this->assertContains(SocialIconOverride::class, $hooks);

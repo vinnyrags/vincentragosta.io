@@ -7,6 +7,12 @@
 p.is-style-muted {
     font-size: var(--wp--preset--font-size--30);
     color: var(--color-text-muted);
+
+    // Bold runs read as the highlighted phrase, in full-strength text.
+    strong {
+        font-weight: 500;
+        color: var(--color-text);
+    }
 }
 
 // Eyebrow style — mono section label with a short accent rule

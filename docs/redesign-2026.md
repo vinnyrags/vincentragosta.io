@@ -8,7 +8,8 @@ starting new files.
 ## Reference
 
 - **Mockups (PNG, not in git):** `~/Downloads/vincentragosta-redesign-2026.png` (homepage),
-  `vincentragosta-redesign-2026-projects-archive.png`, `vincentragosta-redesign-2026-project-detail.png`.
+  `vincentragosta-redesign-2026-projects-archive.png`, `vincentragosta-redesign-2026-project-detail.png`,
+  and (Phase 5b) `-meet-me`, `-framework`, `-contact`, `-nous-signal`, `-nous-post`, `-privacy-policy`, `-404`.
 - **Mockup source (HTML/CSS):** [`redesign-2026/mockups/`](redesign-2026/mockups/) — open in a browser;
   images load from production uploads. Use as the pixel reference for spacing, type, and color.
 
@@ -130,6 +131,14 @@ production during the cutover rehearsal):
   production copy of 2026-10-13. Any production edit to home, projects, meet-me, framework,
   contact, or privacy-policy before launch must be folded into these files, or it is lost at
   cutover (backups are kept, but the edit is overwritten).
+- [ ] **5b — Remaining pages to the new mockups** (one page at a time; local review → sign-off →
+  commit → staging). New CMS vocabulary: table `spec`, group `window` / `timeline`, column
+  `sticky`, list `rows`, image `paper`, panel `is-accent`, restyled `core/pullquote`, core grid
+  layout for card grids. `CoverBlockStyles` → `MediaBlockStyles` (adds image `paper`).
+  - [x] Meet me — signed off 2026-10-14 (AI section reworked to an "accelerates / hands-on" contrast and the toolbox to core tiles + a full-stack Spec table, per `mockups/meet-me-v2.html`). Adds list `arrows` / `checks`; Pullquote citation renders as a trailing caption; panel `is-accent` no longer colors headings (use the Accent format). Résumé is the October 2026 v2 PDF; the preview
+    image covers the contact line. The Instagram feed (`[instagram-feed]`) renders **empty on
+    production** (0 items) — the section is left out until the feed is reconnected.
+  - [ ] Contact · [ ] Privacy · [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -144,6 +153,11 @@ production during the cutover rehearsal):
    old theme would list with an empty page. It downloads the 2025 key art from the live Wicked
    site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
    Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
+4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
+   `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
+   `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links
+   `/wp-content/uploads/2026/10/…`; an import in a later month lands in a different folder —
+   update the two URLs in `meet-me.html` to match before applying.
 5. Clear legacy project `post_content` (after a JSON backup — the fields now hold it) +
    `apply-page-content.php` (page content files; backs up each page first) + `cutover.php` on production; reindex Relevanssi. Free Relevanssi has no WP-CLI command — reindex
    projects with `wp eval` looping `relevanssi_index_doc($id, true, relevanssi_get_custom_fields(), true)`

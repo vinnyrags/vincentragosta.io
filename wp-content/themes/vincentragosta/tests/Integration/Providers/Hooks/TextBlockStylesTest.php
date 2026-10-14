@@ -90,6 +90,10 @@ class TextBlockStylesTest extends BaseTestCase
             'list chips'          => ['core/list', 'chips', 'Chips'],
             'code terminal'       => ['core/code', 'terminal', 'Terminal'],
             'preformatted terminal' => ['core/preformatted', 'terminal', 'Terminal'],
+            'list rows'           => ['core/list', 'rows', 'Rows'],
+            'list arrows'         => ['core/list', 'arrows', 'Arrows'],
+            'list checks'         => ['core/list', 'checks', 'Checks'],
+            'table spec'          => ['core/table', 'spec', 'Spec'],
         ];
     }
 

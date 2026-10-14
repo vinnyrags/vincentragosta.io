@@ -115,4 +115,14 @@ class ContainerBlockStylesTest extends BaseTestCase
         $this->assertArrayHasKey('pipeline', $registry->get_registered_styles_for_block('core/group'));
         $this->assertArrayNotHasKey('pipeline', $registry->get_registered_styles_for_block('core/columns'));
     }
+
+    public function testPageLayoutStylesAreRegistered(): void
+    {
+        $this->hook->registerStyles();
+        $registry = \WP_Block_Styles_Registry::get_instance();
+
+        $this->assertArrayHasKey('window', $registry->get_registered_styles_for_block('core/group'));
+        $this->assertArrayHasKey('timeline', $registry->get_registered_styles_for_block('core/group'));
+        $this->assertArrayHasKey('sticky', $registry->get_registered_styles_for_block('core/column'));
+    }
 }

@@ -12,7 +12,7 @@ use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\DistAssetVersioning;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
-use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
+use ChildTheme\Providers\Theme\Hooks\MediaBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
@@ -59,7 +59,7 @@ class ThemeProvider extends BaseThemeProvider
         AccentHighlight::class,
         DistAssetVersioning::class,
         ContainerBlockStyles::class,
-        CoverBlockStyles::class,
+        MediaBlockStyles::class,
         TextBlockStyles::class,
         SearchSetup::class,
         SocialIconChoices::class,

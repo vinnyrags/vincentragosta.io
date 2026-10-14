@@ -62,10 +62,16 @@ class TextBlockStyles extends BlockStyles
                 ['name' => 'pills', 'label' => __('Pills', 'vincentragosta')],
                 ['name' => 'chips', 'label' => __('Chips', 'vincentragosta')],
                 ['name' => 'index', 'label' => __('Index', 'vincentragosta')],
+                ['name' => 'rows', 'label' => __('Rows', 'vincentragosta')],
+                ['name' => 'arrows', 'label' => __('Arrows', 'vincentragosta')],
+                ['name' => 'checks', 'label' => __('Checks', 'vincentragosta')],
             ],
             'core/code' => [$mutedStyle, $terminalStyle],
             'core/preformatted' => [$terminalStyle],
-            'core/table' => [$mutedStyle],
+            'core/table' => [
+                $mutedStyle,
+                ['name' => 'spec', 'label' => __('Spec', 'vincentragosta')],
+            ],
             'core/button' => [$mutedStyle],
             'core/heading' => [
                 ['name' => 'subheading', 'label' => __('Subheading', 'vincentragosta')],

@@ -1,0 +1,30 @@
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Image Block Styles (core/image)
+// ==========================================================================
+
+// Paper style — a document preview (e.g. the résumé) tilted on its edge and
+// cropped at the bottom, as if sliding out of the panel it sits in.
+.wp-block-image.is-style-paper {
+    margin: var(--wp--preset--spacing--50) 0 0;
+    max-height: 360px;
+    overflow: hidden;
+    border: 1px solid var(--color-border-strong);
+    border-block-end: 0;
+    border-radius: 12px 12px 0 0;
+    transform: rotate(-2deg) translateY(16px);
+    box-shadow: 0 -20px 80px -30px rgb(212 255 58 / 0.35);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+
+// A panel holding a Paper image clips it, so the page appears to slide out of
+// the panel's bottom edge.
+.is-style-panel:has(.is-style-paper) {
+    overflow: hidden;
+}

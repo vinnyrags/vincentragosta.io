@@ -637,3 +637,138 @@
         opacity: 0.85;
     }
 }
+
+// Panel highlight — add the class `is-accent` to a Panel (e.g. one card in a
+// grid) to give it the accent rule and glow. To color text, use the Accent
+// format in the content.
+.is-style-panel.is-accent {
+    border-color: var(--color-accent-line);
+    box-shadow: 0 0 50px -18px rgb(212 255 58 / 0.4);
+}
+
+// Window style (core/group) — a panel with terminal-style window chrome:
+// traffic-light dots and a rule across the top. A first paragraph becomes the
+// window title in the bar (e.g. "whoami", "new-message.txt").
+.wp-block-group.is-style-window {
+    --window-padding: clamp(1.25rem, 2.4vw, 2rem);
+    --window-bar: 42px;
+
+    position: relative;
+    padding: calc(var(--window-bar) + var(--window-padding)) var(--window-padding) var(--window-padding);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--wp--custom--radius--lg);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px rgb(212 255 58 / 0.06), 0 40px 120px -50px rgb(212 255 58 / 0.3);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset-block-start: 15px;
+        inset-inline-start: 16px;
+        width: 11px;
+        height: 11px;
+        border-radius: 50%;
+        background: var(--color-border-strong);
+        box-shadow: 18px 0 0 var(--color-border-strong), 36px 0 0 var(--color-border-strong);
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset-inline: 0;
+        inset-block-start: var(--window-bar);
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    > * {
+        margin-block: 0;
+    }
+
+    > * + * {
+        margin-block-start: var(--wp--preset--spacing--40);
+    }
+
+    > p:first-child {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 72px;
+        height: var(--window-bar);
+        display: flex;
+        align-items: center;
+        margin: 0;
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 12px;
+        color: var(--color-text-dim);
+
+        + * {
+            margin-block-start: 0;
+        }
+    }
+
+    // A Spec table as the last child runs to the window's bottom edge.
+    &:has(> .is-style-spec:last-child) {
+        padding-block-end: 0;
+    }
+}
+
+// Timeline style (core/group) — career/history rows. Each direct child is a
+// Columns block: years | organization + role | description | tag. Column
+// widths come from the block settings; this draws the rules and type.
+.wp-block-group.is-style-timeline {
+    border-block-start: 1px solid var(--color-border);
+
+    > .wp-block-columns {
+        margin: 0;
+        padding-block: var(--wp--preset--spacing--50);
+        border-block-end: 1px solid var(--color-border);
+        gap: var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);
+    }
+
+    .wp-block-column:first-child p {
+        margin: 0;
+        padding-block-start: 0.4rem;
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 13px;
+        color: var(--color-text-muted);
+    }
+
+    :where(h3) {
+        margin: 0;
+        font-size: clamp(1.5rem, 2.2vw, 1.875rem);
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+    }
+
+    :where(h3) + p {
+        margin-block: 0.6rem 0;
+        font-family: var(--wp--preset--font-family--mono);
+        font-size: 12px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--color-text-dim);
+    }
+
+    .wp-block-column:nth-child(3) p {
+        margin: 0;
+        font-size: var(--wp--preset--font-size--30);
+        line-height: 1.6;
+        color: var(--color-text-muted);
+    }
+
+    .wp-block-column:last-child:not(:first-child) .wp-block-list {
+        @include media(md) {
+            justify-content: flex-end;
+        }
+    }
+}
+
+// Sticky style (core/column) — keeps a split section's heading column in
+// view while the content column scrolls.
+.wp-block-column.is-style-sticky {
+    @include media(md) {
+        position: sticky;
+        inset-block-start: calc(var(--header-height, 72px) + var(--wp--preset--spacing--40));
+        align-self: flex-start;
+    }
+}
