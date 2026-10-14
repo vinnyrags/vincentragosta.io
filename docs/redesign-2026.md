@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status:** Phases 0–2 complete and on staging (2026-10-13; `87b7148`, `3c622bd`). Staging has the partials seeded, project fields migrated, Wicked split, and projects reindexed. Next: Phase 3 (projects archive).
+**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy signed off and on staging (`develop` @ `646af75`). Remaining: The Framework, Nous Signal, Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
 
 ## Reference
 
@@ -136,12 +136,13 @@ production during the cutover rehearsal):
   `sticky`, list `rows`, image `paper`, panel `is-accent`, restyled `core/pullquote`, core grid
   layout for card grids. `CoverBlockStyles` → `MediaBlockStyles` (adds image `paper`).
   - [x] Meet me — signed off 2026-10-14 (AI section reworked to an "accelerates / hands-on" contrast and the toolbox to core tiles + a full-stack Spec table, per `mockups/meet-me-v2.html`). Adds list `arrows` / `checks`; Pullquote citation renders as a trailing caption; panel `is-accent` no longer colors headings (use the Accent format). Résumé is the October 2026 v2 PDF; the preview
-    image covers the contact line. The Instagram feed (`[instagram-feed]`) renders **empty on
-    production** (0 items) — the section is left out until the feed is reconnected.
-  - [x] Contact — built locally, awaiting review. Floating labels opted out (static mono labels,
+    image covers the contact line. Instagram section restored (`[instagram-feed feed=1]`, 4 local-image
+    tiles via `update-instagram-feed.php`); works on staging, production still needs the reconnect
+    (cutover 4c).
+  - [x] Contact — signed off, on staging. Floating labels opted out (static mono labels,
     bordered fields, margin-top spacing that neutralizes IX's field margin-bottom). Form copy
     (placeholders, "Send message") is WPForms data → `update-contact-form.php`.
-  - [x] Privacy — built locally, awaiting review. New **Contents** block (`vincentragosta/toc`):
+  - [x] Privacy — signed off, on staging. New **Contents** block (`vincentragosta/toc`):
     lists every H2 with an HTML anchor, labeled by the eyebrow above it; shared `.toc` component +
     `toc.js` (the project detail's card now uses it too). New group style `section` (ruled
     chapters). Compact footer via `seed-content-partials.php` (now also sets Privacy). Copy: adds an
@@ -152,6 +153,9 @@ production during the cutover rehearsal):
     (`label-text`, `meta-text`); the 44 raw 10–12.5px sizes are gone. `custom.measure` (47.5rem)
     is the prose width; `common/_surface.scss` (`panel-surface`) backs Panel, Window, and the
     Contents card. New SCSS should use these, never raw label sizes.
+  - **Spacing (2026-10-14):** `spacing-70` is `clamp(6rem, 13.5vw, 20rem)` (194px at 1440). The
+    footer owns `--footer-gap` (above + below the contact panel); `.site-content` has no bottom
+    padding. Homepage stat strip uses a block margin of `spacing-65`.
   - [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
@@ -189,9 +193,106 @@ production during the cutover rehearsal):
 8. **Rollback:** push the previous `main` sha to production and restore the dump; per-project JSON
    backups from step 5 allow a partial content restore.
 
+## Handoff — continuing the build
+
+For an agent picking this up cold. Read, in order: `CLAUDE.md` (architecture), `RUNBOOK.md` (hosts,
+deploy, traps), then this doc. The mockups are the spec: `docs/redesign-2026/mockups/*.html` (open
+in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
+
+### Working agreement (non-negotiable)
+
+- **One page at a time:** build locally → hand Vincent the local + editor URLs → he reviews and
+  signs off → propose a commit message **and** file list → he approves → commit → push `develop` →
+  `make deploy-staging` (confirm the `old..new develop -> develop` line, not the banner) → run the
+  page's scripts on staging (dry run first) → smoke-check through Cloudflare.
+- **Never** commit, push, or deploy without that explicit approval. No co-author trailer. Never
+  stage `RUNBOOK.md` or `CLAUDE.md` unless he says so — he edits them himself (and never auto-edit
+  `CLAUDE.md`). Never `make push-production`. Never edit IX (shared with client sites).
+- **CMS-first.** Pages are core blocks + registered style variants, authored as
+  `scripts/redesign/content/pages/{slug}.html` and applied with `apply-page-content.php`
+  (backs up first). The editor must open every page with **zero invalid blocks**. Templates only
+  for data the post owns (Nous post header, 404). Push back on one-off CSS — extend the system.
+- **Margin-top only.** No non-zero `margin-bottom` / `margin-block-end` (negative included). A blanket
+  `margin: 0` kills the layout's block gap — zero inline + end only. Spacing from presets.
+- **Design tokens:** font sizes `label` (11.5px) / `meta` (12.5px) via `@include label-text` /
+  `meta-text` (`common/_typography.scss`); `panel-surface` (`common/_surface.scss`); prose width
+  `var(--wp--custom--measure)`; spacing presets `20–70`. Any `.site-content` layout rule needs an
+  `.is-root-container` twin (editor parity — see `layout/_site-main.scss`). American spelling, always.
+
+### Vocabulary (registered, reuse before inventing)
+
+- **Paragraph:** `eyebrow`, `status`, `muted` · **Heading:** `subheading`
+- **List:** `chips`, `index`, `rows` (numbered key points), `arrows` / `checks` (`<strong>Lead</strong> — detail`), `pills`, `muted`
+- **Group:** `panel` (+ class `is-accent`), `window` (first paragraph = title bar), `section`
+  (ruled chapters), `timeline`, `stat-strip`, `pipeline`, `layers`, `testimonials`,
+  `transmission`, `nous-accent` · **Column:** `sticky` · **Table:** `spec` (label | value | count)
+- **Code / preformatted:** `terminal` · **Image:** `paper` · **Cover:** `animated`
+- Core `pullquote` (citation = trailing caption); core **grid** layout (`minimumColumnWidth`) for
+  card grids; rich-text formats **Accent** (`<mark class="accent-highlight">`) and **Serif accent**
+  (`<em class="serif-accent">`); utilities `has-grid-backdrop`, `has-v-lines`.
+- **Contents block** `vincentragosta/toc` (Theme provider, ACF block): lists every H2 that has an HTML
+  anchor (`<h2 id="…">`), labeled by the eyebrow paragraph directly above it ("02 / Cookies" →
+  "Cookies"). Put it in a `sticky` column beside a column of `section` groups. Logic:
+  `TableOfContents::fromBlocks()` (unit-tested); script `assets/js/toc.js` (`[data-toc]`), also used
+  by the project detail card.
+
+### QA loop per page
+
+- `make build` · `composer test` (child PHPUnit) · `npx vitest run` (in the child theme).
+- E2E against DDEV with system Chrome (the bundled Chromium download is broken) — temp config,
+  delete after: `.pw-local.config.js` = `const base = require('./playwright.config.js');
+  module.exports = { ...base, projects: [{ name: 'chrome', use: { ...base.projects[0].use, channel: 'chrome' } }] };`
+  then `npx playwright test -c .pw-local.config.js`. Add each new page to `tests/e2e/smoke.test.js`
+  and `accessibility.test.js`.
+- Screenshots at 1440 and 390 (no horizontal overflow), side by side with the mockup.
+- Editor validity: log in headless with cookies from `wp_generate_auth_cookie()` (via
+  `ddev exec wp eval-file`) for `SECURE_AUTH_COOKIE` + `LOGGED_IN_COOKIE`, open
+  `/wp/wp-admin/post.php?post=ID&action=edit`, walk `wp.data.select('core/block-editor').getBlocks()`
+  for `!isValid`. Never change a password to get in.
+- Local WP admin is at `/wp/wp-admin/` (core lives in `wp/`).
+
+### Remaining work
+
+1. **The Framework (page 68)** — mockup `framework.html`. Hero (H1 + `layers` diagram) + stat strip,
+   then `sticky` column with the Contents block beside 11 `section` groups (Architecture … Developer
+   experience). Fix stale copy while rebuilding: drop light/dark-mode claims; replace
+   `make push-production` with `make deploy-staging` / `deploy-production`; use the real Feature /
+   Hook class names from `ThemeProvider` (e.g. `ContentPartial`, `AccordionIconEnhancer`); **verify
+   the "430+ tests" claim** before reusing it (child PHPUnit alone is 316). Mockup copy is a
+   proposal — the existing page copy (`content/pages/framework.html`) is the source.
+2. **Nous Signal archive (page 431)** — mockup `nous-signal.html`. Hero is page content (red accent
+   comes from `body.nous-signal-page` → accent-1 = nous-red; create `content/pages/nous-signal.html`).
+   Rework the child `ix/blog` override (`src/Providers/Blog/blocks/blog/*`): "latest" feature,
+   month pills with counts (replace the month dropdown), month-grouped text index (date, title,
+   excerpt, read time = words ÷ 230 in PHP), "Show N more"; update its Vitest tests. **Known bug:**
+   the page scrolls sideways at 390px today (renders 506px wide) — fix it here.
+3. **Nous post (single post, 168 posts)** — mockup `nous-post.html`. Rewrite
+   `src/Providers/Blog/templates/single-post.twig` (model on `single-project.twig`): breadcrumb,
+   split title (move `ProjectPost::splitTitle()` to a shared helper, e.g. `src/Support/TitleSplitter.php`),
+   "signal № N" (chronological index, in a `NousPost` model + unit test), lead = excerpt, meta strip,
+   contents card, body, prev/next. **Migration:** every post starts with a legacy group ("Back To
+   Nous" button + heading + "Date:" paragraph) inside `post_content` — write
+   `scripts/redesign/strip-legacy-post-header.php` (exact block-signature match, skip + report
+   anything else, JSON backup, `DRY_RUN` CSV for Vincent to review before any write). Post H2s have
+   **no anchors** — the migration (or the template) must add ids before the Contents card can list
+   them.
+4. **404** — mockup `404.html`. Child `404.php` + `views/404.twig` rendering a content partial
+   (slug `not-found`, seeded by `seed-content-partials.php`) so copy stays in the CMS; compact footer.
+5. **Phase 6** — QA sweep, staging rehearsal from a fresh production copy, then the cutover checklist
+   below (needs Vincent's explicit go-ahead).
+
+### Open decisions (ask Vincent; don't assume)
+
+- **Cloudflare Web Analytics** is injected on prod + staging, contradicting the privacy policy's "no
+  analytics". Disable it in Cloudflare (his login) or name it in the policy.
+- **Meet me stat strip** still has the full section gap above it; the homepage's was halved
+  (`spacing-65` block margin). Offered, not yet decided.
+- `bb1ca82` (docs commit) also carries the `CoverBlockStyles → MediaBlockStyles` rename; HEAD is
+  correct. Recommended leaving history as is (no force-push).
+
 ## Post-launch
 
-- Delete `scripts/redesign/`, `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`;
+- Delete `scripts/redesign/` (incl. `update-contact-form.php`, `update-instagram-feed.php`), `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`;
   propose removing the RUNBOOK's mega-menu re-apply step.
 - Update the README Project section (currently documents methods and a block name that don't exist).
 - Propose CLAUDE.md updates for review.
