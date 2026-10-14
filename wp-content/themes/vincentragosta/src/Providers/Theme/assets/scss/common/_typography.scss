@@ -1,0 +1,21 @@
+// ==========================================================================
+// Typography mixins
+// ==========================================================================
+// The small mono text used across the redesign, built on the theme.json
+// font-size presets `label` (11.5px) and `meta` (12.5px) so sizes live in one
+// place. Color is left to each component.
+// ==========================================================================
+
+// Uppercase mono label — eyebrows, table/field labels, column headings.
+@mixin label-text($size: label) {
+  font-family: var(--wp--preset--font-family--mono);
+  font-size: var(--wp--preset--font-size--#{$size});
+  letter-spacing: var(--wp--custom--tracking--label);
+  text-transform: uppercase;
+}
+
+// Mono metadata — counts, dates, paths, captions (not uppercased).
+@mixin meta-text($size: meta) {
+  font-family: var(--wp--preset--font-family--mono);
+  font-size: var(--wp--preset--font-size--#{$size});
+}

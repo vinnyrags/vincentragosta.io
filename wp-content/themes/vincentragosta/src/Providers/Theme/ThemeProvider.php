@@ -48,6 +48,13 @@ class ThemeProvider extends BaseThemeProvider
     ];
 
     /**
+     * Child blocks (merged with the parent's).
+     */
+    protected array $blocks = [
+        'toc',
+    ];
+
+    /**
      * Hooks to register (always-active structural behavior).
      *
      * Hooks are additive — parent and child hooks are merged automatically.

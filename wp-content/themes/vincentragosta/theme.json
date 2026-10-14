@@ -37,7 +37,8 @@
         "heading": "-0.03em",
         "tight": "-0.015em",
         "label": "0.06em"
-      }
+      },
+      "measure": "47.5rem"
     },
     "spacing": {
       "spacingSizes": [
@@ -134,6 +135,18 @@
     },
     "typography": {
       "fontSizes": [
+        {
+          "fluid": false,
+          "name": "11.5px · Label",
+          "size": "0.71875rem",
+          "slug": "label"
+        },
+        {
+          "fluid": false,
+          "name": "12.5px · Meta",
+          "size": "0.78125rem",
+          "slug": "meta"
+        },
         {
           "fluid": false,
           "name": "13px",

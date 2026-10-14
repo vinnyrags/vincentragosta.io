@@ -1,0 +1,17 @@
+<nav class="toc" aria-labelledby="{{ uid }}" data-toc>
+    <p class="toc__heading" id="{{ uid }}">{{ heading }}</p>
+    {% if entries %}
+        <ol role="list">
+            {% for entry in entries %}
+                <li>
+                    <a href="#{{ entry.id }}" data-toc-link="{{ entry.id }}">
+                        {{ entry.label }} <span aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+        <div class="toc__progress" aria-hidden="true"><span data-toc-progress></span></div>
+    {% else %}
+        <p class="toc__empty">Add an HTML anchor to each H2 (Advanced → HTML anchor) to list it here.</p>
+    {% endif %}
+</nav>

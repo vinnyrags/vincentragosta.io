@@ -10,8 +10,8 @@
  *   - content-partial "Footer"              (footer.html)          default footer
  *   - content-partial "Footer — Compact"    (footer-compact.html)  no CTA panel
  *
- * and points the Contact page at the compact footer (its contact form already
- * does the CTA panel's job).
+ * and points the Contact and Privacy pages at the compact footer (Contact's form already
+ * does the CTA panel's job; Privacy is a reference page).
  *
  * Safe to run BEFORE the redesign code is deployed: if the ContentPartial
  * post type / taxonomy aren't registered yet (old theme), it registers them
@@ -184,17 +184,29 @@ foreach ($partials as [$slug, $title, $file, $term, $isDefault]) {
     }
 }
 
-// 3. Contact page → compact footer (only alongside a freshly written compact partial).
-$contact = get_page_by_path('contact');
-if (!$wroteCompact) {
-    $say('✓ Contact page override left as is');
-} elseif (!$contact) {
-    echo "Error: no page at /contact/ — skipped the compact-footer override.\n";
-    $errors++;
-} else {
-    $setField($contact->ID, 'footer_mode', 'field_partial_overrides_footer_mode', 'custom');
-    $setField($contact->ID, 'footer_partial', 'field_partial_overrides_footer_partial', (string) $ids['footer-compact']);
-    $say("✓ Contact page (#{$contact->ID}) footer → Footer — Compact");
+// 3. Contact + Privacy → compact footer. Applied alongside a freshly written
+// compact partial, or to a page that has never had a footer override (so a
+// re-run never undoes an editor's later choice).
+foreach (['contact' => 'Contact', 'privacy-policy' => 'Privacy policy'] as $path => $label) {
+    $page = get_page_by_path($path);
+    if (!$page) {
+        echo "Error: no page at /{$path}/ — skipped the compact-footer override.\n";
+        $errors++;
+        continue;
+    }
+    $neverSet = get_post_meta($page->ID, 'footer_mode', true) === '';
+    if (!$wroteCompact && !$neverSet) {
+        $say("✓ {$label} page override left as is");
+        continue;
+    }
+    if (empty($ids['footer-compact'])) {
+        echo "Error: no compact footer partial — skipped the {$label} override.\n";
+        $errors++;
+        continue;
+    }
+    $setField($page->ID, 'footer_mode', 'field_partial_overrides_footer_mode', 'custom');
+    $setField($page->ID, 'footer_partial', 'field_partial_overrides_footer_partial', (string) $ids['footer-compact']);
+    $say("✓ {$label} page (#{$page->ID}) footer → Footer — Compact");
 }
 
 if (!$dryRun) {

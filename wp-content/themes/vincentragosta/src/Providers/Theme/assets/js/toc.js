@@ -1,8 +1,10 @@
 /**
- * Project detail — sticky "In this case study" contents card.
+ * Contents card ([data-toc]) — the Contents block on CMS pages and the
+ * project detail's "In this case study" card.
  *
  * Marks the section currently being read (aria-current on its link) and
- * fills the progress bar as the reader moves through the sections.
+ * fills the progress bar as the reader moves through the sections. Sections
+ * are the elements the links point at ([data-toc-link] ids).
  */
 
 /**
@@ -33,7 +35,20 @@ export function progress(top, height, line) {
 }
 
 /**
+ * The elements a contents card's links point at, in link order.
+ * @param {HTMLElement} toc
+ * @returns {HTMLElement[]}
+ */
+export function targets(toc) {
+    return Array.from(toc.querySelectorAll('[data-toc-link]'))
+        .map((link) => document.getElementById(link.dataset.tocLink))
+        .filter(Boolean);
+}
+
+/**
  * Apply the active state and progress to the contents card.
+ * Progress spans from the first section to the end of the last section's
+ * container.
  * @param {HTMLElement} toc
  * @param {HTMLElement[]} sections
  * @param {number} line
@@ -51,22 +66,25 @@ export function update(toc, sections, line) {
     });
 
     const bar = toc.querySelector('[data-toc-progress]');
-    const region = sections[0]?.parentElement;
-    if (bar && region) {
-        const rect = region.getBoundingClientRect();
-        bar.style.transform = `scaleX(${progress(rect.top, rect.height, line)})`;
+    const end = sections[sections.length - 1]?.parentElement;
+    if (bar && end) {
+        const top = sections[0].getBoundingClientRect().top;
+        const height = end.getBoundingClientRect().bottom - top;
+        bar.style.transform = `scaleX(${progress(top, height, line)})`;
     }
 }
 
 /**
- * Wire the contents card to scroll.
+ * Wire every contents card on the page to scroll.
  */
-export function initProjectToc() {
-    const toc = document.querySelector('[data-project-toc]');
-    const sections = Array.from(document.querySelectorAll('[data-toc-section]'));
-    if (!toc || !sections.length) return;
+export function initToc() {
+    const cards = Array.from(document.querySelectorAll('[data-toc]'))
+        .map((toc) => ({ toc, sections: targets(toc) }))
+        .filter(({ sections }) => sections.length);
+    if (!cards.length) return;
 
     const line = () => window.innerHeight * 0.35;
+    const refresh = () => cards.forEach(({ toc, sections }) => update(toc, sections, line()));
     let queued = false;
 
     const onScroll = () => {
@@ -74,17 +92,17 @@ export function initProjectToc() {
         queued = true;
         requestAnimationFrame(() => {
             queued = false;
-            update(toc, sections, line());
+            refresh();
         });
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    update(toc, sections, line());
+    refresh();
 }
 
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initProjectToc);
+    document.addEventListener('DOMContentLoaded', initToc);
 } else {
-    initProjectToc();
+    initToc();
 }

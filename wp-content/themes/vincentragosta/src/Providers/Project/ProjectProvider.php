@@ -46,7 +46,6 @@ class ProjectProvider extends BaseProjectProvider
         }
 
         $this->enqueueStyle('vincentragosta-project-single', 'project.css');
-        $this->enqueueScript('vincentragosta-project-toc', 'project-toc.js');
     }
 
     /**

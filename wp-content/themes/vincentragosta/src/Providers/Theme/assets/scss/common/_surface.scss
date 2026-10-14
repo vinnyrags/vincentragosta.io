@@ -1,0 +1,12 @@
+// ==========================================================================
+// Surface mixins
+// ==========================================================================
+// The bordered panel surface shared by the Panel and Window block styles and
+// the Contents card.
+// ==========================================================================
+
+@mixin panel-surface($radius: lg) {
+  border: 1px solid var(--color-border);
+  border-radius: var(--wp--custom--radius--#{$radius});
+  background: var(--color-surface);
+}

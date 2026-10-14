@@ -1,3 +1,5 @@
+@use 'common/typography' as *;
+
 // ==========================================================================
 // Nous Signal Log block (vincentragosta/nous-log)
 // ==========================================================================
@@ -11,10 +13,7 @@
     justify-content: space-between;
     padding: 1.6rem 1.75rem 1rem;
     border-block-end: 1px solid rgb(255 51 51 / 0.2);
-    font-family: var(--wp--preset--font-family--mono);
-    font-size: 11px;
-    letter-spacing: var(--wp--custom--tracking--label);
-    text-transform: uppercase;
+    @include label-text;
     color: var(--color-text-dim);
   }
 
@@ -54,8 +53,7 @@
 
   &__id,
   &__status {
-    font-family: var(--wp--preset--font-family--mono);
-    font-size: 11.5px;
+    @include meta-text(label);
     color: var(--color-text-dim);
   }
 

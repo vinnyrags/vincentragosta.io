@@ -123,6 +123,7 @@ class ContainerBlockStylesTest extends BaseTestCase
 
         $this->assertArrayHasKey('window', $registry->get_registered_styles_for_block('core/group'));
         $this->assertArrayHasKey('timeline', $registry->get_registered_styles_for_block('core/group'));
+        $this->assertArrayHasKey('section', $registry->get_registered_styles_for_block('core/group'));
         $this->assertArrayHasKey('sticky', $registry->get_registered_styles_for_block('core/column'));
     }
 }

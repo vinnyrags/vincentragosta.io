@@ -1,3 +1,5 @@
+@use 'common/typography' as *;
+
 // ==========================================================================
 // Paragraph Block Styles (core/paragraph)
 // ==========================================================================
@@ -21,10 +23,7 @@ p.is-style-eyebrow {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-family: var(--wp--preset--font-family--mono);
-    font-size: 12px;
-    letter-spacing: var(--wp--custom--tracking--label);
-    text-transform: uppercase;
+    @include label-text(meta);
     color: var(--color-text-dim);
 
     &::before {
@@ -54,8 +53,7 @@ p.is-style-status {
     border: 1px solid var(--color-border-strong);
     // Fixed radius rather than a full pill, so it still reads right when it wraps.
     border-radius: 18px;
-    font-family: var(--wp--preset--font-family--mono);
-    font-size: 12.5px;
+    @include meta-text;
     color: var(--color-text-muted);
 
     strong {

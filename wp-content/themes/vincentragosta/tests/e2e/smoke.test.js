@@ -103,14 +103,14 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('h1.project-detail__title')).toContainText('Celebrity');
         await expect(page.locator('.project-detail__meta dt')).toContainText(['Client', 'Role', 'Year']);
         await expect(page.locator('.project-section')).toHaveCount(3);
-        await expect(page.locator('.project-toc [data-toc-link]')).toHaveCount(3);
+        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(3);
         await expect(page.locator('.project-next')).toBeVisible();
     });
 
     test('project detail contents card tracks the section in view', async ({ page }) => {
         await page.goto('/projects/celebrity-autobiography/');
 
-        await page.locator('.project-toc a[href="#results"]').click();
+        await page.locator('.toc a[href="#results"]').click();
 
         await expect(page.locator('[data-toc-link="results"]')).toHaveAttribute('aria-current', 'true');
     });
@@ -140,6 +140,17 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.is-style-timeline > .wp-block-columns')).toHaveCount(4);
         await expect(page.locator('.is-style-paper img')).toBeVisible();
         expect(errors).toEqual([]);
+    });
+
+    test('privacy page contents card tracks sections and uses the compact footer', async ({ page }) => {
+        const response = await page.goto('/privacy-policy/');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(6);
+        await expect(page.locator('footer.site-footer--footer-compact')).toHaveCount(1);
+
+        await page.locator('.toc a[href="#cookies"]').click();
+        await expect(page.locator('.toc a[href="#cookies"]')).toHaveAttribute('aria-current', 'true');
     });
 
     test('no console errors on homepage', async ({ page }) => {

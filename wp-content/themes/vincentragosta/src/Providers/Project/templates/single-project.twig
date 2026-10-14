@@ -95,8 +95,8 @@
         {% if sections %}
             <div class="project-detail__body">
                 <aside class="project-detail__aside">
-                    <nav class="project-toc" aria-labelledby="project-toc-heading" data-project-toc>
-                        <p class="project-toc__heading" id="project-toc-heading">In this case study</p>
+                    <nav class="toc project-toc" aria-labelledby="project-toc-heading" data-toc>
+                        <p class="toc__heading" id="project-toc-heading">In this case study</p>
                         <ol role="list">
                             {% for section in sections %}
                                 <li>
@@ -106,9 +106,9 @@
                                 </li>
                             {% endfor %}
                         </ol>
-                        <div class="project-toc__progress" aria-hidden="true"><span data-toc-progress></span></div>
+                        <div class="toc__progress" aria-hidden="true"><span data-toc-progress></span></div>
                         {% if post.technologies %}
-                            <p class="project-toc__heading">Built with</p>
+                            <p class="toc__heading">Built with</p>
                             <ul class="project-toc__chips" role="list">
                                 {% for tech in post.technologies %}<li>{{ tech }}</li>{% endfor %}
                             </ul>

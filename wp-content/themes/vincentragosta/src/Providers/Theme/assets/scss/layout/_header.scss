@@ -1,3 +1,4 @@
+@use 'common/typography' as *;
 @use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
 
@@ -112,8 +113,7 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
     padding: 1px 6px;
     border: 1px solid var(--color-border-strong);
     border-radius: 4px;
-    font-family: var(--wp--preset--font-family--mono);
-    font-size: 11px;
+    @include meta-text(label);
     line-height: 1.5;
     color: var(--color-text-dim);
 
@@ -123,8 +123,8 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
   }
 
   // ----------------------------------------------------------- Navigation
-  // In normal flow, centred in the space between the brand and the actions —
-  // so it can never overlap them (it was absolutely centred on the page and
+  // In normal flow, centered in the space between the brand and the actions —
+  // so it can never overlap them (it was absolutely centered on the page and
   // collided with the search field at ~1000px). Below $header-inline-nav the
   // core overlay toggle takes over.
   &__nav {
@@ -334,8 +334,7 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
         padding: 1px 5px;
         border: 1px solid var(--color-border-strong);
         border-radius: 4px;
-        font-family: var(--wp--preset--font-family--mono);
-        font-size: 10px;
+        @include meta-text(label);
         color: var(--color-text-dim);
         pointer-events: none;
       }

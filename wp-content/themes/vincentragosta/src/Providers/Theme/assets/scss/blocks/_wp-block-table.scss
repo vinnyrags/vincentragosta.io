@@ -1,3 +1,4 @@
+@use 'common/typography' as *;
 @use 'common/breakpoints' as *;
 
 // ==========================================================================
@@ -47,10 +48,7 @@
     td:first-child {
         width: 1%;
         padding-inline-end: 2rem;
-        font-family: var(--wp--preset--font-family--mono);
-        font-size: 11px;
-        letter-spacing: var(--wp--custom--tracking--label);
-        text-transform: uppercase;
+        @include label-text;
         white-space: nowrap;
         color: var(--color-text-dim);
     }
@@ -70,8 +68,7 @@
     // Optional third cell — a trailing count or tag.
     td:nth-child(3) {
         width: 1%;
-        font-family: var(--wp--preset--font-family--mono);
-        font-size: 12px;
+        @include meta-text;
         color: var(--color-text-dim);
         text-align: end;
         white-space: nowrap;

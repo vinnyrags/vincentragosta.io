@@ -1,0 +1,98 @@
+@use 'common/surface' as *;
+@use 'common/typography' as *;
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Contents card (.toc) — the Contents block and the project detail's
+// "In this case study" card. toc.js marks the section being read
+// (aria-current) and fills the progress bar.
+// ==========================================================================
+
+.toc {
+  @include panel-surface;
+  padding: var(--wp--preset--spacing--40);
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li a {
+    display: flex;
+    justify-content: space-between;
+    padding-block: var(--wp--preset--spacing--30);
+    border-block-start: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: var(--wp--preset--font-size--20);
+    text-decoration: none;
+
+    span {
+      @include meta-text(label);
+      color: var(--color-text-dim);
+    }
+
+    &:hover,
+    &[aria-current] {
+      color: var(--color-text);
+    }
+
+    &[aria-current] span {
+      color: var(--wp--preset--color--accent-1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: 2px;
+    }
+  }
+
+  &__heading {
+    margin: 0;
+    @include label-text;
+    color: var(--color-text-dim);
+  }
+
+  &__heading + ol {
+    margin-block-start: var(--wp--preset--spacing--30);
+  }
+
+  &__progress {
+    height: 2px;
+    margin-block: var(--wp--preset--spacing--30) 0;
+    overflow: hidden;
+    border-radius: 2px;
+    background: var(--color-border);
+
+    span {
+      display: block;
+      height: 100%;
+      background: var(--wp--preset--color--accent-1);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.15s linear;
+    }
+  }
+
+  // Anything after the progress bar (e.g. "Built with") gets room above it.
+  &__progress + * {
+    margin-block-start: var(--wp--preset--spacing--40);
+  }
+
+  &__empty {
+    margin: var(--wp--preset--spacing--30) 0 0;
+    font-size: var(--wp--preset--font-size--10);
+    color: var(--color-text-dim);
+  }
+}
+
+// Section headings the contents card points at land below the fixed header.
+:is(.site-content, .is-root-container) h2[id] {
+  scroll-margin-block-start: calc(var(--header-height, 72px) + var(--wp--preset--spacing--40));
+}
+
+@include reduced-motion {
+  .toc__progress span {
+    transition: none;
+  }
+}

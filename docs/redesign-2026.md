@@ -141,7 +141,18 @@ production during the cutover rehearsal):
   - [x] Contact — built locally, awaiting review. Floating labels opted out (static mono labels,
     bordered fields, margin-top spacing that neutralizes IX's field margin-bottom). Form copy
     (placeholders, "Send message") is WPForms data → `update-contact-form.php`.
-  - [ ] Privacy · [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
+  - [x] Privacy — built locally, awaiting review. New **Contents** block (`vincentragosta/toc`):
+    lists every H2 with an HTML anchor, labeled by the eyebrow above it; shared `.toc` component +
+    `toc.js` (the project detail's card now uses it too). New group style `section` (ruled
+    chapters). Compact footer via `seed-content-partials.php` (now also sets Privacy). Copy: adds an
+    "Instagram feed" paragraph; "Last updated" → October 14, 2026. **Open:** Cloudflare Web
+    Analytics is injected on prod + staging — disable it or name it in the policy.
+  - **Design-system sweep (2026-10-14):** small mono text now comes from two theme.json font-size
+    presets — `label` (11.5px) and `meta` (12.5px) — via `common/_typography.scss`
+    (`label-text`, `meta-text`); the 44 raw 10–12.5px sizes are gone. `custom.measure` (47.5rem)
+    is the prose width; `common/_surface.scss` (`panel-surface`) backs Panel, Window, and the
+    Contents card. New SCSS should use these, never raw label sizes.
+  - [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 

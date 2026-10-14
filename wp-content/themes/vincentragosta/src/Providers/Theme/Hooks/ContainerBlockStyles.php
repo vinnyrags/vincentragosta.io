@@ -36,6 +36,7 @@ class ContainerBlockStyles extends BlockStyles
                 ['name' => 'transmission', 'label' => __('Transmission', 'vincentragosta')],
                 ['name' => 'window', 'label' => __('Window', 'vincentragosta')],
                 ['name' => 'timeline', 'label' => __('Timeline', 'vincentragosta')],
+                ['name' => 'section', 'label' => __('Section', 'vincentragosta')],
             ],
             'core/columns' => [
                 $statStripStyle,

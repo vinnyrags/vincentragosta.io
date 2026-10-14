@@ -1,0 +1,34 @@
+{
+    "key": "group_block_toc",
+    "title": "Contents Block",
+    "fields": [
+        {
+            "key": "field_block_toc_heading",
+            "label": "Heading",
+            "name": "heading",
+            "type": "text",
+            "instructions": "Label above the list. Entries come from every H2 with an HTML anchor, labeled by the eyebrow above it.",
+            "required": 0,
+            "default_value": "On this page",
+            "placeholder": "On this page"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "block",
+                "operator": "==",
+                "value": "vincentragosta/toc"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0
+}

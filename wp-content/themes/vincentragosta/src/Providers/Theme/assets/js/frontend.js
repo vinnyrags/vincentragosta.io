@@ -8,3 +8,4 @@ import './dropdown';
 import './wpforms-submit-icon';
 import './section-navigator';
 import './testimonials';
+import './toc';

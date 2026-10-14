@@ -1,0 +1,19 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "vincentragosta/toc",
+  "title": "Contents",
+  "category": "widgets",
+  "icon": "list-view",
+  "description": "A sticky contents card for long pages, built from every H2 with an HTML anchor (labeled by the eyebrow above it).",
+  "keywords": ["contents", "toc", "table of contents", "sections"],
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "textdomain": "vincentragosta",
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "render.php"
+  }
+}
