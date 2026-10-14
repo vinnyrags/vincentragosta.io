@@ -146,8 +146,10 @@ production during the cutover rehearsal):
     lists every H2 with an HTML anchor, labeled by the eyebrow above it; shared `.toc` component +
     `toc.js` (the project detail's card now uses it too). New group style `section` (ruled
     chapters). Compact footer via `seed-content-partials.php` (now also sets Privacy). Copy: adds an
-    "Instagram feed" paragraph; "Last updated" → October 14, 2026. **Open:** Cloudflare Web
-    Analytics is injected on prod + staging — disable it or name it in the policy.
+    "Instagram feed" paragraph; "Last updated" → October 14, 2026. Cloudflare Web Analytics
+    (RUM beacon) **disabled 2026-10-14** in the Cloudflare dashboard (Web Analytics → vincentragosta.io
+    → Manage site → Disable; it was "Enable, excluding EU" and injected on prod + staging); a
+    "Cloudflare" paragraph under Third-party services names it as CDN/security provider.
   - **Design-system sweep (2026-10-14):** small mono text now comes from two theme.json font-size
     presets — `label` (11.5px) and `meta` (12.5px) — via `common/_typography.scss`
     (`label-text`, `meta-text`); the 44 raw 10–12.5px sizes are gone. `custom.measure` (47.5rem)
@@ -162,8 +164,10 @@ production during the cutover rehearsal):
     deploy targets, "no runbooks" dropped, the block-allowlist claim made true (`core/html` and
     YouTube embeds are allowed), real Feature/Hook class names, the AssetManager test path. List
     style `rows` is no longer a grid (inline `<code>` became grid cells); the label/number hang as
-    floats, label column 14rem. **Open:** Mythus `composer test` fails (phpunit.xml lists a missing
-    `tests/Integration`), so `make test` stops at step one — fix in the mythus repo.
+    floats, label column 14rem. Mythus's phpunit.xml lists a missing
+    `tests/Integration`, so its `composer test` exits 2; `make test` now runs Mythus's Unit suite only.
+    Upstream fix (drop the suite, v1.4.2) needs Vincent's go — and this site stays on Mythus v1.2.0
+    until after launch.
   - [x] Nous Signal — signed off 2026-10-14. Hero is page content (`content/pages/nous-signal.html`;
     no "live" claims — the feed stopped 2026-08-17). The blog block's "all" mode renders
     `NousArchive` (stats, latest + a `signal.parse()` terminal from real fields, month pills with
@@ -185,6 +189,15 @@ production during the cutover rehearsal):
     re-runs skip. The old card grid, decrypt effect and their templates/styles are removed. The
     Contents card's link styles now target only its `ol`. **Open:** 166 posts mark Nous's "I" with
     the Accent format — reads as a red bar; keep, restyle, or strip.
+  - [x] Search — signed off 2026-10-14 (no mockup; built from the archive/detail components).
+    `search.php` + `views/search.twig`: hero (query, summary "30 results · 29 signals · 1 page", the
+    core search block), type pills with counts (server-side `?post_type=`), index rows with
+    Relevanssi's highlighted excerpts (projects fall back to their lead), paginate_links as pills,
+    empty state with linked panels. `SearchResults` (unit-tested) owns the searchable-type allowlist
+    (project / post / page — `?post_type=product` no longer reaches the query), pills, and summary;
+    `SearchSetup` always scopes the main query to those types. Its `relevanssi_post_types` filter was
+    removed — Relevanssi honors `post_type` itself, and the filter (reading `$_GET`) broke secondary
+    queries.
   - [x] 404 — signed off 2026-10-14. Child `404.php` + `views/404.twig` render the "Not Found"
     content partial (slug `not-found`, no partial type; seeded by `seed-content-partials.php`) with
     the compact footer; falls back to a plain message if the partial is missing. Real 404 status.
@@ -329,8 +342,8 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 ### Open decisions (ask Vincent; don't assume)
 
-- **Cloudflare Web Analytics** is injected on prod + staging, contradicting the privacy policy's "no
-  analytics". Disable it in Cloudflare (his login) or name it in the policy.
+- **Relevanssi min word length** is 3 in every env, so "AI" (and other 2-letter terms) can't be
+  searched. Proposed: set it to 2 and rebuild the index (scripted, dry run first, per env).
 - **Meet me stat strip** still has the full section gap above it; the homepage's was halved
   (`spacing-65` block margin). Offered, not yet decided.
 - `bb1ca82` (docs commit) also carries the `CoverBlockStyles → MediaBlockStyles` rename; HEAD is

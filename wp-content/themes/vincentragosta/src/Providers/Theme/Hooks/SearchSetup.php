@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Theme\Hooks;
 
+use ChildTheme\Providers\Theme\SearchResults;
 use Mythus\Contracts\Hook;
 
 class SearchSetup implements Hook
@@ -11,7 +12,6 @@ class SearchSetup implements Hook
     public function register(): void
     {
         add_action('pre_get_posts', [$this, 'setSearchPostsPerPage']);
-        add_filter('relevanssi_post_types', [$this, 'filterPostTypes']);
     }
 
     public function setSearchPostsPerPage(\WP_Query $query): void
@@ -22,25 +22,10 @@ class SearchSetup implements Hook
 
         $query->set('posts_per_page', 20);
 
-        $postType = sanitize_key($_GET['post_type'] ?? '');
-
-        if ($postType && post_type_exists($postType)) {
-            $query->set('post_type', $postType);
-        }
-    }
-
-    /**
-     * @param array<string> $types
-     * @return array<string>
-     */
-    public function filterPostTypes(array $types): array
-    {
-        $postType = sanitize_key($_GET['post_type'] ?? '');
-
-        if ($postType && post_type_exists($postType)) {
-            return [$postType];
-        }
-
-        return $types;
+        // Always scope to the searchable types: ?post_type= is a public query
+        // var, so an unsearchable value (e.g. the shop's product) would
+        // otherwise reach the query as is.
+        $postType = SearchResults::activeType(sanitize_key($_GET['post_type'] ?? ''));
+        $query->set('post_type', $postType !== '' ? $postType : array_keys(SearchResults::TYPES));
     }
 }

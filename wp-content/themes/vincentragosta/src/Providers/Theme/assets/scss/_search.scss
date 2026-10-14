@@ -1,294 +1,205 @@
-@use 'common/bg-overlay' as *;
+@use 'common/typography' as *;
 @use 'common/breakpoints' as *;
-@use 'common/pill' as *;
+@use 'common/archive' as *;
+@use 'common/detail' as *;
 
 // ==========================================================================
-// Search Results Page
+// Search results (views/search.twig). Hero, type pills, and index rows share
+// the archive and detail components (common/_archive.scss, _detail.scss).
 // ==========================================================================
 
-body.search .footer {
-  margin-block-start: 0;
-}
+// Hero — full-bleed backdrop band with the query, summary, and search form.
+.search-hero {
+  @include detail-header;
 
-body.search .site-content {
-  padding-block: var(--wp--preset--spacing--70);
-}
-
-body.search .site-main {
-  @include bg-pattern-overlay;
-  background-image: url('/wp-content/uploads/2026/02/squiggle-4-grey-1.svg');
-  background-size: cover;
-  background-attachment: fixed;
-}
-
-.site-content > .search-page:first-child {
-  max-width: var(--wp--custom--layout--wide, 1600px);
-  margin: 0 auto;
-  margin-block-start: 0;
-}
-
-.search-page__header {
-  margin-block-end: var(--wp--preset--spacing--50);
-}
-
-.search-page__title {
-  font-family: var(--wp--preset--font-family--sans);
-  font-size: var(--wp--preset--font-size--60);
-  font-weight: 400;
-  line-height: 1.2;
-  margin: 0 0 var(--wp--preset--spacing--20);
-}
-
-.search-page__query {
-  color: var(--wp--preset--color--accent-1);
-}
-
-.search-page__count {
-  color: var(--color-text-muted);
-  font-size: var(--wp--preset--font-size--20);
-  margin: 0;
-}
-
-// ==========================================================================
-// Refine Search Input
-// ==========================================================================
-
-.search-page__form {
-  margin-block-end: var(--wp--preset--spacing--50);
-}
-
-.search-page__input {
-  width: 100%;
-  max-width: 480px;
-  padding: var(--wp--preset--spacing--20) 0;
-  font-size: inherit;
-  font-family: inherit;
-  color: var(--color-text);
-  background: transparent;
-  border: none;
-  border-block-end: 1px solid var(--wp--preset--color--accent-1);
-  outline: none;
-
-  &::placeholder {
-    color: var(--color-text-muted);
+  &__inner {
+    @include detail-inner;
   }
 
-  &:focus {
-    border-block-end-width: 2px;
+  &__title {
+    max-width: 18ch;
+    margin-block-start: 1.75rem;
+    font-size: var(--wp--preset--font-size--90);
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    overflow-wrap: anywhere;
+  }
+
+  &__summary {
+    margin-block-start: 1.5rem;
+    @include meta-text;
+    color: var(--color-text-dim);
+  }
+
+  &__form {
+    max-width: var(--wp--custom--measure);
+    margin-block-start: var(--wp--preset--spacing--50);
   }
 }
 
-// ==========================================================================
-// Filter Tabs
-// ==========================================================================
+// Type filter — the archive toolbar and pills, as links (aria-current marks
+// the active type).
+.search-toolbar {
+  @include archive-toolbar;
 
-.search-filters {
-  margin-block-end: var(--wp--preset--spacing--50);
-}
-
-.search-filters__list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--wp--preset--spacing--20);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    display: flex;
+  &__filters {
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
 }
 
-.search-filters__tab {
-  @extend %pill;
-  border-color: var(--color-border);
-  color: var(--color-text-muted);
-  font-family: inherit;
-  line-height: inherit;
+.search-pill {
+  @include archive-pill;
   text-decoration: none;
-  cursor: pointer;
 
-  &:hover,
-  &:focus-visible {
-    @extend %pill-active;
+  &[aria-current] {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--wp--preset--color--accent-1);
-    outline-offset: 2px;
-  }
-
-  &.is-active {
-    @extend %pill-active;
-  }
-}
-
-// ==========================================================================
-// Search Cards
-// ==========================================================================
-
-.search-page__list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--wp--preset--spacing--40);
-
-  @include media(md) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-%search-panel {
-  padding: var(--wp--preset--spacing--40);
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--wp--custom--border-radius);
-}
-
-.search-card {
-  @extend %search-panel;
-  transition: border-color 0.2s ease;
-
-  &:hover {
-    border-color: var(--wp--preset--color--accent-1);
-  }
-
-  &[data-post-type="post"]:hover {
-    border-color: var(--wp--preset--color--nous-red);
-  }
-
-}
-
-.search-card__meta {
-  display: flex;
-  align-items: center;
-  gap: var(--wp--preset--spacing--20);
-  margin-block-end: var(--wp--preset--spacing--20);
-}
-
-.search-card__type-pill {
-  @extend %pill;
-
-  &--post {
-    border-color: var(--wp--preset--color--nous-red);
-    color: var(--wp--preset--color--nous-red);
-  }
-}
-
-.search-card__date {
-  display: block;
-  font-size: var(--wp--preset--font-size--10);
-  color: var(--color-text-muted);
-  margin-block-start: var(--wp--preset--spacing--20);
-}
-
-.search-card__title {
-  font-family: var(--wp--preset--font-family--sans);
-  font-size: var(--wp--preset--font-size--40);
-  font-weight: 400;
-  line-height: 1.2;
-  margin: 0 0 var(--wp--preset--spacing--20);
-
-  a {
-    text-decoration: none;
+  &[aria-current] .search-pill__count {
     color: inherit;
+    opacity: 0.7;
+  }
+}
 
-    &:hover {
-      color: var(--wp--preset--color--accent-1);
+// Results — type · title + excerpt · meta · arrow. Phones put the type and
+// meta on one line above the text.
+.search-results {
+  margin: var(--wp--preset--spacing--40) 0 0;
+  padding: 0;
+  list-style: none;
+  border-block-start: 1px solid var(--color-border-strong);
+}
+
+.search-row {
+  position: relative;
+  border-block-end: 1px solid var(--color-border);
+
+  &__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem var(--wp--preset--spacing--30);
+    align-items: baseline;
+    padding-block: 20px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+
+    @include media(md) {
+      grid-template-columns: 8.5rem minmax(0, 1fr) auto 24px;
     }
 
     &:focus-visible {
       outline: 2px solid var(--wp--preset--color--accent-1);
-      outline-offset: 4px;
+      outline-offset: -2px;
+    }
+
+    @include archive-row-hover('.search-row__title, .search-row__go');
+  }
+
+  &__type,
+  &__meta {
+    @include meta-text;
+    color: var(--color-text-dim);
+  }
+
+  &__meta {
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  &__body {
+    display: grid;
+    gap: 0.35rem;
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    @include media(md) {
+      grid-column: auto;
+      grid-row: auto;
     }
   }
 
-  [data-post-type="post"] & a {
-    &:hover {
-      color: var(--wp--preset--color--nous-red);
+  &__title {
+    color: var(--color-text);
+    font-size: var(--wp--preset--font-size--40);
+    font-weight: 500;
+    letter-spacing: var(--wp--custom--tracking--tight);
+  }
+
+  &__excerpt {
+    max-width: var(--wp--custom--measure);
+    font-size: var(--wp--preset--font-size--20);
+    line-height: 1.55;
+
+    // Relevanssi's highlight of the matched terms.
+    strong {
+      font-weight: 500;
+      color: var(--color-text);
     }
+  }
 
-    &:focus-visible {
-      outline-color: var(--wp--preset--color--nous-red);
+  &__go {
+    display: none;
+    color: var(--color-text-dim);
+
+    @include media(md) {
+      display: flex;
+      justify-content: flex-end;
     }
   }
 }
 
-.search-card__excerpt {
-  color: var(--color-text-muted);
-  font-size: var(--wp--preset--font-size--20);
-  line-height: 1.6;
-  margin-block-start: var(--wp--preset--spacing--20);
-}
-
-// ==========================================================================
-// Empty State
-// ==========================================================================
-
-.search-page__empty {
-  @extend %search-panel;
-  grid-column: 1 / -1;
-  text-align: center;
-
-  p:first-child {
-    margin-block-start: 0;
-  }
-}
-
-.search-page__empty-message {
-  font-size: var(--wp--preset--font-size--40);
-}
-
-.search-page__empty-suggestion {
-  color: var(--color-text-muted);
-  font-size: var(--wp--preset--font-size--20);
-  margin-block-start: var(--wp--preset--spacing--20);
-
-  a {
-    color: var(--wp--preset--color--accent-1);
-  }
-}
-
-// ==========================================================================
-// Pagination
-// ==========================================================================
-
-.search-pagination {
-  margin-block-start: var(--wp--preset--spacing--50);
-}
-
-.search-pagination__list {
+// Pagination — paginate_links() output as pills.
+.search-pagination ul {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: var(--wp--preset--spacing--20);
-  list-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: var(--wp--preset--spacing--50) 0 0;
   padding: 0;
-  margin: 0;
-}
+  list-style: none;
 
-.search-pagination__link {
-  @extend %pill;
-  cursor: pointer;
+  .page-numbers {
+    @include archive-pill;
+    text-decoration: none;
+  }
 
-  &.is-current {
-    @extend %pill-active;
+  .current {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .dots {
+    border-color: transparent;
     cursor: default;
   }
+}
 
-  &:hover:not(.is-current) {
-    border-color: var(--wp--preset--color--accent-1);
-    color: var(--wp--preset--color--accent-1);
+// No results / no query — a short note, then ways in.
+.search-empty {
+  margin-block-start: var(--wp--preset--spacing--50);
+
+  &__message {
+    max-width: var(--wp--custom--measure);
+    margin: 0;
+    font-size: var(--wp--preset--font-size--30);
+    color: var(--color-text-muted);
+
+    strong {
+      font-weight: 500;
+      color: var(--color-text);
+    }
   }
 }
 
-
-// ==========================================================================
-// Reduced Motion
-// ==========================================================================
-
-@include reduced-motion {
-  .search-card,
-  .search-filters__tab {
-    transition: none;
-  }
+.search-paths {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--wp--preset--spacing--30);
+  margin-block-start: var(--wp--preset--spacing--50);
 }

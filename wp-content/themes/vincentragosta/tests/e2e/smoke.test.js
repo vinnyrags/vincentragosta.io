@@ -247,6 +247,30 @@ test.describe('Smoke tests', () => {
         await expect(page).toHaveURL(/\/projects\/$/);
     });
 
+    test('search lists highlighted results and filters by type', async ({ page }) => {
+        const response = await page.goto('/?s=nvidia');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('.search-hero__title')).toContainText('nvidia');
+        expect(await page.locator('.search-row').count()).toBeGreaterThan(0);
+        await expect(page.locator('.search-row__excerpt strong').first()).toBeVisible();
+
+        await page.locator('.search-pill', { hasText: 'Nous Signal' }).click();
+        await expect(page).toHaveURL(/post_type=post/);
+        await expect(page.locator('.search-pill[aria-current]')).toContainText('Nous Signal');
+        await expect(page.locator('.search-row__type').filter({ hasNotText: 'Nous Signal' })).toHaveCount(0);
+    });
+
+    test('search ignores unsearchable types and shows a way forward when empty', async ({ page }) => {
+        await page.goto('/?s=nvidia&post_type=product');
+        expect(await page.locator('.search-row').count()).toBeGreaterThan(0);
+
+        await page.goto('/?s=zzzqqqxyz');
+        await expect(page.locator('.search-empty')).toBeVisible();
+        await expect(page.locator('.search-toolbar')).toHaveCount(0);
+        await expect(page.locator('.search-paths .is-style-panel')).toHaveCount(3);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {

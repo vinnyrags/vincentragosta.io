@@ -1,109 +1,86 @@
 {% extends "base.twig" %}
 
+{#
+    Search results (search.php). Pills filter by type server-side
+    (?post_type=); counts come from SearchResults. Rows share the archive
+    index look; excerpts carry Relevanssi's <strong> highlights.
+#}
+
 {% block content %}
-  <div class="search-page">
-    <header class="search-page__header">
-      <h1 class="search-page__title">
-        Search results for <span class="search-page__query">"{{ query }}"</span>
-      </h1>
-      <p class="search-page__count">
-        {{ found_posts }} result{{ found_posts != 1 ? 's' : '' }} found
-      </p>
-    </header>
-
-    <form class="search-page__form" role="search" action="{{ site.url }}" method="get">
-      <label for="search-input" class="screen-reader-text">Search</label>
-      <input
-        id="search-input"
-        class="search-page__input"
-        type="search"
-        name="s"
-        value="{{ query }}"
-        placeholder="Refine your search..."
-        aria-label="Search query"
-      />
-    </form>
-
-    <nav class="search-filters" aria-label="Filter by content type">
-      <ul class="search-filters__list">
-        <li>
-          <a
-            href="{{ site.url }}?s={{ query|url_encode }}"
-            class="search-filters__tab{{ not active_post_type ? ' is-active' : '' }}"
-            {{ not active_post_type ? 'aria-current="page"' }}
-          >All</a>
-        </li>
-        {% for slug, label in post_types %}
-          <li>
-            <a
-              href="{{ site.url }}?s={{ query|url_encode }}&post_type={{ slug }}"
-              class="search-filters__tab{{ active_post_type == slug ? ' is-active' : '' }}"
-              {{ active_post_type == slug ? 'aria-current="page"' }}
-            >{{ label }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-
-    <div class="search-page__list">
-      {% for post in posts %}
-        <article class="search-card" data-post-type="{{ post.post_type }}">
-          <div class="search-card__meta">
-            <span class="search-card__type-pill search-card__type-pill--{{ post.post_type }}">
-              {{ post_types[post.post_type] }}
-            </span>
-          </div>
-
-          <h2 class="search-card__title">
-            <a href="{{ post.link }}">{{ post.title }}</a>
-          </h2>
-
-          <time class="search-card__date" datetime="{{ post.date('c') }}">
-            {{ post.date('M j, Y') }}
-          </time>
-
-          {% set raw_excerpt = function('get_post_field', 'post_excerpt', post.id) %}
-          {% if not raw_excerpt %}
-            {% set raw_excerpt = post.meta('_yoast_wpseo_metadesc') %}
-          {% endif %}
-          {% if raw_excerpt %}
-            <p class="search-card__excerpt">{{ raw_excerpt }}</p>
-          {% endif %}
-        </article>
-      {% else %}
-        <div class="search-page__empty">
-          <p class="search-page__empty-message">No results found for "{{ query }}".</p>
-          <p class="search-page__empty-suggestion">Try a different search term or browse our <a href="{{ site.url }}/projects/">projects</a>.</p>
+    <section class="search-hero has-grid-backdrop alignfull">
+        <div class="search-hero__inner">
+            <p class="is-style-eyebrow">Search</p>
+            <h1 class="search-hero__title">
+                {% if query %}
+                    Results for <em class="serif-accent">“{{ query }}”</em>
+                {% else %}
+                    Search the <em class="serif-accent">site</em><mark class="accent-highlight">.</mark>
+                {% endif %}
+            </h1>
+            {% if query %}<p class="search-hero__summary">{{ summary }}</p>{% endif %}
+            <div class="search-hero__form">{{ search_form | raw }}</div>
         </div>
-      {% endfor %}
-    </div>
+    </section>
 
-    {% if posts.pagination and posts.pagination.pages|length > 1 %}
-      <nav class="search-pagination" aria-label="Search results pagination">
-        <ul class="search-pagination__list">
-          {% if posts.pagination.prev %}
-            <li>
-              <a href="{{ posts.pagination.prev.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link" aria-label="Previous page">&larr; Prev</a>
-            </li>
-          {% endif %}
+    {% if query %}
+        {% if pills|length > 1 %}
+        <nav class="search-toolbar" aria-label="Filter results by type">
+            <ul class="search-toolbar__filters" role="list">
+                {% for pill in pills %}
+                    <li>
+                        <a class="search-pill" href="{{ site.url }}/?s={{ query|url_encode }}{{ pill.type ? '&post_type=' ~ pill.type : '' }}"{{ pill.active ? ' aria-current="page"' }}>
+                            {{ pill.label }} <span class="search-pill__count">{{ pill.count }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        {% endif %}
 
-          {% for page in posts.pagination.pages %}
-            <li>
-              {% if page.current %}
-                <span class="search-pagination__link is-current" aria-current="page">{{ page.title }}</span>
-              {% else %}
-                <a href="{{ page.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link">{{ page.title }}</a>
-              {% endif %}
-            </li>
-          {% endfor %}
+        {% if rows %}
+            <ol class="search-results" role="list">
+                {% for row in rows %}
+                    <li class="search-row">
+                        <a class="search-row__link" href="{{ row.link }}">
+                            <span class="search-row__type">{{ row.label }}</span>
+                            <span class="search-row__body">
+                                <span class="search-row__title">{{ row.title }}</span>
+                                {% if row.excerpt %}<span class="search-row__excerpt">{{ row.excerpt | raw }}</span>{% endif %}
+                            </span>
+                            <span class="search-row__meta">{{ row.meta }}</span>
+                            <span class="search-row__go" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
 
-          {% if posts.pagination.next %}
-            <li>
-              <a href="{{ posts.pagination.next.link }}{{ active_post_type ? '&post_type=' ~ active_post_type : '' }}" class="search-pagination__link" aria-label="Next page">Next &rarr;</a>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
+            {% if pagination %}
+                <nav class="search-pagination" aria-label="Search results pages">
+                    <ul role="list">
+                        {% for link in pagination %}<li>{{ link | raw }}</li>{% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="search-empty">
+                <p class="search-empty__message">Nothing matched <strong>“{{ query }}”</strong>{{ active ? ' in this section' : '' }}. Try fewer or different words — or start somewhere below.</p>
+            </div>
+        {% endif %}
     {% endif %}
-  </div>
+
+    {% if not query or not rows %}
+        <div class="search-paths">
+            {% for path in [
+                { href: '/projects/', label: 'Projects', note: 'Every build, grouped by year.' },
+                { href: '/nous-signal/', label: 'Nous Signal', note: 'A daily read on the machine economy.' },
+                { href: '/framework/', label: 'The Framework', note: 'What every site runs on.' },
+            ] %}
+                <div class="wp-block-group is-style-panel">
+                    <p class="is-style-eyebrow">{{ '%02d'|format(loop.index) }}</p>
+                    <h2 class="wp-block-heading has-40-font-size"><a href="{{ site.url }}{{ path.href }}">{{ path.label }}</a></h2>
+                    <p class="is-style-muted has-20-font-size">{{ path.note }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
