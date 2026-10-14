@@ -108,8 +108,14 @@ production during the cutover rehearsal):
   keep a card grid. Page hero (eyebrow, H1, intro) is page content shipped as
   `scripts/redesign/content/pages/projects.html`, applied by `apply-page-content.php` (backs up
   current content first). Sort dropdown dropped — the index is newest-first by design.
-- [ ] **4 — Project detail:** field-driven header + meta strip, browser-frame hero, sticky TOC
-  (section-navigator refactor), content patterns, next/related.
+- [x] **4 — Project detail:** `single-project.twig` renders only from fields — breadcrumb, split
+  title (`ProjectPost::titleParts()`: last word in serif italic; a trailing "(YYYY)" becomes a
+  suffix), live pill, category chips, lead + note, meta strip (client / role / year / stack / live
+  site), browser-frame hero, sticky "In this case study" contents card (`project-toc.js`: active
+  section + progress; replaces the section-navigator pills on detail pages), sections with
+  eyebrow + heading + body + note callout, next project (index order, wraps), up to three related
+  projects with images. JSON-LD gains `sourceOrganization` + `keywords`. Dropped from the mockup:
+  per-project diagram / terminal / results cards (fields-only decision).
 - [ ] **5 — Homepage + remaining pages:** homepage per mockup; token/hero pass on Meet me, Framework,
   Contact, Privacy, Nous Signal. **Privacy policy copy must be rewritten**: it discloses Fira Code
   loading from Google Fonts and a light/dark-mode preference — both removed in Phase 1.

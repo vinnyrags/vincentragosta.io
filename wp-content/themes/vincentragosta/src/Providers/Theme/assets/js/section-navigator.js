@@ -3,7 +3,6 @@
         '.site-content > .wp-block-cover[id]',
         '.site-content > .wp-block-columns[id]',
         '.site-content > .wp-block-group[id]',
-        '.project-detail__section[id]',
     ].join(',');
 
     const MAX_VISIBLE = 5;

@@ -95,4 +95,30 @@ class ProjectRepository extends BaseProjectRepository
 
         return $groups;
     }
+
+    /**
+     * The project after $current in index order (year descending), wrapping
+     * to the first. Null when there is no other project.
+     */
+    public function nextAfter(ProjectPost $current): ?ProjectPost
+    {
+        return self::nextInList($this->allByYear(), (int) $current->ID);
+    }
+
+    /**
+     * @param ProjectPost[] $projects
+     */
+    public static function nextInList(array $projects, int $currentId): ?ProjectPost
+    {
+        $projects = array_values($projects);
+        $count    = count($projects);
+
+        foreach ($projects as $i => $project) {
+            if ((int) $project->ID === $currentId) {
+                return $count > 1 ? $projects[($i + 1) % $count] : null;
+            }
+        }
+
+        return $projects[0] ?? null;
+    }
 }

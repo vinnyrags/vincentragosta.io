@@ -45,6 +45,15 @@ test.describe('Accessibility audits (WCAG 2.1 AA)', () => {
         expect(results.violations).toEqual([]);
     });
 
+    test('project detail page has no accessibility violations', async ({ page }) => {
+        await page.goto('/projects/celebrity-autobiography/');
+        await page.waitForLoadState('networkidle');
+
+        const results = await runAxe(page);
+
+        expect(results.violations).toEqual([]);
+    });
+
     test('contact page has no accessibility violations', async ({ page }) => {
         await page.goto('/contact/');
         await page.waitForLoadState('networkidle');

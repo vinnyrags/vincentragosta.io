@@ -55,6 +55,25 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('[data-view-toggle="grid"]')).toHaveAttribute('aria-pressed', 'true');
     });
 
+    test('project detail renders from fields: header, meta, sections, contents, next', async ({ page }) => {
+        const response = await page.goto('/projects/celebrity-autobiography/');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('h1.project-detail__title')).toContainText('Celebrity');
+        await expect(page.locator('.project-detail__meta dt')).toContainText(['Client', 'Role', 'Year']);
+        await expect(page.locator('.project-section')).toHaveCount(3);
+        await expect(page.locator('.project-toc [data-toc-link]')).toHaveCount(3);
+        await expect(page.locator('.project-next')).toBeVisible();
+    });
+
+    test('project detail contents card tracks the section in view', async ({ page }) => {
+        await page.goto('/projects/celebrity-autobiography/');
+
+        await page.locator('.project-toc a[href="#results"]').click();
+
+        await expect(page.locator('[data-toc-link="results"]')).toHaveAttribute('aria-current', 'true');
+    });
+
     test('contact page loads with WPForms container', async ({ page }) => {
         const response = await page.goto('/contact/');
 

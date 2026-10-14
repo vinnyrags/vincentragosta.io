@@ -1,19 +1,172 @@
 {% extends "base.twig" %}
 
+{#
+    Project detail — rendered entirely from the "Project" ACF fields
+    (ChildTheme\Providers\Project\ProjectPost). Projects have no block editor.
+#}
+
 {% block main %}
     {% if schema is defined %}
         <script type="application/ld+json">{{ schema | raw }}</script>
     {% endif %}
 
-    <article class="site-content project-detail">
-        {{ post.content | raw }}
+    {% set title = post.titleParts %}
+    {% set sections = post.sections %}
+    {% set primary = post.categories|first %}
+    {% set arrow %}<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg>{% endset %}
 
-        {# Related projects #}
+    <article class="site-content project-detail">
+        {# ---------------------------------------------------------------- Header #}
+        <header class="project-detail__header has-grid-backdrop alignfull">
+            <div class="project-detail__inner">
+                <div class="project-detail__top">
+                    <nav class="project-detail__crumb" aria-label="Breadcrumb">
+                        <ol role="list">
+                            <li><a href="{{ site.url }}/projects/">projects</a></li>
+                            {% if primary %}<li><a href="{{ primary.link }}">{{ primary.slug }}</a></li>{% endif %}
+                            <li aria-current="page">{{ post.slug }}</li>
+                        </ol>
+                    </nav>
+                    <a class="project-detail__back" href="{{ site.url }}/projects/">← All projects</a>
+                </div>
+
+                <h1 class="project-detail__title">
+                    {{ title.lead }}{% if title.accent %} <em class="serif-accent">{{ title.accent }}</em>{% endif %}{% if title.suffix %} <span class="project-detail__title-suffix">{{ title.suffix }}</span>{% endif %}
+                </h1>
+
+                <div class="project-detail__intro">
+                    <div class="project-detail__badges">
+                        {% if post.liveHost %}
+                            <a class="project-detail__status" href="{{ post.liveUrl }}" target="_blank" rel="noopener noreferrer">
+                                <span class="project-detail__live"><span class="project-detail__dot" aria-hidden="true"></span>live</span>
+                                {{ post.liveHost }}<span class="screen-reader-text"> (opens in new tab)</span>
+                            </a>
+                        {% endif %}
+                        {% if post.categories %}
+                            <ul class="project-detail__chips" role="list">
+                                {% for category in post.categories %}<li>{{ category.name }}</li>{% endfor %}
+                                {% if post.isCaseStudy %}<li class="is-accent">Case study</li>{% endif %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="project-detail__lead">
+                        {{ post.lead | raw }}
+                        {% if post.leadNote %}<p class="project-detail__lead-note">{{ post.leadNote }}</p>{% endif %}
+                    </div>
+                </div>
+
+                {% set meta = [
+                    { label: 'Client', value: post.client },
+                    { label: 'Role', value: post.role },
+                    { label: 'Year', value: post.year },
+                    { label: 'Stack', value: post.stackSummary },
+                ]|filter(m => m.value) %}
+                {% if meta or post.liveUrl %}
+                    <dl class="project-detail__meta">
+                        {% for item in meta %}
+                            <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
+                        {% endfor %}
+                        {% if post.liveUrl %}
+                            <div>
+                                <dt>Live site</dt>
+                                <dd><a href="{{ post.liveUrl }}" target="_blank" rel="noopener noreferrer">{{ post.liveHost }} {{ arrow }}<span class="screen-reader-text"> (opens in new tab)</span></a></dd>
+                            </div>
+                        {% endif %}
+                    </dl>
+                {% endif %}
+            </div>
+        </header>
+
+        {# ------------------------------------------------------------------ Hero #}
+        {% if post.thumbnail %}
+            <figure class="project-detail__hero">
+                <div class="project-detail__browser" aria-hidden="true">
+                    <span class="project-detail__browser-dots"><i></i><i></i><i></i></span>
+                    <span class="project-detail__browser-url">{{ post.liveUrl ?: (site.url ~ '/projects/' ~ post.slug ~ '/') }}</span>
+                </div>
+                <img src="{{ post.thumbnail.src | resize(1600) }}"
+                     alt="{{ post.thumbnail.alt ?: post.title }}"
+                     width="{{ post.thumbnail.width }}"
+                     height="{{ post.thumbnail.height }}" />
+            </figure>
+        {% endif %}
+
+        {# ------------------------------------------------------------------ Body #}
+        {% if sections %}
+            <div class="project-detail__body">
+                <aside class="project-detail__aside">
+                    <nav class="project-toc" aria-labelledby="project-toc-heading" data-project-toc>
+                        <p class="project-toc__heading" id="project-toc-heading">In this case study</p>
+                        <ol role="list">
+                            {% for section in sections %}
+                                <li>
+                                    <a href="#{{ section.id }}" data-toc-link="{{ section.id }}">
+                                        {{ section.label }} <span aria-hidden="true">{{ '%02d'|format(loop.index) }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                        <div class="project-toc__progress" aria-hidden="true"><span data-toc-progress></span></div>
+                        {% if post.technologies %}
+                            <p class="project-toc__heading">Built with</p>
+                            <ul class="project-toc__chips" role="list">
+                                {% for tech in post.technologies %}<li>{{ tech }}</li>{% endfor %}
+                            </ul>
+                        {% endif %}
+                    </nav>
+                </aside>
+
+                <div class="project-detail__sections">
+                    {% for section in sections %}
+                        <section class="project-section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-heading" data-toc-section>
+                            <p class="is-style-eyebrow">{{ '%02d'|format(loop.index) }} / {{ section.label }}</p>
+                            <h2 class="project-section__heading" id="{{ section.id }}-heading">{{ section.heading }}</h2>
+                            <div class="project-section__body">{{ section.body | raw }}</div>
+                            {% if section.note %}
+                                <p class="project-section__note">{{ section.note | raw }}</p>
+                            {% endif %}
+                        </section>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {# ------------------------------------------------------ Next + related #}
+        {% if next_project %}
+            {% set next_title = next_project.titleParts %}
+            <a class="project-next" href="{{ next_project.link }}">
+                <div class="project-next__text">
+                    <p class="project-next__label">
+                        <span>Next project</span>
+                        <span>{{ next_project.categories|slice(0, 2)|map(c => c.name)|join(' · ') }}</span>
+                    </p>
+                    <p class="project-next__title">
+                        {{ next_title.lead }}{% if next_title.accent %} <em class="serif-accent">{{ next_title.accent }}</em>{% endif %}{% if next_title.suffix %} <span class="project-detail__title-suffix">{{ next_title.suffix }}</span>{% endif %}
+                    </p>
+                    <p class="project-next__meta">
+                        <span>{{ [next_project.client, next_project.year]|filter(v => v)|join(' · ') }}</span>
+                        <span class="project-next__arrow" aria-hidden="true">→</span>
+                    </p>
+                </div>
+                {% if next_project.thumbnail %}
+                    <img class="project-next__image" src="{{ next_project.thumbnail.src | resize(1200) }}" alt="" loading="lazy" />
+                {% endif %}
+            </a>
+        {% endif %}
+
         {% if related is defined and related is not empty %}
-            <section class="project-detail__related alignfull">
-                <div class="project-detail__related-inner">
-                    <h2 class="project-detail__related-heading has-50-font-size"><u>Related Projects</u></h2>
-                    {% include 'projects-grid.twig' with { projects: related } only %}
+            <section class="project-related" aria-labelledby="project-related-heading">
+                <div class="project-related__head">
+                    <div>
+                        <p class="is-style-eyebrow">Related</p>
+                        <h2 id="project-related-heading">More <em class="serif-accent">{{ related_category.name }}</em></h2>
+                    </div>
+                    <a class="project-related__all" href="{{ related_category.link }}">All {{ related_category.name }} projects →</a>
+                </div>
+                <div class="projects-grid">
+                    {% for project in related %}
+                        {% include 'project-card.twig' with { project: project, filterable: false } only %}
+                    {% endfor %}
                 </div>
             </section>
         {% endif %}

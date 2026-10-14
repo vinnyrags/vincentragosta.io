@@ -132,4 +132,23 @@ class ProjectRepositoryTest extends TestCase
     {
         $this->assertSame([], ProjectRepository::groupByYear([]));
     }
+
+    public function testNextInListFollowsOrderAndWraps(): void
+    {
+        $list = [
+            MockProjectPost::create(['ID' => 10]),
+            MockProjectPost::create(['ID' => 20]),
+            MockProjectPost::create(['ID' => 30]),
+        ];
+
+        $this->assertSame(20, ProjectRepository::nextInList($list, 10)->ID);
+        $this->assertSame(10, ProjectRepository::nextInList($list, 30)->ID, 'Wraps to the first');
+        $this->assertSame(10, ProjectRepository::nextInList($list, 99)->ID, 'Unknown current falls back to the first');
+    }
+
+    public function testNextInListIsNullWithoutAnotherProject(): void
+    {
+        $this->assertNull(ProjectRepository::nextInList([MockProjectPost::create(['ID' => 10])], 10));
+        $this->assertNull(ProjectRepository::nextInList([], 10));
+    }
 }
