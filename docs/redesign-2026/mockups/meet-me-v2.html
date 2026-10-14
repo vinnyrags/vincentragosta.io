@@ -1,0 +1,225 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Meet me</title><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="pages.css">
+<style>
+.mhero { padding-top: 88px; }
+.intro { display: grid; grid-template-columns: 1fr 520px; gap: 96px; margin-top: 64px; align-items: start; }
+.idcard { border: 1px solid var(--line-2); border-radius: 16px; background: var(--panel); overflow: hidden; box-shadow: 0 0 0 1px rgba(212,255,58,.06), 0 40px 120px -50px rgba(212,255,58,.3); }
+.idcard dl > div { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 14px 22px; border-top: 1px solid var(--line); align-items: center; }
+.idcard dl > div:first-child { border-top: 0; }
+.idcard dt { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; }
+.idcard dd { font-size: 16px; }
+
+.ai { display: grid; grid-template-columns: 1fr 560px; gap: 80px; align-items: start; }
+.ai .term pre { font-size: 13px; }
+
+.tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tool p { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-top: 14px; }
+.tool { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 24px 24px 26px; }
+.tool header { display: flex; justify-content: space-between; margin-bottom: 22px; }
+.tool .chip { font-size: 12px; padding: 5px 9px; color: #c9cacd; }
+
+.career { border-top: 1px solid var(--line); }
+.job { display: grid; grid-template-columns: 180px 380px 1fr 160px; gap: 32px; padding: 34px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.job .yr { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 6px; }
+.job h4 { font-size: 30px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
+.job .role { font-family: var(--mono); font-size: 12px; color: var(--dim); margin-top: 10px; letter-spacing: .03em; }
+.job p { font-size: 16px; line-height: 1.6; color: var(--muted); }
+.job .tag { justify-self: end; }
+.job.now h4 .it { color: var(--lime); }
+
+.resume { display: grid; grid-template-columns: 1fr 420px; gap: 80px; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); padding: 64px 64px 0; overflow: hidden; position: relative; }
+.resume .paper { align-self: end; height: 360px; border: 1px solid var(--line-2); border-bottom: 0; border-radius: 12px 12px 0 0; overflow: hidden; transform: rotate(-2deg) translateY(16px); box-shadow: 0 -20px 80px -30px rgba(212,255,58,.35); }
+.resume .paper img { width: 100%; display: block; }
+
+.ig { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.ig div { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 14px; background: repeating-linear-gradient(135deg, var(--panel) 0 14px, #121316 14px 28px); display: grid; place-items: end start; padding: 16px; font-family: var(--mono); font-size: 11px; color: var(--dim); }
+
+/* v2: AI contrast + core stack */
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.vs .panel { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 32px; }
+.vs .panel.hl { border-color: rgba(212,255,58,.5); box-shadow: 0 0 60px -24px rgba(212,255,58,.45); }
+.vs h3 { font-size: 34px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; margin-top: 18px; }
+.vs h3 .it { font-size: 1.08em; }
+.vs .panel.hl h3 .lime { color: var(--lime); }
+.vs ul { list-style: none; margin-top: 26px; border-top: 1px solid var(--line); }
+.vs li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 15px 0; border-bottom: 1px solid var(--line); font-size: 16px; line-height: 1.55; color: var(--muted); }
+.vs li b { color: var(--text); font-weight: 500; }
+.vs li::before { font-family: var(--mono); font-size: 12px; padding-top: 3px; }
+.vs .accel li::before { content: "→"; color: var(--dim); }
+.vs .own li::before { content: "✓"; color: var(--lime); }
+.closer { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; margin-top: 14px; border: 1px solid var(--line); border-radius: 16px; padding: 28px 32px; background: linear-gradient(90deg, rgba(212,255,58,.06), transparent 70%); border-left: 2px solid var(--lime); }
+.closer q { font-family: var(--serif); font-style: italic; font-size: 34px; color: #e2e2e4; quotes: "“" "”"; }
+.closer span { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+
+.core { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+.tile { border: 1px solid var(--line); border-radius: 16px; background: var(--panel); padding: 24px; display: flex; flex-direction: column; min-height: 230px; }
+.tile .k { display: flex; justify-content: space-between; }
+.tile .k b { color: var(--lime); font-weight: 400; }
+.tile h4 { font-size: 26px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.08; padding-top: 44px; }
+.tile p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin-top: auto; padding-top: 16px; }
+.tile:first-child { border-color: rgba(212,255,58,.5); box-shadow: 0 0 50px -20px rgba(212,255,58,.4); }
+.tile:first-child h4 { color: var(--lime); }
+.full { margin-top: 14px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel); overflow: hidden; }
+.full > div { display: grid; grid-template-columns: 240px 1fr 60px; gap: 24px; padding: 17px 24px; border-top: 1px solid var(--line); align-items: baseline; }
+.full > div:first-child { border-top: 0; }
+.full .v { font-size: 16px; line-height: 1.6; color: var(--muted); }
+.full .v b { color: var(--text); font-weight: 500; }
+.full .n { font-family: var(--mono); font-size: 12px; color: var(--dim); text-align: right; }
+.legend { display: flex; gap: 18px; margin-top: 16px; font-family: var(--mono); font-size: 11.5px; color: var(--dim); }
+.legend b { color: var(--text); font-weight: 500; font-family: var(--sans); font-size: 13px; }
+</style></head><body>
+<div class="gridbg" style="position:relative;overflow:hidden">
+  <div class="glow" style="width:1000px;height:800px;right:-300px;top:-100px"></div>
+  <div class="wrap" style="position:relative">
+    <header class="nav"><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta <span class="ver">v11.0</span></a><nav class="menu"><a class="on">Meet me</a><a>Projects</a><a>The Framework</a><a>Nous Signal</a><a>Contact</a></nav><div class="navr"><div class="search">Search… <span class="kbd">⌘K</span></div><a class="btn primary">Start a project →</a></div></header>
+    <section class="mhero">
+      <div class="eyebrow">Meet me</div>
+      <h1 class="h1" style="margin-top:36px">Building websites<br>since <span class="it">2015</span><span class="lime">.</span></h1>
+    </section>
+    <div class="intro">
+      <div>
+        <p class="lead">From nonprofit storytelling to digital marketing at scale to independent client work — <b>over a decade of solving real problems with clean, maintainable code</b> and a bias toward shipping.</p>
+        <div style="display:flex;gap:10px;margin-top:36px"><a class="btn primary lg">Start a project →</a><a class="btn lg">Download résumé ↓</a></div>
+      </div>
+      <div class="idcard">
+        <div class="bar"><i></i><i></i><i></i><span>whoami</span></div>
+        <dl>
+          <div><dt>NAME</dt><dd>Vincent Ragosta</dd></div>
+          <div><dt>ROLE</dt><dd>Senior WordPress engineer</dd></div>
+          <div><dt>BASED IN</dt><dd>Brooklyn, NY</dd></div>
+          <div><dt>PRACTICE</dt><dd>Independent · WordPress · Headless</dd></div>
+          <div><dt>EDUCATION</dt><dd>B.S. Computer Science, Brooklyn College</dd></div>
+          <div><dt>STATUS</dt><dd><span class="status"><span class="live"><span class="dot"></span>open</span>to new work</span></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>11<span class="lime">+</span></b><span>Years building for the web</span></div>
+      <div><b>75<span class="lime">+</span></b><span>Web properties at agency scale</span></div>
+      <div><b>4M<span class="lime">+</span></b><span>Annual ticket buyers served</span></div>
+      <div><b>69</b><span>Projects in the archive</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- 01 Philosophy -->
+  <section class="section split">
+    <div>
+      <div class="eyebrow">01 / Working philosophy</div>
+      <h2 class="h2">What I <span class="it">optimize</span> for.</h2>
+    </div>
+    <div>
+      <div class="prose">
+        <p>I believe the best digital work comes from understanding the full picture — <b>not just the design or the code, but the business problem behind both.</b> Every project I take on starts with listening: what's the goal, who's it for, and what does success look like?</p>
+        <p>I write code that's meant to last. That means strict types, automated testing, semantic markup, and accessibility built in from the start — not bolted on at the end. I care about performance, maintainability, and giving the next developer <em>(or future me)</em> something clear to work with.</p>
+      </div>
+      <div class="rows">
+        <div><span class="n">01</span><b>Full-stack ownership</b><p>I move comfortably between frontend and backend, from React editor components to PHP architecture to CI pipelines.</p></div>
+        <div><span class="n">02</span><b>Convention over configuration</b><p>Predictable patterns reduce onboarding friction and cognitive overhead. If the structure is obvious, the code explains itself.</p></div>
+        <div><span class="n">03</span><b>Ship, measure, iterate</b><p>I'd rather ship something focused and refine it than chase perfection in isolation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 AI -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">02 / AI integration</div><h2 class="h2">How AI <span class="it">fits</span> into<br>my workflow.</h2></div>
+      <p>Use AI to move faster on the work that benefits from speed — and stay hands-on for the decisions that benefit from experience.</p>
+    </div>
+    <div class="vs">
+      <div class="panel accel">
+        <span class="k">Where AI accelerates</span>
+        <h3>The work that benefits from <span class="it">speed</span>.</h3>
+        <ul>
+          <li><span><b>Research &amp; exploration</b> — surveying approaches and prototyping before committing to a direction.</span></li>
+          <li><span><b>First drafts</b> — boilerplate and implementations, pair-programmed through the edge cases.</span></li>
+          <li><span><b>Tests &amp; documentation</b> — scaffolds and docs that keep a growing codebase consistent.</span></li>
+          <li><span><b>A second pair of eyes</b> — catching blind spots in code review.</span></li>
+        </ul>
+      </div>
+      <div class="panel own hl">
+        <span class="k">Where I stay hands-on</span>
+        <h3>The decisions that benefit from <span class="it">experience</span><span class="lime">.</span></h3>
+        <ul>
+          <li><span><b>Architecture</b> — I don't hand over the decisions the rest of the system depends on.</span></li>
+          <li><span><b>Judgment</b> — knowing what good output looks like, and when to override it.</span></li>
+          <li><span><b>Verification</b> — every AI-assisted change is reviewed, tested, and understood.</span></li>
+          <li><span><b>What ships</b> — the context and the taste are still the human's job.</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="closer"><q>I don't ship code I don't understand.</q><span>runbooks · dry runs · verified releases</span></div>
+  </section>
+
+  <!-- 03 Skills -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">03 / Skills</div><h2 class="h2">The <span class="it">toolbox</span>.</h2></div>
+      <p>A decade of building for the web means picking up a wide range of tools — and knowing when to reach for each one. These five are where I go deepest.</p>
+    </div>
+    <div class="core">
+      <div class="tile"><span class="k"><span>Core</span><b>01</b></span><h4>WordPress VIP</h4><p>High-traffic multisite for a Fortune 500 brand, through VIP code review.</p></div>
+      <div class="tile"><span class="k"><span>Core</span><b>02</b></span><h4>React + TypeScript</h4><p>Gutenberg blocks, Next.js storefronts, typed front ends.</p></div>
+      <div class="tile"><span class="k"><span>Core</span><b>03</b></span><h4>GraphQL APIs</h4><p>Schemas, resolvers, and caching for web and native clients.</p></div>
+      <div class="tile"><span class="k"><span>Core</span><b>04</b></span><h4>Gutenberg</h4><p>Custom blocks and an editor that matches the front end.</p></div>
+      <div class="tile"><span class="k"><span>Core</span><b>05</b></span><h4>Performance &amp; caching</h4><p>Redis, FastCGI, and Cloudflare, tuned for Core Web Vitals.</p></div>
+    </div>
+    <div class="full"><div><span class="k">WordPress</span><span class="v"><b>WordPress VIP</b> · <b>Gutenberg (React)</b> · <b>ACF</b> · <b>Multisite</b> · custom themes &amp; plugins · block.json v3 · custom post types · editorial workflows · WP-CLI · WP-Cron</span><span class="n">10</span></div><div><span class="k">Front end</span><span class="v"><b>React 19</b> · <b>Next.js (ISR)</b> · <b>TypeScript</b> · JavaScript (ES6+) · Vue · Twig · HTML5 · CSS / SASS</span><span class="n">08</span></div><div><span class="k">GraphQL &amp; APIs</span><span class="v"><b>GraphQL schema design</b> · resolvers · queries &amp; mutations · client caching · TypeScript codegen · <b>WPGraphQL</b> · REST API · webhooks</span><span class="n">08</span></div><div><span class="k">Performance &amp; caching</span><span class="v"><b>Redis object cache</b> · nginx FastCGI cache · <b>Cloudflare CDN</b> · transients · <b>Core Web Vitals</b></span><span class="n">05</span></div><div><span class="k">Integrations</span><span class="v">GA4 / GTM · marketing pixels · video · search · SSO / identity · <b>Stripe</b> · <b>ticketing APIs</b> · content feeds</span><span class="n">08</span></div><div><span class="k">Quality &amp; standards</span><span class="v"><b>PHPUnit</b> · Jest · Cypress · code review · <b>WCAG / ARIA</b> · technical SEO · JSON-LD schema · secure development</span><span class="n">08</span></div><div><span class="k">Platform &amp; DevOps</span><span class="v"><b>PHP 8.x</b> · MySQL / MariaDB · Node.js · GitHub Actions · CI/CD · <b>Docker / DDEV</b> · Linux · <b>nginx</b> · DigitalOcean · AWS</span><span class="n">10</span></div><div><span class="k">AI-assisted</span><span class="v"><b>Claude Code</b> · documented runbooks · dry runs · verification before every release</span><span class="n">04</span></div></div>
+    <div class="legend"><span><b>Bold</b> — daily drivers</span><span>muted — in the toolkit</span></div>
+  </section>
+
+  <!-- 04 Career -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">04 / Career</div><h2 class="h2">Nonprofits, agencies,<br><span class="it">independent</span> work.</h2></div>
+      <p>Hired straight out of college in 2015. A decade later: an independent practice with real ownership over long-running projects.</p>
+    </div>
+    <div class="career">
+      <div class="job now"><span class="yr">2020 — now</span><div><h4>Vincent Ragosta <span class="it">Inc.</span></h4><div class="role">INDEPENDENT WORDPRESS ENGINEER</div></div><p>WordPress VIP work for a Fortune 500 financial-software brand, Broadway and arts sites with live ticketing, a headless Next.js storefront on WPGraphQL — and Mythus + IX, the framework every client build starts from.</p><span class="status tag"><span class="live"><span class="dot"></span>current</span></span></div>
+      <div class="job"><span class="yr">2018 — 2026</span><div><h4>Situation Interactive</h4><div class="role">SENIOR WORDPRESS DEVELOPER · LEAD</div></div><p>Lead developer on a four-person team maintaining 75+ properties for Broadway and the performing arts. Front-end lead on Criterion, Roundabout Theatre Company's ticketing platform — on a GraphQL API that also serves its native apps.</p><span class="chip tag">Webby Honoree</span></div>
+      <div class="job"><span class="yr">2015 — 2018</span><div><h4>StoryCorps</h4><div class="role">SENIOR WORDPRESS DEVELOPER</div></div><p>Built and maintained 5+ WordPress properties for the national oral-history nonprofit during a period of national expansion.</p><span class="chip tag">Nonprofit</span></div>
+      <div class="job"><span class="yr">2012 — 2015</span><div><h4>Brooklyn College</h4><div class="role">B.S. COMPUTER SCIENCE</div></div><p>Brooklyn, NY.</p><span class="chip tag">Education</span></div>
+    </div>
+  </section>
+
+  <!-- Résumé -->
+  <section class="section resume">
+    <div style="padding-bottom:64px">
+      <div class="eyebrow">Résumé</div>
+      <h2 class="h2" style="margin-top:24px">Want the <span class="it">full</span> picture?</h2>
+      <p class="lead" style="margin-top:28px;max-width:520px">Experience, skills, and education on one page. Updated October 2026.</p>
+      <div style="display:flex;gap:10px;margin-top:36px"><a class="btn primary lg">Download résumé ↓</a><a class="btn lg">View projects</a></div>
+    </div>
+    <div class="paper"><img src="resume-v2-preview.jpg" alt=""></div>
+  </section>
+
+  <!-- Instagram -->
+  <section class="section">
+    <div class="shead" style="margin-bottom:40px">
+      <div><div class="eyebrow">Outside the editor</div><h2 class="h3" style="margin-top:22px">Latest from the <span class="it">feed</span>.</h2></div>
+      <p style="text-align:right"><a class="btn">Follow on Instagram ↗</a></p>
+    </div>
+    <div class="ig"><div>instagram · 01</div><div>instagram · 02</div><div>instagram · 03</div><div>instagram · 04</div></div>
+  </section>
+
+  <section class="cta">
+  <svg class="v" viewBox="0 0 380 520"><path d="M0 0h90l100 300L290 0h90L230 520h-80z" fill="rgba(212,255,58,.06)" stroke="rgba(212,255,58,.35)"/></svg>
+  <div class="eyebrow" style="position:relative">Contact</div>
+  <h3 style="margin-top:28px;position:relative">Have a project?<br><span class="it">Let's</span> <span class="lime">ship it.</span></h3>
+  <div class="row" style="position:relative"><p>Looking for a senior-level technical partner, not just a pair of hands? Tell me what you're building.</p>
+  <div style="display:flex;gap:10px"><a class="btn lg">View résumé</a><a class="btn primary lg">Start a project →</a></div></div>
+  <div class="meta"><span>Brooklyn, NY</span><span>Independent practice · WordPress · Headless</span><span>Open to new work</span></div>
+</section>
+  <footer>
+  <div class="foot">
+    <div><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta</a><p class="about">Senior WordPress engineering from Brooklyn, built on a framework refined over six years.</p></div>
+    <div><h5>MEET ME</h5><ul><li>Overview</li><li>My approach</li><li>Career</li><li>Skills</li><li>AI integration</li></ul></div>
+    <div><h5>WORK</h5><ul><li>Projects</li><li>The framework</li><li>Tech stack</li><li>Testing</li><li>Security</li></ul></div>
+    <div><h5>ELSEWHERE</h5><ul><li>Nous Signal</li><li>Résumé</li><li>Contact</li><li>Privacy policy</li></ul></div>
+  </div>
+  <div class="wordmark">vincentragosta</div>
+  <div class="legal"><span>© 2026 Vincent Ragosta</span><span>Built on WordPress · Powered by the framework</span></div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,196 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Meet me</title><link rel="stylesheet" href="base.css"><link rel="stylesheet" href="pages.css">
+<style>
+.mhero { padding-top: 88px; }
+.intro { display: grid; grid-template-columns: 1fr 520px; gap: 96px; margin-top: 64px; align-items: start; }
+.idcard { border: 1px solid var(--line-2); border-radius: 16px; background: var(--panel); overflow: hidden; box-shadow: 0 0 0 1px rgba(212,255,58,.06), 0 40px 120px -50px rgba(212,255,58,.3); }
+.idcard dl > div { display: grid; grid-template-columns: 130px 1fr; gap: 16px; padding: 14px 22px; border-top: 1px solid var(--line); align-items: center; }
+.idcard dl > div:first-child { border-top: 0; }
+.idcard dt { font-family: var(--mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; }
+.idcard dd { font-size: 16px; }
+
+.ai { display: grid; grid-template-columns: 1fr 560px; gap: 80px; align-items: start; }
+.ai .term pre { font-size: 13px; }
+
+.tools { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tool p { font-size: 13.5px; line-height: 1.55; color: var(--muted); margin-top: 14px; }
+.tool { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); padding: 24px 24px 26px; }
+.tool header { display: flex; justify-content: space-between; margin-bottom: 22px; }
+.tool .chip { font-size: 12px; padding: 5px 9px; color: #c9cacd; }
+
+.career { border-top: 1px solid var(--line); }
+.job { display: grid; grid-template-columns: 180px 380px 1fr 160px; gap: 32px; padding: 34px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.job .yr { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 6px; }
+.job h4 { font-size: 30px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.1; }
+.job .role { font-family: var(--mono); font-size: 12px; color: var(--dim); margin-top: 10px; letter-spacing: .03em; }
+.job p { font-size: 16px; line-height: 1.6; color: var(--muted); }
+.job .tag { justify-self: end; }
+.job.now h4 .it { color: var(--lime); }
+
+.resume { display: grid; grid-template-columns: 1fr 420px; gap: 80px; border: 1px solid var(--line); border-radius: 24px; background: var(--panel); padding: 64px 64px 0; overflow: hidden; position: relative; }
+.resume .paper { align-self: end; height: 360px; border: 1px solid var(--line-2); border-bottom: 0; border-radius: 12px 12px 0 0; overflow: hidden; transform: rotate(-2deg) translateY(16px); box-shadow: 0 -20px 80px -30px rgba(212,255,58,.35); }
+.resume .paper img { width: 100%; display: block; }
+
+.ig { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.ig div { aspect-ratio: 1; border: 1px solid var(--line); border-radius: 14px; background: repeating-linear-gradient(135deg, var(--panel) 0 14px, #121316 14px 28px); display: grid; place-items: end start; padding: 16px; font-family: var(--mono); font-size: 11px; color: var(--dim); }
+</style></head><body>
+<div class="gridbg" style="position:relative;overflow:hidden">
+  <div class="glow" style="width:1000px;height:800px;right:-300px;top:-100px"></div>
+  <div class="wrap" style="position:relative">
+    <header class="nav"><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta <span class="ver">v11.0</span></a><nav class="menu"><a class="on">Meet me</a><a>Projects</a><a>The Framework</a><a>Nous Signal</a><a>Contact</a></nav><div class="navr"><div class="search">Search… <span class="kbd">⌘K</span></div><a class="btn primary">Start a project →</a></div></header>
+    <section class="mhero">
+      <div class="eyebrow">Meet me</div>
+      <h1 class="h1" style="margin-top:36px">Building websites<br>since <span class="it">2015</span><span class="lime">.</span></h1>
+    </section>
+    <div class="intro">
+      <div>
+        <p class="lead">From nonprofit storytelling to digital marketing at scale to independent client work — <b>over a decade of solving real problems with clean, maintainable code</b> and a bias toward shipping.</p>
+        <div style="display:flex;gap:10px;margin-top:36px"><a class="btn primary lg">Start a project →</a><a class="btn lg">Download résumé ↓</a></div>
+      </div>
+      <div class="idcard">
+        <div class="bar"><i></i><i></i><i></i><span>whoami</span></div>
+        <dl>
+          <div><dt>NAME</dt><dd>Vincent Ragosta</dd></div>
+          <div><dt>ROLE</dt><dd>Senior WordPress engineer</dd></div>
+          <div><dt>BASED IN</dt><dd>Brooklyn, NY</dd></div>
+          <div><dt>PRACTICE</dt><dd>Independent · WordPress · Headless</dd></div>
+          <div><dt>EDUCATION</dt><dd>B.S. Computer Science, Brooklyn College</dd></div>
+          <div><dt>STATUS</dt><dd><span class="status"><span class="live"><span class="dot"></span>open</span>to new work</span></dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="stats">
+      <div><b>11<span class="lime">+</span></b><span>Years building for the web</span></div>
+      <div><b>75<span class="lime">+</span></b><span>Web properties at agency scale</span></div>
+      <div><b>4M<span class="lime">+</span></b><span>Annual ticket buyers served</span></div>
+      <div><b>69</b><span>Projects in the archive</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- 01 Philosophy -->
+  <section class="section split">
+    <div>
+      <div class="eyebrow">01 / Working philosophy</div>
+      <h2 class="h2">What I <span class="it">optimize</span> for.</h2>
+    </div>
+    <div>
+      <div class="prose">
+        <p>I believe the best digital work comes from understanding the full picture — <b>not just the design or the code, but the business problem behind both.</b> Every project I take on starts with listening: what's the goal, who's it for, and what does success look like?</p>
+        <p>I write code that's meant to last. That means strict types, automated testing, semantic markup, and accessibility built in from the start — not bolted on at the end. I care about performance, maintainability, and giving the next developer <em>(or future me)</em> something clear to work with.</p>
+      </div>
+      <div class="rows">
+        <div><span class="n">01</span><b>Full-stack ownership</b><p>I move comfortably between frontend and backend, from React editor components to PHP architecture to CI pipelines.</p></div>
+        <div><span class="n">02</span><b>Convention over configuration</b><p>Predictable patterns reduce onboarding friction and cognitive overhead. If the structure is obvious, the code explains itself.</p></div>
+        <div><span class="n">03</span><b>Ship, measure, iterate</b><p>I'd rather ship something focused and refine it than chase perfection in isolation.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 AI -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">02 / AI integration</div><h2 class="h2">How AI <span class="it">fits</span> into<br>my workflow.</h2></div>
+      <p>Deliberately, with clear boundaries — the same way I'd integrate any powerful tool.</p>
+    </div>
+    <div class="ai">
+      <div>
+        <div class="prose">
+          <p>AI is exceptional at accelerating research, generating boilerplate, stress-testing ideas, and catching blind spots in code review. I use it daily.</p>
+          <p>But I don't hand over architectural decisions. AI works best when the developer driving it knows what good output looks like — and knows when to override it. <b>The judgment, the context, the taste — that's still the human's job.</b></p>
+        </div>
+        <blockquote class="pull">“I don't ship code I don't understand.”</blockquote>
+      </div>
+      <div class="term">
+        <div class="bar"><i></i><i></i><i></i><span>~/projects/client-site — the loop</span></div>
+<pre><span class="c"># 1. draft fast</span>
+<span class="p">$</span> claude "add a next-project query by year"
+  <span class="ok">✓</span> draft ready · 3 files changed
+<span class="c"># 2. prove it</span>
+<span class="p">$</span> make test
+  <span class="ok">✓</span> phpunit  <span class="ok">✓</span> vitest  <span class="ok">✓</span> playwright + axe
+<span class="c"># 3. read every line before it ships</span>
+<span class="p">$</span> git diff --stat
+  <span class="p">reviewed · understood · committed</span></pre>
+      </div>
+    </div>
+    <div class="feats" style="margin-top:56px">
+      <div class="feat"><span class="n">01</span><div class="ic">&lt;/&gt;</div><h4>Code generation &amp; review</h4><p>Drafting implementations, catching edge cases, and pair-programming through complex logic.</p></div>
+      <div class="feat"><span class="n">02</span><div class="ic">?</div><h4>Research &amp; exploration</h4><p>Surveying approaches, evaluating trade-offs, and prototyping ideas before committing to a direction.</p></div>
+      <div class="feat"><span class="n">03</span><div class="ic">✎</div><h4>Documentation &amp; testing</h4><p>Test scaffolds, clear documentation, and consistency across a growing codebase.</p></div>
+      <div class="feat hl"><span class="n">04</span><div class="ic">✓</div><h4>Always verified</h4><p>Every AI-assisted output is reviewed, tested, and understood before it ships.</p></div>
+    </div>
+  </section>
+
+  <!-- 03 Skills -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">03 / Skills</div><h2 class="h2">The <span class="it">toolbox</span>.</h2></div>
+      <p>A decade of building for the web means picking up a wide range of tools — and knowing when to reach for each one.</p>
+    </div>
+    <div class="tools">
+      <div class="tool"><header><span class="k">WordPress</span><span class="k">11</span></header><div class="chips"><span class="chip">WordPress VIP</span><span class="chip">Multisite</span><span class="chip">Custom themes</span><span class="chip">Custom plugins</span><span class="chip">Gutenberg (React)</span><span class="chip">block.json v3</span><span class="chip">Custom post types</span><span class="chip">ACF</span><span class="chip">Editorial workflows</span><span class="chip">WP-CLI</span><span class="chip">WP-Cron</span></div></div>
+      <div class="tool"><header><span class="k">Front end</span><span class="k">08</span></header><div class="chips"><span class="chip">React 19</span><span class="chip">Next.js (ISR)</span><span class="chip">TypeScript</span><span class="chip">JavaScript (ES6+)</span><span class="chip">Vue</span><span class="chip">HTML5</span><span class="chip">CSS / SASS</span><span class="chip">Twig</span></div></div>
+      <div class="tool"><header><span class="k">GraphQL &amp; APIs</span><span class="k">08</span></header><div class="chips"><span class="chip">Schema design</span><span class="chip">Resolvers</span><span class="chip">Queries &amp; mutations</span><span class="chip">Client caching</span><span class="chip">TypeScript codegen</span><span class="chip">WPGraphQL</span><span class="chip">REST API</span><span class="chip">Webhooks</span></div></div>
+      <div class="tool"><header><span class="k">Integrations</span><span class="k">08</span></header><div class="chips"><span class="chip">GA4 / GTM</span><span class="chip">Marketing pixels</span><span class="chip">Video</span><span class="chip">Search</span><span class="chip">SSO / identity</span><span class="chip">Stripe</span><span class="chip">Ticketing APIs</span><span class="chip">Content feeds</span></div></div>
+      <div class="tool"><header><span class="k">Performance &amp; caching</span><span class="k">05</span></header><div class="chips"><span class="chip">Redis object cache</span><span class="chip">nginx FastCGI cache</span><span class="chip">Cloudflare CDN</span><span class="chip">Transients</span><span class="chip">Core Web Vitals</span></div></div>
+      <div class="tool"><header><span class="k">Quality &amp; standards</span><span class="k">08</span></header><div class="chips"><span class="chip">PHPUnit</span><span class="chip">Jest</span><span class="chip">Cypress</span><span class="chip">Code review</span><span class="chip">WCAG / ARIA</span><span class="chip">Technical SEO</span><span class="chip">JSON-LD schema</span><span class="chip">Secure development</span></div></div>
+      <div class="tool"><header><span class="k">Platform &amp; DevOps</span><span class="k">10</span></header><div class="chips"><span class="chip">PHP 8.x</span><span class="chip">MySQL / MariaDB</span><span class="chip">Node.js</span><span class="chip">GitHub Actions</span><span class="chip">CI/CD</span><span class="chip">Docker / DDEV</span><span class="chip">Linux</span><span class="chip">nginx</span><span class="chip">DigitalOcean</span><span class="chip">AWS</span></div></div>
+      <div class="tool"><header><span class="k">AI-assisted development</span><span class="k">01</span></header><div class="chips"><span class="chip">Claude Code</span></div><p>With documented runbooks, dry runs, and verification before every release.</p></div>
+    </div>
+  </section>
+
+  <!-- 04 Career -->
+  <section class="section">
+    <div class="shead">
+      <div><div class="eyebrow">04 / Career</div><h2 class="h2">Nonprofits, agencies,<br><span class="it">independent</span> work.</h2></div>
+      <p>Hired straight out of college in 2015. A decade later: an independent practice with real ownership over long-running projects.</p>
+    </div>
+    <div class="career">
+      <div class="job now"><span class="yr">2020 — now</span><div><h4>Vincent Ragosta <span class="it">Inc.</span></h4><div class="role">INDEPENDENT WORDPRESS ENGINEER</div></div><p>WordPress VIP work for a Fortune 500 financial-software brand, Broadway and arts sites with live ticketing, a headless Next.js storefront on WPGraphQL — and Mythus + IX, the framework every client build starts from.</p><span class="status tag"><span class="live"><span class="dot"></span>current</span></span></div>
+      <div class="job"><span class="yr">2018 — 2026</span><div><h4>Situation Interactive</h4><div class="role">SENIOR WORDPRESS DEVELOPER · LEAD</div></div><p>Lead developer on a four-person team maintaining 75+ properties for Broadway and the performing arts. Front-end lead on Criterion, Roundabout Theatre Company's ticketing platform — on a GraphQL API that also serves its native apps.</p><span class="chip tag">Webby Honoree</span></div>
+      <div class="job"><span class="yr">2015 — 2018</span><div><h4>StoryCorps</h4><div class="role">SENIOR WORDPRESS DEVELOPER</div></div><p>Built and maintained 5+ WordPress properties for the national oral-history nonprofit during a period of national expansion.</p><span class="chip tag">Nonprofit</span></div>
+      <div class="job"><span class="yr">2012 — 2015</span><div><h4>Brooklyn College</h4><div class="role">B.S. COMPUTER SCIENCE</div></div><p>Brooklyn, NY.</p><span class="chip tag">Education</span></div>
+    </div>
+  </section>
+
+  <!-- Résumé -->
+  <section class="section resume">
+    <div style="padding-bottom:64px">
+      <div class="eyebrow">Résumé</div>
+      <h2 class="h2" style="margin-top:24px">Want the <span class="it">full</span> picture?</h2>
+      <p class="lead" style="margin-top:28px;max-width:520px">Experience, skills, and education on one page. Updated October 2026.</p>
+      <div style="display:flex;gap:10px;margin-top:36px"><a class="btn primary lg">Download résumé ↓</a><a class="btn lg">View projects</a></div>
+    </div>
+    <div class="paper"><img src="resume-v2-preview.jpg" alt=""></div>
+  </section>
+
+  <!-- Instagram -->
+  <section class="section">
+    <div class="shead" style="margin-bottom:40px">
+      <div><div class="eyebrow">Outside the editor</div><h2 class="h3" style="margin-top:22px">Latest from the <span class="it">feed</span>.</h2></div>
+      <p style="text-align:right"><a class="btn">Follow on Instagram ↗</a></p>
+    </div>
+    <div class="ig"><div>instagram · 01</div><div>instagram · 02</div><div>instagram · 03</div><div>instagram · 04</div></div>
+  </section>
+
+  <section class="cta">
+  <svg class="v" viewBox="0 0 380 520"><path d="M0 0h90l100 300L290 0h90L230 520h-80z" fill="rgba(212,255,58,.06)" stroke="rgba(212,255,58,.35)"/></svg>
+  <div class="eyebrow" style="position:relative">Contact</div>
+  <h3 style="margin-top:28px;position:relative">Have a project?<br><span class="it">Let's</span> <span class="lime">ship it.</span></h3>
+  <div class="row" style="position:relative"><p>Looking for a senior-level technical partner, not just a pair of hands? Tell me what you're building.</p>
+  <div style="display:flex;gap:10px"><a class="btn lg">View résumé</a><a class="btn primary lg">Start a project →</a></div></div>
+  <div class="meta"><span>Brooklyn, NY</span><span>Independent practice · WordPress · Headless</span><span>Open to new work</span></div>
+</section>
+  <footer>
+  <div class="foot">
+    <div><a class="brand"><span class="logo"><svg width="16" height="14" viewBox="0 0 16 14"><path d="M1 1l7 12 7-12" fill="none" stroke="#0b0c0d" stroke-width="2.4" stroke-linejoin="round"/></svg></span>Vincent Ragosta</a><p class="about">Senior WordPress engineering from Brooklyn, built on a framework refined over six years.</p></div>
+    <div><h5>MEET ME</h5><ul><li>Overview</li><li>My approach</li><li>Career</li><li>Skills</li><li>AI integration</li></ul></div>
+    <div><h5>WORK</h5><ul><li>Projects</li><li>The framework</li><li>Tech stack</li><li>Testing</li><li>Security</li></ul></div>
+    <div><h5>ELSEWHERE</h5><ul><li>Nous Signal</li><li>Résumé</li><li>Contact</li><li>Privacy policy</li></ul></div>
+  </div>
+  <div class="wordmark">vincentragosta</div>
+  <div class="legal"><span>© 2026 Vincent Ragosta</span><span>Built on WordPress · Powered by the framework</span></div>
+</footer>
+</div>
+</body></html>
