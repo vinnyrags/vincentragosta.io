@@ -16,6 +16,15 @@ class ProjectRepository extends BaseProjectRepository
     protected string $model = ProjectPost::class;
 
     /**
+     * Index order: newest year first, then title — a deterministic tie-break,
+     * so every year-ordered query (index, case studies, next project) agrees.
+     */
+    private const YEAR_ORDER = [
+        'meta_key' => ProjectPost::FIELD_YEAR,
+        'orderby'  => ['meta_value_num' => 'DESC', 'title' => 'ASC'],
+    ];
+
+    /**
      * Get all projects ordered by project year (descending).
      *
      * @return ProjectPost[]
@@ -24,9 +33,7 @@ class ProjectRepository extends BaseProjectRepository
     {
         return $this->query([
             'posts_per_page' => -1,
-            'meta_key'       => ProjectPost::FIELD_YEAR,
-            'orderby'        => 'meta_value_num',
-            'order'          => 'DESC',
+            ...self::YEAR_ORDER,
         ]);
     }
 
@@ -39,9 +46,7 @@ class ProjectRepository extends BaseProjectRepository
     {
         return $this->query([
             'posts_per_page' => $limit,
-            'meta_key'       => ProjectPost::FIELD_YEAR,
-            'orderby'        => 'meta_value_num',
-            'order'          => 'DESC',
+            ...self::YEAR_ORDER,
         ]);
     }
 
@@ -54,9 +59,7 @@ class ProjectRepository extends BaseProjectRepository
     {
         return $this->query([
             'posts_per_page' => -1,
-            'meta_key'       => ProjectPost::FIELD_YEAR,
-            'orderby'        => 'meta_value_num',
-            'order'          => 'DESC',
+            ...self::YEAR_ORDER,
             'meta_query'     => [
                 [
                     'key'   => ProjectPost::FIELD_CASE_STUDY,
@@ -99,26 +102,41 @@ class ProjectRepository extends BaseProjectRepository
     /**
      * The project after $current in index order (year descending), wrapping
      * to the first. Null when there is no other project.
+     *
+     * Queries IDs directly: query() excludes the current post on singular
+     * pages, which would leave $current out of the list it must be found in.
      */
     public function nextAfter(ProjectPost $current): ?ProjectPost
     {
-        return self::nextInList($this->allByYear(), (int) $current->ID);
+        $ids = get_posts([
+            ...$this->buildArgs([
+                'posts_per_page' => -1,
+                ...self::YEAR_ORDER,
+            ]),
+            'fields'           => 'ids',
+            'suppress_filters' => false,
+        ]);
+
+        $nextId = self::nextIdInList(array_map('intval', $ids), (int) $current->ID);
+
+        return $nextId !== null ? $this->find($nextId) : null;
     }
 
     /**
-     * @param ProjectPost[] $projects
+     * The ID after $currentId in $ids, wrapping to the first. Null when
+     * $currentId isn't in the list or is the only entry.
+     *
+     * @param int[] $ids
      */
-    public static function nextInList(array $projects, int $currentId): ?ProjectPost
+    public static function nextIdInList(array $ids, int $currentId): ?int
     {
-        $projects = array_values($projects);
-        $count    = count($projects);
+        $ids   = array_values($ids);
+        $index = array_search($currentId, $ids, true);
 
-        foreach ($projects as $i => $project) {
-            if ((int) $project->ID === $currentId) {
-                return $count > 1 ? $projects[($i + 1) % $count] : null;
-            }
+        if ($index === false || count($ids) < 2) {
+            return null;
         }
 
-        return $projects[0] ?? null;
+        return $ids[($index + 1) % count($ids)];
     }
 }

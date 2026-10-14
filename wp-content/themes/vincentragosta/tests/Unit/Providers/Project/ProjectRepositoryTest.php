@@ -133,22 +133,21 @@ class ProjectRepositoryTest extends TestCase
         $this->assertSame([], ProjectRepository::groupByYear([]));
     }
 
-    public function testNextInListFollowsOrderAndWraps(): void
+    public function testNextIdInListFollowsOrderAndWraps(): void
     {
-        $list = [
-            MockProjectPost::create(['ID' => 10]),
-            MockProjectPost::create(['ID' => 20]),
-            MockProjectPost::create(['ID' => 30]),
-        ];
-
-        $this->assertSame(20, ProjectRepository::nextInList($list, 10)->ID);
-        $this->assertSame(10, ProjectRepository::nextInList($list, 30)->ID, 'Wraps to the first');
-        $this->assertSame(10, ProjectRepository::nextInList($list, 99)->ID, 'Unknown current falls back to the first');
+        $this->assertSame(20, ProjectRepository::nextIdInList([10, 20, 30], 10));
+        $this->assertSame(10, ProjectRepository::nextIdInList([10, 20, 30], 30), 'Wraps to the first');
     }
 
-    public function testNextInListIsNullWithoutAnotherProject(): void
+    /**
+     * Regression: the current project must be found, not silently replaced by
+     * the first entry (staging showed the same "next" on every page because
+     * the list excluded the current post).
+     */
+    public function testNextIdInListIsNullWhenCurrentIsMissingOrAlone(): void
     {
-        $this->assertNull(ProjectRepository::nextInList([MockProjectPost::create(['ID' => 10])], 10));
-        $this->assertNull(ProjectRepository::nextInList([], 10));
+        $this->assertNull(ProjectRepository::nextIdInList([10, 20, 30], 99));
+        $this->assertNull(ProjectRepository::nextIdInList([10], 10));
+        $this->assertNull(ProjectRepository::nextIdInList([], 10));
     }
 }
