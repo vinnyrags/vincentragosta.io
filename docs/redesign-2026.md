@@ -216,49 +216,54 @@ production during the cutover rehearsal):
     Contact carries ~500 KB of WPForms JS (plugin, left as is). **Broken link (pre-existing on
     prod):** two posts (#421, #482) link `/25-million-users-walk-away/`; the slug is
     `/2-5-million-users-walk-away/`.
-  - **Cutover checklist gaps found:** step 5 names `cutover.php`, which has never existed, and
-    "clear legacy project `post_content` after a JSON backup" has no script. Resolve during the
-    staging rehearsal. axe, contrast, mobile, font payload; staging rehearsal from a fresh
+  - **Cutover checklist gaps found and fixed in the rehearsal:** the phantom `cutover.php` is gone,
+    `clear-project-content.php` scripts the legacy-content clear, the Relevanssi step moved last so
+    its reindex sees the cleared projects, the résumé preview comes from staging's uploads, and
+    `seed-content-partials.php`'s dry run no longer reports errors on a fresh database. axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
 ## Cutover checklist (production)
 
-1. `mysqldump` the production DB.
-2. `migrate-project-fields.php` and `seed-content-partials.php` on production — both additive; the
-   old theme ignores the fields and the partials, and seeding first means the new header/footer
-   exist the moment the new code goes live.
+**Rehearsed end to end on staging 2026-10-14** from a fresh production copy (`make refresh-from-production`),
+in exactly this order; every step dry-run first. Run every script from the deployed checkout
+(`cd /var/www/vincentragosta.io && wp --path=wp --allow-root eval-file scripts/redesign/<script>`) with
+`BACKUP_DIR=/root/redesign-backups/production` where the script takes one.
+
+0. **Content freeze check.** For each page in `content/pages/`, diff production's `post_content`
+   (URLs normalized, whitespace ignored) against the pre-redesign copy; any real difference is a
+   production edit that must be folded into the file first. (Rehearsal: all 7 identical.)
+1. **Back up:** `wp db export` the production DB to `/root/redesign-backups/production/` and gzip it.
+2. `migrate-project-fields.php` (expect 68 written, 9 known warnings: legacy meta disagreements,
+   Wicked's two years, "#"/"N/A" live URLs) and `seed-content-partials.php` (navigation, Header,
+   Footer, Footer — Compact, Not Found; Contact + Privacy → compact footer). Both are additive and
+   safe on the old theme, so the new chrome exists the moment the code goes live.
 3. `make deploy-production` — confirm the ref-update line, not the banner.
-4. `split-wicked.php` — **after** the deploy: it publishes the new Wicked (2018) post, which the
-   old theme would list with an empty page. It downloads the 2025 key art from the live Wicked
-   site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
-   Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
-4a. **Contact form copy:** `update-contact-form.php` (WPForms #60 placeholders + submit text; dry-run first).
-4c. **Instagram:** reconnect the vincent.ragosta source by hand (**Instagram Feed → Settings → Manage
-   Sources** — delete the broken source, then **Add Source**; the feed *builder's* Add Source freezes
-   on a broken source). Production's token stopped decrypting after the 2026-08-13 salt rotation.
-   Then `update-instagram-feed.php` (4 tiles, no captions/likes, GDPR mode **on** so images are
-   served from uploads, never Instagram's CDN — keeps the privacy policy accurate).
-4d. **Nous posts:** `migrate-nous-posts.php` — **after** the deploy (the old theme still renders
-   the legacy header). `DRY_RUN=1` first: expect 168 × migrate, 0 skips; then the real run
-   (JSON backup of every post to `BACKUP_DIR`).
-4e. **Search:** `relevanssi-short-words.php` (`DRY_RUN=1` first — expect "ai" 0 results and the
-   min word length 3 → 2; the real run re-indexes every published post, then reports "ai" again).
-   It sets the option before re-indexing, so step 5's project reindex also keeps the short words.
-4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
-   `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
-   `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links
-   `/wp-content/uploads/2026/10/…`; an import in a later month lands in a different folder —
-   update the two URLs in `meet-me.html` to match before applying.
-5. Clear legacy project `post_content` (after a JSON backup — the fields now hold it) +
-   `apply-page-content.php` (page content files; backs up each page first) + `cutover.php` on production; reindex Relevanssi. Free Relevanssi has no WP-CLI command — reindex
-   projects with `wp eval` looping `relevanssi_index_doc($id, true, relevanssi_get_custom_fields(), true)`
-   over published project IDs (proven on staging 2026-10-13: 69 reindexed, the content-less
-   Wicked (2018) post matches on its fields).
-6. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`, twice;
-   check `X-FastCGI-Cache`.
-7. Smoke-test itzenzo.tv (GraphQL/REST).
-8. **Rollback:** push the previous `main` sha to production and restore the dump; per-project JSON
-   backups from step 5 allow a partial content restore.
+4. `split-wicked.php` — **after** the deploy (it publishes Wicked (2018), which the old theme would
+   list with an empty page). Downloads the 2025 key art from the live Wicked site (outbound fetch).
+   A later `FORCE=1` project-field re-run overwrites Wicked (2025) — re-run this after it.
+5. `update-contact-form.php` (4 changes: three placeholders + "Send message").
+6. **Instagram:** reconnect the vincent.ragosta source by hand (Instagram Feed → Settings → Manage
+   Sources → delete the broken source → Add Source; the feed *builder's* Add Source freezes on a
+   broken source), then `update-instagram-feed.php` (7 changes incl. GDPR mode **on**, so images
+   come from uploads — the privacy policy depends on it).
+7. **Résumé media:** copy `2026/10/VincentRagostaResume.pdf` and `2026/10/vincent-ragosta-resume-preview.jpg`
+   from **staging's** uploads (the preview is not in ~/Downloads) and `wp media import` both. They
+   must land in `2026/10/` — the content links there; an import in a later month needs the two URLs
+   in `meet-me.html` updated first.
+8. `migrate-nous-posts.php` — after the deploy (the old theme renders the legacy header). Expect
+   168 × migrate, 0 skips; JSON backup of every post first.
+9. `clear-project-content.php` — clears legacy project `post_content` only where the fields are
+   filled (expect 68 cleared, 1 already empty, 0 skipped); JSON backup first. (Replaces the
+   `cutover.php` this checklist used to name — that script never existed.)
+10. `apply-page-content.php` — all 7 pages; backs up each page first.
+11. `relevanssi-short-words.php` — **last**, after 9 and 10: sets the min word length to 2 and
+    re-indexes every published post, so the index reflects the cleared projects and new pages
+    (expect "ai" 0 → 172). This replaces the separate project reindex.
+12. `wp cache flush`; FastCGI check — compare `<title>` across `/`, `/projects/`, `/contact/`
+    (no query string), twice; check `X-FastCGI-Cache`.
+13. Smoke-test itzenzo.tv (GraphQL/REST), then run the QA sweep against production.
+14. **Rollback:** push the previous `main` sha to production and restore the dump; the JSON backups
+    from steps 8 and 9 and the page backups from step 10 allow a partial content restore.
 
 ## Handoff — continuing the build
 

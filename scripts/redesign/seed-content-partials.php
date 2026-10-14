@@ -203,6 +203,12 @@ foreach (['contact' => 'Contact', 'privacy-policy' => 'Privacy policy'] as $path
         continue;
     }
     if (empty($ids['footer-compact'])) {
+        // In a dry run on a fresh database the compact partial is only
+        // "would create" — it has no ID yet, which is not an error.
+        if ($dryRun && $wroteCompact) {
+            $say("✓ {$label} page (#{$page->ID}) footer → Footer — Compact (once created)");
+            continue;
+        }
         echo "Error: no compact footer partial — skipped the {$label} override.\n";
         $errors++;
         continue;
