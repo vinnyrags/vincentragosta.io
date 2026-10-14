@@ -9,3 +9,4 @@ import './wpforms-submit-icon';
 import './section-navigator';
 import './testimonials';
 import './toc';
+import './scroll-regions';
