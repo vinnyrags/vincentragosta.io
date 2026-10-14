@@ -14,7 +14,8 @@
 .site-content,
 .is-root-container {
   --ix-root-padding-inline: var(--wp--preset--spacing--40);
-  --ix-root-padding-block-end: var(--wp--preset--spacing--50);
+  // The footer owns the space below the content (see --footer-gap).
+  --ix-root-padding-block-end: 0;
   --ix-section-padding-block: var(--wp--preset--spacing--70);
   --ix-section-margin-block: var(--wp--preset--spacing--70);
   --ix-section-scroll-offset: var(--wp--preset--spacing--70);
