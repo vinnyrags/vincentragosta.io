@@ -76,6 +76,18 @@ test.describe('Smoke tests', () => {
         await expect(visibleRows.first()).toBeVisible();
     });
 
+    test('projects "show more" disappears once every row is shown', async ({ page }) => {
+        await page.goto('/projects/');
+        const more = page.locator('[data-show-more]');
+
+        await expect(more).toBeVisible();
+        await more.click();
+        await expect(more).toBeHidden();
+
+        await page.locator('[data-category-filter]').nth(2).click();
+        await expect(more).toBeHidden();
+    });
+
     test('projects view toggle switches to the card grid via ?view=grid', async ({ page }) => {
         await page.goto('/projects/?view=grid');
 

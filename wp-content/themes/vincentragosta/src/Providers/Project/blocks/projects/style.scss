@@ -14,6 +14,13 @@
   .project-row[data-collapsed] {
     display: none;
   }
+
+  // view.js toggles `hidden` on the show-more button, featured grid, empty
+  // state, and year groups; component display rules (e.g. inline-flex) must
+  // not override it.
+  [hidden] {
+    display: none !important;
+  }
 }
 
 // --------------------------------------------------------------------------
