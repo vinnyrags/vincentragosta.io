@@ -256,6 +256,8 @@ in exactly this order; every step dry-run first. Run every script from the deplo
    filled (expect 68 cleared, 1 already empty, 0 skipped); JSON backup first. (Replaces the
    `cutover.php` this checklist used to name — that script never existed.)
 10. `apply-page-content.php` — all 7 pages; backs up each page first.
+10a. `set-site-icon.php` — imports the V-mark icon and sets it as the Site Icon (expect "Imported
+    site icon", then four `site-icon-*.png` sizes). Rollback: Settings → General → Site Icon → #466.
 11. `relevanssi-short-words.php` — **last**, after 9 and 10: sets the min word length to 2 and
     re-indexes every published post, so the index reflects the cleared projects and new pages
     (expect "ai" 0 → 172). This replaces the separate project reindex.
@@ -358,9 +360,10 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 6. **Copy edit (separate task, requested 2026-10-14)** — an English/grammar pass over all
    frontend language: page content files, partials (header, footer, 404), WPForms copy, template
    strings, and the project fields. Not part of any page build; run it on its own.
-7. **Favicon (requested 2026-10-14)** — replace the current favicon with the new V mark (the
-   header logo) in the accent lime/neon green. Cover the Site Icon (Settings → General, or the
-   theme's favicon files if any) and check the apple-touch icon; it ships with the cutover.
+7. ~~**Favicon**~~ — done 2026-10-14: `set-site-icon.php` installs the header's V mark
+   (`content/site-icon/site-icon.svg` → 512 px PNG; lime full-bleed so platforms round it, V at ~59%
+   width so it reads at 16 px) as the Site Icon with PNG sizes 32/180/192/270 (it keeps the Shop's
+   `PngSubsizesAsJpeg` from turning them into JPEG). The old icon (#466) stays in the media library.
 
 ### Open decisions (ask Vincent; don't assume)
 
