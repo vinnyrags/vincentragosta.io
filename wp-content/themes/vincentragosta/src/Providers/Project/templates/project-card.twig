@@ -17,7 +17,7 @@
 >
     <a href="{{ project.link }}" class="project-card__image" tabindex="-1" aria-hidden="true">
         {% if project.thumbnail %}
-            <img src="{{ project.thumbnail.src | resize(size == 'lg' ? 1200 : 800) }}"
+            <img src="{{ project.thumbnail.src | resize(size == 'lg' ? 1200 : 800) | towebp }}"
                  alt=""
                  width="{{ project.thumbnail.width }}"
                  height="{{ project.thumbnail.height }}"

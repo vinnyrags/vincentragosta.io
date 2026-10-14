@@ -206,7 +206,19 @@ production during the cutover rehearsal):
     Copy from the mockup (no live-feed claim, no hard-coded project count). New Panel behavior:
     a heading that is a single link makes the whole panel clickable (stretched link; the heading
     skips the scroll-reveal transform so it doesn't trap the hit area).
-- [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
+- [ ] **6 — QA + cutover:**
+  - **QA sweep (2026-10-14, local):** every published URL (7 pages, 69 projects, 168 posts) plus
+    search and the 404, at 390 / 768 / 1440 — 738 loads, no horizontal overflow, no console
+    errors, no failed assets. axe at 390 on every page type: one violation, fixed (overflowing
+    terminals weren't keyboard-reachable → `scroll-regions.js` adds `tabindex="0"` while one
+    overflows). **Weight:** project images were resized PNGs (itzenzo card 848 KB) → `towebp`:
+    homepage 2.17 MB → 0.76 MB, /projects/ 2.34 → 0.94 MB. Fonts 86–129 KB/page (4–6 files).
+    Contact carries ~500 KB of WPForms JS (plugin, left as is). **Broken link (pre-existing on
+    prod):** two posts (#421, #482) link `/25-million-users-walk-away/`; the slug is
+    `/2-5-million-users-walk-away/`.
+  - **Cutover checklist gaps found:** step 5 names `cutover.php`, which has never existed, and
+    "clear legacy project `post_content` after a JSON backup" has no script. Resolve during the
+    staging rehearsal. axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
 ## Cutover checklist (production)

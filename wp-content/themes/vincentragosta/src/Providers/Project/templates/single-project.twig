@@ -84,7 +84,7 @@
                     <span class="project-detail__browser-dots"><i></i><i></i><i></i></span>
                     <span class="project-detail__browser-url">{{ post.liveUrl ?: (site.url ~ '/projects/' ~ post.slug ~ '/') }}</span>
                 </div>
-                <img src="{{ post.thumbnail.src | resize(1600) }}"
+                <img src="{{ post.thumbnail.src | resize(1600) | towebp }}"
                      alt="{{ post.thumbnail.alt ?: post.title }}"
                      width="{{ post.thumbnail.width }}"
                      height="{{ post.thumbnail.height }}" />
@@ -149,7 +149,7 @@
                     </p>
                 </div>
                 {% if next_project.thumbnail %}
-                    <img class="project-next__image" src="{{ next_project.thumbnail.src | resize(1200) }}" alt="" loading="lazy" />
+                    <img class="project-next__image" src="{{ next_project.thumbnail.src | resize(1200) | towebp }}" alt="" loading="lazy" />
                 {% endif %}
             </a>
         {% endif %}
