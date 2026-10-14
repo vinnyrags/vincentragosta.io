@@ -23,6 +23,21 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.is-style-transmission .nous-log__row.is-new')).toHaveCount(1);
     });
 
+    test('homepage testimonials slide with prev/next controls', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto('/');
+        const row = page.locator('.is-style-testimonials');
+        const prev = page.locator('.testimonials-controls__prev');
+        const next = page.locator('.testimonials-controls__next');
+
+        await expect(prev).toBeDisabled();
+        await expect(next).toBeEnabled();
+
+        await next.click();
+        await expect.poll(() => row.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+        await expect(prev).toBeEnabled();
+    });
+
     test('header and footer render from the default content partials', async ({ page }) => {
         await page.goto('/');
 

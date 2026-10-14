@@ -36,3 +36,26 @@
         filter: blur(60px);
     }
 }
+
+// ==========================================================================
+// V lines — three nested lime "V" strokes in the right half of a hero,
+// converging just above the bottom (where the hero's terminal card sits).
+// Add `has-v-lines` alongside `has-grid-backdrop`. Desktop only: on smaller
+// screens it would sit behind the heading.
+// ==========================================================================
+
+$v-lines: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 500' fill='none' stroke='%23d4ff3a' stroke-width='1.2'%3E%3Cpath d='M0 0L245 480M520 0L280 480' stroke-opacity='.42'/%3E%3Cpath d='M50 0L262 420L470 0' stroke-opacity='.2'/%3E%3Cpath d='M100 0L262 330L420 0' stroke-opacity='.11'/%3E%3C/svg%3E");
+
+.has-v-lines {
+    @media (min-width: 992px) {
+        background-image: $v-lines;
+        background-repeat: no-repeat;
+        // Right edge of the centred content column, inset like the mockup.
+        // (Percentages in a background-position offset are relative to
+        // container − image, so the column edge is computed in vw.)
+        background-position:
+            right max(1.5rem, calc((100vw - var(--wp--style--global--content-size, 1440px)) / 2 + 3.5rem))
+            top clamp(1rem, 4vw, 3.5rem);
+        background-size: clamp(380px, 40vw, 560px) auto;
+    }
+}

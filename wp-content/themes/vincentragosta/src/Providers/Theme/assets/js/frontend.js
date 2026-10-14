@@ -7,3 +7,4 @@ import './header';
 import './dropdown';
 import './wpforms-submit-icon';
 import './section-navigator';
+import './testimonials';

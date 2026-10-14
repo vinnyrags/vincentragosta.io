@@ -40,3 +40,21 @@
 ) {
   min-height: calc(100vh - var(--header-height, 72px)) !important;
 }
+
+// Block editor parity: IX applies the root gutter and full-bleed math to
+// .site-content only, so the editor canvas (.is-root-container) ran content
+// flush to its edges. Mirror the same three rules here. (.is-root-container
+// exists only in the editor.)
+.is-root-container {
+  padding-inline: var(--ix-root-padding-inline, 0);
+
+  > .alignfull {
+    margin-inline: calc(-1 * var(--ix-root-padding-inline, 0)) !important;
+    max-width: none;
+    width: calc(100% + (2 * var(--ix-root-padding-inline, 0)));
+  }
+
+  > :is(.wp-block-group, .wp-block-columns).alignfull {
+    padding-inline: var(--ix-root-padding-inline, 0);
+  }
+}
