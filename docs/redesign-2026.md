@@ -166,8 +166,8 @@ production during the cutover rehearsal):
     style `rows` is no longer a grid (inline `<code>` became grid cells); the label/number hang as
     floats, label column 14rem. Mythus's phpunit.xml lists a missing
     `tests/Integration`, so its `composer test` exits 2; `make test` now runs Mythus's Unit suite only.
-    Upstream fix (drop the suite, v1.4.2) needs Vincent's go — and this site stays on Mythus v1.2.0
-    until after launch.
+    Fixed upstream in Mythus v1.4.2 (suite removed); this site stays on Mythus v1.2.0 until after
+    launch, so the Makefile workaround stays until then (see Post-launch).
   - [x] Nous Signal — signed off 2026-10-14. Hero is page content (`content/pages/nous-signal.html`;
     no "live" claims — the feed stopped 2026-08-17). The blog block's "all" mode renders
     `NousArchive` (stats, latest + a `signal.parse()` terminal from real fields, month pills with
@@ -197,7 +197,9 @@ production during the cutover rehearsal):
     (project / post / page — `?post_type=product` no longer reaches the query), pills, and summary;
     `SearchSetup` always scopes the main query to those types. Its `relevanssi_post_types` filter was
     removed — Relevanssi honors `post_type` itself, and the filter (reading `$_GET`) broke secondary
-    queries.
+    queries. **Two-letter words:** Relevanssi's `min_word_length` was 3 in every env, so "AI" found
+    nothing; `scripts/redesign/relevanssi-short-words.php` sets it to 2 and re-indexes every indexed
+    post (local: "ai" 0 → 172 results, 244 posts in ~3 s).
   - [x] 404 — signed off 2026-10-14. Child `404.php` + `views/404.twig` render the "Not Found"
     content partial (slug `not-found`, no partial type; seeded by `seed-content-partials.php`) with
     the compact footer; falls back to a plain message if the partial is missing. Real 404 status.
@@ -227,6 +229,9 @@ production during the cutover rehearsal):
 4d. **Nous posts:** `migrate-nous-posts.php` — **after** the deploy (the old theme still renders
    the legacy header). `DRY_RUN=1` first: expect 168 × migrate, 0 skips; then the real run
    (JSON backup of every post to `BACKUP_DIR`).
+4e. **Search:** `relevanssi-short-words.php` (`DRY_RUN=1` first — expect "ai" 0 results and the
+   min word length 3 → 2; the real run re-indexes every published post, then reports "ai" again).
+   It sets the option before re-indexing, so step 5's project reindex also keeps the short words.
 4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
    `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
    `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links
@@ -342,8 +347,6 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 ### Open decisions (ask Vincent; don't assume)
 
-- **Relevanssi min word length** is 3 in every env, so "AI" (and other 2-letter terms) can't be
-  searched. Proposed: set it to 2 and rebuild the index (scripted, dry run first, per env).
 - **Meet me stat strip** still has the full section gap above it; the homepage's was halved
   (`spacing-65` block margin). Offered, not yet decided.
 - `bb1ca82` (docs commit) also carries the `CoverBlockStyles → MediaBlockStyles` rename; HEAD is
@@ -353,5 +356,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 - Delete `scripts/redesign/` (incl. `update-contact-form.php`, `update-instagram-feed.php`), `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`;
   propose removing the RUNBOOK's mega-menu re-apply step.
+- Update Mythus to ≥ v1.4.2 (`composer update vincentragosta/mythus`, mind RUNBOOK trap 5), then
+  drop the Makefile's Mythus `test:unit` special case.
 - Update the README Project section (currently documents methods and a block name that don't exist).
 - Propose CLAUDE.md updates for review.
