@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy signed off and on staging (`develop` @ `646af75`). Remaining: The Framework, Nous Signal, Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
+**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework signed off and on staging. Remaining: Nous Signal, Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
 
 ## Reference
 
@@ -156,7 +156,15 @@ production during the cutover rehearsal):
   - **Spacing (2026-10-14):** `spacing-70` is `clamp(6rem, 13.5vw, 20rem)` (194px at 1440). The
     footer owns `--footer-gap` (above + below the contact panel); `.site-content` has no bottom
     padding. Homepage stat strip uses a block margin of `spacing-65`.
-  - [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
+  - [x] The Framework — signed off 2026-10-14. Contents block beside 11 `section` groups; hero
+    `layers` + stat strip; everything from existing vocabulary. Stale copy corrected: 430+ → 700+
+    PHP tests (721 across Mythus/IX/child), light/dark claims removed, `make push-production` →
+    deploy targets, "no runbooks" dropped, the block-allowlist claim made true (`core/html` and
+    YouTube embeds are allowed), real Feature/Hook class names, the AssetManager test path. List
+    style `rows` is no longer a grid (inline `<code>` became grid cells); the label/number hang as
+    floats, label column 14rem. **Open:** Mythus `composer test` fails (phpunit.xml lists a missing
+    `tests/Integration`), so `make test` stops at step one — fix in the mythus repo.
+  - [ ] Nous Signal · [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -253,7 +261,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 ### Remaining work
 
-1. **The Framework (page 68)** — mockup `framework.html`. Hero (H1 + `layers` diagram) + stat strip,
+1. ~~**The Framework (page 68)**~~ — done 2026-10-14. — mockup `framework.html`. Hero (H1 + `layers` diagram) + stat strip,
    then `sticky` column with the Contents block beside 11 `section` groups (Architecture … Developer
    experience). Fix stale copy while rebuilding: drop light/dark-mode claims; replace
    `make push-production` with `make deploy-staging` / `deploy-production`; use the real Feature /
@@ -280,6 +288,12 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
    (slug `not-found`, seeded by `seed-content-partials.php`) so copy stays in the CMS; compact footer.
 5. **Phase 6** — QA sweep, staging rehearsal from a fresh production copy, then the cutover checklist
    below (needs Vincent's explicit go-ahead).
+6. **Copy edit (separate task, requested 2026-10-14)** — an English/grammar pass over all
+   frontend language: page content files, partials (header, footer, 404), WPForms copy, template
+   strings, and the project fields. Not part of any page build; run it on its own.
+7. **Favicon (requested 2026-10-14)** — replace the current favicon with the new V mark (the
+   header logo) in the accent lime/neon green. Cover the Site Icon (Settings → General, or the
+   theme's favicon files if any) and check the apple-touch icon; it ships with the cutover.
 
 ### Open decisions (ask Vincent; don't assume)
 

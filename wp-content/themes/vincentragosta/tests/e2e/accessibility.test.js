@@ -72,6 +72,15 @@ test.describe('Accessibility audits (WCAG 2.1 AA)', () => {
         expect(results.violations).toEqual([]);
     });
 
+    test('framework page has no accessibility violations', async ({ page }) => {
+        await page.goto('/framework/');
+        await page.waitForLoadState('networkidle');
+
+        const results = await runAxe(page);
+
+        expect(results.violations).toEqual([]);
+    });
+
     test('privacy page has no accessibility violations', async ({ page }) => {
         await page.goto('/privacy-policy/');
         await page.waitForLoadState('networkidle');

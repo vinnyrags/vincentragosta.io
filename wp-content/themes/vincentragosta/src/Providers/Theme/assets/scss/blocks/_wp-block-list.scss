@@ -95,38 +95,60 @@
     counter-reset: row;
     border-block-start: 1px solid var(--color-border);
 
+    // Not a grid: grid would turn every inline element in the detail (a
+    // <code>, a link) into its own cell. The counter and the label are floats
+    // hung in the item's start padding instead, so the detail flows as one
+    // paragraph and the item still grows to fit a label taller than it.
+    --row-number: 3rem;
+    --row-label: 0rem;
+    --row-gap: var(--wp--preset--spacing--40);
+
+    @include media(lg) {
+        --row-number: 4rem;
+        --row-label: 14rem;
+    }
+
     li {
         counter-increment: row;
-        display: grid;
-        grid-template-columns: 3rem 1fr;
-        gap: var(--wp--preset--spacing--20) var(--wp--preset--spacing--40);
+        display: flow-root;
         padding-block: var(--wp--preset--spacing--40);
+        padding-inline-start: calc(var(--row-number) + var(--row-label) + var(--row-gap));
         border-block-end: 1px solid var(--color-border);
         font-size: 1rem;
         line-height: 1.6;
         color: var(--color-text-muted);
 
-        @include media(lg) {
-            grid-template-columns: 4rem minmax(0, 18rem) 1fr;
-            align-items: baseline;
-        }
-
+        // Stacked, the number shares the label's 2rem line box. Side by side,
+        // it shares the detail's 1.6rem line, and the label is pulled up so
+        // all three sit on one baseline.
         &::before {
             content: counter(row, decimal-leading-zero);
-            grid-row: span 2;
+            float: inline-start;
+            width: var(--row-number);
+            margin-inline-start: calc(-1 * (var(--row-number) + var(--row-label) + var(--row-gap)));
             @include meta-text;
+            line-height: 2rem;
             color: var(--wp--preset--color--accent-1);
 
             @include media(lg) {
-                grid-row: auto;
+                line-height: 1.6rem;
             }
         }
 
-        strong {
+        > strong:first-child {
+            display: block;
             font-size: 1.25em;
             font-weight: 500;
+            line-height: 1.6;
             letter-spacing: var(--wp--custom--tracking--tight);
             color: var(--color-text);
+
+            @include media(lg) {
+                float: inline-start;
+                width: var(--row-label);
+                margin-block-start: -0.25rem;
+                margin-inline-start: calc(-1 * (var(--row-label) + var(--row-gap)));
+            }
         }
     }
 }

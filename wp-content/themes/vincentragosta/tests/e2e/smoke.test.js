@@ -153,6 +153,28 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.toc a[href="#cookies"]')).toHaveAttribute('aria-current', 'true');
     });
 
+    test('framework page lists all eleven sections in its contents card', async ({ page }) => {
+        const errors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                errors.push(msg.text());
+            }
+        });
+
+        const response = await page.goto('/framework/');
+        await page.waitForLoadState('networkidle');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('h1')).toContainText('The framework');
+        await expect(page.locator('.is-style-layers')).toBeVisible();
+        await expect(page.locator('.is-style-stat-strip')).toBeVisible();
+        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(11);
+
+        await page.locator('.toc a[href="#security"]').click();
+        await expect(page.locator('.toc a[href="#security"]')).toHaveAttribute('aria-current', 'true');
+        expect(errors).toEqual([]);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {
