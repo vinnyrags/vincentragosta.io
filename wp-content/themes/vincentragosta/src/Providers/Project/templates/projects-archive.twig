@@ -47,18 +47,7 @@
             <h2 id="projects-featured-heading">Featured <em class="serif-accent">builds</em></h2>
             <p class="projects-section-head__lede">The full story — brief, architecture, and outcome — for the projects built on my own stack.</p>
         </div>
-        <div class="projects-featured__top">
-            {% for project in archive.case_studies|slice(0, 2) %}
-                {% include 'project-card.twig' with { project: project, size: 'lg', highlight: loop.first, filterable: false } only %}
-            {% endfor %}
-        </div>
-        {% if archive.case_studies|length > 2 %}
-            <div class="projects-featured__rest">
-                {% for project in archive.case_studies|slice(2) %}
-                    {% include 'project-card.twig' with { project: project, size: 'sm', filterable: false } only %}
-                {% endfor %}
-            </div>
-        {% endif %}
+        {% include 'projects-featured.twig' with { projects: archive.case_studies } only %}
     </section>
 {% endif %}
 

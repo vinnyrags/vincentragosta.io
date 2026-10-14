@@ -1,5 +1,7 @@
 {% if archive is defined %}
     {% include 'projects-archive.twig' with { archive: archive } only %}
+{% elseif featured is defined %}
+    {% include 'projects-featured.twig' with { projects: featured } only %}
 {% else %}
     {% include 'projects-grid.twig' with { projects: projects } only %}
 {% endif %}

@@ -55,11 +55,13 @@ class TextBlockStyles extends BlockStyles
             'core/paragraph' => [
                 $mutedStyle,
                 ['name' => 'eyebrow', 'label' => __('Eyebrow', 'vincentragosta')],
+                ['name' => 'status', 'label' => __('Status', 'vincentragosta')],
             ],
             'core/list' => [
                 $mutedStyle,
                 ['name' => 'pills', 'label' => __('Pills', 'vincentragosta')],
                 ['name' => 'chips', 'label' => __('Chips', 'vincentragosta')],
+                ['name' => 'index', 'label' => __('Index', 'vincentragosta')],
             ],
             'core/code' => [$mutedStyle, $terminalStyle],
             'core/preformatted' => [$terminalStyle],

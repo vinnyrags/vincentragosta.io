@@ -28,11 +28,14 @@ class ContainerBlockStyles extends BlockStyles
                 $darkStyle,
                 ['name' => 'panel', 'label' => __('Panel', 'vincentragosta')],
                 $statStripStyle,
+                ['name' => 'layers', 'label' => __('Layers', 'vincentragosta')],
+                ['name' => 'testimonials', 'label' => __('Testimonials', 'vincentragosta')],
                 ['name' => 'numbered-list', 'label' => __('Numbered List', 'vincentragosta')],
                 ['name' => 'nous-accent', 'label' => __('Nous Accent', 'vincentragosta')],
             ],
             'core/columns' => [
                 $statStripStyle,
+                ['name' => 'pipeline', 'label' => __('Pipeline', 'vincentragosta')],
             ],
             'core/column' => [
                 $darkStyle,

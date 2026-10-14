@@ -85,6 +85,8 @@ class TextBlockStylesTest extends BaseTestCase
     {
         return [
             'paragraph eyebrow'   => ['core/paragraph', 'eyebrow', 'Eyebrow'],
+            'paragraph status'    => ['core/paragraph', 'status', 'Status'],
+            'list index'          => ['core/list', 'index', 'Index'],
             'list chips'          => ['core/list', 'chips', 'Chips'],
             'code terminal'       => ['core/code', 'terminal', 'Terminal'],
             'preformatted terminal' => ['core/preformatted', 'terminal', 'Terminal'],

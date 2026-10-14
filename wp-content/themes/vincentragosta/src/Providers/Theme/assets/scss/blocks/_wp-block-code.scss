@@ -21,7 +21,8 @@
     font-size: 13.5px;
     line-height: 2;
     color: var(--color-text-muted);
-    white-space: pre-wrap;
+    // Terminal lines don't wrap — narrow screens scroll sideways.
+    white-space: pre;
     overflow-x: auto;
 
     // Title bar: traffic-light dots + rule

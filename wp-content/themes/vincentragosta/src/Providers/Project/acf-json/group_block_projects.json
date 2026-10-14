@@ -11,8 +11,9 @@
             "required": 1,
             "choices": {
                 "latest": "Latest Projects",
+                "featured": "Case Studies",
                 "curated": "Curated Selection",
-                "all": "All Projects"
+                "all": "All Projects (archive)"
             },
             "default_value": "latest",
             "return_format": "value",
@@ -25,8 +26,12 @@
             "type": "relationship",
             "instructions": "Search and select up to 6 projects. Drag to reorder.",
             "required": 0,
-            "post_type": ["project"],
-            "filters": ["search"],
+            "post_type": [
+                "project"
+            ],
+            "filters": [
+                "search"
+            ],
             "max": 6,
             "return_format": "id",
             "conditional_logic": [
@@ -54,5 +59,6 @@
     "label_placement": "top",
     "instruction_placement": "label",
     "active": true,
-    "show_in_rest": 0
+    "show_in_rest": 0,
+    "modified": 1791943511
 }

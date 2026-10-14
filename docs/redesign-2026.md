@@ -116,9 +116,20 @@ production during the cutover rehearsal):
   eyebrow + heading + body + note callout, next project (index order, wraps), up to three related
   projects with images. JSON-LD gains `sourceOrganization` + `keywords`. Dropped from the mockup:
   per-project diagram / terminal / results cards (fields-only decision).
-- [ ] **5 — Homepage + remaining pages:** homepage per mockup; token/hero pass on Meet me, Framework,
-  Contact, Privacy, Nous Signal. **Privacy policy copy must be rewritten**: it discloses Fira Code
-  loading from Google Fonts and a light/dark-mode preference — both removed in Phase 1.
+- [x] **5 — Homepage + remaining pages:** homepage rebuilt per the mockup from core blocks +
+  style variants (`status`, `stat-strip`, `pipeline`, `layers`, `index`, `testimonials`,
+  `terminal`, `panel`) using the existing copy (about, five approach stages, framework intro,
+  Nous Signal, five testimonials, FAQ accordion — lifted verbatim). "Selected projects" uses a new
+  projects-block mode, **Case studies** (`featured`), sharing the archive's featured layout.
+  Meet me / The Framework / Contact / Privacy get the new hero (eyebrow + H1 with a serif-accent
+  word + their existing intro); these pages had no H1 before. Nous Signal keeps its own hero.
+  Privacy policy: "Google Fonts" section → "Self-hosted fonts", light/dark cookie example
+  replaced, "Last updated" → 2026-10-13 (**review the wording**). Display font sizes 80/90/100
+  get smaller fluid minimums so H1s fit on phones.
+  **Content freeze:** `scripts/redesign/content/pages/*.html` were generated from the
+  production copy of 2026-10-13. Any production edit to home, projects, meet-me, framework,
+  contact, or privacy-policy before launch must be folded into these files, or it is lost at
+  cutover (backups are kept, but the edit is overwritten).
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 

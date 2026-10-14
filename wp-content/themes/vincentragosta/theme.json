@@ -193,7 +193,7 @@
         },
         {
           "fluid": {
-            "min": "3.5rem",
+            "min": "2.5rem",
             "max": "6rem"
           },
           "name": "56px / 96px",
@@ -202,7 +202,7 @@
         },
         {
           "fluid": {
-            "min": "4rem",
+            "min": "2.75rem",
             "max": "8.5rem"
           },
           "name": "64px / 136px",
@@ -211,7 +211,7 @@
         },
         {
           "fluid": {
-            "min": "4.5rem",
+            "min": "3rem",
             "max": "9.375rem"
           },
           "name": "72px / 150px",

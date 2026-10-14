@@ -94,6 +94,14 @@
     border: 1px solid var(--color-border);
     border-radius: var(--wp--custom--radius--lg);
     padding: clamp(1.5rem, 3vw, 2.25rem);
+
+    > * {
+        margin-block: 0;
+    }
+
+    > * + * {
+        margin-block-start: 1.75rem;
+    }
 }
 
 // Stat Strip style — a single bordered strip of equal cells divided by
@@ -143,13 +151,243 @@
 
     :where(h2, h3, h4) {
         margin-block: 1.125rem 0;
-        font-size: var(--wp--preset--font-size--70);
+        font-size: clamp(2rem, 3.6vw, 3.75rem);
         letter-spacing: -0.04em;
+
+        @include media(lg) {
+            white-space: nowrap;
+        }
     }
 
     :where(h2, h3, h4) + p {
         margin-block-start: 0.5rem;
         font-size: var(--wp--preset--font-size--20);
         color: var(--color-text-muted);
+    }
+}
+
+// Pipeline style (core/columns) — process stages in one bordered strip. Each
+// column gets a check + rule + stage number drawn by CSS; content is a
+// heading (stage), a bold subtitle paragraph, and a description paragraph.
+.wp-block-columns.is-style-pipeline {
+    gap: 0 !important;
+    counter-reset: pipeline-stage;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--lg);
+    background: var(--color-surface);
+
+    > .wp-block-column {
+        position: relative;
+        padding: 4.25rem 1.6rem 1.75rem;
+        border-block-end: 1px solid var(--color-border);
+        counter-increment: pipeline-stage;
+
+        @include media(md) {
+            border-block-end: 0;
+            border-inline-end: 1px solid var(--color-border);
+
+            &:last-child {
+                border-inline-end: 0;
+            }
+        }
+
+        // ✓ in a ring
+        &::before {
+            content: '';
+            position: absolute;
+            inset-block-start: 1.6rem;
+            inset-inline-start: 1.6rem;
+            width: 26px;
+            height: 26px;
+            border: 1px solid var(--color-accent-line);
+            border-radius: 50%;
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3 4.7-5' fill='none' stroke='%23d4ff3a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+                center / 12px no-repeat;
+        }
+
+        // rule + stage number
+        &::after {
+            content: counter(pipeline-stage, decimal-leading-zero);
+            position: absolute;
+            inset-block-start: 1.6rem;
+            inset-inline: calc(1.6rem + 36px) 1.6rem;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            background: linear-gradient(var(--color-border-strong), var(--color-border-strong)) left center / calc(100% - 2.5rem) 1px no-repeat;
+            font-family: var(--wp--preset--font-family--mono);
+            font-size: 11.5px;
+            color: var(--color-text-dim);
+        }
+
+        > * {
+            margin-block: 0;
+        }
+
+        > * + * {
+            margin-block-start: 0.75rem;
+        }
+
+        :where(h3) {
+            font-size: var(--wp--preset--font-size--50);
+            letter-spacing: var(--wp--custom--tracking--heading);
+        }
+
+        :where(p) {
+            color: var(--color-text-muted);
+            font-size: var(--wp--preset--font-size--20);
+            line-height: 1.6;
+        }
+
+        :where(p strong) {
+            color: var(--color-text);
+            font-weight: 500;
+        }
+    }
+}
+
+// Layers style (core/group) — an architecture stack. Each child group is a
+// layer: a small label paragraph, a name heading, and a chips list on the
+// right. Add the class `is-accent` to a child group to highlight it.
+.wp-block-group.is-style-layers {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--lg);
+    background-color: var(--color-surface);
+    background-image: radial-gradient(var(--color-border-strong) 1px, transparent 1px);
+    background-size: 18px 18px;
+
+    > * {
+        margin: 0 !important;
+    }
+
+    > .wp-block-group {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.5rem 1rem;
+        padding: 1rem 1.25rem;
+        border: 1px solid var(--color-border-strong);
+        border-radius: 12px;
+        background: var(--color-surface);
+
+        @include media(md) {
+            grid-template-columns: 1fr auto;
+            align-items: center;
+        }
+
+        // dashed connector to the layer below
+        & + .wp-block-group::before {
+            content: '';
+            position: absolute;
+            inset-block-start: -15px;
+            inset-inline-start: 50%;
+            height: 14px;
+            border-inline-start: 1px dashed var(--color-border-strong);
+        }
+
+        > * {
+            margin: 0 !important;
+        }
+
+        > p {
+            grid-column: 1;
+            font-family: var(--wp--preset--font-family--mono);
+            font-size: 11.5px;
+            color: var(--color-text-dim);
+        }
+
+        > :is(h3, h4) {
+            grid-column: 1;
+            font-size: var(--wp--preset--font-size--30);
+            font-weight: 500;
+            letter-spacing: var(--wp--custom--tracking--tight);
+        }
+
+        > .wp-block-list {
+            @include media(md) {
+                grid-column: 2;
+                grid-row: 1 / span 2;
+                justify-content: flex-end;
+            }
+        }
+
+        &.is-accent {
+            border-color: var(--color-accent-line);
+            box-shadow: 0 0 40px -12px rgb(212 255 58 / 0.35);
+
+            > :is(h3, h4) {
+                color: var(--wp--preset--color--accent-1);
+            }
+        }
+    }
+}
+
+// Testimonials style (core/group) — a grid of quotes; the first spans two
+// columns and is set large in the serif italic.
+.wp-block-group.is-style-testimonials {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @include media(md) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    @include media(lg) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    > * {
+        margin: 0 !important;
+    }
+
+    > :is(.wp-block-quote, .wp-block-pullquote) {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 2rem;
+        padding: 1.75rem;
+        border: 1px solid var(--color-border);
+        border-radius: var(--wp--custom--radius--lg);
+        background: var(--color-surface);
+        text-align: start;
+
+        p {
+            margin: 0;
+            font-size: var(--wp--preset--font-size--30);
+            font-style: normal;
+            line-height: 1.55;
+            color: var(--color-text);
+        }
+
+        cite {
+            font-family: var(--wp--preset--font-family--sans);
+            font-size: var(--wp--preset--font-size--20);
+            font-style: normal;
+            color: var(--color-text-muted);
+        }
+
+        &:first-child {
+            background: linear-gradient(135deg, rgb(212 255 58 / 0.05), transparent 50%), var(--color-surface);
+
+            @include media(lg) {
+                grid-column: span 2;
+            }
+
+            p {
+                font-family: var(--wp--preset--font-family--serif);
+                font-size: var(--wp--preset--font-size--50);
+                font-style: italic;
+                line-height: 1.3;
+            }
+        }
     }
 }

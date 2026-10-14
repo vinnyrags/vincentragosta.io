@@ -2,9 +2,9 @@
 /**
  * Server-side rendering for the Projects block.
  *
- * "all" mode renders the projects archive (stats, filters, featured case
- * studies, year-grouped index / card grid). "latest" and "curated" render a
- * plain card grid (used on the homepage).
+ * "all" renders the projects archive (stats, filters, featured case studies,
+ * year-grouped index / card grid). "featured" renders the case studies in the
+ * featured layout (homepage). "latest" and "curated" render a card grid.
  */
 
 use ChildTheme\Providers\Project\ProjectArchive;
@@ -21,6 +21,8 @@ $context = Timber::context();
 if ($mode === 'all') {
     $archive = new ProjectArchive($repository->allByYear(), $repository->caseStudies());
     $context['archive'] = $archive->toArray();
+} elseif ($mode === 'featured') {
+    $context['featured'] = $repository->caseStudies();
 } elseif ($mode === 'curated' && !empty($selected_ids)) {
     $context['projects'] = $repository->findMany($selected_ids);
 } else {
