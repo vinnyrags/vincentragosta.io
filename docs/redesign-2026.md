@@ -138,7 +138,10 @@ production during the cutover rehearsal):
   - [x] Meet me — signed off 2026-10-14 (AI section reworked to an "accelerates / hands-on" contrast and the toolbox to core tiles + a full-stack Spec table, per `mockups/meet-me-v2.html`). Adds list `arrows` / `checks`; Pullquote citation renders as a trailing caption; panel `is-accent` no longer colors headings (use the Accent format). Résumé is the October 2026 v2 PDF; the preview
     image covers the contact line. The Instagram feed (`[instagram-feed]`) renders **empty on
     production** (0 items) — the section is left out until the feed is reconnected.
-  - [ ] Contact · [ ] Privacy · [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
+  - [x] Contact — built locally, awaiting review. Floating labels opted out (static mono labels,
+    bordered fields, margin-top spacing that neutralizes IX's field margin-bottom). Form copy
+    (placeholders, "Send message") is WPForms data → `update-contact-form.php`.
+  - [ ] Privacy · [ ] The Framework · [ ] Nous Signal · [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -153,6 +156,7 @@ production during the cutover rehearsal):
    old theme would list with an empty page. It downloads the 2025 key art from the live Wicked
    site's OG image (outbound fetch from the droplet). A later `FORCE=1` migration re-run overwrites
    Wicked (2025) from its legacy content — re-run `split-wicked.php` after it.
+4a. **Contact form copy:** `update-contact-form.php` (WPForms #60 placeholders + submit text; dry-run first).
 4b. **Media:** import the résumé PDF and its preview so the content files' URLs resolve —
    `wp media import VincentRagostaResume.pdf vincent-ragosta-resume-preview.jpg` (from
    `~/Downloads/VincentRagostaResume-2026-10-v2.pdf`, renamed). Content links

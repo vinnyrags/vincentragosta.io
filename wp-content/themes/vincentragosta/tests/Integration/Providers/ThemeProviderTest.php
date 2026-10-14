@@ -99,8 +99,9 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(ScrollReveal::class, $enabled);
         $this->assertContains(WpFormsBaseStyles::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
-        $this->assertContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(13, $enabled);
+        // Static labels sit above the fields; floating labels are not used.
+        $this->assertNotContains(WpFormsFloatingLabels::class, $enabled);
+        $this->assertCount(12, $enabled);
 
         // Hook classes should NOT be in features
         $this->assertNotContains(AccordionIconEnhancer::class, $enabled);

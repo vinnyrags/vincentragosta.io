@@ -1,35 +1,92 @@
+@use 'common/breakpoints' as *;
+
 // ==========================================================================
 // WPForms — site-specific styling
 // ==========================================================================
-// Opinionated visual styling that builds on top of parent sensible defaults
-// and the WpFormsFloatingLabels Feature.
+// Static labels above bordered fields (the WpFormsFloatingLabels Feature is
+// not used). Builds on IX's WpFormsBaseStyles; spacing follows the
+// margin-top convention, so IX's field margin-bottom is neutralized here.
 // ==========================================================================
 
-// Required asterisk accent color
-.wpforms-required-label {
-  color: var(--wp--preset--color--accent-1);
+.wpforms-form {
+  .wpforms-field {
+    margin-block-end: 0;
+    padding: 0;
+  }
+
+  .wpforms-field + .wpforms-field {
+    margin-block-start: var(--wp--preset--spacing--40);
+  }
+
+  // Labels — mono, uppercase, dim; the required marker in the accent color.
+  .wpforms-field-label {
+    display: block;
+    margin: 0;
+    font-family: var(--wp--preset--font-family--mono);
+    font-size: 11.5px;
+    font-weight: 400;
+    letter-spacing: var(--wp--custom--tracking--label);
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+  }
+
+  .wpforms-required-label {
+    color: var(--wp--preset--color--accent-1);
+  }
+
+  // Fields — bordered, on the page background, with an accent focus ring.
+  input:not([type='hidden'], [type='submit'], [type='checkbox'], [type='radio']),
+  textarea {
+    box-sizing: border-box;
+    margin-block-start: 10px;
+    height: 52px;
+    padding: 0 16px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--wp--custom--radius--md);
+    background: var(--color-bg);
+    font-size: var(--wp--preset--font-size--30);
+    color: var(--color-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--wp--preset--color--accent-1);
+      box-shadow: 0 0 0 3px rgb(212 255 58 / 0.12);
+    }
+  }
+
+  textarea {
+    height: 168px;
+    padding-block: 14px;
+    line-height: 1.55;
+  }
+
+  .wpforms-field:focus-within .wpforms-field-label {
+    color: var(--color-text);
+  }
+
+  .wpforms-submit-container {
+    margin-block-start: var(--wp--preset--spacing--50);
+    padding: 0;
+  }
 }
 
-// Float-label colors. IX provides float positioning + transitions;
-// the child theme owns the colors. Resting/dormant labels use the muted
-// text token so they follow light/dark mode; active labels go accent.
-.wpforms-field-label {
-  color: var(--color-text-muted);
-}
-
-.wpforms-field:focus-within .wpforms-field-label {
-  color: var(--wp--preset--color--accent-1);
-}
-
-.wpforms-field:has(input:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label,
-.wpforms-field:has(textarea:not(:placeholder-shown)):not(:focus-within) .wpforms-field-label {
-  color: var(--color-text-muted);
+@include reduced-motion {
+  .wpforms-form :is(input, textarea) {
+    transition: none;
+  }
 }
 
 // Error states
 .wpforms-field.wpforms-has-error {
-  input, textarea { border-block-end-color: var(--wp--custom--color--error); }
-  .wpforms-field-label { color: var(--wp--custom--color--error); }
+  input,
+  textarea {
+    border-color: var(--wp--custom--color--error);
+  }
+
+  .wpforms-field-label {
+    color: var(--wp--custom--color--error);
+  }
 }
 
 .wpforms-confirmation-container.wpforms-confirmation-scroll p:first-of-type {

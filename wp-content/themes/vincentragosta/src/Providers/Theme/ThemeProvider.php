@@ -22,7 +22,6 @@ use IX\Providers\Theme\Features\ButtonIconEnhancer;
 use IX\Providers\Theme\Features\ScrollReveal;
 use IX\Providers\Theme\Features\WpFormsBaseStyles;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
-use IX\Providers\Theme\Features\WpFormsFloatingLabels;
 use IX\Providers\Theme\ThemeProvider as BaseThemeProvider;
 use IX\Services\IconServiceFactory;
 
@@ -46,7 +45,6 @@ class ThemeProvider extends BaseThemeProvider
         ScrollReveal::class,
         WpFormsBaseStyles::class,
         WpFormsBlockDetection::class,
-        WpFormsFloatingLabels::class,
     ];
 
     /**
