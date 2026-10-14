@@ -9,6 +9,7 @@ use ChildTheme\Providers\Shop\CardPost;
 use ChildTheme\Providers\Shop\ProductPost;
 use IX\Providers\Blog\BlogPost;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
+use ChildTheme\Providers\Theme\Hooks\DistAssetVersioning;
 use ChildTheme\Providers\Theme\Hooks\ContainerBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SearchSetup;
 use ChildTheme\Providers\Theme\Hooks\CoverBlockStyles;
@@ -56,6 +57,7 @@ class ThemeProvider extends BaseThemeProvider
      */
     protected array $hooks = [
         AccentHighlight::class,
+        DistAssetVersioning::class,
         ContainerBlockStyles::class,
         CoverBlockStyles::class,
         TextBlockStyles::class,

@@ -74,6 +74,11 @@ production during the cutover rehearsal):
 - **E2E accessibility audits run with reduced motion** so axe checks the settled render; the
   pre-redesign suite already flaked on mid-animation contrast.
 
+- **Block asset cache-busting.** `block.json` assets (e.g. `projects-view.js`) were versioned with the
+  WordPress release (`?ver=6.9.7`), so Cloudflare kept serving the pre-redesign script on staging
+  after deploy. `DistAssetVersioning` rewrites `ver` to filemtime for theme `dist/` assets still on
+  the core version. Same bug exists fleet-wide (IX-level fix pending).
+
 ## Phases
 
 - [x] **0 — Setup:** this doc, mockup source, preset-class audit.
