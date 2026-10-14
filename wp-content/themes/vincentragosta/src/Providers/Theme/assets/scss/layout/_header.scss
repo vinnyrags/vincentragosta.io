@@ -8,6 +8,11 @@
 // (core/search + CTA buttons). Styles target those classes + core markup.
 // ==========================================================================
 
+// Inline navigation needs brand + five nav items + search + CTA ≈ 1,270px;
+// below this width the header uses the core/navigation overlay instead.
+$header-inline-nav: 1280px;
+$header-inline-nav-max: 1279.98px;
+
 // "V" mark drawn on the site-title link: a black glyph on the accent color,
 // so it follows per-page accent overrides (e.g. Nous Signal red).
 $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M1 1l7 12 7-12' fill='none' stroke='black' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -36,6 +41,9 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-block-end: 1px solid var(--color-border);
+
+  // One height for every control in the bar (search, CTA, overlay toggle).
+  --header-control-height: 40px;
 
   // backdrop-filter makes the header the containing block for fixed-position
   // descendants, which would trap core/navigation's overlay inside the bar.
@@ -115,19 +123,19 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
   }
 
   // ----------------------------------------------------------- Navigation
-  // Centered absolutely at lg+ so it sits on the page axis regardless of the
-  // brand / actions widths. Below lg the core overlay toggle takes over.
+  // In normal flow, centred in the space between the brand and the actions —
+  // so it can never overlap them (it was absolutely centred on the page and
+  // collided with the search field at ~1000px). Below $header-inline-nav the
+  // core overlay toggle takes over.
   &__nav {
-    // Overlay toggle is the last item on the right below lg
-    @media (max-width: 991.98px) {
+    // Overlay toggle is the last item on the right below the inline breakpoint
+    @media (max-width: $header-inline-nav-max) {
       order: 3;
     }
 
-    @include media(lg) {
-      position: absolute;
-      inset-inline-start: 50%;
-      width: max-content;
-      transform: translateX(-50%);
+    @media (min-width: $header-inline-nav) {
+      flex: 1 1 auto;
+      justify-content: center;
     }
 
     .wp-block-navigation__container {
@@ -188,11 +196,16 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
       color: var(--color-text);
     }
 
-    .wp-block-navigation__responsive-container-open {
-      width: 38px;
-      height: 38px;
-      justify-content: center;
+    // Open (hamburger) and close (×) share one look and one position, so the
+    // control reads as a single button changing state. (No `display` here:
+    // the open button's visibility belongs to core + the breakpoint rules.)
+    .wp-block-navigation__responsive-container-open,
+    .wp-block-navigation__responsive-container-close {
       align-items: center;
+      justify-content: center;
+      width: var(--header-control-height);
+      height: var(--header-control-height);
+      padding: 0;
       border: 1px solid var(--color-border-strong);
       border-radius: var(--wp--custom--radius--md);
       background: var(--color-surface);
@@ -205,6 +218,22 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
         outline: 2px solid var(--wp--preset--color--accent-1);
         outline-offset: 2px;
       }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    // The close button sits exactly over the hamburger: the header bar's
+    // vertical padding + half the leftover bar height, and the container's
+    // inline gutter. (Fixed positioning escapes the overlay's own box.)
+    .wp-block-navigation__responsive-container-close {
+      display: flex;
+      position: fixed;
+      inset-block-start: calc(var(--wp--preset--spacing--20) + (56px - var(--header-control-height)) / 2);
+      inset-inline-end: var(--wp--preset--spacing--40);
+      z-index: 2;
     }
 
     // Mobile overlay panel. Matches core's
@@ -213,9 +242,16 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
       // The desktop nav is centered (layout justifyContent); left-align the overlay.
       --navigation-layout-justification-setting: flex-start;
       --navigation-layout-justify: flex-start;
+      // Opens below the header bar so the brand and CTA stay visible.
+      inset-block-start: var(--header-height, 72px);
+      // Core's open animation leaves a `transform` on this container (fill-mode
+      // forwards), which makes it the containing block for the fixed close
+      // button and drops it ~80px. Fade with opacity only.
+      animation: header-overlay-fade 0.15s ease-out both;
+      border-block-start: 1px solid var(--color-border);
       background: var(--color-bg);
       color: var(--color-text);
-      padding: calc(var(--header-height, 72px) + var(--wp--preset--spacing--40)) var(--wp--preset--spacing--40) var(--wp--preset--spacing--40);
+      padding: var(--wp--preset--spacing--50) var(--wp--preset--spacing--40) var(--wp--preset--spacing--40);
 
       .wp-block-navigation__responsive-container-content,
       .wp-block-navigation__container,
@@ -236,13 +272,18 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
         &::after {
           display: none;
         }
+
+        &:hover,
+        &:focus-visible {
+          color: var(--wp--preset--color--accent-1);
+        }
       }
     }
   }
 
-  // Core collapses navigation at 600px; this header needs the overlay until lg
-  // (inline nav + search + CTA don't fit below ~992px).
-  @media (min-width: 600px) and (max-width: 991.98px) {
+  // Core collapses navigation at 600px; this header needs the overlay until
+  // $header-inline-nav (inline nav + search + CTA don't fit below it).
+  @media (min-width: 600px) and (max-width: $header-inline-nav-max) {
     &__nav {
       .wp-block-navigation__responsive-container-open:not(.always-shown) {
         display: flex;
@@ -258,8 +299,8 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
   & &__actions {
     gap: var(--wp--preset--spacing--20);
 
-    // Below lg: brand left, then actions + overlay toggle grouped right
-    @media (max-width: 991.98px) {
+    // Below the inline breakpoint: brand left, actions + overlay toggle right
+    @media (max-width: $header-inline-nav-max) {
       margin-inline-start: auto;
     }
   }
@@ -269,7 +310,7 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
     display: none;
     margin: 0;
 
-    @include media(lg) {
+    @media (min-width: $header-inline-nav) {
       display: block;
       width: 200px;
     }
@@ -309,7 +350,7 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
     }
 
     .wp-block-search__input {
-      height: 36px;
+      height: calc(var(--header-control-height) - 2px); // inside the 1px wrapper border
       padding: 0 40px 0 12px;
       border: 0;
       background: transparent;
@@ -336,7 +377,12 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
     }
 
     .wp-block-button__link {
-      padding: 9px 16px;
+      display: inline-flex;
+      align-items: center;
+      box-sizing: border-box;
+      height: var(--header-control-height);
+      padding-block: 0;
+      padding-inline: 16px;
       white-space: nowrap;
     }
   }
@@ -348,5 +394,21 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
   .header__nav .wp-block-navigation-item__content::after,
   .header__search .wp-block-search__inside-wrapper {
     transition: none;
+  }
+}
+
+@keyframes header-overlay-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@include reduced-motion {
+  .header__nav .wp-block-navigation__responsive-container.is-menu-open {
+    animation: none;
   }
 }

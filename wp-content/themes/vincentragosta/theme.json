@@ -357,7 +357,7 @@
       },
       "core/buttons": {
         "spacing": {
-          "blockGap": "var:preset|spacing|50"
+          "blockGap": "0.625rem"
         }
       },
       "core/separator": {

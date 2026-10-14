@@ -49,6 +49,20 @@ test.describe('Header interactions', () => {
         await expect(page.locator(`${OVERLAY}.is-menu-open`)).toHaveCount(0);
     });
 
+    test('overlay close button sits exactly where the hamburger was', async ({ page }) => {
+        await page.setViewportSize({ width: 375, height: 812 });
+
+        const open = await page.locator(OPEN).boundingBox();
+        await page.locator(OPEN).click();
+        const close = await page.locator('.header .wp-block-navigation__responsive-container-close').boundingBox();
+
+        expect(Math.round(close.x)).toBe(Math.round(open.x));
+        expect(Math.round(close.y)).toBe(Math.round(open.y));
+        expect(Math.round(close.width)).toBe(Math.round(open.width));
+        // the brand stays visible above the open overlay
+        await expect(page.locator('.header__brand')).toBeVisible();
+    });
+
     test('focus stays inside the open overlay', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
 

@@ -30,13 +30,20 @@
     }
 }
 
-// Outline style — fill on hover.
+// Outline style — the secondary button: dark panel fill, a thin border,
+// light text; border and text go lime on hover. (Overrides core's 2px
+// currentColor outline.)
 .wp-block-button.is-style-outline .wp-block-button__link {
-    transition: background-color 0.2s ease, color 0.2s ease;
+    border: 1px solid var(--color-border-strong);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition: border-color 0.2s ease, color 0.2s ease;
 
-    &:hover {
-        background-color: var(--color-text);
-        color: var(--color-bg);
+    &:hover,
+    &:focus-visible {
+        border-color: var(--wp--preset--color--accent-1);
+        background-color: var(--color-surface);
+        color: var(--wp--preset--color--accent-1);
     }
 }
 
