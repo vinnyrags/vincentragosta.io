@@ -640,6 +640,54 @@
     box-shadow: 0 0 50px -18px color-mix(in srgb, var(--wp--preset--color--accent-1) 40%, transparent);
 }
 
+// Linked panel — a Panel whose heading is a single link is clickable as a
+// whole (the link's hit area stretches over the panel). No extra markup:
+// link the heading text in the editor.
+.is-style-panel:has(> :is(h2, h3, h4) > a:only-child) {
+    position: relative;
+    transition: border-color 0.2s ease;
+
+    // A transformed heading would contain the stretched link (scroll reveal
+    // leaves translateY(0) on it), so here the heading fades without moving.
+    > :is(h2, h3, h4) {
+        transform: none;
+    }
+
+    > :is(h2, h3, h4) > a {
+        color: inherit;
+        text-decoration: none;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+    }
+
+    &:hover,
+    &:has(a:focus-visible) {
+        border-color: var(--color-accent-line);
+    }
+
+    &:has(a:focus-visible) {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 3px;
+    }
+
+    &:hover > :is(h2, h3, h4) > a {
+        color: var(--wp--preset--color--accent-1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
 // Window style (core/group) — a panel with terminal-style window chrome:
 // traffic-light dots and a rule across the top. A first paragraph becomes the
 // window title in the bar (e.g. "whoami", "new-message.txt").

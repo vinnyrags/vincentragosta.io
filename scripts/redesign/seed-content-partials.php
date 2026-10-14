@@ -9,6 +9,8 @@
  *   - content-partial "Header"              (header.html)          default header
  *   - content-partial "Footer"              (footer.html)          default footer
  *   - content-partial "Footer — Compact"    (footer-compact.html)  no CTA panel
+ *   - content-partial "Not Found"           (not-found.html)       the 404 page body (404.php
+ *                                                                  renders it by slug; no type)
  *
  * and points the Contact and Privacy pages at the compact footer (Contact's form already
  * does the CTA panel's job; Privacy is a reference page).
@@ -153,6 +155,7 @@ $partials = [
     ['header',         'Header',           'header.html',         'header', true],
     ['footer',         'Footer',           'footer.html',         'footer', true],
     ['footer-compact', 'Footer — Compact', 'footer-compact.html', 'footer', false],
+    ['not-found',      'Not Found',        'not-found.html',      null,     false],
 ];
 
 $ids = [];
@@ -171,7 +174,7 @@ foreach ($partials as [$slug, $title, $file, $term, $isDefault]) {
         continue;
     }
 
-    if (!$dryRun && $id) {
+    if (!$dryRun && $id && $term !== null) {
         if (!term_exists($term, VR_PARTIAL_TAXONOMY)) {
             wp_insert_term(ucfirst($term), VR_PARTIAL_TAXONOMY, ['slug' => $term]);
         }

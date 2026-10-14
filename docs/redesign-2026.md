@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework, Nous Signal, Nous post signed off and on staging. Remaining: 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
+**Status (2026-10-14):** Phases 0–5b done — every page signed off and on staging (Meet me, Contact, Privacy, The Framework, Nous Signal, Nous post, 404). Remaining: Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
 
 ## Reference
 
@@ -185,7 +185,12 @@ production during the cutover rehearsal):
     re-runs skip. The old card grid, decrypt effect and their templates/styles are removed. The
     Contents card's link styles now target only its `ol`. **Open:** 166 posts mark Nous's "I" with
     the Accent format — reads as a red bar; keep, restyle, or strip.
-  - [ ] 404
+  - [x] 404 — signed off 2026-10-14. Child `404.php` + `views/404.twig` render the "Not Found"
+    content partial (slug `not-found`, no partial type; seeded by `seed-content-partials.php`) with
+    the compact footer; falls back to a plain message if the partial is missing. Real 404 status.
+    Copy from the mockup (no live-feed claim, no hard-coded project count). New Panel behavior:
+    a heading that is a single link makes the whole panel clickable (stretched link; the heading
+    skips the scroll-reveal transform so it doesn't trap the hit area).
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -255,7 +260,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 - **Paragraph:** `eyebrow`, `status`, `muted` · **Heading:** `subheading`
 - **List:** `chips`, `index`, `rows` (numbered key points), `arrows` / `checks` (`<strong>Lead</strong> — detail`), `pills`, `muted`
-- **Group:** `panel` (+ class `is-accent`), `window` (first paragraph = title bar), `section`
+- **Group:** `panel` (+ class `is-accent`; link its heading to make the whole panel a link), `window` (first paragraph = title bar), `section`
   (ruled chapters), `timeline`, `stat-strip`, `pipeline`, `layers`, `testimonials`,
   `transmission`, `nous-accent` · **Column:** `sticky` · **Table:** `spec` (label | value | count)
 - **Code / preformatted:** `terminal` · **Image:** `paper`, `screen` · **Cover:** `animated`
@@ -277,10 +282,13 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
   then `npx playwright test -c .pw-local.config.js`. Add each new page to `tests/e2e/smoke.test.js`
   and `accessibility.test.js`.
 - Screenshots at 1440 and 390 (no horizontal overflow), side by side with the mockup.
-- Editor validity: log in headless with cookies from `wp_generate_auth_cookie()` (via
-  `ddev exec wp eval-file`) for `SECURE_AUTH_COOKIE` + `LOGGED_IN_COOKIE`, open
-  `/wp/wp-admin/post.php?post=ID&action=edit`, walk `wp.data.select('core/block-editor').getBlocks()`
-  for `!isValid`. Never change a password to get in.
+- Editor validity: in Vincent's own Chrome (Claude in Chrome extension, his existing local WP
+  login — never generate auth cookies or change a password), open any editor screen
+  (`/wp/wp-admin/post.php?post=ID&action=edit`) and run WordPress's parser over every item in one
+  pass: fetch raw content with `wp.apiFetch({ path: '/wp/v2/{pages|posts|content-partial|wp_navigation}?context=edit&per_page=100&_fields=id,slug,content' })`
+  (page through `X-WP-TotalPages`), `wp.blocks.parse(item.content.raw)`, and walk blocks +
+  `innerBlocks` for `!isValid`. Expect zero. Last run 2026-10-14: 7 pages / 168 posts / 3 partials /
+  1 navigation, 3,596 blocks, 0 invalid.
 - Local WP admin is at `/wp/wp-admin/` (core lives in `wp/`).
 
 ### Remaining work
@@ -308,7 +316,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
    anything else, JSON backup, `DRY_RUN` CSV for Vincent to review before any write). Post H2s have
    **no anchors** — the migration (or the template) must add ids before the Contents card can list
    them.
-4. **404** — mockup `404.html`. Child `404.php` + `views/404.twig` rendering a content partial
+4. ~~**404**~~ — done 2026-10-14. Mockup `404.html`. Child `404.php` + `views/404.twig` rendering a content partial
    (slug `not-found`, seeded by `seed-content-partials.php`) so copy stays in the CMS; compact footer.
 5. **Phase 6** — QA sweep, staging rehearsal from a fresh production copy, then the cutover checklist
    below (needs Vincent's explicit go-ahead).

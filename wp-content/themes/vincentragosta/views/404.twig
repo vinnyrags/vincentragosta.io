@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+
+{# 404 — the "Not Found" content partial (see 404.php). Falls back to a
+   plain message if the partial is missing or unpublished. #}
+
+{% block content %}
+    {% if not_found %}
+        {{ not_found | raw }}
+    {% else %}
+        <p class="is-style-eyebrow">Error 404</p>
+        <h1>Page not found<mark class="accent-highlight">.</mark></h1>
+        <p class="is-style-muted">The page you're looking for doesn't exist or has been moved.</p>
+        <p><a href="{{ site.url }}/">Return to the homepage →</a></p>
+    {% endif %}
+{% endblock %}

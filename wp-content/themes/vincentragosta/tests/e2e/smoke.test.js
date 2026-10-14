@@ -233,6 +233,20 @@ test.describe('Smoke tests', () => {
         expect(errors).toEqual([]);
     });
 
+    test('404 renders the Not Found partial with the compact footer', async ({ page }) => {
+        const response = await page.goto('/this-page-does-not-exist/');
+
+        expect(response.status()).toBe(404);
+        await expect(page.locator('h1')).toContainText('This page');
+        await expect(page.locator('.site-content .wp-block-search')).toBeVisible();
+        await expect(page.locator('footer.site-footer--footer-compact')).toHaveCount(1);
+
+        // A linked panel is clickable as a whole, not just its heading text.
+        const panel = page.locator('.is-style-panel', { has: page.locator('a[href="/projects/"]') });
+        await panel.click({ position: { x: 20, y: 140 } });
+        await expect(page).toHaveURL(/\/projects\/$/);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {
