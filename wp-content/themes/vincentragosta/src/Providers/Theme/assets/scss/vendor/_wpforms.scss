@@ -49,7 +49,7 @@
     &:focus {
       outline: none;
       border-color: var(--wp--preset--color--accent-1);
-      box-shadow: 0 0 0 3px rgb(212 255 58 / 0.12);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--wp--preset--color--accent-1) 12%, transparent);
     }
   }
 

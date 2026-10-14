@@ -277,7 +277,7 @@
 
         // Highlighted stage
         &.is-accent {
-            background: linear-gradient(180deg, rgb(212 255 58 / 0.07), transparent 65%);
+            background: linear-gradient(180deg, color-mix(in srgb, var(--wp--preset--color--accent-1) 7%, transparent), transparent 65%);
 
             &::before {
                 border-color: var(--wp--preset--color--accent-1);
@@ -285,7 +285,7 @@
                     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 6.2l2.3 2.3 4.7-5' fill='none' stroke='%2308090a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
                     center / 12px no-repeat,
                     var(--wp--preset--color--accent-1);
-                box-shadow: 0 0 14px rgb(212 255 58 / 0.45);
+                box-shadow: 0 0 14px color-mix(in srgb, var(--wp--preset--color--accent-1) 45%, transparent);
             }
         }
     }
@@ -362,7 +362,7 @@
 
         &.is-accent {
             border-color: var(--color-accent-line);
-            box-shadow: 0 0 40px -12px rgb(212 255 58 / 0.35);
+            box-shadow: 0 0 40px -12px color-mix(in srgb, var(--wp--preset--color--accent-1) 35%, transparent);
 
             > :is(h3, h4) {
                 color: var(--wp--preset--color--accent-1);
@@ -473,7 +473,7 @@
         }
 
         &:first-child {
-            background: linear-gradient(135deg, rgb(212 255 58 / 0.05), transparent 50%), var(--color-surface);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--wp--preset--color--accent-1) 5%, transparent), transparent 50%), var(--color-surface);
 
             @include media(lg) {
                 flex-basis: calc((100% - 2 * var(--testimonial-gap)) * 0.4);
@@ -637,7 +637,7 @@
 // format in the content.
 .is-style-panel.is-accent {
     border-color: var(--color-accent-line);
-    box-shadow: 0 0 50px -18px rgb(212 255 58 / 0.4);
+    box-shadow: 0 0 50px -18px color-mix(in srgb, var(--wp--preset--color--accent-1) 40%, transparent);
 }
 
 // Window style (core/group) — a panel with terminal-style window chrome:
@@ -651,7 +651,7 @@
     position: relative;
     padding: calc(var(--window-bar) + var(--window-padding)) var(--window-padding) var(--window-padding);
     border-color: var(--color-border-strong);
-    box-shadow: 0 0 0 1px rgb(212 255 58 / 0.06), 0 40px 120px -50px rgb(212 255 58 / 0.3);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--wp--preset--color--accent-1) 6%, transparent), 0 40px 120px -50px color-mix(in srgb, var(--wp--preset--color--accent-1) 30%, transparent);
 
     &::before {
         content: '';

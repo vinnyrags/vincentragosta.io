@@ -34,9 +34,16 @@
   // Text on accent-1 backgrounds (e.g. skip-link, dropdown hover, accordion icon)
   --color-on-accent: var(--wp--preset--color--contrast);
 
-  // Accent glow used by featured cards, highlighted layers, and heroes
-  --color-accent-glow: rgb(212 255 58 / 0.14);
-  --color-accent-line: rgb(212 255 58 / 0.45);
+}
+
+// Accent glow and line (featured cards, highlighted layers, hero backdrops),
+// derived from accent-1. Declared on body as well as :root: a custom property
+// resolves var() where it is declared, so a page that re-points accent-1 on
+// <body> (Nous Signal → nous-red) must re-derive them there.
+:root,
+body {
+  --color-accent-glow: color-mix(in srgb, var(--wp--preset--color--accent-1) 14%, transparent);
+  --color-accent-line: color-mix(in srgb, var(--wp--preset--color--accent-1) 45%, transparent);
 }
 
 // ==========================================================================

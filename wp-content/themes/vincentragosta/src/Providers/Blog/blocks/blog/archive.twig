@@ -1,0 +1,99 @@
+{#
+    Nous Signal archive — the blog block in "all" mode.
+    View model: ChildTheme\Providers\Blog\NousArchive::toArray(); tag: the ?tag= filter or null.
+    Behavior (month pills, search, tag filter, show more, URL state): blocks/blog/view.js.
+#}
+{% if archive.stats %}
+    <dl class="nous-stats">
+        {% for stat in archive.stats %}
+            <div class="nous-stats__item">
+                <dt>{{ stat.label }}</dt>
+                <dd>
+                    <span class="nous-stats__value">{{ stat.value }}{% if stat.suffix %}<small>{{ stat.suffix }}</small>{% endif %}</span>
+                    <span class="nous-stats__detail">{{ stat.detail }}</span>
+                </dd>
+            </div>
+        {% endfor %}
+    </dl>
+{% endif %}
+
+{% if archive.latest %}
+    {% set latest = archive.latest %}
+    <article class="nous-latest" aria-labelledby="nous-latest-title">
+        <div class="nous-latest__text">
+            <p class="nous-latest__meta">
+                <strong>Latest</strong>
+                <time datetime="{{ latest.iso }}">{{ latest.date_long }}</time>
+                <span>{{ latest.minutes }} min read</span>
+            </p>
+            <h2 class="nous-latest__title" id="nous-latest-title"><a href="{{ latest.link }}">{{ latest.title }}</a></h2>
+            <p class="nous-latest__excerpt">{{ latest.excerpt }}</p>
+            <div class="wp-block-buttons">
+                <div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="{{ latest.link }}">Read the signal →</a></div>
+            </div>
+        </div>
+        <pre class="wp-block-code is-style-terminal nous-latest__parse"><code><span>&gt; signal.parse()</span>
+signal ...... <mark class="accent-highlight">№ {{ latest.number }}</mark>
+received .... {{ latest.iso|replace({'-': '.'}) }}
+read time ... {{ latest.minutes }} min
+{% for name in latest.tag_names %}{{ loop.first ? 'tags ........ ' : '             ' }}{{ name }}
+{% endfor %}</code></pre>
+    </article>
+{% endif %}
+
+<div class="nous-toolbar">
+    <div class="nous-toolbar__filters" role="group" aria-label="Filter by month">
+        <button type="button" class="nous-pill" data-month-filter="all" aria-pressed="true">
+            All <span class="nous-pill__count">{{ archive.total }}</span>
+        </button>
+        {% for pill in archive.pills %}
+            <button type="button" class="nous-pill" data-month-filter="{{ pill.key }}" aria-pressed="false">
+                {{ pill.label }} <span class="nous-pill__count">{{ pill.count }}</span>
+            </button>
+        {% endfor %}
+    </div>
+    <div class="nous-toolbar__controls">
+        {% if tag %}
+            <button type="button" class="nous-pill nous-tag" data-tag-filter="{{ tag.slug }}" aria-pressed="true">
+                Tagged: {{ tag.name }} <span aria-hidden="true">×</span><span class="screen-reader-text"> — remove filter</span>
+            </button>
+        {% endif %}
+        <div class="nous-search">
+            <label class="screen-reader-text" for="nous-search-input">Search the signal</label>
+            <input id="nous-search-input" type="search" class="nous-search__input" placeholder="Search the signal…" />
+        </div>
+    </div>
+</div>
+
+<div class="nous-index">
+    {% for group in archive.groups %}
+        <section class="nous-month" data-month-group="{{ group.key }}" data-filter="{{ group.filter }}" data-label="{{ group.month }}" aria-labelledby="nous-month-{{ group.key }}">
+            <h3 class="nous-month__label" id="nous-month-{{ group.key }}">
+                {{ group.month }} <span>{{ group.year }} · <span data-month-count>{{ group.count }}</span> transmissions</span>
+            </h3>
+            <ol class="nous-month__rows" role="list">
+                {% for row in group.rows %}
+                    <li class="nous-row" data-nous-item data-search="{{ row.search|e('html_attr') }}" data-tags="{{ row.tags }}">
+                        <a class="nous-row__link" href="{{ row.link }}">
+                            <time class="nous-row__date" datetime="{{ row.iso }}">{{ row.date }}</time>
+                            <span class="nous-row__body">
+                                <span class="nous-row__title">{{ row.title }}</span>
+                                <span class="nous-row__excerpt">{{ row.excerpt }}</span>
+                            </span>
+                            <span class="nous-row__time">{{ row.minutes }} min</span>
+                            <span class="nous-row__go" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ol>
+            <div class="nous-month__more">
+                <button type="button" class="nous-more" data-show-more hidden>Show <span data-show-more-count></span> more from {{ group.month }}</button>
+            </div>
+        </section>
+    {% endfor %}
+</div>
+
+<div class="nous-empty" data-empty hidden aria-live="polite">
+    <p>No transmissions match.</p>
+    <a class="nous-empty__search" data-search-all href="{{ site.url }}/?post_type=post">Search the whole site →</a>
+</div>

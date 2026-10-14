@@ -19,6 +19,7 @@ class MediaBlockStyles extends BlockStyles
             ],
             'core/image' => [
                 ['name' => 'paper', 'label' => __('Paper', 'vincentragosta')],
+                ['name' => 'screen', 'label' => __('Screen', 'vincentragosta')],
             ],
         ];
     }

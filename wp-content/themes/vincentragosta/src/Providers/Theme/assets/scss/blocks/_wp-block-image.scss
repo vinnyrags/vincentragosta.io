@@ -1,3 +1,4 @@
+@use 'common/typography' as *;
 @use 'common/breakpoints' as *;
 
 // ==========================================================================
@@ -14,12 +15,52 @@
     border-block-end: 0;
     border-radius: 12px 12px 0 0;
     transform: rotate(-2deg) translateY(16px);
-    box-shadow: 0 -20px 80px -30px rgb(212 255 58 / 0.35);
+    box-shadow: 0 -20px 80px -30px color-mix(in srgb, var(--wp--preset--color--accent-1) 35%, transparent);
 
     img {
         display: block;
         width: 100%;
         height: auto;
+    }
+}
+
+// Screen style — the image as a monitor: accent border and glow, scan lines,
+// and the caption overlaid along the bottom edge in mono. Takes the page's
+// accent (lime, or nous-red on Nous Signal).
+.wp-block-image.is-style-screen {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--color-accent-line);
+    border-radius: 20px;
+    background: var(--color-surface);
+    box-shadow: 0 0 80px -20px var(--color-accent-line);
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    // Scan lines
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(0deg, rgb(0 0 0 / 0.18) 0 2px, transparent 2px 4px);
+        pointer-events: none;
+    }
+
+    figcaption {
+        position: absolute;
+        inset-inline: 0;
+        inset-block-end: 0;
+        z-index: 1;
+        margin: 0;
+        padding: 2rem 1rem 0.75rem;
+        background: linear-gradient(transparent, rgb(0 0 0 / 0.75));
+        @include label-text;
+        text-align: start;
+        color: var(--color-text-muted);
     }
 }
 

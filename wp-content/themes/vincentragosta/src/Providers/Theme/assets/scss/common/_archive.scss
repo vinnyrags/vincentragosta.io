@@ -1,0 +1,238 @@
+@use 'common/typography' as *;
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Archive components — shared by the projects archive and the Nous Signal
+// archive. Include each mixin on the component's root class; BEM children
+// (&__item, &__count, …) resolve against it. Accents use accent-1, so a page
+// that re-points accent-1 (Nous Signal → nous-red) recolors them for free.
+// ==========================================================================
+
+// Stats card: a <dl> of four items — label (dt), value + detail (dd).
+@mixin archive-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--wp--custom--radius--lg);
+  background: var(--color-surface);
+
+  @include media(lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  &__item {
+    padding: 1.75rem;
+    border-block-end: 1px solid var(--color-border);
+    border-inline-end: 1px solid var(--color-border);
+
+    @include media(lg) {
+      border-block-end: 0;
+
+      &:last-child {
+        border-inline-end: 0;
+      }
+    }
+  }
+
+  dt {
+    @include label-text;
+    color: var(--color-text-dim);
+  }
+
+  dd {
+    margin: 1.125rem 0 0;
+  }
+
+  &__value {
+    display: block;
+    font-size: var(--wp--preset--font-size--70);
+    white-space: nowrap;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+
+    small {
+      margin-inline-start: 4px;
+      font-size: 0.38em;
+      letter-spacing: -0.02em;
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__detail {
+    display: block;
+    margin-block-start: 0.5rem;
+    font-size: var(--wp--preset--font-size--20);
+    color: var(--color-text-muted);
+  }
+}
+
+// Toolbar — filter pills (&__filters, scrolls sideways when tight) and
+// controls (&__controls); sticks under the fixed header.
+@mixin archive-toolbar {
+  position: sticky;
+  inset-block-start: var(--header-height, 0px);
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wp--preset--spacing--30);
+  margin-block-start: var(--wp--preset--spacing--60);
+  padding-block: 14px;
+  border-block: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  &__filters {
+    display: flex;
+    gap: 8px;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+// Filter pill — a toggle button (aria-pressed) with an optional &__count.
+@mixin archive-pill {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--wp--custom--radius--md);
+  background: transparent;
+  color: var(--color-text-muted);
+  @include meta-text;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-text-dim);
+    color: var(--color-text);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  // Dim, not translucent: 70% of the muted grey fails AA at label size.
+  &__count {
+    font-size: var(--wp--preset--font-size--label);
+    color: var(--color-text-dim);
+  }
+
+  &[aria-pressed='true'] &__count {
+    color: inherit;
+    opacity: 0.7;
+  }
+}
+
+// Search field inside the toolbar.
+@mixin archive-search-input {
+  width: 200px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--wp--custom--radius--md);
+  background: transparent;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 13px;
+
+  &::placeholder {
+    color: var(--color-text-dim);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--wp--preset--color--accent-1);
+  }
+}
+
+// Group heading — a large label with a mono count (<span>) beside it.
+@mixin archive-group-label {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 0;
+  padding-block: 34px 12px;
+  border-block-end: 1px solid var(--color-border);
+  font-size: var(--wp--preset--font-size--60);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+
+  span {
+    @include meta-text;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--color-text-dim);
+  }
+}
+
+// Index row link hover / focus: accent rule at the start + a fading tint.
+// $accented: selectors inside the link that take the accent color.
+@mixin archive-row-hover($accented) {
+  &:is(:hover, :focus-visible) {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--wp--preset--color--accent-1) 6%, transparent), transparent 70%);
+
+    #{$accented} {
+      color: var(--wp--preset--color--accent-1);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: -16px;
+      width: 2px;
+      background: var(--wp--preset--color--accent-1);
+    }
+  }
+}
+
+// "Show N more" button.
+@mixin archive-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  height: 48px;
+  padding-inline: 22px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--wp--custom--radius--md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: var(--wp--preset--font-size--30);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--wp--preset--color--accent-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wp--preset--color--accent-1);
+    outline-offset: 2px;
+  }
+}

@@ -62,7 +62,7 @@ p.is-style-status {
         gap: 7px;
         padding: 3px 10px;
         border-radius: 999px;
-        background: rgb(212 255 58 / 0.12);
+        background: color-mix(in srgb, var(--wp--preset--color--accent-1) 12%, transparent);
         color: var(--wp--preset--color--accent-1);
         font-weight: 400;
 

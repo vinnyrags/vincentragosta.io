@@ -1,0 +1,214 @@
+@use 'common/typography' as *;
+@use 'common/breakpoints' as *;
+@use 'common/surface' as *;
+@use 'common/archive' as *;
+
+// ==========================================================================
+// Nous Signal archive — the blog block in "all" mode (blocks/blog/archive.twig).
+// Stats, toolbar, pills, and rows share the projects archive's components
+// (common/_archive.scss); accent-1 is nous-red on this page.
+// ==========================================================================
+
+.wp-block-ix-blog.is-archive {
+  display: block;
+
+  // view.js hides filtered rows and empty groups with `hidden`, and collapses
+  // rows past the per-month limit; component display rules must not win.
+  [hidden],
+  .nous-row[data-collapsed] {
+    display: none !important;
+  }
+}
+
+.nous-stats {
+  @include archive-stats;
+}
+
+// Latest transmission: text beside a terminal of its facts.
+.nous-latest {
+  display: grid;
+  gap: var(--wp--preset--spacing--50);
+  margin-block-start: var(--wp--preset--spacing--60);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  @include panel-surface;
+
+  @include media(lg) {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: center;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 0;
+    @include meta-text;
+    color: var(--color-text-dim);
+
+    strong {
+      font-weight: 500;
+      color: var(--wp--preset--color--accent-1);
+
+      &::before {
+        content: '● ';
+      }
+    }
+  }
+
+  &__title {
+    margin-block-start: 1.25rem;
+    font-size: var(--wp--preset--font-size--70);
+    letter-spacing: var(--wp--custom--tracking--tight);
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:is(:hover, :focus-visible) {
+        color: var(--wp--preset--color--accent-1);
+      }
+    }
+  }
+
+  &__excerpt {
+    max-width: var(--wp--custom--measure);
+    margin-block-start: 1rem;
+    font-size: var(--wp--preset--font-size--30);
+    color: var(--color-text-muted);
+  }
+
+  .wp-block-buttons {
+    margin-block-start: var(--wp--preset--spacing--40);
+  }
+
+  &__parse {
+    min-width: 0;
+    margin-block: 0;
+  }
+}
+
+.nous-toolbar {
+  @include archive-toolbar;
+}
+
+.nous-pill {
+  @include archive-pill;
+}
+
+// The ?tag= filter — pressed, in the accent, removed on click.
+.nous-tag[aria-pressed='true'] {
+  border-color: var(--wp--preset--color--accent-1);
+  background: var(--wp--preset--color--accent-1);
+}
+
+.nous-search__input {
+  @include archive-search-input;
+}
+
+.nous-month {
+  &__label {
+    @include archive-group-label;
+  }
+
+  &__rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__more {
+    display: flex;
+    justify-content: center;
+    margin-block-start: 2.25rem;
+  }
+}
+
+.nous-more {
+  @include archive-more;
+}
+
+// Row: date · title + excerpt · read time · arrow. Phones put the date and
+// read time on one line above the text.
+.nous-row {
+  position: relative;
+  border-block-end: 1px solid var(--color-border);
+
+  &__link {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem var(--wp--preset--spacing--30);
+    align-items: baseline;
+    padding-block: 20px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+
+    @include media(md) {
+      grid-template-columns: 4.5rem minmax(0, 1fr) auto 24px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: -2px;
+    }
+
+    @include archive-row-hover('.nous-row__title, .nous-row__go');
+  }
+
+  &__date,
+  &__time {
+    @include meta-text;
+    color: var(--color-text-dim);
+    white-space: nowrap;
+  }
+
+  &__body {
+    display: grid;
+    gap: 0.35rem;
+    grid-column: 1 / -1;
+    grid-row: 2;
+
+    @include media(md) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+  }
+
+  &__title {
+    color: var(--color-text);
+    font-size: var(--wp--preset--font-size--40);
+    font-weight: 500;
+    letter-spacing: var(--wp--custom--tracking--tight);
+  }
+
+  &__excerpt {
+    max-width: var(--wp--custom--measure);
+    font-size: var(--wp--preset--font-size--20);
+    line-height: 1.55;
+  }
+
+  &__go {
+    display: none;
+    color: var(--color-text-dim);
+
+    @include media(md) {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.nous-empty {
+  margin-block-start: 2rem;
+  color: var(--color-text-muted);
+
+  p {
+    margin: 0;
+  }
+
+  &__search {
+    display: inline-block;
+    margin-block-start: 0.5rem;
+    color: var(--wp--preset--color--accent-1);
+  }
+}

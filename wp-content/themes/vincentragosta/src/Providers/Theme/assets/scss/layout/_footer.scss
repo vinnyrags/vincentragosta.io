@@ -10,7 +10,7 @@
 // ==========================================================================
 
 $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 14'%3E%3Cpath d='M1 1l7 12 7-12' fill='none' stroke='black' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E");
-$v-outline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 380 520'%3E%3Cpath d='M0 0h90l100 300L290 0h90L230 520h-80z' fill='rgba(212,255,58,0.05)' stroke='rgba(212,255,58,0.3)'/%3E%3C/svg%3E");
+$v-outline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 380 520'%3E%3Cpath d='M0 0h90l100 300L290 0h90L230 520h-80z' fill='rgba(0,0,0,0.05)' stroke='rgba(0,0,0,0.3)'/%3E%3C/svg%3E");
 
 .footer {
   // One gap above and below the contact panel, so it sits centered between
@@ -60,7 +60,10 @@ $v-outline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' vi
     z-index: -1;
     width: clamp(200px, 28vw, 380px);
     aspect-ratio: 380 / 520;
-    background: $v-outline center / contain no-repeat;
+    // The outline is a mask (its alpha sets the fill and stroke strength) so
+    // it takes the page's accent — lime, or nous-red on Nous Signal.
+    background: var(--wp--preset--color--accent-1);
+    mask: $v-outline center / contain no-repeat;
     pointer-events: none;
   }
 

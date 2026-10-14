@@ -3,7 +3,7 @@
 Living doc for the 2026 redesign. One doc for the whole initiative — fold sub-plans in here rather than
 starting new files.
 
-**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework signed off and on staging. Remaining: Nous Signal, Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
+**Status (2026-10-14):** Phases 0–5 done; 5b in progress — Meet me, Contact, Privacy, The Framework, Nous Signal signed off and on staging. Remaining: Nous post, 404, then Phase 6. **New agent? Start at [Handoff](#handoff--continuing-the-build).**
 
 ## Reference
 
@@ -164,7 +164,16 @@ production during the cutover rehearsal):
     style `rows` is no longer a grid (inline `<code>` became grid cells); the label/number hang as
     floats, label column 14rem. **Open:** Mythus `composer test` fails (phpunit.xml lists a missing
     `tests/Integration`), so `make test` stops at step one — fix in the mythus repo.
-  - [ ] Nous Signal · [ ] Nous post · [ ] 404
+  - [x] Nous Signal — signed off 2026-10-14. Hero is page content (`content/pages/nous-signal.html`;
+    no "live" claims — the feed stopped 2026-08-17). The blog block's "all" mode renders
+    `NousArchive` (stats, latest + a `signal.parse()` terminal from real fields, month pills with
+    "Earlier", month-grouped index, 8 rows then "Show N more"); `view.js` filters client-side
+    (`?month=`, `?tag=` chip; tag/sort dropdowns dropped). `NousPost` is the post class (read time
+    = words ÷ 230). Archive components shared with Projects via `common/_archive.scss`. New image
+    style **Screen**. **Accent is now derived everywhere:** `--color-accent-glow/-line` and 18
+    hardcoded lime tints use `accent-1`, so Nous pages go fully red (footer V is a mask). The old
+    card grid + decrypt CSS stays until the Nous post template replaces "Related posts".
+  - [ ] Nous post · [ ] 404
 - [ ] **6 — QA + cutover:** axe, contrast, mobile, font payload; staging rehearsal from a fresh
   production copy; production cutover.
 
@@ -234,7 +243,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 - **Group:** `panel` (+ class `is-accent`), `window` (first paragraph = title bar), `section`
   (ruled chapters), `timeline`, `stat-strip`, `pipeline`, `layers`, `testimonials`,
   `transmission`, `nous-accent` · **Column:** `sticky` · **Table:** `spec` (label | value | count)
-- **Code / preformatted:** `terminal` · **Image:** `paper` · **Cover:** `animated`
+- **Code / preformatted:** `terminal` · **Image:** `paper`, `screen` · **Cover:** `animated`
 - Core `pullquote` (citation = trailing caption); core **grid** layout (`minimumColumnWidth`) for
   card grids; rich-text formats **Accent** (`<mark class="accent-highlight">`) and **Serif accent**
   (`<em class="serif-accent">`); utilities `has-grid-backdrop`, `has-v-lines`.
@@ -268,7 +277,7 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
    Hook class names from `ThemeProvider` (e.g. `ContentPartial`, `AccordionIconEnhancer`); **verify
    the "430+ tests" claim** before reusing it (child PHPUnit alone is 316). Mockup copy is a
    proposal — the existing page copy (`content/pages/framework.html`) is the source.
-2. **Nous Signal archive (page 431)** — mockup `nous-signal.html`. Hero is page content (red accent
+2. ~~**Nous Signal archive (page 431)**~~ — done 2026-10-14. — mockup `nous-signal.html`. Hero is page content (red accent
    comes from `body.nous-signal-page` → accent-1 = nous-red; create `content/pages/nous-signal.html`).
    Rework the child `ix/blog` override (`src/Providers/Blog/blocks/blog/*`): "latest" feature,
    month pills with counts (replace the month dropdown), month-grouped text index (date, title,

@@ -153,7 +153,7 @@
   gap: 7px;
   padding: 3px 10px;
   border-radius: 999px;
-  background: rgb(212 255 58 / 0.12);
+  background: color-mix(in srgb, var(--wp--preset--color--accent-1) 12%, transparent);
   color: var(--wp--preset--color--accent-1);
 }
 
@@ -294,7 +294,7 @@
   border: 1px solid var(--color-border-strong);
   border-radius: 18px;
   background: var(--color-surface);
-  box-shadow: 0 0 0 1px rgb(212 255 58 / 0.08), 0 40px 120px -40px rgb(212 255 58 / 0.25);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--wp--preset--color--accent-1) 8%, transparent), 0 40px 120px -40px color-mix(in srgb, var(--wp--preset--color--accent-1) 25%, transparent);
 
   img {
     display: block;
@@ -421,7 +421,7 @@
     padding: 1.75rem 2rem;
     border-inline-start: 2px solid var(--wp--preset--color--accent-1);
     border-radius: 0 14px 14px 0;
-    background: linear-gradient(90deg, rgb(212 255 58 / 0.06), transparent 80%);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--wp--preset--color--accent-1) 6%, transparent), transparent 80%);
     color: var(--color-text);
     font-family: var(--wp--preset--font-family--serif);
     font-size: var(--wp--preset--font-size--50);

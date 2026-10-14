@@ -175,6 +175,39 @@ test.describe('Smoke tests', () => {
         expect(errors).toEqual([]);
     });
 
+    test('nous signal archive: stats, latest, month pills, collapsed months', async ({ page }) => {
+        const errors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                errors.push(msg.text());
+            }
+        });
+
+        const response = await page.goto('/nous-signal/');
+        await page.waitForLoadState('networkidle');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('body')).toHaveClass(/nous-signal-page/);
+        await expect(page.locator('.nous-stats')).toBeVisible();
+        await expect(page.locator('.nous-latest')).toBeVisible();
+        await expect(page.locator('.nous-month').first().locator('.nous-row:visible')).toHaveCount(8);
+
+        const second = page.locator('[data-month-filter]').nth(1);
+        const month = await second.getAttribute('data-month-filter');
+        await second.click();
+        await expect(second).toHaveAttribute('aria-pressed', 'true');
+        await expect(page).toHaveURL(new RegExp(`month=${month}`));
+        await expect(page.locator('.nous-month:visible')).toHaveCount(1);
+        expect(errors).toEqual([]);
+    });
+
+    test('nous signal search narrows rows and shows the empty state', async ({ page }) => {
+        await page.goto('/nous-signal/');
+        await page.locator('.nous-search__input').fill('zzzz-no-such-signal');
+        await expect(page.locator('[data-empty]')).toBeVisible();
+        await expect(page.locator('.nous-row:visible')).toHaveCount(0);
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {
