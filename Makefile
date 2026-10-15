@@ -290,29 +290,45 @@ test-js: ## Run JS test suites only
 
 ##@ Deploy
 
-deploy-staging: ## Deploy develop branch to staging
-	@echo "Deploying develop to staging..."
-	git push production develop
+# Deploys go through GitHub. A push to develop/main runs .github/workflows/deploy.yml:
+# tests, then deploy-kit builds on the droplet. Every run, with its full log, is in
+# the repo's Actions tab, and these targets follow it in the terminal.
+# The -direct targets push straight to the droplet — break-glass for when GitHub or
+# Actions is down. Push origin afterwards so GitHub is never behind production.
+
+# Follow the Deploy run for a commit on a branch (it takes a few seconds to appear).
+# $(1) = commit-ish, $(2) = branch the run is for (develop → staging, main → production).
+define watch_deploy
+	@sha=$$(git rev-parse $(1)); id=; \
+	for i in $$(seq 1 20); do \
+		id=$$(gh run list --workflow deploy.yml --branch $(2) --commit $$sha --limit 1 --json databaseId -q '.[0].databaseId'); \
+		[ -n "$$id" ] && break; sleep 3; \
+	done; \
+	[ -n "$$id" ] || { echo "No Deploy run found for $$sha — check the Actions tab."; exit 1; }; \
+	gh run watch $$id --exit-status --interval 10
+endef
+
+deploy-staging: ## Deploy develop to staging (push to GitHub → Actions)
+	git push origin develop
+	$(call watch_deploy,develop,develop)
 	@echo "✓ Staging deployed — verify at $(STAGING_URL)"
 
-deploy-production: ## Merge develop into main and deploy to production
-	@echo "Merging develop into main..."
-	git checkout main
-	git merge develop --ff-only
-	@echo "Deploying main to production..."
-	git push production main
-	git checkout develop
+deploy-production: ## Deploy develop to production (fast-forward GitHub main → Actions)
+	@git fetch -q origin
+	@[ "$$(git rev-parse develop)" = "$$(git rev-parse origin/develop)" ] || \
+		{ echo "develop isn't on GitHub yet — run make deploy-staging first."; exit 1; }
+	git push origin develop:main
+	@git fetch -q origin; [ "$$(git branch --show-current)" = main ] || git branch -f main origin/main
+	$(call watch_deploy,develop,main)
 	@echo "✓ Production deployed — verify at $(PRODUCTION_URL)"
 
-release: ## Merge develop into main and push both branches to origin
-	@echo "Merging develop into main..."
-	git checkout main
-	git merge develop --ff-only
-	@echo "Pushing both branches to origin..."
-	git push origin main
-	git push origin develop
-	git checkout develop
-	@echo "✓ Both branches pushed to origin"
+deploy-staging-direct: ## Break-glass: push develop straight to the droplet (GitHub down)
+	git push production develop
+	@echo "⚠ Deployed outside GitHub — run 'git push origin develop' once GitHub is back."
+
+deploy-production-direct: ## Break-glass: push develop straight to production (GitHub down)
+	git push production develop:main
+	@echo "⚠ Deployed outside GitHub — run 'git push origin develop:main' once GitHub is back."
 
 ##@ Database & uploads sync
 

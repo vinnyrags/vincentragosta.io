@@ -1,0 +1,31 @@
+name: Deploy
+
+# develop → staging, main → production. Tests run first; a failing test blocks
+# the deploy. The deploy itself is the shared deploy-kit reusable workflow: it
+# pushes the ref to the droplet's bare repo, whose deploy-kit hook builds,
+# purges caches, and smoke-tests (config: /etc/deploy-kit/vincentragosta.conf
+# on the droplet). @v2 fails the run unless the droplet reports
+# DEPLOY-KIT-RESULT ok/skipped, so a broken build turns the run red.
+#
+# "Run workflow" re-deploys the selected branch's current commit.
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+concurrency: deploy-${{ github.ref_name }}
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+
+  deploy:
+    needs: test
+    uses: vinnyrags/deploy-kit/.github/workflows/deploy-reusable.yml@v2
+    with:
+      bare_repo: vincentragosta.git
+    secrets:
+      DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+      DROPLET_HOST: ${{ secrets.DROPLET_HOST }}
+      DROPLET_KNOWN_HOSTS: ${{ secrets.DROPLET_KNOWN_HOSTS }}

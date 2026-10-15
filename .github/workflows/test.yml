@@ -18,10 +18,14 @@ name: test
 #
 # WorDBless simulates WP without a database, so no MySQL services needed.
 
+#
+# Runs on pull requests, and as the first job of deploy.yml (workflow_call), so
+# every staging/production deploy is gated on it. No push trigger of its own:
+# deploy.yml already runs it for every push to develop/main.
+
 on:
   pull_request:
-  push:
-    branches: [main]
+  workflow_call:
 
 concurrency:
   group: test-${{ github.ref }}
