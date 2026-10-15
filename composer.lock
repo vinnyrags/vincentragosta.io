@@ -1080,17 +1080,17 @@
         },
         {
             "name": "vincentragosta/mythus",
-            "version": "v1.2.0",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/mythus.git",
-                "reference": "e6c8a89819317de13754a0a96bc5e5edbe76dcdc"
+                "reference": "e84a26b1a3583255b7a9bd57e9afd47280fc8cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.vincentragosta.io/dist/vincentragosta/mythus/vincentragosta-mythus-e6c8a89819317de13754a0a96bc5e5edbe76dcdc-zip-c41e8d.zip",
-                "reference": "e6c8a89819317de13754a0a96bc5e5edbe76dcdc",
-                "shasum": "11110a4d38f5192c60aff03475035be19786dd5a"
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/mythus/vincentragosta-mythus-e84a26b1a3583255b7a9bd57e9afd47280fc8cfc-zip-a0e599.zip",
+                "reference": "e84a26b1a3583255b7a9bd57e9afd47280fc8cfc",
+                "shasum": "457724bd6684e570fa1b44b770c2e8e45bddcc46"
             },
             "require": {
                 "php": ">=8.3",
@@ -1117,9 +1117,6 @@
                 ],
                 "test:unit": [
                     "phpunit --testsuite Unit"
-                ],
-                "test:integration": [
-                    "phpunit --testsuite Integration"
                 ]
             },
             "license": [
@@ -1127,10 +1124,10 @@
             ],
             "description": "WordPress platform framework — provider pattern, DI container integration, and support managers",
             "support": {
-                "source": "https://github.com/vinnyrags/mythus/tree/v1.2.0",
+                "source": "https://github.com/vinnyrags/mythus/tree/v1.4.2",
                 "issues": "https://github.com/vinnyrags/mythus/issues"
             },
-            "time": "2026-07-15T03:07:15+00:00"
+            "time": "2026-10-14T18:17:25+00:00"
         },
         {
             "name": "wpackagist-plugin/instagram-feed",

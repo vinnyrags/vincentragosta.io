@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { syncScrollRegions, fitFontSize, MIN_FONT_PX } from '../../../../../../src/Providers/Theme/assets/js/scroll-regions.js';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { syncScrollRegions, fitFontSize, MIN_FONT_PX, FIT_QUERY } from '../../../../../../src/Providers/Theme/assets/js/scroll-regions.js';
 
 /**
  * jsdom has no layout, so give each region the widths a browser would report.
@@ -73,19 +73,51 @@ describe('fitFontSize', () => {
 });
 
 describe('syncScrollRegions fitting', () => {
-    it('shrinks an overflowing terminal to fit instead of making it scroll', () => {
+    let el;
+    const original = window.getComputedStyle;
+
+    /** @param {boolean} phone */
+    function viewport(phone) {
+        window.matchMedia.mockImplementation((query) => ({ matches: phone && query === FIT_QUERY, media: query }));
+    }
+
+    beforeEach(() => {
         document.body.innerHTML = '<pre class="is-style-terminal" id="t"></pre>';
-        const el = document.getElementById('t');
-        // 600 wide content in a 300 box at 12px; once fitted it no longer overflows.
+        el = document.getElementById('t');
+        // 330 wide content in a 300 box at 12px; once fitted it no longer overflows.
         Object.defineProperty(el, 'clientWidth', { configurable: true, value: 300 });
         Object.defineProperty(el, 'scrollWidth', { configurable: true, get: () => (el.style.fontSize ? 300 : 330) });
-        const original = window.getComputedStyle;
         window.getComputedStyle = () => ({ fontSize: '12px', paddingLeft: '0px', paddingRight: '0px' });
+    });
 
+    afterEach(() => {
+        window.getComputedStyle = original;
+        viewport(false);
+    });
+
+    it('on a phone, shrinks an overflowing terminal to fit instead of making it scroll', () => {
+        viewport(true);
         syncScrollRegions();
 
-        window.getComputedStyle = original;
         expect(el.style.fontSize).toBe('10.9px');
         expect(el.hasAttribute('tabindex')).toBe(false);
+    });
+
+    it('on a wider screen, keeps the stylesheet size and scrolls', () => {
+        viewport(false);
+        syncScrollRegions();
+
+        expect(el.style.fontSize).toBe('');
+        expect(el.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('drops a phone fit once the viewport widens', () => {
+        viewport(true);
+        syncScrollRegions();
+        viewport(false);
+        syncScrollRegions();
+
+        expect(el.style.fontSize).toBe('');
+        expect(el.hasAttribute('data-fit-font')).toBe(false);
     });
 });

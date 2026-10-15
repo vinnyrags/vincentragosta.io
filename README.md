@@ -377,87 +377,65 @@ Adds `svg`/`svgz` to allowed mime types with sanitization (removes `<script>` el
 
 ## Child Theme
 
+Four providers, each extending its IX counterpart where one exists.
+
 ### ThemeProvider
 
-Extends parent ThemeProvider. Adds:
+**Features:** `ButtonIconEnhancer`, `ScrollReveal`, `WpFormsBaseStyles`, `WpFormsBlockDetection`.
 
 **Hooks (always-active):**
-- `AccordionIconEnhancer` — Replaces default +/- text in `core/accordion-heading` with SVG icon
-- `ButtonIconEnhancer` — Adds icon picker to `core/button` (stores `selectedIcon` + `iconPosition` attributes, injects SVG on render)
-- `CoverBlockStyles` — Registers "Animated" style for `core/cover`
-- `SocialIconChoices` — Custom social icon options
+- `ContainerBlockStyles`, `MediaBlockStyles`, `TextBlockStyles` — the registered style variants the pages are built from (panel, section, pipeline, layers, window, timeline, terminal, spec, and more)
+- `AccentHighlight` — the Accent and Serif accent rich-text formats in the editor
+- `SearchSetup` — limits search to pages, projects, and Nous posts
+- `DistAssetVersioning` — cache-busts block assets by file mtime
+- `SocialIconChoices`, `SocialIconOverride`, `MailIdentity`
 
-**Blocks:**
-- `child-theme/shutter-cards` — Container for interactive expanding cards
-- `child-theme/shutter-card` — Individual card within the container
-
-**Assets:** `theme.css` (frontend + editor), JS modules for dropdown, header, button, scroll animation, frontend initialization.
+**Block:** `vincentragosta/toc` (Contents) — a sticky contents card built from every H2 with an HTML anchor. Below 782px it becomes a bar under the header that opens the list.
 
 ### ProjectProvider
 
-**Post type:** `project` (registered from `config/post-type.json`, `has_archive: false`)
+**Post type:** `project`. **Model:** `ProjectPost` (lead, sections, client, role, year, live URL, technologies, case-study status), queried through `ProjectRepository`; `ProjectArchive` builds the archive's stats and filters.
 
-**Model:** `ProjectPost` extends `Post` with: `client()`, `role()`, `year()`, `technologies()`, `technologyList()`, `externalUrl()`, `hasProjectDetails()`, `relatedProjects()`.
+**Block:** `ix/projects`, overridden by the child. ACF `display_mode` picks the mode:
+- **All** — the projects archive: stats, filters, featured case studies, year-grouped index
+- **Featured** — case studies in the featured layout (homepage)
+- **Latest** / **Curated** — a card grid
 
-**Block:** `child-theme/projects` — Asymmetric grid of project posts with three display modes:
-- **Latest** — 5 most recent projects
-- **Curated** — Hand-picked via ACF relationship field
-- **All** — Every project with sort dropdown and scroll-reveal animation
+### BlogProvider
 
-The projects archive is CMS-managed: a WordPress Page at `/projects/` uses the Projects block in "All" mode.
+Posts are the Nous Signal. **Model:** `NousPost`; `NousArchive` and `NousSequence` drive the archive and signal numbers.
 
----
+**Blocks:** `ix/blog` (child override; "all" mode renders the Nous Signal archive) and `vincentragosta/nous-log` (the latest transmissions as a log).
 
-## Custom Blocks
+### ShopProvider
 
-### Shutter Cards (`child-theme/shutter-cards`)
-
-Container block for interactive cards that expand/collapse with a "shutter" effect.
-
-**Grid layout** uses a 10-column CSS Grid system:
-- 4 cards: Row 1 = 40%/60%, Row 2 = 60%/40%
-- 5 cards: Row 1 = ~33% each, Row 2 = 60%/40%
-
-**Responsive:** Desktop = grid with active/inactive states. Mobile = single column accordion. Uses CSS container queries (`container: shutter-cards / inline-size`).
-
-**Preload:** Renders with `shutter-cards--preload` class that hides content until JS initializes (prevents layout shift).
-
-Supports: `align` (wide, full), `spacing` (padding, margin).
-
-### Shutter Card (`child-theme/shutter-card`)
-
-Individual card inside Shutter Cards. Attributes: `title`, `subtitle`, `description`, `cardIndex`.
-
-**States:** Active (`.is-active` — full background, content visible) and inactive (`.is-inactive` — muted, content faded/collapsed, toggle rotated as "+").
-
-**Accessibility:** `aria-expanded` on toggle, `role="button"` + `tabindex="0"` on inactive cards, keyboard nav (Enter/Space), `prefers-reduced-motion` support.
-
-Supports light mode via `.light-mode` ancestor class.
-
-### Projects (`child-theme/projects`)
-
-Asymmetric project grid. Alternating 35%/65% layout via CSS Grid `nth-child` selectors on a 10-column system. Three modes (latest/curated/all) controlled by ACF `display_mode` field. "All" mode includes a sort dropdown and scroll-reveal (IntersectionObserver).
+Headless backend for [itzenzo.tv](https://itzenzo.tv): `card`/`product` post types, REST endpoints, and WPGraphQL fields. No frontend UI; the shop page redirects to itzenzo.tv.
 
 ---
 
 ## Design System
 
-Design tokens defined in `theme.json`, available as CSS custom properties:
+Design tokens are defined in `theme.json` and exposed as CSS custom properties.
 
-**Colors:** `--wp--preset--color--{base, contrast, accent-1, accent-2, grey-2}`
+**Colors:** `--wp--preset--color--{base, contrast, accent-1, grey-1, panel-2, grey-2…grey-5, nous-red}`. `accent-1` is lime; Nous Signal pages re-point it to `nous-red`, and the accent glow/line tokens derive from it.
 
-**Spacing (8px grid):**
+**Spacing:**
 
-| Token | Value | Use |
-|-------|-------|-----|
-| `--spacing--20` | 0.5rem (8px) | Tight |
-| `--spacing--30` | 1rem (16px) | Small |
-| `--spacing--40` | 1.5rem (24px) | Medium |
-| `--spacing--50` | 2.5rem (40px) | Large |
-| `--spacing--60` | 4rem (64px) | Section gaps |
-| `--spacing--70` | 10rem (160px) | Page-level gaps |
+| Token | Value |
+|-------|-------|
+| `--spacing--20` | 0.5rem (8px) |
+| `--spacing--30` | 1rem (16px) |
+| `--spacing--40` | 1.5rem (24px) |
+| `--spacing--50` | 2.5rem (40px) |
+| `--spacing--60` | 4rem (64px) |
+| `--spacing--65` | clamp(4rem, 15vw, 7rem) |
+| `--spacing--70` | clamp(6rem, 13.5vw, 20rem) — section gaps |
 
-**Typography:** Roobert (body), Reckless Neue (headings), Fira Code (monospace).
+**Typography:** Inter Tight (sans), Instrument Serif (serif accents), JetBrains Mono (mono). Font sizes `10`–`100` plus `label` and `meta`.
+
+**Phones (below 576px):** `common/_tokens.scss` fixes the display, heading, and section-gap presets to phone values.
+
+**Spacing rule:** margin-top only; never a non-zero margin-bottom.
 
 **Container query breakpoints:** `sm` (576px), `md` (768px), `lg` (992px), `xl` (1440px) — via `@include container(name, breakpoint)` mixin. Requires explicit `@use 'common/breakpoints' as *;` in each SCSS file.
 

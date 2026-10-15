@@ -1,9 +1,10 @@
 /**
  * Terminal blocks (`.is-style-terminal`) on narrow screens.
  *
- * Terminal lines never wrap. When a terminal's longest line is wider than its
- * box, its text first shrinks to fit — down to MIN_FONT_PX — so the whole
- * line stays readable instead of being cropped. A line too long even at that
+ * Terminal lines never wrap. On a phone (FIT_QUERY, the stylesheet's phone
+ * breakpoint), when a terminal's longest line is wider than its box, its text
+ * first shrinks to fit — down to MIN_FONT_PX — so the whole line stays
+ * readable instead of being cropped. Wider screens keep the stylesheet size. A line too long even at that
  * size keeps its normal size and scrolls sideways instead. A scrollable
  * region must be reachable by keyboard (WCAG 2.1.1; axe
  * "scrollable-region-focusable"), so it then gets tabindex="0" — removed
@@ -13,6 +14,7 @@
 
 export const SELECTOR = '.is-style-terminal';
 export const MIN_FONT_PX = 9;
+export const FIT_QUERY = '(max-width: 575px)';
 const MARK = 'data-scroll-focusable';
 const FIT = 'data-fit-font';
 
@@ -41,7 +43,8 @@ export function fitFontSize(current, needed, available, min = MIN_FONT_PX) {
 }
 
 /**
- * Shrink an overflowing terminal's text to fit, from its stylesheet size.
+ * On a phone, shrink an overflowing terminal's text to fit, from its
+ * stylesheet size.
  * @param {HTMLElement} el
  */
 function fit(el) {
@@ -49,7 +52,7 @@ function fit(el) {
         el.style.removeProperty('font-size');
         el.removeAttribute(FIT);
     }
-    if (!overflowsX(el)) return;
+    if (!window.matchMedia(FIT_QUERY).matches || !overflowsX(el)) return;
 
     const style = window.getComputedStyle(el);
     const current = parseFloat(style.fontSize);

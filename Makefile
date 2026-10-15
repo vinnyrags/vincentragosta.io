@@ -269,17 +269,11 @@ update: ## Update composer dependencies (root + Mythus + both themes)
 	done
 	@echo "✓ All dependencies updated"
 
-# Mythus runs its Unit suite only: its phpunit.xml declares an Integration
-# suite whose directory doesn't exist, so a bare `composer test` exits 2.
 test: ## Run PHP and JS test suites for Mythus and both themes
 	@for dir in $(COMPOSER_DIRS); do \
 		echo ""; \
 		echo "Running PHP tests in $$dir..."; \
-		if [ "$$dir" = "$(MYTHUS_DIR)" ]; then \
-			(cd $$dir && composer test:unit) || exit $$?; \
-		else \
-			(cd $$dir && composer test) || exit $$?; \
-		fi; \
+		(cd $$dir && composer test) || exit $$?; \
 	done
 	@for dir in $(NPM_DIRS); do \
 		echo ""; \
