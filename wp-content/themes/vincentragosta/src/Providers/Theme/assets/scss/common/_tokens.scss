@@ -47,6 +47,29 @@ body {
 }
 
 // ==========================================================================
+// Phone type + spacing scale (below 576px)
+// ==========================================================================
+// The fluid presets bottom out too large on a phone and differ page to page
+// (H1s measured 41–54px, section heads 33–46px), so phones get fixed values:
+// one display size, one section-head size, and a 64px section gap. Every
+// heading, stat, and section that reads a preset follows. `:root:root` beats
+// WordPress's own preset declarations regardless of stylesheet order.
+
+@media (max-width: 575px) {
+  :root:root {
+    --wp--preset--font-size--100: 3rem;      // H1 display — 48px everywhere
+    --wp--preset--font-size--90: 3rem;
+    --wp--preset--font-size--80: 2.5rem;     // next-project / large titles — 40px
+    --wp--preset--font-size--70: 2rem;       // default H2 — 32px
+    --wp--preset--font-size--60: 2rem;       // section heads — 32px
+    --wp--preset--font-size--50: 1.375rem;   // callouts, panel titles — 22px
+    --wp--preset--font-size--40: 1.125rem;   // leads — 18px
+    --wp--preset--spacing--70: 4rem;         // section gap — 64px
+    --wp--preset--spacing--65: 3rem;
+  }
+}
+
+// ==========================================================================
 // High Contrast Overrides
 // ==========================================================================
 // Push semantic tokens toward stronger contrast when the user prefers it.

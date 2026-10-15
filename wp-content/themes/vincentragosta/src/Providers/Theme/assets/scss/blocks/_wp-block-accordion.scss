@@ -64,6 +64,23 @@
   }
 }
 
+// Phones: a quieter 28px outline instead of the filled accent disc.
+@media (max-width: 575px) {
+  .wp-block-accordion-heading__toggle-icon {
+    width: 28px;
+    height: 28px;
+
+    &::before {
+      border: 1px solid var(--color-accent-line);
+      background-color: transparent;
+    }
+
+    svg {
+      color: var(--wp--preset--color--accent-1);
+    }
+  }
+}
+
 // Flip upward when expanded — the button carries aria-expanded
 .wp-block-accordion-heading__toggle[aria-expanded="true"] {
   .wp-block-accordion-heading__toggle-icon svg {

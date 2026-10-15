@@ -86,6 +86,133 @@
   }
 }
 
+// --------------------------------------------------------------------------
+// Toggle — added by toc.js; only shown in the phone bar (below).
+// --------------------------------------------------------------------------
+
+.toc__toggle {
+  display: none;
+}
+
+// --------------------------------------------------------------------------
+// Phones and small tablets (below 782px, where the columns stack): the card
+// is a slim bar that sticks under the header and opens to the full card. Its
+// wrappers (the Sticky column, the Contents block, the detail aside) step out
+// of the way (display: contents) so the bar sticks across the whole content
+// column, not just its own box.
+// --------------------------------------------------------------------------
+
+@media (max-width: 781px) {
+  .wp-block-column.is-style-sticky:has(> .wp-block-vincentragosta-toc),
+  .wp-block-vincentragosta-toc,
+  :is(.project-detail__aside, .nous-post__aside):has(> .toc) {
+    display: contents;
+  }
+
+  // Full-bleed: edge to edge under the header, square, rules top and bottom.
+  .toc:has(.toc__toggle) {
+    position: sticky;
+    inset-block-start: var(--header-height, 0px);
+    z-index: 20;
+    align-self: stretch;
+    box-sizing: border-box;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    padding: 0;
+    overflow: hidden;
+    border-inline: 0;
+    border-radius: 0;
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .toc.is-open {
+    box-shadow: 0 24px 48px rgb(0 0 0 / 0.6);
+  }
+
+  .toc__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--wp--preset--spacing--30);
+    width: 100%;
+    min-height: 48px;
+    padding: 12px max(16px, var(--wp--style--root--padding-left, 24px));
+    border: 0;
+    background: none;
+    color: var(--color-text);
+    font: inherit;
+    font-size: var(--wp--preset--font-size--20);
+    text-align: start;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--wp--preset--color--accent-1);
+      outline-offset: -2px;
+    }
+  }
+
+  .toc__current {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .toc__count {
+    @include meta-text(label);
+    color: var(--wp--preset--color--accent-1);
+  }
+
+  .toc__hint {
+    flex-shrink: 0;
+    @include meta-text(label);
+    color: var(--color-text-dim);
+
+    &::after {
+      content: ' ▾';
+    }
+  }
+
+  .toc.is-open .toc__hint::after {
+    content: ' ▴';
+  }
+
+  .toc__panel {
+    display: none;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 0 max(16px, var(--wp--style--root--padding-left, 24px)) 16px;
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  .toc.is-open .toc__panel {
+    display: block;
+  }
+
+  // The panel repeats what the toggle says; its own heading is redundant.
+  .toc__panel > .toc__heading:first-child {
+    display: none;
+  }
+
+  .toc__panel > .toc__heading:first-child + ol {
+    margin-block-start: 0;
+  }
+
+  // The progress bar runs along the bar's bottom edge.
+  .toc:has(.toc__toggle) > .toc__progress {
+    margin: 0;
+    border-radius: 0;
+  }
+
+  // A jumped-to section lands below the header AND the bar.
+  :root :is(.site-content, .is-root-container) h2[id],
+  :root .project-section {
+    scroll-margin-block-start: calc(var(--header-height, 72px) + 4.5rem);
+  }
+}
+
 // Section headings the contents card points at land below the fixed header.
 :is(.site-content, .is-root-container) h2[id] {
   scroll-margin-block-start: calc(var(--header-height, 72px) + var(--wp--preset--spacing--40));

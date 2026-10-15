@@ -126,6 +126,10 @@
         border-inline-end: 1px solid var(--color-border);
         border-block-end: 1px solid var(--color-border);
 
+        @media (max-width: 575px) {
+            padding: 1.125rem 1rem;
+        }
+
         @include media(lg) {
             border-block-end: 0;
 
@@ -273,6 +277,46 @@
         :where(p strong) {
             color: var(--color-text);
             font-weight: 500;
+        }
+
+        // Phones: a compact numbered list — the stage number beside the stage
+        // name, the ring and rule dropped; every line of text stays.
+        @media (max-width: 575px) {
+            display: grid;
+            grid-template-columns: 2.25rem minmax(0, 1fr);
+            align-items: baseline;
+            padding: 1.125rem 1.25rem;
+
+            &::before {
+                display: none;
+            }
+
+            &::after {
+                position: static;
+                grid-column: 1;
+                grid-row: 1;
+                display: block;
+                height: auto;
+                background: none;
+                color: var(--wp--preset--color--accent-1);
+            }
+
+            > * {
+                grid-column: 2;
+            }
+
+            :where(h3) {
+                font-size: 1.125rem;
+                font-weight: 500;
+            }
+
+            :where(h3) + p {
+                margin-block-start: 0.5rem;
+            }
+
+            :where(p) + :where(p) {
+                margin-block-start: 0.375rem;
+            }
         }
 
         // Highlighted stage
@@ -835,5 +879,11 @@
         margin-block-start: var(--wp--preset--spacing--60);
         padding-block-start: var(--wp--preset--spacing--60);
         border-block-start: 1px solid var(--color-border);
+
+        // Phones: 64px from section to section, rule included (was 128).
+        @media (max-width: 575px) {
+            margin-block-start: 2rem;
+            padding-block-start: 2rem;
+        }
     }
 }

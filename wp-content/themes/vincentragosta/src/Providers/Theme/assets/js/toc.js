@@ -5,6 +5,11 @@
  * Marks the section currently being read (aria-current on its link) and
  * fills the progress bar as the reader moves through the sections. Sections
  * are the elements the links point at ([data-toc-link] ids).
+ *
+ * On phones the card is a slim sticky bar (see _toc.scss): enhance() adds a
+ * toggle naming the current section ("03 / 11 Feature system") that opens the
+ * rest of the card; choosing a section closes it again. Desktop hides the
+ * toggle and shows the card as before.
  */
 
 /**
@@ -75,6 +80,81 @@ export function update(toc, sections, line) {
 }
 
 /**
+ * The bar's summary: "03 / 11" and the current section's label (the first
+ * section until one has been reached).
+ * @param {HTMLElement} toc
+ * @returns {{count: string, label: string}}
+ */
+export function summary(toc) {
+    const links = Array.from(toc.querySelectorAll('[data-toc-link]'));
+    const index = Math.max(0, links.findIndex((link) => link.hasAttribute('aria-current')));
+    const pad = (n) => String(n).padStart(2, '0');
+    const link = links[index];
+    const label = link ? (link.firstChild?.textContent ?? link.textContent).trim() : '';
+
+    return { count: links.length ? `${pad(index + 1)} / ${pad(links.length)}` : '', label };
+}
+
+/**
+ * Add the phone toggle: a button at the top of the card naming the current
+ * section, controlling a panel that holds the rest of the card. The progress
+ * bar stays outside the panel so the collapsed bar still shows it.
+ * @param {HTMLElement} toc
+ */
+export function enhance(toc) {
+    if (toc.querySelector('.toc__toggle')) return;
+
+    const panel = document.createElement('div');
+    panel.className = 'toc__panel';
+    panel.id = `${toc.id || toc.getAttribute('aria-labelledby') || 'toc'}-panel`;
+    const progressBar = toc.querySelector('.toc__progress');
+    Array.from(toc.childNodes).forEach((node) => {
+        if (node !== progressBar) panel.appendChild(node);
+    });
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'toc__toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', panel.id);
+    toggle.innerHTML = '<span class="toc__current"><span class="toc__count"></span> <span class="toc__label"></span></span><span class="toc__hint">On this page</span>';
+
+    toc.prepend(toggle);
+    toggle.after(panel);
+    if (progressBar) panel.after(progressBar);
+
+    const setOpen = (open) => {
+        toc.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+    };
+    toggle.addEventListener('click', () => setOpen(!toc.classList.contains('is-open')));
+    panel.addEventListener('click', (event) => {
+        if (event.target.closest('a')) setOpen(false);
+    });
+    toc.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && toc.classList.contains('is-open')) {
+            setOpen(false);
+            toggle.focus();
+        }
+    });
+
+    renderSummary(toc);
+}
+
+/**
+ * Write the current summary into the toggle.
+ * @param {HTMLElement} toc
+ */
+export function renderSummary(toc) {
+    const count = toc.querySelector('.toc__count');
+    const label = toc.querySelector('.toc__label');
+    if (!count || !label) return;
+    const { count: c, label: l } = summary(toc);
+    count.textContent = c;
+    label.textContent = l;
+}
+
+/**
  * Wire every contents card on the page to scroll.
  */
 export function initToc() {
@@ -83,8 +163,13 @@ export function initToc() {
         .filter(({ sections }) => sections.length);
     if (!cards.length) return;
 
+    cards.forEach(({ toc }) => enhance(toc));
+
     const line = () => window.innerHeight * 0.35;
-    const refresh = () => cards.forEach(({ toc, sections }) => update(toc, sections, line()));
+    const refresh = () => cards.forEach(({ toc, sections }) => {
+        update(toc, sections, line());
+        renderSummary(toc);
+    });
     let queued = false;
 
     const onScroll = () => {

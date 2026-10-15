@@ -271,6 +271,36 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.search-paths .is-style-panel')).toHaveCount(3);
     });
 
+    test('on a phone the contents card is a sticky bar that opens and jumps', async ({ page }) => {
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await page.goto('/framework/');
+
+        const toc = page.locator('.toc');
+        const toggle = page.locator('.toc__toggle');
+        await expect(toggle).toBeVisible();
+        await expect(toggle).toContainText('01 / 11');
+        await expect(page.locator('.toc__panel')).toBeHidden();
+
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight / 2));
+        await expect.poll(() => toc.evaluate((el) => Math.round(el.getBoundingClientRect().top)))
+            .toBe(await page.evaluate(() => parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height'), 10)));
+
+        await toggle.click();
+        await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+        await page.locator('.toc__panel a[href="#security"]').click();
+        await expect(page.locator('.toc__panel')).toBeHidden();
+        await expect(toggle).toContainText('Security');
+    });
+
+    test('on a desktop the contents card shows in full, without the bar toggle', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await page.goto('/framework/');
+
+        await expect(page.locator('.toc__toggle')).toBeHidden();
+        await expect(page.locator('.toc [data-toc-link]').first()).toBeVisible();
+    });
+
     test('no console errors on homepage', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {

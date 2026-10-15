@@ -47,9 +47,26 @@
         background: var(--color-border);
     }
 
+    // Core's code-block CSS gives the inner <code> `white-space: pre-wrap`,
+    // which would wrap terminal lines at every width; inherit `pre` instead.
     code {
         font: inherit;
         color: inherit;
+        white-space: inherit;
+        overflow-wrap: normal;
+    }
+
+    // Phones: a smaller mono size and tighter frame. scroll-regions.js then
+    // shrinks the text further if the longest line still doesn't fit; only a
+    // line too long even at its floor scrolls, with a fade on the right edge.
+    @media (max-width: 575px) {
+        padding: 52px 16px 18px;
+        font-size: 12px;
+        line-height: 1.85;
+
+        &[data-scroll-focusable] {
+            mask-image: linear-gradient(90deg, #000 calc(100% - 44px), transparent);
+        }
     }
 
     mark,

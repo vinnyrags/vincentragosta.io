@@ -60,12 +60,34 @@
   [aria-current] {
     color: var(--color-text-muted);
   }
+
+  // Phones: one line — the way back plus its parent ("← projects / broadway");
+  // the current page's slug drops (the title says it) and so does the separate
+  // "← All …" link, which this replaces.
+  @media (max-width: 575px) {
+    flex-wrap: nowrap;
+    min-width: 0;
+    white-space: nowrap;
+
+    li:first-child::before {
+      content: '← ';
+    }
+
+    [aria-current] {
+      display: none;
+    }
+  }
 }
 
 // "← All …" link.
 @mixin detail-back {
   color: var(--color-text-muted);
   text-decoration: none;
+
+  // Phones: the breadcrumb's first item is the way back (see detail-crumb).
+  @media (max-width: 575px) {
+    display: none;
+  }
 
   &:hover {
     color: var(--wp--preset--color--accent-1);
@@ -81,6 +103,12 @@
   line-height: 0.92;
   letter-spacing: -0.055em;
   overflow-wrap: break-word;
+
+  // Phones: the same 48px display size as every other page's H1.
+  @media (max-width: 575px) {
+    margin-block-start: 1.5rem;
+    font-size: var(--wp--preset--font-size--100);
+  }
 
   .serif-accent {
     font-size: 1.1em;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { activeIndex, progress, update, targets } from '../../../../../../src/Providers/Theme/assets/js/toc.js';
+import { activeIndex, progress, update, targets, summary, enhance } from '../../../../../../src/Providers/Theme/assets/js/toc.js';
 
 describe('activeIndex', () => {
     it('is -1 before the first section reaches the line', () => {
@@ -62,5 +62,76 @@ describe('targets', () => {
             <h2 id="a"></h2><h2 id="b"></h2>`;
         const ids = targets(document.querySelector('[data-toc]')).map((el) => el.id);
         expect(ids).toEqual(['b', 'a']);
+    });
+});
+
+/**
+ * A contents card as the templates render it.
+ */
+function card() {
+    document.body.innerHTML = `
+        <nav class="toc" aria-labelledby="t-heading" data-toc>
+            <p class="toc__heading" id="t-heading">On this page</p>
+            <ol>
+                <li><a href="#one" data-toc-link="one">
+                    Overview <span aria-hidden="true">01</span></a></li>
+                <li><a href="#two" data-toc-link="two">
+                    Cookies <span aria-hidden="true">02</span></a></li>
+            </ol>
+            <div class="toc__progress"><span data-toc-progress></span></div>
+        </nav>`;
+    return document.querySelector('.toc');
+}
+
+describe('summary', () => {
+    it('names the first section until one is reached', () => {
+        expect(summary(card())).toEqual({ count: '01 / 02', label: 'Overview' });
+    });
+
+    it('follows the current section', () => {
+        const toc = card();
+        toc.querySelector('[data-toc-link="two"]').setAttribute('aria-current', 'true');
+        expect(summary(toc)).toEqual({ count: '02 / 02', label: 'Cookies' });
+    });
+});
+
+describe('enhance', () => {
+    it('adds a toggle controlling a panel, and keeps the progress bar outside it', () => {
+        const toc = card();
+        enhance(toc);
+
+        const toggle = toc.querySelector('.toc__toggle');
+        const panel = toc.querySelector('.toc__panel');
+        expect(toggle.getAttribute('aria-expanded')).toBe('false');
+        expect(toggle.getAttribute('aria-controls')).toBe(panel.id);
+        expect(panel.querySelector('ol')).not.toBeNull();
+        expect(panel.querySelector('.toc__progress')).toBeNull();
+        expect(toc.lastElementChild.classList.contains('toc__progress')).toBe(true);
+        expect(toggle.textContent).toContain('01 / 02');
+        expect(toggle.textContent).toContain('Overview');
+    });
+
+    it('opens on the toggle and closes when a section is chosen or on Escape', () => {
+        const toc = card();
+        enhance(toc);
+        const toggle = toc.querySelector('.toc__toggle');
+
+        toggle.click();
+        expect(toc.classList.contains('is-open')).toBe(true);
+        expect(toggle.getAttribute('aria-expanded')).toBe('true');
+
+        toc.querySelector('[data-toc-link="two"]').click();
+        expect(toc.classList.contains('is-open')).toBe(false);
+
+        toggle.click();
+        toc.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        expect(toc.classList.contains('is-open')).toBe(false);
+    });
+
+    it('enhances a card only once', () => {
+        const toc = card();
+        enhance(toc);
+        enhance(toc);
+        expect(toc.querySelectorAll('.toc__toggle')).toHaveLength(1);
     });
 });

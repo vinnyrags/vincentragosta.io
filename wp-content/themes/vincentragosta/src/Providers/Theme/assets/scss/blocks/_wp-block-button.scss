@@ -53,3 +53,45 @@
         transition: none;
     }
 }
+
+// ==========================================================================
+// Phones (below 576px)
+// ==========================================================================
+// Action pairs (hero CTAs, contact panels) stack full width, primary first.
+// A right-aligned group is a section's "see more" action sitting beside its
+// heading on desktop; on a phone it falls under the heading, so it reads as a
+// left-aligned text link instead of a stray button.
+@media (max-width: 575px) {
+  :is(.site-content, .footer-cta) .wp-block-buttons:not(.is-content-justification-right) {
+    flex-direction: column;
+    align-items: stretch;
+
+    > .wp-block-button {
+      width: 100%;
+    }
+
+    .wp-block-button__link {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+
+  .site-content .wp-block-buttons.is-content-justification-right {
+    justify-content: flex-start;
+
+    .wp-block-button__link {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: var(--wp--preset--color--accent-1);
+
+      &:hover,
+      &:focus-visible {
+        background: none;
+        color: var(--color-text);
+      }
+    }
+  }
+}
