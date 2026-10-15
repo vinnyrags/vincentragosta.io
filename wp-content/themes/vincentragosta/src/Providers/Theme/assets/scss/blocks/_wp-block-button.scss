@@ -60,8 +60,17 @@
 // Action pairs (hero CTAs, contact panels) stack full width, primary first.
 // A right-aligned group is a section's "see more" action sitting beside its
 // heading on desktop; on a phone it falls under the heading, so it reads as a
-// left-aligned text link instead of a stray button.
+// left-aligned text link instead of a stray button. Either way, a button row
+// sits a step closer to the copy above it than the section's block gap.
 @media (max-width: 575px) {
+  .site-content .is-layout-flow > .wp-block-buttons:not(:first-child) {
+    margin-block-start: var(--wp--preset--spacing--40);
+  }
+
+  .site-content .wp-block-columns:has(> .wp-block-column:last-child > .wp-block-buttons:only-child) {
+    row-gap: var(--wp--preset--spacing--40);
+  }
+
   :is(.site-content, .footer-cta) .wp-block-buttons:not(.is-content-justification-right) {
     flex-direction: column;
     align-items: stretch;

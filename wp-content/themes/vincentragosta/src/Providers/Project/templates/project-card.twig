@@ -1,13 +1,12 @@
 {#
     Project card.
     size: 'lg' | 'sm' | null (default). Featured cards pass a size; grid cards don't.
-    highlight: lime-ringed card (the lead case study).
     filterable: false for featured cards, which hide as a group while filtering.
 #}
 {% set size = size ?? null %}
 {% set filterable = filterable ?? true %}
 <article
-    class="project-card{{ size ? ' project-card--' ~ size }}{{ highlight|default(false) ? ' is-highlighted' }}"
+    class="project-card{{ size ? ' project-card--' ~ size }}"
     {% if filterable %}
         data-project-item
         data-title="{{ (project.title ~ ' ' ~ project.client ~ ' ' ~ project.technologies|join(' '))|lower|e('html_attr') }}"

@@ -1,7 +1,7 @@
 {# Featured layout: the first two projects large, the rest small (four across). #}
 <div class="projects-featured__top">
     {% for project in projects|slice(0, 2) %}
-        {% include 'project-card.twig' with { project: project, size: 'lg', highlight: loop.first, filterable: false } only %}
+        {% include 'project-card.twig' with { project: project, size: 'lg', filterable: false } only %}
     {% endfor %}
 </div>
 {% if projects|length > 2 %}
