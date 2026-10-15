@@ -58,7 +58,7 @@ foreach (Timber::get_posts() as $post) {
         'label'   => SearchResults::TYPES[$type] ?? ucfirst($type),
         'title'   => $post->title(),
         'link'    => $post->link(),
-        'excerpt' => $excerpt,
+        'excerpt' => SearchResults::excerpt($excerpt),
         'meta'    => implode(' · ', $meta),
     ];
 }

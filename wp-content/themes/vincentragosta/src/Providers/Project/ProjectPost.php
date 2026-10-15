@@ -36,14 +36,20 @@ class ProjectPost extends BaseProjectPost
         return trim((string) $this->getField(self::FIELD_LEAD));
     }
 
+    /**
+     * Plain-text field, so it gets the smart quotes and dashes that ACF
+     * applies to WYSIWYG fields but not to text fields.
+     */
     public function leadNote(): string
     {
-        return trim((string) $this->getField(self::FIELD_LEAD_NOTE));
+        return wptexturize(trim((string) $this->getField(self::FIELD_LEAD_NOTE)));
     }
 
     /**
      * Body sections, in order, each with a unique anchor id derived from its
-     * label. Rows missing a label, heading, or body are skipped.
+     * label. Rows missing a label, heading, or body are skipped. The heading
+     * and note are plain-text fields, so they get the smart quotes and dashes
+     * the WYSIWYG body already has.
      *
      * @return array<int, array{id: string, label: string, heading: string, body: string, note: string}>
      */
@@ -74,9 +80,9 @@ class ProjectPost extends BaseProjectPost
             $sections[] = [
                 'id'      => self::uniqueId(sanitize_title($label) ?: 'section', $usedIds),
                 'label'   => $label,
-                'heading' => $heading,
+                'heading' => wptexturize($heading),
                 'body'    => $body,
-                'note'    => trim((string) ($row['note'] ?? '')),
+                'note'    => wptexturize(trim((string) ($row['note'] ?? ''))),
             ];
         }
 

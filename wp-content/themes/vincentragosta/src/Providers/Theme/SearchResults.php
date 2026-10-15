@@ -81,6 +81,17 @@ final class SearchResults
     }
 
     /**
+     * Smart quotes and dashes for a result excerpt. A highlighted word
+     * followed by an apostrophe ("<strong>ADL</strong>'s") would otherwise be
+     * read as an opening quote, so the apostrophe after a closing highlight tag
+     * is set as one first.
+     */
+    public static function excerpt(string $html): string
+    {
+        return wptexturize((string) preg_replace("#(</(?:strong|mark|em)>)'(?=\\w)#", '$1&#8217;', $html));
+    }
+
+    /**
      * Counts for searchable types only.
      *
      * @param array<string, int> $counts

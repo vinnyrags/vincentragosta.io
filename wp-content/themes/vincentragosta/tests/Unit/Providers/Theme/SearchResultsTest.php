@@ -44,4 +44,10 @@ class SearchResultsTest extends TestCase
         $this->assertSame('1 result · 1 signal', SearchResults::summary(['post' => 1]));
         $this->assertSame('0 results', SearchResults::summary([]));
     }
+
+    public function testExcerptGetsSmartQuotesIncludingAfterAHighlight(): void
+    {
+        $this->assertSame('the <strong>ADL</strong>&#8217;s summit', SearchResults::excerpt("the <strong>ADL</strong>'s summit"));
+        $this->assertSame('North America&#8217;s oldest &#8212; <mark>show</mark>', SearchResults::excerpt("North America's oldest --- <mark>show</mark>"));
+    }
 }

@@ -175,6 +175,22 @@ class ProjectPostTest extends TestCase
         $this->assertSame('', $sections[1]['note']);
     }
 
+    public function testPlainTextFieldsGetSmartQuotes(): void
+    {
+        $post = $this->project([
+            ProjectPost::FIELD_LEAD_NOTE => "The show's lead",
+            ProjectPost::FIELD_SECTIONS  => [
+                ['label' => 'Background', 'heading' => "Broadway's biggest", 'body' => '<p>One</p>', 'note' => "The brand's launch"],
+            ],
+        ]);
+
+        $section = $post->sections()[0];
+
+        $this->assertSame('The show&#8217;s lead', $post->leadNote());
+        $this->assertSame('Broadway&#8217;s biggest', $section['heading']);
+        $this->assertSame('The brand&#8217;s launch', $section['note']);
+    }
+
     public function testSectionsDeduplicateIdsAndSkipIncompleteRows(): void
     {
         $post = $this->project([ProjectPost::FIELD_SECTIONS => [
