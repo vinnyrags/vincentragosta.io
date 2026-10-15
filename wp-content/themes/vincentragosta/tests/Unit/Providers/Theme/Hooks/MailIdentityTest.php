@@ -10,7 +10,8 @@ use WorDBless\BaseTestCase;
  * The behaviour under test is the guard, not the substitution: wp_mail()
  * applies `wp_mail_from` even when the caller supplied an explicit
  * `From:` header, so an unconditional filter would silently rewrite the
- * Shop provider's per-send itzenzoTTV identity. These tests pin that.
+ * Shop provider's per-send itzenzoTTV identity. These tests pin that —
+ * and that an address Resend would refuse is replaced, with a Reply-To.
  */
 class MailIdentityTest extends BaseTestCase
 {
@@ -20,6 +21,10 @@ class MailIdentityTest extends BaseTestCase
     {
         parent::setUp();
         $this->hook = new MailIdentity();
+
+        // wp_mail() loads WordPress's bundled PHPMailer lazily; the Reply-To tests need it.
+        require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+        require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
     }
 
     public function testImplementsHook(): void
@@ -40,20 +45,69 @@ class MailIdentityTest extends BaseTestCase
     /**
      * The regression that matters: shop mail must keep its own From.
      *
-     * @dataProvider explicitAddresses
+     * @dataProvider ownDomainAddresses
      */
-    public function testLeavesAnExplicitAddressAlone(string $address): void
+    public function testLeavesAnExplicitAddressOnOurDomainsAlone(string $address): void
     {
         $this->assertSame($address, $this->hook->filterFromEmail($address));
     }
 
-    public static function explicitAddresses(): array
+    public static function ownDomainAddresses(): array
     {
         return [
             'shop per-send identity' => ['noreply@itzenzo.tv'],
+            'site identity' => ['noreply@vincentragosta.io'],
+            'mixed case domain' => ['inquiries@VincentRagosta.io'],
+        ];
+    }
+
+    /**
+     * Resend refuses these, so keeping them means the mail never sends
+     * (Smash Balloon's weekly report sends as the admin Gmail).
+     *
+     * @dataProvider foreignAddresses
+     */
+    public function testReplacesAnAddressNoRelayAccepts(string $address): void
+    {
+        $this->assertSame('noreply@vincentragosta.io', $this->hook->filterFromEmail($address));
+    }
+
+    public static function foreignAddresses(): array
+    {
+        return [
+            'admin gmail set by a plugin' => ['vincentpasqualeragosta@gmail.com'],
             'a plugin-set address' => ['forms@example.com'],
             'another site default' => ['wordpress@some-other-host.test'],
+            'a lookalike subdomain' => ['noreply@mail.vincentragosta.io.example.com'],
         ];
+    }
+
+    public function testReplacedAddressBecomesTheReplyTo(): void
+    {
+        $mailer = new \PHPMailer\PHPMailer\PHPMailer();
+        $this->hook->filterFromEmail('vincentpasqualeragosta@gmail.com');
+        $this->hook->addReplyTo($mailer);
+
+        $this->assertSame(['vincentpasqualeragosta@gmail.com'], array_column($mailer->getReplyToAddresses(), 0));
+    }
+
+    public function testAnExistingReplyToIsKept(): void
+    {
+        $mailer = new \PHPMailer\PHPMailer\PHPMailer();
+        $mailer->addReplyTo('person@example.com');
+        $this->hook->filterFromEmail('vincentpasqualeragosta@gmail.com');
+        $this->hook->addReplyTo($mailer);
+
+        $this->assertSame(['person@example.com'], array_column($mailer->getReplyToAddresses(), 0));
+    }
+
+    public function testNoReplyToWhenNothingWasReplaced(): void
+    {
+        $mailer = new \PHPMailer\PHPMailer\PHPMailer();
+        $this->hook->filterFromEmail('noreply@itzenzo.tv');
+        $this->hook->addReplyTo($mailer);
+
+        $this->assertSame([], $mailer->getReplyToAddresses());
     }
 
     public function testReplacesTheCoreDefaultName(): void
@@ -72,5 +126,6 @@ class MailIdentityTest extends BaseTestCase
 
         $this->assertNotFalse(has_filter('wp_mail_from', [$this->hook, 'filterFromEmail']));
         $this->assertNotFalse(has_filter('wp_mail_from_name', [$this->hook, 'filterFromName']));
+        $this->assertNotFalse(has_action('phpmailer_init', [$this->hook, 'addReplyTo']));
     }
 }

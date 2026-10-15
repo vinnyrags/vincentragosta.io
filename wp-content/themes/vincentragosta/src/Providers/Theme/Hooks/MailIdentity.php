@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme\Hooks;
 
 use Mythus\Contracts\Hook;
+use PHPMailer\PHPMailer\PHPMailer;
 
 /**
  * Gives site-wide outbound mail a real From address on our own domain.
@@ -22,9 +23,14 @@ use Mythus\Contracts\Hook;
  * would silently clobber every per-send identity on the site. The Shop
  * provider's MailNotifications deliberately sets `From: itzenzoTTV
  * <noreply@itzenzo.tv>` per send so only shop mail wears that identity;
- * overriding it here would undo that on purpose-built code. So we only
- * substitute when the value is still WordPress's own default, and leave
- * anything explicitly set alone.
+ * overriding it here would undo that on purpose-built code. So an explicit
+ * address on one of our verified sending domains is left alone.
+ *
+ * An explicit address on any OTHER domain is replaced too: Resend refuses
+ * it, so leaving it alone only means the mail is never sent. Plugins do
+ * this — Smash Balloon's weekly report sends as the admin email (a Gmail
+ * address) and was rejected every week from September 2026. The original
+ * address becomes the Reply-To, so answering still reaches it.
  *
  * @see \ChildTheme\Providers\Shop\Support\MailNotifications
  */
@@ -40,23 +46,46 @@ class MailIdentity implements Hook
     private const FROM_NAME = 'Vincent Ragosta';
 
     /**
+     * Domains verified in Resend. An explicit From on one of these is kept.
+     */
+    private const SENDING_DOMAINS = ['vincentragosta.io', 'itzenzo.tv'];
+
+    /**
      * WordPress's own defaults, which are the only values we replace.
      */
     private const CORE_DEFAULT_NAME = 'WordPress';
+
+    /**
+     * The address replaced on the current send, kept for its Reply-To.
+     */
+    private ?string $replaced = null;
 
     public function register(): void
     {
         add_filter('wp_mail_from', [$this, 'filterFromEmail']);
         add_filter('wp_mail_from_name', [$this, 'filterFromName']);
+        add_action('phpmailer_init', [$this, 'addReplyTo']);
     }
 
     /**
-     * Replace only WordPress's `wordpress@<sitename>` default, so an
-     * explicit per-send `From:` header survives untouched.
+     * Replace WordPress's `wordpress@<sitename>` default and any address
+     * no relay will accept; keep explicit addresses on our own domains.
      */
     public function filterFromEmail(string $from): string
     {
-        return $from === $this->coreDefaultEmail() ? self::FROM_EMAIL : $from;
+        $this->replaced = null;
+
+        if ($from === $this->coreDefaultEmail()) {
+            return self::FROM_EMAIL;
+        }
+
+        if ($this->isSendable($from)) {
+            return $from;
+        }
+
+        $this->replaced = $from;
+
+        return self::FROM_EMAIL;
     }
 
     /**
@@ -67,6 +96,26 @@ class MailIdentity implements Hook
     public function filterFromName(string $name): string
     {
         return $name === self::CORE_DEFAULT_NAME ? self::FROM_NAME : $name;
+    }
+
+    /**
+     * When a foreign From was replaced, replies go back to it — unless the
+     * sender already chose a Reply-To.
+     */
+    public function addReplyTo(PHPMailer $mailer): void
+    {
+        if ($this->replaced !== null && $mailer->getReplyToAddresses() === []) {
+            $mailer->addReplyTo($this->replaced);
+        }
+
+        $this->replaced = null;
+    }
+
+    private function isSendable(string $email): bool
+    {
+        $domain = strtolower((string) substr(strrchr($email, '@') ?: '', 1));
+
+        return in_array($domain, self::SENDING_DOMAINS, true);
     }
 
     /**
