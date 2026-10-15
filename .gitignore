@@ -43,3 +43,7 @@ wp-content/debug.log
 GEMINI.md
 # Local DB backup snapshots (never commit — contains customer data)
 .db-backups/
+
+# Project docs live in xipe (~/.claude/project-docs/vincentragosta.io/), symlinked here.
+/CLAUDE.md
+/RUNBOOK.md
