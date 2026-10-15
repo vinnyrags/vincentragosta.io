@@ -374,9 +374,12 @@ in a browser) and the PNGs in `~/Downloads/vincentragosta-redesign-2026-*.png`.
 
 ## Post-launch
 
-- Delete `scripts/redesign/` (incl. `update-contact-form.php`, `update-instagram-feed.php`), `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`;
-  propose removing the RUNBOOK's mega-menu re-apply step.
-- Update Mythus to ≥ v1.4.2 (`composer update vincentragosta/mythus`, mind RUNBOOK trap 5), then
-  drop the Makefile's Mythus `test:unit` special case.
-- Update the README Project section (currently documents methods and a block name that don't exist).
-- Propose CLAUDE.md updates for review.
+Done 2026-10-15. The cutover scripts, page content files, and mockups referenced throughout this doc
+were deleted after launch; they are in git history at `76306b6` (`git show 76306b6:<path>`).
+
+- [x] Deleted `scripts/redesign/`, `docs/redesign-2026/mockups/`, and `scripts/setup-mega-menu.sh`.
+  The CMS is now the only source of page content.
+- [x] Mythus v1.2.0 → v1.4.2; the Makefile's Mythus `test:unit` special case is gone.
+- [x] README Child Theme, Custom Blocks, and Design System sections rewritten against the code.
+- [ ] RUNBOOK: remove the mega-menu re-apply steps and the `scripts/redesign/` references (proposed).
+- [ ] Propose CLAUDE.md updates for review.
