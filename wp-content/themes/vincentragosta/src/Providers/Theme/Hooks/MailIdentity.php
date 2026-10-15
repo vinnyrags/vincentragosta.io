@@ -20,19 +20,18 @@ use PHPMailer\PHPMailer\PHPMailer;
  * IMPORTANT — why this checks the incoming value instead of returning a
  * constant. `wp_mail()` applies the `wp_mail_from` filter *even when the
  * caller passed an explicit `From:` header*, so an unconditional filter
- * would silently clobber every per-send identity on the site. The Shop
- * provider's MailNotifications deliberately sets `From: itzenzoTTV
- * <noreply@itzenzo.tv>` per send so only shop mail wears that identity;
- * overriding it here would undo that on purpose-built code. So an explicit
- * address on one of our verified sending domains is left alone.
+ * would silently clobber every per-send identity on the site. An explicit
+ * address on a domain verified in Resend is left alone, so a sender can
+ * still choose its own name and mailbox there.
  *
- * An explicit address on any OTHER domain is replaced too: Resend refuses
- * it, so leaving it alone only means the mail is never sent. Plugins do
+ * An explicit address on any OTHER domain is replaced: Resend refuses it,
+ * so leaving it alone only means the mail is never sent. Plugins do
  * this — Smash Balloon's weekly report sends as the admin email (a Gmail
  * address) and was rejected every week from September 2026. The original
  * address becomes the Reply-To, so answering still reaches it.
  *
- * @see \ChildTheme\Providers\Shop\Support\MailNotifications
+ * @see \ChildTheme\Providers\Shop\Support\MailNotifications (sends as
+ *      noreply@vincentragosta.io since itzenzo.tv is not verified in Resend)
  */
 class MailIdentity implements Hook
 {
@@ -47,8 +46,10 @@ class MailIdentity implements Hook
 
     /**
      * Domains verified in Resend. An explicit From on one of these is kept.
+     * Add itzenzo.tv here only after verifying it in Resend (see
+     * MailNotifications::FROM_HEADER).
      */
-    private const SENDING_DOMAINS = ['vincentragosta.io', 'itzenzo.tv'];
+    private const SENDING_DOMAINS = ['vincentragosta.io'];
 
     /**
      * WordPress's own defaults, which are the only values we replace.

@@ -10,8 +10,8 @@ use WorDBless\BaseTestCase;
  * The behaviour under test is the guard, not the substitution: wp_mail()
  * applies `wp_mail_from` even when the caller supplied an explicit
  * `From:` header, so an unconditional filter would silently rewrite the
- * Shop provider's per-send itzenzoTTV identity. These tests pin that —
- * and that an address Resend would refuse is replaced, with a Reply-To.
+ * per-send identity on a verified domain. These tests pin that — and that
+ * an address Resend would refuse is replaced, with a Reply-To.
  */
 class MailIdentityTest extends BaseTestCase
 {
@@ -43,7 +43,7 @@ class MailIdentityTest extends BaseTestCase
     }
 
     /**
-     * The regression that matters: shop mail must keep its own From.
+     * A sender may choose its own mailbox on a verified domain.
      *
      * @dataProvider ownDomainAddresses
      */
@@ -55,8 +55,8 @@ class MailIdentityTest extends BaseTestCase
     public static function ownDomainAddresses(): array
     {
         return [
-            'shop per-send identity' => ['noreply@itzenzo.tv'],
             'site identity' => ['noreply@vincentragosta.io'],
+            'another mailbox on the site domain' => ['shop@vincentragosta.io'],
             'mixed case domain' => ['inquiries@VincentRagosta.io'],
         ];
     }
@@ -79,6 +79,7 @@ class MailIdentityTest extends BaseTestCase
             'a plugin-set address' => ['forms@example.com'],
             'another site default' => ['wordpress@some-other-host.test'],
             'a lookalike subdomain' => ['noreply@mail.vincentragosta.io.example.com'],
+            'itzenzo.tv, not verified in Resend' => ['noreply@itzenzo.tv'],
         ];
     }
 
@@ -104,7 +105,7 @@ class MailIdentityTest extends BaseTestCase
     public function testNoReplyToWhenNothingWasReplaced(): void
     {
         $mailer = new \PHPMailer\PHPMailer\PHPMailer();
-        $this->hook->filterFromEmail('noreply@itzenzo.tv');
+        $this->hook->filterFromEmail('noreply@vincentragosta.io');
         $this->hook->addReplyTo($mailer);
 
         $this->assertSame([], $mailer->getReplyToAddresses());
