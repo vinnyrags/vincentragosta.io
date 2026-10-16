@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<ruleset name="vincentragosta">
+    <description>WordPress VIP coding standards for the child theme. Errors fail CI; warnings are reported only.</description>
+
+    <file>src</file>
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+    <config name="minimum_wp_version" value="6.5"/>
+
+    <rule ref="WordPress-VIP-Go"/>
+
+    <!--
+        Baseline exclusions. Each is scoped to the narrowest path that holds the pattern and
+        carries the reason it is safe, so new code anywhere else is held to the full standard.
+    -->
+
+    <!-- Block render.php files are included inside WP_Block::render(), a method scope:
+         $mode, $posts, $term and $tag there are locals, never WordPress's globals. -->
+    <rule ref="WordPress.WP.GlobalVariablesOverride.Prohibited">
+        <exclude-pattern>*/blocks/*/render.php</exclude-pattern>
+    </rule>
+
+    <!-- The Shop provider's custom tables (queue, pull boxes). Interpolated names are
+         $wpdb->prefix plus a constant table name, and every value goes through prepare();
+         CardGraphQL interpolates fixed SQL fragments chosen from a whitelist. Parked code:
+         move to the %i identifier placeholder if the shop is ever revived. -->
+    <rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+        <exclude-pattern>*/Providers/Shop/*</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+        <exclude-pattern>*/Providers/Shop/*</exclude-pattern>
+    </rule>
+
+    <!-- Unbounded queries over small, editor-curated sets (projects, the blog archive).
+         VIP forbids posts_per_page -1 for sites with unbounded content; these are not. -->
+    <rule ref="WordPressVIPMinimum.Performance.NoPaging">
+        <exclude-pattern>*/Providers/Project/*</exclude-pattern>
+        <exclude-pattern>*/Providers/Blog/blocks/blog/render.php</exclude-pattern>
+    </rule>
+
+    <!-- Mail delivery failures are logged deliberately: the msmtp relay fails silently
+         otherwise (RUNBOOK trap 2). -->
+    <rule ref="WordPress.PHP.DevelopmentFunctions.error_log_error_log">
+        <exclude-pattern>*/Providers/Shop/Support/MailNotifications.php</exclude-pattern>
+    </rule>
+</ruleset>

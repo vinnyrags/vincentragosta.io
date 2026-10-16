@@ -6,6 +6,8 @@
  * Inserter: true
  */
 
+declare(strict_types=1);
+
 ?>
 <!-- wp:group {"align":"full","style":{"background":{"backgroundImage":{"url":"<?php echo esc_url(content_url('uploads/')); ?>2026/02/squiggle-2-grey-1.svg","id":6,"source":"file","title":"squiggle-2-grey"},"backgroundSize":"cover"},"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="lorem-ipsum" style="margin-top:0"><!-- wp:columns -->

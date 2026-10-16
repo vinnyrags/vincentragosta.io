@@ -6,6 +6,8 @@
  * Inserter: true
  */
 
+declare(strict_types=1);
+
 ?>
 <!-- wp:group {"align":"full","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" id="lorem-ipsum"><!-- wp:columns -->

@@ -138,6 +138,8 @@ node -e "
             ' * Inserter: true',
             ' */',
             '',
+            'declare(strict_types=1);',
+            '',
             '?>',
             content,
             '',

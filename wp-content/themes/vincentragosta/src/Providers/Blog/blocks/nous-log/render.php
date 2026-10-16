@@ -6,6 +6,8 @@
  * count so numbers stay stable as the feed grows. The newest is marked "new".
  */
 
+declare(strict_types=1);
+
 use ChildTheme\Providers\Blog\NousLog;
 use Timber\Timber;
 
@@ -29,6 +31,7 @@ $context['rows'] = NousLog::rows(
     (int) (wp_count_posts('post')->publish ?? 0)
 );
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is escaped by core.
 echo '<div ' . get_block_wrapper_attributes(['class' => 'nous-log']) . '>';
 Timber::render(__DIR__ . '/log.twig', $context);
 echo '</div>';

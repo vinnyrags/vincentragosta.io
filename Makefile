@@ -148,6 +148,7 @@ endef
 	pull-staging \
 	push-production \
 	pull-production \
+	restore-latest \
 	refresh-from-production \
 	pull-patterns \
 	pull-patterns-staging \
@@ -347,6 +348,46 @@ push-production: ## Push local DB + uploads to production
 
 pull-production: ## Pull production DB + uploads to local
 	$(call pull-db-from-env,PRODUCTION,production)
+
+# Restore drill: rebuild local DDEV from the latest OFF-SITE backup (restic → B2),
+# never touching the droplet. This is how the backups are proven, not assumed —
+# run it after setup and quarterly (RUNBOOK → Backups). Credentials live outside
+# the repo in $(RESTIC_ENV); local DB is snapshotted first.
+#
+# B2's free tier allows 1 GB of downloads a day and uploads are ~1.3 GB, so the
+# routine drill restores the DB plus ONE uploads subfolder:
+#   make restore-latest UPLOADS_SUBDIR=2026/10
+# A full restore (no UPLOADS_SUBDIR) needs B2's download cap raised for the day
+# (Caps & Alerts; about a cent per GB).
+RESTIC_ENV  ?= $(HOME)/.config/restic/vincentragosta.env
+RESTIC_SITE := vincentragosta
+RESTIC      := set -a && . $(RESTIC_ENV) && set +a && restic
+
+restore-latest: ## Restore drill: latest off-site backup into local DDEV
+	@test -r $(RESTIC_ENV) || { echo "Missing $(RESTIC_ENV) — see RUNBOOK → Backups"; exit 1; }
+	@command -v restic >/dev/null || { echo "restic not installed — brew install restic"; exit 1; }
+	ddev snapshot --name pre-restore-$$(date +%Y%m%d-%H%M%S)
+	@echo "Restoring latest database snapshot..."
+	$(RESTIC) dump latest --host $(RESTIC_SITE) --tag db /$(RESTIC_SITE)-db.sql > /tmp/restore-db.sql
+	ddev import-db --file=/tmp/restore-db.sql
+	ddev wp search-replace '$(PRODUCTION_URL)' '$(LOCAL_URL)' --precise --all-tables --quiet
+	ddev wp cache flush --quiet
+	ddev wp rewrite flush --quiet
+	@echo "Restoring latest uploads snapshot$(if $(UPLOADS_SUBDIR), (only $(UPLOADS_SUBDIR)),)..."
+	rm -rf /tmp/restore-uploads
+	$(RESTIC) restore latest --host $(RESTIC_SITE) --tag uploads --target /tmp/restore-uploads \
+		$(if $(UPLOADS_SUBDIR),--include '*/uploads/$(UPLOADS_SUBDIR)',)
+	src="$$(find /tmp/restore-uploads -type d -name uploads -prune | head -1)"; \
+	test -n "$$src" -a -d "$$src" || { echo "No uploads dir in the restored snapshot"; exit 1; }; \
+	if [ -n "$(UPLOADS_SUBDIR)" ]; then \
+		test -d "$$src/$(UPLOADS_SUBDIR)" || { echo "$(UPLOADS_SUBDIR) not in the snapshot"; exit 1; }; \
+		mkdir -p "$(UPLOADS_DIR)/$(UPLOADS_SUBDIR)"; \
+		rsync -a --delete "$$src/$(UPLOADS_SUBDIR)/" "$(UPLOADS_DIR)/$(UPLOADS_SUBDIR)/"; \
+	else \
+		rsync -a --delete "$$src/" $(UPLOADS_DIR)/; \
+	fi
+	rm -rf /tmp/restore-db.sql /tmp/restore-uploads
+	@echo "Done — local restored from the latest off-site backup. Check $(LOCAL_URL)"
 
 # Pre-retirement this had two extra steps that rebuilt the local + staging
 # catalogs from test-mode Stripe (live↔test product IDs are mode-specific and

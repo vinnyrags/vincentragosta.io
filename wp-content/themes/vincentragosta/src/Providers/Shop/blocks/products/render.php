@@ -3,6 +3,8 @@
  * Server-side rendering for the Products block.
  */
 
+declare(strict_types=1);
+
 use ChildTheme\Providers\Shop\ProductRepository;
 use ChildTheme\Theme;
 use Timber\Timber;
@@ -40,6 +42,7 @@ $context['categories'] = $categories;
 
 $wrapper_attributes = get_block_wrapper_attributes();
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is escaped by core.
 echo '<div ' . $wrapper_attributes . '>';
 Timber::render(__DIR__ . '/grid.twig', $context);
 echo '</div>';

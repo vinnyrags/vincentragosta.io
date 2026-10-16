@@ -10,6 +10,8 @@
  * @var array $attributes Block attributes.
  */
 
+declare(strict_types=1);
+
 use ChildTheme\Providers\Blog\NousArchive;
 use IX\Providers\Blog\BlogRepository;
 use IX\Theme;
@@ -36,6 +38,7 @@ $context['tag'] = $tag ? ['slug' => $tag->slug, 'name' => html_entity_decode($ta
 
 $wrapper_attributes = get_block_wrapper_attributes(['class' => 'is-archive']);
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is escaped by core.
 echo '<div ' . $wrapper_attributes . '>';
 Timber::render(__DIR__ . '/archive.twig', $context);
 echo '</div>';

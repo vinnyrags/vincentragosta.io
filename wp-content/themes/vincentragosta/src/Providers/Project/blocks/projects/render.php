@@ -7,6 +7,8 @@
  * featured layout (homepage). "latest" and "curated" render a card grid.
  */
 
+declare(strict_types=1);
+
 use ChildTheme\Providers\Project\ProjectArchive;
 use ChildTheme\Providers\Project\ProjectRepository;
 use ChildTheme\Theme;
@@ -34,6 +36,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
     $mode === 'all' ? ['class' => 'is-archive', 'data-view' => 'index'] : []
 );
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_block_wrapper_attributes() is escaped by core.
 echo '<div ' . $wrapper_attributes . '>';
 Timber::render(__DIR__ . '/grid.twig', $context);
 echo '</div>';

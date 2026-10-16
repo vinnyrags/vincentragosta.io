@@ -64,3 +64,9 @@ jobs:
       - name: Run PHPUnit
         working-directory: wp-content/themes/vincentragosta
         run: composer test
+
+      # WordPress VIP coding standards (phpcs.xml.dist). Errors fail the job — and so
+      # block the deploy; warnings are printed but never fail it.
+      - name: Run PHPCS (WordPress-VIP-Go)
+        working-directory: wp-content/themes/vincentragosta
+        run: composer lint
