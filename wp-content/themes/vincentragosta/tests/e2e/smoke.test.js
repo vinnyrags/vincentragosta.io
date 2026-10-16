@@ -153,7 +153,7 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.toc a[href="#cookies"]')).toHaveAttribute('aria-current', 'true');
     });
 
-    test('framework page lists all eleven sections in its contents card', async ({ page }) => {
+    test('framework page lists all seven sections in its contents card', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {
             if (msg.type() === 'error') {
@@ -168,10 +168,33 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('h1')).toContainText('The framework');
         await expect(page.locator('.is-style-layers')).toBeVisible();
         await expect(page.locator('.is-style-stat-strip')).toBeVisible();
-        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(11);
+        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(7);
 
         await page.locator('.toc a[href="#security"]').click();
         await expect(page.locator('.toc a[href="#security"]')).toHaveAttribute('aria-current', 'true');
+        expect(errors).toEqual([]);
+    });
+
+    test('delivery page lists all five sections and links back to the framework', async ({ page }) => {
+        const errors = [];
+        page.on('console', (msg) => {
+            if (msg.type() === 'error') {
+                errors.push(msg.text());
+            }
+        });
+
+        const response = await page.goto('/framework/delivery/');
+        await page.waitForLoadState('networkidle');
+
+        expect(response.status()).toBe(200);
+        await expect(page.locator('h1')).toContainText('From push to');
+        await expect(page.locator('.is-style-layers')).toBeVisible();
+        await expect(page.locator('.is-style-stat-strip > *')).toHaveCount(4);
+        await expect(page.locator('.toc [data-toc-link]')).toHaveCount(5);
+        await expect(page.locator('.site-content a[href="/framework/"]')).toHaveCount(1);
+
+        await page.locator('.toc a[href="#hardening"]').click();
+        await expect(page.locator('.toc a[href="#hardening"]')).toHaveAttribute('aria-current', 'true');
         expect(errors).toEqual([]);
     });
 
@@ -279,7 +302,7 @@ test.describe('Smoke tests', () => {
         const toc = page.locator('.toc');
         const toggle = page.locator('.toc__toggle');
         await expect(toggle).toBeVisible();
-        await expect(toggle).toContainText('01 / 11');
+        await expect(toggle).toContainText('01 / 07');
         await expect(page.locator('.toc__panel')).toBeHidden();
 
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight / 2));

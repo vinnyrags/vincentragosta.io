@@ -49,6 +49,27 @@ test.describe('Header interactions', () => {
         await expect(page.locator(`${OVERLAY}.is-menu-open`)).toHaveCount(0);
     });
 
+    test('desktop Framework submenu opens on hover with Overview and Delivery', async ({ page }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        const submenu = page.locator('.header li.wp-block-navigation-submenu');
+        const panel = submenu.locator('.wp-block-navigation__submenu-container');
+
+        await expect(panel).toBeHidden();
+        await submenu.hover();
+        await expect(panel).toBeVisible();
+        await expect(panel.locator('.wp-block-navigation-item__label')).toHaveText(['Overview', 'Delivery']);
+        await expect(panel.locator('.wp-block-navigation-item__description').first()).toBeVisible();
+    });
+
+    test('mobile overlay lists Delivery under The Framework, without descriptions', async ({ page }) => {
+        await page.setViewportSize({ width: 375, height: 812 });
+
+        await page.locator(OPEN).click();
+        const delivery = page.locator(`${OVERLAY}.is-menu-open a[href="/framework/delivery/"]`);
+        await expect(delivery).toBeVisible();
+        await expect(page.locator(`${OVERLAY}.is-menu-open .wp-block-navigation-item__description`).first()).toBeHidden();
+    });
+
     test('overlay close button sits exactly where the hamburger was', async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 812 });
 

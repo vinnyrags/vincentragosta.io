@@ -1,6 +1,7 @@
 @use 'common/typography' as *;
 @use 'common/accessibility' as *;
 @use 'common/breakpoints' as *;
+@use 'common/surface' as *;
 
 // ==========================================================================
 // Header — wrapper for the `header` content partial.
@@ -182,12 +183,27 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
     }
 
     .current-menu-item > .wp-block-navigation-item__content,
+    .current-menu-ancestor > .wp-block-navigation-item__content,
     [aria-current='page'] {
       color: var(--color-text);
 
       &::after {
         transform: scaleX(1);
       }
+    }
+
+    // Submenu chevron (core/navigation-submenu). The panel itself is styled
+    // under "Submenu panel" below, scoped higher than core's submenu rules.
+    .wp-block-navigation__submenu-icon {
+      width: 10px;
+      height: 10px;
+      margin-inline-start: 6px;
+      color: var(--color-text-dim);
+    }
+
+    // Item descriptions only show in the desktop submenu panel.
+    .wp-block-navigation-item__description {
+      display: none;
     }
 
     // Overlay open/close toggles
@@ -278,6 +294,20 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
           color: var(--wp--preset--color--accent-1);
         }
       }
+
+      // Submenu items sit under their parent: smaller, dimmer, indented.
+      .wp-block-navigation__submenu-container {
+        gap: var(--wp--preset--spacing--20);
+        padding: var(--wp--preset--spacing--20) 0 0 var(--wp--preset--spacing--30);
+        border: 0;
+        background: transparent;
+
+        .wp-block-navigation-item__content {
+          padding: 0;
+          font-size: var(--wp--preset--font-size--50);
+          color: var(--color-text-muted);
+        }
+      }
     }
   }
 
@@ -292,6 +322,116 @@ $v-glyph: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' view
       .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
         display: none;
       }
+    }
+  }
+
+  // -------------------------------------------------------- Submenu panel
+  // Desktop dropdown for core/navigation-submenu (The Framework → Overview,
+  // Delivery). Echoes the hero's layers diagram: numbered rows, each with its
+  // label and the nav link's description, the current page outlined in the
+  // accent. `.header &__nav` lifts these over core's 0,4,0 submenu rules.
+  & &__nav:not(.has-background) .wp-block-navigation__submenu-container {
+    counter-reset: submenu-item;
+    inset-block-start: calc(100% + 14px);
+    gap: 4px;
+    min-width: 19rem;
+    padding: 6px;
+    @include panel-surface;
+    box-shadow: 0 18px 40px -18px rgb(0 0 0 / 70%);
+    color: var(--color-text);
+
+    // Invisible bridge over the gap, so moving the pointer from the parent
+    // link to the panel doesn't close it.
+    &::before {
+      content: '';
+      position: absolute;
+      inset-inline: 0;
+      inset-block-end: 100%;
+      height: 14px;
+    }
+
+    .wp-block-navigation-item {
+      width: 100%;
+    }
+
+    .wp-block-navigation-item__content {
+      counter-increment: submenu-item;
+      position: relative;
+      flex-wrap: wrap;
+      row-gap: 3px;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 11px 14px 11px 48px;
+      border: 1px solid transparent;
+      border-radius: var(--wp--custom--radius--md);
+
+      // Row number, centered against both lines.
+      &::before {
+        content: counter(submenu-item, decimal-leading-zero);
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 16px;
+        display: flex;
+        align-items: center;
+        @include meta-text;
+        color: var(--color-text-dim);
+      }
+
+      // The inline nav's hover underline doesn't belong in the panel.
+      &::after {
+        display: none;
+      }
+
+      &:hover,
+      &:focus-visible,
+      &[aria-current='page'] {
+        border-color: var(--color-border);
+        background: var(--color-bg);
+
+        &::before {
+          color: var(--wp--preset--color--accent-1);
+        }
+      }
+
+      &[aria-current='page'] {
+        border-color: color-mix(in srgb, var(--wp--preset--color--accent-1) 45%, transparent);
+      }
+    }
+
+    .wp-block-navigation-item__label {
+      flex-basis: 100%;
+      color: var(--color-text);
+    }
+
+    .wp-block-navigation-item__description {
+      display: block;
+      flex-basis: 100%;
+      @include label-text;
+      color: var(--color-text-dim);
+    }
+  }
+
+  // The mobile overlay lists submenu items inline under their parent (sized in
+  // the overlay rules above); undo the panel chrome there.
+  & &__nav .is-menu-open .wp-block-navigation__submenu-container {
+    min-width: 0;
+    box-shadow: none;
+
+    &::before {
+      display: none;
+    }
+
+    .wp-block-navigation-item__content {
+      border: 0;
+      background: none;
+
+      &::before {
+        display: none;
+      }
+    }
+
+    .wp-block-navigation-item__description {
+      display: none;
     }
   }
 
