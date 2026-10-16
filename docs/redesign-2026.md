@@ -158,7 +158,8 @@ production during the cutover rehearsal):
   - **Spacing (2026-10-14):** `spacing-70` is `clamp(6rem, 13.5vw, 20rem)` (194px at 1440). The
     footer owns `--footer-gap` (above + below the contact panel); `.site-content` has no bottom
     padding. Homepage stat strip uses a block margin of `spacing-65`.
-  - [x] The Framework — signed off 2026-10-14. Contents block beside 11 `section` groups; hero
+  - [x] The Framework — signed off 2026-10-14 (split into Framework + Delivery 2026-10-16; see
+    Post-launch). Contents block beside 11 `section` groups; hero
     `layers` + stat strip; everything from existing vocabulary. Stale copy corrected: 430+ → 700+
     PHP tests (721 across Mythus/IX/child), light/dark claims removed, `make push-production` →
     deploy targets, "no runbooks" dropped, the block-allowlist claim made true (`core/html` and
@@ -381,5 +382,23 @@ were deleted after launch; they are in git history at `76306b6` (`git show 76306
   The CMS is now the only source of page content.
 - [x] Mythus v1.2.0 → v1.4.2; the Makefile's Mythus `test:unit` special case is gone.
 - [x] README Child Theme, Custom Blocks, and Design System sections rewritten against the code.
+- [x] **Framework split (live 2026-10-16, `b566f04`).** The page had grown to 12 sections, so it
+  splits on the line deploy-kit's README draws between runtime and delivery:
+  - `/framework/` (68) keeps 7 — Architecture (absorbs Tech stack), Feature system, Blocks and
+    tokens (absorbs Design system), Build system (absorbs Developer experience), Testing,
+    Accessibility, Security (application layer, now incl. `DisableAuthorArchives`). The
+    `#tech-stack` / `#design-system` anchors survive on the merged h3s, so the footer's deep links
+    still land.
+  - `/framework/delivery/` (child page) holds 5 — deploy-kit, Deploys, Performance, Hardening
+    (server layer), Operations (local environment, Make table, environment sync). Its own hero
+    (`layers`: Cloudflare / nginx / deploy-kit) and stat strip.
+  - The Architecture and Feature-system grids use `minimumColumnWidth: 23rem` so they cap at two
+    columns in the 1040px main column. Core's `columnCount` was rejected: in 6.9 it emits a fixed
+    `repeat(2, …)` with no narrow-screen fallback (163px columns at 390px).
+  - Header: The Framework is a `core/navigation-submenu` (Overview + Delivery, each with a nav-link
+    description), styled in `_header.scss` as the numbered "Layers" panel; the mobile overlay lists
+    the items inline without descriptions. Footer Framework column gains Delivery.
+  - e2e: framework expects 7 Contents entries (`01 / 07`); new Delivery smoke + axe tests; desktop
+    submenu hover and mobile overlay tests.
 - [ ] RUNBOOK: remove the mega-menu re-apply steps and the `scripts/redesign/` references (proposed).
 - [ ] Propose CLAUDE.md updates for review.
