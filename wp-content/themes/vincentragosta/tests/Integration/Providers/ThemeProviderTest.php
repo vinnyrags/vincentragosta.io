@@ -125,6 +125,9 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(FeaturedImageFocalPoint::class, $hooks);
         $this->assertContains(HeadingBlockStyles::class, $hooks);
         $this->assertContains(TermsQuerySupports::class, $hooks);
+        // IX >= 1.8.0. Inert here: it acts only when IX_MAIL_FROM is set, and this
+        // site sets its From in the child's own MailIdentity instead.
+        $this->assertContains(\IX\Providers\Theme\Hooks\MailIdentity::class, $hooks);
 
         // Child hooks
         $this->assertContains(ContainerBlockStyles::class, $hooks);
@@ -136,7 +139,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(SearchSetup::class, $hooks);
         $this->assertContains(MailIdentity::class, $hooks);
         $this->assertContains(DistAssetVersioning::class, $hooks);
-        $this->assertCount(13, $hooks);
+        $this->assertCount(14, $hooks);
 
         // ButtonIconEnhancer is now a Feature, not a Hook
         $this->assertNotContains(ButtonIconEnhancer::class, $hooks);
