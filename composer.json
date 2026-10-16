@@ -30,7 +30,8 @@
     "wpackagist-plugin/instagram-feed": "^6.10",
     "wpackagist-plugin/wordpress-importer": "^0.9",
     "wpackagist-plugin/wp-graphql": "^2.0",
-    "wpackagist-plugin/wpgraphql-acf": "^2.5"
+    "wpackagist-plugin/wpgraphql-acf": "^2.5",
+    "wpackagist-plugin/redis-cache": "^2.8"
   },
   "extra": {
     "wordpress-install-dir": "wp",

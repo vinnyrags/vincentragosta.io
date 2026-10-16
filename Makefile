@@ -15,14 +15,18 @@ NPM_DIRS      := $(IX_DIR) $(CHILD_THEME_DIR)
 
 LOCAL_URL := https://vincentragosta.io.ddev.site
 
-STAGING_HOST := root@174.138.70.29
-STAGING_DIR  := /var/www/staging.vincentragosta.io
-STAGING_WP   := $(STAGING_DIR)/wp
-STAGING_URL  := https://staging.vincentragosta.io
+# Staging runs deploy-kit LAYOUT=releases (2026-10-16): the docroot is the `current`
+# symlink of /srv/staging.vincentragosta.io, code is read-only, and uploads live in shared/.
+STAGING_HOST    := root@174.138.70.29
+STAGING_DIR     := /srv/staging.vincentragosta.io/current
+STAGING_WP      := $(STAGING_DIR)/wp
+STAGING_UPLOADS := /srv/staging.vincentragosta.io/shared/wp-content/uploads
+STAGING_URL     := https://staging.vincentragosta.io
 
 PRODUCTION_HOST := root@174.138.70.29
 PRODUCTION_DIR  := /var/www/vincentragosta.io
 PRODUCTION_WP   := $(PRODUCTION_DIR)/wp
+PRODUCTION_UPLOADS := $(PRODUCTION_DIR)/wp-content/uploads
 PRODUCTION_URL  := https://vincentragosta.io
 
 # itzenzo.tv (Next.js headless storefront) — co-located on the same droplet.
@@ -94,8 +98,8 @@ ssh $($(1)_HOST) "wp search-replace '$(LOCAL_URL)' '$($(1)_URL)' --path=$($(1)_W
 @echo "Flushing caches..."
 ssh $($(1)_HOST) "wp cache flush --path=$($(1)_WP) --allow-root --quiet && wp rewrite flush --path=$($(1)_WP) --allow-root --quiet"
 @echo "Syncing uploads..."
-rsync -az --delete $(UPLOADS_DIR)/ $($(1)_HOST):$($(1)_DIR)/wp-content/uploads/
-ssh $($(1)_HOST) "chown -R www-data:www-data $($(1)_DIR)/wp-content/uploads"
+rsync -az --delete $(UPLOADS_DIR)/ $($(1)_HOST):$($(1)_UPLOADS)/
+ssh $($(1)_HOST) "chown -R www-data:www-data $($(1)_UPLOADS)"
 @echo "Cleaning up..."
 rm -f /tmp/ddev-export.sql
 ssh $($(1)_HOST) "rm -f /tmp/ddev-export.sql"
@@ -117,7 +121,7 @@ ddev wp search-replace '$($(1)_URL)' '$(LOCAL_URL)' --precise --all-tables --qui
 ddev wp cache flush --quiet
 ddev wp rewrite flush --quiet
 @echo "Syncing uploads..."
-rsync -az --delete $($(1)_HOST):$($(1)_DIR)/wp-content/uploads/ $(UPLOADS_DIR)/
+rsync -az --delete $($(1)_HOST):$($(1)_UPLOADS)/ $(UPLOADS_DIR)/
 @echo "Cleaning up..."
 rm -f /tmp/$(2)-export.sql
 ssh $($(1)_HOST) "rm -f /tmp/$(2)-export.sql"
@@ -143,6 +147,7 @@ endef
 	update \
 	deploy-staging \
 	deploy-production \
+	rollback-staging \
 	release \
 	push-staging \
 	pull-staging \
@@ -322,6 +327,9 @@ deploy-production: ## Deploy develop to production (fast-forward GitHub main →
 	@git fetch -q origin; [ "$$(git branch --show-current)" = main ] || git branch -f main origin/main
 	$(call watch_deploy,develop,main)
 	@echo "✓ Production deployed — verify at $(PRODUCTION_URL)"
+
+rollback-staging: ## Point staging back at its previous release (code only — not the DB)
+	ssh $(STAGING_HOST) "/opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf develop"
 
 deploy-staging-direct: ## Break-glass: push develop straight to the droplet (GitHub down)
 	git push production develop
