@@ -18,7 +18,9 @@ use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use ChildTheme\Providers\Theme\Hooks\MailIdentity;
 use DI\Container;
+use IX\Providers\Theme\Features\AccordionIconEnhancer;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
+use IX\Providers\Theme\Features\CoreBlockStyles;
 use IX\Providers\Theme\Features\ScrollReveal;
 use IX\Providers\Theme\Features\WpFormsBaseStyles;
 use IX\Providers\Theme\Features\WpFormsBlockDetection;
@@ -41,7 +43,9 @@ class ThemeProvider extends BaseThemeProvider
      * or opt out of parent features via ClassName::class => false.
      */
     protected array $features = [
+        AccordionIconEnhancer::class,
         ButtonIconEnhancer::class,
+        CoreBlockStyles::class => false,
         ScrollReveal::class,
         WpFormsBaseStyles::class,
         WpFormsBlockDetection::class,

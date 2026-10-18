@@ -16,7 +16,8 @@ use ChildTheme\Providers\Theme\Hooks\MailIdentity;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
-use IX\Providers\Theme\Hooks\AccordionIconEnhancer;
+use IX\Providers\Theme\Features\AccordionIconEnhancer;
+use IX\Providers\Theme\Features\CoreBlockStyles;
 use IX\Providers\Theme\Hooks\FeaturedImageFocalPoint;
 use IX\Providers\Theme\Hooks\HeadingBlockStyles;
 use IX\Providers\Theme\Hooks\TermsQuerySupports;
@@ -95,16 +96,18 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(ContentPartial::class, $enabled);
 
         // Child theme opt-in features
+        $this->assertContains(AccordionIconEnhancer::class, $enabled);
         $this->assertContains(ButtonIconEnhancer::class, $enabled);
         $this->assertContains(ScrollReveal::class, $enabled);
         $this->assertContains(WpFormsBaseStyles::class, $enabled);
         $this->assertContains(WpFormsBlockDetection::class, $enabled);
         // Static labels sit above the fields; floating labels are not used.
         $this->assertNotContains(WpFormsFloatingLabels::class, $enabled);
-        $this->assertCount(12, $enabled);
+        // Core's bundled block theme CSS is off; this theme styles those blocks itself.
+        $this->assertNotContains(CoreBlockStyles::class, $enabled);
+        $this->assertCount(13, $enabled);
 
         // Hook classes should NOT be in features
-        $this->assertNotContains(AccordionIconEnhancer::class, $enabled);
         $this->assertNotContains(MediaBlockStyles::class, $enabled);
         $this->assertNotContains(SocialIconChoices::class, $enabled);
     }
@@ -121,7 +124,6 @@ class ThemeProviderTest extends BaseTestCase
         $hooks = $method->invoke($this->provider);
 
         // Parent hooks (inherited)
-        $this->assertContains(AccordionIconEnhancer::class, $hooks);
         $this->assertContains(FeaturedImageFocalPoint::class, $hooks);
         $this->assertContains(HeadingBlockStyles::class, $hooks);
         $this->assertContains(TermsQuerySupports::class, $hooks);
@@ -139,7 +141,7 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(SearchSetup::class, $hooks);
         $this->assertContains(MailIdentity::class, $hooks);
         $this->assertContains(DistAssetVersioning::class, $hooks);
-        $this->assertCount(14, $hooks);
+        $this->assertCount(13, $hooks);
 
         // ButtonIconEnhancer is now a Feature, not a Hook
         $this->assertNotContains(ButtonIconEnhancer::class, $hooks);

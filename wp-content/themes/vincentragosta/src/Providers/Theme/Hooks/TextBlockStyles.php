@@ -10,15 +10,13 @@ use Mythus\Hooks\BlockStyles;
  * Registers custom block styles for text blocks (core/paragraph, core/list, core/code,
  * core/preformatted, core/table, core/button, core/heading).
  *
- * Also removes the bundled core block theme stylesheet and dequeues
- * specific core block styles that conflict with theme styles.
+ * Also dequeues specific core block styles that conflict with theme styles.
  */
 class TextBlockStyles extends BlockStyles
 {
     public function register(): void
     {
         parent::register();
-        add_action('after_setup_theme', [$this, 'removeBundledBlockStyles'], 99);
         add_action('wp_enqueue_scripts', [$this, 'dequeueCoreBlockStyles']);
         add_action('enqueue_block_assets', [$this, 'dequeueCoreBlockStyles']);
     }
@@ -29,14 +27,6 @@ class TextBlockStyles extends BlockStyles
     public function dequeueCoreBlockStyles(): void
     {
         wp_dequeue_style('wp-block-table-theme');
-    }
-
-    /**
-     * Remove the bundled core block theme stylesheet (theme.min.css).
-     */
-    public function removeBundledBlockStyles(): void
-    {
-        remove_theme_support('wp-block-styles');
     }
 
     protected function styles(): array
