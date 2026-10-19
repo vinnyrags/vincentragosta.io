@@ -1,0 +1,49 @@
+{#
+    Personal project card — text-led, for products and packages that often
+    have no screenshot. The title link covers the card; the repo and live
+    links sit above it so they stay separately clickable.
+#}
+<article class="personal-card">
+    <div class="personal-card__head">
+        <div class="personal-card__heading">
+            <p class="personal-card__meta">
+                {% if project.statusLabel %}
+                    <span class="personal-card__status"><span class="personal-card__dot" aria-hidden="true"></span>{{ project.statusLabel }}</span>
+                {% endif %}
+                {% if project.year %}
+                    <span class="personal-card__year">{{ project.year }}</span>
+                {% endif %}
+            </p>
+            <h3 class="personal-card__title">
+                <a href="{{ project.link }}">{{ project.title }}</a>
+            </h3>
+        </div>
+        {% set image = project.cardImage %}
+        {% if image %}
+            <img class="personal-card__image"
+                 src="{{ image.src | resize(160, 160) | towebp }}"
+                 alt=""
+                 width="80"
+                 height="80"
+                 loading="lazy" />
+        {% endif %}
+    </div>
+    {% if project.summary %}
+        <p class="personal-card__summary">{{ project.summary }}</p>
+    {% endif %}
+    <div class="personal-card__foot">
+        {% if project.stackSummary %}
+            <p class="personal-card__stack">{{ project.stackSummary }}</p>
+        {% endif %}
+        {% if project.repoUrl or project.liveUrl %}
+            <ul class="personal-card__links" role="list">
+                {% if project.repoUrl %}
+                    <li><a href="{{ project.repoUrl }}" target="_blank" rel="noopener">Source<span class="screen-reader-text"> for {{ project.title }} (opens in new tab)</span> <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></a></li>
+                {% endif %}
+                {% if project.liveUrl %}
+                    <li><a href="{{ project.liveUrl }}" target="_blank" rel="noopener">{{ project.liveHost }}<span class="screen-reader-text"> (opens in new tab)</span> <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l6-6M4 3h5v5"/></svg></a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+</article>

@@ -415,6 +415,177 @@
   }
 }
 
+// Personal work: text-led cards, 1 / 2 / 3 across
+.projects-personal__grid {
+  display: grid;
+  gap: 16px;
+
+  @include media(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include media(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.personal-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wp--preset--spacing--30);
+  padding: var(--wp--preset--spacing--40);
+  border: 1px solid var(--color-border);
+  border-radius: var(--wp--custom--radius--lg);
+  background: radial-gradient(circle at 100% 0%, var(--color-accent-glow), transparent 45%), var(--color-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent-line);
+  }
+
+  &:focus-within {
+    border-color: var(--wp--preset--color--accent-1);
+  }
+
+  &:is(:hover, :focus-within) {
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--wp--preset--color--accent-1) 20%, transparent), 0 0 60px -10px color-mix(in srgb, var(--wp--preset--color--accent-1) 25%, transparent);
+  }
+
+  // Status and title on the left, the square image on the right.
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--wp--preset--spacing--30);
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    margin: 0;
+    min-height: 26px;
+  }
+
+  &__image {
+    flex: none;
+    width: 64px;
+    height: 64px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--wp--custom--radius--md);
+    object-fit: cover;
+
+    @include media(md) {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-text);
+    @include meta-text(label);
+  }
+
+  &__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--wp--preset--color--accent-1);
+    box-shadow: 0 0 8px var(--wp--preset--color--accent-1);
+  }
+
+  &__year {
+    color: var(--color-text-dim);
+    @include meta-text(label);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: var(--wp--preset--font-size--40);
+    letter-spacing: var(--wp--custom--tracking--tight);
+
+    a {
+      color: var(--color-text);
+      text-decoration: none;
+
+      // The title link covers the whole card.
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+      }
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+
+  &__summary {
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  // Pushed to the bottom so stacks line up across a row.
+  &__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-block-start: auto;
+    padding-block-start: var(--wp--preset--spacing--30);
+    border-block-start: 1px solid var(--color-border);
+  }
+
+  &__stack {
+    margin: 0;
+    color: var(--color-text-dim);
+    @include meta-text(label);
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    // Above the card-covering title link.
+    a {
+      position: relative;
+      z-index: 1;
+      color: var(--color-text);
+      @include meta-text(label);
+      text-decoration: none;
+
+      &:hover {
+        color: var(--wp--preset--color--accent-1);
+      }
+
+      &:focus-visible {
+        outline: 2px solid var(--wp--preset--color--accent-1);
+        outline-offset: 3px;
+      }
+    }
+  }
+}
+
 // Index
 .projects-index {
   border-block-start: 1px solid var(--color-border-strong);

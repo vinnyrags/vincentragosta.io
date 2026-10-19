@@ -80,7 +80,8 @@ class ProjectArchiveTest extends TestCase
     {
         $data = $this->archive()->toArray();
 
-        $this->assertSame(['stats', 'categories', 'case_studies', 'groups', 'total'], array_keys($data));
+        $this->assertSame(['stats', 'categories', 'case_studies', 'personal', 'groups', 'total'], array_keys($data));
+        $this->assertSame([], $data['personal']);
         $this->assertSame(5, $data['total']);
         $this->assertCount(2, $data['case_studies']);
     }
@@ -92,5 +93,36 @@ class ProjectArchiveTest extends TestCase
         $this->assertNotContains('Since', array_column($archive->stats(), 'label'));
         $this->assertSame([], $archive->categories());
         $this->assertSame([], $archive->groups());
+    }
+
+    public function testPersonalProjectsGetTheirOwnSection(): void
+    {
+        $projects   = $this->fixture();
+        $projects[] = $this->project(6, '2026', 'itzenzoTTV (Independent)', [['personal', 'Personal'], ['brand', 'Brand']], true);
+        $projects[] = $this->project(7, '2025', '', [['personal', 'Personal']]);
+        $archive    = new ProjectArchive($projects, array_filter($projects, static fn($p) => $p->isCaseStudy()));
+
+        $this->assertSame([6, 7], array_map(static fn($p) => $p->ID, $archive->personal()));
+        $this->assertSame([1, 2], array_map(static fn($p) => $p->ID, $archive->caseStudies()), 'Personal case studies leave the featured section');
+
+        $stats = array_column($archive->stats(), 'value', 'label');
+        $this->assertSame('7', $stats['Projects'], 'Personal projects stay in the full index');
+        $this->assertSame('2', $stats['Case studies']);
+        $this->assertSame('2', $stats['Clients'], 'Personal projects are not clients');
+        $this->assertContains('personal', array_column($archive->categories(), 'slug'));
+    }
+
+    public function testPersonalProjectsAreOrderedByMenuOrderThenArchiveOrder(): void
+    {
+        $first  = $this->project(8, '2026', '', [['personal', 'Personal']]);
+        $second = $this->project(9, '2026', '', [['personal', 'Personal']]);
+        $third  = $this->project(10, '2024', '', [['personal', 'Personal']]);
+        $first->menu_order  = 2;
+        $second->menu_order = 2;
+        $third->menu_order  = 1;
+
+        $archive = new ProjectArchive([$first, $second, $third], []);
+
+        $this->assertSame([10, 8, 9], array_map(static fn($p) => $p->ID, $archive->personal()));
     }
 }

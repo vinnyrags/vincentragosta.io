@@ -6,6 +6,8 @@ namespace ChildTheme\Providers\Project;
 
 use ChildTheme\Support\TitleSplitter;
 use IX\Providers\Project\ProjectPost as BaseProjectPost;
+use Timber\Image;
+use Timber\Timber;
 
 /**
  * Project post model.
@@ -27,6 +29,11 @@ class ProjectPost extends BaseProjectPost
     public const FIELD_STACK_SUMMARY = 'project_stack_summary';
     public const FIELD_CASE_STUDY    = 'project_case_study';
     public const FIELD_STATUS_LABEL  = 'project_status_label';
+    public const FIELD_REPO_URL      = 'project_repo_url';
+    public const FIELD_CARD_IMAGE    = 'project_card_image';
+
+    /** Category slug that places a project in the archive's Personal section. */
+    public const PERSONAL_CATEGORY = 'personal';
 
     /**
      * Opening paragraph (formatted HTML from the WYSIWYG field).
@@ -123,6 +130,85 @@ class ProjectPost extends BaseProjectPost
     public function liveUrl(): string
     {
         return trim((string) $this->getField(self::FIELD_LIVE_URL));
+    }
+
+    public function repoUrl(): string
+    {
+        return trim((string) $this->getField(self::FIELD_REPO_URL));
+    }
+
+    /**
+     * Repository URL without scheme, "www." or trailing slash
+     * (e.g. "github.com/vinnyrags/mythus"), or '' when there is none.
+     */
+    public function repoLabel(): string
+    {
+        $label = (string) preg_replace('#^https?://(www\.)?#i', '', $this->repoUrl());
+
+        return rtrim($label, '/');
+    }
+
+    /**
+     * Attachment ID of the square card image, or 0 when unset.
+     */
+    public function cardImageId(): int
+    {
+        $value = $this->getField(self::FIELD_CARD_IMAGE);
+
+        if (is_array($value)) {
+            $value = $value['ID'] ?? $value['id'] ?? 0;
+        }
+
+        return max(0, (int) $value);
+    }
+
+    /**
+     * Square image for compact cards: the card image, falling back to the
+     * featured image (the template crops it square).
+     */
+    public function cardImage(): ?Image
+    {
+        $id = $this->cardImageId();
+
+        if ($id > 0) {
+            $image = Timber::get_image($id);
+
+            if ($image instanceof Image) {
+                return $image;
+            }
+        }
+
+        return $this->thumbnail() ?: null;
+    }
+
+    /**
+     * Personal work (my own products and open-source packages) rather than
+     * client work.
+     */
+    public function isPersonal(): bool
+    {
+        foreach ($this->categories() as $term) {
+            if ($term->slug === self::PERSONAL_CATEGORY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The lead's first sentence as plain text — the description on compact
+     * cards. Falls back to the first $words words when that sentence runs long.
+     */
+    public function summary(int $words = 26): string
+    {
+        $text = trim(html_entity_decode(wp_strip_all_tags($this->lead()), ENT_QUOTES));
+
+        if (preg_match('/^.+?[.!?](?=\s|$)/u', $text, $match) && str_word_count($match[0]) <= $words) {
+            return $match[0];
+        }
+
+        return wp_trim_words($text, $words);
     }
 
     /**

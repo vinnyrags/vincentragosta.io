@@ -44,6 +44,7 @@ function createArchive(groups) {
             <button data-view-toggle="index" aria-pressed="true"></button>
             <button data-view-toggle="grid" aria-pressed="false"></button>
             <section data-featured><article class="project-card"></article></section>
+            <section data-featured class="projects-personal"><article class="personal-card"></article></section>
             <div data-view-panel="index">${rows}<button data-show-more hidden><span data-show-more-count></span></button></div>
             <div data-view-panel="grid">${cards}</div>
             <p data-empty hidden></p>
@@ -173,12 +174,12 @@ describe('setView', () => {
 });
 
 describe('render', () => {
-    it('hides featured while filtering and shows the empty state with no matches', () => {
+    it('hides the featured and personal sections while filtering and shows the empty state with no matches', () => {
         const block = createArchive(FIXTURE);
 
         render(block, state({ query: 'no such project' }));
 
-        expect(block.querySelector('[data-featured]').hidden).toBe(true);
+        block.querySelectorAll('[data-featured]').forEach((section) => expect(section.hidden).toBe(true));
         expect(block.querySelector('[data-empty]').hidden).toBe(false);
     });
 
@@ -187,7 +188,7 @@ describe('render', () => {
 
         render(block, state());
 
-        expect(block.querySelector('[data-featured]').hidden).toBe(false);
+        block.querySelectorAll('[data-featured]').forEach((section) => expect(section.hidden).toBe(false));
         expect(block.querySelector('[data-empty]').hidden).toBe(true);
         expect(block.querySelector('[data-show-more]').hidden).toBe(true); // 4 rows < 20
     });

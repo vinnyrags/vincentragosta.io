@@ -51,9 +51,27 @@
     </section>
 {% endif %}
 
+{% set section = archive.case_studies ? 1 : 0 %}
+
+{% if archive.personal %}
+    {% set section = section + 1 %}
+    <section class="projects-personal" data-featured aria-labelledby="projects-personal-heading">
+        <div class="projects-section-head">
+            <p class="is-style-eyebrow">{{ '%02d'|format(section) }} / Personal</p>
+            <h2 id="projects-personal-heading">My <em class="serif-accent">own</em> work</h2>
+            <p class="projects-section-head__lede">The frameworks my client builds run on, and the products I build for myself.</p>
+        </div>
+        <div class="projects-personal__grid">
+            {% for project in archive.personal %}
+                {% include 'project-personal-card.twig' with { project: project } only %}
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
 <section class="projects-all" aria-labelledby="projects-all-heading">
     <div class="projects-section-head">
-        <p class="is-style-eyebrow">{{ archive.case_studies ? '02' : '01' }} / The archive</p>
+        <p class="is-style-eyebrow">{{ '%02d'|format(section + 1) }} / The archive</p>
         <h2 id="projects-all-heading">The <em class="serif-accent">full</em> index</h2>
         <p class="projects-section-head__lede">Every project, newest first — agency work alongside my own clients.</p>
     </div>

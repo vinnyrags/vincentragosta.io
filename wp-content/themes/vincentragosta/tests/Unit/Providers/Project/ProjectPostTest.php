@@ -215,4 +215,45 @@ class ProjectPostTest extends TestCase
         $this->assertSame('wickedthemusical.com', $this->project([ProjectPost::FIELD_LIVE_URL => 'https://www.wickedthemusical.com/tickets'])->liveHost());
         $this->assertSame('', $this->project([])->liveHost());
     }
+
+    public function testRepoLabelStripsSchemeWwwAndTrailingSlash(): void
+    {
+        $post = $this->project([ProjectPost::FIELD_REPO_URL => ' https://www.github.com/vinnyrags/mythus/ ']);
+
+        $this->assertSame('https://www.github.com/vinnyrags/mythus/', $post->repoUrl());
+        $this->assertSame('github.com/vinnyrags/mythus', $post->repoLabel());
+        $this->assertSame('', $this->project([])->repoLabel());
+    }
+
+    public function testIsPersonalReadsThePersonalCategory(): void
+    {
+        $personal = $this->project([])->setMockTerms('category', [(object) ['slug' => 'brand'], (object) ['slug' => 'personal']]);
+        $client   = $this->project([])->setMockTerms('category', [(object) ['slug' => 'brand']]);
+
+        $this->assertTrue($personal->isPersonal());
+        $this->assertFalse($client->isPersonal());
+        $this->assertFalse($this->project([])->isPersonal());
+    }
+
+    public function testSummaryIsThePlainTextFirstSentence(): void
+    {
+        $post = $this->project([ProjectPost::FIELD_LEAD => '<p>A <strong>WordPress</strong> framework v1.4 for sites. It does more.</p>']);
+
+        $this->assertSame('A WordPress framework v1.4 for sites.', $post->summary());
+    }
+
+    public function testSummaryTrimsALongFirstSentenceToWords(): void
+    {
+        $post = $this->project([ProjectPost::FIELD_LEAD => '<p>One two three four five six.</p>']);
+
+        $this->assertSame('One two&hellip;', $post->summary(2));
+        $this->assertSame('', $this->project([])->summary());
+    }
+
+    public function testCardImageIdAcceptsIdsAndArrays(): void
+    {
+        $this->assertSame(42, $this->project([ProjectPost::FIELD_CARD_IMAGE => '42'])->cardImageId());
+        $this->assertSame(7, $this->project([ProjectPost::FIELD_CARD_IMAGE => ['ID' => 7]])->cardImageId());
+        $this->assertSame(0, $this->project([])->cardImageId());
+    }
 }

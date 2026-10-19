@@ -158,8 +158,10 @@ export function render(block, state) {
     setView(block, state.view);
     setActivePill(block, state.category);
 
-    const featured = block.querySelector('[data-featured]');
-    if (featured) featured.hidden = isFiltered(state);
+    // Featured sections (case studies, personal) hide while filtering.
+    block.querySelectorAll('[data-featured]').forEach((section) => {
+        section.hidden = isFiltered(state);
+    });
 
     const more = block.querySelector('[data-show-more]');
     if (more) {

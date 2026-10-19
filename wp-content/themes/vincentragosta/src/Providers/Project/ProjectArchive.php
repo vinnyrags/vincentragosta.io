@@ -6,7 +6,11 @@ namespace ChildTheme\Providers\Project;
 
 /**
  * Builds the view model for the projects archive (the projects block in
- * "all" mode): stats, filterable categories, case studies, year groups.
+ * "all" mode): stats, filterable categories, case studies, personal work,
+ * year groups.
+ *
+ * Personal projects get their own section, so they are left out of the case
+ * studies and the client count. They stay in the full index.
  *
  * Pure — takes already-queried projects, so it is testable without a database.
  */
@@ -30,6 +34,7 @@ class ProjectArchive
      *     stats: array<int, array{label: string, value: string, suffix: string, detail: string}>,
      *     categories: array<int, array{slug: string, name: string, count: int}>,
      *     case_studies: ProjectPost[],
+     *     personal: ProjectPost[],
      *     groups: array<int, array{year: string, projects: ProjectPost[]}>,
      *     total: int
      * }
@@ -39,7 +44,8 @@ class ProjectArchive
         return [
             'stats'        => $this->stats(),
             'categories'   => $this->categories(),
-            'case_studies' => $this->caseStudies,
+            'case_studies' => $this->caseStudies(),
+            'personal'     => $this->personal(),
             'groups'       => $this->groups(),
             'total'        => count($this->projects),
         ];
@@ -57,7 +63,7 @@ class ProjectArchive
 
         $stats = [
             ['label' => 'Projects', 'value' => (string) count($this->projects), 'suffix' => '', 'detail' => 'Shipped and documented'],
-            ['label' => 'Case studies', 'value' => (string) count($this->caseStudies), 'suffix' => '', 'detail' => 'Featured builds'],
+            ['label' => 'Case studies', 'value' => (string) count($this->caseStudies()), 'suffix' => '', 'detail' => 'Featured builds'],
             ['label' => 'Clients', 'value' => (string) $this->clientCount(), 'suffix' => '', 'detail' => 'Agencies and independents'],
         ];
 
@@ -69,13 +75,49 @@ class ProjectArchive
     }
 
     /**
-     * Distinct clients, compared case-insensitively.
+     * Case studies, minus personal projects (they have their own section).
+     *
+     * @return ProjectPost[]
+     */
+    public function caseStudies(): array
+    {
+        return array_values(array_filter(
+            $this->caseStudies,
+            static fn(ProjectPost $p): bool => !$p->isPersonal()
+        ));
+    }
+
+    /**
+     * Personal projects, curated by menu order (Order in the editor), then in
+     * archive order.
+     *
+     * @return ProjectPost[]
+     */
+    public function personal(): array
+    {
+        $personal = array_values(array_filter(
+            $this->projects,
+            static fn(ProjectPost $p): bool => $p->isPersonal()
+        ));
+
+        usort($personal, static fn(ProjectPost $a, ProjectPost $b): int => (int) $a->menu_order <=> (int) $b->menu_order);
+
+        return $personal;
+    }
+
+    /**
+     * Distinct clients, compared case-insensitively. Personal projects have
+     * no client.
      */
     public function clientCount(): int
     {
         $clients = [];
 
         foreach ($this->projects as $project) {
+            if ($project->isPersonal()) {
+                continue;
+            }
+
             $client = mb_strtolower($project->client());
             if ($client !== '') {
                 $clients[$client] = true;

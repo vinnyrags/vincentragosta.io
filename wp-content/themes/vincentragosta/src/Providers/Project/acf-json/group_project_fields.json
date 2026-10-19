@@ -223,6 +223,38 @@
             }
         },
         {
+            "key": "field_project_repo_url",
+            "label": "Repository",
+            "name": "project_repo_url",
+            "type": "url",
+            "instructions": "Public source repository (e.g. GitHub), if there is one. Shown on Personal cards and the detail page.",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            }
+        },
+        {
+            "key": "field_project_card_image",
+            "label": "Card image",
+            "name": "project_card_image",
+            "type": "image",
+            "instructions": "Square image (at least 256×256) for the small Personal cards. Falls back to the featured image, cropped square.",
+            "required": 0,
+            "show_in_graphql": 1,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "id",
+            "preview_size": "thumbnail",
+            "library": "all",
+            "mime_types": "png, jpg, jpeg, webp"
+        },
+        {
             "key": "field_project_technologies",
             "label": "Technologies",
             "name": "project_technologies",
@@ -308,5 +340,5 @@
     "show_in_rest": 0,
     "show_in_graphql": 1,
     "graphql_field_name": "projectFields",
-    "modified": 1791922526
+    "modified": 1792440000
 }

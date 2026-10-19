@@ -41,6 +41,10 @@
                                 <span class="project-detail__live"><span class="project-detail__dot" aria-hidden="true"></span>live</span>
                                 {{ post.liveHost }}<span class="screen-reader-text"> (opens in new tab)</span>
                             </a>
+                        {% elseif post.statusLabel %}
+                            <span class="project-detail__status">
+                                <span class="project-detail__live"><span class="project-detail__dot" aria-hidden="true"></span>{{ post.statusLabel }}</span>
+                            </span>
                         {% endif %}
                         {% if post.categories %}
                             <ul class="project-detail__chips" role="list">
@@ -61,7 +65,7 @@
                     { label: 'Year', value: post.year },
                     { label: 'Stack', value: post.stackSummary },
                 ]|filter(m => m.value) %}
-                {% if meta or post.liveUrl %}
+                {% if meta or post.liveUrl or post.repoUrl %}
                     <dl class="project-detail__meta">
                         {% for item in meta %}
                             <div><dt>{{ item.label }}</dt><dd>{{ item.value }}</dd></div>
@@ -70,6 +74,12 @@
                             <div>
                                 <dt>Live site</dt>
                                 <dd><a href="{{ post.liveUrl }}" target="_blank" rel="noopener noreferrer">{{ post.liveHost }} {{ arrow }}<span class="screen-reader-text"> (opens in new tab)</span></a></dd>
+                            </div>
+                        {% endif %}
+                        {% if post.repoUrl %}
+                            <div>
+                                <dt>Source</dt>
+                                <dd><a href="{{ post.repoUrl }}" target="_blank" rel="noopener noreferrer">{{ post.repoLabel }} {{ arrow }}<span class="screen-reader-text"> (opens in new tab)</span></a></dd>
                             </div>
                         {% endif %}
                     </dl>
