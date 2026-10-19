@@ -215,7 +215,10 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.nous-carrier__wave rect')).toHaveCount(await page.locator('.nous-row').count());
         await expect(page.locator('.nous-carrier__strip')).toContainText('Transmissions');
         await expect(page.locator('.nous-latest')).toBeVisible();
-        await expect(page.locator('.nous-month').first().locator('.nous-row:visible')).toHaveCount(8);
+        // The newest month shows its rows up to the per-month limit (8), however many it has.
+        const newest = page.locator('.nous-month').first();
+        const inMonth = await newest.locator('.nous-row').count();
+        await expect(newest.locator('.nous-row:visible')).toHaveCount(Math.min(inMonth, 8));
 
         const second = page.locator('[data-month-filter]').nth(1);
         const month = await second.getAttribute('data-month-filter');
