@@ -154,12 +154,9 @@ class ThemeProviderTest extends BaseTestCase
     {
         $blocks = $this->provider->getBlocks();
 
-        // Child blocks
-        $this->assertContains('shutter-cards', $blocks);
-        $this->assertContains('shutter-card', $blocks);
-
-        // Inherited parent blocks
+        // Inherited parent blocks (IX >= 1.11 dropped shutter-cards)
         $this->assertContains('content-slider', $blocks);
+        $this->assertNotContains('shutter-cards', $blocks);
     }
 
     /**
@@ -204,28 +201,6 @@ class ThemeProviderTest extends BaseTestCase
             0,
             has_filter('timber/context', [$this->provider, 'addOptionsToContext'])
         );
-    }
-
-    /**
-     * Test that shutter-cards block directory exists in parent theme.
-     */
-    public function testShutterCardsBlockDirectoryExistsInParent(): void
-    {
-        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
-
-        $this->assertDirectoryExists($parentBlocksPath . '/shutter-cards');
-        $this->assertFileExists($parentBlocksPath . '/shutter-cards/block.json');
-    }
-
-    /**
-     * Test that shutter-card block directory exists in parent theme.
-     */
-    public function testShutterCardBlockDirectoryExistsInParent(): void
-    {
-        $parentBlocksPath = realpath(dirname(__DIR__, 3) . '/../ix') . '/src/Providers/Theme/blocks';
-
-        $this->assertDirectoryExists($parentBlocksPath . '/shutter-card');
-        $this->assertFileExists($parentBlocksPath . '/shutter-card/block.json');
     }
 
     /**

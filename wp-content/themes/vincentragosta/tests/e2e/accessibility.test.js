@@ -7,7 +7,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
  * `aria-hidden="true"` subtrees are excluded because they're invisible
  * to assistive tech by definition. Most axe rules already skip them;
  * the practical effect is that `color-contrast` (which still flags
- * decorative typography like the .shutter-card__id numbers) won't
+ * decorative typography) won't
  * report against intentionally-low-contrast decorative content. Real
  * content is unaffected — anything user-readable shouldn't be hidden
  * from screen readers anyway.
