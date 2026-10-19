@@ -247,6 +247,7 @@ test.describe('Smoke tests', () => {
 
     test('nous signal carrier: the silence after the last transmission is not clickable', async ({ page }) => {
         await page.goto('/nous-signal/');
+        test.skip(await page.locator('.nous-carrier.is-live').count() > 0, 'The feed is live: no silence to click.');
         const box = await page.locator('.nous-carrier__wave').boundingBox();
         const point = [box.x + box.width - 4, box.y + box.height / 2];
 
@@ -455,6 +456,7 @@ test.describe('Nous Signal carrier on a phone', () => {
 
     test('dragging into the silence clears the pick', async ({ page }) => {
         await page.goto('/nous-signal/');
+        test.skip(await page.locator('.nous-carrier.is-live').count() > 0, 'The feed is live: no silence to drag into.');
 
         await drag(page, 0.3, 0.98);
         await expect(page.locator('[data-carrier-pick]')).toBeHidden();
