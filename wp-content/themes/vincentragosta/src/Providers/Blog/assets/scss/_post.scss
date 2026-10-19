@@ -156,6 +156,15 @@
   @include detail-prose;
   counter-reset: signal-section;
 
+  // A grid item here, not a section body under a heading: drop the prose's
+  // top offset and trim the first line's leading so it starts flush with the
+  // contents card.
+  margin-block-start: 0;
+
+  > :first-child {
+    text-box: trim-start cap alphabetic;
+  }
+
   // Sections and the closing panel sit further apart than paragraphs; two
   // Sections in a row add their own rule (the Section style).
   > .wp-block-group {
