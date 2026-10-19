@@ -198,7 +198,7 @@ test.describe('Smoke tests', () => {
         expect(errors).toEqual([]);
     });
 
-    test('nous signal archive: stats, latest, month pills, collapsed months', async ({ page }) => {
+    test('nous signal archive: carrier, latest, month pills, collapsed months', async ({ page }) => {
         const errors = [];
         page.on('console', (msg) => {
             if (msg.type() === 'error') {
@@ -211,7 +211,9 @@ test.describe('Smoke tests', () => {
 
         expect(response.status()).toBe(200);
         await expect(page.locator('body')).toHaveClass(/nous-signal-page/);
-        await expect(page.locator('.nous-stats')).toBeVisible();
+        await expect(page.locator('.nous-carrier')).toBeVisible();
+        await expect(page.locator('.nous-carrier__wave rect')).toHaveCount(await page.locator('.nous-row').count());
+        await expect(page.locator('.nous-carrier__strip')).toContainText('Transmissions');
         await expect(page.locator('.nous-latest')).toBeVisible();
         await expect(page.locator('.nous-month').first().locator('.nous-row:visible')).toHaveCount(8);
 
@@ -222,6 +224,33 @@ test.describe('Smoke tests', () => {
         await expect(page).toHaveURL(new RegExp(`month=${month}`));
         await expect(page.locator('.nous-month:visible')).toHaveCount(1);
         expect(errors).toEqual([]);
+    });
+
+    test('nous signal carrier: hover reads a transmission, click opens it', async ({ page }) => {
+        await page.goto('/nous-signal/');
+        const wave = page.locator('.nous-carrier__wave');
+        const box = await wave.boundingBox();
+        const readout = page.locator('[data-carrier-readout]');
+
+        await page.mouse.move(box.x + 2, box.y + box.height - 4);
+        await expect(readout).toBeVisible();
+        await expect(page.locator('.nous-carrier__wave rect.is-active')).toHaveCount(1);
+        const link = await page.locator('.nous-carrier__wave rect.is-active').getAttribute('data-link');
+
+        await page.mouse.down();
+        await page.mouse.up();
+        await expect(page).toHaveURL(link);
+    });
+
+    test('nous signal carrier: the silence after the last transmission is not clickable', async ({ page }) => {
+        await page.goto('/nous-signal/');
+        const box = await page.locator('.nous-carrier__wave').boundingBox();
+        const point = [box.x + box.width - 4, box.y + box.height / 2];
+
+        await page.mouse.move(...point);
+        await expect(page.locator('[data-carrier-readout]')).toBeHidden();
+        await page.mouse.click(...point);
+        await expect(page).toHaveURL(/\/nous-signal\/$/);
     });
 
     test('nous signal search narrows rows and shows the empty state', async ({ page }) => {
@@ -364,5 +393,68 @@ test.describe('Smoke tests', () => {
         await page.waitForLoadState('networkidle');
 
         expect(errors).toEqual([]);
+    });
+});
+
+test.describe('Nous Signal carrier on a phone', () => {
+    test.use({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true });
+
+    /**
+     * Drag a finger along the wave from one fraction of its width to another,
+     * through Chrome's touch input (Playwright has no touch-drag helper).
+     * Returns a function that lifts the finger (it must use the same session).
+     */
+    async function drag(page, from, to, { lift = true } = {}) {
+        const box = await page.locator('.nous-carrier__wave').boundingBox();
+        const y = box.y + box.height / 2;
+        const at = (f) => [{ x: box.x + box.width * f, y }];
+        const cdp = await page.context().newCDPSession(page);
+
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: at(from) });
+        for (let i = 1; i <= 8; i++) {
+            await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: at(from + ((to - from) * i) / 8) });
+        }
+        const up = () => cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        if (lift) {
+            await up();
+        }
+        return up;
+    }
+
+    test('the slot shows the status at rest', async ({ page }) => {
+        await page.goto('/nous-signal/');
+
+        await expect(page.locator('.nous-carrier__slot')).toBeVisible();
+        await expect(page.locator('.nous-carrier__rest')).toBeVisible();
+        await expect(page.locator('.nous-carrier__label')).toBeHidden();
+    });
+
+    test('dragging scrubs, lifting holds, and Read opens the held transmission', async ({ page }) => {
+        await page.goto('/nous-signal/');
+        const go = page.locator('[data-carrier-go]');
+
+        const lift = await drag(page, 0.05, 0.3, { lift: false });
+        await expect(page.locator('[data-carrier-pick]')).toBeVisible();
+        await expect(page.locator('[data-carrier-hair]')).toBeVisible();
+        await expect(go).toBeHidden();
+        // Scroll-reveal must not tag the slot: a fade-up would hold it at opacity 0.
+        await expect(page.locator('.nous-carrier__meta')).not.toHaveClass(/fade-up/);
+        await expect(page.locator('.nous-carrier__meta')).toHaveCSS('opacity', '1');
+
+        await lift();
+        await expect(go).toBeVisible();
+        expect(page.url()).toMatch(/\/nous-signal\/$/);
+
+        const href = await go.getAttribute('href');
+        await go.tap();
+        await expect(page).toHaveURL(href);
+    });
+
+    test('dragging into the silence clears the pick', async ({ page }) => {
+        await page.goto('/nous-signal/');
+
+        await drag(page, 0.3, 0.98);
+        await expect(page.locator('[data-carrier-pick]')).toBeHidden();
+        await expect(page.locator('.nous-carrier__rest')).toBeVisible();
     });
 });

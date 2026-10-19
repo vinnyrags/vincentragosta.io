@@ -40,23 +40,10 @@ class NousArchiveTest extends TestCase
         ];
     }
 
-    public function testStatsReportTotalSpanAverageReadMonthsAndLatest(): void
+    public function testAverageReadingTimeIsTheRoundedMean(): void
     {
-        $stats = array_column((new NousArchive($this->fixture()))->stats(), null, 'label');
-
-        $this->assertSame('7', $stats['Transmissions']['value']);
-        $this->assertSame('March – August 2026', $stats['Transmissions']['detail']);
-        $this->assertSame('~2', $stats['Average read']['value'], '(8 + 2 + 1×5) / 7 rounds to 2');
-        $this->assertSame('6', $stats['Months']['value']);
-        $this->assertSame('08.17', $stats['Latest']['value']);
-        $this->assertSame('August 17, 2026', $stats['Latest']['detail']);
-    }
-
-    public function testStatsSpanNamesBothYearsAcrossAYearBoundary(): void
-    {
-        $archive = new NousArchive([$this->post(2, '2027-01-02'), $this->post(1, '2026-12-30')]);
-
-        $this->assertSame('December 2026 – January 2027', $archive->stats()[0]['detail']);
+        $this->assertSame(2, (new NousArchive($this->fixture()))->averageReadingTime(), '(8 + 2 + 1×5) / 7 rounds to 2');
+        $this->assertSame(0, (new NousArchive([]))->averageReadingTime());
     }
 
     public function testReadingTimeIsWordsOverTwoThirtyRoundedUp(): void
@@ -137,12 +124,11 @@ class NousArchiveTest extends TestCase
         $this->assertSame(['Nvidia', 'OpenAI', 'Data Centers'], $latest['tag_names']);
     }
 
-    public function testEmptyArchiveHasNoStatsLatestPillsOrGroups(): void
+    public function testEmptyArchiveHasNoLatestPillsOrGroups(): void
     {
         $archive = (new NousArchive([]))->toArray();
 
         $this->assertSame(0, $archive['total']);
-        $this->assertSame([], $archive['stats']);
         $this->assertNull($archive['latest']);
         $this->assertSame([], $archive['pills']);
         $this->assertSame([], $archive['groups']);

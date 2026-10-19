@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "vincentragosta/nous-carrier",
+  "title": "Nous Signal Carrier",
+  "category": "widgets",
+  "icon": "chart-bar",
+  "description": "Every Nous Signal transmission as a bar on a day axis that runs to today, with a readout of the archive beneath.",
+  "keywords": ["nous", "signal", "carrier", "archive", "hero"],
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "viewScript": "file:../../../../../dist/js/nous-carrier-view.js",
+  "textdomain": "vincentragosta",
+  "acf": {
+    "mode": "preview",
+    "renderTemplate": "render.php"
+  }
+}

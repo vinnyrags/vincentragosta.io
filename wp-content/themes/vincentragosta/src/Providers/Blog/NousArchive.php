@@ -8,8 +8,8 @@ use DateTimeImmutable;
 
 /**
  * Builds the view model for the Nous Signal archive (the blog block in "all"
- * mode): stats, the latest transmission, month filter pills, and the
- * month-grouped index.
+ * mode): the latest transmission, month filter pills, and the month-grouped
+ * index. The hero's figures live in NousCarrier's readout.
  *
  * Pure — takes already-queried posts, so it is testable without a database.
  */
@@ -38,7 +38,6 @@ class NousArchive
     /**
      * @return array{
      *     total: int,
-     *     stats: array<int, array{label: string, value: string, suffix: string, detail: string}>,
      *     latest: array<string, mixed>|null,
      *     pills: array<int, array{key: string, label: string, count: int}>,
      *     groups: array<int, array<string, mixed>>
@@ -48,33 +47,9 @@ class NousArchive
     {
         return [
             'total'  => count($this->posts),
-            'stats'  => $this->stats(),
             'latest' => $this->latest(),
             'pills'  => $this->pills(),
             'groups' => $this->groups(),
-        ];
-    }
-
-    /**
-     * @return array<int, array{label: string, value: string, suffix: string, detail: string}>
-     */
-    public function stats(): array
-    {
-        if (!$this->posts) {
-            return [];
-        }
-
-        $newest = $this->date($this->posts[0]);
-        $oldest = $this->date($this->posts[count($this->posts) - 1]);
-        $span = $newest->format('Y') === $oldest->format('Y')
-            ? $oldest->format('F') . ' – ' . $newest->format('F Y')
-            : $oldest->format('F Y') . ' – ' . $newest->format('F Y');
-
-        return [
-            ['label' => 'Transmissions', 'value' => (string) count($this->posts), 'suffix' => '', 'detail' => $span],
-            ['label' => 'Average read', 'value' => '~' . $this->averageReadingTime(), 'suffix' => 'min', 'detail' => 'Per transmission'],
-            ['label' => 'Months', 'value' => (string) count($this->months()), 'suffix' => '', 'detail' => 'In the archive'],
-            ['label' => 'Latest', 'value' => $newest->format('m.d'), 'suffix' => '', 'detail' => $newest->format('F j, Y')],
         ];
     }
 

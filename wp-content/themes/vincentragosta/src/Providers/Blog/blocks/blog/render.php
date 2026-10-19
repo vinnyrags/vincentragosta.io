@@ -2,7 +2,7 @@
 /**
  * Server-side rendering for the Blog block (child theme override).
  *
- * "all" renders the Nous Signal archive: stats, the latest transmission,
+ * "all" renders the Nous Signal archive: the latest transmission,
  * month pills, and the month-grouped index (view model: NousArchive;
  * behavior: view.js). A ?tag= deep link (post tag links point here) renders
  * a removable tag filter. Other modes fall through to the parent renderer.

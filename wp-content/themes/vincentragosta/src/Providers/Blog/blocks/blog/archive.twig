@@ -3,20 +3,6 @@
     View model: ChildTheme\Providers\Blog\NousArchive::toArray(); tag: the ?tag= filter or null.
     Behavior (month pills, search, tag filter, show more, URL state): blocks/blog/view.js.
 #}
-{% if archive.stats %}
-    <dl class="nous-stats">
-        {% for stat in archive.stats %}
-            <div class="nous-stats__item">
-                <dt>{{ stat.label }}</dt>
-                <dd>
-                    <span class="nous-stats__value">{{ stat.value }}{% if stat.suffix %}<small>{{ stat.suffix }}</small>{% endif %}</span>
-                    <span class="nous-stats__detail">{{ stat.detail }}</span>
-                </dd>
-            </div>
-        {% endfor %}
-    </dl>
-{% endif %}
-
 {% if archive.latest %}
     {% set latest = archive.latest %}
     <article class="nous-latest" aria-labelledby="nous-latest-title">

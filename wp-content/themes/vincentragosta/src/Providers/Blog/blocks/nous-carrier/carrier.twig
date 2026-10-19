@@ -1,0 +1,55 @@
+{#
+    Nous Signal carrier wave. View model: ChildTheme\Providers\Blog\NousCarrier::toArray().
+    The SVG stretches to the plot (bars only); labels are HTML so they keep their size.
+    Behavior: view.js ([data-carrier]). With a mouse, hover shows the floating readout and a
+    click opens the bar. On touch, dragging scrubs the slot above the plot, and lifting holds
+    the pick with a "Read" link.
+#}
+<div class="nous-carrier__main" data-carrier>
+    <div class="nous-carrier__slot">
+        <p class="nous-carrier__rest">
+            <span class="nous-carrier__status">{{ carrier.label }}</span>
+            <span class="nous-carrier__hint" aria-hidden="true">Drag to read ↔</span>
+        </p>
+        <div class="nous-carrier__pick" data-carrier-pick hidden>
+            <p class="nous-carrier__meta">
+                <small><span data-carrier-date></span> <span class="nous-carrier__minutes" data-carrier-minutes></span></small>
+                <strong data-carrier-title></strong>
+            </p>
+            <a class="nous-carrier__go" data-carrier-go href="#" hidden>Read →</a>
+        </div>
+    </div>
+
+    <div class="nous-carrier__plot" data-carrier-plot>
+        <svg class="nous-carrier__wave" viewBox="0 0 {{ width }} {{ height }}" preserveAspectRatio="none" role="img"
+            aria-label="{{ carrier.readout[0].value }} transmissions, {{ carrier.readout[1].value }}. {{ carrier.label }}.">
+            {% for bar in carrier.bars %}
+                <rect x="{{ bar.x }}" y="{{ bar.y }}" width="{{ bar.width }}" height="{{ bar.height }}"
+                    data-date="{{ bar.date }}" data-title="{{ bar.title }}" data-minutes="{{ bar.minutes }}" data-link="{{ bar.link }}"/>
+            {% endfor %}
+            {% if carrier.flatline %}
+                <line class="nous-carrier__flatline" x1="{{ carrier.flatline.x }}" x2="{{ width }}" y1="{{ height - 1 }}" y2="{{ height - 1 }}" vector-effect="non-scaling-stroke"/>
+            {% endif %}
+        </svg>
+
+        <span class="nous-carrier__hair" data-carrier-hair aria-hidden="true"></span>
+
+        <ol class="nous-carrier__ticks" role="list" aria-hidden="true">
+            {% for tick in carrier.ticks %}
+                <li style="--x: {{ tick.x }}%">{{ tick.label }}</li>
+            {% endfor %}
+        </ol>
+
+        <p class="nous-carrier__label" aria-hidden="true">{{ carrier.label }}</p>
+        <p class="nous-carrier__readout" data-carrier-readout aria-hidden="true" hidden></p>
+    </div>
+</div>
+
+<dl class="nous-carrier__strip">
+    {% for item in carrier.readout %}
+        <div{% if item.accent %} class="is-accent"{% endif %}>
+            <dt>{{ item.label }}</dt>
+            <dd>{{ item.value }}</dd>
+        </div>
+    {% endfor %}
+</dl>

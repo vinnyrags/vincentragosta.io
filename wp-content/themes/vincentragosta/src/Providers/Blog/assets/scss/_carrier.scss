@@ -1,0 +1,306 @@
+@use 'common/typography' as *;
+@use 'common/breakpoints' as *;
+
+// ==========================================================================
+// Nous Signal Carrier block (vincentragosta/nous-carrier) — the archive hero.
+// One bar per transmission on a day axis that runs to today; a dashed flat
+// line marks the silence since the last one. accent-1 is nous-red here.
+// Mouse gets the floating readout; touch gets the slot (see view.js).
+// ==========================================================================
+
+.nous-carrier {
+  --carrier-height: clamp(6.5rem, 14vw, 11rem);
+
+  margin-block-start: var(--wp--preset--spacing--60);
+
+  // view.js toggles the slot's parts with `hidden`; component display rules
+  // must not win.
+  [hidden] {
+    display: none !important;
+  }
+
+  &__plot {
+    position: relative;
+    padding-block-end: 1.75rem; // room for the month ticks
+  }
+
+  &__wave {
+    display: block;
+    width: 100%;
+    height: var(--carrier-height);
+    overflow: visible;
+    border-block-end: 1px solid var(--color-border-strong);
+    touch-action: pan-y; // sideways drags scrub; vertical swipes still scroll
+    user-select: none;
+    -webkit-user-select: none;
+
+    rect {
+      fill: var(--wp--preset--color--accent-1);
+      opacity: 0.82;
+      transition: opacity 0.15s ease;
+
+      &.is-active {
+        opacity: 1;
+      }
+    }
+
+    // While a bar is under the pointer, it is the click target: dim the
+    // rest and show a pointer. Dead space (the silence) gets neither.
+    &:has(.is-active) {
+      cursor: pointer;
+
+      rect:not(.is-active) {
+        opacity: 0.35;
+      }
+    }
+  }
+
+  &__flatline {
+    stroke: var(--wp--preset--color--accent-1);
+    stroke-width: 1.5;
+    stroke-dasharray: 2 4;
+    opacity: 0.75;
+  }
+
+  &__ticks {
+    position: absolute;
+    inset: auto 0 0;
+    height: 1.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      position: absolute;
+      inset-inline-start: var(--x);
+      inset-block: 0;
+      padding-inline-start: 0.4rem;
+      padding-block-start: 0.6rem;
+      max-width: calc(100% - var(--x)); // a tick near today must not run past the edge
+      overflow: hidden;
+      white-space: nowrap;
+      border-inline-start: 1px solid var(--color-border-strong);
+      @include label-text;
+      color: var(--color-text-dim);
+    }
+  }
+
+  &__label,
+  &__readout {
+    position: absolute;
+    margin: 0;
+    @include label-text;
+  }
+
+  // "No carrier · 63 days", over the flat line at the right edge. Below md
+  // the flat line is too short to hold it; on touch the slot carries it.
+  &__label {
+    display: none;
+    inset-inline-end: 0;
+    inset-block-end: calc(1.75rem + 0.75rem);
+    color: var(--wp--preset--color--accent-1);
+
+    @include media(md) {
+      display: block;
+    }
+
+    @media (hover: none) {
+      display: none;
+    }
+  }
+
+  // Touch slot above the plot: the status and a hint at rest, the scrubbed
+  // transmission while dragging, and a "Read" link once the finger lifts.
+  // Its height is fixed so nothing below shifts. Shown on devices without
+  // hover, and on any device mid-scrub (a touchscreen laptop).
+  &__slot {
+    display: none;
+    align-items: center;
+    min-height: 3.6rem;
+    margin-block-end: 1.25rem;
+    padding-inline: 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--wp--custom--radius--md);
+    background: var(--color-surface);
+
+    @media (hover: none) {
+      display: flex;
+    }
+  }
+
+  &__main:is(.is-scrubbing, .is-held) &__slot {
+    display: flex;
+    border-color: var(--color-border-strong);
+  }
+
+  &__rest {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    @include label-text;
+  }
+
+  &__main:is(.is-scrubbing, .is-held) &__rest {
+    display: none;
+  }
+
+  &__status {
+    color: var(--wp--preset--color--accent-1);
+  }
+
+  &__hint {
+    color: var(--color-text-dim);
+    white-space: nowrap;
+  }
+
+  &__pick {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  &__meta {
+    display: grid;
+    flex: 1;
+    gap: 0.2rem;
+    min-width: 0;
+    margin: 0;
+
+    small {
+      @include meta-text(label);
+      color: var(--wp--preset--color--accent-1);
+    }
+
+    strong {
+      overflow: hidden;
+      font-weight: 500;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__minutes {
+    color: var(--color-text-dim);
+  }
+
+  &__go {
+    flex: none;
+    padding: 0.6rem 0.8rem;
+    border-radius: var(--wp--custom--radius--sm);
+    background: var(--wp--preset--color--accent-1); // not --color-button-bg: it resolves on :root, before this page's red
+    color: var(--color-on-accent);
+    font-size: var(--wp--preset--font-size--20);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+
+    &:focus-visible {
+      outline: 2px solid var(--color-text);
+      outline-offset: 2px;
+    }
+  }
+
+  // Hairline over the scrubbed bar, rising above the plot so it shows past
+  // the fingertip.
+  &__hair {
+    display: none;
+    position: absolute;
+    inset-block: -0.85rem 1.75rem;
+    width: 1px;
+    background: var(--color-text);
+    transform: translateX(-0.5px);
+    pointer-events: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block-start: -4px;
+      inset-inline-start: -4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--color-text);
+      box-shadow: 0 0 0 3px var(--color-bg);
+    }
+  }
+
+  &__main:is(.is-scrubbing, .is-held) &__hair {
+    display: block;
+  }
+
+  &.is-live &__label {
+    display: none;
+  }
+
+  // Hover readout, sitting just above the plot; view.js sets its left edge.
+  &__readout {
+    inset-block-start: -0.5rem;
+    inset-inline-start: 0;
+    transform: translateY(-100%);
+    max-width: min(100%, 36rem);
+    padding: 0.45rem 0.65rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--wp--custom--radius--sm);
+    background: var(--color-surface-2);
+    color: var(--color-text);
+    text-transform: none;
+    letter-spacing: 0;
+    pointer-events: none;
+
+    strong {
+      font-weight: 500;
+      color: var(--wp--preset--color--accent-1);
+    }
+  }
+
+  // Readout strip: the archive's figures in one mono line.
+  &__strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: var(--wp--preset--spacing--40) 0 0;
+    border-block: 1px solid var(--color-border);
+
+    @include media(md) {
+      grid-template-columns: repeat(4, auto);
+      justify-content: start;
+    }
+
+    div {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.25rem 0.6rem;
+      padding: 0.9rem 1.5rem 0.9rem 0;
+
+      @include media(md) {
+        padding-inline-end: 2.25rem;
+      }
+    }
+
+    dt {
+      @include label-text;
+      color: var(--color-text-dim);
+    }
+
+    dd {
+      margin: 0;
+      @include label-text;
+      color: var(--color-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .is-accent dd {
+      color: var(--wp--preset--color--accent-1);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nous-carrier__wave rect {
+    transition: none;
+  }
+}

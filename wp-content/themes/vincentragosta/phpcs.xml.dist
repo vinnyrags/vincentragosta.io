@@ -31,11 +31,12 @@
         <exclude-pattern>*/Providers/Shop/*</exclude-pattern>
     </rule>
 
-    <!-- Unbounded queries over small, editor-curated sets (projects, the blog archive).
+    <!-- Unbounded queries over small, editor-curated sets (projects, the blog archive and its carrier hero).
          VIP forbids posts_per_page -1 for sites with unbounded content; these are not. -->
     <rule ref="WordPressVIPMinimum.Performance.NoPaging">
         <exclude-pattern>*/Providers/Project/*</exclude-pattern>
         <exclude-pattern>*/Providers/Blog/blocks/blog/render.php</exclude-pattern>
+        <exclude-pattern>*/Providers/Blog/blocks/nous-carrier/render.php</exclude-pattern>
     </rule>
 
     <!-- Mail delivery failures are logged deliberately: the msmtp relay fails silently

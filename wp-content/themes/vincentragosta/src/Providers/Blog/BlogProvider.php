@@ -8,6 +8,7 @@ use ChildTheme\Providers\Blog\Hooks\NousSignalFeed;
 use ChildTheme\Providers\Blog\Hooks\TagTermLinkRewrite;
 use IX\Providers\Blog\BlogPost;
 use IX\Providers\Blog\BlogProvider as BaseBlogProvider;
+use IX\Providers\Theme\Features\ScrollReveal;
 
 /**
  * Blog Provider.
@@ -30,6 +31,7 @@ class BlogProvider extends BaseBlogProvider
      * Child blocks (merged with the parent's).
      */
     protected array $blocks = [
+        'nous-carrier',
         'nous-log',
     ];
 
@@ -43,6 +45,7 @@ class BlogProvider extends BaseBlogProvider
         add_action('admin_menu', [$this, 'renamePostsMenu']);
         add_action('init', [$this, 'unregisterCategories']);
         add_action('enqueue_block_editor_assets', [$this, 'enqueueEditorAccentOverride']);
+        add_filter(ScrollReveal::FILTER_EXCLUDE_ANCESTORS, [$this, 'excludeCarrierFromScrollReveal']);
 
         parent::register();
 
@@ -63,6 +66,21 @@ class BlogProvider extends BaseBlogProvider
         }
 
         return $classes;
+    }
+
+    /**
+     * Keep scroll-reveal off the carrier's chart and slot. Their paragraphs
+     * start hidden and appear under the pointer; a fade-up would leave them
+     * invisible until the observer caught up.
+     *
+     * @param string[] $excludes
+     * @return string[]
+     */
+    public function excludeCarrierFromScrollReveal(array $excludes): array
+    {
+        $excludes[] = '.nous-carrier__main';
+
+        return $excludes;
     }
 
     /**
