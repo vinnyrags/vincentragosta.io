@@ -154,16 +154,16 @@
         },
         {
             "name": "enshrined/svg-sanitize",
-            "version": "0.22.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/darylldoyle/svg-sanitizer.git",
-                "reference": "0afa95ea74be155a7bcd6c6fb60c276c39984500"
+                "reference": "f3300fcd1bbf67d205b52217c75d0f7d6a8c47ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/0afa95ea74be155a7bcd6c6fb60c276c39984500",
-                "reference": "0afa95ea74be155a7bcd6c6fb60c276c39984500",
+                "url": "https://api.github.com/repos/darylldoyle/svg-sanitizer/zipball/f3300fcd1bbf67d205b52217c75d0f7d6a8c47ff",
+                "reference": "f3300fcd1bbf67d205b52217c75d0f7d6a8c47ff",
                 "shasum": ""
             },
             "require": {
@@ -193,9 +193,9 @@
             "description": "An SVG sanitizer for PHP",
             "support": {
                 "issues": "https://github.com/darylldoyle/svg-sanitizer/issues",
-                "source": "https://github.com/darylldoyle/svg-sanitizer/tree/0.22.0"
+                "source": "https://github.com/darylldoyle/svg-sanitizer/tree/1.0.0"
             },
-            "time": "2025-08-12T10:13:48+00:00"
+            "time": "2026-09-01T09:35:47+00:00"
         },
         {
             "name": "johnpbloch/wordpress",
@@ -1026,20 +1026,20 @@
         },
         {
             "name": "vincentragosta/ix",
-            "version": "v1.9.0",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "ef27b9ecc53642347df8f9ff34a5e84d9c3383fe"
+                "reference": "2c13d28caeda3f7e3a70d25f7a9bc7d12181def3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.vincentragosta.io/dist/vincentragosta/ix/vincentragosta-ix-ef27b9ecc53642347df8f9ff34a5e84d9c3383fe-zip-c49aec.zip",
-                "reference": "ef27b9ecc53642347df8f9ff34a5e84d9c3383fe",
-                "shasum": "ee552af47e02f0d94a76f8657dacaea0d5358b0e"
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/ix/vincentragosta-ix-2c13d28caeda3f7e3a70d25f7a9bc7d12181def3-zip-efa4ab.zip",
+                "reference": "2c13d28caeda3f7e3a70d25f7a9bc7d12181def3",
+                "shasum": "7f3806c92b6bace5425f791fd7856a372c7a3300"
             },
             "require": {
-                "enshrined/svg-sanitize": "^0.22.0",
+                "enshrined/svg-sanitize": "^1.0",
                 "php": ">=8.3",
                 "timber/timber": "2.x-dev"
             },
@@ -1073,10 +1073,10 @@
             ],
             "description": "A foundational WordPress parent theme with Timber support",
             "support": {
-                "source": "https://github.com/vinnyrags/IX/tree/v1.9.0",
+                "source": "https://github.com/vinnyrags/IX/tree/v1.9.1",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-10-18T22:37:36+00:00"
+            "time": "2026-10-18T22:48:25+00:00"
         },
         {
             "name": "vincentragosta/mythus",
