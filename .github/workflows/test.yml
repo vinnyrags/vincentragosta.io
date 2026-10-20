@@ -85,3 +85,11 @@ jobs:
       - name: Run itzenzoTTV PHPCS (WordPress-VIP-Go)
         working-directory: wp-content/mu-plugins/itzenzottv
         run: composer lint
+
+      # Known-vulnerable dependencies block the deploy. To ship past an advisory that
+      # has no fix yet, list its ID under config.audit.ignore in that composer.json.
+      - name: Audit Composer dependencies
+        run: |
+          composer audit --locked
+          composer audit --locked --working-dir=wp-content/themes/vincentragosta
+          composer audit --locked --working-dir=wp-content/mu-plugins/itzenzottv

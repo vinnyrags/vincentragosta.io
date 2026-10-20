@@ -1,0 +1,57 @@
+# Weekly dependency PRs against develop, so plugin, core and CI drift shows up as a
+# reviewable PR instead of going unnoticed (core sat a major behind until 2026-10-20).
+#
+# The root and itzenzoTTV projects resolve from private registries. Their credentials
+# are Dependabot secrets (Settings → Secrets and variables → Dependabot), not Actions
+# secrets — Dependabot runs cannot read Actions secrets.
+version: 2
+
+registries:
+  satis:
+    type: composer-repository
+    url: https://packages.vincentragosta.io
+    username: ${{ secrets.SATIS_USERNAME }}
+    password: ${{ secrets.SATIS_PASSWORD }}
+  acf:
+    type: composer-repository
+    url: https://connect.advancedcustomfields.com
+    username: ${{ secrets.ACF_LICENSE_KEY }}
+    password: ${{ secrets.ACF_SITE_URL }}
+
+updates:
+  # WordPress core, plugins, Mythus and IX.
+  - package-ecosystem: composer
+    directory: /
+    registries: [satis, acf]
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: composer
+    directories:
+      - /wp-content/themes/vincentragosta
+      - /wp-content/mu-plugins/itzenzottv
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /wp-content/themes/vincentragosta
+    target-branch: develop
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
