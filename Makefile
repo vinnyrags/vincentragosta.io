@@ -15,15 +15,19 @@ NPM_DIRS      := $(IX_DIR) $(CHILD_THEME_DIR)
 
 LOCAL_URL := https://vincentragosta.io.ddev.site
 
+# SSH alias for the droplet, defined in ~/.ssh/config (HostName + User root) so this
+# public repo carries no address. Override per run: make pull-production DROPLET=other
+DROPLET ?= vinrag
+
 # Staging runs deploy-kit LAYOUT=releases (2026-10-16): the docroot is the `current`
 # symlink of /srv/staging.vincentragosta.io, code is read-only, and uploads live in shared/.
-STAGING_HOST    := root@174.138.70.29
+STAGING_HOST    := $(DROPLET)
 STAGING_DIR     := /srv/staging.vincentragosta.io/current
 STAGING_WP      := $(STAGING_DIR)/wp
 STAGING_UPLOADS := /srv/staging.vincentragosta.io/shared/wp-content/uploads
 STAGING_URL     := https://staging.vincentragosta.io
 
-PRODUCTION_HOST := root@174.138.70.29
+PRODUCTION_HOST := $(DROPLET)
 PRODUCTION_DIR  := /var/www/vincentragosta.io
 PRODUCTION_WP   := $(PRODUCTION_DIR)/wp
 PRODUCTION_UPLOADS := $(PRODUCTION_DIR)/wp-content/uploads

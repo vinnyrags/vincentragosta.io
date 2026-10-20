@@ -6,7 +6,7 @@ name: test
 # and vincentragosta/mythus, served from packages.vincentragosta.io)
 # plus wpengine/advanced-custom-fields-pro from connect.advancedcustomfields.com.
 # Both require auth — we consume it via the COMPOSER_AUTH secret, whose
-# value is the contents of /root/.composer-auth.json on the deploy server.
+# value is the contents of the deploy server's Composer auth file.
 #
 # Workflow strategy:
 #   1. composer install at repo ROOT — fires the post-install-cmd that

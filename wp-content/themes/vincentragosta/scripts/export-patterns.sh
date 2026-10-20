@@ -12,7 +12,7 @@
 #   ./scripts/export-patterns.sh
 #
 # Environment variables (set by Makefile targets):
-#   REMOTE_HOST  - SSH host (e.g., root@174.138.70.29)
+#   REMOTE_HOST  - SSH host (e.g., the vinrag alias from ~/.ssh/config)
 #   REMOTE_WP    - Remote WordPress path for WP-CLI --path flag
 #   REMOTE_URL   - Remote site URL for upload path replacement
 
