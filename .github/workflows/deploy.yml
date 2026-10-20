@@ -7,7 +7,10 @@ name: Deploy
 # on the droplet). @v2 fails the run unless the droplet reports
 # DEPLOY-KIT-RESULT ok/skipped, so a broken build turns the run red.
 #
-# "Run workflow" re-deploys the selected branch's current commit.
+# "Run workflow" re-runs the tests and the push, but deploys nothing when the droplet
+# already has the commit: git answers "Everything up-to-date", no hook runs, and the
+# run still goes green. To re-deploy a commit, re-run the hook on the droplet (RUNBOOK
+# → Deploy).
 on:
   push:
     branches: [develop, main]
