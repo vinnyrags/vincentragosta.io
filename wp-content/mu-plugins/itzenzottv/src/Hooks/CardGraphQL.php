@@ -248,6 +248,8 @@ class CardGraphQL implements Hook
                 // INNER JOIN on price + stock ensures we only consider cards
                 // with both fields set; the LEFT JOIN on is_personal_collection
                 // is permissive (NULL/empty/'0' all pass as "for sale").
+                // p.ID breaks price ties, so which equally-priced cards make
+                // the cut is the same on every database and after every flush.
                 $sql = "
                     SELECT p.ID
                     FROM {$wpdb->posts} p
@@ -258,7 +260,8 @@ class CardGraphQL implements Hook
                       AND p.post_status = 'publish'
                       AND CAST(ms.meta_value AS UNSIGNED) > 0
                       AND (mpc.meta_value IS NULL OR mpc.meta_value = '0' OR mpc.meta_value = '')
-                    ORDER BY CAST(REPLACE(REPLACE(mp.meta_value, '$', ''), ',', '') AS DECIMAL(10,2)) DESC
+                    ORDER BY CAST(REPLACE(REPLACE(mp.meta_value, '$', ''), ',', '') AS DECIMAL(10,2)) DESC,
+                        p.ID ASC
                     LIMIT %d
                 ";
 
