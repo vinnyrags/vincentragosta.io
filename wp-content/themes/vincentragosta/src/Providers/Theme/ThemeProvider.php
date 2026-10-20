@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace ChildTheme\Providers\Theme;
 
 use ChildTheme\Providers\Project\ProjectPost;
-use ChildTheme\Providers\Shop\CardPost;
-use ChildTheme\Providers\Shop\ProductPost;
 use ChildTheme\Providers\Blog\NousPost;
 use ChildTheme\Providers\Theme\Hooks\AccentHighlight;
 use ChildTheme\Providers\Theme\Hooks\DistAssetVersioning;
@@ -115,8 +113,6 @@ class ThemeProvider extends BaseThemeProvider
         $classMap = parent::registerClassMap($classMap);
         $classMap[ProjectPost::POST_TYPE] = ProjectPost::class;
         $classMap[NousPost::POST_TYPE] = NousPost::class;
-        $classMap[ProductPost::POST_TYPE] = ProductPost::class;
-        $classMap[CardPost::POST_TYPE] = CardPost::class;
 
         return $classMap;
     }

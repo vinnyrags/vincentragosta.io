@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Shop\Hooks;
+namespace ItzenzoTTV\Hooks;
 
 use Mythus\Contracts\Hook;
 

@@ -33,6 +33,19 @@ if [ -n "$STAGED_PHP" ]; then
         echo "Child-theme tests passed."
     fi
 
+    # Check if itzenzoTTV mu-plugin PHP files are staged
+    if echo "$STAGED_PHP" | grep -q "wp-content/mu-plugins/itzenzottv/"; then
+        echo "Running itzenzoTTV PHP tests..."
+        cd "$REPO_ROOT/wp-content/mu-plugins/itzenzottv" && composer test
+        if [ $? -ne 0 ]; then
+            echo ""
+            echo "itzenzoTTV tests failed. Commit aborted."
+            echo "Fix the failing tests or use --no-verify to bypass."
+            exit 1
+        fi
+        echo "itzenzoTTV tests passed."
+    fi
+
     # Check if ix PHP files are staged
     if echo "$STAGED_PHP" | grep -q "wp-content/themes/ix/"; then
         # Only run if ix has tests configured

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="itzenzottv">
+    <description>WordPress VIP coding standards for the itzenzoTTV mu-plugin. Errors fail CI; warnings are reported only.</description>
+
+    <file>itzenzottv.php</file>
+    <file>src</file>
+    <arg name="extensions" value="php"/>
+    <arg value="sp"/>
+    <config name="minimum_wp_version" value="6.5"/>
+
+    <rule ref="WordPress-VIP-Go"/>
+
+    <!-- CardGraphQL interpolates fixed SQL fragments chosen from a whitelist; every value
+         goes through prepare(). -->
+    <rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
+        <exclude-pattern>*/src/Hooks/CardGraphQL.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.DB.PreparedSQL.NotPrepared">
+        <exclude-pattern>*/src/Hooks/CardGraphQL.php</exclude-pattern>
+    </rule>
+</ruleset>

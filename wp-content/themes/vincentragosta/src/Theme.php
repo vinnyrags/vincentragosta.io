@@ -6,7 +6,6 @@ namespace ChildTheme;
 
 use ChildTheme\Providers\Blog\BlogProvider;
 use ChildTheme\Providers\Project\ProjectProvider;
-use ChildTheme\Providers\Shop\ShopProvider;
 use ChildTheme\Providers\Theme\ThemeProvider;
 use IX\Theme as BaseTheme;
 
@@ -27,6 +26,5 @@ class Theme extends BaseTheme
         ThemeProvider::class,
         ProjectProvider::class,
         BlogProvider::class,
-        ShopProvider::class,
     ];
 }

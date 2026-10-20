@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Tests\Unit\Providers\Shop\Hooks;
+namespace ItzenzoTTV\Tests\Unit\Hooks;
 
-use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
+use ItzenzoTTV\Hooks\CardAttachmentUniqueFilename;
 use Mythus\Contracts\Hook;
 use PHPUnit\Framework\TestCase;
 

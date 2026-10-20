@@ -33,6 +33,11 @@
     "wpackagist-plugin/wpgraphql-acf": "^2.5",
     "wpackagist-plugin/redis-cache": "^2.8"
   },
+  "autoload": {
+    "psr-4": {
+      "ItzenzoTTV\\": "wp-content/mu-plugins/itzenzottv/src/"
+    }
+  },
   "extra": {
     "wordpress-install-dir": "wp",
     "installer-paths": {

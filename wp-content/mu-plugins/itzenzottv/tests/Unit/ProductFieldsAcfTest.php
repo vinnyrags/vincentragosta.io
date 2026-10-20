@@ -1,6 +1,6 @@
 <?php
 
-namespace ChildTheme\Tests\Unit\Providers\Shop;
+namespace ItzenzoTTV\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
@@ -15,7 +15,7 @@ class ProductFieldsAcfTest extends TestCase
 
     protected function setUp(): void
     {
-        $path = __DIR__ . '/../../../../src/Providers/Shop/acf-json/group_product_fields.json';
+        $path = dirname(__DIR__, 2) . '/src/acf-json/group_product_fields.json';
         $this->assertFileExists($path);
         $this->group = json_decode(file_get_contents($path), true);
         $this->assertIsArray($this->group);

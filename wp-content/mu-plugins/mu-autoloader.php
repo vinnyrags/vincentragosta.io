@@ -18,6 +18,7 @@ if (file_exists($rootAutoload)) {
 // Each entry is the path to the plugin's main file relative to mu-plugins/.
 $plugins = [
     'mythus/mythus.php',
+    'itzenzottv/itzenzottv.php',
 ];
 
 foreach ($plugins as $plugin) {

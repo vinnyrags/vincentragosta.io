@@ -6,9 +6,10 @@
 IX_DIR          := $(CURDIR)/wp-content/themes/ix
 CHILD_THEME_DIR := $(CURDIR)/wp-content/themes/vincentragosta
 MYTHUS_DIR      := $(CURDIR)/wp-content/mu-plugins/mythus
+ITZENZOTTV_DIR  := $(CURDIR)/wp-content/mu-plugins/itzenzottv
 UPLOADS_DIR     := $(CURDIR)/wp-content/uploads
 
-COMPOSER_DIRS := $(MYTHUS_DIR) $(IX_DIR) $(CHILD_THEME_DIR)
+COMPOSER_DIRS := $(MYTHUS_DIR) $(ITZENZOTTV_DIR) $(IX_DIR) $(CHILD_THEME_DIR)
 NPM_DIRS      := $(IX_DIR) $(CHILD_THEME_DIR)
 
 # ─── Environments ────────────────────────────────────────────────────────────
@@ -222,7 +223,7 @@ stop: ## Snapshot database and stop DDEV
 	ddev stop
 	@echo "✓ Database snapshotted and DDEV stopped"
 
-install: install-root install-mythus install-ix install-child ## Install all dependencies (root, Mythus, IX, child)
+install: install-root install-mythus install-itzenzottv install-ix install-child ## Install all dependencies (root, Mythus, itzenzoTTV, IX, child)
 	@echo "✓ All dependencies installed"
 
 install-root:
@@ -232,6 +233,10 @@ install-root:
 install-mythus:
 	@echo "Installing Mythus dependencies..."
 	cd $(MYTHUS_DIR) && composer install --no-interaction
+
+install-itzenzottv:
+	@echo "Installing itzenzoTTV mu-plugin dev dependencies..."
+	cd $(ITZENZOTTV_DIR) && composer install --no-interaction
 
 install-ix:
 	@echo "Installing IX dependencies..."
@@ -262,14 +267,14 @@ clean: ## Remove vendor, node_modules, and dist from all packages
 	done
 	@echo "✓ Clean complete"
 
-autoload: ## Regenerate composer autoloaders for Mythus and both themes
+autoload: ## Regenerate composer autoloaders for Mythus, itzenzoTTV and both themes
 	@echo "Regenerating autoloaders..."
 	@for dir in $(COMPOSER_DIRS); do \
 		(cd $$dir && composer dump-autoload) || exit $$?; \
 	done
 	@echo "✓ Autoloaders regenerated"
 
-update: ## Update composer dependencies (root + Mythus + both themes)
+update: ## Update composer dependencies (root + Mythus + itzenzoTTV + both themes)
 	@echo "Updating root dependencies..."
 	composer update --no-interaction
 	@for dir in $(COMPOSER_DIRS); do \
@@ -279,7 +284,7 @@ update: ## Update composer dependencies (root + Mythus + both themes)
 	done
 	@echo "✓ All dependencies updated"
 
-test: ## Run PHP and JS test suites for Mythus and both themes
+test: ## Run PHP and JS test suites for Mythus, itzenzoTTV and both themes
 	@for dir in $(COMPOSER_DIRS); do \
 		echo ""; \
 		echo "Running PHP tests in $$dir..."; \

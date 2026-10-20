@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Tests\Unit\Providers\Shop\Hooks;
+namespace ItzenzoTTV\Tests\Unit\Hooks;
 
-use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
+use ItzenzoTTV\Hooks\PngSubsizesAsJpeg;
 use Mythus\Contracts\Hook;
 use PHPUnit\Framework\TestCase;
 

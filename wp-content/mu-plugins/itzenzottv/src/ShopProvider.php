@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Shop;
+namespace ItzenzoTTV;
 
-use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
-use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
-use ChildTheme\Providers\Shop\Hooks\CardImageSize;
-use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
-use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
-use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
-use IX\Providers\Provider;
+use ItzenzoTTV\Hooks\CardAttachmentUniqueFilename;
+use ItzenzoTTV\Hooks\CardGraphQL;
+use ItzenzoTTV\Hooks\CardImageSize;
+use ItzenzoTTV\Hooks\PngSubsizesAsJpeg;
+use ItzenzoTTV\Hooks\ShopRedirect;
+use ItzenzoTTV\Hooks\ShopSettingsMenuLink;
+use Mythus\Provider;
 
 /**
  * Shop Provider.
@@ -18,6 +18,10 @@ use IX\Providers\Provider;
  * Registers the product/card post types, card taxonomies, ACF field
  * groups and the card GraphQL extensions that itzenzo.tv (Next.js)
  * reads. It is a headless content backend only — no checkout path.
+ *
+ * Lives in an mu-plugin rather than the theme so the data model and the
+ * GraphQL surface itzenzo.tv depends on survive a theme change. Extends
+ * Mythus directly: nothing here renders through Timber.
  */
 class ShopProvider extends Provider
 {
@@ -32,6 +36,25 @@ class ShopProvider extends Provider
         ShopSettingsMenuLink::class,
         ShopRedirect::class,
     ];
+
+    /**
+     * Assets resolve against the plugin, not the active theme. The provider
+     * ships none today; this keeps it independent of get_stylesheet_directory().
+     */
+    protected function getDistPath(): string
+    {
+        return dirname(__DIR__) . '/dist';
+    }
+
+    protected function getDistUri(): string
+    {
+        return plugins_url('dist', __DIR__);
+    }
+
+    protected function resolveTextDomain(string $providerDir): string
+    {
+        return 'itzenzottv';
+    }
 
     /**
      * Register the shop provider.
@@ -51,8 +74,6 @@ class ShopProvider extends Provider
         }, 10, 5);
 
         parent::register();
-
-        $this->acfManager->registerSavePath();
     }
 
     /**
@@ -72,9 +93,9 @@ class ShopProvider extends Provider
     {
         register_taxonomy('card_game', ['card'], [
             'labels' => [
-                'name'          => __('Card Games', 'vincentragosta'),
-                'singular_name' => __('Card Game', 'vincentragosta'),
-                'menu_name'     => __('Games', 'vincentragosta'),
+                'name'          => __('Card Games', 'itzenzottv'),
+                'singular_name' => __('Card Game', 'itzenzottv'),
+                'menu_name'     => __('Games', 'itzenzottv'),
             ],
             'public'             => true,
             'publicly_queryable' => true,
@@ -90,9 +111,9 @@ class ShopProvider extends Provider
 
         register_taxonomy('card_set', ['card'], [
             'labels' => [
-                'name'          => __('Card Sets', 'vincentragosta'),
-                'singular_name' => __('Card Set', 'vincentragosta'),
-                'menu_name'     => __('Sets', 'vincentragosta'),
+                'name'          => __('Card Sets', 'itzenzottv'),
+                'singular_name' => __('Card Set', 'itzenzottv'),
+                'menu_name'     => __('Sets', 'itzenzottv'),
             ],
             'public'             => true,
             'publicly_queryable' => true,
@@ -105,20 +126,5 @@ class ShopProvider extends Provider
             'graphql_plural_name' => 'cardSets',
             'rewrite'            => ['slug' => 'card-set'],
         ]);
-    }
-
-    /**
-     * Get the frontend URL for the shop.
-     *
-     * Returns the ITZENZO_FRONTEND_URL constant if defined,
-     * otherwise falls back to the WordPress shop page URL.
-     */
-    public static function frontendUrl(): string
-    {
-        if (defined('ITZENZO_FRONTEND_URL')) {
-            return rtrim(ITZENZO_FRONTEND_URL, '/');
-        }
-
-        return home_url('/shop');
     }
 }

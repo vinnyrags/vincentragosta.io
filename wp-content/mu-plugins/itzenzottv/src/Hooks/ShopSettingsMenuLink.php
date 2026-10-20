@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Shop\Hooks;
+namespace ItzenzoTTV\Hooks;
 
 use Mythus\Contracts\Hook;
 
@@ -34,8 +34,8 @@ class ShopSettingsMenuLink implements Hook
 
         add_submenu_page(
             'shop-settings',
-            __('itzenzo.tv Settings', 'vincentragosta'),
-            __('Settings', 'vincentragosta'),
+            __('itzenzo.tv Settings', 'itzenzottv'),
+            __('Settings', 'itzenzottv'),
             'edit_posts',
             'shop-settings'
         );

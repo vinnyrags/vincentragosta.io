@@ -1,0 +1,39 @@
+{
+  "name": "vinnyrags/itzenzottv",
+  "description": "Headless content backend for itzenzo.tv (mu-plugin)",
+  "type": "wordpress-muplugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vincent Ragosta"
+    }
+  ],
+  "require": {
+    "php": ">=8.4"
+  },
+  "require-dev": {
+    "automattic/wordbless": "^0.4.2",
+    "automattic/vipwpcs": "^3.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "ItzenzoTTV\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "ItzenzoTTV\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "roots/wordpress-core-installer": false,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "lint": "phpcs --runtime-set ignore_warnings_on_exit 1"
+  }
+}

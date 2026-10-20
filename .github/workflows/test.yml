@@ -71,3 +71,17 @@ jobs:
       - name: Run PHPCS (WordPress-VIP-Go)
         working-directory: wp-content/themes/vincentragosta
         run: composer lint
+
+      # The itzenzoTTV mu-plugin (itzenzo.tv's content backend) has its own suite and
+      # standards config, so it tests without any theme loaded.
+      - name: Install itzenzoTTV mu-plugin dependencies
+        working-directory: wp-content/mu-plugins/itzenzottv
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run itzenzoTTV PHPUnit
+        working-directory: wp-content/mu-plugins/itzenzottv
+        run: composer test
+
+      - name: Run itzenzoTTV PHPCS (WordPress-VIP-Go)
+        working-directory: wp-content/mu-plugins/itzenzottv
+        run: composer lint

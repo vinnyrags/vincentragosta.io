@@ -3,10 +3,11 @@
 WordPress site with a three-layer architecture: a mu-plugin framework ([Mythus](https://github.com/vinnyrags/mythus)), a parent theme ([IX](https://github.com/vinnyrags/IX)), and a child theme (this project), all built on Timber 2.x / Twig with PHP-DI for dependency injection.
 
 - **[Mythus](https://github.com/vinnyrags/mythus)** (`wp-content/mu-plugins/mythus/`) — theme-agnostic platform framework. Owns the provider pattern, DI container, contracts, and support managers.
+- **itzenzoTTV** (`wp-content/mu-plugins/itzenzottv/`) — in-repo mu-plugin: itzenzo.tv's content backend, built as a Mythus provider. Independent of the theme.
 - **[IX](https://github.com/vinnyrags/IX)** (`wp-content/themes/ix/`) — Timber/Twig bridge parent theme. Extends Mythus with template resolution and reusable blog/project infrastructure.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends IX providers for the vincentragosta.io website.
 
-The **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) lives in a separate repository and uses this site as its content backend: the Shop provider registers the `product` and `card` CPTs, the card taxonomies (`card_game`, `card_set`), their ACF field groups, and the WPGraphQL fields the storefront reads.
+The **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) lives in a separate repository and uses this site as its content backend: the **itzenzoTTV mu-plugin** registers the `product` and `card` CPTs, the card taxonomies (`card_game`, `card_set`), their ACF field groups, and the WPGraphQL fields the storefront reads. It lives outside the theme so that backend survives a theme change.
 
 ## Prerequisites
 
@@ -119,8 +120,7 @@ vincentragosta/             # Child theme (wp-content/themes/vincentragosta/)
 │   ├── Providers/
 │   │   ├── Theme/           # ThemeProvider + Features/ + Hooks/ + blocks/
 │   │   ├── Project/         # ProjectProvider + blocks/ + config/ + acf-json/
-│   │   ├── Blog/            # Child BlogProvider + NousSignal* hooks + blocks/
-│   │   └── Shop/            # card/product CPTs, ACF, WPGraphQL (headless)
+│   │   └── Blog/            # Child BlogProvider + NousSignal* hooks + blocks/
 │   ├── Services/            # Child-specific services
 │   └── Theme.php            # Extends parent Theme
 ├── views/                   # Twig templates (base, header, footer, pages)
@@ -407,9 +407,12 @@ Posts are the Nous Signal. **Model:** `NousPost`; `NousArchive` and `NousSequenc
 
 **Blocks:** `ix/blog` (child override; "all" mode renders the Nous Signal archive) and `vincentragosta/nous-log` (the latest transmissions as a log).
 
-### ShopProvider
+### itzenzoTTV mu-plugin
 
-Headless backend for [itzenzo.tv](https://itzenzo.tv): `card`/`product` post types, card taxonomies, ACF fields and WPGraphQL extensions. No REST surface and no frontend UI; the shop page redirects to itzenzo.tv.
+Headless backend for [itzenzo.tv](https://itzenzo.tv), in `wp-content/mu-plugins/itzenzottv/`: one `ItzenzoTTV\ShopProvider` (extends `Mythus\Provider` directly — no Timber) with the `card`/`product` post types, card taxonomies, ACF fields and WPGraphQL extensions. No REST surface and no frontend UI; `/shop` redirects to itzenzo.tv.
+
+- **Loading:** `mu-autoloader.php` requires `itzenzottv/itzenzottv.php`, which resolves the provider from its own PHP-DI container on `plugins_loaded`. Classes autoload from the root `composer.json` (`ItzenzoTTV\` → `src/`), so deploys need no extra install step.
+- **Tests and standards:** its own `composer.json`, PHPUnit/WorDBless suite and `phpcs.xml.dist` — it tests with no theme loaded. `make test` and CI run it.
 
 ---
 

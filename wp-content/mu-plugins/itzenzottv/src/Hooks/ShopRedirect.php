@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ChildTheme\Providers\Shop\Hooks;
+namespace ItzenzoTTV\Hooks;
 
 use Mythus\Contracts\Hook;
 
@@ -11,8 +11,8 @@ use Mythus\Contracts\Hook;
  *
  * The WordPress shop UI was retired when the storefront moved to the
  * headless Next.js frontend at itzenzo.tv. ShopProvider still owns the
- * product CPT, REST endpoints, and ACF fields (the "backend") but
- * renders no public shop pages. Old emails, social posts, and inbound
+ * product/card CPTs, ACF fields and GraphQL extensions (the "backend")
+ * but renders no public shop pages. Old emails, social posts, and inbound
  * links to /shop/ would otherwise hit a 404 — this hook funnels them
  * to the live storefront instead.
  *

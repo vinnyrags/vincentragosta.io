@@ -1,12 +1,12 @@
 <?php
 
-namespace ChildTheme\Tests\Unit\Providers\Shop;
+namespace ItzenzoTTV\Tests\Unit;
 
-use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
-use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
-use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
-use ChildTheme\Providers\Shop\ShopProvider;
-use IX\Providers\Provider;
+use ItzenzoTTV\Hooks\CardGraphQL;
+use ItzenzoTTV\Hooks\ShopRedirect;
+use ItzenzoTTV\Hooks\ShopSettingsMenuLink;
+use ItzenzoTTV\ShopProvider;
+use Mythus\Provider;
 use PHPUnit\Framework\TestCase;
 
 /**
