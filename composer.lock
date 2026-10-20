@@ -743,16 +743,16 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.38.2",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6"
+                "reference": "4d5d331bf731e0aedbc6b2f5e61135b7b7996a72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
-                "reference": "d3d318bad5e7a1bfbd026009c8bfb8d8f99ae6b6",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/4d5d331bf731e0aedbc6b2f5e61135b7b7996a72",
+                "reference": "4d5d331bf731e0aedbc6b2f5e61135b7b7996a72",
                 "shasum": ""
             },
             "require": {
@@ -804,7 +804,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.38.2"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.43.0"
             },
             "funding": [
                 {
@@ -824,25 +824,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-05-27T06:59:30+00:00"
+            "time": "2026-09-24T15:19:04+00:00"
         },
         {
             "name": "timber/timber",
-            "version": "2.x-dev",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "5fce3616b5a443419f6963d1a84e05cb77da35a3"
+                "reference": "b91d24b9d76b44e49a345d2844ed5dfc21b118a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/5fce3616b5a443419f6963d1a84e05cb77da35a3",
-                "reference": "5fce3616b5a443419f6963d1a84e05cb77da35a3",
+                "url": "https://api.github.com/repos/timber/timber/zipball/b91d24b9d76b44e49a345d2844ed5dfc21b118a0",
+                "reference": "b91d24b9d76b44e49a345d2844ed5dfc21b118a0",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.2",
-                "twig/twig": "^3.19"
+                "twig/twig": "^3.27"
             },
             "require-dev": {
                 "composer/installers": "^2",
@@ -873,7 +873,7 @@
                 "squizlabs/php_codesniffer": "^3.0",
                 "symplify/easy-coding-standard": "^13",
                 "szepeviktor/phpstan-wordpress": "^2",
-                "twig/cache-extra": "^3.17",
+                "twig/cache-extra": "^3.21",
                 "wp-plugin/advanced-custom-fields": "^6.5",
                 "wp-plugin/co-authors-plus": "^3.6"
             },
@@ -881,7 +881,6 @@
                 "php-coveralls/php-coveralls": "^2.0 for code coverage",
                 "twig/cache-extra": "For using the cache tag in Twig"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -942,20 +941,20 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2026-04-21T12:43:30+00:00"
+            "time": "2026-05-29T14:43:04+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.28.0",
+            "version": "v3.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b"
+                "reference": "8c737079b726af72ff8ef3c595be9f6a810ea1ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
-                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/8c737079b726af72ff8ef3c595be9f6a810ea1ef",
+                "reference": "8c737079b726af72ff8ef3c595be9f6a810ea1ef",
                 "shasum": ""
             },
             "require": {
@@ -1010,7 +1009,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.28.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.30.0"
             },
             "funding": [
                 {
@@ -1022,26 +1021,26 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-03T20:44:34+00:00"
+            "time": "2026-09-25T13:20:01+00:00"
         },
         {
             "name": "vincentragosta/ix",
-            "version": "v1.11.0",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vinnyrags/IX.git",
-                "reference": "22a8f1f7a4f49096386dcab0f1a11f1fcdff6c4c"
+                "reference": "6f12931385577248116627bdac024e5642403f6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://packages.vincentragosta.io/dist/vincentragosta/ix/vincentragosta-ix-22a8f1f7a4f49096386dcab0f1a11f1fcdff6c4c-zip-9102e5.zip",
-                "reference": "22a8f1f7a4f49096386dcab0f1a11f1fcdff6c4c",
-                "shasum": "aa6434901bbe7c2f934ff30f8c22370db751d95b"
+                "url": "https://packages.vincentragosta.io/dist/vincentragosta/ix/vincentragosta-ix-6f12931385577248116627bdac024e5642403f6e-zip-bc437f.zip",
+                "reference": "6f12931385577248116627bdac024e5642403f6e",
+                "shasum": "4a92cb11945c738c369f2095cc6e29c85a875594"
             },
             "require": {
                 "enshrined/svg-sanitize": "^1.0",
                 "php": ">=8.3",
-                "timber/timber": "2.x-dev"
+                "timber/timber": "^2.5"
             },
             "require-dev": {
                 "automattic/wordbless": "^0.4.2"
@@ -1073,10 +1072,10 @@
             ],
             "description": "A foundational WordPress parent theme with Timber support",
             "support": {
-                "source": "https://github.com/vinnyrags/IX/tree/v1.11.0",
+                "source": "https://github.com/vinnyrags/IX/tree/v1.11.1",
                 "issues": "https://github.com/vinnyrags/IX/issues"
             },
-            "time": "2026-10-19T02:57:53+00:00"
+            "time": "2026-10-20T15:00:05+00:00"
         },
         {
             "name": "vincentragosta/mythus",
