@@ -191,7 +191,7 @@ test.describe('Smoke tests', () => {
         await expect(page.locator('.is-style-layers')).toBeVisible();
         await expect(page.locator('.is-style-stat-strip > *')).toHaveCount(4);
         await expect(page.locator('.toc [data-toc-link]')).toHaveCount(5);
-        await expect(page.locator('.site-content a[href="/framework/"]')).toHaveCount(1);
+        await expect(page.locator('.site-content a[href="/framework/"]')).toHaveCount(2);
 
         await page.locator('.toc a[href="#hardening"]').click();
         await expect(page.locator('.toc a[href="#hardening"]')).toHaveAttribute('aria-current', 'true');
