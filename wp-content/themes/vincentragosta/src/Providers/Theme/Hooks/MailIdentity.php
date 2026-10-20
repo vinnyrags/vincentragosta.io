@@ -29,9 +29,6 @@ use PHPMailer\PHPMailer\PHPMailer;
  * this — Smash Balloon's weekly report sends as the admin email (a Gmail
  * address) and was rejected every week from September 2026. The original
  * address becomes the Reply-To, so answering still reaches it.
- *
- * @see \ChildTheme\Providers\Shop\Support\MailNotifications (sends as
- *      noreply@vincentragosta.io since itzenzo.tv is not verified in Resend)
  */
 class MailIdentity implements Hook
 {
@@ -46,8 +43,7 @@ class MailIdentity implements Hook
 
     /**
      * Domains verified in Resend. An explicit From on one of these is kept.
-     * Add itzenzo.tv here only after verifying it in Resend (see
-     * MailNotifications::FROM_HEADER).
+     * Add itzenzo.tv here only after verifying it in Resend.
      */
     private const SENDING_DOMAINS = ['vincentragosta.io'];
 

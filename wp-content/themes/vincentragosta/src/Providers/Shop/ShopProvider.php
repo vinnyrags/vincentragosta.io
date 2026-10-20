@@ -4,47 +4,20 @@ declare(strict_types=1);
 
 namespace ChildTheme\Providers\Shop;
 
-use ChildTheme\Providers\Shop\Endpoints\CardOfferEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CardRequestEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\CurrentPackBattleEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxClaimEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxCreateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxResetEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\PullBoxUpdateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueEntryCreateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueEntryRefundEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueEntryUpdateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueResetEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueSessionCreateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueSessionEntriesEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueSessionUpdateEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueSessionsListEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\QueueSnapshotEndpoint;
-use ChildTheme\Providers\Shop\Endpoints\StockDecrementEndpoint;
 use ChildTheme\Providers\Shop\Hooks\CardAttachmentUniqueFilename;
 use ChildTheme\Providers\Shop\Hooks\CardGraphQL;
 use ChildTheme\Providers\Shop\Hooks\CardImageSize;
-use ChildTheme\Providers\Shop\Hooks\CardRequestEmailNotifier;
-use ChildTheme\Providers\Shop\Hooks\OfferEmailNotifier;
 use ChildTheme\Providers\Shop\Hooks\PngSubsizesAsJpeg;
-use ChildTheme\Providers\Shop\Hooks\PullBoxAdminReset;
-use ChildTheme\Providers\Shop\Hooks\PullBoxGraphQL;
-use ChildTheme\Providers\Shop\Hooks\PullBoxMigration;
-use ChildTheme\Providers\Shop\Hooks\QueueGraphQL;
-use ChildTheme\Providers\Shop\Hooks\QueueMigration;
 use ChildTheme\Providers\Shop\Hooks\ShopRedirect;
 use ChildTheme\Providers\Shop\Hooks\ShopSettingsMenuLink;
-use ChildTheme\Providers\Shop\Hooks\StockStatusBadge;
 use IX\Providers\Provider;
 
 /**
  * Shop Provider.
  *
- * Registers the product/card post types, ACF field groups, and the
- * headless REST surface: product/card data, the unified queue, and the
- * pull-box slot data endpoints. Stripe checkout and its webhooks are
- * retired — this provider is the headless backend for itzenzo.tv
- * (Next.js) only, with no checkout path.
+ * Registers the product/card post types, card taxonomies, ACF field
+ * groups and the card GraphQL extensions that itzenzo.tv (Next.js)
+ * reads. It is a headless content backend only — no checkout path.
  */
 class ShopProvider extends Provider
 {
@@ -52,49 +25,13 @@ class ShopProvider extends Provider
      * Always-active hooks.
      */
     protected array $hooks = [
-        StockStatusBadge::class,
         CardImageSize::class,
         CardGraphQL::class,
         CardAttachmentUniqueFilename::class,
         PngSubsizesAsJpeg::class,
         ShopSettingsMenuLink::class,
         ShopRedirect::class,
-        QueueMigration::class,
-        QueueGraphQL::class,
-        PullBoxMigration::class,
-        PullBoxGraphQL::class,
-        PullBoxAdminReset::class,
-        OfferEmailNotifier::class,
-        CardRequestEmailNotifier::class,
     ];
-
-    /**
-     * REST API endpoints.
-     */
-    protected array $routes = [
-        CardOfferEndpoint::class,
-        CardRequestEndpoint::class,
-        CurrentPackBattleEndpoint::class,
-        PullBoxClaimEndpoint::class,
-        PullBoxCreateEndpoint::class,
-        PullBoxResetEndpoint::class,
-        PullBoxUpdateEndpoint::class,
-        QueueEntryCreateEndpoint::class,
-        QueueEntryRefundEndpoint::class,
-        QueueEntryUpdateEndpoint::class,
-        QueueResetEndpoint::class,
-        QueueSessionCreateEndpoint::class,
-        QueueSessionEntriesEndpoint::class,
-        QueueSessionUpdateEndpoint::class,
-        QueueSessionsListEndpoint::class,
-        QueueSnapshotEndpoint::class,
-        StockDecrementEndpoint::class,
-    ];
-
-    /**
-     * REST namespace.
-     */
-    protected string $routeNamespace = 'shop';
 
     /**
      * Register the shop provider.

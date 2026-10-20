@@ -6,7 +6,7 @@ WordPress site with a three-layer architecture: a mu-plugin framework ([Mythus](
 - **[IX](https://github.com/vinnyrags/IX)** (`wp-content/themes/ix/`) — Timber/Twig bridge parent theme. Extends Mythus with template resolution and reusable blog/project infrastructure.
 - **Child theme** (`wp-content/themes/vincentragosta/`) — site-specific. Extends IX providers for the vincentragosta.io website.
 
-The **[Nous Discord bot](https://github.com/vinnyrags/Nous)** (order notifications, pack battles, card shop) and the **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) live in separate repositories. This site acts as their WordPress backend — the Shop provider registers the `product` and `card` CPTs, the card singles taxonomies (`card_game`, `card_set`), Stripe checkout/webhook endpoints, the unified queue (`wp_queue_sessions` / `wp_queue_entries`) that backs orders, pack battles, pull boxes, and "Request to See" submissions, and ACF field groups that the bot and storefront consume.
+The **[itzenzo.tv storefront](https://github.com/vinnyrags/itzenzo.tv)** (headless Next.js frontend) lives in a separate repository and uses this site as its content backend: the Shop provider registers the `product` and `card` CPTs, the card taxonomies (`card_game`, `card_set`), their ACF field groups, and the WPGraphQL fields the storefront reads.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ make start     # start DDEV, restore DB snapshot, install deps, build assets
 ## Commands
 
 Run `make help` for the full list of Make targets, grouped by section (local
-development, deploy, DB sync, Stripe products, card singles, etc.). Each
+development, deploy, DB sync, block patterns, seeds, etc.). Each
 target's description is generated from its Makefile annotation, so this list
 stays in sync automatically.
 
@@ -120,7 +120,7 @@ vincentragosta/             # Child theme (wp-content/themes/vincentragosta/)
 │   │   ├── Theme/           # ThemeProvider + Features/ + Hooks/ + blocks/
 │   │   ├── Project/         # ProjectProvider + blocks/ + config/ + acf-json/
 │   │   ├── Blog/            # Child BlogProvider + NousSignal* hooks + blocks/
-│   │   └── Shop/            # Shop REST endpoints, ACF, Stripe integration (headless)
+│   │   └── Shop/            # card/product CPTs, ACF, WPGraphQL (headless)
 │   ├── Services/            # Child-specific services
 │   └── Theme.php            # Extends parent Theme
 ├── views/                   # Twig templates (base, header, footer, pages)
@@ -409,7 +409,7 @@ Posts are the Nous Signal. **Model:** `NousPost`; `NousArchive` and `NousSequenc
 
 ### ShopProvider
 
-Headless backend for [itzenzo.tv](https://itzenzo.tv): `card`/`product` post types, REST endpoints, and WPGraphQL fields. No frontend UI; the shop page redirects to itzenzo.tv.
+Headless backend for [itzenzo.tv](https://itzenzo.tv): `card`/`product` post types, card taxonomies, ACF fields and WPGraphQL extensions. No REST surface and no frontend UI; the shop page redirects to itzenzo.tv.
 
 ---
 

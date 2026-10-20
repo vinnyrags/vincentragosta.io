@@ -20,15 +20,13 @@
         <exclude-pattern>*/blocks/*/render.php</exclude-pattern>
     </rule>
 
-    <!-- The Shop provider's custom tables (queue, pull boxes). Interpolated names are
-         $wpdb->prefix plus a constant table name, and every value goes through prepare();
-         CardGraphQL interpolates fixed SQL fragments chosen from a whitelist. Parked code:
-         move to the %i identifier placeholder if the shop is ever revived. -->
+    <!-- CardGraphQL interpolates fixed SQL fragments chosen from a whitelist; every value
+         goes through prepare(). -->
     <rule ref="WordPress.DB.PreparedSQL.InterpolatedNotPrepared">
-        <exclude-pattern>*/Providers/Shop/*</exclude-pattern>
+        <exclude-pattern>*/Providers/Shop/Hooks/CardGraphQL.php</exclude-pattern>
     </rule>
     <rule ref="WordPress.DB.PreparedSQL.NotPrepared">
-        <exclude-pattern>*/Providers/Shop/*</exclude-pattern>
+        <exclude-pattern>*/Providers/Shop/Hooks/CardGraphQL.php</exclude-pattern>
     </rule>
 
     <!-- Unbounded queries over small, editor-curated sets (projects, the blog archive and its carrier hero).
@@ -39,9 +37,4 @@
         <exclude-pattern>*/Providers/Blog/blocks/nous-carrier/render.php</exclude-pattern>
     </rule>
 
-    <!-- Mail delivery failures are logged deliberately: the msmtp relay fails silently
-         otherwise (RUNBOOK trap 2). -->
-    <rule ref="WordPress.PHP.DevelopmentFunctions.error_log_error_log">
-        <exclude-pattern>*/Providers/Shop/Support/MailNotifications.php</exclude-pattern>
-    </rule>
 </ruleset>
