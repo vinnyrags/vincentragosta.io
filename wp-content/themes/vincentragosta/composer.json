@@ -19,7 +19,7 @@
     "timber/timber": "^2.5"
   },
   "require-dev": {
-    "automattic/wordbless": "^0.4.2",
+    "automattic/wordbless": "^0.6.1",
     "automattic/vipwpcs": "^3.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
   },
