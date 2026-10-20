@@ -19,19 +19,18 @@
   "require": {
     "php": ">=8.4",
     "composer/installers": "^1.12 || ^2.0",
-    "johnpbloch/wordpress": "^6.5",
-    "wpengine/advanced-custom-fields-pro": "^6.0",
+    "johnpbloch/wordpress": "^7.1",
+    "wpengine/advanced-custom-fields-pro": "^6.8",
     "ext-dom": "*",
-    "wpackagist-plugin/wpforms-lite": "^1.9",
-    "wpackagist-plugin/wordpress-seo": "^24.0",
-    "wpackagist-plugin/relevanssi": "^4.26",
+    "wpackagist-plugin/wpforms-lite": "^2.0",
+    "wpackagist-plugin/wordpress-seo": "^28.7",
+    "wpackagist-plugin/relevanssi": "^4.28",
     "vincentragosta/mythus": "^1.2",
     "vincentragosta/ix": "^1.7",
     "wpackagist-plugin/instagram-feed": "^6.10",
-    "wpackagist-plugin/wordpress-importer": "^0.9",
-    "wpackagist-plugin/wp-graphql": "^2.0",
-    "wpackagist-plugin/wpgraphql-acf": "^2.5",
-    "wpackagist-plugin/redis-cache": "^2.8"
+    "wpackagist-plugin/wp-graphql": "^2.24",
+    "wpackagist-plugin/wpgraphql-acf": "^3.0",
+    "wpackagist-plugin/redis-cache": "^3.0"
   },
   "autoload": {
     "psr-4": {
