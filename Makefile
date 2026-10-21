@@ -20,18 +20,21 @@ LOCAL_URL := https://vincentragosta.io.ddev.site
 # public repo carries no address. Override per run: make pull-production DROPLET=other
 DROPLET ?= vinrag
 
-# Staging runs deploy-kit LAYOUT=releases (2026-10-16): the docroot is the `current`
-# symlink of /srv/staging.vincentragosta.io, code is read-only, and uploads live in shared/.
+# Both environments run deploy-kit LAYOUT=releases (staging 2026-10-16, production 2026-10-21):
+# the docroot is the `current` symlink, code is read-only, and uploads live in shared/, owned by
+# the environment's PHP user.
 STAGING_HOST    := $(DROPLET)
 STAGING_DIR     := /srv/staging.vincentragosta.io/current
 STAGING_WP      := $(STAGING_DIR)/wp
 STAGING_UPLOADS := /srv/staging.vincentragosta.io/shared/wp-content/uploads
+STAGING_USER    := vinrag-stg
 STAGING_URL     := https://staging.vincentragosta.io
 
 PRODUCTION_HOST := $(DROPLET)
-PRODUCTION_DIR  := /var/www/vincentragosta.io
+PRODUCTION_DIR  := /srv/vincentragosta.io/current
 PRODUCTION_WP   := $(PRODUCTION_DIR)/wp
-PRODUCTION_UPLOADS := $(PRODUCTION_DIR)/wp-content/uploads
+PRODUCTION_UPLOADS := /srv/vincentragosta.io/shared/wp-content/uploads
+PRODUCTION_USER := vinrag
 PRODUCTION_URL  := https://vincentragosta.io
 
 # itzenzo.tv (Next.js headless storefront) — co-located on the same droplet.
@@ -104,7 +107,7 @@ ssh $($(1)_HOST) "wp search-replace '$(LOCAL_URL)' '$($(1)_URL)' --path=$($(1)_W
 ssh $($(1)_HOST) "wp cache flush --path=$($(1)_WP) --allow-root --quiet && wp rewrite flush --path=$($(1)_WP) --allow-root --quiet"
 @echo "Syncing uploads..."
 rsync -az --delete $(UPLOADS_DIR)/ $($(1)_HOST):$($(1)_UPLOADS)/
-ssh $($(1)_HOST) "chown -R www-data:www-data $($(1)_UPLOADS)"
+ssh $($(1)_HOST) "chown -R $($(1)_USER):$($(1)_USER) $($(1)_UPLOADS)"
 @echo "Cleaning up..."
 rm -f /tmp/ddev-export.sql
 ssh $($(1)_HOST) "rm -f /tmp/ddev-export.sql"
@@ -152,7 +155,7 @@ endef
 	update \
 	deploy-staging \
 	deploy-production \
-	rollback-staging \
+	rollback-staging rollback-production \
 	release \
 	push-staging \
 	pull-staging \
@@ -339,6 +342,9 @@ deploy-production: ## Deploy develop to production (fast-forward GitHub main →
 
 rollback-staging: ## Point staging back at its previous release (code only — not the DB)
 	ssh $(STAGING_HOST) "/opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf develop"
+
+rollback-production: ## Point production back at its previous release (code only — not the DB)
+	ssh $(PRODUCTION_HOST) "/opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf main"
 
 deploy-staging-direct: ## Break-glass: push develop straight to the droplet (GitHub down)
 	git push production develop
