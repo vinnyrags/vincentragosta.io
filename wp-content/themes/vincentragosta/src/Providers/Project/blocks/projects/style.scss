@@ -381,7 +381,8 @@
   margin-block: var(--wp--preset--spacing--65) 2.25rem;
 
   @include media(lg) {
-    grid-template-columns: 1fr 380px;
+    // Wide enough for each lede to set in two lines at its largest size (19px).
+    grid-template-columns: 1fr 420px;
     align-items: end;
   }
 
@@ -402,6 +403,8 @@
     color: var(--color-text-muted);
     font-size: var(--wp--preset--font-size--30);
     line-height: 1.55;
+    // Backstop for wider font rendering: never strand one word on a last line.
+    text-wrap: pretty;
 
     @include media(lg) {
       text-align: end;
