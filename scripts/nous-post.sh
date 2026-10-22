@@ -209,7 +209,7 @@ while :; do
   PID="$(echo "$POUT" | grep -oE 'published ID [0-9]+' | grep -oE '[0-9]+' | head -1)"
   echo "  • mirroring to staging…"
   PROD_HOST="$PROD_HOST" PROD_WP="$STAGING_WP" bash "$IMPORTER" "$DEST" "$TITLE" "$EXCERPT" "$d" "$TAGS" >/dev/null 2>&1 || true
-  ssh "$PROD_HOST" "wp cache flush --path=$PROD_WP --allow-root >/dev/null 2>&1; wp cache flush --path=$STAGING_WP --allow-root >/dev/null 2>&1" || true
+  ssh "$PROD_HOST" "sudo wp cache flush --path=$PROD_WP --allow-root >/dev/null 2>&1; sudo wp cache flush --path=$STAGING_WP --allow-root >/dev/null 2>&1" || true
 
   # The HTTP check is the ONLY proof the post is actually reachable — `wp post
   # create` exiting 0 is not. A post WordPress downgraded to `future`, a bad
@@ -222,7 +222,7 @@ while :; do
     created=$((created+1))
   else
     echo "  ✗ created ID ${PID:-?} but $PROD_URL/$SLUG/ returned HTTP $CODE — NOT live."
-    echo "      inspect: ssh $PROD_HOST \"wp post get ${PID:-<id>} --fields=post_status,post_date,post_date_gmt --path=$PROD_WP --allow-root\""
+    echo "      inspect: ssh $PROD_HOST \"sudo wp post get ${PID:-<id>} --fields=post_status,post_date,post_date_gmt --path=$PROD_WP --allow-root\""
     echo "      if post_status is 'future', pass BOTH --post_date and --post_date_gmt (in the past) to publish it."
     SUMMARY+=("FAIL(http ${CODE})  ${d}  ${SLUG}  id=${PID:-?}")
     failed=$((failed+1))

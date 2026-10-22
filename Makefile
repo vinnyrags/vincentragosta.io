@@ -40,13 +40,6 @@ PRODUCTION_URL  := https://vincentragosta.io
 # itzenzo.tv (Next.js headless storefront) — co-located on the same droplet.
 # Used by the post-pull image-cache flush. See akivili/business/itzenzo-tv.md
 # → "Runbook: flush Next.js image cache" for context.
-ITZENZO_PROD_DIR    := /var/www/itzenzo.tv
-ITZENZO_PROD_PM2    := itzenzo-tv
-ITZENZO_STAGING_DIR := /var/www/staging.itzenzo.tv
-ITZENZO_STAGING_PM2 := staging-itzenzo
-ITZENZO_NODE_PATH   := /root/.nvm/versions/node/v20.20.2/bin
-ITZENZO_PROD_URL    := https://itzenzo.tv
-ITZENZO_STAGING_URL := https://staging.itzenzo.tv
 
 # ─── Macros ──────────────────────────────────────────────────────────────────
 # All `remote-*` macros take the env prefix in upper-case (STAGING|PRODUCTION)
@@ -55,7 +48,7 @@ ITZENZO_STAGING_URL := https://staging.itzenzo.tv
 # Run `wp eval-file scripts/<script>` on a remote env.
 #   $(call remote-wp-eval, ENV, script)
 define remote-wp-eval
-ssh $($(1)_HOST) "wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root"
+ssh $($(1)_HOST) "sudo wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root"
 endef
 
 # Run a remote `wp eval-file` gated on flag files in the env's scripts/ dir.
@@ -63,33 +56,24 @@ endef
 # the script fails (the rm runs via `;`, not `&&`).
 #   $(call remote-wp-eval-with-flags, ENV, script, flag-files)
 define remote-wp-eval-with-flags
-ssh $($(1)_HOST) "cd $($(1)_DIR)/scripts && touch $(3) && wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root; rm -f $(3)"
+ssh $($(1)_HOST) "cd $($(1)_DIR)/scripts && sudo touch $(3) && sudo wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root; sudo rm -f $(3)"
 endef
 
 # Run a remote `wp eval-file` with inline env vars (e.g. `FORCE=1`).
 #   $(call remote-wp-eval-with-env, ENV, script, env-vars)
 define remote-wp-eval-with-env
-ssh $($(1)_HOST) "$(3) wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root"
+ssh $($(1)_HOST) "sudo $(3) wp eval-file $($(1)_DIR)/scripts/$(2) --path=$($(1)_WP) --allow-root"
 endef
 
-# Flush itzenzo.tv Next.js image proxy cache + zero-downtime pm2 reload.
-# Run this after any sync that mutates WP attachment bytes (cards, products),
-# otherwise the proxy will keep serving stale per-`(url, w, q)` AVIF/WebP
-# variants for up to 30 days. Cache regenerates lazily after the wipe.
-#   $(call flush-itzenzo-cache, ENV, ITZENZO_DIR, PM2_PROCESS)
-define flush-itzenzo-cache
-ssh $($(1)_HOST) 'export PATH=$(ITZENZO_NODE_PATH):$$PATH; rm -rf $(2)/.next/cache/images/* && pm2 reload $(3)'
-endef
-
-# Force on-demand ISR revalidation of the catalog pages on the itzenzo.tv
-# frontend. /cards, /collection and the homepage are ISR-cached (300s) and only
-# refresh per-request after the window OR when the per-checkout revalidate
-# webhook fires — a bulk price/stock sync triggers neither, so without this the
-# storefront keeps serving stale (sold-out / old-price) cards. The secret is
-# read from the frontend's .env on the droplet so it never leaves the server.
-#   $(call revalidate-itzenzo, ENV, ITZENZO_DIR, ITZENZO_URL)
-define revalidate-itzenzo
-ssh $($(1)_HOST) 'SECRET=$$(grep -E "^REVALIDATION_SECRET=" $(2)/.env.production | cut -d= -f2-); curl -s -X POST "$(3)/api/revalidate" -H "Content-Type: application/json" -d "{\"secret\":\"$$SECRET\",\"paths\":[\"/\",\"/cards\",\"/collection\",\"/livestream-shop\"]}" -w "\n"'
+# Break-glass deploy without GitHub: bundle local develop, copy it up as the admin user,
+# fetch it into the bare repo as `<branch>` with sudo, and run the same deploy-kit deploy the
+# hook would. Root SSH is limited to the CI keys, so nothing pushes to the droplet as root.
+#   $(call deploy-direct, branch-on-droplet)
+define deploy-direct
+git bundle create /tmp/vr-direct.bundle develop
+scp -q /tmp/vr-direct.bundle $(DROPLET):/tmp/vr-direct.bundle
+ssh $(DROPLET) "sudo sh -c 'cd /var/repo/vincentragosta.git && git fetch -q /tmp/vr-direct.bundle +develop:$(1) && GIT_DIR=/var/repo/vincentragosta.git /opt/deploy-kit/deploy/deploy.sh $(1) /etc/deploy-kit/vincentragosta.conf \$$(git rev-parse $(1)); rc=\$$?; rm -f /tmp/vr-direct.bundle; exit \$$rc'"
+rm -f /tmp/vr-direct.bundle
 endef
 
 # Push local DDEV DB + uploads to a remote env.
@@ -100,17 +84,17 @@ ddev export-db --gzip=false --file=/tmp/ddev-export.sql
 @echo "Uploading database to $(2)..."
 scp /tmp/ddev-export.sql $($(1)_HOST):/tmp/ddev-export.sql
 @echo "Importing database on $(2)..."
-ssh $($(1)_HOST) "wp db import /tmp/ddev-export.sql --path=$($(1)_WP) --allow-root"
+ssh $($(1)_HOST) "sudo wp db import /tmp/ddev-export.sql --path=$($(1)_WP) --allow-root"
 @echo "Replacing URLs..."
-ssh $($(1)_HOST) "wp search-replace '$(LOCAL_URL)' '$($(1)_URL)' --path=$($(1)_WP) --allow-root --precise --all-tables --quiet"
+ssh $($(1)_HOST) "sudo wp search-replace '$(LOCAL_URL)' '$($(1)_URL)' --path=$($(1)_WP) --allow-root --precise --all-tables --quiet"
 @echo "Flushing caches..."
-ssh $($(1)_HOST) "wp cache flush --path=$($(1)_WP) --allow-root --quiet && wp rewrite flush --path=$($(1)_WP) --allow-root --quiet"
+ssh $($(1)_HOST) "sudo wp cache flush --path=$($(1)_WP) --allow-root --quiet && sudo wp rewrite flush --path=$($(1)_WP) --allow-root --quiet"
 @echo "Syncing uploads..."
-rsync -az --delete $(UPLOADS_DIR)/ $($(1)_HOST):$($(1)_UPLOADS)/
-ssh $($(1)_HOST) "chown -R $($(1)_USER):$($(1)_USER) $($(1)_UPLOADS)"
+rsync -az --delete --rsync-path="sudo rsync" $(UPLOADS_DIR)/ $($(1)_HOST):$($(1)_UPLOADS)/
+ssh $($(1)_HOST) "sudo chown -R $($(1)_USER):$($(1)_USER) $($(1)_UPLOADS)"
 @echo "Cleaning up..."
 rm -f /tmp/ddev-export.sql
-ssh $($(1)_HOST) "rm -f /tmp/ddev-export.sql"
+ssh $($(1)_HOST) "sudo rm -f /tmp/ddev-export.sql"
 @echo "Done — $(2) synced from local"
 endef
 
@@ -118,7 +102,7 @@ endef
 #   $(call pull-db-from-env, ENV, env-display-name)
 define pull-db-from-env
 @echo "Exporting $(2) database..."
-ssh $($(1)_HOST) "wp db export /tmp/$(2)-export.sql --path=$($(1)_WP) --allow-root"
+ssh $($(1)_HOST) "sudo wp db export /tmp/$(2)-export.sql --path=$($(1)_WP) --allow-root"
 @echo "Downloading database..."
 scp $($(1)_HOST):/tmp/$(2)-export.sql /tmp/$(2)-export.sql
 @echo "Importing into DDEV..."
@@ -129,10 +113,10 @@ ddev wp search-replace '$($(1)_URL)' '$(LOCAL_URL)' --precise --all-tables --qui
 ddev wp cache flush --quiet
 ddev wp rewrite flush --quiet
 @echo "Syncing uploads..."
-rsync -az --delete $($(1)_HOST):$($(1)_UPLOADS)/ $(UPLOADS_DIR)/
+rsync -az --delete --rsync-path="sudo rsync" $($(1)_HOST):$($(1)_UPLOADS)/ $(UPLOADS_DIR)/
 @echo "Cleaning up..."
 rm -f /tmp/$(2)-export.sql
-ssh $($(1)_HOST) "rm -f /tmp/$(2)-export.sql"
+ssh $($(1)_HOST) "sudo rm -f /tmp/$(2)-export.sql"
 @echo "Done — local synced from $(2)"
 endef
 
@@ -341,17 +325,17 @@ deploy-production: ## Deploy develop to production (fast-forward GitHub main →
 	@echo "✓ Production deployed — verify at $(PRODUCTION_URL)"
 
 rollback-staging: ## Point staging back at its previous release (code only — not the DB)
-	ssh $(STAGING_HOST) "/opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf develop"
+	ssh $(STAGING_HOST) "sudo /opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf develop"
 
 rollback-production: ## Point production back at its previous release (code only — not the DB)
-	ssh $(PRODUCTION_HOST) "/opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf main"
+	ssh $(PRODUCTION_HOST) "sudo /opt/deploy-kit/bin/rollback.sh /etc/deploy-kit/vincentragosta.conf main"
 
-deploy-staging-direct: ## Break-glass: push develop straight to the droplet (GitHub down)
-	git push production develop
+deploy-staging-direct: ## Break-glass: deploy develop to staging without GitHub (GitHub down)
+	$(call deploy-direct,develop)
 	@echo "⚠ Deployed outside GitHub — run 'git push origin develop' once GitHub is back."
 
-deploy-production-direct: ## Break-glass: push develop straight to production (GitHub down)
-	git push production develop:main
+deploy-production-direct: ## Break-glass: deploy develop to production without GitHub (GitHub down)
+	$(call deploy-direct,main)
 	@echo "⚠ Deployed outside GitHub — run 'git push origin develop:main' once GitHub is back."
 
 ##@ Database & uploads sync
@@ -503,13 +487,13 @@ REBUILD ?= true
 
 satis-refresh: ## Rebuild Satis package repository on server
 	@echo "Rebuilding Satis repository..."
-	ssh $(PRODUCTION_HOST) "/var/satis/rebuild.sh"
+	ssh $(PRODUCTION_HOST) "sudo /var/satis/rebuild.sh"
 	@echo "Done — packages.vincentragosta.io updated"
 
 satis-add: ## Add a repository to Satis (URL=..., REBUILD=true|false)
 	$(if $(URL),,$(error Usage: make satis-add URL=https://github.com/vinnyrags/repo.git))
 	@echo "Adding $(URL) to Satis..."
-	@ssh $(PRODUCTION_HOST) "jq '.repositories += [{\"type\": \"vcs\", \"url\": \"$(URL)\"}] | .repositories |= unique_by(.url)' /var/satis/satis.json > /tmp/satis.json && mv /tmp/satis.json /var/satis/satis.json"
+	@ssh $(PRODUCTION_HOST) "sudo jq '.repositories += [{\"type\": \"vcs\", \"url\": \"$(URL)\"}] | .repositories |= unique_by(.url)' /var/satis/satis.json > /tmp/satis.json && sudo install -m 644 -o root -g root /tmp/satis.json /var/satis/satis.json && rm -f /tmp/satis.json"
 	@echo "Repository added."
 ifeq ($(REBUILD),true)
 	@$(MAKE) satis-refresh
@@ -518,6 +502,6 @@ endif
 satis-remove: ## Remove a repository from Satis and rebuild
 	$(if $(URL),,$(error Usage: make satis-remove URL=https://github.com/vinnyrags/repo.git))
 	@echo "Removing $(URL) from Satis..."
-	@ssh $(PRODUCTION_HOST) "jq '.repositories |= map(select(.url != \"$(URL)\"))' /var/satis/satis.json > /tmp/satis.json && mv /tmp/satis.json /var/satis/satis.json"
+	@ssh $(PRODUCTION_HOST) "sudo jq '.repositories |= map(select(.url != \"$(URL)\"))' /var/satis/satis.json > /tmp/satis.json && sudo install -m 644 -o root -g root /tmp/satis.json /var/satis/satis.json && rm -f /tmp/satis.json"
 	@echo "Repository removed."
 	@$(MAKE) satis-refresh

@@ -33,7 +33,7 @@ fi
 echo "Fetching synced patterns from $REMOTE_HOST..."
 
 # Fetch all wp_block posts as JSON (title, slug, content) in a single SSH call
-PATTERNS_JSON=$(ssh "$REMOTE_HOST" "wp post list \
+PATTERNS_JSON=$(ssh "$REMOTE_HOST" "sudo wp post list \
     --post_type=wp_block \
     --post_status=publish \
     --fields=ID,post_title,post_name,post_content \
@@ -47,7 +47,7 @@ if [[ -z "$PATTERNS_JSON" || "$PATTERNS_JSON" == "[]" ]]; then
 fi
 
 # Fetch pattern category assignments (term relationships)
-CATEGORIES_JSON=$(ssh "$REMOTE_HOST" "wp post list \
+CATEGORIES_JSON=$(ssh "$REMOTE_HOST" "sudo wp post list \
     --post_type=wp_block \
     --post_status=publish \
     --fields=ID,post_name \
@@ -57,11 +57,11 @@ CATEGORIES_JSON=$(ssh "$REMOTE_HOST" "wp post list \
 
 # Build a map of post ID -> category slugs using WP-CLI on the remote
 CATEGORY_MAP_JSON=$(ssh "$REMOTE_HOST" "
-    ids=\$(wp post list --post_type=wp_block --post_status=publish --field=ID --path=$REMOTE_WP --allow-root 2>/dev/null)
+    ids=\$(sudo wp post list --post_type=wp_block --post_status=publish --field=ID --path=$REMOTE_WP --allow-root 2>/dev/null)
     echo '{'
     first=true
     for id in \$ids; do
-        cats=\$(wp post term list \$id wp_pattern_category --field=slug --format=csv --path=$REMOTE_WP --allow-root 2>/dev/null | tr '\n' ',' | sed 's/,\$//')
+        cats=\$(sudo wp post term list \$id wp_pattern_category --field=slug --format=csv --path=$REMOTE_WP --allow-root 2>/dev/null | tr '\n' ',' | sed 's/,\$//')
         if [ \"\$first\" = true ]; then
             first=false
         else

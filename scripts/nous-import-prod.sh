@@ -43,7 +43,7 @@ scp -q "$FILE" "$PROD_HOST:$REMOTE_TMP"
 
 echo "Creating post on remote: $TITLE  ($POST_DATE)"
 ssh "$PROD_HOST" \
-    "WP='$PROD_WP' RFILE='$REMOTE_TMP' PDATE='$POST_DATE' B_TITLE='$(b64 "$TITLE")' B_EXCERPT='$(b64 "$EXCERPT")' B_TAGS='$(b64 "$TAGS")' bash -s" <<'REMOTE'
+    "sudo WP='$PROD_WP' RFILE='$REMOTE_TMP' PDATE='$POST_DATE' B_TITLE='$(b64 "$TITLE")' B_EXCERPT='$(b64 "$EXCERPT")' B_TAGS='$(b64 "$TAGS")' bash -s" <<'REMOTE'
 set -euo pipefail
 TITLE="$(printf '%s' "$B_TITLE"   | base64 -d)"
 EXCERPT="$(printf '%s' "$B_EXCERPT" | base64 -d)"
