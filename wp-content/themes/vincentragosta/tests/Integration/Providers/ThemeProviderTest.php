@@ -141,7 +141,8 @@ class ThemeProviderTest extends BaseTestCase
         $this->assertContains(SearchSetup::class, $hooks);
         $this->assertContains(MailIdentity::class, $hooks);
         $this->assertContains(DistAssetVersioning::class, $hooks);
-        $this->assertCount(13, $hooks);
+        $this->assertContains(\ChildTheme\Providers\Theme\Hooks\SitemapFilterUrls::class, $hooks);
+        $this->assertCount(14, $hooks);
 
         // ButtonIconEnhancer is now a Feature, not a Hook
         $this->assertNotContains(ButtonIconEnhancer::class, $hooks);

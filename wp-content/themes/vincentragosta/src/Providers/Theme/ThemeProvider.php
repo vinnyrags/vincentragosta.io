@@ -15,6 +15,7 @@ use ChildTheme\Providers\Theme\Hooks\TextBlockStyles;
 use ChildTheme\Providers\Theme\Hooks\SocialIconChoices;
 use ChildTheme\Providers\Theme\Hooks\SocialIconOverride;
 use ChildTheme\Providers\Theme\Hooks\MailIdentity;
+use ChildTheme\Providers\Theme\Hooks\SitemapFilterUrls;
 use DI\Container;
 use IX\Providers\Theme\Features\AccordionIconEnhancer;
 use IX\Providers\Theme\Features\ButtonIconEnhancer;
@@ -72,6 +73,7 @@ class ThemeProvider extends BaseThemeProvider
         SocialIconChoices::class,
         SocialIconOverride::class,
         MailIdentity::class,
+        SitemapFilterUrls::class,
     ];
 
     /**
